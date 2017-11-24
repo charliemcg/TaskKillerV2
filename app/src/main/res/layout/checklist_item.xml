@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context="com.violenthoboenterprises.taskkiller.MainActivity">
+
+    <TextView
+        android:id="@+id/checklistTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <Button
+        android:id="@+id/tick"
+        android:background="@color/green"
+        android:text="Done"
+        android:layout_weight="4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <!--<Button-->
+    <!--android:id="@+id/cross"-->
+    <!--android:text="More..."-->
+    <!--android:layout_weight="2.5"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:textSize="10sp"-->
+    <!--android:layout_margin="8dp"-->
+    <!--android:visibility="gone"/>-->
+
+</LinearLayout>

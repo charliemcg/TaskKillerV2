@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/checklistRoot"
+    android:background="@color/gray">
+
+    <ListView
+        android:id="@+id/theChecklist"
+        android:layout_width="match_parent"
+        android:layout_height="518dp"/>
+    <!--TODO make sure hard coded height works on all devices-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/checklistTextView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:background="@color/colorAccent"/>-->
+
+    <EditText
+        android:id="@+id/checklistEditText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:maxLines="1"
+        android:inputType="text"
+        android:layout_alignParentBottom="true"
+        android:hint="@string/checklistItem"
+        android:imeOptions="actionDone"
+        android:background="@color/white"/>
+
+</RelativeLayout>

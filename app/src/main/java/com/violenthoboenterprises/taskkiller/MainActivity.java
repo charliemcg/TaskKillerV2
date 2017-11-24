@@ -1,0 +1,799 @@
+package com.violenthoboenterprises.taskkiller;
+
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.icu.util.GregorianCalendar;
+import android.os.Vibrator;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
+
+public class MainActivity extends AppCompatActivity {
+
+    //Indicates if a tasks properties are showing
+    static boolean taskPropertiesShowing;
+    //Indicates if tasks can be clicked on
+    static boolean tasksAreClickable;
+    //Indicates if a task is being edited
+    static boolean taskBeingEdited;
+    //Indicates there are no menus or unusual stuff showing
+    private boolean restoreNormalListView;
+    //Allows the list to be updated
+    static boolean goToMyAdapter;
+    //Indicates that a checklist is showing
+    static boolean checklistShowing;
+    //Indicates that tasks should be faded out due to keyboard being up
+    static boolean fadeTasks;
+
+    static boolean centerTask;
+
+    //Indicates which task has it's properties showing
+    static int activeTask;
+    //Saves the size of the task list
+    static int taskListSize;
+    //Height of the 'add' button
+    static int addHeight;
+    //Measures to determine if keyboard is up
+    private int heightDiff;
+
+    static int checklistListSize;
+
+    static int listViewHeight;
+
+    //List of tasks
+    public static ArrayList<String> taskList;
+    //Keeps track of tasks that are completed but not removed
+    static ArrayList<Boolean> tasksKilled;
+
+    //Message that shows up when there are no tasks
+    private TextView noTasksToShow;
+
+    //The editable text box that allows for creating and editing task names
+    static EditText taskNameEditText;
+
+    //The button that facilitates the adding of tasks
+    static Button add;
+
+    //Scrollable list
+    static ListView theListView;
+
+    static InputMethodManager keyboard;
+
+    //Parameters of 'add' button
+    static RelativeLayout.LayoutParams params;
+
+    private SharedPreferences mSharedPreferences;
+    static SharedPreferences nSharedPreferences;
+
+    static View activityRootView;
+
+    static Vibrator vibrate;
+
+    public ListAdapter[] theAdapter;
+
+    //Inflater for checklists
+    static LayoutInflater inflater;
+
+    //String used for debugging
+    String TAG;
+
+    //Notify the user that something happened in the background
+    NotificationManager notificationManager;
+
+    //Tracks if notification is active in the task bar
+    boolean isNotificActive = false;
+
+    //Tracks notifications
+    int notifID = 33;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mSharedPreferences = getPreferences(MODE_PRIVATE);
+
+        //Initialising variables
+        taskPropertiesShowing = false;
+        tasksAreClickable = true;
+        taskList = new ArrayList<>();
+        tasksKilled = new ArrayList<>();
+        noTasksToShow = (TextView) findViewById(R.id.noTasks);
+        taskNameEditText = (EditText) findViewById(R.id.taskNameEditText);
+        add = (Button) findViewById(R.id.add);
+        theListView = (ListView) findViewById(R.id.theListView);
+        keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        params = (RelativeLayout.LayoutParams) add.getLayoutParams();
+        vibrate = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        inflater = LayoutInflater.from(getApplicationContext());
+        addHeight = params.height;
+        theAdapter = new ListAdapter[]{new MyAdapter(this, taskList)};
+        TAG = "mainActivity";
+        //Getting the main view layout
+        activityRootView = findViewById(R.id.activityRoot);
+        fadeTasks = false;
+
+        //Put data in list
+        theListView.setAdapter(theAdapter[0]);
+
+        //Make task clickable
+        theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                //Tasks are not clickable if keyboard is up
+                if(tasksAreClickable) {
+
+                    vibrate.vibrate(50);
+
+                    //Selecting a task to view options
+                    if (!taskPropertiesShowing && !tasksKilled.get(position)) {
+
+                        //fade out inactive tasks
+                        activityRootView.setBackgroundColor(Color.parseColor("#888888"));
+
+                        onPause();
+
+                        //Put options underneath selected task
+                        taskList.add(position + 1, "properties");
+
+                        //Marks task as having it's properties showing
+                        taskPropertiesShowing = true;
+
+                        centerTask = true;
+
+                        //Gets position of selected task
+                        activeTask = position;
+
+                        //Updates the view
+                        theListView.setAdapter(theAdapter[0]);
+
+                        //Can't change visibility of 'add' button. Have to set height to
+                        //zero instead.
+                        params.height = 0;
+
+                        add.setLayoutParams(params);
+
+                        //Removes completed task
+                    } else if (!taskPropertiesShowing && tasksKilled.get(position)) {
+
+                        MainActivity.checklistShowing = true;
+
+                        //updating Checklist's shared preferences without inflating the class view
+
+                        //getSavedData
+
+                        //skip this management of sub tasks if there are no sub tasks
+                        try {
+
+                            checklistListSize = nSharedPreferences.getInt("checklistListSizeKey", 0);
+
+                            for (int i = 0; i < checklistListSize; i++) {
+
+                                Checklist.checklistSize = nSharedPreferences.getInt("checklistSizeKey" + String.valueOf(i), 0);
+
+                                try {
+
+                                    Checklist.checklistList.get(i);
+
+                                } catch (IndexOutOfBoundsException e) {
+
+                                    Checklist.checklistList.add(new ArrayList<String>());
+
+                                }
+
+                                try {
+
+                                    Checklist.subTasksKilled.get(i);
+
+                                } catch (IndexOutOfBoundsException e) {
+
+                                    Checklist.subTasksKilled.add(new ArrayList<Boolean>());
+
+                                }
+
+                                for (int j = 0; j < Checklist.checklistSize; j++) {
+
+                                    Checklist.checklistList.get(i).set(j, nSharedPreferences.getString("checklistItemKey"
+                                            + String.valueOf(i) + String.valueOf(j), ""));
+
+                                    Checklist.subTasksKilled.get(i).set(j, nSharedPreferences.getBoolean("subTasksKilledKey"
+                                            + String.valueOf(i) + String.valueOf(j), false));
+
+                                }
+
+                            }
+
+                            //onPause
+
+                            checklistListSize = Checklist.checklistList.size();
+
+                            for (int i = 0; i < checklistListSize; i++) {
+
+                                if (i == MainActivity.activeTask) {
+
+                                    Checklist.checklistList.remove(activeTask);
+
+                                    Checklist.subTasksKilled.remove(activeTask);
+
+                                }
+
+                            }
+
+                            //Getting and saving the size of the task array list
+                            checklistListSize = Checklist.checklistList.size();
+
+                            nSharedPreferences.edit().putInt("checklistListSizeKey", Checklist.checklistListSize).apply();
+
+                            for (int i = 0; i < checklistListSize; i++) {
+
+                                //Getting and saving the size of each array list of sub tasks
+                                Checklist.checklistSize = Checklist.checklistList.get(i).size();
+
+                                nSharedPreferences.edit().putInt("checklistSizeKey" + String.valueOf(i),
+                                        Checklist.checklistSize).apply();
+
+                            }
+
+                            //Saving each individual sub task
+                            for (int i = 0; i < checklistListSize; i++) {
+
+                                Checklist.checklistSize = Checklist.checklistList.get(i).size();
+
+                                for (int j = 0; j < Checklist.checklistSize; j++) {
+
+                                    nSharedPreferences.edit().putString("checklistItemKey" + String.valueOf(i)
+                                            + String.valueOf(j), Checklist.checklistList.get(i).get(j)).apply();
+
+                                    nSharedPreferences.edit().putBoolean("subTasksKilledKey" + String.valueOf(i)
+                                            + String.valueOf(j), Checklist.subTasksKilled.get(i).get(j)).apply();
+
+                                }
+
+                            }
+
+                        } catch (NullPointerException e) {
+
+                        }
+
+                        taskList.remove(position);
+
+                        //Updates the view
+                        theListView.setAdapter(theAdapter[0]);
+
+                        tasksKilled.remove(position);
+
+                        //Checks to see if there are still tasks left
+                        noTasksLeft();
+
+                        //Removes task options from view
+                    } else {
+
+                        //set background to white
+                        activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                        //Removes the task's properties
+                        taskList.remove(activeTask + 1);
+
+                        //Updates the view
+                        theListView.setAdapter(theAdapter[0]);
+
+                        //Marks properties as not showing
+                        taskPropertiesShowing = false;
+
+                        //Returns the 'add' button
+                        params.height = addHeight;
+
+                        add.setLayoutParams(params);
+
+                    }
+
+                }
+
+            }
+
+        });
+
+        //Long click allows for editing the task name
+        theListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+
+                int i = position;
+
+                //Cannot long click last list item with another item's properties showing to prevent index out of bounds error
+                if (taskPropertiesShowing && (position != 0)) {
+
+                    i = position - 1;
+
+                }
+
+                //Determine if it's possible to edit task
+                if (tasksAreClickable && !tasksKilled.get(i) && !taskPropertiesShowing) {
+
+                    //Cannot update the list until after the task has been updated.
+                    goToMyAdapter = false;
+
+                    //Actions to occur when keyboard is showing
+                    checkKeyboardShowing();
+
+                    //Indicates that a task is being edited
+                    taskBeingEdited = true;
+
+                    activeTask = position;
+
+                    tasksAreClickable = false;
+
+                    fadeTasks = true;
+
+                    centerTask = true;
+
+                    theListView.setAdapter(theAdapter[0]);
+
+                    //Can't change visibility of 'add' button. Have to set height to zero instead.
+                    params.height = 0;
+
+                    add.setLayoutParams(params);
+
+                } else if (tasksAreClickable && tasksKilled.get(i) && !taskPropertiesShowing) {
+
+                    Toast.makeText(MainActivity.this, "Task Reinstated", Toast.LENGTH_SHORT).show();
+
+                    tasksKilled.set(i, false);
+
+                    theListView.setAdapter(theAdapter[0]);
+
+                }
+
+                return true;
+
+            }
+
+        });
+
+        //Actions to occur when 'add' selected
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//
+//                goToMyAdapter = true;
+//
+//                vibrate.vibrate(50);
+//
+//                //Removes any visible task options
+//                if(taskPropertiesShowing){
+//
+//                    taskList.remove(activeTask + 1);
+//
+//                    theListView.setAdapter(theAdapter[0]);
+//
+//                    taskPropertiesShowing = false;
+//
+//                }
+//
+//                //Show keyboard
+//                keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
+//
+//                //Set return button to 'Done'
+//                taskNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+//
+//                //Ensure that there is no previous text in the text box
+//                taskNameEditText.setText("");
+//
+//                //Actions to occur when keyboard is showing
+//                checkKeyboardShowing();
+//
+                showNotification(activityRootView);
+            }
+
+        });
+
+        //Actions to occur when user submits new task
+        taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                //Actions to take when creating new task
+                if((actionId == EditorInfo.IME_ACTION_DONE) && !taskBeingEdited){
+
+                    //Text box and keyboard disappear
+                    taskNameEditText.setVisibility(View.GONE);
+
+                    //Hide keyboard
+                    keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+
+                    //Getting user data
+                    String taskName = taskNameEditText.getText().toString();
+
+                    //Clear text from text box
+                    taskNameEditText.setText("");
+
+                    //Add new task in task list
+                    createTask(taskName, taskList, taskBeingEdited);
+
+                    //Checks to see if there are still tasks available
+                    noTasksLeft();
+
+                    return true;
+
+                    //Actions to take when editing existing task
+                }else if(actionId == EditorInfo.IME_ACTION_DONE){
+
+                    taskNameEditText.setVisibility(View.GONE);
+
+                    //Hide keyboard
+                    keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+
+                    //Getting user data
+                    String editedTaskString = taskNameEditText.getText().toString();
+
+                    createTask(editedTaskString, taskList, taskBeingEdited);
+
+                    theListView.setAdapter(theAdapter[0]);
+
+                    tasksAreClickable = true;
+
+                    //Marking editing as complete
+                    taskBeingEdited = false;
+
+                    //Bringing back the 'add' button
+                    params.height = addHeight;
+
+                    add.setLayoutParams(params);
+
+                    return true;
+
+                }
+
+                return false;
+
+            }
+
+        });
+
+    }
+
+    public void showNotification(View view) {
+
+        android.support.v4.app.NotificationCompat.Builder notificBuilder = new NotificationCompat.Builder(this)
+                .setContentTitle("Message")
+                .setContentText("New Message")
+                .setTicker("Alert New Message")
+                .setSmallIcon(R.drawable.bell);
+
+        // Define that we have the intention of opening MoreInfoNotification
+        Intent moreInfoIntent = new Intent(this, /*MoreInfoNotification*/MainActivity.class);
+
+        // Used to stack tasks across activites so we go to the proper place when back is clicked
+        TaskStackBuilder tStackBuilder = TaskStackBuilder.create(this);
+
+        // Add all parents of this activity to the stack
+        tStackBuilder.addParentStack(/*MoreInfoNotification*/MainActivity.class);
+
+        // Add our new Intent to the stack
+        tStackBuilder.addNextIntent(moreInfoIntent);
+
+        // Define an Intent and an action to perform with it by another application
+        // FLAG_UPDATE_CURRENT : If the intent exists keep it but update it if needed
+        PendingIntent pendingIntent = tStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Defines the Intent to fire when the notification is clicked
+        notificBuilder.setContentIntent(pendingIntent);
+
+        // Gets a NotificationManager which is used to notify the user of the background event
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Post the notification
+        notificationManager.notify(notifID, notificBuilder.build());
+
+        // Used so that we can't stop a notification that has already been stopped
+        isNotificActive = true;
+
+    }
+
+    public void stopNotification(View view) {
+
+        // If the notification is still active close it
+        if(isNotificActive){
+
+            notificationManager.cancel(notifID);
+
+        }
+
+    }
+
+    public void setAlarm(View view){
+
+        // Define a time value of 5 seconds
+        Long alertTime = new GregorianCalendar().getTimeInMillis()+5*1000;
+
+        // Define our intention of executing AlertReceiver
+        Intent alertIntent = new Intent(this, AlertReceiver.class);
+
+        // Allows you to schedule for your application to do something at a later date
+        // even if it is in the background or isn't active
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        // set() schedules an alarm to trigger
+        // Trigger for alertIntent to fire in 5 seconds
+        // FLAG_UPDATE_CURRENT : Update the Intent if active
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alertTime, PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+    }
+
+    private void getSavedData() {
+
+        //clearing the lists before adding data back into them so as to avoid duplication
+        taskList.clear();
+        tasksKilled.clear();
+
+        checklistListSize = 0;
+
+        //Existing tasks are recalled when app opened
+        taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
+
+        for( int i = 0 ; i < taskListSize ; i++ ) {
+
+            taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
+
+            tasksKilled.add(mSharedPreferences.getBoolean("taskKilledKey" +
+                    String.valueOf(i), false));
+
+        }
+
+        theListView.setAdapter(theAdapter[0]);
+
+        //Checks to see if there are still tasks left
+        noTasksLeft();
+
+    }
+
+    //Actions to occur when keyboard is showing
+    private void checkKeyboardShowing() {
+
+        //TODO check out the hard coded pixels will work on all devices
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                heightDiff = activityRootView.getRootView().getHeight();
+
+                Rect screen = new Rect();
+
+                activityRootView.getWindowVisibleDisplayFrame(screen);
+
+                //Screen pixel values are used to determine how much of the screen is visible
+                heightDiff = activityRootView.getRootView().getHeight() -
+                        (screen.bottom - screen.top);
+
+                //Value of more than 800 seems to indicate that the keyboard is showing
+                //in portrait mode
+                if ((heightDiff > 800) && (getResources().getConfiguration().orientation == 1)) {
+
+                    fadeTasks = true;
+
+                    if (goToMyAdapter) {
+
+                        theListView.setAdapter(theAdapter[0]);
+
+                        goToMyAdapter = false;
+
+                    }
+
+                    //fade background when something is in focus
+                    activityRootView.setBackgroundColor(Color.parseColor("#888888"));
+
+                    taskNameEditText.setFocusable(true);
+
+                    taskNameEditText.requestFocus();
+
+                    //Textbox is visible and 'add' button is gone whenever keyboard is showing
+                    taskNameEditText.setVisibility(View.VISIBLE);
+
+                    params.height = 0;
+
+                    add.setLayoutParams(params);
+
+                    tasksAreClickable = false;
+
+                    restoreNormalListView = true;
+
+                    //Similar to above but for landscape mode
+                }else if((heightDiff > 73) && (heightDiff < 800) && (getResources()
+                        .getConfiguration().orientation == 2)){
+
+                    fadeTasks = true;
+
+                    if (goToMyAdapter) {
+
+                        theListView.setAdapter(theAdapter[0]);
+
+                        goToMyAdapter = false;
+
+                    }
+
+                    //fade background when something is in focus
+                    activityRootView.setBackgroundColor(Color.parseColor("#888888"));
+
+                    taskNameEditText.setFocusable(true);
+
+                    taskNameEditText.requestFocus();
+
+                    //Textbox is visible and 'add' button is gone whenever keyboard is showing
+                    taskNameEditText.setVisibility(View.VISIBLE);
+
+                    //Keyboard is inactive without this line
+                    taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+
+                    params.height = 0;
+
+                    add.setLayoutParams(params);
+
+                    tasksAreClickable = false;
+
+                    restoreNormalListView = true;
+
+                }else if(restoreNormalListView){
+
+                    fadeTasks = false;
+
+                    //setting background to white
+                    activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                    //Textbox is gone and 'add' button is visible whenever keyboard is not showing
+                    taskNameEditText.setVisibility(View.GONE);
+
+                    params.height = addHeight;
+
+                    add.setLayoutParams(params);
+
+                    tasksAreClickable = true;
+
+                    theListView.setAdapter(theAdapter[0]);
+
+                    restoreNormalListView = false;
+
+                    //Once editing is complete the adapter can update the list
+                    goToMyAdapter = true;
+
+                }
+
+            }
+
+        });
+
+    }
+
+    //Tells user to add tasks when task list is empty
+    private void noTasksLeft() {
+
+        //Checks if there are any existing tasks
+        if (taskList.size() == 0){
+
+            //Inform user to add some tasks
+            noTasksToShow.setVisibility(View.VISIBLE);
+
+        }else{
+
+            noTasksToShow.setVisibility(View.GONE);
+
+        }
+
+    }
+
+    //Create a new task
+    private void createTask(final String taskName, ArrayList taskList, boolean taskBeingEdited) {
+
+        //Don't allow blank tasks
+        if(!taskName.equals("")) {
+
+            if(!taskBeingEdited) {
+
+                taskList.add(taskList.size(), taskName);
+
+                tasksKilled.add(tasksKilled.size(), false);
+
+            }else{
+
+                taskList.set(activeTask, taskName);
+
+            }
+
+        }
+
+    }
+
+    @Override
+    protected void onPause(){
+
+        super.onPause();
+
+        //Important to know if task properties are showing so as to not corrupt the list
+        if (!taskPropertiesShowing) {
+
+            //Tasks are saved in a manner so that they don't vanish when app closed
+            taskListSize = taskList.size();
+
+            mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
+
+            for (int i = 0; i < taskListSize; i++) {
+
+                mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
+                        taskList.get(i)).apply();
+
+                mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
+                        tasksKilled.get(i)).apply();
+
+            }
+
+        } else {
+
+            //Removes the task properties from the list because they should not
+            //be saved on pause.
+            taskList.remove(activeTask + 1);
+
+            //Update the list
+            theListView.setAdapter(theAdapter[0]);
+
+            taskPropertiesShowing = false;
+
+            //Tasks are saved in a manner so that they don't vanish when app closed
+            taskListSize = taskList.size();
+
+            mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
+
+            for (int i = 0; i < taskListSize - 1; i++) {
+
+                mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
+                        taskList.get(i)).apply();
+
+                mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
+                        tasksKilled.get(i)).apply();
+
+            }
+
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+
+        getSavedData();
+
+    }
+
+}

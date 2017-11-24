@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Task Killer</string>
+    <string name="add">add...</string>
+    <string name="taskTitle">What do you want to do?</string>
+    <string name="noTasks">Hit the \'add\' button and start being productive!</string>
+    <string name="checklistItem">Add something here</string>
+</resources>
