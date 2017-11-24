@@ -1,9 +1,13 @@
 package com.violenthoboenterprises.taskkiller;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +26,18 @@ import java.util.ArrayList;
 
 class MyAdapter extends ArrayAdapter<String> {
 
+    //Notify the user that something happened in the background
+    NotificationManager notificationManager;
+
+    //Tracks if notification is active in the task bar
+    boolean isNotificActive = false;
+
+    //Tracks notifications
+    int notifID = 33;
+
+    //String for debugging
+    final String TAG = "MyAdapter";
+
     public MyAdapter(Context context, ArrayList<String> values) {
         super(context, R.layout.task_layout, values);
     }
@@ -39,8 +55,6 @@ class MyAdapter extends ArrayAdapter<String> {
         final View dateView = theInflater.inflate(R.layout.date_layout, parent, false);
         final TextView theTextView = (TextView) taskView.findViewById(R.id.textView);
         final Intent intent = new Intent(getContext(), Checklist.class);
-        //String for debugging
-        final String TAG = "MyAdapter";
 
         //TODO make sure hard coded values work on all devices
         //Task cannot be centered unless it's in view. Moving selected task into view if not already in view in portrait.
@@ -167,15 +181,16 @@ class MyAdapter extends ArrayAdapter<String> {
             final TimePicker timePicker = (TimePicker) dateView.findViewById(R.id.timePicker);
             Button dateBtn = (Button) dateView.findViewById(R.id.date);
 
-            dateBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v){
-
-                    Toast.makeText(v.getContext(), "Selected " + timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute(), Toast.LENGTH_SHORT).show();
-
-                }
-
-            });
+            //TODO use this code to help with setting notification time
+//            dateBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v){
+//
+//                    Toast.makeText(v.getContext(), "Selected " + timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute(), Toast.LENGTH_SHORT).show();
+//
+//                }
+//
+//            });
 
             return dateView;
 

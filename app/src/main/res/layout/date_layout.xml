@@ -16,6 +16,7 @@
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Set Time"/>
+        android:text="Set Time"
+        android:onClick="showNotification"/>
 
 </LinearLayout>

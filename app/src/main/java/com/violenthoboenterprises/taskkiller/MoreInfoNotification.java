@@ -12,5 +12,7 @@ public class MoreInfoNotification extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.more_info_notific);
 
+//        TODO remove this class if never used
+
     }
 }

@@ -385,35 +385,34 @@ public class MainActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//
-//                goToMyAdapter = true;
-//
-//                vibrate.vibrate(50);
-//
-//                //Removes any visible task options
-//                if(taskPropertiesShowing){
-//
-//                    taskList.remove(activeTask + 1);
-//
-//                    theListView.setAdapter(theAdapter[0]);
-//
-//                    taskPropertiesShowing = false;
-//
-//                }
-//
-//                //Show keyboard
-//                keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
-//
-//                //Set return button to 'Done'
-//                taskNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-//
-//                //Ensure that there is no previous text in the text box
-//                taskNameEditText.setText("");
-//
-//                //Actions to occur when keyboard is showing
-//                checkKeyboardShowing();
-//
-                showNotification(activityRootView);
+
+                goToMyAdapter = true;
+
+                vibrate.vibrate(50);
+
+                //Removes any visible task options
+                if(taskPropertiesShowing){
+
+                    taskList.remove(activeTask + 1);
+
+                    theListView.setAdapter(theAdapter[0]);
+
+                    taskPropertiesShowing = false;
+
+                }
+
+                //Show keyboard
+                keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
+
+                //Set return button to 'Done'
+                taskNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+                //Ensure that there is no previous text in the text box
+                taskNameEditText.setText("");
+
+                //Actions to occur when keyboard is showing
+                checkKeyboardShowing();
+
             }
 
         });
@@ -487,41 +486,39 @@ public class MainActivity extends AppCompatActivity {
     public void showNotification(View view) {
 
         android.support.v4.app.NotificationCompat.Builder notificBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("Message")
-                .setContentText("New Message")
-                .setTicker("Alert New Message")
-                .setSmallIcon(R.drawable.bell);
+                .setContentTitle("Message").setContentText("New Message").setTicker("Alert New Message").setSmallIcon(R.drawable.bell);
 
-        // Define that we have the intention of opening MoreInfoNotification
-        Intent moreInfoIntent = new Intent(this, /*MoreInfoNotification*/MainActivity.class);
+        //Intention to open MainActivity when notification clicked
+        Intent moreInfoIntent = new Intent(this, MainActivity.class);
 
-        // Used to stack tasks across activites so we go to the proper place when back is clicked
+        //stack tasks across activites so we go to the proper place when back is clicked
         TaskStackBuilder tStackBuilder = TaskStackBuilder.create(this);
 
-        // Add all parents of this activity to the stack
-        tStackBuilder.addParentStack(/*MoreInfoNotification*/MainActivity.class);
+        //parents of this activity added to the stack
+        tStackBuilder.addParentStack(MainActivity.class);
 
-        // Add our new Intent to the stack
+        //add intent to stack
         tStackBuilder.addNextIntent(moreInfoIntent);
 
-        // Define an Intent and an action to perform with it by another application
-        // FLAG_UPDATE_CURRENT : If the intent exists keep it but update it if needed
+        //update intent if needed
         PendingIntent pendingIntent = tStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Defines the Intent to fire when the notification is clicked
         notificBuilder.setContentIntent(pendingIntent);
 
-        // Gets a NotificationManager which is used to notify the user of the background event
+        //remove notification on click
+        notificBuilder.setAutoCancel(true);
+
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Post the notification
+        //show notification
         notificationManager.notify(notifID, notificBuilder.build());
 
-        // Used so that we can't stop a notification that has already been stopped
+        //can't stop notification that has already been stopped
         isNotificActive = true;
 
     }
 
+    //TODO remove this method if not used
     public void stopNotification(View view) {
 
         // If the notification is still active close it
