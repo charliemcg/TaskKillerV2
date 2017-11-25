@@ -178,8 +178,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }else if (task.equals("date")){
 
-            final TimePicker timePicker = (TimePicker) dateView.findViewById(R.id.timePicker);
-            Button dateBtn = (Button) dateView.findViewById(R.id.date);
+//            TimePicker timePicker = (TimePicker) dateView.findViewById(R.id.timePicker);
+//            Button dateBtn = (Button) dateView.findViewById(R.id.date);
+
+//            MainActivity.alertTime = timePicker.getDrawingTime();
 
             //TODO use this code to help with setting notification time
 //            dateBtn.setOnClickListener(new View.OnClickListener() {

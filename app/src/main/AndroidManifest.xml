@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.violenthoboenterprises.taskkiller">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
@@ -29,7 +30,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
-            <!--<receiver  android:process=":remote" android:name="AlarmReceiver"/>-->
+            <receiver android:process=":remote" android:name="AlarmReceiver"/>
         </activity>
 
         <receiver android:name=".AlertReceiver"/>

@@ -30,9 +30,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static java.security.AccessController.getContext;
 
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     static boolean fadeTasks;
 
     static boolean centerTask;
+
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -532,8 +536,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void setAlarm(View view){
 
-        // Define a time value of 5 seconds
-        Long alertTime = new GregorianCalendar().getTimeInMillis()+5*1000;
+        TimePicker timePicker = findViewById(R.id.timePicker);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
+        calendar.set(Calendar.MINUTE, timePicker.getMinute());
+        calendar.set(calendar.SECOND, 0);
 
         // Define our intention of executing AlertReceiver
         Intent alertIntent = new Intent(this, AlertReceiver.class);
@@ -545,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
         // set() schedules an alarm to trigger
         // Trigger for alertIntent to fire in 5 seconds
         // FLAG_UPDATE_CURRENT : Update the Intent if active
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alertTime, PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        alarmManager.set(AlarmManager.RTC_WAKEUP, /*alertTime*/calendar.getTimeInMillis(), PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
     }
 
