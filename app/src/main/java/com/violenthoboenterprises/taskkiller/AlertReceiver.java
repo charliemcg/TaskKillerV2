@@ -19,10 +19,13 @@ import android.util.Log;
 
 public class AlertReceiver extends BroadcastReceiver {
 
+    String TAG;
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        createNotification(context, "This is a message", "This is message text", "This is a message alert");
+        //retrieving task name to set as notification name
+        createNotification(context, String.valueOf(intent.getStringExtra("ToDo")), "This is message text", "This is a message alert");
 
     }
 

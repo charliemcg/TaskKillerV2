@@ -32,6 +32,7 @@
                 android:value=".MainActivity"/>
             <receiver android:process=":remote" android:name="AlarmReceiver"/>
         </activity>
+        <activity android:name=".AlertReceiver" />
 
         <receiver android:name=".AlertReceiver"/>
 

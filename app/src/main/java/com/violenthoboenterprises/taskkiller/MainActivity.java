@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean dateOrTime;
 
+
     //Indicates which task has it's properties showing
     static int activeTask;
     //Saves the size of the task list
@@ -571,6 +572,9 @@ public class MainActivity extends AppCompatActivity {
 
             //intention to execute AlertReceiver
             Intent alertIntent = new Intent(this, AlertReceiver.class);
+
+            //setting the name of the task for which the notification is being set
+            alertIntent.putExtra("ToDo", taskList.get(activeTask));
 
             //allows for scheduling of notification
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
