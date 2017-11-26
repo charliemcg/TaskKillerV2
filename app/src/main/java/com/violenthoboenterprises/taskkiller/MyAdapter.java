@@ -194,6 +194,9 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //            });
 
+            //centering the selected item in the view
+            MainActivity.theListView.smoothScrollToPositionFromTop(position - 1,0 );
+
             return dateView;
 
         } else{

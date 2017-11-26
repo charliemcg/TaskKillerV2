@@ -24,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     static boolean centerTask;
 
+    boolean dateOrTime;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -143,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         //Getting the main view layout
         activityRootView = findViewById(R.id.activityRoot);
         fadeTasks = false;
+        dateOrTime = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -186,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
                         add.setLayoutParams(params);
 
-                        //Removes completed task
+                    //Removes completed task
                     } else if (!taskPropertiesShowing && tasksKilled.get(position)) {
 
                         MainActivity.checklistShowing = true;
@@ -298,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
                         //Checks to see if there are still tasks left
                         noTasksLeft();
 
-                        //Removes task options from view
+                    //Removes task options from view
                     } else {
 
                         //set background to white
@@ -536,25 +539,69 @@ public class MainActivity extends AppCompatActivity {
 
     public void setAlarm(View view){
 
+        DatePicker datePicker = findViewById(R.id.datePicker);
+
         TimePicker timePicker = findViewById(R.id.timePicker);
 
-        Calendar calendar = Calendar.getInstance();
+        Button dateButton = findViewById(R.id.date);
 
-        calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
-        calendar.set(Calendar.MINUTE, timePicker.getMinute());
-        calendar.set(calendar.SECOND, 0);
+        //actions to occur when date has been chosen
+        if(!dateOrTime){
 
-        // Define our intention of executing AlertReceiver
-        Intent alertIntent = new Intent(this, AlertReceiver.class);
+            datePicker.setVisibility(View.GONE);
 
-        // Allows you to schedule for your application to do something at a later date
-        // even if it is in the background or isn't active
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            timePicker.setVisibility(View.VISIBLE);
 
-        // set() schedules an alarm to trigger
-        // Trigger for alertIntent to fire in 5 seconds
-        // FLAG_UPDATE_CURRENT : Update the Intent if active
-        alarmManager.set(AlarmManager.RTC_WAKEUP, /*alertTime*/calendar.getTimeInMillis(), PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            dateOrTime = true;
+
+            dateButton.setText("Set Time");
+
+        //actions to occur when time has been chosen
+        }else{
+
+            Calendar calendar = Calendar.getInstance();
+
+            //setting alarm
+            calendar.set(Calendar.YEAR, datePicker.getYear());
+            calendar.set(Calendar.MONTH, datePicker.getMonth());
+            calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+            calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
+            calendar.set(Calendar.MINUTE, timePicker.getMinute());
+            calendar.set(calendar.SECOND, 0);
+
+            //intention to execute AlertReceiver
+            Intent alertIntent = new Intent(this, AlertReceiver.class);
+
+            //allows for scheduling of notification
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+            //setting the notification
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            datePicker.setVisibility(View.VISIBLE);
+
+            timePicker.setVisibility(View.GONE);
+
+            dateOrTime = false;
+
+            dateButton.setText("Set Date");
+
+            //set background to white
+            activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+            taskList.remove(activeTask + 1);
+
+            theListView.setAdapter(theAdapter[0]);
+
+            //Marks properties as not showing
+            taskPropertiesShowing = false;
+
+            //Returns the 'add' button
+            params.height = addHeight;
+
+            add.setLayoutParams(params);
+
+        }
 
     }
 
