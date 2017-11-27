@@ -170,7 +170,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
 
-                    MainActivity.alarmManager.cancel(MainActivity.pendingIntent);
+                    Log.i(TAG, String.valueOf(MainActivity.alarmManager));
+
+                    //TODO fix alarm manager
+//                    MainActivity.alarmManager/*.get(MainActivity.activeTask)*/.cancel(MainActivity.pendingIntent);
 
                     notifyDataSetChanged();
 
@@ -249,11 +252,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         theTextView.setPaintFlags(theTextView.getPaintFlags() |
                                 Paint.STRIKE_THRU_TEXT_FLAG);
 
-                        //TODO use this code as a basis for setting up notification icons
-                        ImageView due = taskView.findViewById(R.id.due);
-
-                        due.setVisibility(View.VISIBLE);
-
                     }
 
                     //crossing out completed tasks which are above the showing task properties
@@ -266,11 +264,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             theTextView.setPaintFlags(theTextView.getPaintFlags() |
                                     Paint.STRIKE_THRU_TEXT_FLAG);
-
-                            //TODO use this code as a basis for setting up notification icons
-                            ImageView due = taskView.findViewById(R.id.due);
-
-                            due.setVisibility(View.VISIBLE);
 
                         }
 

@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
     static ArrayList<Boolean> showTaskDueIcon;
 
+    //TODO fix alarm manager
+//    static ArrayList<AlarmManager> alarmManager;
     static AlarmManager alarmManager;
 
     //Message that shows up when there are no tasks
@@ -143,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
         taskList = new ArrayList<>();
         tasksKilled = new ArrayList<>();
         showTaskDueIcon = new ArrayList<>();
+        //TODO fix alarm manager
+//        alarmManager = new ArrayList<>();
         noTasksToShow = (TextView) findViewById(R.id.noTasks);
         taskNameEditText = (EditText) findViewById(R.id.taskNameEditText);
         add = (Button) findViewById(R.id.add);
@@ -311,6 +315,9 @@ public class MainActivity extends AppCompatActivity {
                     tasksKilled.remove(position);
 
                     showTaskDueIcon.remove(position);
+
+                    //TODO fix alarm manager
+//                    alarmManager.remove(position);
 
                     //Checks to see if there are still tasks left
                     noTasksLeft();
@@ -589,13 +596,18 @@ public class MainActivity extends AppCompatActivity {
             //setting the name of the task for which the notification is being set
             alertIntent.putExtra("ToDo", taskList.get(activeTask));
 
+            //TODO fix alarm manager
             //allows for scheduling of notification
+//            alarmManager.set(activeTask, (AlarmManager) getSystemService(Context.ALARM_SERVICE));
             alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-            pendingIntent = PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            //TODO find better way to get IDs
+            int broadcastID = (int) (calendar.getTimeInMillis() / 10000);
+
+            pendingIntent = PendingIntent.getBroadcast(this, broadcastID, alertIntent, PendingIntent.FLAG_ONE_SHOT/*UPDATE_CURRENT*/);
 
             //setting the notification
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent/*PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT)*/);
+            alarmManager/*.get(activeTask)*/.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent/*PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT)*/);
 
             datePicker.setVisibility(View.VISIBLE);
 
@@ -621,6 +633,8 @@ public class MainActivity extends AppCompatActivity {
             params.height = addHeight;
 
             add.setLayoutParams(params);
+
+            Log.i(TAG, String.valueOf(alarmManager));
 
         }
 
@@ -802,6 +816,9 @@ public class MainActivity extends AppCompatActivity {
                 tasksKilled.add(tasksKilled.size(), false);
 
                 showTaskDueIcon.add(showTaskDueIcon.size(), false);
+
+                //TODO fix alarm manager
+//                alarmManager.add(alarmManager.size(), null);
 
             }else{
 
