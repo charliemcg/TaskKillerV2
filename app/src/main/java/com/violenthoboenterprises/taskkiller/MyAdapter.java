@@ -1,5 +1,6 @@
 package com.violenthoboenterprises.taskkiller;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -102,33 +103,33 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                    //set background white
-                    MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                //set background white
+                MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
-                    //Task options disappear
-                    MainActivity.taskList.remove(MainActivity.activeTask + 1);
+                //Task options disappear
+                MainActivity.taskList.remove(MainActivity.activeTask + 1);
 
-                    //Visibly mark task as complete
-                    MainActivity.taskList.set(MainActivity.activeTask,
-                            MyAdapter.this.getItem(position - 1));
+                //Visibly mark task as complete
+                MainActivity.taskList.set(MainActivity.activeTask,
+                        MyAdapter.this.getItem(position - 1));
 
-                    notifyDataSetChanged();
+                notifyDataSetChanged();
 
-                    MainActivity.taskPropertiesShowing = false;
+                MainActivity.taskPropertiesShowing = false;
 
-                    //Marks task as complete
-                    MainActivity.tasksKilled.set(MainActivity.activeTask, true);
+                //Marks task as complete
+                MainActivity.tasksKilled.set(MainActivity.activeTask, true);
 
-                    Toast.makeText(v.getContext(), "You killed this task!",
-                            Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "You killed this task!",
+                        Toast.LENGTH_SHORT).show();
 
-                    MainActivity.add.setVisibility(View.VISIBLE);
+                MainActivity.add.setVisibility(View.VISIBLE);
 
-                    MainActivity.vibrate.vibrate(50);
+                MainActivity.vibrate.vibrate(50);
 
-                    MainActivity.params.height = MainActivity.addHeight;
+                MainActivity.params.height = MainActivity.addHeight;
 
-                    v.setLayoutParams(MainActivity.params);
+                v.setLayoutParams(MainActivity.params);
 
                 }
 
@@ -159,19 +160,21 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                v.setLayoutParams(MainActivity.params);
 
-                    if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
+                if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
 
-                        MainActivity.taskList.set(MainActivity.activeTask + 1, "date");
+                    MainActivity.taskList.set(MainActivity.activeTask + 1, "date");
 
-                        notifyDataSetChanged();
+                    notifyDataSetChanged();
 
-                    } else {
+                } else {
 
-                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+                    MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
 
-                        notifyDataSetChanged();
+                    MainActivity.alarmManager.cancel(MainActivity.pendingIntent);
 
-                    }
+                    notifyDataSetChanged();
+
+                }
 
                 }
             });
@@ -181,13 +184,13 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                    MainActivity.checklistShowing = true;
+                MainActivity.checklistShowing = true;
 
-                    MainActivity.vibrate.vibrate(50);
+                MainActivity.vibrate.vibrate(50);
 
-                    getContext().startActivity(intent);
+                getContext().startActivity(intent);
 
-                    notifyDataSetChanged();
+                notifyDataSetChanged();
 
                 }
             });
