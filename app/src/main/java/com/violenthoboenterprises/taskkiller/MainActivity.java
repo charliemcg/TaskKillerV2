@@ -596,7 +596,7 @@ public class MainActivity extends AppCompatActivity {
 
             dateOrTime = false;
 
-            dateButton.setText("Set Date");
+            dateButton.setText("Set Time");
 
             //set background to white
             activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));

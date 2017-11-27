@@ -89,6 +89,13 @@ class MyAdapter extends ArrayAdapter<String> {
             Button snooze = (Button) propertiesView.findViewById(R.id.snooze);
             Button more = (Button) propertiesView.findViewById(R.id.more);
 
+            //"set due date" button becomes "remove due date" button if due date already set
+            if (MainActivity.showTaskDueIcon.get(MainActivity.activeTask)){
+
+                snooze.setText("Remove Due Date");
+
+            }
+
             //Actions to occur if user selects 'complete'
             complete.setOnClickListener(new View.OnClickListener() {
 
@@ -152,8 +159,19 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                v.setLayoutParams(MainActivity.params);
 
-                    MainActivity.taskList.set(MainActivity.activeTask + 1, "date");
-                    notifyDataSetChanged();
+                    if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
+
+                        MainActivity.taskList.set(MainActivity.activeTask + 1, "date");
+
+                        notifyDataSetChanged();
+
+                    } else {
+
+                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+
+                        notifyDataSetChanged();
+
+                    }
 
                 }
             });
@@ -247,7 +265,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     Paint.STRIKE_THRU_TEXT_FLAG);
 
                             //TODO use this code as a basis for setting up notification icons
-                            ImageView due = (ImageView) taskView.findViewById(R.id.due);
+                            ImageView due = taskView.findViewById(R.id.due);
 
                             due.setVisibility(View.VISIBLE);
 
@@ -255,7 +273,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     }
 
-                    //crossing out completed tasks which are below the showing task properties
+                //crossing out completed tasks which are below the showing task properties
                 } else {
 
                     //check is task has to be crossed out
