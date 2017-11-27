@@ -80,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
     //Keeps track of tasks that are completed but not removed
     static ArrayList<Boolean> tasksKilled;
 
+    static ArrayList<Boolean> showTaskDueIcon;
+
+
     //Message that shows up when there are no tasks
     private TextView noTasksToShow;
 
@@ -132,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         tasksAreClickable = true;
         taskList = new ArrayList<>();
         tasksKilled = new ArrayList<>();
+        showTaskDueIcon = new ArrayList<>();
         noTasksToShow = (TextView) findViewById(R.id.noTasks);
         taskNameEditText = (EditText) findViewById(R.id.taskNameEditText);
         add = (Button) findViewById(R.id.add);
@@ -159,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
 
                 //Tasks are not clickable if keyboard is up
                 if(tasksAreClickable) {
+
+                    Log.i(TAG, String.valueOf(showTaskDueIcon));
 
                     vibrate.vibrate(50);
 
@@ -298,6 +304,8 @@ public class MainActivity extends AppCompatActivity {
                         theListView.setAdapter(theAdapter[0]);
 
                         tasksKilled.remove(position);
+
+                        showTaskDueIcon.remove(position);
 
                         //Checks to see if there are still tasks left
                         noTasksLeft();
@@ -595,6 +603,8 @@ public class MainActivity extends AppCompatActivity {
 
             taskList.remove(activeTask + 1);
 
+            showTaskDueIcon.set(activeTask, true);
+
             theListView.setAdapter(theAdapter[0]);
 
             //Marks properties as not showing
@@ -614,6 +624,7 @@ public class MainActivity extends AppCompatActivity {
         //clearing the lists before adding data back into them so as to avoid duplication
         taskList.clear();
         tasksKilled.clear();
+        showTaskDueIcon.clear();
 
         checklistListSize = 0;
 
@@ -626,6 +637,8 @@ public class MainActivity extends AppCompatActivity {
 
             tasksKilled.add(mSharedPreferences.getBoolean("taskKilledKey" +
                     String.valueOf(i), false));
+
+            showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon" + String.valueOf(i), false));
 
         }
 
@@ -781,6 +794,8 @@ public class MainActivity extends AppCompatActivity {
 
                 tasksKilled.add(tasksKilled.size(), false);
 
+                showTaskDueIcon.add(showTaskDueIcon.size(), false);
+
             }else{
 
                 taskList.set(activeTask, taskName);
@@ -812,6 +827,9 @@ public class MainActivity extends AppCompatActivity {
                 mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
                         tasksKilled.get(i)).apply();
 
+                mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
+                        showTaskDueIcon.get(i)).apply();
+
             }
 
         } else {
@@ -837,6 +855,9 @@ public class MainActivity extends AppCompatActivity {
 
                 mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
                         tasksKilled.get(i)).apply();
+
+                mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
+                        showTaskDueIcon.get(i)).apply();
 
             }
 

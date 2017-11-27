@@ -229,9 +229,9 @@ class MyAdapter extends ArrayAdapter<String> {
                                 Paint.STRIKE_THRU_TEXT_FLAG);
 
                         //TODO use this code as a basis for setting up notification icons
-                        ImageView bell = (ImageView) taskView.findViewById(R.id.bell);
+                        ImageView due = taskView.findViewById(R.id.due);
 
-                        bell.setVisibility(View.VISIBLE);
+                        due.setVisibility(View.VISIBLE);
 
                     }
 
@@ -247,9 +247,9 @@ class MyAdapter extends ArrayAdapter<String> {
                                     Paint.STRIKE_THRU_TEXT_FLAG);
 
                             //TODO use this code as a basis for setting up notification icons
-                            ImageView bell = (ImageView) taskView.findViewById(R.id.bell);
+                            ImageView due = (ImageView) taskView.findViewById(R.id.due);
 
-                            bell.setVisibility(View.VISIBLE);
+                            due.setVisibility(View.VISIBLE);
 
                         }
 
@@ -264,12 +264,15 @@ class MyAdapter extends ArrayAdapter<String> {
                         theTextView.setPaintFlags(theTextView.getPaintFlags() |
                                 Paint.STRIKE_THRU_TEXT_FLAG);
 
-                        //TODO use this code as a basis for setting up notification icons
-                        ImageView bell = (ImageView) taskView.findViewById(R.id.bell);
-
-                        bell.setVisibility(View.VISIBLE);
-
                     }
+
+                }
+
+                if(MainActivity.showTaskDueIcon.get(position)){
+
+                    ImageView due = taskView.findViewById(R.id.due);
+
+                    due.setVisibility(View.VISIBLE);
 
                 }
 

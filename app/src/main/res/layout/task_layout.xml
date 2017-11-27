@@ -15,10 +15,10 @@
         android:layout_weight="4"/>
 
     <ImageView
-        android:id="@+id/bell"
+        android:id="@+id/due"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/bell"
+        android:src="@drawable/due"
         android:layout_weight="1"
         android:visibility="gone"/>
 

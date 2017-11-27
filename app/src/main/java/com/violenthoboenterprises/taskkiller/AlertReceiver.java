@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
 import android.app.Activity;
@@ -35,7 +36,8 @@ public class AlertReceiver extends BroadcastReceiver {
         PendingIntent notificIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
 
         //intent to execute when notification is clicked
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.bell).setContentTitle(msg).setTicker(msgAlert).setContentText(msgText);
+        //TODO find out what's going on with setSmallIcon()
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.bell).setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.bell)).setContentTitle(msg).setTicker(msgAlert).setContentText(msgText);
 
         //use phone's default notification sound
         mBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND);
