@@ -21,6 +21,7 @@ import android.util.Log;
 public class AlertReceiver extends BroadcastReceiver {
 
     String TAG;
+    static int notificationCount;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,6 +32,12 @@ public class AlertReceiver extends BroadcastReceiver {
     }
 
     public void createNotification(Context context, String msg, String msgText, String msgAlert){
+
+        if (notificationCount > 0) {
+
+            msg = "Multiple tasks need completing.";
+
+        }
 
         //defining intent and action to perform
         PendingIntent notificIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
@@ -52,7 +59,9 @@ public class AlertReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         //post notification
-        notificationManager.notify(1, mBuilder.build());
+        notificationManager.notify(/*1*/MainActivity.broadcastID, mBuilder.build());
+
+        notificationCount++;
 
     }
 

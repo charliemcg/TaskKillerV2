@@ -75,10 +75,17 @@ public class MainActivity extends AppCompatActivity {
 
     static int listViewHeight;
 
+    static int broadcastID;
 
-    static Intent alertIntent;
+    static int notificationCount;
 
-    static PendingIntent pendingIntent;
+    //TODO remove array
+    static Intent[] alertIntent;
+
+    //TODO remove intentCount and turn array into single variable if doesn't work. Might not even need this
+    static PendingIntent[] pendingIntent;
+//    static ArrayList<PendingIntent> pendingIntent;
+    static int intentCount;
 
 
     //List of tasks
@@ -109,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     //Parameters of 'add' button
     static RelativeLayout.LayoutParams params;
 
-    private SharedPreferences mSharedPreferences;
+    static SharedPreferences mSharedPreferences;
     static SharedPreferences nSharedPreferences;
 
     static View activityRootView;
@@ -162,6 +169,10 @@ public class MainActivity extends AppCompatActivity {
         activityRootView = findViewById(R.id.activityRoot);
         fadeTasks = false;
         dateOrTime = false;
+        intentCount = 0;
+        pendingIntent = new PendingIntent[3];
+        alertIntent = new Intent[3];
+        notificationCount = 0;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -414,32 +425,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                goToMyAdapter = true;
+                Toast.makeText(MainActivity.this, String.valueOf(notificationCount), Toast.LENGTH_SHORT).show();
 
-                vibrate.vibrate(50);
-
-                //Removes any visible task options
-                if(taskPropertiesShowing){
-
-                    taskList.remove(activeTask + 1);
-
-                    theListView.setAdapter(theAdapter[0]);
-
-                    taskPropertiesShowing = false;
-
-                }
-
-                //Show keyboard
-                keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
-
-                //Set return button to 'Done'
-                taskNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
-                //Ensure that there is no previous text in the text box
-                taskNameEditText.setText("");
-
-                //Actions to occur when keyboard is showing
-                checkKeyboardShowing();
+//                goToMyAdapter = true;
+//
+//                vibrate.vibrate(50);
+//
+//                //Removes any visible task options
+//                if(taskPropertiesShowing){
+//
+//                    taskList.remove(activeTask + 1);
+//
+//                    theListView.setAdapter(theAdapter[0]);
+//
+//                    taskPropertiesShowing = false;
+//
+//                }
+//
+//                //Show keyboard
+//                keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
+//
+//                //Set return button to 'Done'
+//                taskNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+//
+//                //Ensure that there is no previous text in the text box
+//                taskNameEditText.setText("");
+//
+//                //Actions to occur when keyboard is showing
+//                checkKeyboardShowing();
 
             }
 
@@ -538,8 +551,10 @@ public class MainActivity extends AppCompatActivity {
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        broadcastID = (int) (System.currentTimeMillis() / 10000);
+
         //show notification
-        notificationManager.notify(notifID, notificBuilder.build());
+        notificationManager.notify(/*notifID*/broadcastID, notificBuilder.build());
 
         //can't stop notification that has already been stopped
         isNotificActive = true;
@@ -591,10 +606,10 @@ public class MainActivity extends AppCompatActivity {
             calendar.set(calendar.SECOND, 0);
 
             //intention to execute AlertReceiver
-            alertIntent = new Intent(this, AlertReceiver.class);
+            alertIntent[intentCount] = new Intent(this, AlertReceiver.class);
 
             //setting the name of the task for which the notification is being set
-            alertIntent.putExtra("ToDo", taskList.get(activeTask));
+            alertIntent[intentCount].putExtra("ToDo", taskList.get(activeTask));
 
             //TODO fix alarm manager
             //allows for scheduling of notification
@@ -602,12 +617,21 @@ public class MainActivity extends AppCompatActivity {
             alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
             //TODO find better way to get IDs
-            int broadcastID = (int) (calendar.getTimeInMillis() / 10000);
+            broadcastID = (int) (/*calendar.getTimeInMillis()*/System.currentTimeMillis() / 10000);
 
-            pendingIntent = PendingIntent.getBroadcast(this, broadcastID, alertIntent, PendingIntent.FLAG_ONE_SHOT/*UPDATE_CURRENT*/);
+//            int requestCode = ("someString" + System.currentTimeMillis()).hashCode();
+
+//            alertIntent.putExtra("randomRequestCode", requestCode);
+
+            //TODO use an array list for these and try cancelling the correct one when needed
+            pendingIntent[intentCount] = PendingIntent.getBroadcast(this, broadcastID/*intentCount/*requestCode*/, alertIntent[intentCount], PendingIntent./*FLAG_ONE_SHOT*/FLAG_UPDATE_CURRENT);
 
             //setting the notification
-            alarmManager/*.get(activeTask)*/.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent/*PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT)*/);
+            alarmManager/*.get(activeTask)*/.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent[intentCount]/*PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT)*/);
+
+            intentCount++;
+
+            notificationCount++;
 
             datePicker.setVisibility(View.VISIBLE);
 
@@ -634,8 +658,6 @@ public class MainActivity extends AppCompatActivity {
 
             add.setLayoutParams(params);
 
-            Log.i(TAG, String.valueOf(alarmManager));
-
         }
 
     }
@@ -648,6 +670,10 @@ public class MainActivity extends AppCompatActivity {
         showTaskDueIcon.clear();
 
         checklistListSize = 0;
+
+        notificationCount = mSharedPreferences.getInt("notificationCountKey", 0);
+
+        notificationCount = notificationCount - AlertReceiver.notificationCount;
 
         //Existing tasks are recalled when app opened
         taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
@@ -834,6 +860,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
 
         super.onPause();
+
+        mSharedPreferences.edit().putInt("notificationCountKey", notificationCount).apply();
 
         //Important to know if task properties are showing so as to not corrupt the list
         if (!taskPropertiesShowing) {

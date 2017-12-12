@@ -170,8 +170,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
 
-                    Log.i(TAG, String.valueOf(MainActivity.alarmManager));
-
                     //TODO fix alarm manager
 //                    MainActivity.alarmManager/*.get(MainActivity.activeTask)*/.cancel(MainActivity.pendingIntent);
 
