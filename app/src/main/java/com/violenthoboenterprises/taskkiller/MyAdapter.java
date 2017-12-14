@@ -140,26 +140,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-//                //set background white
-//                MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//
-//                //Task options disappear
-//                MainActivity.taskList.remove(MainActivity.activeTask + 1);
-//
-//                notifyDataSetChanged();
-//
-//                MainActivity.taskPropertiesShowing = false;
-//
-//                Toast.makeText(v.getContext(), "Get it done, Wimp!", Toast.LENGTH_SHORT).show();
-//
-//                MainActivity.add.setVisibility(View.VISIBLE);
-//
-//                MainActivity.vibrate.vibrate(50);
-//
-//                MainActivity.params.height = MainActivity.addHeight;
-//
-//                v.setLayoutParams(MainActivity.params);
-
                 if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
 
                     MainActivity.taskList.set(MainActivity.activeTask + 1, "date");
@@ -170,8 +150,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
 
-                    //TODO fix alarm manager
-//                    MainActivity.alarmManager/*.get(MainActivity.activeTask)*/.cancel(MainActivity.pendingIntent);
+                    MainActivity.alarmManager.cancel(MainActivity.pendingIntent.get(MainActivity.activeTask));
 
                     notifyDataSetChanged();
 
@@ -199,22 +178,6 @@ class MyAdapter extends ArrayAdapter<String> {
             return propertiesView;
 
         }else if (task.equals("date")){
-
-//            TimePicker timePicker = (TimePicker) dateView.findViewById(R.id.timePicker);
-//            Button dateBtn = (Button) dateView.findViewById(R.id.date);
-
-//            MainActivity.alertTime = timePicker.getDrawingTime();
-
-            //TODO use this code to help with setting notification time
-//            dateBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v){
-//
-//                    Toast.makeText(v.getContext(), "Selected " + timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute(), Toast.LENGTH_SHORT).show();
-//
-//                }
-//
-//            });
 
             //centering the selected item in the view
             MainActivity.theListView.smoothScrollToPositionFromTop(position - 1,0 );
@@ -244,7 +207,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 //crossing out completed tasks if task properties are not showing
                 if (!MainActivity.taskPropertiesShowing) {
 
-                    //check is task has to be crossed out
+                    //check if task has to be crossed out
                     if (MainActivity.tasksKilled.get(position)) {
 
                         theTextView.setPaintFlags(theTextView.getPaintFlags() |
@@ -252,7 +215,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     }
 
-                    //crossing out completed tasks which are above the showing task properties
+                //crossing out completed tasks which are above the showing task properties
                 } else if (MainActivity.activeTask < position) {
 
                     if (position != 0) {
@@ -270,7 +233,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 //crossing out completed tasks which are below the showing task properties
                 } else {
 
-                    //check is task has to be crossed out
+                    //check if task has to be crossed out
                     if (MainActivity.tasksKilled.get(position)) {
 
                         theTextView.setPaintFlags(theTextView.getPaintFlags() |

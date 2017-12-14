@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.net.URISyntaxException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,16 +76,20 @@ public class MainActivity extends AppCompatActivity {
 
     static int listViewHeight;
 
-    static int broadcastID;
+//    static int broadcastID;
 
     static int notificationCount;
 
     //TODO remove array
-    static Intent[] alertIntent;
+    static ArrayList<Integer> broadcastID;
+
+    //TODO remove array
+//    static Intent[] alertIntent;
+    static ArrayList<Intent> alertIntent;
 
     //TODO remove intentCount and turn array into single variable if doesn't work. Might not even need this
-    static PendingIntent[] pendingIntent;
-//    static ArrayList<PendingIntent> pendingIntent;
+//    static PendingIntent[] pendingIntent;
+    static ArrayList<PendingIntent> pendingIntent;
     static int intentCount;
 
 
@@ -170,9 +175,11 @@ public class MainActivity extends AppCompatActivity {
         fadeTasks = false;
         dateOrTime = false;
         intentCount = 0;
-        pendingIntent = new PendingIntent[3];
-        alertIntent = new Intent[3];
+        pendingIntent = new ArrayList<>();
+        alertIntent = new ArrayList<>();
         notificationCount = 0;
+        broadcastID = new ArrayList<>();
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -325,7 +332,13 @@ public class MainActivity extends AppCompatActivity {
 
                     tasksKilled.remove(position);
 
+                    alertIntent.remove(position);
+
+                    pendingIntent.remove(position);
+
                     showTaskDueIcon.remove(position);
+
+                    broadcastID.remove(position);
 
                     //TODO fix alarm manager
 //                    alarmManager.remove(position);
@@ -425,34 +438,39 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(MainActivity.this, String.valueOf(notificationCount), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, String.valueOf(notificationCount), Toast.LENGTH_SHORT).show();
+//                Log.i(TAG, "notification count: " + String.valueOf(notificationCount));
+//                Log.i(TAG, "intent count: " + String.valueOf(intentCount));
+//                Log.i(TAG, "alert intent: " + String.valueOf(alertIntent));
+                Log.i(TAG, "pending intent: " + String.valueOf(pendingIntent));
+                Log.i(TAG, "broadcast id: " + String.valueOf(broadcastID));
 
-//                goToMyAdapter = true;
-//
-//                vibrate.vibrate(50);
-//
-//                //Removes any visible task options
-//                if(taskPropertiesShowing){
-//
-//                    taskList.remove(activeTask + 1);
-//
-//                    theListView.setAdapter(theAdapter[0]);
-//
-//                    taskPropertiesShowing = false;
-//
-//                }
-//
-//                //Show keyboard
-//                keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
-//
-//                //Set return button to 'Done'
-//                taskNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-//
-//                //Ensure that there is no previous text in the text box
-//                taskNameEditText.setText("");
-//
-//                //Actions to occur when keyboard is showing
-//                checkKeyboardShowing();
+                goToMyAdapter = true;
+
+                vibrate.vibrate(50);
+
+                //Removes any visible task options
+                if(taskPropertiesShowing){
+
+                    taskList.remove(activeTask + 1);
+
+                    theListView.setAdapter(theAdapter[0]);
+
+                    taskPropertiesShowing = false;
+
+                }
+
+                //Show keyboard
+                keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
+
+                //Set return button to 'Done'
+                taskNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+                //Ensure that there is no previous text in the text box
+                taskNameEditText.setText("");
+
+                //Actions to occur when keyboard is showing
+                checkKeyboardShowing();
 
             }
 
@@ -551,10 +569,10 @@ public class MainActivity extends AppCompatActivity {
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        broadcastID = (int) (System.currentTimeMillis() / 10000);
+//        broadcastID = (int) (System.currentTimeMillis() / 10000);
 
         //show notification
-        notificationManager.notify(/*notifID*/broadcastID, notificBuilder.build());
+//        notificationManager.notify(/*notifID*/broadcastID, notificBuilder.build());
 
         //can't stop notification that has already been stopped
         isNotificActive = true;
@@ -605,33 +623,27 @@ public class MainActivity extends AppCompatActivity {
             calendar.set(Calendar.MINUTE, timePicker.getMinute());
             calendar.set(calendar.SECOND, 0);
 
+            //TODO this probably doesn't even need to be an arraylist
             //intention to execute AlertReceiver
-            alertIntent[intentCount] = new Intent(this, AlertReceiver.class);
+            alertIntent.set(activeTask, new Intent(this, AlertReceiver.class));/* = new Intent(this, AlertReceiver.class);*/
 
             //setting the name of the task for which the notification is being set
-            alertIntent[intentCount].putExtra("ToDo", taskList.get(activeTask));
-
-            //TODO fix alarm manager
-            //allows for scheduling of notification
-//            alarmManager.set(activeTask, (AlarmManager) getSystemService(Context.ALARM_SERVICE));
-            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alertIntent.get(activeTask).putExtra("ToDo", taskList.get(activeTask));
 
             //TODO find better way to get IDs
-            broadcastID = (int) (/*calendar.getTimeInMillis()*/System.currentTimeMillis() / 10000);
-
-//            int requestCode = ("someString" + System.currentTimeMillis()).hashCode();
-
-//            alertIntent.putExtra("randomRequestCode", requestCode);
+//            broadcastID = (int) (/*calendar.getTimeInMillis()*/System.currentTimeMillis() / 10000);
+            broadcastID.set(activeTask, (int) (System.currentTimeMillis() / 10000));
 
             //TODO use an array list for these and try cancelling the correct one when needed
-            pendingIntent[intentCount] = PendingIntent.getBroadcast(this, broadcastID/*intentCount/*requestCode*/, alertIntent[intentCount], PendingIntent./*FLAG_ONE_SHOT*/FLAG_UPDATE_CURRENT);
+//            pendingIntent[intentCount] = PendingIntent.getBroadcast(this, broadcastID/*intentCount/*requestCode*/, alertIntent.get(intentCount), PendingIntent./*FLAG_ONE_SHOT*/FLAG_UPDATE_CURRENT);
+            pendingIntent.set(activeTask, PendingIntent.getBroadcast(this, broadcastID.get(activeTask)/*intentCount/*requestCode*/, alertIntent.get(activeTask), PendingIntent./*FLAG_ONE_SHOT*/FLAG_UPDATE_CURRENT));
 
             //setting the notification
-            alarmManager/*.get(activeTask)*/.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent[intentCount]/*PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT)*/);
+            alarmManager/*.get(activeTask)*/.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent.get(activeTask)/*PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT)*/);
 
-            intentCount++;
+//            intentCount++;
 
-            notificationCount++;
+//            notificationCount++;
 
             datePicker.setVisibility(View.VISIBLE);
 
@@ -662,18 +674,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void getSavedData() {
+    private void getSavedData() throws URISyntaxException {
 
         //clearing the lists before adding data back into them so as to avoid duplication
         taskList.clear();
         tasksKilled.clear();
         showTaskDueIcon.clear();
+        alertIntent.clear();
+        pendingIntent.clear();
+        broadcastID.clear();
 
         checklistListSize = 0;
 
-        notificationCount = mSharedPreferences.getInt("notificationCountKey", 0);
+//        notificationCount = mSharedPreferences.getInt("notificationCountKey", 0);
 
-        notificationCount = notificationCount - AlertReceiver.notificationCount;
+//        notificationCount = notificationCount - AlertReceiver.notificationCount;
 
         //Existing tasks are recalled when app opened
         taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
@@ -686,6 +701,19 @@ public class MainActivity extends AppCompatActivity {
                     String.valueOf(i), false));
 
             showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon" + String.valueOf(i), false));
+
+            alertIntent.add(i, Intent.getIntent(mSharedPreferences.getString("alertIntentKey" + String.valueOf(i), "")));
+//            alertIntent.set(i, new Intent(this, AlertReceiver.class));
+
+            //TODO May have to rebuild this from scratch
+//            pendingIntent.add(mSharedPreferences.getString("pendingIntentKey" + String.valueOf(i), ""));
+
+            broadcastID.add(mSharedPreferences.getInt("broadcastIDKey" + String.valueOf(i), 0));
+
+            Log.i(TAG, String.valueOf(broadcastID));
+            Log.i(TAG, String.valueOf(alertIntent));
+
+            pendingIntent.add(PendingIntent.getBroadcast(this, broadcastID.get(i), alertIntent.get(i), PendingIntent.FLAG_UPDATE_CURRENT));
 
         }
 
@@ -843,8 +871,11 @@ public class MainActivity extends AppCompatActivity {
 
                 showTaskDueIcon.add(showTaskDueIcon.size(), false);
 
-                //TODO fix alarm manager
-//                alarmManager.add(alarmManager.size(), null);
+                alertIntent.add(alertIntent.size(), new Intent());
+
+                pendingIntent.add(pendingIntent.size(), PendingIntent.getBroadcast(this, 0, alertIntent.get(0), PendingIntent.FLAG_UPDATE_CURRENT));
+
+                broadcastID.add(broadcastID.size(), 0);
 
             }else{
 
@@ -882,6 +913,14 @@ public class MainActivity extends AppCompatActivity {
                 mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
                         showTaskDueIcon.get(i)).apply();
 
+//                Log.i(TAG, String.valueOf(alertIntent.get(i).getData()));
+
+                mSharedPreferences.edit().putString("alertIntentKey" + String.valueOf(i), String.valueOf(alertIntent.get(i))).apply();
+
+                mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i), pendingIntent.get(i).toString()).apply();
+
+                mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i), broadcastID.get(i)).apply();
+
             }
 
         } else {
@@ -911,6 +950,12 @@ public class MainActivity extends AppCompatActivity {
                 mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
                         showTaskDueIcon.get(i)).apply();
 
+                mSharedPreferences.edit().putString("alertIntentKey" + String.valueOf(i), alertIntent.get(i).toString()).apply();
+
+                mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i), pendingIntent.get(i).toString()).apply();
+
+                mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i), broadcastID.get(i)).apply();
+
             }
 
         }
@@ -922,7 +967,11 @@ public class MainActivity extends AppCompatActivity {
 
         super.onResume();
 
-        getSavedData();
+        try {
+            getSavedData();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
     }
 
