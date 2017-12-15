@@ -27,10 +27,8 @@ public class Checklist extends MainActivity {
     public ListAdapter[] checklistAdapter;
     static ListView checklistView;
     public static int checklistSize;
-    //    public static SharedPreferences mSharedPreferences;
     static ArrayList<ArrayList<String>> checklistList;
     static int activeSubTask;
-    //    static int checklistListSize;
     static ArrayList<ArrayList<Boolean>> subTasksKilled;
     static boolean subTaskBeingEdited;
     static boolean goToChecklistAdapter;
@@ -47,9 +45,9 @@ public class Checklist extends MainActivity {
         MainActivity.nSharedPreferences = getPreferences(MODE_PRIVATE);
 
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        checklistEditText = (EditText) findViewById(R.id.checklistEditText);
+        checklistEditText = findViewById(R.id.checklistEditText);
         activeSubTask = MainActivity.activeTask;
-        checklistView = (ListView) findViewById(R.id.theChecklist);
+        checklistView = findViewById(R.id.theChecklist);
         checklistList = new ArrayList<>();
         subTasksKilled = new ArrayList<>();
         subTaskBeingEdited = false;
@@ -99,7 +97,8 @@ public class Checklist extends MainActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
 
-                if(subTasksClickable && !subTasksKilled.get(MainActivity.activeTask).get(position)) {
+                if(subTasksClickable && !subTasksKilled.get(MainActivity.activeTask)
+                        .get(position)) {
 
                     keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 
@@ -143,12 +142,12 @@ public class Checklist extends MainActivity {
                     if(!checklistTaskName.equals("")) {
 
                         //Adds sub task to list
-                        checklistList.get(activeSubTask).add(checklistList.get(activeSubTask).size(),
-                                checklistTaskName);
+                        checklistList.get(activeSubTask).add(checklistList
+                                        .get(activeSubTask).size(), checklistTaskName);
 
                         //Marks sub task as incomplete
-                        subTasksKilled.get(activeSubTask).add(subTasksKilled.get(activeSubTask).size(),
-                                false);
+                        subTasksKilled.get(activeSubTask).add(subTasksKilled
+                                .get(activeSubTask).size(), false);
 
                     }
 
@@ -168,7 +167,8 @@ public class Checklist extends MainActivity {
                     //Don't allow blank sub tasks
                     if(!editedSubTaskString.equals("")) {
 
-                        checklistList.get(MainActivity.activeTask).set(activeSubTask, editedSubTaskString);
+                        checklistList.get(MainActivity.activeTask).set(activeSubTask,
+                                editedSubTaskString);
 
                     }
 
@@ -309,7 +309,8 @@ public class Checklist extends MainActivity {
         //Getting and saving the size of the task array list
         MainActivity.checklistListSize = checklistList.size();
 
-        MainActivity.nSharedPreferences.edit().putInt("checklistListSizeKey", MainActivity.checklistListSize).apply();
+        MainActivity.nSharedPreferences.edit().putInt("checklistListSizeKey",
+                MainActivity.checklistListSize).apply();
 
         for(int i = 0; i < MainActivity.checklistListSize; i++){
 
@@ -328,11 +329,13 @@ public class Checklist extends MainActivity {
 
             for(int j = 0; j < checklistSize; j++){
 
-                MainActivity.nSharedPreferences.edit().putString("checklistItemKey" + String.valueOf(i)
-                        + String.valueOf(j), checklistList.get(i).get(j)).apply();
+                MainActivity.nSharedPreferences.edit().putString("checklistItemKey"
+                        + String.valueOf(i) + String.valueOf(j),
+                        checklistList.get(i).get(j)).apply();
 
-                MainActivity.nSharedPreferences.edit().putBoolean("subTasksKilledKey" + String.valueOf(i)
-                        + String.valueOf(j), subTasksKilled.get(i).get(j)).apply();
+                MainActivity.nSharedPreferences.edit().putBoolean("subTasksKilledKey"
+                        + String.valueOf(i) + String.valueOf(j),
+                        subTasksKilled.get(i).get(j)).apply();
 
             }
 
@@ -360,11 +363,13 @@ public class Checklist extends MainActivity {
         //Keyboard is inactive without this line
         checklistEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
-        MainActivity.checklistListSize = MainActivity.nSharedPreferences.getInt("checklistListSizeKey", 0);
+        MainActivity.checklistListSize = MainActivity.nSharedPreferences
+                .getInt("checklistListSizeKey", 0);
 
         for (int i = 0; i < MainActivity.checklistListSize; i++) {
 
-            checklistSize = MainActivity.nSharedPreferences.getInt("checklistSizeKey" + String.valueOf(i), 0);
+            checklistSize = MainActivity.nSharedPreferences
+                    .getInt("checklistSizeKey" + String.valueOf(i), 0);
 
             try {
 
@@ -388,28 +393,30 @@ public class Checklist extends MainActivity {
 
             for (int j = 0; j < checklistSize; j++) {
 
-                checklistList.get(i).add(j, MainActivity.nSharedPreferences.getString("checklistItemKey"
-                        + String.valueOf(i) + String.valueOf(j), ""));
+                checklistList.get(i).add(j, MainActivity.nSharedPreferences
+                        .getString("checklistItemKey" + String.valueOf(i)
+                                + String.valueOf(j), ""));
 
-                subTasksKilled.get(i).add(j, MainActivity.nSharedPreferences.getBoolean("subTasksKilledKey"
-                        + String.valueOf(i) + String.valueOf(j), false));
+                subTasksKilled.get(i).add(j, MainActivity.nSharedPreferences
+                        .getBoolean("subTasksKilledKey" + String.valueOf(i)
+                                + String.valueOf(j), false));
 
             }
 
         }
 
-        //Only show keyboard if there are no existing sub tasks TODO might not need this if checkifkeyboardshowing is called
-        if(checklistList.get(MainActivity.activeTask).size() != 0) {
-
-            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-            subTasksClickable = true;
-
-        }else{
-
-            subTasksClickable = false;
-
-        }
+//        //Only show keyboard if there are no existing sub tasks TODO might not need this if checkifkeyboardshowing is called
+//        if(checklistList.get(MainActivity.activeTask).size() != 0) {
+//
+//            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//
+//            subTasksClickable = true;
+//
+//        }else{
+//
+//            subTasksClickable = false;
+//
+//        }
 
     }
 

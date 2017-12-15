@@ -27,15 +27,6 @@ import java.util.ArrayList;
 
 class MyAdapter extends ArrayAdapter<String> {
 
-    //Notify the user that something happened in the background
-    NotificationManager notificationManager;
-
-    //Tracks if notification is active in the task bar
-    boolean isNotificActive = false;
-
-    //Tracks notifications
-    int notifID = 33;
-
     //String for debugging
     final String TAG = "MyAdapter";
 
@@ -54,12 +45,14 @@ class MyAdapter extends ArrayAdapter<String> {
         final View propertiesView = theInflater.inflate(R.layout.task_properties_layout,
                 parent, false);
         final View dateView = theInflater.inflate(R.layout.date_layout, parent, false);
-        final TextView theTextView = (TextView) taskView.findViewById(R.id.textView);
+        final TextView theTextView = taskView.findViewById(R.id.textView);
         final Intent intent = new Intent(getContext(), Checklist.class);
 
         //TODO make sure hard coded values work on all devices
-        //Task cannot be centered unless it's in view. Moving selected task into view if not already in view in portrait.
-        if ((MainActivity.activeTask > 6) && MainActivity.centerTask && (getContext().getResources().getConfiguration().orientation == 1)) {
+        //Task cannot be centered unless it's in view. Moving selected task into view
+        // if not already in view in portrait.
+        if ((MainActivity.activeTask > 6) && MainActivity.centerTask && (getContext()
+                .getResources().getConfiguration().orientation == 1)) {
             MainActivity.theListView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -68,7 +61,8 @@ class MyAdapter extends ArrayAdapter<String> {
             });
             MainActivity.centerTask = false;
             //Same as above but for landscape.
-        } else if ((MainActivity.activeTask > 3) && MainActivity.centerTask && (getContext().getResources().getConfiguration().orientation == 2)) {
+        } else if ((MainActivity.activeTask > 3) && MainActivity.centerTask && (getContext()
+                .getResources().getConfiguration().orientation == 2)) {
             MainActivity.theListView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -83,12 +77,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //centering the selected item in the view
             MainActivity.listViewHeight = MainActivity.theListView.getMeasuredHeight();
-            MainActivity.theListView.smoothScrollToPositionFromTop(position, (MainActivity.listViewHeight / 2));
+            MainActivity.theListView.smoothScrollToPositionFromTop(position,
+                    (MainActivity.listViewHeight / 2));
 
             //Initialising variables
-            Button complete = (Button) propertiesView.findViewById(R.id.complete);
-            Button snooze = (Button) propertiesView.findViewById(R.id.snooze);
-            Button more = (Button) propertiesView.findViewById(R.id.more);
+            Button complete = propertiesView.findViewById(R.id.complete);
+            Button snooze = propertiesView.findViewById(R.id.snooze);
+            Button more = propertiesView.findViewById(R.id.more);
 
             //"set due date" button becomes "remove due date" button if due date already set
             if (MainActivity.showTaskDueIcon.get(MainActivity.activeTask)){
@@ -104,7 +99,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 public void onClick(View v) {
 
                 //set background white
-                MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                MainActivity.activityRootView.setBackgroundColor(Color
+                        .parseColor("#FFFFFF"));
 
                 //Task options disappear
                 MainActivity.taskList.remove(MainActivity.activeTask + 1);
@@ -150,7 +146,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
 
-                    MainActivity.alarmManager.cancel(MainActivity.pendingIntent.get(MainActivity.activeTask));
+                    MainActivity.alarmManager.cancel(MainActivity.pendingIntent
+                            .get(MainActivity.activeTask));
 
                     notifyDataSetChanged();
 
@@ -243,6 +240,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+                //Show due date notification if required
                 if(MainActivity.showTaskDueIcon.get(position)){
 
                     ImageView due = taskView.findViewById(R.id.due);

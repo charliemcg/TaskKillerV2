@@ -19,9 +19,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
     String TAG;
 
     public ChecklistAdapter(Context context, ArrayList<String> values) {
-
         super(context, R.layout.checklist_item, values);
-
     }
 
     @Override
@@ -29,9 +27,10 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         final String item = getItem(position);
         final LayoutInflater theInflater = LayoutInflater.from(getContext());
-        final View checklistItemView = theInflater.inflate(R.layout.checklist_item, parent, false);
-        TextView checklistTextView = (TextView) checklistItemView.findViewById(R.id.checklistTextView);
-        final Button tick = (Button) checklistItemView.findViewById(R.id.tick);
+        final View checklistItemView = theInflater.inflate
+                (R.layout.checklist_item, parent, false);
+        TextView checklistTextView = checklistItemView.findViewById(R.id.checklistTextView);
+        final Button tick = checklistItemView.findViewById(R.id.tick);
         TAG = "ChecklistAdapter";
 
         //actions to occur when sub task marked as done
@@ -49,13 +48,14 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
                 //Value of more than 800 seems to indicate that the keyboard is showing
                 //in portrait mode
-                if ((heightDiff > 800) && (Checklist.checklistRootView.getResources().getConfiguration().orientation == 1)) {
+                if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
+                        .getConfiguration().orientation == 1)) {
 
                     Checklist.subTasksClickable = false;
 
                     //Similar to above but for landscape mode
-                }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView.getResources()
-                        .getConfiguration().orientation == 2)){
+                }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
+                        .getResources().getConfiguration().orientation == 2)){
 
                     Checklist.subTasksClickable = false;
 

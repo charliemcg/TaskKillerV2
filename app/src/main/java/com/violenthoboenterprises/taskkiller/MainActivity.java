@@ -57,11 +57,10 @@ public class MainActivity extends AppCompatActivity {
     static boolean checklistShowing;
     //Indicates that tasks should be faded out due to keyboard being up
     static boolean fadeTasks;
-
+    //Used when making task centered in list view
     static boolean centerTask;
-
+    //Used when displaying UI elements for either picking time or date
     boolean dateOrTime;
-
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -71,37 +70,26 @@ public class MainActivity extends AppCompatActivity {
     static int addHeight;
     //Measures to determine if keyboard is up
     private int heightDiff;
-
+    //Size of checklist of checklists
     static int checklistListSize;
-
+    //Height of list view as viewable on screen
     static int listViewHeight;
 
-//    static int broadcastID;
-
-    static int notificationCount;
-
-    //TODO remove array
+    //Each task is assigned a unique broadcast ID when assigning a notification alarm
     static ArrayList<Integer> broadcastID;
-
-    //TODO remove array
-//    static Intent[] alertIntent;
-    static ArrayList<Intent> alertIntent;
-
-    //TODO remove intentCount and turn array into single variable if doesn't work. Might not even need this
-//    static PendingIntent[] pendingIntent;
+    //Each task is assigned a unique pending intent when assigning a notification alarm
     static ArrayList<PendingIntent> pendingIntent;
-    static int intentCount;
-
-
     //List of tasks
     public static ArrayList<String> taskList;
     //Keeps track of tasks that are completed but not removed
     static ArrayList<Boolean> tasksKilled;
-
+    //Keeps track of tasks which require a due date notification
     static ArrayList<Boolean> showTaskDueIcon;
 
-    //TODO fix alarm manager
-//    static ArrayList<AlarmManager> alarmManager;
+    //Required for setting notification alarms
+    static Intent alertIntent;
+
+    //Managers notification alarms
     static AlarmManager alarmManager;
 
     //Message that shows up when there are no tasks
@@ -116,34 +104,32 @@ public class MainActivity extends AppCompatActivity {
     //Scrollable list
     static ListView theListView;
 
+    //The master view
+    static View activityRootView;
+
+    //The keyboard
     static InputMethodManager keyboard;
 
     //Parameters of 'add' button
     static RelativeLayout.LayoutParams params;
 
+    //Save data from main activity on close
     static SharedPreferences mSharedPreferences;
+
+    //Save data related to checklist on close
     static SharedPreferences nSharedPreferences;
 
-    static View activityRootView;
-
+    //Allow phone to vibrate
     static Vibrator vibrate;
 
-    public ListAdapter[] theAdapter;
+    //Allow for updating the list
+    public static ListAdapter[] theAdapter;
 
     //Inflater for checklists
     static LayoutInflater inflater;
 
     //String used for debugging
     String TAG;
-
-    //Notify the user that something happened in the background
-    NotificationManager notificationManager;
-
-    //Tracks if notification is active in the task bar
-    boolean isNotificActive = false;
-
-    //Tracks notifications
-    int notifID = 33;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,12 +143,10 @@ public class MainActivity extends AppCompatActivity {
         taskList = new ArrayList<>();
         tasksKilled = new ArrayList<>();
         showTaskDueIcon = new ArrayList<>();
-        //TODO fix alarm manager
-//        alarmManager = new ArrayList<>();
-        noTasksToShow = (TextView) findViewById(R.id.noTasks);
-        taskNameEditText = (EditText) findViewById(R.id.taskNameEditText);
-        add = (Button) findViewById(R.id.add);
-        theListView = (ListView) findViewById(R.id.theListView);
+        noTasksToShow = findViewById(R.id.noTasks);
+        taskNameEditText = findViewById(R.id.taskNameEditText);
+        add = findViewById(R.id.add);
+        theListView = findViewById(R.id.theListView);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         params = (RelativeLayout.LayoutParams) add.getLayoutParams();
         vibrate = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -170,14 +154,10 @@ public class MainActivity extends AppCompatActivity {
         addHeight = params.height;
         theAdapter = new ListAdapter[]{new MyAdapter(this, taskList)};
         TAG = "mainActivity";
-        //Getting the main view layout
         activityRootView = findViewById(R.id.activityRoot);
         fadeTasks = false;
         dateOrTime = false;
-        intentCount = 0;
         pendingIntent = new ArrayList<>();
-        alertIntent = new ArrayList<>();
-        notificationCount = 0;
         broadcastID = new ArrayList<>();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
@@ -235,11 +215,13 @@ public class MainActivity extends AppCompatActivity {
                     //skip this management of sub tasks if there are no sub tasks
                     try {
 
-                        checklistListSize = nSharedPreferences.getInt("checklistListSizeKey", 0);
+                        checklistListSize = nSharedPreferences
+                                .getInt("checklistListSizeKey", 0);
 
                         for (int i = 0; i < checklistListSize; i++) {
 
-                            Checklist.checklistSize = nSharedPreferences.getInt("checklistSizeKey" + String.valueOf(i), 0);
+                            Checklist.checklistSize = nSharedPreferences
+                                    .getInt("checklistSizeKey" + String.valueOf(i), 0);
 
                             try {
 
@@ -263,10 +245,12 @@ public class MainActivity extends AppCompatActivity {
 
                             for (int j = 0; j < Checklist.checklistSize; j++) {
 
-                                Checklist.checklistList.get(i).set(j, nSharedPreferences.getString("checklistItemKey"
+                                Checklist.checklistList.get(i).set(j, nSharedPreferences
+                                        .getString("checklistItemKey"
                                         + String.valueOf(i) + String.valueOf(j), ""));
 
-                                Checklist.subTasksKilled.get(i).set(j, nSharedPreferences.getBoolean("subTasksKilledKey"
+                                Checklist.subTasksKilled.get(i).set(j, nSharedPreferences
+                                        .getBoolean("subTasksKilledKey"
                                         + String.valueOf(i) + String.valueOf(j), false));
 
                             }
@@ -292,15 +276,16 @@ public class MainActivity extends AppCompatActivity {
                         //Getting and saving the size of the task array list
                         checklistListSize = Checklist.checklistList.size();
 
-                        nSharedPreferences.edit().putInt("checklistListSizeKey", Checklist.checklistListSize).apply();
+                        nSharedPreferences.edit().putInt("checklistListSizeKey",
+                                Checklist.checklistListSize).apply();
 
                         for (int i = 0; i < checklistListSize; i++) {
 
                             //Getting and saving the size of each array list of sub tasks
                             Checklist.checklistSize = Checklist.checklistList.get(i).size();
 
-                            nSharedPreferences.edit().putInt("checklistSizeKey" + String.valueOf(i),
-                                    Checklist.checklistSize).apply();
+                            nSharedPreferences.edit().putInt("checklistSizeKey"
+                                            + String.valueOf(i), Checklist.checklistSize).apply();
 
                         }
 
@@ -311,11 +296,13 @@ public class MainActivity extends AppCompatActivity {
 
                             for (int j = 0; j < Checklist.checklistSize; j++) {
 
-                                nSharedPreferences.edit().putString("checklistItemKey" + String.valueOf(i)
-                                        + String.valueOf(j), Checklist.checklistList.get(i).get(j)).apply();
+                                nSharedPreferences.edit().putString("checklistItemKey"
+                                        + String.valueOf(i) + String.valueOf(j),
+                                        Checklist.checklistList.get(i).get(j)).apply();
 
-                                nSharedPreferences.edit().putBoolean("subTasksKilledKey" + String.valueOf(i)
-                                        + String.valueOf(j), Checklist.subTasksKilled.get(i).get(j)).apply();
+                                nSharedPreferences.edit().putBoolean("subTasksKilledKey"
+                                        + String.valueOf(i) + String.valueOf(j),
+                                        Checklist.subTasksKilled.get(i).get(j)).apply();
 
                             }
 
@@ -332,16 +319,14 @@ public class MainActivity extends AppCompatActivity {
 
                     tasksKilled.remove(position);
 
-                    alertIntent.remove(position);
+                    //Cancel notification alarms if one is set
+                    alarmManager.cancel(pendingIntent.get(position));
 
                     pendingIntent.remove(position);
 
                     showTaskDueIcon.remove(position);
 
                     broadcastID.remove(position);
-
-                    //TODO fix alarm manager
-//                    alarmManager.remove(position);
 
                     //Checks to see if there are still tasks left
                     noTasksLeft();
@@ -383,7 +368,8 @@ public class MainActivity extends AppCompatActivity {
 
                 int i = position;
 
-                //Cannot long click last list item with another item's properties showing to prevent index out of bounds error
+                //Cannot long click last list item with another item's
+                // properties showing to prevent index out of bounds error
                 if (taskPropertiesShowing && (position != 0)) {
 
                     i = position - 1;
@@ -419,7 +405,8 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (tasksAreClickable && tasksKilled.get(i) && !taskPropertiesShowing) {
 
-                    Toast.makeText(MainActivity.this, "Task Reinstated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Task Reinstated",
+                            Toast.LENGTH_SHORT).show();
 
                     tasksKilled.set(i, false);
 
@@ -437,13 +424,6 @@ public class MainActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                Toast.makeText(MainActivity.this, String.valueOf(notificationCount), Toast.LENGTH_SHORT).show();
-//                Log.i(TAG, "notification count: " + String.valueOf(notificationCount));
-//                Log.i(TAG, "intent count: " + String.valueOf(intentCount));
-//                Log.i(TAG, "alert intent: " + String.valueOf(alertIntent));
-                Log.i(TAG, "pending intent: " + String.valueOf(pendingIntent));
-                Log.i(TAG, "broadcast id: " + String.valueOf(broadcastID));
 
                 goToMyAdapter = true;
 
@@ -542,55 +522,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void showNotification(View view) {
-
-        android.support.v4.app.NotificationCompat.Builder notificBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("Message").setContentText("New Message").setTicker("Alert New Message").setSmallIcon(R.drawable.bell);
-
-        //Intention to open MainActivity when notification clicked
-        Intent moreInfoIntent = new Intent(this, MainActivity.class);
-
-        //stack tasks across activites so we go to the proper place when back is clicked
-        TaskStackBuilder tStackBuilder = TaskStackBuilder.create(this);
-
-        //parents of this activity added to the stack
-        tStackBuilder.addParentStack(MainActivity.class);
-
-        //add intent to stack
-        tStackBuilder.addNextIntent(moreInfoIntent);
-
-        //update intent if needed
-        PendingIntent pendingIntent = tStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        notificBuilder.setContentIntent(pendingIntent);
-
-        //remove notification on click
-        notificBuilder.setAutoCancel(true);
-
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-//        broadcastID = (int) (System.currentTimeMillis() / 10000);
-
-        //show notification
-//        notificationManager.notify(/*notifID*/broadcastID, notificBuilder.build());
-
-        //can't stop notification that has already been stopped
-        isNotificActive = true;
-
-    }
-
-    //TODO remove this method if not used
-    public void stopNotification(View view) {
-
-        // If the notification is still active close it
-        if(isNotificActive){
-
-            notificationManager.cancel(notifID);
-
-        }
-
-    }
-
+    //Set notification alarm for selected task
     public void setAlarm(View view){
 
         DatePicker datePicker = findViewById(R.id.datePicker);
@@ -623,27 +555,28 @@ public class MainActivity extends AppCompatActivity {
             calendar.set(Calendar.MINUTE, timePicker.getMinute());
             calendar.set(calendar.SECOND, 0);
 
-            //TODO this probably doesn't even need to be an arraylist
             //intention to execute AlertReceiver
-            alertIntent.set(activeTask, new Intent(this, AlertReceiver.class));/* = new Intent(this, AlertReceiver.class);*/
+            alertIntent = new Intent(this, AlertReceiver.class);
 
             //setting the name of the task for which the notification is being set
-            alertIntent.get(activeTask).putExtra("ToDo", taskList.get(activeTask));
+            alertIntent.putExtra("ToDo", taskList.get(activeTask));
 
-            //TODO find better way to get IDs
-//            broadcastID = (int) (/*calendar.getTimeInMillis()*/System.currentTimeMillis() / 10000);
-            broadcastID.set(activeTask, (int) (System.currentTimeMillis() / 10000));
+            int i = 0;
 
-            //TODO use an array list for these and try cancelling the correct one when needed
-//            pendingIntent[intentCount] = PendingIntent.getBroadcast(this, broadcastID/*intentCount/*requestCode*/, alertIntent.get(intentCount), PendingIntent./*FLAG_ONE_SHOT*/FLAG_UPDATE_CURRENT);
-            pendingIntent.set(activeTask, PendingIntent.getBroadcast(this, broadcastID.get(activeTask)/*intentCount/*requestCode*/, alertIntent.get(activeTask), PendingIntent./*FLAG_ONE_SHOT*/FLAG_UPDATE_CURRENT));
+            while (broadcastID.contains(i)){
+
+                i++;
+
+            }
+
+            broadcastID.set(activeTask, i);
+
+            pendingIntent.set(activeTask, PendingIntent.getBroadcast(this,
+                    broadcastID.get(activeTask), alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
             //setting the notification
-            alarmManager/*.get(activeTask)*/.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent.get(activeTask)/*PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT)*/);
-
-//            intentCount++;
-
-//            notificationCount++;
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar
+                    .getTimeInMillis(), pendingIntent.get(activeTask));
 
             datePicker.setVisibility(View.VISIBLE);
 
@@ -680,15 +613,10 @@ public class MainActivity extends AppCompatActivity {
         taskList.clear();
         tasksKilled.clear();
         showTaskDueIcon.clear();
-        alertIntent.clear();
         pendingIntent.clear();
         broadcastID.clear();
 
         checklistListSize = 0;
-
-//        notificationCount = mSharedPreferences.getInt("notificationCountKey", 0);
-
-//        notificationCount = notificationCount - AlertReceiver.notificationCount;
 
         //Existing tasks are recalled when app opened
         taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
@@ -700,20 +628,15 @@ public class MainActivity extends AppCompatActivity {
             tasksKilled.add(mSharedPreferences.getBoolean("taskKilledKey" +
                     String.valueOf(i), false));
 
-            showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon" + String.valueOf(i), false));
+            showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon"
+                    + String.valueOf(i), false));
 
-            alertIntent.add(i, Intent.getIntent(mSharedPreferences.getString("alertIntentKey" + String.valueOf(i), "")));
-//            alertIntent.set(i, new Intent(this, AlertReceiver.class));
-
-            //TODO May have to rebuild this from scratch
-//            pendingIntent.add(mSharedPreferences.getString("pendingIntentKey" + String.valueOf(i), ""));
+            alertIntent = new Intent(this, AlertReceiver.class);
 
             broadcastID.add(mSharedPreferences.getInt("broadcastIDKey" + String.valueOf(i), 0));
 
-            Log.i(TAG, String.valueOf(broadcastID));
-            Log.i(TAG, String.valueOf(alertIntent));
-
-            pendingIntent.add(PendingIntent.getBroadcast(this, broadcastID.get(i), alertIntent.get(i), PendingIntent.FLAG_UPDATE_CURRENT));
+            pendingIntent.add(PendingIntent.getBroadcast(this, broadcastID.get(i),
+                    alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         }
 
@@ -728,7 +651,8 @@ public class MainActivity extends AppCompatActivity {
     private void checkKeyboardShowing() {
 
         //TODO check out the hard coded pixels will work on all devices
-        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener
+                (new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
 
@@ -774,7 +698,7 @@ public class MainActivity extends AppCompatActivity {
 
                     restoreNormalListView = true;
 
-                    //Similar to above but for landscape mode
+                //Similar to above but for landscape mode
                 }else if((heightDiff > 73) && (heightDiff < 800) && (getResources()
                         .getConfiguration().orientation == 2)){
 
@@ -871,9 +795,10 @@ public class MainActivity extends AppCompatActivity {
 
                 showTaskDueIcon.add(showTaskDueIcon.size(), false);
 
-                alertIntent.add(alertIntent.size(), new Intent());
+                alertIntent = new Intent(this, AlertReceiver.class);
 
-                pendingIntent.add(pendingIntent.size(), PendingIntent.getBroadcast(this, 0, alertIntent.get(0), PendingIntent.FLAG_UPDATE_CURRENT));
+                pendingIntent.add(pendingIntent.size(), PendingIntent.getBroadcast(this,
+                        0, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
                 broadcastID.add(broadcastID.size(), 0);
 
@@ -891,8 +816,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
 
         super.onPause();
-
-        mSharedPreferences.edit().putInt("notificationCountKey", notificationCount).apply();
 
         //Important to know if task properties are showing so as to not corrupt the list
         if (!taskPropertiesShowing) {
@@ -913,13 +836,11 @@ public class MainActivity extends AppCompatActivity {
                 mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
                         showTaskDueIcon.get(i)).apply();
 
-//                Log.i(TAG, String.valueOf(alertIntent.get(i).getData()));
+                mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i),
+                        pendingIntent.get(i).toString()).apply();
 
-                mSharedPreferences.edit().putString("alertIntentKey" + String.valueOf(i), String.valueOf(alertIntent.get(i))).apply();
-
-                mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i), pendingIntent.get(i).toString()).apply();
-
-                mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i), broadcastID.get(i)).apply();
+                mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i),
+                        broadcastID.get(i)).apply();
 
             }
 
@@ -950,11 +871,11 @@ public class MainActivity extends AppCompatActivity {
                 mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
                         showTaskDueIcon.get(i)).apply();
 
-                mSharedPreferences.edit().putString("alertIntentKey" + String.valueOf(i), alertIntent.get(i).toString()).apply();
+                mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i),
+                        pendingIntent.get(i).toString()).apply();
 
-                mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i), pendingIntent.get(i).toString()).apply();
-
-                mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i), broadcastID.get(i)).apply();
+                mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i),
+                        broadcastID.get(i)).apply();
 
             }
 
