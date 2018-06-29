@@ -405,18 +405,18 @@ public class Checklist extends MainActivity {
 
         }
 
-//        //Only show keyboard if there are no existing sub tasks TODO might not need this if checkifkeyboardshowing is called
-//        if(checklistList.get(MainActivity.activeTask).size() != 0) {
-//
-//            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-//
-//            subTasksClickable = true;
-//
-//        }else{
-//
-//            subTasksClickable = false;
-//
-//        }
+        //Only show keyboard if there are no existing sub tasks
+        if(checklistList.get(MainActivity.activeTask).size() != 0) {
+
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+            subTasksClickable = true;
+
+        }else{
+
+            subTasksClickable = false;
+
+        }
 
     }
 

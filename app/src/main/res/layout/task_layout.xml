@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,27 +7,97 @@
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:background="@color/white">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:id="@+id/textView"
-        android:padding="15dp"
-        android:layout_weight="4"/>
+    <TableRow
+        android:id="@+id/taskName">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:id="@+id/textView"
+            android:padding="15dp"
+            android:layout_weight="4"/>
 
-    <ImageView
-        android:id="@+id/due"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/due"
-        android:layout_weight="1"
-        android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/due"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/due"
+            android:layout_weight="1"
+            android:visibility="gone"/>
 
-    <ImageView
-        android:id="@+id/dueRed"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/due_red"
-        android:layout_weight="1"
-        android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/dueRed"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/due_red"
+            android:layout_weight="1"
+            android:visibility="gone"/>
+    </TableRow>
 
-</LinearLayout>
+    <TableRow
+        android:id="@+id/properties"
+        android:visibility="gone">
+        <Button
+            android:id="@+id/snooze"
+            android:background="@color/red"
+            android:text="Set due date"
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/complete"
+            android:background="@color/green"
+            android:text="Complete"
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/more"
+            android:text="More..."
+            android:layout_weight="2.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:layout_margin="8dp"/>
+    </TableRow>
+
+    <TableRow>
+        <LinearLayout>
+        <include
+            layout="@layout/date_layout"
+            android:id="@+id/dateTime"
+            android:visibility="gone"/>
+        </LinearLayout>
+    </TableRow>
+
+    <!--<TableRow-->
+        <!--android:id="@+id/dateTime"-->
+        <!--android:visibility="gone">-->
+        <!--<LinearLayout-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:orientation="vertical">-->
+            <!--<DatePicker-->
+                <!--android:id="@+id/datePicker"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="400dp"/>-->
+
+            <!--<TimePicker-->
+                <!--android:id="@+id/timePicker"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="400dp"-->
+                <!--android:visibility="gone"/>-->
+
+            <!--<Button-->
+                <!--android:id="@+id/date"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:text="Set Date"-->
+                <!--android:onClick="setAlarm"/>-->
+        <!--</LinearLayout>-->
+    <!--</TableRow>-->
+
+</TableLayout>

@@ -1,15 +1,9 @@
 package com.violenthoboenterprises.taskkiller;
 
-import android.app.AlarmManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -42,11 +37,13 @@ class MyAdapter extends ArrayAdapter<String> {
         //Uses unique layout for the new item
         final LayoutInflater theInflater = LayoutInflater.from(getContext());
         final View taskView = theInflater.inflate(R.layout.task_layout, parent, false);
-        final View propertiesView = theInflater.inflate(R.layout.task_properties_layout,
-                parent, false);
-        final View dateView = theInflater.inflate(R.layout.date_layout, parent, false);
+//        final View dateView = theInflater.inflate(R.layout.date_layout, parent, false);
         final TextView theTextView = taskView.findViewById(R.id.textView);
         final Intent intent = new Intent(getContext(), Checklist.class);
+        final TableRow propertyRow = taskView.findViewById(R.id.properties);
+        final TableRow dateRow = taskView.findViewById(R.id.dateTime);
+        final DatePicker datePicker = taskView.findViewById(R.id.datePicker);
+        final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
 
         //TODO make sure hard coded values work on all devices
         //Task cannot be centered unless it's in view. Moving selected task into view
@@ -60,7 +57,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
             });
             MainActivity.centerTask = false;
-            //Same as above but for landscape.
+        //Same as above but for landscape.
         } else if ((MainActivity.activeTask > 3) && MainActivity.centerTask && (getContext()
                 .getResources().getConfiguration().orientation == 2)) {
             MainActivity.theListView.post(new Runnable() {
@@ -72,8 +69,50 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.centerTask = false;
         }
 
-        //Actions to occur if requesting task options
-        if (task.equals("properties")) {
+        //actions to occur in regards to selected task
+        if(MainActivity.taskPropertiesShowing && position == MainActivity.activeTask){
+
+            //actions to occur if setting alarm
+            if(MainActivity.alarmBeingSet) {
+
+                //Determine whether to show datepicker or timepicker
+                if (!MainActivity.dateOrTime) {
+                    dateRow.setVisibility(View.VISIBLE);
+                } else {
+                    dateRow.setVisibility(View.VISIBLE);
+                    datePicker.setVisibility(View.GONE);
+                    timePicker.setVisibility(View.VISIBLE);
+                }
+
+                //show the tasks properties
+            }else{
+
+                propertyRow.setVisibility(View.VISIBLE);
+
+            }
+
+            //Making extra row visible removes clickability. Clickability needs to be reinstated.
+            taskView.findViewById(R.id.taskName).setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+
+                    //set background to white
+                    MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+
+                    //Updates the view
+                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                    //Marks properties as not showing
+                    MainActivity.taskPropertiesShowing = false;
+
+                    //Returns the 'add' button
+                    MainActivity.params.height = MainActivity.addHeight;
+
+                    MainActivity.add.setLayoutParams(MainActivity.params);
+
+                }
+            });
 
             //centering the selected item in the view
             MainActivity.listViewHeight = MainActivity.theListView.getMeasuredHeight();
@@ -81,9 +120,12 @@ class MyAdapter extends ArrayAdapter<String> {
                     (MainActivity.listViewHeight / 2));
 
             //Initialising variables
-            Button complete = propertiesView.findViewById(R.id.complete);
-            Button snooze = propertiesView.findViewById(R.id.snooze);
-            Button more = propertiesView.findViewById(R.id.more);
+            Button complete = taskView.findViewById(R.id.complete);
+            Button snooze = taskView.findViewById(R.id.snooze);
+            Button more = taskView.findViewById(R.id.more);
+
+            //put data in text view
+            theTextView.setText(task);
 
             //"set due date" button becomes "remove due date" button if due date already set
             if (MainActivity.showTaskDueIcon.get(MainActivity.activeTask)){
@@ -98,34 +140,31 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                //set background white
-                MainActivity.activityRootView.setBackgroundColor(Color
-                        .parseColor("#FFFFFF"));
+                    //set background white
+                    MainActivity.activityRootView.setBackgroundColor(Color
+                            .parseColor("#FFFFFF"));
 
-                //Task options disappear
-                MainActivity.taskList.remove(MainActivity.activeTask + 1);
+                    //Visibly mark task as complete
+                    MainActivity.taskList.set(MainActivity.activeTask,
+                            MyAdapter.this.getItem(position));
 
-                //Visibly mark task as complete
-                MainActivity.taskList.set(MainActivity.activeTask,
-                        MyAdapter.this.getItem(position - 1));
+                    notifyDataSetChanged();
 
-                notifyDataSetChanged();
+                    MainActivity.taskPropertiesShowing = false;
 
-                MainActivity.taskPropertiesShowing = false;
+                    //Marks task as complete
+                    MainActivity.tasksKilled.set(MainActivity.activeTask, true);
 
-                //Marks task as complete
-                MainActivity.tasksKilled.set(MainActivity.activeTask, true);
+                    Toast.makeText(v.getContext(), "You killed this task!",
+                            Toast.LENGTH_SHORT).show();
 
-                Toast.makeText(v.getContext(), "You killed this task!",
-                        Toast.LENGTH_SHORT).show();
+                    MainActivity.add.setVisibility(View.VISIBLE);
 
-                MainActivity.add.setVisibility(View.VISIBLE);
+                    MainActivity.vibrate.vibrate(50);
 
-                MainActivity.vibrate.vibrate(50);
+                    MainActivity.params.height = MainActivity.addHeight;
 
-                MainActivity.params.height = MainActivity.addHeight;
-
-                v.setLayoutParams(MainActivity.params);
+                    v.setLayoutParams(MainActivity.params);
 
                 }
 
@@ -136,22 +175,24 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
+                    //actions to occur if alarm not already set
+                    if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
 
-                    MainActivity.taskList.set(MainActivity.activeTask + 1, "date");
+                        MainActivity.alarmBeingSet = true;
 
-                    notifyDataSetChanged();
+                        notifyDataSetChanged();
 
-                } else {
+                    //actions to occur when cancelling alarm
+                    } else {
 
-                    MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
 
-                    MainActivity.alarmManager.cancel(MainActivity.pendingIntent
-                            .get(MainActivity.activeTask));
+                        MainActivity.alarmManager.cancel(MainActivity.pendingIntent
+                                .get(MainActivity.activeTask));
 
-                    notifyDataSetChanged();
+                        notifyDataSetChanged();
 
-                }
+                    }
 
                 }
             });
@@ -161,134 +202,88 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                MainActivity.checklistShowing = true;
+                    MainActivity.checklistShowing = true;
 
-                MainActivity.vibrate.vibrate(50);
+                    MainActivity.vibrate.vibrate(50);
 
-                getContext().startActivity(intent);
+                    getContext().startActivity(intent);
 
-                notifyDataSetChanged();
+                    notifyDataSetChanged();
 
                 }
             });
+        }
 
-            return propertiesView;
+        if (MainActivity.fadeTasks) {
 
-        }else if (task.equals("date")){
+            //fade tasks when keyboard is up
+            taskView.setBackgroundColor(Color.parseColor("#888888"));
 
-            //centering the selected item in the view
-            MainActivity.theListView.smoothScrollToPositionFromTop(position - 1,0 );
+        }else{
 
-            return dateView;
-
-        } else{
-
-            if (MainActivity.fadeTasks) {
-
-                //fade tasks when keyboard is up
-                taskView.setBackgroundColor(Color.parseColor("#888888"));
-
-            } else {
-
-                //tasks are white when keyboard is down
-                taskView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-            }
-
-            //put data in text view
-            theTextView.setText(task);
-
-            //Preventing out of bounds problems
-            if (position < MainActivity.tasksKilled.size()) {
-
-                //crossing out completed tasks if task properties are not showing
-                if (!MainActivity.taskPropertiesShowing) {
-
-                    //check if task has to be crossed out
-                    if (MainActivity.tasksKilled.get(position)) {
-
-                        theTextView.setPaintFlags(theTextView.getPaintFlags() |
-                                Paint.STRIKE_THRU_TEXT_FLAG);
-
-                    }
-
-                //crossing out completed tasks which are above the showing task properties
-                } else if (MainActivity.activeTask < position) {
-
-                    if (position != 0) {
-
-                        //check is task has to be crossed out
-                        if (MainActivity.tasksKilled.get(position - 1)) {
-
-                            theTextView.setPaintFlags(theTextView.getPaintFlags() |
-                                    Paint.STRIKE_THRU_TEXT_FLAG);
-
-                        }
-
-                    }
-
-                //crossing out completed tasks which are below the showing task properties
-                } else {
-
-                    //check if task has to be crossed out
-                    if (MainActivity.tasksKilled.get(position)) {
-
-                        theTextView.setPaintFlags(theTextView.getPaintFlags() |
-                                Paint.STRIKE_THRU_TEXT_FLAG);
-
-                    }
-
-                }
-
-                //Show due date notification if required
-                if(MainActivity.showTaskDueIcon.get(position)){
-
-                    ImageView due = taskView.findViewById(R.id.due);
-
-                    due.setVisibility(View.VISIBLE);
-
-                }
-
-            }
-
-            //greying out unselected tasks
-            if (MainActivity.taskPropertiesShowing && (position != MainActivity.activeTask)) {
-
-                //fade out inactive tasks
-                taskView.setBackgroundColor(Color.parseColor("#888888"));
-
-            }
-
-            //Actions to take when editing task
-            if (MainActivity.taskBeingEdited && (position == MainActivity.activeTask) &&
-                    !MainActivity.goToMyAdapter) {
-
-                MainActivity.keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-
-                String oldTaskString = theTextView.getText().toString();
-
-                theTextView.setVisibility(View.GONE);
-
-                MainActivity.taskNameEditText.setText(oldTaskString);
-
-                MainActivity.taskNameEditText.setVisibility(View.VISIBLE);
-
-                //Keyboard is inactive without this line
-                MainActivity.taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI |
-                        EditorInfo.IME_ACTION_DONE);
-
-                MainActivity.taskNameEditText.setFocusable(true);
-
-                MainActivity.taskNameEditText.requestFocus();
-
-                MainActivity.taskNameEditText.setSelection(MainActivity.taskNameEditText
-                        .getText().length());
-
-            }
-
-            return taskView;
+            //tasks are white when keyboard is down
+            taskView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         }
+
+        //put data in text view
+        theTextView.setText(task);
+
+        //crossing out completed tasks
+
+        //check if task has to be crossed out
+        if (MainActivity.tasksKilled.get(position)) {
+
+            theTextView.setPaintFlags(theTextView.getPaintFlags() |
+                    Paint.STRIKE_THRU_TEXT_FLAG);
+
+        }
+
+        //Show due date notification if required
+        if(MainActivity.showTaskDueIcon.get(position)) {
+
+            ImageView due = taskView.findViewById(R.id.due);
+
+            due.setVisibility(View.VISIBLE);
+
+        }
+
+        //greying out unselected tasks
+        if (MainActivity.taskPropertiesShowing && (position != MainActivity.activeTask)) {
+
+            //fade out inactive tasks
+            taskView.setBackgroundColor(Color.parseColor("#888888"));
+
+        }
+
+        //Actions to take when editing task
+        if (MainActivity.taskBeingEdited && (position == MainActivity.activeTask) &&
+                !MainActivity.goToMyAdapter) {
+
+            MainActivity.keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+
+            String oldTaskString = theTextView.getText().toString();
+
+            theTextView.setVisibility(View.GONE);
+
+            MainActivity.taskNameEditText.setText(oldTaskString);
+
+            MainActivity.taskNameEditText.setVisibility(View.VISIBLE);
+
+            //Keyboard is inactive without this line
+            MainActivity.taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI |
+                    EditorInfo.IME_ACTION_DONE);
+
+            MainActivity.taskNameEditText.setFocusable(true);
+
+            MainActivity.taskNameEditText.requestFocus();
+
+            MainActivity.taskNameEditText.setSelection(MainActivity.taskNameEditText
+                    .getText().length());
+
+        }
+
+        return taskView;
 
     }
 

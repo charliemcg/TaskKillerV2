@@ -1,19 +1,15 @@
 package com.violenthoboenterprises.taskkiller;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.icu.util.GregorianCalendar;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -22,24 +18,19 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.net.URISyntaxException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,7 +51,11 @@ public class MainActivity extends AppCompatActivity {
     //Used when making task centered in list view
     static boolean centerTask;
     //Used when displaying UI elements for either picking time or date
-    boolean dateOrTime;
+    static boolean dateOrTime;
+    //Used when showing time picker
+    static boolean showTimePicker;
+    //Used to indicate an alarm is being set
+    static boolean alarmBeingSet;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -74,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
     static int checklistListSize;
     //Height of list view as viewable on screen
     static int listViewHeight;
+
+    //Helps to determine if keyboard is up in portrait orientation
+    private double portraitKeyboardMeasure;
+    //Helps to determine if keyboard is up in landscape orientation
+    private double landscapeKeyboardMeasure;
 
     //Each task is assigned a unique broadcast ID when assigning a notification alarm
     static ArrayList<Integer> broadcastID;
@@ -153,13 +153,14 @@ public class MainActivity extends AppCompatActivity {
         inflater = LayoutInflater.from(getApplicationContext());
         addHeight = params.height;
         theAdapter = new ListAdapter[]{new MyAdapter(this, taskList)};
-        TAG = "mainActivity";
+        TAG = "MainActivity";
         activityRootView = findViewById(R.id.activityRoot);
         fadeTasks = false;
         dateOrTime = false;
         pendingIntent = new ArrayList<>();
         broadcastID = new ArrayList<>();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmBeingSet = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -170,190 +171,184 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-            //Tasks are not clickable if keyboard is up
-            if(tasksAreClickable) {
+                //Tasks are not clickable if keyboard is up
+                if(tasksAreClickable) {
 
-                vibrate.vibrate(50);
+                    vibrate.vibrate(50);
 
-                //Selecting a task to view options
-                if (!taskPropertiesShowing && !tasksKilled.get(position)) {
+                    //Selecting a task to view options
+                    if (!taskPropertiesShowing && !tasksKilled.get(position)) {
 
-                    //fade out inactive tasks
-                    activityRootView.setBackgroundColor(Color.parseColor("#888888"));
+                        //fade out inactive tasks
+                        activityRootView.setBackgroundColor(Color.parseColor("#888888"));
 
-                    onPause();
+                        onPause();
 
-                    //Put options underneath selected task
-                    taskList.add(position + 1, "properties");
+                        //Marks task as having it's properties showing
+                        taskPropertiesShowing = true;
 
-                    //Marks task as having it's properties showing
-                    taskPropertiesShowing = true;
+                        centerTask = true;
 
-                    centerTask = true;
+                        //Gets position of selected task
+                        activeTask = position;
 
-                    //Gets position of selected task
-                    activeTask = position;
+                        //Updates the view
+                        theListView.setAdapter(theAdapter[0]);
 
-                    //Updates the view
-                    theListView.setAdapter(theAdapter[0]);
+                        //Can't change visibility of 'add' button. Have to set height to
+                        //zero instead.
+                        params.height = 0;
 
-                    //Can't change visibility of 'add' button. Have to set height to
-                    //zero instead.
-                    params.height = 0;
+                        add.setLayoutParams(params);
 
-                    add.setLayoutParams(params);
+                    //Removes completed task
+                    } else if (!taskPropertiesShowing && tasksKilled.get(position)) {
 
-                //Removes completed task
-                } else if (!taskPropertiesShowing && tasksKilled.get(position)) {
+                        MainActivity.checklistShowing = true;
 
-                    MainActivity.checklistShowing = true;
+                        //updating Checklist's shared preferences without inflating the class view
 
-                    //updating Checklist's shared preferences without inflating the class view
+                        //getSavedData
 
-                    //getSavedData
+                        //skip this management of sub tasks if there are no sub tasks
+                        try {
 
-                    //skip this management of sub tasks if there are no sub tasks
-                    try {
+                            checklistListSize = nSharedPreferences
+                                    .getInt("checklistListSizeKey", 0);
 
-                        checklistListSize = nSharedPreferences
-                                .getInt("checklistListSizeKey", 0);
+                            for (int i = 0; i < checklistListSize; i++) {
 
-                        for (int i = 0; i < checklistListSize; i++) {
+                                Checklist.checklistSize = nSharedPreferences
+                                        .getInt("checklistSizeKey" + String.valueOf(i), 0);
 
-                            Checklist.checklistSize = nSharedPreferences
-                                    .getInt("checklistSizeKey" + String.valueOf(i), 0);
+                                try {
 
-                            try {
+                                    Checklist.checklistList.get(i);
 
-                                Checklist.checklistList.get(i);
+                                } catch (IndexOutOfBoundsException e) {
 
-                            } catch (IndexOutOfBoundsException e) {
+                                    Checklist.checklistList.add(new ArrayList<String>());
 
-                                Checklist.checklistList.add(new ArrayList<String>());
+                                }
+
+                                try {
+
+                                    Checklist.subTasksKilled.get(i);
+
+                                } catch (IndexOutOfBoundsException e) {
+
+                                    Checklist.subTasksKilled.add(new ArrayList<Boolean>());
+
+                                }
+
+                                for (int j = 0; j < Checklist.checklistSize; j++) {
+
+                                    Checklist.checklistList.get(i).set(j, nSharedPreferences
+                                            .getString("checklistItemKey"
+                                            + String.valueOf(i) + String.valueOf(j), ""));
+
+                                    Checklist.subTasksKilled.get(i).set(j, nSharedPreferences
+                                            .getBoolean("subTasksKilledKey"
+                                            + String.valueOf(i) + String.valueOf(j), false));
+
+                                }
 
                             }
 
-                            try {
+                            //onPause
 
-                                Checklist.subTasksKilled.get(i);
+                            checklistListSize = Checklist.checklistList.size();
 
-                            } catch (IndexOutOfBoundsException e) {
+                            for (int i = 0; i < checklistListSize; i++) {
 
-                                Checklist.subTasksKilled.add(new ArrayList<Boolean>());
+                                if (i == MainActivity.activeTask) {
 
-                            }
+                                    Checklist.checklistList.remove(activeTask);
 
-                            for (int j = 0; j < Checklist.checklistSize; j++) {
+                                    Checklist.subTasksKilled.remove(activeTask);
 
-                                Checklist.checklistList.get(i).set(j, nSharedPreferences
-                                        .getString("checklistItemKey"
-                                        + String.valueOf(i) + String.valueOf(j), ""));
-
-                                Checklist.subTasksKilled.get(i).set(j, nSharedPreferences
-                                        .getBoolean("subTasksKilledKey"
-                                        + String.valueOf(i) + String.valueOf(j), false));
+                                }
 
                             }
 
+                            //Getting and saving the size of the task array list
+                            checklistListSize = Checklist.checklistList.size();
+
+                            nSharedPreferences.edit().putInt("checklistListSizeKey",
+                                    Checklist.checklistListSize).apply();
+
+                            for (int i = 0; i < checklistListSize; i++) {
+
+                                //Getting and saving the size of each array list of sub tasks
+                                Checklist.checklistSize = Checklist.checklistList.get(i).size();
+
+                                nSharedPreferences.edit().putInt("checklistSizeKey"
+                                                + String.valueOf(i), Checklist.checklistSize).apply();
+
+                            }
+
+                            //Saving each individual sub task
+                            for (int i = 0; i < checklistListSize; i++) {
+
+                                Checklist.checklistSize = Checklist.checklistList.get(i).size();
+
+                                for (int j = 0; j < Checklist.checklistSize; j++) {
+
+                                    nSharedPreferences.edit().putString("checklistItemKey"
+                                            + String.valueOf(i) + String.valueOf(j),
+                                            Checklist.checklistList.get(i).get(j)).apply();
+
+                                    nSharedPreferences.edit().putBoolean("subTasksKilledKey"
+                                            + String.valueOf(i) + String.valueOf(j),
+                                            Checklist.subTasksKilled.get(i).get(j)).apply();
+
+                                }
+
+                            }
+
+                        } catch (NullPointerException e) {
+                            //TODO don't leave this blank
                         }
 
-                        //onPause
+                        taskList.remove(position);
 
-                        checklistListSize = Checklist.checklistList.size();
+                        //Updates the view
+                        theListView.setAdapter(theAdapter[0]);
 
-                        for (int i = 0; i < checklistListSize; i++) {
+                        tasksKilled.remove(position);
 
-                            if (i == MainActivity.activeTask) {
+                        //Cancel notification alarms if one is set
+                        alarmManager.cancel(pendingIntent.get(position));
 
-                                Checklist.checklistList.remove(activeTask);
+                        pendingIntent.remove(position);
 
-                                Checklist.subTasksKilled.remove(activeTask);
+                        showTaskDueIcon.remove(position);
 
-                            }
+                        broadcastID.remove(position);
 
-                        }
+                        //Checks to see if there are still tasks left
+                        noTasksLeft();
 
-                        //Getting and saving the size of the task array list
-                        checklistListSize = Checklist.checklistList.size();
+                    //Removes task options from view
+                    } else {
 
-                        nSharedPreferences.edit().putInt("checklistListSizeKey",
-                                Checklist.checklistListSize).apply();
+                        //set background to white
+                        activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
-                        for (int i = 0; i < checklistListSize; i++) {
+                        //Updates the view
+                        theListView.setAdapter(theAdapter[0]);
 
-                            //Getting and saving the size of each array list of sub tasks
-                            Checklist.checklistSize = Checklist.checklistList.get(i).size();
+                        //Marks properties as not showing
+                        taskPropertiesShowing = false;
 
-                            nSharedPreferences.edit().putInt("checklistSizeKey"
-                                            + String.valueOf(i), Checklist.checklistSize).apply();
+                        //Returns the 'add' button
+                        params.height = addHeight;
 
-                        }
-
-                        //Saving each individual sub task
-                        for (int i = 0; i < checklistListSize; i++) {
-
-                            Checklist.checklistSize = Checklist.checklistList.get(i).size();
-
-                            for (int j = 0; j < Checklist.checklistSize; j++) {
-
-                                nSharedPreferences.edit().putString("checklistItemKey"
-                                        + String.valueOf(i) + String.valueOf(j),
-                                        Checklist.checklistList.get(i).get(j)).apply();
-
-                                nSharedPreferences.edit().putBoolean("subTasksKilledKey"
-                                        + String.valueOf(i) + String.valueOf(j),
-                                        Checklist.subTasksKilled.get(i).get(j)).apply();
-
-                            }
-
-                        }
-
-                    } catch (NullPointerException e) {
+                        add.setLayoutParams(params);
 
                     }
 
-                    taskList.remove(position);
-
-                    //Updates the view
-                    theListView.setAdapter(theAdapter[0]);
-
-                    tasksKilled.remove(position);
-
-                    //Cancel notification alarms if one is set
-                    alarmManager.cancel(pendingIntent.get(position));
-
-                    pendingIntent.remove(position);
-
-                    showTaskDueIcon.remove(position);
-
-                    broadcastID.remove(position);
-
-                    //Checks to see if there are still tasks left
-                    noTasksLeft();
-
-                //Removes task options from view
-                } else {
-
-                    //set background to white
-                    activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-                    //Removes the task's properties
-                    taskList.remove(activeTask + 1);
-
-                    //Updates the view
-                    theListView.setAdapter(theAdapter[0]);
-
-                    //Marks properties as not showing
-                    taskPropertiesShowing = false;
-
-                    //Returns the 'add' button
-                    params.height = addHeight;
-
-                    add.setLayoutParams(params);
-
                 }
-
-            }
 
             }
 
@@ -485,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
 
                     return true;
 
-                    //Actions to take when editing existing task
+                //Actions to take when editing existing task
                 }else if(actionId == EditorInfo.IME_ACTION_DONE){
 
                     taskNameEditText.setVisibility(View.GONE);
@@ -525,6 +520,8 @@ public class MainActivity extends AppCompatActivity {
     //Set notification alarm for selected task
     public void setAlarm(View view){
 
+        //TODO this date and time picker is different to the date and time picker in MyAdapter
+        //TODO this could be why it isn't saving time properly
         DatePicker datePicker = findViewById(R.id.datePicker);
 
         TimePicker timePicker = findViewById(R.id.timePicker);
@@ -537,6 +534,9 @@ public class MainActivity extends AppCompatActivity {
             datePicker.setVisibility(View.GONE);
 
             timePicker.setVisibility(View.VISIBLE);
+
+            //Updates the view
+            theListView.setAdapter(theAdapter[0]);
 
             dateOrTime = true;
 
@@ -553,7 +553,6 @@ public class MainActivity extends AppCompatActivity {
             calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
             calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
             calendar.set(Calendar.MINUTE, timePicker.getMinute());
-            calendar.set(calendar.SECOND, 0);
 
             //intention to execute AlertReceiver
             alertIntent = new Intent(this, AlertReceiver.class);
@@ -589,14 +588,14 @@ public class MainActivity extends AppCompatActivity {
             //set background to white
             activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
-            taskList.remove(activeTask + 1);
-
             showTaskDueIcon.set(activeTask, true);
 
             theListView.setAdapter(theAdapter[0]);
 
             //Marks properties as not showing
             taskPropertiesShowing = false;
+
+            alarmBeingSet = false;
 
             //Returns the 'add' button
             params.height = addHeight;
@@ -656,7 +655,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
 
-                heightDiff = activityRootView.getRootView().getHeight();
+                if (getResources().getConfiguration().orientation == 1) {
+
+                    portraitKeyboardMeasure = /*heightDiff*/activityRootView.getRootView()
+                            .getHeight() / 2.4;
+                    landscapeKeyboardMeasure = activityRootView.getRootView()
+                            .getWidth() / 13.7945205479452054794;
+
+                } else if (getResources().getConfiguration().orientation == 2) {
+
+                    landscapeKeyboardMeasure = /*heightDiff*/activityRootView
+                            .getHeight() / 13.7945205479452054794;
+                    portraitKeyboardMeasure = activityRootView.getRootView()
+                            .getRootView().getWidth() / 2.4;
+
+                }
 
                 Rect screen = new Rect();
 
@@ -668,7 +681,8 @@ public class MainActivity extends AppCompatActivity {
 
                 //Value of more than 800 seems to indicate that the keyboard is showing
                 //in portrait mode
-                if ((heightDiff > 800) && (getResources().getConfiguration().orientation == 1)) {
+                if ((heightDiff > /*800*/portraitKeyboardMeasure) && (getResources()
+                        .getConfiguration().orientation == 1)) {
 
                     fadeTasks = true;
 
@@ -699,7 +713,8 @@ public class MainActivity extends AppCompatActivity {
                     restoreNormalListView = true;
 
                 //Similar to above but for landscape mode
-                }else if((heightDiff > 73) && (heightDiff < 800) && (getResources()
+                }else if((heightDiff > /*73*/landscapeKeyboardMeasure) &&
+                        (heightDiff < /*800*/portraitKeyboardMeasure) && (getResources()
                         .getConfiguration().orientation == 2)){
 
                     fadeTasks = true;
@@ -895,5 +910,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
 }
