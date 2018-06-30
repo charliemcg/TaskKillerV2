@@ -366,41 +366,10 @@ public class MainActivity extends AppCompatActivity {
 
                     rename(i);
 
-//                    //Cannot update the list until after the task has been updated.
-//                    goToMyAdapter = false;
-//
-//                    //Actions to occur when keyboard is showing
-//                    checkKeyboardShowing();
-//
-//                    //Indicates that a task is being edited
-//                    taskBeingEdited = true;
-//
-//                    activeTask = position;
-//
-//                    tasksAreClickable = false;
-//
-//                    fadeTasks = true;
-//
-//                    centerTask = true;
-//
-//                    theListView.setAdapter(theAdapter[0]);
-//
-//                    //Can't change visibility of 'add' button. Have to set height to zero instead.
-//                    params.height = 0;
-//
-//                    add.setLayoutParams(params);
-
                 //long click reinstates task that is crossed out
                 } else if (tasksAreClickable && tasksKilled.get(i) && !taskPropertiesShowing) {
 
                     reinstate(i);
-
-//                    Toast.makeText(MainActivity.this, "Task Reinstated",
-//                            Toast.LENGTH_SHORT).show();
-//
-//                    tasksKilled.set(i, false);
-//
-//                    theListView.setAdapter(theAdapter[0]);
 
                 }
 
@@ -418,17 +387,6 @@ public class MainActivity extends AppCompatActivity {
                 goToMyAdapter = true;
 
                 vibrate.vibrate(50);
-
-                //Removes any visible task options
-                if(taskPropertiesShowing){
-
-                    taskList.remove(activeTask + 1);
-
-                    theListView.setAdapter(theAdapter[0]);
-
-                    taskPropertiesShowing = false;
-
-                }
 
                 //Show keyboard
                 keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
@@ -512,6 +470,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //renames task
     public void rename(int i) {
 
         //Cannot update the list until after the task has been updated.
@@ -539,6 +498,7 @@ public class MainActivity extends AppCompatActivity {
         add.setLayoutParams(params);
     }
 
+    //reinstates completed task
     public void reinstate(int i) {
 
         Toast.makeText(MainActivity.this, "Task Reinstated",

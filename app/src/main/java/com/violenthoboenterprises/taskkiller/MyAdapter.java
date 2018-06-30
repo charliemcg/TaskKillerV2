@@ -228,28 +228,30 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-//                    //Cannot update the list until after the task has been updated.
-//                    MainActivity.goToMyAdapter = false;
-//
-//                    //Actions to occur when keyboard is showing
-////                    MainActivity.checkKeyboardShowing();
-//
-//                    //Indicates that a task is being edited
-//                    MainActivity.taskBeingEdited = true;
-//
-////                    MainActivity.activeTask = position;
-//
-//                    MainActivity.tasksAreClickable = false;
-//
-//                    MainActivity.fadeTasks = true;
-//
+                    //Cannot update the list until after the task has been updated.
+                    MainActivity.goToMyAdapter = false;
+
+                    //Actions to occur when keyboard is showing
+//                    MainActivity.checkKeyboardShowing();
+
+                    //Indicates that a task is being edited
+                    MainActivity.taskBeingEdited = true;
+
+                    MainActivity.activeTask = position;
+
+                    MainActivity.tasksAreClickable = false;
+
+                    MainActivity.fadeTasks = true;
+
 //                    MainActivity.centerTask = true;
-//
-//                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-//
-//                    //Can't change visibility of 'add' button. Have to set height to zero instead.
+
+                    MainActivity.taskPropertiesShowing = false;
+
+                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                    //Can't change visibility of 'add' button. Have to set height to zero instead.
 //                    MainActivity.params.height = 0;
-//
+
 //                    MainActivity.add.setLayoutParams(MainActivity.params);
 
                 }
@@ -266,7 +268,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     getContext().startActivity(intent);
 
-                    notifyDataSetChanged();
+//                    notifyDataSetChanged();
 
                 }
             });
