@@ -86,7 +86,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     timePicker.setVisibility(View.VISIBLE);
                 }
 
-                //show the tasks properties
+            //show the tasks properties
             }else{
 
                 propertyRow.setVisibility(View.VISIBLE);
@@ -242,7 +242,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
             });
 
-            //Actions to occur if user selects 'more'
+            //Actions to occur if user selects 'Sub-Tasks'
             subTasks.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

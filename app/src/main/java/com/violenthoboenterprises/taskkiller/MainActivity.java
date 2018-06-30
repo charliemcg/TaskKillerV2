@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean dateOrTime;
     //Used to indicate an alarm is being set
     static boolean alarmBeingSet;
+    //Used to indicate a note is being set
+//    static boolean noteBeingSet;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         broadcastID = new ArrayList<>();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmBeingSet = false;
+//        noteBeingSet = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);

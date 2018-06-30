@@ -155,7 +155,7 @@ public class Checklist extends MainActivity {
 
                     return true;
 
-                    //Actions to occur when editing sub tasks
+                //Actions to occur when editing sub tasks
                 }else if(actionId == EditorInfo.IME_ACTION_DONE && subTaskBeingEdited){
 
                     //Hide keyboard

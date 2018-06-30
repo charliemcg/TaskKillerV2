@@ -10,6 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <Button
+        android:id="@+id/editBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="Edit"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:visibility="gone"/>
+
     <EditText
         android:id="@+id/noteEditText"
         android:layout_width="match_parent"
@@ -17,7 +27,7 @@
         android:maxLines="1"
         android:inputType="text"
         android:layout_alignParentBottom="true"
-        android:hint="@string/checklistItem"
+        android:hint="Add your note here..."
         android:imeOptions="actionDone"
         android:background="@color/white"/>
 
