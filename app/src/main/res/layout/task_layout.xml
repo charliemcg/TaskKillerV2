@@ -33,37 +33,6 @@
             android:visibility="gone"/>
     </TableRow>
 
-    <!--<TableRow-->
-        <!--android:id="@+id/properties"-->
-        <!--android:visibility="gone">-->
-        <!--<Button-->
-            <!--android:id="@+id/snooze"-->
-            <!--android:background="@color/red"-->
-            <!--android:text="Set due date"-->
-            <!--android:layout_weight="2"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"/>-->
-
-        <!--<Button-->
-            <!--android:id="@+id/complete"-->
-            <!--android:background="@color/green"-->
-            <!--android:text="Complete"-->
-            <!--android:layout_weight="2"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"/>-->
-
-        <!--<Button-->
-            <!--android:id="@+id/more"-->
-            <!--android:text="More..."-->
-            <!--android:layout_weight="2.5"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textSize="10sp"-->
-            <!--android:layout_margin="8dp"/>-->
-    <!--</TableRow>-->
-
     <TableRow>
         <LinearLayout>
             <include

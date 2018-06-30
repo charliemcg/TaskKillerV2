@@ -40,6 +40,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final View taskView = theInflater.inflate(R.layout.task_layout, parent, false);
         final TextView theTextView = taskView.findViewById(R.id.textView);
         final Intent intent = new Intent(getContext(), Checklist.class);
+        final Intent noteIntent = new Intent(getContext(), Note.class);
         final TableRow propertyRow = taskView.findViewById(R.id.properties);
         final TableRow dateRow = taskView.findViewById(R.id.dateTime);
         final TableRow optionsRow = taskView.findViewById(R.id.options);
@@ -124,8 +125,9 @@ class MyAdapter extends ArrayAdapter<String> {
             Button complete = taskView.findViewById(R.id.complete);
             Button snooze = taskView.findViewById(R.id.snooze);
             Button more = taskView.findViewById(R.id.more);
-            Button rename = taskView.findViewById(R.id.rename);
+            final Button rename = taskView.findViewById(R.id.rename);
             Button subTasks = taskView.findViewById(R.id.subTasks);
+            Button note = taskView.findViewById(R.id.note);
 
             //put data in text view
             theTextView.setText(task);
@@ -210,15 +212,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 public void onClick(View v) {
 
                     propertyRow.setVisibility(View.GONE);
-                    optionsRow.setVisibility(View.VISIBLE);
 
-//                    MainActivity.checklistShowing = true;
-//
-//                    MainActivity.vibrate.vibrate(50);
-//
-//                    getContext().startActivity(intent);
-//
-//                    notifyDataSetChanged();
+                    optionsRow.setVisibility(View.VISIBLE);
 
                 }
             });
@@ -231,9 +226,6 @@ class MyAdapter extends ArrayAdapter<String> {
                     //Cannot update the list until after the task has been updated.
                     MainActivity.goToMyAdapter = false;
 
-                    //Actions to occur when keyboard is showing
-//                    MainActivity.checkKeyboardShowing();
-
                     //Indicates that a task is being edited
                     MainActivity.taskBeingEdited = true;
 
@@ -243,16 +235,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.fadeTasks = true;
 
-//                    MainActivity.centerTask = true;
-
                     MainActivity.taskPropertiesShowing = false;
 
                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-
-                    //Can't change visibility of 'add' button. Have to set height to zero instead.
-//                    MainActivity.params.height = 0;
-
-//                    MainActivity.add.setLayoutParams(MainActivity.params);
 
                 }
             });
@@ -268,7 +253,17 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     getContext().startActivity(intent);
 
-//                    notifyDataSetChanged();
+                }
+            });
+
+            //Actions to occur if user selects 'Add Note'
+            note.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    MainActivity.vibrate.vibrate(50);
+
+                    getContext().startActivity(noteIntent);
 
                 }
             });
