@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
     static boolean centerTask;
     //Used when displaying UI elements for either picking time or date
     static boolean dateOrTime;
-    //Used when showing time picker
-    static boolean showTimePicker;
     //Used to indicate an alarm is being set
     static boolean alarmBeingSet;
 
@@ -363,49 +361,46 @@ public class MainActivity extends AppCompatActivity {
 
                 int i = position;
 
-                //Cannot long click last list item with another item's
-                // properties showing to prevent index out of bounds error
-                if (taskPropertiesShowing && (position != 0)) {
-
-                    i = position - 1;
-
-                }
-
                 //Determine if it's possible to edit task
                 if (tasksAreClickable && !tasksKilled.get(i) && !taskPropertiesShowing) {
 
-                    //Cannot update the list until after the task has been updated.
-                    goToMyAdapter = false;
+                    rename(i);
 
-                    //Actions to occur when keyboard is showing
-                    checkKeyboardShowing();
+//                    //Cannot update the list until after the task has been updated.
+//                    goToMyAdapter = false;
+//
+//                    //Actions to occur when keyboard is showing
+//                    checkKeyboardShowing();
+//
+//                    //Indicates that a task is being edited
+//                    taskBeingEdited = true;
+//
+//                    activeTask = position;
+//
+//                    tasksAreClickable = false;
+//
+//                    fadeTasks = true;
+//
+//                    centerTask = true;
+//
+//                    theListView.setAdapter(theAdapter[0]);
+//
+//                    //Can't change visibility of 'add' button. Have to set height to zero instead.
+//                    params.height = 0;
+//
+//                    add.setLayoutParams(params);
 
-                    //Indicates that a task is being edited
-                    taskBeingEdited = true;
-
-                    activeTask = position;
-
-                    tasksAreClickable = false;
-
-                    fadeTasks = true;
-
-                    centerTask = true;
-
-                    theListView.setAdapter(theAdapter[0]);
-
-                    //Can't change visibility of 'add' button. Have to set height to zero instead.
-                    params.height = 0;
-
-                    add.setLayoutParams(params);
-
+                //long click reinstates task that is crossed out
                 } else if (tasksAreClickable && tasksKilled.get(i) && !taskPropertiesShowing) {
 
-                    Toast.makeText(MainActivity.this, "Task Reinstated",
-                            Toast.LENGTH_SHORT).show();
+                    reinstate(i);
 
-                    tasksKilled.set(i, false);
-
-                    theListView.setAdapter(theAdapter[0]);
+//                    Toast.makeText(MainActivity.this, "Task Reinstated",
+//                            Toast.LENGTH_SHORT).show();
+//
+//                    tasksKilled.set(i, false);
+//
+//                    theListView.setAdapter(theAdapter[0]);
 
                 }
 
@@ -515,6 +510,43 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    public void rename(int i) {
+
+        //Cannot update the list until after the task has been updated.
+        goToMyAdapter = false;
+
+        //Actions to occur when keyboard is showing
+        checkKeyboardShowing();
+
+        //Indicates that a task is being edited
+        taskBeingEdited = true;
+
+        activeTask = i;
+
+        tasksAreClickable = false;
+
+        fadeTasks = true;
+
+        centerTask = true;
+
+        theListView.setAdapter(theAdapter[0]);
+
+        //Can't change visibility of 'add' button. Have to set height to zero instead.
+        params.height = 0;
+
+        add.setLayoutParams(params);
+    }
+
+    public void reinstate(int i) {
+
+        Toast.makeText(MainActivity.this, "Task Reinstated",
+                Toast.LENGTH_SHORT).show();
+
+        tasksKilled.set(i, false);
+
+        theListView.setAdapter(theAdapter[0]);
     }
 
     //Set notification alarm for selected task
@@ -647,7 +679,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Actions to occur when keyboard is showing
-    private void checkKeyboardShowing() {
+    void checkKeyboardShowing() {
 
         //TODO check out the hard coded pixels will work on all devices
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener
@@ -832,67 +864,27 @@ public class MainActivity extends AppCompatActivity {
 
         super.onPause();
 
-        //Important to know if task properties are showing so as to not corrupt the list
-        if (!taskPropertiesShowing) {
+        //Tasks are saved in a manner so that they don't vanish when app closed
+        taskListSize = taskList.size();
 
-            //Tasks are saved in a manner so that they don't vanish when app closed
-            taskListSize = taskList.size();
+        mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
 
-            mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
+        for (int i = 0; i < taskListSize; i++) {
 
-            for (int i = 0; i < taskListSize; i++) {
+            mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
+                    taskList.get(i)).apply();
 
-                mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
-                        taskList.get(i)).apply();
+            mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
+                    tasksKilled.get(i)).apply();
 
-                mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
-                        tasksKilled.get(i)).apply();
+            mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
+                    showTaskDueIcon.get(i)).apply();
 
-                mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
-                        showTaskDueIcon.get(i)).apply();
+            mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i),
+                    pendingIntent.get(i).toString()).apply();
 
-                mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i),
-                        pendingIntent.get(i).toString()).apply();
-
-                mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i),
-                        broadcastID.get(i)).apply();
-
-            }
-
-        } else {
-
-            //Removes the task properties from the list because they should not
-            //be saved on pause.
-            taskList.remove(activeTask + 1);
-
-            //Update the list
-            theListView.setAdapter(theAdapter[0]);
-
-            taskPropertiesShowing = false;
-
-            //Tasks are saved in a manner so that they don't vanish when app closed
-            taskListSize = taskList.size();
-
-            mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
-
-            for (int i = 0; i < taskListSize - 1; i++) {
-
-                mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
-                        taskList.get(i)).apply();
-
-                mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
-                        tasksKilled.get(i)).apply();
-
-                mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
-                        showTaskDueIcon.get(i)).apply();
-
-                mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i),
-                        pendingIntent.get(i).toString()).apply();
-
-                mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i),
-                        broadcastID.get(i)).apply();
-
-            }
+            mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i),
+                    broadcastID.get(i)).apply();
 
         }
 

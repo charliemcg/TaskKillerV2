@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +38,11 @@ class MyAdapter extends ArrayAdapter<String> {
         //Uses unique layout for the new item
         final LayoutInflater theInflater = LayoutInflater.from(getContext());
         final View taskView = theInflater.inflate(R.layout.task_layout, parent, false);
-//        final View dateView = theInflater.inflate(R.layout.date_layout, parent, false);
         final TextView theTextView = taskView.findViewById(R.id.textView);
         final Intent intent = new Intent(getContext(), Checklist.class);
         final TableRow propertyRow = taskView.findViewById(R.id.properties);
         final TableRow dateRow = taskView.findViewById(R.id.dateTime);
+        final TableRow optionsRow = taskView.findViewById(R.id.options);
         final DatePicker datePicker = taskView.findViewById(R.id.datePicker);
         final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
 
@@ -123,6 +124,8 @@ class MyAdapter extends ArrayAdapter<String> {
             Button complete = taskView.findViewById(R.id.complete);
             Button snooze = taskView.findViewById(R.id.snooze);
             Button more = taskView.findViewById(R.id.more);
+            Button rename = taskView.findViewById(R.id.rename);
+            Button subTasks = taskView.findViewById(R.id.subTasks);
 
             //put data in text view
             theTextView.setText(task);
@@ -175,30 +178,85 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                    //actions to occur if alarm not already set
-                    if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
+                    Toast.makeText(v.getContext(), "Upgrade to the Pro version to" +
+                                    " get this feature", Toast.LENGTH_SHORT).show();
 
-                        MainActivity.alarmBeingSet = true;
-
-                        notifyDataSetChanged();
-
-                    //actions to occur when cancelling alarm
-                    } else {
-
-                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
-
-                        MainActivity.alarmManager.cancel(MainActivity.pendingIntent
-                                .get(MainActivity.activeTask));
-
-                        notifyDataSetChanged();
-
-                    }
+                    //TODO worry about this later. This is a pro feature. Do free features first
+//                    //actions to occur if alarm not already set
+//                    if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
+//
+//                        MainActivity.alarmBeingSet = true;
+//
+//                        notifyDataSetChanged();
+//
+//                    //actions to occur when cancelling alarm
+//                    } else {
+//
+//                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+//
+//                        MainActivity.alarmManager.cancel(MainActivity.pendingIntent
+//                                .get(MainActivity.activeTask));
+//
+//                        notifyDataSetChanged();
+//
+//                    }
 
                 }
             });
 
             //Actions to occur if user selects 'more'
             more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    propertyRow.setVisibility(View.GONE);
+                    optionsRow.setVisibility(View.VISIBLE);
+
+//                    MainActivity.checklistShowing = true;
+//
+//                    MainActivity.vibrate.vibrate(50);
+//
+//                    getContext().startActivity(intent);
+//
+//                    notifyDataSetChanged();
+
+                }
+            });
+
+            //Actions to occur if user selects 'rename' or 'reinstate'
+            rename.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+//                    //Cannot update the list until after the task has been updated.
+//                    MainActivity.goToMyAdapter = false;
+//
+//                    //Actions to occur when keyboard is showing
+////                    MainActivity.checkKeyboardShowing();
+//
+//                    //Indicates that a task is being edited
+//                    MainActivity.taskBeingEdited = true;
+//
+////                    MainActivity.activeTask = position;
+//
+//                    MainActivity.tasksAreClickable = false;
+//
+//                    MainActivity.fadeTasks = true;
+//
+//                    MainActivity.centerTask = true;
+//
+//                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//
+//                    //Can't change visibility of 'add' button. Have to set height to zero instead.
+//                    MainActivity.params.height = 0;
+//
+//                    MainActivity.add.setLayoutParams(MainActivity.params);
+
+                }
+            });
+
+            //Actions to occur if user selects 'more'
+            subTasks.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -212,6 +270,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
             });
+
         }
 
         if (MainActivity.fadeTasks) {

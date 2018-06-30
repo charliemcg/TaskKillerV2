@@ -10,24 +10,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <DatePicker
-            android:id="@+id/datePicker"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/rename"
+            android:text="Rename"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="400dp"/>
-
-        <TimePicker
-            android:id="@+id/timePicker"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"/>
 
         <Button
-            android:id="@+id/date"
+            android:id="@+id/subTasks"
+            android:text="Sub-Tasks"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Set Date"
-            android:onClick="setAlarm"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"/>
     </LinearLayout>
 
 </TableRow>
