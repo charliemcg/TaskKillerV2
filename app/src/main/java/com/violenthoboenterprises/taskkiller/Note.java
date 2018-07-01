@@ -26,7 +26,7 @@ public class Note extends MainActivity {
     EditText noteEditText;
     InputMethodManager keyboard;
     Button editBtn;
-    ArrayList<String> noteContent;
+    static ArrayList<String> noteContent;
     String TAG;
 
     public void onCreate(Bundle savedInstanceState){
@@ -185,13 +185,19 @@ public class Note extends MainActivity {
     //Return to main screen when back pressed
     public void onBackPressed() {
 
-        Intent intent = new Intent();
+//        if(checklistShowing) {
 
-        intent.setClass(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent();
 
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setClass(getApplicationContext(), MainActivity.class);
 
-        startActivity(intent);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(intent);
+
+//            checklistShowing = false;
+
+//        }
 
     }
 

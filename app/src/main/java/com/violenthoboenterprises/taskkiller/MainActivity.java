@@ -313,6 +313,84 @@ public class MainActivity extends AppCompatActivity {
                             //TODO don't leave this blank
                         }
 
+                        //skip this management of notes if there are none
+                        try {
+
+                            noteListSize = oSharedPreferences
+                                    .getInt("noteListSizeKey", 0);
+
+////                            for (int i = 0; i < noteListSize; i++) {
+//
+////                                Checklist.checklistSize = nSharedPreferences
+////                                        .getInt("checklistSizeKey" + String.valueOf(i), 0);
+////
+////                                try {
+////
+////                                    Checklist.checklistList.get(i);
+////
+////                                } catch (IndexOutOfBoundsException e) {
+////
+////                                    Checklist.checklistList.add(new ArrayList<String>());
+////
+////                                }
+////
+////                                try {
+////
+////                                    Checklist.subTasksKilled.get(i);
+////
+////                                } catch (IndexOutOfBoundsException e) {
+////
+////                                    Checklist.subTasksKilled.add(new ArrayList<Boolean>());
+////
+////                                }
+
+                            oSharedPreferences.edit().putInt("noteListSizeKey",
+                                    Note.noteListSize).apply();
+
+//                            for (int i = 0; i < noteListSize; i++) {
+//
+//                                Note.noteContent.set(i, oSharedPreferences
+//                                        .getString("noteItemKey" + String.valueOf(i), ""));
+//
+//                            }
+
+////                            }
+
+                            //onPause
+
+                            noteListSize = Note.noteContent.size();
+
+                            for (int i = 0; i < noteListSize; i++) {
+
+                                if (i == MainActivity.activeTask) {
+
+                                    Note.noteContent.remove(activeTask);
+
+                                }
+
+                            }
+
+                            noteListSize = Note.noteContent.size();
+
+                            if(noteListSize == 0){
+                                Log.i(TAG, "I'm in here");
+//                                oSharedPreferences.edit().putString("noteItemKey"
+//                                        + String.valueOf(0), "").apply();
+                                oSharedPreferences.edit().clear().apply();
+                            }
+
+                            //Saving each note
+                            for (int i = 0; i < noteListSize; i++) {
+
+                                oSharedPreferences.edit().putString("noteItemKey"
+                                        + String.valueOf(i), Note.noteContent.get(i)).apply();
+
+                            }
+
+                        } catch (NullPointerException e) {
+                            //TODO don't leave this blank
+                        }
+
                         taskList.remove(position);
 
                         //Updates the view
