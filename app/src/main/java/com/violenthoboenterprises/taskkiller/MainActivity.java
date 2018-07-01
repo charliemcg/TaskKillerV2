@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
     static boolean dateOrTime;
     //Used to indicate an alarm is being set
     static boolean alarmBeingSet;
-    //Used to indicate a note is being set
-//    static boolean noteBeingSet;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -67,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private int heightDiff;
     //Size of checklist of checklists
     static int checklistListSize;
+    //Size of list of notes
+    static int noteListSize;
     //Height of list view as viewable on screen
     static int listViewHeight;
 
@@ -119,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
     //Save data related to checklist on close
     static SharedPreferences nSharedPreferences;
 
+    //Save data related to notes on close
+    static SharedPreferences oSharedPreferences;
+
     //Allow phone to vibrate
     static Vibrator vibrate;
 
@@ -161,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         broadcastID = new ArrayList<>();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmBeingSet = false;
-//        noteBeingSet = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
