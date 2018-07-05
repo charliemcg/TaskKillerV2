@@ -288,7 +288,8 @@ public class MainActivity extends AppCompatActivity {
                                 Checklist.checklistSize = Checklist.checklistList.get(i).size();
 
                                 nSharedPreferences.edit().putInt("checklistSizeKey"
-                                                + String.valueOf(i), Checklist.checklistSize).apply();
+                                                + String.valueOf(i),
+                                        Checklist.checklistSize).apply();
 
                             }
 
@@ -322,7 +323,8 @@ public class MainActivity extends AppCompatActivity {
                         String note;
                         int newId;
 
-                        //note ID must match task list index. Decrementing id value of all notes with id greater than the deleted task index.
+                        //note ID must match task list index. Decrementing id value of all
+                        // notes with id greater than the deleted task index.
                         for(int i = activeTask; i <= taskList.size(); i++){
                             result = noteDb.getData(i);
                             note = "";
@@ -532,285 +534,6 @@ public class MainActivity extends AppCompatActivity {
         theListView.setAdapter(theAdapter[0]);
     }
 
-    //Set notification alarm for selected task
-    public void setAlarm(View view){
-
-        //TODO this date and time picker is different to the date and time picker in MyAdapter
-        //TODO this could be why it isn't saving time properly
-        DatePicker datePicker = findViewById(R.id.datePicker);
-
-        TimePicker timePicker = findViewById(R.id.timePicker);
-
-        Button dateButton = findViewById(R.id.date);
-
-        //actions to occur when date has been chosen
-        if(!dateOrTime){
-
-            datePicker.setVisibility(View.GONE);
-
-            timePicker.setVisibility(View.VISIBLE);
-
-            //Updates the view
-            theListView.setAdapter(theAdapter[0]);
-
-            dateOrTime = true;
-
-            dateButton.setText("Set Time");
-
-        //actions to occur when time has been chosen
-        }else{
-
-            Calendar calendar = Calendar.getInstance();
-
-            //setting alarm
-            calendar.set(Calendar.YEAR, datePicker.getYear());
-            calendar.set(Calendar.MONTH, datePicker.getMonth());
-            calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-            calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
-            calendar.set(Calendar.MINUTE, timePicker.getMinute());
-
-            //intention to execute AlertReceiver
-            alertIntent = new Intent(this, AlertReceiver.class);
-
-            //setting the name of the task for which the notification is being set
-            alertIntent.putExtra("ToDo", taskList.get(activeTask));
-
-            int i = 0;
-
-            while (broadcastID.contains(i)){
-
-                i++;
-
-            }
-
-            broadcastID.set(activeTask, i);
-
-            pendingIntent.set(activeTask, PendingIntent.getBroadcast(this,
-                    broadcastID.get(activeTask), alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-            //setting the notification
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar
-                    .getTimeInMillis(), pendingIntent.get(activeTask));
-
-            datePicker.setVisibility(View.VISIBLE);
-
-            timePicker.setVisibility(View.GONE);
-
-            dateOrTime = false;
-
-            dateButton.setText("Set Time");
-
-            //set background to white
-            activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-            showTaskDueIcon.set(activeTask, true);
-
-            theListView.setAdapter(theAdapter[0]);
-
-            //Marks properties as not showing
-            taskPropertiesShowing = false;
-
-            alarmBeingSet = false;
-
-            //Returns the 'add' button
-            params.height = addHeight;
-
-            add.setLayoutParams(params);
-
-        }
-
-    }
-
-    private void getSavedData() throws URISyntaxException {
-
-        //clearing the lists before adding data back into them so as to avoid duplication
-        taskList.clear();
-        tasksKilled.clear();
-        showTaskDueIcon.clear();
-        pendingIntent.clear();
-        broadcastID.clear();
-
-        checklistListSize = 0;
-
-        //Existing tasks are recalled when app opened
-        taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
-
-        for( int i = 0 ; i < taskListSize ; i++ ) {
-
-            taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
-
-            tasksKilled.add(mSharedPreferences.getBoolean("taskKilledKey" +
-                    String.valueOf(i), false));
-
-            showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon"
-                    + String.valueOf(i), false));
-
-            alertIntent = new Intent(this, AlertReceiver.class);
-
-            broadcastID.add(mSharedPreferences.getInt("broadcastIDKey" + String.valueOf(i), 0));
-
-            pendingIntent.add(PendingIntent.getBroadcast(this, broadcastID.get(i),
-                    alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-        }
-
-        theListView.setAdapter(theAdapter[0]);
-
-        //Checks to see if there are still tasks left
-        noTasksLeft();
-
-    }
-
-    //Actions to occur when keyboard is showing
-    void checkKeyboardShowing() {
-
-        //TODO check out the hard coded pixels will work on all devices
-        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener
-                (new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-                if (getResources().getConfiguration().orientation == 1) {
-
-                    portraitKeyboardMeasure = /*heightDiff*/activityRootView.getRootView()
-                            .getHeight() / 2.4;
-                    landscapeKeyboardMeasure = activityRootView.getRootView()
-                            .getWidth() / 13.7945205479452054794;
-
-                } else if (getResources().getConfiguration().orientation == 2) {
-
-                    landscapeKeyboardMeasure = /*heightDiff*/activityRootView
-                            .getHeight() / 13.7945205479452054794;
-                    portraitKeyboardMeasure = activityRootView.getRootView()
-                            .getRootView().getWidth() / 2.4;
-
-                }
-
-                Rect screen = new Rect();
-
-                activityRootView.getWindowVisibleDisplayFrame(screen);
-
-                //Screen pixel values are used to determine how much of the screen is visible
-                heightDiff = activityRootView.getRootView().getHeight() -
-                        (screen.bottom - screen.top);
-
-                //Value of more than 800 seems to indicate that the keyboard is showing
-                //in portrait mode
-                if ((heightDiff > /*800*/portraitKeyboardMeasure) && (getResources()
-                        .getConfiguration().orientation == 1)) {
-
-                    fadeTasks = true;
-
-                    if (goToMyAdapter) {
-
-                        theListView.setAdapter(theAdapter[0]);
-
-                        goToMyAdapter = false;
-
-                    }
-
-                    //fade background when something is in focus
-                    activityRootView.setBackgroundColor(Color.parseColor("#888888"));
-
-                    taskNameEditText.setFocusable(true);
-
-                    taskNameEditText.requestFocus();
-
-                    //Textbox is visible and 'add' button is gone whenever keyboard is showing
-                    taskNameEditText.setVisibility(View.VISIBLE);
-
-                    params.height = 0;
-
-                    add.setLayoutParams(params);
-
-                    tasksAreClickable = false;
-
-                    restoreNormalListView = true;
-
-                //Similar to above but for landscape mode
-                }else if((heightDiff > /*73*/landscapeKeyboardMeasure) &&
-                        (heightDiff < /*800*/portraitKeyboardMeasure) && (getResources()
-                        .getConfiguration().orientation == 2)){
-
-                    fadeTasks = true;
-
-                    if (goToMyAdapter) {
-
-                        theListView.setAdapter(theAdapter[0]);
-
-                        goToMyAdapter = false;
-
-                    }
-
-                    //fade background when something is in focus
-                    activityRootView.setBackgroundColor(Color.parseColor("#888888"));
-
-                    taskNameEditText.setFocusable(true);
-
-                    taskNameEditText.requestFocus();
-
-                    //Textbox is visible and 'add' button is gone whenever keyboard is showing
-                    taskNameEditText.setVisibility(View.VISIBLE);
-
-                    //Keyboard is inactive without this line
-                    taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-
-                    params.height = 0;
-
-                    add.setLayoutParams(params);
-
-                    tasksAreClickable = false;
-
-                    restoreNormalListView = true;
-
-                }else if(restoreNormalListView){
-
-                    fadeTasks = false;
-
-                    //setting background to white
-                    activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-                    //Textbox is gone and 'add' button is visible whenever keyboard is not showing
-                    taskNameEditText.setVisibility(View.GONE);
-
-                    params.height = addHeight;
-
-                    add.setLayoutParams(params);
-
-                    tasksAreClickable = true;
-
-                    theListView.setAdapter(theAdapter[0]);
-
-                    restoreNormalListView = false;
-
-                    //Once editing is complete the adapter can update the list
-                    goToMyAdapter = true;
-
-                }
-
-            }
-
-        });
-
-    }
-
-    //Tells user to add tasks when task list is empty
-    private void noTasksLeft() {
-
-        //Checks if there are any existing tasks
-        if (taskList.size() == 0){
-
-            //Inform user to add some tasks
-            noTasksToShow.setVisibility(View.VISIBLE);
-
-        }else{
-
-            noTasksToShow.setVisibility(View.GONE);
-
-        }
-
-    }
-
     //Create a new task
     private void createTask(final String taskName, ArrayList taskList, boolean taskBeingEdited) {
 
@@ -839,6 +562,156 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
+    }
+
+    //Tells user to add tasks when task list is empty
+    private void noTasksLeft() {
+
+        //Checks if there are any existing tasks
+        if (taskList.size() == 0){
+
+            //Inform user to add some tasks
+            noTasksToShow.setVisibility(View.VISIBLE);
+
+        }else{
+
+            noTasksToShow.setVisibility(View.GONE);
+
+        }
+
+    }
+
+    //Actions to occur when keyboard is showing
+    void checkKeyboardShowing() {
+
+        //TODO check out the hard coded pixels will work on all devices
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener
+                (new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+
+                        if (getResources().getConfiguration().orientation == 1) {
+
+                            portraitKeyboardMeasure = /*heightDiff*/activityRootView.getRootView()
+                                    .getHeight() / 2.4;
+                            landscapeKeyboardMeasure = activityRootView.getRootView()
+                                    .getWidth() / 13.7945205479452054794;
+
+                        } else if (getResources().getConfiguration().orientation == 2) {
+
+                            landscapeKeyboardMeasure = /*heightDiff*/activityRootView
+                                    .getHeight() / 13.7945205479452054794;
+                            portraitKeyboardMeasure = activityRootView.getRootView()
+                                    .getRootView().getWidth() / 2.4;
+
+                        }
+
+                        Rect screen = new Rect();
+
+                        activityRootView.getWindowVisibleDisplayFrame(screen);
+
+                        //Screen pixel values are used to determine how much of the screen is visible
+                        heightDiff = activityRootView.getRootView().getHeight() -
+                                (screen.bottom - screen.top);
+
+                        //Value of more than 800 seems to indicate that the keyboard is showing
+                        //in portrait mode
+                        if ((heightDiff > /*800*/portraitKeyboardMeasure) && (getResources()
+                                .getConfiguration().orientation == 1)) {
+
+                            fadeTasks = true;
+
+                            if (goToMyAdapter) {
+
+                                theListView.setAdapter(theAdapter[0]);
+
+                                goToMyAdapter = false;
+
+                            }
+
+                            //fade background when something is in focus
+                            activityRootView.setBackgroundColor(Color.parseColor("#888888"));
+
+                            taskNameEditText.setFocusable(true);
+
+                            taskNameEditText.requestFocus();
+
+                            //Textbox is visible and 'add' button is gone whenever keyboard is showing
+                            taskNameEditText.setVisibility(View.VISIBLE);
+
+                            params.height = 0;
+
+                            add.setLayoutParams(params);
+
+                            tasksAreClickable = false;
+
+                            restoreNormalListView = true;
+
+                            //Similar to above but for landscape mode
+                        }else if((heightDiff > /*73*/landscapeKeyboardMeasure) &&
+                                (heightDiff < /*800*/portraitKeyboardMeasure) && (getResources()
+                                .getConfiguration().orientation == 2)){
+
+                            fadeTasks = true;
+
+                            if (goToMyAdapter) {
+
+                                theListView.setAdapter(theAdapter[0]);
+
+                                goToMyAdapter = false;
+
+                            }
+
+                            //fade background when something is in focus
+                            activityRootView.setBackgroundColor(Color.parseColor("#888888"));
+
+                            taskNameEditText.setFocusable(true);
+
+                            taskNameEditText.requestFocus();
+
+                            //Textbox is visible and 'add' button is gone whenever keyboard is showing
+                            taskNameEditText.setVisibility(View.VISIBLE);
+
+                            //Keyboard is inactive without this line
+                            taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+
+                            params.height = 0;
+
+                            add.setLayoutParams(params);
+
+                            tasksAreClickable = false;
+
+                            restoreNormalListView = true;
+
+                        }else if(restoreNormalListView){
+
+                            fadeTasks = false;
+
+                            //setting background to white
+                            activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                            //Textbox is gone and 'add' button is visible whenever keyboard is not showing
+                            taskNameEditText.setVisibility(View.GONE);
+
+                            params.height = addHeight;
+
+                            add.setLayoutParams(params);
+
+                            tasksAreClickable = true;
+
+                            theListView.setAdapter(theAdapter[0]);
+
+                            restoreNormalListView = false;
+
+                            //Once editing is complete the adapter can update the list
+                            goToMyAdapter = true;
+
+                        }
+
+                    }
+
+                });
 
     }
 
@@ -883,6 +756,46 @@ public class MainActivity extends AppCompatActivity {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void getSavedData() throws URISyntaxException {
+
+        //clearing the lists before adding data back into them so as to avoid duplication
+        taskList.clear();
+        tasksKilled.clear();
+        showTaskDueIcon.clear();
+        pendingIntent.clear();
+        broadcastID.clear();
+
+        checklistListSize = 0;
+
+        //Existing tasks are recalled when app opened
+        taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
+
+        for( int i = 0 ; i < taskListSize ; i++ ) {
+
+            taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
+
+            tasksKilled.add(mSharedPreferences.getBoolean("taskKilledKey" +
+                    String.valueOf(i), false));
+
+            showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon"
+                    + String.valueOf(i), false));
+
+            alertIntent = new Intent(this, AlertReceiver.class);
+
+            broadcastID.add(mSharedPreferences.getInt("broadcastIDKey" + String.valueOf(i), 0));
+
+            pendingIntent.add(PendingIntent.getBroadcast(this, broadcastID.get(i),
+                    alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        }
+
+        theListView.setAdapter(theAdapter[0]);
+
+        //Checks to see if there are still tasks left
+        noTasksLeft();
 
     }
 }

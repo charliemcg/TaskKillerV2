@@ -22,6 +22,8 @@ public class Note extends MainActivity {
     EditText noteEditText;
     InputMethodManager keyboard;
     Button editBtn;
+    Button removeBtn;
+    Button addNoteBtn;
     String TAG;
     String theNote;
     //Indicates if new note is being added or if existing note is being edited
@@ -35,6 +37,8 @@ public class Note extends MainActivity {
         noteEditText = findViewById(R.id.noteEditText);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         editBtn = findViewById(R.id.editBtn);
+        removeBtn = findViewById(R.id.removeBtn);
+        addNoteBtn = findViewById(R.id.addNoteBtn);
         TAG = "Note";
         theNote = "";
         setEdit = false;
@@ -57,7 +61,8 @@ public class Note extends MainActivity {
                         noteDb.insertData(activeTask, noteEditText.getText().toString());
                     //existing note is being edited.
                     }else{
-                        noteDb.updateData(String.valueOf(activeTask), noteEditText.getText().toString());
+                        noteDb.updateData(String.valueOf(activeTask),
+                                noteEditText.getText().toString());
                         setEdit = false;
                     }
 
@@ -101,6 +106,9 @@ public class Note extends MainActivity {
                     //Show edit button
                     editBtn.setVisibility(View.VISIBLE);
 
+                    //show remove button
+                    removeBtn.setVisibility(View.VISIBLE);
+
                     return true;
 
                 }
@@ -135,6 +143,46 @@ public class Note extends MainActivity {
 
                 //hide edit button
                 editBtn.setVisibility(View.GONE);
+
+                //hide remove button
+                removeBtn.setVisibility(View.GONE);
+
+            }
+        });
+
+        //Actions to occur if user selects 'Remove'
+        removeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                MainActivity.vibrate.vibrate(50);
+
+                //deleting note related to deleted task
+                noteDb.deleteData(String.valueOf(activeTask));
+
+                noteTextView.setText("");
+
+                //hide edit button
+                editBtn.setVisibility(View.GONE);
+
+                //hide remove button
+                removeBtn.setVisibility(View.GONE);
+
+                //show add button
+                addNoteBtn.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        //actions to occur if user selects 'add'
+        addNoteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                noteEditText.setVisibility(View.VISIBLE);
+                noteEditText.requestFocus();
+                keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                addNoteBtn.setVisibility(View.GONE);
 
             }
         });
@@ -180,9 +228,11 @@ public class Note extends MainActivity {
         if(!theNote.equals("")){
 
             noteTextView.setText(theNote);
-            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            this.getWindow().setSoftInputMode(WindowManager
+                    .LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             noteEditText.setVisibility(View.GONE);
             editBtn.setVisibility(View.VISIBLE);
+            removeBtn.setVisibility(View.VISIBLE);
 
         }
 
