@@ -1,24 +1,20 @@
 package com.violenthoboenterprises.taskkiller;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Rect;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-
-import java.util.ArrayList;
+import android.widget.Toast;
 
 public class Note extends MainActivity {
 
@@ -26,20 +22,22 @@ public class Note extends MainActivity {
     EditText noteEditText;
     InputMethodManager keyboard;
     Button editBtn;
-    static ArrayList<String> noteContent;
     String TAG;
+    String theNote;
+    //Indicates if new note is being added or if existing note is being edited
+    Boolean setEdit;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_layout);
-        MainActivity.oSharedPreferences = getPreferences(MODE_PRIVATE);
 
         noteTextView = findViewById(R.id.noteTextView);
         noteEditText = findViewById(R.id.noteEditText);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         editBtn = findViewById(R.id.editBtn);
-        noteContent = new ArrayList<>();
         TAG = "Note";
+        theNote = "";
+        setEdit = false;
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
@@ -54,22 +52,45 @@ public class Note extends MainActivity {
                 //Actions to occur when user submits note
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-                    //Getting user data
-//                    noteContent = noteEditText.getText().toString();
-                    noteContent.add(MainActivity.activeTask, noteEditText.getText().toString());
+                    //new note being added
+                    if(!setEdit) {
+                        noteDb.insertData(activeTask, noteEditText.getText().toString());
+                    //existing note is being edited.
+                    }else{
+                        noteDb.updateData(String.valueOf(activeTask), noteEditText.getText().toString());
+                        setEdit = false;
+                    }
+
+                    ////////For showing table date////////
+//                    Cursor res = noteDb.getAllData();
+//                    if(res.getCount() == 0){
+//                        showMessage("Error", "Nothing found");
+//                    }
+//                    StringBuffer buffer = new StringBuffer();
+//                    while(res.moveToNext()){
+//                        buffer.append("ID: " + res.getString(0) + "\n");
+//                        buffer.append("NOTE: " + res.getString(1) + "\n\n");
+//                    }
+//
+//                    showMessage("Data", buffer.toString());
+                    ///////////////////////////////////////
 
                     //Clear text from text box
                     noteEditText.setText("");
 
-                    //Don't allow blank notes
-                    if (!noteContent.equals("")) {
-
-//                        noteTextView.setText(noteContent);
-                        noteTextView.setText(noteContent.get(MainActivity.activeTask));
-
+                    //Getting note from database
+                    Cursor result = noteDb.getData(activeTask);
+                    while(result.moveToNext()){
+                        theNote = result.getString(1);
                     }
 
-                    noteEditText.setText("");
+                    //Don't allow blank notes
+                    if(!theNote.equals("")){
+
+                        //Set text view to the note content
+                        noteTextView.setText(theNote);
+
+                    }
 
                     //Hide text box
                     noteEditText.setVisibility(View.GONE);
@@ -97,14 +118,20 @@ public class Note extends MainActivity {
 
                 MainActivity.vibrate.vibrate(50);
 
-                //show keyboard
-                keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                setEdit = true;
 
                 //show edit text
                 noteEditText.setVisibility(View.VISIBLE);
 
-//                noteEditText.setText(noteContent);
-                noteEditText.setText(noteContent.get(MainActivity.activeTask));
+                //set text to existing note
+                noteEditText.setText(theNote);
+
+                //put cursor at end of text
+                noteEditText.requestFocus();
+                noteEditText.setSelection(noteEditText.getText().length());
+
+                //show keyboard
+                keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
                 //hide edit button
                 editBtn.setVisibility(View.GONE);
@@ -114,25 +141,21 @@ public class Note extends MainActivity {
 
     }
 
+    //////////For showing table results///////////////
+//    public void showMessage(String title, String message){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setCancelable(true);
+//        builder.setTitle(title);
+//        builder.setMessage(message);
+//        builder.show();
+//    }
+    ////////////////////////////////////////////////
+
     @Override
     //Notes are saved in a manner so that they don't vanish when app closed
     protected void onPause(){
 
         super.onPause();
-
-        //Getting and saving the size of the note list
-        MainActivity.noteListSize = noteContent.size();
-
-        MainActivity.oSharedPreferences.edit().putInt("noteListSizeKey",
-                MainActivity.noteListSize).apply();
-
-        //Saving each individual note
-        for(int i = 0; i < MainActivity.noteListSize; i++){
-
-            MainActivity.oSharedPreferences.edit().putString("noteItemKey" + String.valueOf(i),
-                    noteContent.get(i)).apply();
-
-        }
 
     }
 
@@ -148,35 +171,19 @@ public class Note extends MainActivity {
     //Existing notes are recalled when app opened
     private void getSavedData() {
 
-        noteContent.clear();
-
-        MainActivity.noteListSize = MainActivity.oSharedPreferences
-                .getInt("noteListSizeKey", 0);
-
-        for (int i = 0; i < MainActivity.noteListSize; i++) {
-
-            noteContent.add(i, MainActivity.oSharedPreferences
-                    .getString("noteItemKey" + String.valueOf(i), ""));
-
+        Cursor result = noteDb.getData(activeTask);
+        while(result.moveToNext()){
+            theNote = result.getString(1);
         }
 
-        try{
-            noteTextView.setText(noteContent.get(MainActivity.activeTask));
+        //Don't allow blank notes
+        if(!theNote.equals("")){
+
+            noteTextView.setText(theNote);
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             noteEditText.setVisibility(View.GONE);
             editBtn.setVisibility(View.VISIBLE);
-        }catch (IndexOutOfBoundsException e){
-            noteTextView.setText("");
-        }
 
-        try {
-            //Only show keyboard if there is no existing note
-            if (!noteContent.get(MainActivity.activeTask).equals("")) {
-
-                this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-            }
-        }catch(IndexOutOfBoundsException e){
-            //TODO put something here
         }
 
     }
@@ -185,19 +192,13 @@ public class Note extends MainActivity {
     //Return to main screen when back pressed
     public void onBackPressed() {
 
-//        if(checklistShowing) {
+        Intent intent = new Intent();
 
-            Intent intent = new Intent();
+        intent.setClass(getApplicationContext(), MainActivity.class);
 
-            intent.setClass(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            startActivity(intent);
-
-//            checklistShowing = false;
-
-//        }
+        startActivity(intent);
 
     }
 

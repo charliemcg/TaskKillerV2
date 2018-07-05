@@ -424,6 +424,7 @@ public class Checklist extends MainActivity {
     //Return to main screen when back pressed
     public void onBackPressed() {
 
+        //TODO find out if this condition is necessary
         if(checklistShowing) {
 
             Intent intent = new Intent();

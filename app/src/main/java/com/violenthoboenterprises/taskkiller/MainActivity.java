@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Vibrator;
@@ -65,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private int heightDiff;
     //Size of checklist of checklists
     static int checklistListSize;
-    //Size of list of notes
-    static int noteListSize;
     //Height of list view as viewable on screen
     static int listViewHeight;
 
@@ -119,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
     //Save data related to checklist on close
     static SharedPreferences nSharedPreferences;
 
-    //Save data related to notes on close
-    static SharedPreferences oSharedPreferences;
-
     //Allow phone to vibrate
     static Vibrator vibrate;
 
@@ -133,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
 
     //String used for debugging
     String TAG;
+
+    //Database for keeping track of notes
+    static Database noteDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         broadcastID = new ArrayList<>();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmBeingSet = false;
+        noteDb = new Database(this);
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -206,6 +206,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //Removes completed task
                     } else if (!taskPropertiesShowing && tasksKilled.get(position)) {
+
+                        taskList.remove(position);
 
                         MainActivity.checklistShowing = true;
 
@@ -313,85 +315,23 @@ public class MainActivity extends AppCompatActivity {
                             //TODO don't leave this blank
                         }
 
-                        //skip this management of notes if there are none
-                        try {
+                        //deleting note related to deleted task
+                        noteDb.deleteData(String.valueOf(activeTask));
 
-                            noteListSize = oSharedPreferences
-                                    .getInt("noteListSizeKey", 0);
+                        Cursor result;
+                        String note;
+                        int newId;
 
-////                            for (int i = 0; i < noteListSize; i++) {
-//
-////                                Checklist.checklistSize = nSharedPreferences
-////                                        .getInt("checklistSizeKey" + String.valueOf(i), 0);
-////
-////                                try {
-////
-////                                    Checklist.checklistList.get(i);
-////
-////                                } catch (IndexOutOfBoundsException e) {
-////
-////                                    Checklist.checklistList.add(new ArrayList<String>());
-////
-////                                }
-////
-////                                try {
-////
-////                                    Checklist.subTasksKilled.get(i);
-////
-////                                } catch (IndexOutOfBoundsException e) {
-////
-////                                    Checklist.subTasksKilled.add(new ArrayList<Boolean>());
-////
-////                                }
-
-                            oSharedPreferences.edit().putInt("noteListSizeKey",
-                                    Note.noteListSize).apply();
-
-//                            for (int i = 0; i < noteListSize; i++) {
-//
-//                                Note.noteContent.set(i, oSharedPreferences
-//                                        .getString("noteItemKey" + String.valueOf(i), ""));
-//
-//                            }
-
-////                            }
-
-                            //onPause
-
-                            noteListSize = Note.noteContent.size();
-
-                            for (int i = 0; i < noteListSize; i++) {
-
-                                if (i == MainActivity.activeTask) {
-
-                                    Note.noteContent.remove(activeTask);
-
-                                }
-
+                        //note ID must match task list index. Decrementing id value of all notes with id greater than the deleted task index.
+                        for(int i = activeTask; i <= taskList.size(); i++){
+                            result = noteDb.getData(i);
+                            note = "";
+                            while(result.moveToNext()){
+                                note = result.getString(1);
                             }
-
-                            noteListSize = Note.noteContent.size();
-
-                            if(noteListSize == 0){
-                                Log.i(TAG, "I'm in here");
-//                                oSharedPreferences.edit().putString("noteItemKey"
-//                                        + String.valueOf(0), "").apply();
-                                oSharedPreferences.edit().clear().apply();
-                            }
-
-                            //Saving each note
-                            for (int i = 0; i < noteListSize; i++) {
-
-                                oSharedPreferences.edit().putString("noteItemKey"
-                                        + String.valueOf(i), Note.noteContent.get(i)).apply();
-
-                            }
-
-                        } catch (NullPointerException e) {
-                            //TODO don't leave this blank
+                            newId = i - 1;
+                            noteDb.updateAfterDelete(String.valueOf(newId), note);
                         }
-
-                        taskList.remove(position);
 
                         //Updates the view
                         theListView.setAdapter(theAdapter[0]);
