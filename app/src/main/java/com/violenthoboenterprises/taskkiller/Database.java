@@ -22,7 +22,8 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, NOTE TEXT, CHECKLIST BOOLEAN, TEST TEXT)");
+        db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
+                "NOTE TEXT, CHECKLIST BOOLEAN)");
     }
 
     @Override
@@ -53,18 +54,19 @@ public class Database extends SQLiteOpenHelper {
 
     public Cursor getData(int id){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL1 + " == " + id, null);
+        Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL1
+                + " == " + id, null);
         return result;
     }
 
-    public boolean updateData(String id, String note){
+    public boolean updateData(String id, String note, Boolean checklist){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(COL1, id);
-        if(!Checklist.checklistShowing) {
+        if(MainActivity.inNote) {
             content.put(COL2, note);
         }else {
-            content.put(COL3, true);
+            content.put(COL3, checklist);
         }
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
@@ -83,7 +85,6 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(COL1, id);
-//        content.put(COL2, note);
         content.put(COL3, true);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;

@@ -26,8 +26,8 @@ public class Note extends MainActivity {
     Button addNoteBtn;
     String TAG;
     String theNote;
-    //Indicates if new note is being added or if existing note is being edited
-    Boolean setEdit;
+    //Indicates that the active task has subtasks
+    Boolean checklistExists;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -41,7 +41,8 @@ public class Note extends MainActivity {
         addNoteBtn = findViewById(R.id.addNoteBtn);
         TAG = "Note";
         theNote = "";
-        setEdit = false;
+        checklistExists = false;
+        inNote = true;
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
@@ -56,36 +57,36 @@ public class Note extends MainActivity {
                 //Actions to occur when user submits note
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
 
+                    Cursor result = noteDb.getData(activeTask);
+                    while(result.moveToNext()){
+                        checklistExists = (result.getInt(2) == 1);
+                        Log.i(TAG, String.valueOf(checklistExists));
+                    }
+
                     //new note being added
-//                    if(!setEdit) {
-//                        noteDb.insertData(activeTask, noteEditText.getText().toString());
-//                    existing note is being edited.
-//                    }else{
-                        noteDb.updateData(String.valueOf(activeTask),
-                                noteEditText.getText().toString());
-//                        setEdit = false;
-//                    }
+                    noteDb.updateData(String.valueOf(activeTask),
+                            noteEditText.getText().toString(), checklistExists);
 
                     ////////For showing table date////////
-                    Cursor res = noteDb.getAllData();
-                    if(res.getCount() == 0){
-                        showMessage("Error", "Nothing found");
-                    }
-                    StringBuffer buffer = new StringBuffer();
-                    while(res.moveToNext()){
-                        buffer.append("ID: " + res.getString(0) + "\n");
-                        buffer.append("NOTE: " + res.getString(1) + "\n");
-                        buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
-                    }
-
-                    showMessage("Data", buffer.toString());
+//                    Cursor res = noteDb.getAllData();
+//                    if(res.getCount() == 0){
+//                        showMessage("Error", "Nothing found");
+//                    }
+//                    StringBuffer buffer = new StringBuffer();
+//                    while(res.moveToNext()){
+//                        buffer.append("ID: " + res.getString(0) + "\n");
+//                        buffer.append("NOTE: " + res.getString(1) + "\n");
+//                        buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
+//                    }
+//
+//                    showMessage("Data", buffer.toString());
                     ///////////////////////////////////////
 
                     //Clear text from text box
                     noteEditText.setText("");
 
                     //Getting note from database
-                    Cursor result = noteDb.getData(activeTask);
+                    result = noteDb.getData(activeTask);
                     while(result.moveToNext()){
                         theNote = result.getString(1);
                     }
@@ -127,8 +128,6 @@ public class Note extends MainActivity {
 
                 MainActivity.vibrate.vibrate(50);
 
-//                setEdit = true;
-
                 //show edit text
                 noteEditText.setVisibility(View.VISIBLE);
 
@@ -158,8 +157,14 @@ public class Note extends MainActivity {
 
                 MainActivity.vibrate.vibrate(50);
 
-                //deleting note related to deleted task
-                noteDb.deleteData(String.valueOf(activeTask));
+                Cursor result = noteDb.getData(activeTask);
+                while(result.moveToNext()){
+                    checklistExists = (result.getInt(2) == 1);
+                    Log.i(TAG, String.valueOf(checklistExists));
+                }
+
+                //setting note in database to nothing
+                noteDb.updateData(String.valueOf(activeTask), "", checklistExists);
 
                 noteTextView.setText("");
 
@@ -191,20 +196,21 @@ public class Note extends MainActivity {
     }
 
     //////////For showing table results///////////////
-    public void showMessage(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
-    }
+//    public void showMessage(String title, String message){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setCancelable(true);
+//        builder.setTitle(title);
+//        builder.setMessage(message);
+//        builder.show();
+//    }
     ////////////////////////////////////////////////
 
     @Override
-    //Notes are saved in a manner so that they don't vanish when app closed
     protected void onPause(){
 
         super.onPause();
+
+        inNote = false;
 
     }
 
@@ -212,6 +218,8 @@ public class Note extends MainActivity {
     protected void onResume() {
 
         super.onResume();
+
+        inNote = true;
 
         getSavedData();
 

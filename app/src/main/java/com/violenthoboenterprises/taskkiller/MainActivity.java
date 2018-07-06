@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean dateOrTime;
     //Used to indicate an alarm is being set
     static boolean alarmBeingSet;
+    //Used to indicate that user is in the note screen
+    static boolean inNote;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -84,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
     static ArrayList<Boolean> tasksKilled;
     //Keeps track of tasks which require a due date notification
     static ArrayList<Boolean> showTaskDueIcon;
-    //Keeps track of tasks which require a checklist icon
-    static ArrayList<Boolean> showChecklistIcon;
 
     //Required for setting notification alarms
     static Intent alertIntent;
@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
         taskList = new ArrayList<>();
         tasksKilled = new ArrayList<>();
         showTaskDueIcon = new ArrayList<>();
-        showChecklistIcon = new ArrayList<>();
         noTasksToShow = findViewById(R.id.noTasks);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
@@ -350,8 +349,6 @@ public class MainActivity extends AppCompatActivity {
 
                         showTaskDueIcon.remove(position);
 
-                        showChecklistIcon.remove(position);
-
                         broadcastID.remove(position);
 
                         //Checks to see if there are still tasks left
@@ -462,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
                     noTasksLeft();
 
                     //create a record in the database for tracking icons
-                    noteDb.insertData(activeTask, "");
+                    noteDb.insertData((taskList.size() - 1), "");
 
                     return true;
 
@@ -556,8 +553,6 @@ public class MainActivity extends AppCompatActivity {
 
                 showTaskDueIcon.add(showTaskDueIcon.size(), false);
 
-                showChecklistIcon.add(showChecklistIcon.size(), false);
-
                 alertIntent = new Intent(this, AlertReceiver.class);
 
                 pendingIntent.add(pendingIntent.size(), PendingIntent.getBroadcast(this,
@@ -621,7 +616,8 @@ public class MainActivity extends AppCompatActivity {
 
                         activityRootView.getWindowVisibleDisplayFrame(screen);
 
-                        //Screen pixel values are used to determine how much of the screen is visible
+                        //Screen pixel values are used to determine how much of
+                        // the screen is visible
                         heightDiff = activityRootView.getRootView().getHeight() -
                                 (screen.bottom - screen.top);
 
@@ -641,13 +637,15 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             //fade background when something is in focus
-                            activityRootView.setBackgroundColor(Color.parseColor("#888888"));
+                            activityRootView.setBackgroundColor(Color
+                                    .parseColor("#888888"));
 
                             taskNameEditText.setFocusable(true);
 
                             taskNameEditText.requestFocus();
 
-                            //Textbox is visible and 'add' button is gone whenever keyboard is showing
+                            //Textbox is visible and 'add' button is gone
+                            // whenever keyboard is showing
                             taskNameEditText.setVisibility(View.VISIBLE);
 
                             params.height = 0;
@@ -674,13 +672,15 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             //fade background when something is in focus
-                            activityRootView.setBackgroundColor(Color.parseColor("#888888"));
+                            activityRootView.setBackgroundColor(Color
+                                    .parseColor("#888888"));
 
                             taskNameEditText.setFocusable(true);
 
                             taskNameEditText.requestFocus();
 
-                            //Textbox is visible and 'add' button is gone whenever keyboard is showing
+                            //Textbox is visible and 'add' button is gone
+                            // whenever keyboard is showing
                             taskNameEditText.setVisibility(View.VISIBLE);
 
                             //Keyboard is inactive without this line
@@ -699,9 +699,11 @@ public class MainActivity extends AppCompatActivity {
                             fadeTasks = false;
 
                             //setting background to white
-                            activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            activityRootView.setBackgroundColor(Color
+                                    .parseColor("#FFFFFF"));
 
-                            //Textbox is gone and 'add' button is visible whenever keyboard is not showing
+                            //Textbox is gone and 'add' button is visible whenever
+                            // keyboard is not showing
                             taskNameEditText.setVisibility(View.GONE);
 
                             params.height = addHeight;
@@ -746,8 +748,6 @@ public class MainActivity extends AppCompatActivity {
             mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
                     showTaskDueIcon.get(i)).apply();
 
-//            nSharedPreferences.edit().putBoolean("showChecklistIcon" + String.valueOf(i),
-//                    showChecklistIcon.get(i)).apply();
 
             mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i),
                     pendingIntent.get(i).toString()).apply();
@@ -778,7 +778,6 @@ public class MainActivity extends AppCompatActivity {
         taskList.clear();
         tasksKilled.clear();
         showTaskDueIcon.clear();
-        showChecklistIcon.clear();
         pendingIntent.clear();
         broadcastID.clear();
 
@@ -796,9 +795,6 @@ public class MainActivity extends AppCompatActivity {
 
             showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon"
                     + String.valueOf(i), false));
-
-//            showChecklistIcon.add(nSharedPreferences.getBoolean("showChecklistIcon"
-//                    + String.valueOf(i), false));
 
             alertIntent = new Intent(this, AlertReceiver.class);
 

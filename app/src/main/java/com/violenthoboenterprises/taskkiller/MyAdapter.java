@@ -100,8 +100,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 public void onClick(View view) {
 
                     //set background to white
-                    MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
+                    MainActivity.activityRootView.setBackgroundColor(Color
+                            .parseColor("#FFFFFF"));
 
                     //Updates the view
                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);

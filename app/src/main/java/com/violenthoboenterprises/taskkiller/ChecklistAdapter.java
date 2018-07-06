@@ -1,9 +1,11 @@
 package com.violenthoboenterprises.taskkiller;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +77,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
                         notifyDataSetChanged();
 
-                        //Removes sub task
+                    //Removes sub task
                     } else {
 
                         MainActivity.vibrate.vibrate(50);
@@ -85,6 +87,17 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                         Checklist.subTasksKilled.get(MainActivity.activeTask).remove(position);
 
                         notifyDataSetChanged();
+
+                        Cursor result = MainActivity.noteDb.getData(MainActivity.activeTask);
+                        while(result.moveToNext()){
+                            Checklist.noteExists = (result.getInt(2) == 1);
+                        }
+
+                        if(Checklist.checklistList.get(MainActivity.activeTask).size() == 0){
+                            //setting checklist in database to false
+                            MainActivity.noteDb.updateData(String.valueOf(MainActivity
+                                    .activeTask), "", false);
+                        }
 
                     }
 

@@ -40,6 +40,7 @@ public class Checklist extends MainActivity {
     static boolean subTasksClickable;
     private static String TAG;
     static boolean fadeSubTasks;
+    static boolean noteExists;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -57,6 +58,7 @@ public class Checklist extends MainActivity {
         checklistRootView = findViewById(R.id.checklistRoot);
         TAG = "Checklist";
         fadeSubTasks = false;
+        noteExists = false;
 
         //Ensure there are array lists available to write data to
         if(checklistList.size() <= activeSubTask){
@@ -151,31 +153,8 @@ public class Checklist extends MainActivity {
                         subTasksKilled.get(activeSubTask).add(subTasksKilled
                                 .get(activeSubTask).size(), false);
 
-                        //Enables checklist icon
-//                        Cursor result;
-//                        String note;
-//                        String id;
-
-//                        noteDb.insertData(activeTask, "");
-                        noteDb.updateData(String.valueOf(activeTask), "");
-//                        noteDb.addChecklist(String.valueOf(activeTask));
-
-                        //note ID must match task list index. Decrementing id value of all
-                        // notes with id greater than the deleted task index.
-//                        for(int i = activeTask; i <= taskList.size(); i++){
-//                            result = noteDb.getData(activeTask);
-//                            id = "";
-//                            note = "";
-//                            while(result.moveToNext()){
-//                                Log.i(TAG, "I'm in here");
-//                                id = result.getString(0);
-//                                note = result.getString(1);
-//                                Log.i(TAG, id);
-//                            }
-//                            Log.i(TAG, String.valueOf(activeTask));
-//                            Log.i(TAG, id + " " + note);
-//                            noteDb.addChecklist(id, note);
-//                        }
+                        //marking task so that it displays checklist icon
+                        noteDb.updateData(String.valueOf(activeTask), "", true);
 
                     }
 
@@ -400,11 +379,6 @@ public class Checklist extends MainActivity {
             checklistSize = MainActivity.nSharedPreferences
                     .getInt("checklistSizeKey" + String.valueOf(i), 0);
 
-//            Log.i(TAG, String.valueOf(MainActivity.nSharedPreferences.getBoolean("showChecklistIcon" + String.valueOf(i), false)));
-//
-//            showChecklistIcon.add(MainActivity.nSharedPreferences.getBoolean("showChecklistIcon"
-//                    + String.valueOf(i), false));
-
             try {
 
                 checklistList.get(i);
@@ -442,7 +416,8 @@ public class Checklist extends MainActivity {
         //Only show keyboard if there are no existing sub tasks
         if(checklistList.get(MainActivity.activeTask).size() != 0) {
 
-            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams
+                    .SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
             subTasksClickable = true;
 
