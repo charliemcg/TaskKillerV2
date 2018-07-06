@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
     static ArrayList<Boolean> tasksKilled;
     //Keeps track of tasks which require a due date notification
     static ArrayList<Boolean> showTaskDueIcon;
+    //Keeps track of tasks which require a checklist icon
+    static ArrayList<Boolean> showChecklistIcon;
 
     //Required for setting notification alarms
     static Intent alertIntent;
@@ -145,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         taskList = new ArrayList<>();
         tasksKilled = new ArrayList<>();
         showTaskDueIcon = new ArrayList<>();
+        showChecklistIcon = new ArrayList<>();
         noTasksToShow = findViewById(R.id.noTasks);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
@@ -347,6 +350,8 @@ public class MainActivity extends AppCompatActivity {
 
                         showTaskDueIcon.remove(position);
 
+                        showChecklistIcon.remove(position);
+
                         broadcastID.remove(position);
 
                         //Checks to see if there are still tasks left
@@ -456,6 +461,9 @@ public class MainActivity extends AppCompatActivity {
                     //Checks to see if there are still tasks available
                     noTasksLeft();
 
+                    //create a record in the database for tracking icons
+                    noteDb.insertData(activeTask, "");
+
                     return true;
 
                 //Actions to take when editing existing task
@@ -547,6 +555,8 @@ public class MainActivity extends AppCompatActivity {
                 tasksKilled.add(tasksKilled.size(), false);
 
                 showTaskDueIcon.add(showTaskDueIcon.size(), false);
+
+                showChecklistIcon.add(showChecklistIcon.size(), false);
 
                 alertIntent = new Intent(this, AlertReceiver.class);
 
@@ -736,6 +746,9 @@ public class MainActivity extends AppCompatActivity {
             mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
                     showTaskDueIcon.get(i)).apply();
 
+//            nSharedPreferences.edit().putBoolean("showChecklistIcon" + String.valueOf(i),
+//                    showChecklistIcon.get(i)).apply();
+
             mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i),
                     pendingIntent.get(i).toString()).apply();
 
@@ -765,6 +778,7 @@ public class MainActivity extends AppCompatActivity {
         taskList.clear();
         tasksKilled.clear();
         showTaskDueIcon.clear();
+        showChecklistIcon.clear();
         pendingIntent.clear();
         broadcastID.clear();
 
@@ -782,6 +796,9 @@ public class MainActivity extends AppCompatActivity {
 
             showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon"
                     + String.valueOf(i), false));
+
+//            showChecklistIcon.add(nSharedPreferences.getBoolean("showChecklistIcon"
+//                    + String.valueOf(i), false));
 
             alertIntent = new Intent(this, AlertReceiver.class);
 

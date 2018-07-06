@@ -12,7 +12,8 @@ public class Database extends SQLiteOpenHelper {
     public static final String DBNAME = "Notes.db";
     public static final String TABLE = "notes_table";
     public static final String COL1 = "ID";
-    public static final String COL2= "NOTE";
+    public static final String COL2 = "NOTE";
+    public static final String COL3 = "CHECKLIST";
 
     public Database(Context context) {
         super(context, DBNAME, null, 1);
@@ -21,7 +22,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, NOTE TEXT)");
+        db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, NOTE TEXT, CHECKLIST BOOLEAN, TEST TEXT)");
     }
 
     @Override
@@ -35,6 +36,7 @@ public class Database extends SQLiteOpenHelper {
         ContentValues content= new ContentValues();
         content.put(COL1, id);
         content.put(COL2, note);
+        content.put(COL3, false);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -59,7 +61,11 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(COL1, id);
-        content.put(COL2, note);
+        if(!Checklist.checklistShowing) {
+            content.put(COL2, note);
+        }else {
+            content.put(COL3, true);
+        }
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
@@ -70,6 +76,16 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL1, id);
         content.put(COL2, note);
         db.update(TABLE, content, "NOTE = ?", new String[] {note});
+        return true;
+    }
+
+    public boolean addChecklist(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content= new ContentValues();
+        content.put(COL1, id);
+//        content.put(COL2, note);
+        content.put(COL3, true);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
 

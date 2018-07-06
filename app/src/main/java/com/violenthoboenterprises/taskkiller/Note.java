@@ -57,27 +57,28 @@ public class Note extends MainActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
 
                     //new note being added
-                    if(!setEdit) {
-                        noteDb.insertData(activeTask, noteEditText.getText().toString());
-                    //existing note is being edited.
-                    }else{
+//                    if(!setEdit) {
+//                        noteDb.insertData(activeTask, noteEditText.getText().toString());
+//                    existing note is being edited.
+//                    }else{
                         noteDb.updateData(String.valueOf(activeTask),
                                 noteEditText.getText().toString());
-                        setEdit = false;
-                    }
+//                        setEdit = false;
+//                    }
 
                     ////////For showing table date////////
-//                    Cursor res = noteDb.getAllData();
-//                    if(res.getCount() == 0){
-//                        showMessage("Error", "Nothing found");
-//                    }
-//                    StringBuffer buffer = new StringBuffer();
-//                    while(res.moveToNext()){
-//                        buffer.append("ID: " + res.getString(0) + "\n");
-//                        buffer.append("NOTE: " + res.getString(1) + "\n\n");
-//                    }
-//
-//                    showMessage("Data", buffer.toString());
+                    Cursor res = noteDb.getAllData();
+                    if(res.getCount() == 0){
+                        showMessage("Error", "Nothing found");
+                    }
+                    StringBuffer buffer = new StringBuffer();
+                    while(res.moveToNext()){
+                        buffer.append("ID: " + res.getString(0) + "\n");
+                        buffer.append("NOTE: " + res.getString(1) + "\n");
+                        buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
+                    }
+
+                    showMessage("Data", buffer.toString());
                     ///////////////////////////////////////
 
                     //Clear text from text box
@@ -126,7 +127,7 @@ public class Note extends MainActivity {
 
                 MainActivity.vibrate.vibrate(50);
 
-                setEdit = true;
+//                setEdit = true;
 
                 //show edit text
                 noteEditText.setVisibility(View.VISIBLE);
@@ -190,13 +191,13 @@ public class Note extends MainActivity {
     }
 
     //////////For showing table results///////////////
-//    public void showMessage(String title, String message){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setCancelable(true);
-//        builder.setTitle(title);
-//        builder.setMessage(message);
-//        builder.show();
-//    }
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
+    }
     ////////////////////////////////////////////////
 
     @Override

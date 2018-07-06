@@ -2,6 +2,7 @@ package com.violenthoboenterprises.taskkiller;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
@@ -302,6 +303,23 @@ class MyAdapter extends ArrayAdapter<String> {
 
             due.setVisibility(View.VISIBLE);
 
+        }
+
+        //Show checklist/note icon if required
+        boolean showChecklist = false;
+        String showNote = "";
+        Cursor result = MainActivity.noteDb.getData(position);
+        while(result.moveToNext()){
+            showChecklist = (result.getInt(2) == 1);
+            showNote = result.getString(1);
+        }
+        if(showChecklist){
+            ImageView checklistImg = taskView.findViewById(R.id.checklistIcon);
+            checklistImg.setVisibility(View.VISIBLE);
+        }
+        if(!showNote.equals("")){
+            ImageView noteImg = taskView.findViewById(R.id.noteIcon);
+            noteImg.setVisibility(View.VISIBLE);
         }
 
         //greying out unselected tasks

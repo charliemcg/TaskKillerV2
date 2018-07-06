@@ -31,6 +31,22 @@
             android:src="@drawable/due_red"
             android:layout_weight="1"
             android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/checklistIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/checklist"
+            android:layout_weight="1"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/noteIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/note"
+            android:layout_weight="1"
+            android:visibility="gone"/>
     </TableRow>
 
     <TableRow>

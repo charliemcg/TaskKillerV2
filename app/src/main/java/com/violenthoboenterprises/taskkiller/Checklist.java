@@ -1,7 +1,9 @@
 package com.violenthoboenterprises.taskkiller;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -148,6 +150,32 @@ public class Checklist extends MainActivity {
                         //Marks sub task as incomplete
                         subTasksKilled.get(activeSubTask).add(subTasksKilled
                                 .get(activeSubTask).size(), false);
+
+                        //Enables checklist icon
+//                        Cursor result;
+//                        String note;
+//                        String id;
+
+//                        noteDb.insertData(activeTask, "");
+                        noteDb.updateData(String.valueOf(activeTask), "");
+//                        noteDb.addChecklist(String.valueOf(activeTask));
+
+                        //note ID must match task list index. Decrementing id value of all
+                        // notes with id greater than the deleted task index.
+//                        for(int i = activeTask; i <= taskList.size(); i++){
+//                            result = noteDb.getData(activeTask);
+//                            id = "";
+//                            note = "";
+//                            while(result.moveToNext()){
+//                                Log.i(TAG, "I'm in here");
+//                                id = result.getString(0);
+//                                note = result.getString(1);
+//                                Log.i(TAG, id);
+//                            }
+//                            Log.i(TAG, String.valueOf(activeTask));
+//                            Log.i(TAG, id + " " + note);
+//                            noteDb.addChecklist(id, note);
+//                        }
 
                     }
 
@@ -357,6 +385,7 @@ public class Checklist extends MainActivity {
 
         checklistList.get(MainActivity.activeTask).clear();
         subTasksKilled.get(MainActivity.activeTask).clear();
+//        showChecklistIcon.clear();
 
         checkIfKeyboardShowing();
 
@@ -370,6 +399,11 @@ public class Checklist extends MainActivity {
 
             checklistSize = MainActivity.nSharedPreferences
                     .getInt("checklistSizeKey" + String.valueOf(i), 0);
+
+//            Log.i(TAG, String.valueOf(MainActivity.nSharedPreferences.getBoolean("showChecklistIcon" + String.valueOf(i), false)));
+//
+//            showChecklistIcon.add(MainActivity.nSharedPreferences.getBoolean("showChecklistIcon"
+//                    + String.valueOf(i), false));
 
             try {
 
