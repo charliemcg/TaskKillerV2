@@ -65,7 +65,12 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL1, id);
         if(MainActivity.inNote) {
             content.put(COL2, note);
-        }else {
+        }else if(MainActivity.inChecklist){
+            content.put(COL3, checklist);
+        }else{
+            //decrementing id value because higher ranking task was deleted
+            content.put(COL1, (Integer.valueOf(id) - 1));
+            content.put(COL2, note);
             content.put(COL3, checklist);
         }
         db.update(TABLE, content, "ID = ?", new String[] {id});

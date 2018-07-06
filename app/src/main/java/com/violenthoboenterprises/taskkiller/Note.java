@@ -68,18 +68,18 @@ public class Note extends MainActivity {
                             noteEditText.getText().toString(), checklistExists);
 
                     ////////For showing table date////////
-//                    Cursor res = noteDb.getAllData();
-//                    if(res.getCount() == 0){
-//                        showMessage("Error", "Nothing found");
-//                    }
-//                    StringBuffer buffer = new StringBuffer();
-//                    while(res.moveToNext()){
-//                        buffer.append("ID: " + res.getString(0) + "\n");
-//                        buffer.append("NOTE: " + res.getString(1) + "\n");
-//                        buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
-//                    }
-//
-//                    showMessage("Data", buffer.toString());
+                    Cursor res = noteDb.getAllData();
+                    if(res.getCount() == 0){
+                        showMessage("Error", "Nothing found");
+                    }
+                    StringBuffer buffer = new StringBuffer();
+                    while(res.moveToNext()){
+                        buffer.append("ID: " + res.getString(0) + "\n");
+                        buffer.append("NOTE: " + res.getString(1) + "\n");
+                        buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
+                    }
+
+                    showMessage("Data", buffer.toString());
                     ///////////////////////////////////////
 
                     //Clear text from text box
@@ -196,13 +196,13 @@ public class Note extends MainActivity {
     }
 
     //////////For showing table results///////////////
-//    public void showMessage(String title, String message){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setCancelable(true);
-//        builder.setTitle(title);
-//        builder.setMessage(message);
-//        builder.show();
-//    }
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
+    }
     ////////////////////////////////////////////////
 
     @Override

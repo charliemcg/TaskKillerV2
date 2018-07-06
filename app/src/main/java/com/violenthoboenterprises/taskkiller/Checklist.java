@@ -59,6 +59,7 @@ public class Checklist extends MainActivity {
         TAG = "Checklist";
         fadeSubTasks = false;
         noteExists = false;
+        inChecklist = true;
 
         //Ensure there are array lists available to write data to
         if(checklistList.size() <= activeSubTask){
@@ -313,6 +314,8 @@ public class Checklist extends MainActivity {
 
         super.onPause();
 
+        inChecklist = false;
+
         //Getting and saving the size of the task array list
         MainActivity.checklistListSize = checklistList.size();
 
@@ -355,6 +358,8 @@ public class Checklist extends MainActivity {
 
         super.onResume();
 
+        inChecklist = true;
+
         getSavedData();
 
     }
@@ -364,7 +369,6 @@ public class Checklist extends MainActivity {
 
         checklistList.get(MainActivity.activeTask).clear();
         subTasksKilled.get(MainActivity.activeTask).clear();
-//        showChecklistIcon.clear();
 
         checkIfKeyboardShowing();
 

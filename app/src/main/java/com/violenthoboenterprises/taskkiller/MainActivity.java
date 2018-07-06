@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean alarmBeingSet;
     //Used to indicate that user is in the note screen
     static boolean inNote;
+    //Used to indicate that user is in the sub-tasks screen
+    static boolean inChecklist;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     //Toasts which show up when adding new task
     String[] motivation = new String[] {"Get it done!", "Smash that task!",
             "Be a winner!", "Only wimps give up!", "Don't be a failure!"};
+    //Keep track of last phrase used so as to not have the same thing twice in a row
     String lastToast;
 
     //Required for setting notification alarms
@@ -176,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
         alarmBeingSet = false;
         noteDb = new Database(this);
         lastToast = "";
+        inNote = false;
+        inChecklist = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -333,18 +338,18 @@ public class MainActivity extends AppCompatActivity {
 
                         Cursor result;
                         String note;
-                        int newId;
+                        Boolean checklist;
 
-                        //note ID must match task list index. Decrementing id value of all
-                        // notes with id greater than the deleted task index.
-                        for(int i = activeTask; i <= taskList.size(); i++){
+                        //Getting existing data before going to Database class to change ids.
+                        for(int i = (activeTask + 1); i <= taskList.size(); i++){
                             result = noteDb.getData(i);
                             note = "";
+                            checklist = false;
                             while(result.moveToNext()){
                                 note = result.getString(1);
+                                checklist = result.getInt(2) == 1;
                             }
-                            newId = i - 1;
-                            noteDb.updateAfterDelete(String.valueOf(newId), note);
+                            noteDb.updateData(String.valueOf(i), note, checklist);
                         }
 
                         //Updates the view
