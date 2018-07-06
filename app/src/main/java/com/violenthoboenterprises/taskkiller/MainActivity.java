@@ -32,6 +32,7 @@ import android.widget.Toast;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
     //Keeps track of tasks which require a due date notification
     static ArrayList<Boolean> showTaskDueIcon;
 
+    //Toasts which show up when adding new task
+    String[] motivation = new String[] {"Get it done!", "Smash that task!",
+            "Be a winner!", "Only wimps give up!", "Don't be a failure!"};
+    String lastToast;
+
     //Required for setting notification alarms
     static Intent alertIntent;
 
@@ -135,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
     //Database for keeping track of notes
     static Database noteDb;
 
+    //for generating random number to select toast phrases
+    Random random = new Random();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmBeingSet = false;
         noteDb = new Database(this);
+        lastToast = "";
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -461,6 +471,17 @@ public class MainActivity extends AppCompatActivity {
                     //create a record in the database for tracking icons
                     noteDb.insertData((taskList.size() - 1), "");
 
+                    int i = random.nextInt(5);
+
+                    while (motivation[i].equals(lastToast)) {
+                        i = random.nextInt(5);
+                    }
+
+                    lastToast = motivation[i];
+
+                    Toast.makeText(v.getContext(), motivation[i],
+                            Toast.LENGTH_SHORT).show();
+
                     return true;
 
                 //Actions to take when editing existing task
@@ -531,7 +552,7 @@ public class MainActivity extends AppCompatActivity {
     //reinstates completed task
     public void reinstate(int i) {
 
-        Toast.makeText(MainActivity.this, "Task Reinstated",
+        Toast.makeText(MainActivity.this, "Task reinstated",
                 Toast.LENGTH_SHORT).show();
 
         tasksKilled.set(i, false);

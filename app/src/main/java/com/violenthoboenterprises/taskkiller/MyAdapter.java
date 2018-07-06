@@ -181,6 +181,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    //TODO reword this
                     Toast.makeText(v.getContext(), "Upgrade to the Pro version to" +
                                     " get this feature", Toast.LENGTH_SHORT).show();
 
