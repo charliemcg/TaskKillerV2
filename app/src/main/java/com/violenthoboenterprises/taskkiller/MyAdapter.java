@@ -1,5 +1,7 @@
 package com.violenthoboenterprises.taskkiller;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,6 +23,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 class MyAdapter extends ArrayAdapter<String> {
 
@@ -78,13 +81,10 @@ class MyAdapter extends ArrayAdapter<String> {
             //actions to occur if setting alarm
             if(MainActivity.alarmBeingSet) {
 
-                //Determine whether to show datepicker or timepicker
+                //Determine whether to show datepicker
                 if (!MainActivity.dateOrTime) {
                     dateRow.setVisibility(View.VISIBLE);
-                } else {
-                    dateRow.setVisibility(View.VISIBLE);
-                    datePicker.setVisibility(View.GONE);
-                    timePicker.setVisibility(View.VISIBLE);
+                    MainActivity.dateOrTime = true;
                 }
 
             //show the tasks properties
@@ -129,6 +129,7 @@ class MyAdapter extends ArrayAdapter<String> {
             final Button rename = taskView.findViewById(R.id.rename);
             Button subTasks = taskView.findViewById(R.id.subTasks);
             Button note = taskView.findViewById(R.id.note);
+            Button dateButton = taskView.findViewById(R.id.date);
 
             //put data in text view
             theTextView.setText(task);
@@ -182,28 +183,27 @@ class MyAdapter extends ArrayAdapter<String> {
                 public void onClick(View v) {
 
                     //TODO reword this
-                    Toast.makeText(v.getContext(), "Upgrade to the Pro version to" +
-                                    " get this feature", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(v.getContext(), "Upgrade to the Pro version to" +
+//                                    " get this feature", Toast.LENGTH_SHORT).show();
 
-                    //TODO worry about this later. This is a pro feature. Do free features first
-//                    //actions to occur if alarm not already set
-//                    if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
-//
-//                        MainActivity.alarmBeingSet = true;
-//
-//                        notifyDataSetChanged();
-//
-//                    //actions to occur when cancelling alarm
-//                    } else {
-//
-//                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
-//
-//                        MainActivity.alarmManager.cancel(MainActivity.pendingIntent
-//                                .get(MainActivity.activeTask));
-//
-//                        notifyDataSetChanged();
-//
-//                    }
+                    //actions to occur if alarm not already set
+                    if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
+
+                        MainActivity.alarmBeingSet = true;
+
+                        notifyDataSetChanged();
+
+                    //actions to occur when cancelling alarm
+                    } else {
+
+                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+
+                        MainActivity.alarmManager.cancel(MainActivity.pendingIntent
+                                .get(MainActivity.activeTask));
+
+                        notifyDataSetChanged();
+
+                    }
 
                 }
             });
@@ -216,6 +216,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     propertyRow.setVisibility(View.GONE);
 
                     optionsRow.setVisibility(View.VISIBLE);
+
+                    MainActivity.taskOptionsShowing = true;
 
                 }
             });
@@ -266,6 +268,16 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.vibrate.vibrate(50);
 
                     getContext().startActivity(noteIntent);
+
+                }
+            });
+
+            //Actions to occur if user selects 'Set Time'
+            dateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    setAlarm(dateRow, datePicker, timePicker);
 
                 }
             });
@@ -362,4 +374,100 @@ class MyAdapter extends ArrayAdapter<String> {
 
     }
 
+    //set notification alarm for selected task
+    public void setAlarm(/*View view*/TableRow dateRow, DatePicker datePicker, TimePicker timePicker){
+
+        if(MainActivity.dateOrTime) {
+            dateRow.setVisibility(View.VISIBLE);
+            datePicker.setVisibility(View.GONE);
+            timePicker.setVisibility(View.VISIBLE);
+            MainActivity.dateOrTime = false;
+        }else {
+
+            //TODO this date and time picker is different to the date and time picker in MyAdapter
+            //TODO this could be why it isn't saving time properly
+//        DatePicker datePicker = findViewById(R.id.datePicker);
+
+//        TimePicker timePicker = findViewById(R.id.timePicker);
+//
+//        Button dateButton = taskView.findViewById(R.id.date);
+
+            //actions to occur when date has been chosen
+//        if(!dateOrTime){
+//
+//            datePicker.setVisibility(View.GONE);
+//
+//            timePicker.setVisibility(View.VISIBLE);
+//
+//            //Updates the view
+//            theListView.setAdapter(theAdapter[0]);
+//
+//            dateOrTime = true;
+//
+//            dateButton.setText("Set Time");
+//
+//            //actions to occur when time has been chosen
+//        }
+// else{
+//
+            Calendar calendar = Calendar.getInstance();
+
+            //setting alarm
+            calendar.set(Calendar.YEAR, datePicker.getYear());
+            calendar.set(Calendar.MONTH, datePicker.getMonth());
+            calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+            calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
+            calendar.set(Calendar.MINUTE, timePicker.getMinute());
+
+            //intention to execute AlertReceiver
+            MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
+
+            //setting the name of the task for which the notification is being set
+            MainActivity.alertIntent.putExtra("ToDo", MainActivity.taskList.get(MainActivity.activeTask));
+
+            int i = 0;
+
+            while (MainActivity.broadcastID.contains(i)){
+
+                i++;
+
+            }
+
+            MainActivity.broadcastID.set(MainActivity.activeTask, i);
+
+            MainActivity.pendingIntent.set(MainActivity.activeTask, PendingIntent.getBroadcast(getContext(),
+                    MainActivity.broadcastID.get(MainActivity.activeTask), MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            //setting the notification
+            MainActivity.alarmManager.set(AlarmManager.RTC_WAKEUP, calendar
+                    .getTimeInMillis(), MainActivity.pendingIntent.get(MainActivity.activeTask));
+
+            datePicker.setVisibility(View.VISIBLE);
+
+            timePicker.setVisibility(View.GONE);
+
+            MainActivity.dateOrTime = false;
+
+            //set background to white
+            MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+            MainActivity.showTaskDueIcon.set(MainActivity.activeTask, true);
+
+            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+            //Marks properties as not showing
+            MainActivity.taskPropertiesShowing = false;
+
+            MainActivity.alarmBeingSet = false;
+
+            //Returns the 'add' button
+            MainActivity.params.height = MainActivity.addHeight;
+
+            MainActivity.add.setLayoutParams(MainActivity.params);
+
+        }
+
+    }
+
 }
+
