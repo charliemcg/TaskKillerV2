@@ -24,6 +24,7 @@ public class Note extends MainActivity {
     Button editBtn;
     Button removeBtn;
     Button addNoteBtn;
+    Button submitNoteBtn;
     String TAG;
     String theNote;
     //Indicates that the active task has subtasks
@@ -39,6 +40,7 @@ public class Note extends MainActivity {
         editBtn = findViewById(R.id.editBtn);
         removeBtn = findViewById(R.id.removeBtn);
         addNoteBtn = findViewById(R.id.addNoteBtn);
+        submitNoteBtn = findViewById(R.id.submitNoteBtn);
         TAG = "Note";
         theNote = "";
         checklistExists = false;
@@ -46,76 +48,144 @@ public class Note extends MainActivity {
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-        noteEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+//        noteEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+//
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//
+//                //Keyboard is inactive without this line
+//                noteEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+//
+//                //Actions to occur when user submits note
+//                if (actionId == EditorInfo.IME_ACTION_DONE) {
+//
+//                    Cursor result = noteDb.getData(activeTask);
+//                    while(result.moveToNext()){
+//                        checklistExists = (result.getInt(2) == 1);
+//                        Log.i(TAG, String.valueOf(checklistExists));
+//                    }
+//
+//                    //new note being added
+//                    noteDb.updateData(String.valueOf(activeTask),
+//                            noteEditText.getText().toString(), checklistExists);
+//
+//                    ////////For showing table date////////
+////                    Cursor res = noteDb.getAllData();
+////                    if(res.getCount() == 0){
+////                        showMessage("Error", "Nothing found");
+////                    }
+////                    StringBuffer buffer = new StringBuffer();
+////                    while(res.moveToNext()){
+////                        buffer.append("ID: " + res.getString(0) + "\n");
+////                        buffer.append("NOTE: " + res.getString(1) + "\n");
+////                        buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
+////                    }
+////
+////                    showMessage("Data", buffer.toString());
+//                    ///////////////////////////////////////
+//
+//                    //Clear text from text box
+//                    noteEditText.setText("");
+//
+//                    //Getting note from database
+//                    result = noteDb.getData(activeTask);
+//                    while(result.moveToNext()){
+//                        theNote = result.getString(1);
+//                    }
+//
+//                    //Don't allow blank notes
+//                    if(!theNote.equals("")){
+//
+//                        //Set text view to the note content
+//                        noteTextView.setText(theNote);
+//
+//                    }
+//
+//                    //Hide text box
+//                    noteEditText.setVisibility(View.GONE);
+//
+//                    //Hide keyboard
+//                    keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+//
+//                    //Show edit button
+//                    editBtn.setVisibility(View.VISIBLE);
+//
+//                    //show remove button
+//                    removeBtn.setVisibility(View.VISIBLE);
+//
+//                    return true;
+//
+//                }
+//
+//                return false;
+//
+//            }
+//
+//        });
 
+        //Actions to occur when user clicks submit
+        submitNoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            public void onClick(View v) {
 
                 //Keyboard is inactive without this line
                 noteEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
-                //Actions to occur when user submits note
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                Cursor result = noteDb.getData(activeTask);
+                while(result.moveToNext()){
+                    checklistExists = (result.getInt(2) == 1);
+                }
 
-                    Cursor result = noteDb.getData(activeTask);
-                    while(result.moveToNext()){
-                        checklistExists = (result.getInt(2) == 1);
-                        Log.i(TAG, String.valueOf(checklistExists));
-                    }
+                //new note being added
+                noteDb.updateData(String.valueOf(activeTask),
+                        noteEditText.getText().toString(), checklistExists);
 
-                    //new note being added
-                    noteDb.updateData(String.valueOf(activeTask),
-                            noteEditText.getText().toString(), checklistExists);
+                ////////For showing table date////////
+//                Cursor res = noteDb.getAllData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("NOTE: " + res.getString(1) + "\n");
+//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
+//                }
+//
+//                showMessage("Data", buffer.toString());
+                ///////////////////////////////////////
 
-                    ////////For showing table date////////
-                    Cursor res = noteDb.getAllData();
-                    if(res.getCount() == 0){
-                        showMessage("Error", "Nothing found");
-                    }
-                    StringBuffer buffer = new StringBuffer();
-                    while(res.moveToNext()){
-                        buffer.append("ID: " + res.getString(0) + "\n");
-                        buffer.append("NOTE: " + res.getString(1) + "\n");
-                        buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
-                    }
+                //Clear text from text box
+                noteEditText.setText("");
 
-                    showMessage("Data", buffer.toString());
-                    ///////////////////////////////////////
+                //Getting note from database
+                result = noteDb.getData(activeTask);
+                while(result.moveToNext()){
+                    theNote = result.getString(1);
+                }
 
-                    //Clear text from text box
-                    noteEditText.setText("");
+                //Don't allow blank notes
+                if(!theNote.equals("")){
 
-                    //Getting note from database
-                    result = noteDb.getData(activeTask);
-                    while(result.moveToNext()){
-                        theNote = result.getString(1);
-                    }
-
-                    //Don't allow blank notes
-                    if(!theNote.equals("")){
-
-                        //Set text view to the note content
-                        noteTextView.setText(theNote);
-
-                    }
-
-                    //Hide text box
-                    noteEditText.setVisibility(View.GONE);
-
-                    //Hide keyboard
-                    keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
-                    //Show edit button
-                    editBtn.setVisibility(View.VISIBLE);
-
-                    //show remove button
-                    removeBtn.setVisibility(View.VISIBLE);
-
-                    return true;
+                    //Set text view to the note content
+                    noteTextView.setText(theNote);
 
                 }
 
-                return false;
+                //Hide text box
+                noteEditText.setVisibility(View.GONE);
+
+                //Hide submit button
+                submitNoteBtn.setVisibility(View.GONE);
+
+                //Hide keyboard
+                keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                //Show edit button
+                editBtn.setVisibility(View.VISIBLE);
+
+                //show remove button
+                removeBtn.setVisibility(View.VISIBLE);
 
             }
 
@@ -130,6 +200,9 @@ public class Note extends MainActivity {
 
                 //show edit text
                 noteEditText.setVisibility(View.VISIBLE);
+
+                //show submit button
+                submitNoteBtn.setVisibility(View.VISIBLE);
 
                 //set text to existing note
                 noteEditText.setText(theNote);
@@ -186,6 +259,7 @@ public class Note extends MainActivity {
             public void onClick(View v) {
 
                 noteEditText.setVisibility(View.VISIBLE);
+                submitNoteBtn.setVisibility(View.VISIBLE);
                 noteEditText.requestFocus();
                 keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 addNoteBtn.setVisibility(View.GONE);
@@ -196,13 +270,13 @@ public class Note extends MainActivity {
     }
 
     //////////For showing table results///////////////
-    public void showMessage(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
-    }
+//    public void showMessage(String title, String message){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setCancelable(true);
+//        builder.setTitle(title);
+//        builder.setMessage(message);
+//        builder.show();
+//    }
     ////////////////////////////////////////////////
 
     @Override
@@ -240,6 +314,7 @@ public class Note extends MainActivity {
             this.getWindow().setSoftInputMode(WindowManager
                     .LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             noteEditText.setVisibility(View.GONE);
+            submitNoteBtn.setVisibility(View.GONE);
             editBtn.setVisibility(View.VISIBLE);
             removeBtn.setVisibility(View.VISIBLE);
 

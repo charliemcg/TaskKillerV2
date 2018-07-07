@@ -790,6 +790,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onResume();
 
+        taskBeingEdited = false;
+
         try {
             getSavedData();
         } catch (URISyntaxException e) {
