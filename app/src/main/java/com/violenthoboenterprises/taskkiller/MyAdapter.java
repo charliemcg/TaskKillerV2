@@ -129,7 +129,7 @@ class MyAdapter extends ArrayAdapter<String> {
             final Button rename = taskView.findViewById(R.id.rename);
             Button subTasks = taskView.findViewById(R.id.subTasks);
             Button note = taskView.findViewById(R.id.note);
-            Button dateButton = taskView.findViewById(R.id.date);
+            final Button dateButton = taskView.findViewById(R.id.date);
 
             //put data in text view
             theTextView.setText(task);
@@ -277,6 +277,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    dateButton.setText("Set Time");
                     setAlarm(dateRow, datePicker, timePicker);
 
                 }
@@ -418,6 +419,8 @@ class MyAdapter extends ArrayAdapter<String> {
             calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
             calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
             calendar.set(Calendar.MINUTE, timePicker.getMinute());
+
+            Log.i(TAG, calendar.toString());
 
             //intention to execute AlertReceiver
             MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
