@@ -303,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //create a record in the database for tracking icons
                     noteDb.insertData((taskList.size() - 1), "");
+                    noteDb.insertAlarmData((taskList.size() - 1), "", "", "", "", "", "");
 
                     int i = random.nextInt(5);
 
@@ -467,6 +468,7 @@ public class MainActivity extends AppCompatActivity {
 
         //deleting note related to deleted task
         noteDb.deleteData(String.valueOf(activeTask));
+        noteDb.deleteAlarmData(String.valueOf(activeTask));
 
         Cursor result;
         String note;

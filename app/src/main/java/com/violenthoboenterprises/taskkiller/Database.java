@@ -10,10 +10,22 @@ import android.util.Log;
 public class Database extends SQLiteOpenHelper {
 
     public static final String DBNAME = "Notes.db";
+    //Main Table
     public static final String TABLE = "notes_table";
     public static final String COL1 = "ID";
     public static final String COL2 = "NOTE";
     public static final String COL3 = "CHECKLIST";
+    //Alarm Table
+    public static final String ATABLE = "alarms_table";
+    public static final String ACOL1 = "ID";
+    public static final String ACOL2 = "HOUR";
+    public static final String ACOL3 = "MINUTE";
+    public static final String ACOL4 = "AMPM";
+    public static final String ACOL5 = "DAY";
+    public static final String ACOL6 = "MONTH";
+    public static final String ACOL7 = "YEAR";
+    public static final String ACOL8 = "TIMESTAMP";
+    String TAG = "Data";
 
     public Database(Context context) {
         super(context, DBNAME, null, 1);
@@ -24,11 +36,14 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
                 "NOTE TEXT, CHECKLIST BOOLEAN)");
+        db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
+                "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT/*, TIMESTAMP INTEGER*/)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + ATABLE);
         onCreate(db);
     }
 
@@ -39,6 +54,25 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL2, note);
         content.put(COL3, false);
         long result = db.insert(TABLE, null, content);
+        if(result == -1){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public boolean insertAlarmData(int id, String hour, String minute, String ampm, String day, String month, String year/*, int timestamp*/){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content= new ContentValues();
+        content.put(ACOL1, id);
+        content.put(ACOL2, hour);
+        content.put(ACOL3, minute);
+        content.put(ACOL4, ampm);
+        content.put(ACOL5, day);
+        content.put(ACOL6, month);
+        content.put(ACOL7, year);
+//        content.put(ACOL8, "timestampblah");
+        long result = db.insert(ATABLE, null, content);
         if(result == -1){
             return false;
         }else {
@@ -59,6 +93,19 @@ public class Database extends SQLiteOpenHelper {
         return result;
     }
 
+    public Cursor getAllAlarmData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + ATABLE, null);
+        return result;
+    }
+
+    public Cursor getAlarmData(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + ATABLE + " where " + ACOL1
+                + " == " + id, null);
+        return result;
+    }
+
     public boolean updateData(String id, String note, Boolean checklist){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
@@ -74,6 +121,20 @@ public class Database extends SQLiteOpenHelper {
             content.put(COL3, checklist);
         }
         db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateAlarmData(String id, String hour, String minute, String ampm, String day, String month, String year){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content= new ContentValues();
+        content.put(ACOL1, id);
+        content.put(ACOL2, hour);
+        content.put(ACOL3, minute);
+        content.put(ACOL4, ampm);
+        content.put(ACOL5, day);
+        content.put(ACOL6, month);
+        content.put(ACOL7, year);
+        db.update(ATABLE, content, "ID = ?", new String[] {id});
         return true;
     }
 
@@ -98,6 +159,11 @@ public class Database extends SQLiteOpenHelper {
     public Integer deleteData (String id){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE, "ID = ?", new String[] {id});
+    }
+
+    public Integer deleteAlarmData (String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(ATABLE, "ID = ?", new String[] {id});
     }
 
 }

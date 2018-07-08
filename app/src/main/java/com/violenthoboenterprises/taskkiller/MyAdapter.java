@@ -5,8 +5,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -317,6 +319,34 @@ class MyAdapter extends ArrayAdapter<String> {
 
             due.setVisibility(View.VISIBLE);
 
+            Cursor result;
+            String hour;
+            String minute;
+            String ampm;
+            String day;
+            String month;
+            String year;
+
+            //Getting time data
+            result = MainActivity.noteDb.getAlarmData(position);
+            hour = "";
+            minute = "";
+            ampm = "";
+            day = "";
+            month = "";
+            year = "";
+            while(result.moveToNext()){
+                hour = result.getString(1);
+                minute = result.getString(2);
+                ampm = result.getString(3);
+                day = result.getString(4);
+                month = result.getString(5);
+                year = result.getString(6);
+            }
+            //TODO display this data on task. Might be better to save timestamp and then format it
+            Log.i(TAG, "\nHour " + hour + "\nMinute " + minute + "\nam/pm " + ampm + "\nDay "
+                    + day + "\nMonth " + month + "\nYear " + year);
+
         }
 
         //Show checklist/note icon if required
@@ -376,7 +406,7 @@ class MyAdapter extends ArrayAdapter<String> {
     }
 
     //set notification alarm for selected task
-    public void setAlarm(/*View view*/TableRow dateRow, DatePicker datePicker, TimePicker timePicker){
+    public void setAlarm(TableRow dateRow, DatePicker datePicker, TimePicker timePicker){
 
         if(MainActivity.dateOrTime) {
             dateRow.setVisibility(View.VISIBLE);
@@ -385,32 +415,6 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.dateOrTime = false;
         }else {
 
-            //TODO this date and time picker is different to the date and time picker in MyAdapter
-            //TODO this could be why it isn't saving time properly
-//        DatePicker datePicker = findViewById(R.id.datePicker);
-
-//        TimePicker timePicker = findViewById(R.id.timePicker);
-//
-//        Button dateButton = taskView.findViewById(R.id.date);
-
-            //actions to occur when date has been chosen
-//        if(!dateOrTime){
-//
-//            datePicker.setVisibility(View.GONE);
-//
-//            timePicker.setVisibility(View.VISIBLE);
-//
-//            //Updates the view
-//            theListView.setAdapter(theAdapter[0]);
-//
-//            dateOrTime = true;
-//
-//            dateButton.setText("Set Time");
-//
-//            //actions to occur when time has been chosen
-//        }
-// else{
-//
             Calendar calendar = Calendar.getInstance();
 
             //setting alarm
@@ -420,13 +424,22 @@ class MyAdapter extends ArrayAdapter<String> {
             calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
             calendar.set(Calendar.MINUTE, timePicker.getMinute());
 
-            Log.i(TAG, calendar.toString());
-
             //intention to execute AlertReceiver
             MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
+            //TODO change the date format for yanks
+
+            MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
+                    String.valueOf(calendar.get(calendar.HOUR)),
+                    String.valueOf(calendar.get(calendar.MINUTE)),
+                    String.valueOf(calendar.get(calendar.AM_PM)),
+                    String.valueOf(calendar.get(calendar.DAY_OF_MONTH)),
+                    String.valueOf(calendar.get(calendar.MONTH)),
+                    String.valueOf(calendar.get(calendar.YEAR)));
+
             //setting the name of the task for which the notification is being set
-            MainActivity.alertIntent.putExtra("ToDo", MainActivity.taskList.get(MainActivity.activeTask));
+            MainActivity.alertIntent.putExtra("ToDo", MainActivity.taskList
+                    .get(MainActivity.activeTask));
 
             int i = 0;
 
@@ -438,8 +451,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
             MainActivity.broadcastID.set(MainActivity.activeTask, i);
 
-            MainActivity.pendingIntent.set(MainActivity.activeTask, PendingIntent.getBroadcast(getContext(),
-                    MainActivity.broadcastID.get(MainActivity.activeTask), MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            MainActivity.pendingIntent.set(MainActivity.activeTask,
+                            PendingIntent.getBroadcast(getContext(),
+                            MainActivity.broadcastID.get(MainActivity.activeTask),
+                            MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
             //setting the notification
             MainActivity.alarmManager.set(AlarmManager.RTC_WAKEUP, calendar
@@ -473,4 +488,3 @@ class MyAdapter extends ArrayAdapter<String> {
     }
 
 }
-
