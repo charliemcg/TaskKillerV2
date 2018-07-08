@@ -21,7 +21,6 @@
             android:layout_height="80dp"
             android:id="@+id/dueTextView"
             android:padding="15dp"
-            android:text="Hello"
             android:layout_marginTop="40dp"
             android:layout_weight="4"/>
 

@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 class MyAdapter extends ArrayAdapter<String> {
 
@@ -319,6 +321,9 @@ class MyAdapter extends ArrayAdapter<String> {
         //Show due date notification if required
         if(MainActivity.showTaskDueIcon.get(position)) {
 
+//            DateTime dt = new DateTime();
+            Calendar currentDate = new GregorianCalendar();
+
             ImageView due = taskView.findViewById(R.id.due);
 
             due.setVisibility(View.VISIBLE);
@@ -346,6 +351,29 @@ class MyAdapter extends ArrayAdapter<String> {
                 day = result.getString(4);
                 month = result.getString(5);
                 year = result.getString(6);
+            }
+
+            //Checking for overdue tasks
+            //am = 0, pm = 1
+            if(currentDate.get(Calendar.YEAR) <= Integer.valueOf(year) &&
+                    currentDate.get(Calendar.MONTH) <= Integer.valueOf(month) &&
+                    currentDate.get(Calendar.DAY_OF_MONTH) <= Integer.valueOf(day)){
+                if(currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(day)) {
+                    if (Integer.valueOf(ampm) == 1 && currentDate.get(Calendar.AM_PM) == 0) {
+                        Log.i(TAG, "Not overdue");
+                    }else if(Integer.valueOf(ampm) == currentDate.get(Calendar.AM_PM)) {
+                        if(currentDate.get(Calendar.HOUR) <= Integer.valueOf(hour) &&
+                                currentDate.get(Calendar.MINUTE) <= Integer.valueOf(minute)){
+                            Log.i(TAG, "Not overdue");
+                        }else{
+                            Log.i(TAG, "Overdue 1");
+                        }
+                    }else{
+                        Log.i(TAG, "Overdue 2");
+                    }
+                }
+            }else{
+                Log.i(TAG, "Overdue 3");
             }
             dueTextView.setText(hour + ":" + minute);
         }
