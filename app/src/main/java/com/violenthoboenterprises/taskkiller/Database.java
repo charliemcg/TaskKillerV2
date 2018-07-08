@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.Date;
+
 public class Database extends SQLiteOpenHelper {
 
     public static final String DBNAME = "Notes.db";
@@ -15,6 +17,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL1 = "ID";
     public static final String COL2 = "NOTE";
     public static final String COL3 = "CHECKLIST";
+//    public static final String COL4 = "ALARM";
     //Alarm Table
     public static final String ATABLE = "alarms_table";
     public static final String ACOL1 = "ID";
@@ -108,7 +111,7 @@ public class Database extends SQLiteOpenHelper {
 
     public boolean updateData(String id, String note, Boolean checklist){
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content= new ContentValues();
+        ContentValues content = new ContentValues();
         content.put(COL1, id);
         if(MainActivity.inNote) {
             content.put(COL2, note);
@@ -123,6 +126,14 @@ public class Database extends SQLiteOpenHelper {
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
+
+//    public boolean updateAlarmData(String id, Date time){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues content = new ContentValues();
+//        content.put(COL4, String.valueOf(time));
+//        db.update(TABLE, content, "ID = ?", new String[] {id});
+//        return true;
+//    }
 
     public boolean updateAlarmData(String id, String hour, String minute, String ampm, String day, String month, String year){
         SQLiteDatabase db = this.getWritableDatabase();

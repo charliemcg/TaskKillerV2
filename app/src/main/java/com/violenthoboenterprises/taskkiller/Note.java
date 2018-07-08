@@ -155,22 +155,22 @@ public class Note extends MainActivity {
 //                showMessage("Data", buffer.toString());
                 ///////////////////////////////////////
                 ////////For showing table date////////
-                Cursor res = noteDb.getAllAlarmData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("HOUR: " + res.getString(1) + "\n");
-                    buffer.append("MINUTE: " + res.getString(2) + "\n");
-                    buffer.append("AM/PM: " + res.getString(3) + "\n");
-                    buffer.append("DAY: " + res.getString(4) + "\n");
-                    buffer.append("MONTH: " + res.getString(5) + "\n");
-                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
-                }
-
-                showMessage("Data", buffer.toString());
+//                Cursor res = noteDb.getAllAlarmData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("HOUR: " + res.getString(1) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(2) + "\n");
+//                    buffer.append("AM/PM: " + res.getString(3) + "\n");
+//                    buffer.append("DAY: " + res.getString(4) + "\n");
+//                    buffer.append("MONTH: " + res.getString(5) + "\n");
+//                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
+//                }
+//
+//                showMessage("Data", buffer.toString());
                 ///////////////////////////////////////
 
                 //Clear text from text box
@@ -288,13 +288,13 @@ public class Note extends MainActivity {
     }
 
     //////////For showing table results///////////////
-    public void showMessage(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
-    }
+//    public void showMessage(String title, String message){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setCancelable(true);
+//        builder.setTitle(title);
+//        builder.setMessage(message);
+//        builder.show();
+//    }
     ////////////////////////////////////////////////
 
     @Override

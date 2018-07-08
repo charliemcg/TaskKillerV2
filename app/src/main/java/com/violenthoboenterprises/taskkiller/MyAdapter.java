@@ -52,6 +52,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final TableRow optionsRow = taskView.findViewById(R.id.options);
         final DatePicker datePicker = taskView.findViewById(R.id.datePicker);
         final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
+        TextView dueTextView = taskView.findViewById(R.id.dueTextView);
 
         //TODO make sure hard coded values work on all devices
         //Task cannot be centered unless it's in view. Moving selected task into view
@@ -203,6 +204,9 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.alarmManager.cancel(MainActivity.pendingIntent
                                 .get(MainActivity.activeTask));
 
+                        MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
+                                "", "", "", "", "", "");
+
                         notifyDataSetChanged();
 
                     }
@@ -343,10 +347,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 month = result.getString(5);
                 year = result.getString(6);
             }
-            //TODO display this data on task. Might be better to save timestamp and then format it
-            Log.i(TAG, "\nHour " + hour + "\nMinute " + minute + "\nam/pm " + ampm + "\nDay "
-                    + day + "\nMonth " + month + "\nYear " + year);
-
+            dueTextView.setText(hour + ":" + minute);
         }
 
         //Show checklist/note icon if required
@@ -428,7 +429,8 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
             //TODO change the date format for yanks
-
+//            MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask), calendar.getTime());
+//            Log.i(TAG, String.valueOf(calendar.getTime()));
             MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
                     String.valueOf(calendar.get(calendar.HOUR)),
                     String.valueOf(calendar.get(calendar.MINUTE)),
