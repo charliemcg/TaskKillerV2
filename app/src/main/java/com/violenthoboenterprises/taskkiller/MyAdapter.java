@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -326,8 +327,6 @@ class MyAdapter extends ArrayAdapter<String> {
             ImageView due = taskView.findViewById(R.id.due);
             ImageView overdue = taskView.findViewById(R.id.dueRed);
 
-//            due.setVisibility(View.VISIBLE);
-
             Cursor result;
             String hour;
             String minute;
@@ -356,96 +355,50 @@ class MyAdapter extends ArrayAdapter<String> {
             //Checking for overdue tasks
             //am = 0, pm = 1
             String formattedTime;
-            if(currentDate.get(Calendar.YEAR) <= Integer.valueOf(year) &&
-                    currentDate.get(Calendar.MONTH) <= Integer.valueOf(month) &&
-                    currentDate.get(Calendar.DAY_OF_MONTH) <= Integer.valueOf(day)){
-                if(currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(day)) {
-                    if (Integer.valueOf(ampm) == 1 && currentDate.get(Calendar.AM_PM) == 0) {
-//                        Log.i(TAG, "Not overdue 1");
-                        due.setVisibility(View.VISIBLE);
-                        if(Integer.valueOf(minute) < 10){
-                            formattedTime = hour + ":0" + minute + "pm";
-                        }else{
-                            formattedTime = hour + ":" + minute + "pm";
-                        }
-                        dueTextView.setText(formattedTime);
-                    }else if(Integer.valueOf(ampm) == currentDate.get(Calendar.AM_PM)) {
-                        if(currentDate.get(Calendar.HOUR) <= Integer.valueOf(hour) &&
-                                currentDate.get(Calendar.MINUTE) <= Integer.valueOf(minute)){
-//                            Log.i(TAG, "Not overdue 2");
-                            due.setVisibility(View.VISIBLE);
-                            if(Integer.valueOf(minute) < 10){
-                                if(Integer.valueOf(ampm) == 0) {
-                                    formattedTime = hour + ":0" + minute + "am";
-                                }else{
-                                    formattedTime = hour + ":0" + minute + "pm";
-                                }
-                            }else{
-                                if(Integer.valueOf(ampm) == 0) {
-                                    formattedTime = hour + ":" + minute + "am";
-                                }else{
-                                    formattedTime = hour + ":" + minute + "pm";
-                                }
-                            }
-                            dueTextView.setText(formattedTime);
-                        }else{
-//                            Log.i(TAG, "Overdue 1");
-                            overdue.setVisibility(View.VISIBLE);
-                            if(Integer.valueOf(minute) < 10){
-                                if(Integer.valueOf(ampm) == 0) {
-                                    formattedTime = hour + ":0" + minute + "am";
-                                }else{
-                                    formattedTime = hour + ":0" + minute + "pm";
-                                }
-                            }else{
-                                if(Integer.valueOf(ampm) == 0) {
-                                    formattedTime = hour + ":" + minute + "am";
-                                }else{
-                                    formattedTime = hour + ":" + minute + "pm";
-                                }
-                            }
-                            dueTextView.setText(formattedTime);
-                        }
-                    }else{
-//                        Log.i(TAG, "Overdue 2");
-                        overdue.setVisibility(View.VISIBLE);
-                        if(Integer.valueOf(minute) < 10){
-                            formattedTime = hour + ":0" + minute + "pm";
-                        }else{
-                            formattedTime = hour + ":" + minute + "pm";
-                        }
-                        dueTextView.setText(formattedTime);
-                    }
-                }else{
-//                    Log.i(TAG, "Not overdue 3");
-                    due.setVisibility(View.VISIBLE);
-                    //TODO account for MM/DD/YYYY
-                    //Formatting date
-                    String formattedDay;
-                    String formattedMonth;;
-                    String formattedDate;
-                    if(Integer.valueOf(day) < 10){
-                        formattedDay = "0" + day;
-                    }else{
-                        formattedDay = day;
-                    }
-                    if(Integer.valueOf(month) < 10){
-                        formattedMonth = "0" + month;
-                    }else{
-                        formattedMonth = month;
-                    }
-
-                    formattedDate = formattedDay + "/" + formattedMonth + "/" + year;
-
-                    dueTextView.setText(formattedDate);
-                }
-            }else{
-//                Log.i(TAG, "Overdue 3");
+            Boolean sameDay = false;
+            //Overdue
+            if(currentDate.get(Calendar.YEAR) > Integer.valueOf(year)) {
                 overdue.setVisibility(View.VISIBLE);
-                //TODO account for MM/DD/YYYY
+            //Overdue
+            }else if(currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
+                    && currentDate.get(Calendar.MONTH) > Integer.valueOf(month)) {
+                overdue.setVisibility(View.VISIBLE);
+            //Overdue
+            }else if(currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
+                    && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
+                    && currentDate.get(Calendar.DAY_OF_MONTH) > Integer.valueOf(day)) {
+                overdue.setVisibility(View.VISIBLE);
+            }else if(currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
+                    && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
+                    && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(day)){
+                sameDay = true;
+                int adjustedHour = 0;
+                if (Integer.valueOf(ampm) == 1) {
+                    adjustedHour = Integer.valueOf(hour) + 12;
+                }else{
+                    adjustedHour = Integer.valueOf(hour);
+                }
+                //Overdue
+                if(currentDate.get(Calendar.HOUR_OF_DAY) > adjustedHour){
+                    overdue.setVisibility(View.VISIBLE);
+                //Overdue
+                }else if(currentDate.get(Calendar.HOUR_OF_DAY) == adjustedHour
+                        && currentDate.get(Calendar.MINUTE) > Integer.valueOf(minute)){
+                    overdue.setVisibility(View.VISIBLE);
+                //Not overdue
+                }else{
+                    due.setVisibility(View.VISIBLE);
+                }
+            //Not overdue
+            }else{
+                due.setVisibility(View.VISIBLE);
+            }
+
+            if(!sameDay){
+                //TODO account for MM/DD/YYYY https://en.wikipedia.org/wiki/Date_format_by_country
                 //Formatting date
                 String formattedDay;
-                String formattedMonth;;
+                String formattedMonth;
                 String formattedDate;
                 if(Integer.valueOf(day) < 10){
                     formattedDay = "0" + day;
@@ -461,6 +414,21 @@ class MyAdapter extends ArrayAdapter<String> {
                 formattedDate = formattedDay + "/" + formattedMonth + "/" + year;
 
                 dueTextView.setText(formattedDate);
+            }else{
+                if(Integer.valueOf(minute) < 10){
+                    if(Integer.valueOf(ampm) == 0) {
+                        formattedTime = hour + ":0" + minute + "am";
+                    }else{
+                        formattedTime = hour + ":0" + minute + "pm";
+                    }
+                }else{
+                    if(Integer.valueOf(ampm) == 0) {
+                        formattedTime = hour + ":" + minute + "am";
+                    }else{
+                        formattedTime = hour + ":" + minute + "pm";
+                    }
+                }
+                dueTextView.setText(formattedTime);
             }
 
         }
@@ -540,42 +508,72 @@ class MyAdapter extends ArrayAdapter<String> {
             calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
             calendar.set(Calendar.MINUTE, timePicker.getMinute());
 
-            //intention to execute AlertReceiver
-            MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
+            Calendar currentDate = new GregorianCalendar();
 
-            //TODO change the date format for yanks
-//            MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask), calendar.getTime());
-//            Log.i(TAG, String.valueOf(calendar.getTime()));
-            MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
-                    String.valueOf(calendar.get(calendar.HOUR)),
-                    String.valueOf(calendar.get(calendar.MINUTE)),
-                    String.valueOf(calendar.get(calendar.AM_PM)),
-                    String.valueOf(calendar.get(calendar.DAY_OF_MONTH)),
-                    String.valueOf(calendar.get(calendar.MONTH)),
-                    String.valueOf(calendar.get(calendar.YEAR)));
+            if (currentDate.get(Calendar.YEAR) > Integer.valueOf(datePicker.getYear())) {
+                Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                        Toast.LENGTH_SHORT).show();
+            } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
+                    && currentDate.get(Calendar.MONTH) > Integer.valueOf(datePicker.getMonth())) {
+                Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                        Toast.LENGTH_SHORT).show();
+            } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
+                    && currentDate.get(Calendar.MONTH) == Integer.valueOf(datePicker.getMonth())
+                    && currentDate.get(Calendar.DAY_OF_MONTH) > Integer.valueOf(datePicker.getDayOfMonth())) {
+                Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                        Toast.LENGTH_SHORT).show();
+            } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
+                    && currentDate.get(Calendar.MONTH) == Integer.valueOf(datePicker.getMonth())
+                    && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(datePicker.getDayOfMonth())
+                    && currentDate.get(Calendar.HOUR_OF_DAY) > Integer.valueOf(timePicker.getHour())) {
+                Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                        Toast.LENGTH_SHORT).show();
+            } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
+                    && currentDate.get(Calendar.MONTH) == Integer.valueOf(datePicker.getMonth())
+                    && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(datePicker.getDayOfMonth())
+                    && currentDate.get(Calendar.HOUR_OF_DAY) == Integer.valueOf(timePicker.getHour())
+                    && currentDate.get(Calendar.MINUTE) > Integer.valueOf(timePicker.getMinute())) {
+                Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                        Toast.LENGTH_SHORT).show();
+            } else {
 
-            //setting the name of the task for which the notification is being set
-            MainActivity.alertIntent.putExtra("ToDo", MainActivity.taskList
-                    .get(MainActivity.activeTask));
+                //intention to execute AlertReceiver
+                MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
-            int i = 0;
+                MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
+                        String.valueOf(calendar.get(calendar.HOUR)),
+                        String.valueOf(calendar.get(calendar.MINUTE)),
+                        String.valueOf(calendar.get(calendar.AM_PM)),
+                        String.valueOf(calendar.get(calendar.DAY_OF_MONTH)),
+                        String.valueOf(calendar.get(calendar.MONTH)),
+                        String.valueOf(calendar.get(calendar.YEAR)));
 
-            while (MainActivity.broadcastID.contains(i)){
+                //setting the name of the task for which the notification is being set
+                MainActivity.alertIntent.putExtra("ToDo", MainActivity.taskList
+                        .get(MainActivity.activeTask));
 
-                i++;
+                int i = 0;
+
+                while (MainActivity.broadcastID.contains(i)) {
+
+                    i++;
+
+                }
+
+                MainActivity.broadcastID.set(MainActivity.activeTask, i);
+
+                MainActivity.pendingIntent.set(MainActivity.activeTask,
+                        PendingIntent.getBroadcast(getContext(),
+                                MainActivity.broadcastID.get(MainActivity.activeTask),
+                                MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                //setting the notification
+                MainActivity.alarmManager.set(AlarmManager.RTC_WAKEUP, calendar
+                        .getTimeInMillis(), MainActivity.pendingIntent.get(MainActivity.activeTask));
+
+                MainActivity.showTaskDueIcon.set(MainActivity.activeTask, true);
 
             }
-
-            MainActivity.broadcastID.set(MainActivity.activeTask, i);
-
-            MainActivity.pendingIntent.set(MainActivity.activeTask,
-                            PendingIntent.getBroadcast(getContext(),
-                            MainActivity.broadcastID.get(MainActivity.activeTask),
-                            MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-            //setting the notification
-            MainActivity.alarmManager.set(AlarmManager.RTC_WAKEUP, calendar
-                    .getTimeInMillis(), MainActivity.pendingIntent.get(MainActivity.activeTask));
 
             datePicker.setVisibility(View.VISIBLE);
 
@@ -585,8 +583,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //set background to white
             MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-            MainActivity.showTaskDueIcon.set(MainActivity.activeTask, true);
 
             MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
