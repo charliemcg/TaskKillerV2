@@ -89,6 +89,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 //Determine whether to show datepicker
                 if (!MainActivity.dateOrTime) {
+
                     dateRow.setVisibility(View.VISIBLE);
                     MainActivity.dateOrTime = true;
                 }
@@ -196,6 +197,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
 
                         MainActivity.alarmBeingSet = true;
+
+                        MainActivity.dateRowShowing = true;
 
                         notifyDataSetChanged();
 
@@ -598,6 +601,8 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.params.height = MainActivity.addHeight;
 
             MainActivity.add.setLayoutParams(MainActivity.params);
+
+            MainActivity.dateRowShowing = false;
 
         }
 

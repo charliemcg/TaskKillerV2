@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean inNote;
     //Used to indicate that user is in the sub-tasks screen
     static boolean inChecklist;
-    //Used to indicate that timepicker is showing
-    static boolean timepickerShowing;
+    //Used to indicate that date row is showing
+    static boolean dateRowShowing;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
         inNote = false;
         inChecklist = false;
         taskOptionsShowing = false;
-//        timepickerShowing = false;
+        dateRowShowing = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -639,92 +639,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    //set notification alarm for selected task
-//    public void setAlarm(View view){
-//        //TODO this date and time picker is different to the date and time picker in MyAdapter
-//        //TODO this could be why it isn't saving time properly
-//        DatePicker datePicker = findViewById(R.id.datePicker);
-//
-//        TimePicker timePicker = findViewById(R.id.timePicker);
-//
-//        Button dateButton = findViewById(R.id.date);
-//
-//        //actions to occur when date has been chosen
-//        if(!dateOrTime){
-//
-//            datePicker.setVisibility(View.GONE);
-//
-//            timePicker.setVisibility(View.VISIBLE);
-//
-//            //Updates the view
-//            theListView.setAdapter(theAdapter[0]);
-//
-//            dateOrTime = true;
-//
-//            dateButton.setText("Set Time");
-//
-//            //actions to occur when time has been chosen
-//        }else{
-//
-//            Calendar calendar = Calendar.getInstance();
-//
-//            //setting alarm
-//            calendar.set(Calendar.YEAR, datePicker.getYear());
-//            calendar.set(Calendar.MONTH, datePicker.getMonth());
-//            calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-//            calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
-//            calendar.set(Calendar.MINUTE, timePicker.getMinute());
-//
-//            //intention to execute AlertReceiver
-//            alertIntent = new Intent(this, AlertReceiver.class);
-//
-//            //setting the name of the task for which the notification is being set
-//            alertIntent.putExtra("ToDo", taskList.get(activeTask));
-//
-//            int i = 0;
-//
-//            while (broadcastID.contains(i)){
-//
-//                i++;
-//
-//            }
-//
-//            broadcastID.set(activeTask, i);
-//
-//            pendingIntent.set(activeTask, PendingIntent.getBroadcast(this,
-//                    broadcastID.get(activeTask), alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-//
-//            //setting the notification
-//            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar
-//                    .getTimeInMillis(), pendingIntent.get(activeTask));
-//
-//            datePicker.setVisibility(View.VISIBLE);
-//
-//            timePicker.setVisibility(View.GONE);
-//
-//            dateOrTime = false;
-//
-//            dateButton.setText("Set Time");
-//
-//            //set background to white
-//            activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//
-//            showTaskDueIcon.set(activeTask, true);
-//
-//            theListView.setAdapter(theAdapter[0]);
-//
-//            //Marks properties as not showing
-//            taskPropertiesShowing = false;
-//
-//            alarmBeingSet = false;
-//
-//            //Returns the 'add' button
-//            params.height = addHeight;
-//
-//            add.setLayoutParams(params);
-//
-//        }
-//    }
 
     //Actions to occur when keyboard is showing
     void checkKeyboardShowing() {
@@ -904,6 +818,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         taskBeingEdited = false;
+        alarmBeingSet = false;
+        dateOrTime = false;
+        removeTaskProperties();
 
         try {
             getSavedData();
@@ -964,17 +881,18 @@ public class MainActivity extends AppCompatActivity {
         }
         //Remove task properties if they are visible
         else if(taskPropertiesShowing){
-            Log.i(TAG, String.valueOf(dateOrTime));
-            if(dateOrTime) {
-                removeTaskProperties();
-                alarmBeingSet = false;
-                dateOrTime = false;
+            if(dateRowShowing) {
+                if (dateOrTime) {
+                    removeTaskProperties();
+                    alarmBeingSet = false;
+                    dateOrTime = false;
+                } else {
+                    dateOrTime = false;
+                    theListView.setAdapter(theAdapter[0]);
+                }
             }else{
-                dateOrTime = false;
-                theListView.setAdapter(theAdapter[0]);
+                removeTaskProperties();
             }
-        }else{
-            super.onBackPressed();
         }
 
     }
