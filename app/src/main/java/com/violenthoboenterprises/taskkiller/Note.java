@@ -136,9 +136,11 @@ public class Note extends MainActivity {
                     checklistExists = (result.getInt(2) == 1);
                 }
 
-                //new note being added
-                noteDb.updateData(String.valueOf(activeTask),
-                        noteEditText.getText().toString(), checklistExists);
+                if(!noteEditText.getText().toString().equals("")) {
+                    //new note being added
+                    noteDb.updateData(String.valueOf(activeTask),
+                            noteEditText.getText().toString(), checklistExists);
+                }
 
                 ////////For showing table date////////
 //                Cursor res = noteDb.getAllData();
@@ -150,24 +152,6 @@ public class Note extends MainActivity {
 //                    buffer.append("ID: " + res.getString(0) + "\n");
 //                    buffer.append("NOTE: " + res.getString(1) + "\n");
 //                    buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
-//                }
-//
-//                showMessage("Data", buffer.toString());
-                ///////////////////////////////////////
-                ////////For showing table date////////
-//                Cursor res = noteDb.getAllAlarmData();
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("HOUR: " + res.getString(1) + "\n");
-//                    buffer.append("MINUTE: " + res.getString(2) + "\n");
-//                    buffer.append("AM/PM: " + res.getString(3) + "\n");
-//                    buffer.append("DAY: " + res.getString(4) + "\n");
-//                    buffer.append("MONTH: " + res.getString(5) + "\n");
-//                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
 //                }
 //
 //                showMessage("Data", buffer.toString());
@@ -188,6 +172,13 @@ public class Note extends MainActivity {
                     //Set text view to the note content
                     noteTextView.setText(theNote);
 
+                    //show remove button
+                    removeBtn.setVisibility(View.VISIBLE);
+
+                    editBtn.setText("Edit");
+
+                }else{
+                    editBtn.setText("Add Note");
                 }
 
                 //Hide text box
@@ -201,9 +192,6 @@ public class Note extends MainActivity {
 
                 //Show edit button
                 editBtn.setVisibility(View.VISIBLE);
-
-                //show remove button
-                removeBtn.setVisibility(View.VISIBLE);
 
             }
 
