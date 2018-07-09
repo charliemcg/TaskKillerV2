@@ -321,12 +321,12 @@ class MyAdapter extends ArrayAdapter<String> {
         //Show due date notification if required
         if(MainActivity.showTaskDueIcon.get(position)) {
 
-//            DateTime dt = new DateTime();
             Calendar currentDate = new GregorianCalendar();
 
             ImageView due = taskView.findViewById(R.id.due);
+            ImageView overdue = taskView.findViewById(R.id.dueRed);
 
-            due.setVisibility(View.VISIBLE);
+//            due.setVisibility(View.VISIBLE);
 
             Cursor result;
             String hour;
@@ -355,27 +355,114 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //Checking for overdue tasks
             //am = 0, pm = 1
+            String formattedTime;
             if(currentDate.get(Calendar.YEAR) <= Integer.valueOf(year) &&
                     currentDate.get(Calendar.MONTH) <= Integer.valueOf(month) &&
                     currentDate.get(Calendar.DAY_OF_MONTH) <= Integer.valueOf(day)){
                 if(currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(day)) {
                     if (Integer.valueOf(ampm) == 1 && currentDate.get(Calendar.AM_PM) == 0) {
-                        Log.i(TAG, "Not overdue");
+//                        Log.i(TAG, "Not overdue 1");
+                        due.setVisibility(View.VISIBLE);
+                        if(Integer.valueOf(minute) < 10){
+                            formattedTime = hour + ":0" + minute + "pm";
+                        }else{
+                            formattedTime = hour + ":" + minute + "pm";
+                        }
+                        dueTextView.setText(formattedTime);
                     }else if(Integer.valueOf(ampm) == currentDate.get(Calendar.AM_PM)) {
                         if(currentDate.get(Calendar.HOUR) <= Integer.valueOf(hour) &&
                                 currentDate.get(Calendar.MINUTE) <= Integer.valueOf(minute)){
-                            Log.i(TAG, "Not overdue");
+//                            Log.i(TAG, "Not overdue 2");
+                            due.setVisibility(View.VISIBLE);
+                            if(Integer.valueOf(minute) < 10){
+                                if(Integer.valueOf(ampm) == 0) {
+                                    formattedTime = hour + ":0" + minute + "am";
+                                }else{
+                                    formattedTime = hour + ":0" + minute + "pm";
+                                }
+                            }else{
+                                if(Integer.valueOf(ampm) == 0) {
+                                    formattedTime = hour + ":" + minute + "am";
+                                }else{
+                                    formattedTime = hour + ":" + minute + "pm";
+                                }
+                            }
+                            dueTextView.setText(formattedTime);
                         }else{
-                            Log.i(TAG, "Overdue 1");
+//                            Log.i(TAG, "Overdue 1");
+                            overdue.setVisibility(View.VISIBLE);
+                            if(Integer.valueOf(minute) < 10){
+                                if(Integer.valueOf(ampm) == 0) {
+                                    formattedTime = hour + ":0" + minute + "am";
+                                }else{
+                                    formattedTime = hour + ":0" + minute + "pm";
+                                }
+                            }else{
+                                if(Integer.valueOf(ampm) == 0) {
+                                    formattedTime = hour + ":" + minute + "am";
+                                }else{
+                                    formattedTime = hour + ":" + minute + "pm";
+                                }
+                            }
+                            dueTextView.setText(formattedTime);
                         }
                     }else{
-                        Log.i(TAG, "Overdue 2");
+//                        Log.i(TAG, "Overdue 2");
+                        overdue.setVisibility(View.VISIBLE);
+                        if(Integer.valueOf(minute) < 10){
+                            formattedTime = hour + ":0" + minute + "pm";
+                        }else{
+                            formattedTime = hour + ":" + minute + "pm";
+                        }
+                        dueTextView.setText(formattedTime);
                     }
+                }else{
+//                    Log.i(TAG, "Not overdue 3");
+                    due.setVisibility(View.VISIBLE);
+                    //TODO account for MM/DD/YYYY
+                    //Formatting date
+                    String formattedDay;
+                    String formattedMonth;;
+                    String formattedDate;
+                    if(Integer.valueOf(day) < 10){
+                        formattedDay = "0" + day;
+                    }else{
+                        formattedDay = day;
+                    }
+                    if(Integer.valueOf(month) < 10){
+                        formattedMonth = "0" + month;
+                    }else{
+                        formattedMonth = month;
+                    }
+
+                    formattedDate = formattedDay + "/" + formattedMonth + "/" + year;
+
+                    dueTextView.setText(formattedDate);
                 }
             }else{
-                Log.i(TAG, "Overdue 3");
+//                Log.i(TAG, "Overdue 3");
+                overdue.setVisibility(View.VISIBLE);
+                //TODO account for MM/DD/YYYY
+                //Formatting date
+                String formattedDay;
+                String formattedMonth;;
+                String formattedDate;
+                if(Integer.valueOf(day) < 10){
+                    formattedDay = "0" + day;
+                }else{
+                    formattedDay = day;
+                }
+                if(Integer.valueOf(month) < 10){
+                    formattedMonth = "0" + month;
+                }else{
+                    formattedMonth = month;
+                }
+
+                formattedDate = formattedDay + "/" + formattedMonth + "/" + year;
+
+                dueTextView.setText(formattedDate);
             }
-            dueTextView.setText(hour + ":" + minute);
+
         }
 
         //Show checklist/note icon if required
