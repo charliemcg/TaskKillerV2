@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean inNote;
     //Used to indicate that user is in the sub-tasks screen
     static boolean inChecklist;
+    //Used to indicate that timepicker is showing
+    static boolean timepickerShowing;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -184,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
         inNote = false;
         inChecklist = false;
         taskOptionsShowing = false;
+//        timepickerShowing = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -961,7 +964,15 @@ public class MainActivity extends AppCompatActivity {
         }
         //Remove task properties if they are visible
         else if(taskPropertiesShowing){
-            removeTaskProperties();
+            Log.i(TAG, String.valueOf(dateOrTime));
+            if(dateOrTime) {
+                removeTaskProperties();
+                alarmBeingSet = false;
+                dateOrTime = false;
+            }else{
+                dateOrTime = false;
+                theListView.setAdapter(theAdapter[0]);
+            }
         }else{
             super.onBackPressed();
         }
