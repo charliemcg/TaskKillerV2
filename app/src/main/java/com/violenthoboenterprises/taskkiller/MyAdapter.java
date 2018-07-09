@@ -353,7 +353,6 @@ class MyAdapter extends ArrayAdapter<String> {
             }
 
             //Checking for overdue tasks
-            //am = 0, pm = 1
             String formattedTime;
             Boolean sameDay = false;
             //Overdue
@@ -372,6 +371,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
                     && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(day)){
                 sameDay = true;
+                //Saved hours are in 12 hour time. Accounting for am/pm.
                 int adjustedHour = 0;
                 if (Integer.valueOf(ampm) == 1) {
                     adjustedHour = Integer.valueOf(hour) + 12;
@@ -394,6 +394,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 due.setVisibility(View.VISIBLE);
             }
 
+            //If task due on same day show the due time
             if(!sameDay){
                 //TODO account for MM/DD/YYYY https://en.wikipedia.org/wiki/Date_format_by_country
                 //Formatting date
@@ -406,14 +407,15 @@ class MyAdapter extends ArrayAdapter<String> {
                     formattedDay = day;
                 }
                 if(Integer.valueOf(month) < 10){
-                    formattedMonth = "0" + month;
+                    formattedMonth = "0" + String.valueOf(Integer.valueOf(month) + 1);
                 }else{
-                    formattedMonth = month;
+                    formattedMonth = String.valueOf(Integer.valueOf(month) + 1);
                 }
 
                 formattedDate = formattedDay + "/" + formattedMonth + "/" + year;
 
                 dueTextView.setText(formattedDate);
+            //If task due on different day show the due date
             }else{
                 if(Integer.valueOf(minute) < 10){
                     if(Integer.valueOf(ampm) == 0) {
@@ -510,6 +512,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
             Calendar currentDate = new GregorianCalendar();
 
+            //Checking that task due date is in the future
             if (currentDate.get(Calendar.YEAR) > Integer.valueOf(datePicker.getYear())) {
                 Toast.makeText(getContext(), "Cannot set task to be completed in the past",
                         Toast.LENGTH_SHORT).show();
