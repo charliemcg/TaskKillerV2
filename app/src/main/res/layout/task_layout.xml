@@ -71,6 +71,10 @@
                 layout="@layout/options"
                 android:id="@+id/options"
                 android:visibility="gone"/>
+            <include
+                layout="@layout/alarm_options"
+                android:id="@+id/alarmOptions"
+                android:visibility="gone"/>
         </LinearLayout>
     </TableRow>
 

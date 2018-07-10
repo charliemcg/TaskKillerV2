@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:background="@color/white">
 
@@ -12,30 +12,27 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/alarm"
-            android:background="@color/red"
-            android:text="Set due date"
-            android:layout_weight="2"
+            android:id="@+id/killAlarmBtn"
+            android:text="Turn off alarm"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"/>
 
         <Button
-            android:id="@+id/complete"
-            android:background="@color/green"
-            android:text="Complete"
-            android:layout_weight="2"
+            android:id="@+id/resetAlarmBtn"
+            android:text="Change due date"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"/>
 
         <Button
-            android:id="@+id/more"
-            android:text="More..."
-            android:layout_weight="2.5"
+            android:id="@+id/repeatBtn"
+            android:text="Set repeat"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
             android:layout_margin="8dp"/>
     </LinearLayout>
 

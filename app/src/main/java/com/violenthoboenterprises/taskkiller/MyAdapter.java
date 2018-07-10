@@ -53,6 +53,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final TableRow propertyRow = taskView.findViewById(R.id.properties);
         final TableRow dateRow = taskView.findViewById(R.id.dateTime);
         final TableRow optionsRow = taskView.findViewById(R.id.options);
+        final TableRow alarmOptionsRow = taskView.findViewById(R.id.alarmOptions);
         final DatePicker datePicker = taskView.findViewById(R.id.datePicker);
         final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
@@ -131,7 +132,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //Initialising variables
             Button complete = taskView.findViewById(R.id.complete);
-            Button snooze = taskView.findViewById(R.id.snooze);
+            Button alarm = taskView.findViewById(R.id.alarm);
             Button more = taskView.findViewById(R.id.more);
             final Button rename = taskView.findViewById(R.id.rename);
             Button subTasks = taskView.findViewById(R.id.subTasks);
@@ -144,7 +145,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //"set due date" button becomes "remove due date" button if due date already set
             if (MainActivity.showTaskDueIcon.get(MainActivity.activeTask)){
 
-                snooze.setText("Remove Due Date");
+                alarm.setText("Remove Due Date");
 
             }
 
@@ -185,7 +186,7 @@ class MyAdapter extends ArrayAdapter<String> {
             });
 
             //Actions to occur if user selects 'set due date'
-            snooze.setOnClickListener(new View.OnClickListener() {
+            alarm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -205,15 +206,45 @@ class MyAdapter extends ArrayAdapter<String> {
                     //actions to occur when cancelling alarm
                     } else {
 
-                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+                        Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
+                        Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
+                        Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
 
-                        MainActivity.alarmManager.cancel(MainActivity.pendingIntent
-                                .get(MainActivity.activeTask));
+                        alarmOptionsRow.setVisibility(View.VISIBLE);
 
-                        MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
-                                "", "", "", "", "", "");
+                        propertyRow.setVisibility(View.GONE);
 
-                        notifyDataSetChanged();
+                        //Actions to occur if user selects 'remove alarm'
+                        killAlarmBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+
+                                MainActivity.alarmManager.cancel(MainActivity.pendingIntent
+                                        .get(MainActivity.activeTask));
+
+                                MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
+                                        "", "", "", "", "", "");
+
+                                notifyDataSetChanged();
+
+                            }
+                        });
+
+                        //Actions to occur if user selects 'change due date'
+                        resetAlarmBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                MainActivity.alarmBeingSet = true;
+
+                                MainActivity.dateRowShowing = true;
+
+                                notifyDataSetChanged();
+
+                            }
+                        });
 
                     }
 
