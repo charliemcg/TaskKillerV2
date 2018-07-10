@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean inChecklist;
     //Used to indicate that date row is showing
     static boolean dateRowShowing;
+    //Used to indicate that a repeating alarm is being set
+    static boolean repeating;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -77,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
     static int checklistListSize;
     //Height of list view as viewable on screen
     static int listViewHeight;
+
+    //Interval between repeating alarms
+    static long repeatInterval;
 
     //Helps to determine if keyboard is up in portrait orientation
     private double portraitKeyboardMeasure;
@@ -187,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
         inChecklist = false;
         taskOptionsShowing = false;
         dateRowShowing = false;
+        repeating = false;
+        repeatInterval = 0;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);

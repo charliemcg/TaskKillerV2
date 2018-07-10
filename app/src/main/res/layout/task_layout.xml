@@ -75,6 +75,10 @@
                 layout="@layout/alarm_options"
                 android:id="@+id/alarmOptions"
                 android:visibility="gone"/>
+            <include
+                layout="@layout/repeat_layout"
+                android:id="@+id/repeat"
+                android:visibility="gone"/>
         </LinearLayout>
     </TableRow>
 

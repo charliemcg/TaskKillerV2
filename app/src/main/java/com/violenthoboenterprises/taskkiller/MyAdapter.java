@@ -54,6 +54,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final TableRow dateRow = taskView.findViewById(R.id.dateTime);
         final TableRow optionsRow = taskView.findViewById(R.id.options);
         final TableRow alarmOptionsRow = taskView.findViewById(R.id.alarmOptions);
+        final TableRow repeatRow = taskView.findViewById(R.id.repeat);
         final DatePicker datePicker = taskView.findViewById(R.id.datePicker);
         final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
@@ -138,6 +139,9 @@ class MyAdapter extends ArrayAdapter<String> {
             Button subTasks = taskView.findViewById(R.id.subTasks);
             Button note = taskView.findViewById(R.id.note);
             final Button dateButton = taskView.findViewById(R.id.date);
+            final Button daily = taskView.findViewById(R.id.daily);
+            final Button weekly = taskView.findViewById(R.id.weekly);
+            final Button monthly = taskView.findViewById(R.id.monthly);
 
             //put data in text view
             theTextView.setText(task);
@@ -145,7 +149,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //"set due date" button becomes "remove due date" button if due date already set
             if (MainActivity.showTaskDueIcon.get(MainActivity.activeTask)){
 
-                alarm.setText("Remove Due Date");
+                alarm.setText("Alarm options");
 
             }
 
@@ -246,6 +250,18 @@ class MyAdapter extends ArrayAdapter<String> {
                             }
                         });
 
+                        //Actions to occur if user selects 'repeat alarm'
+                        repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                alarmOptionsRow.setVisibility(View.GONE);
+
+                                repeatRow.setVisibility(View.VISIBLE);
+
+                            }
+                        });
+
                     }
 
                 }
@@ -322,6 +338,61 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     dateButton.setText("Set Time");
                     setAlarm(dateRow, datePicker, timePicker);
+
+                }
+            });
+
+            //Actions to occur if user selects to repeat daily
+            daily.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    MainActivity.dateRowShowing = true;
+
+                    MainActivity.repeatInterval = AlarmManager.INTERVAL_DAY;
+
+                    MainActivity.repeating = true;
+
+                    MainActivity.taskPropertiesShowing = false;
+
+                    notifyDataSetChanged();
+
+                }
+            });
+
+            //Actions to occur if user selects to repeat weekly
+            weekly.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    MainActivity.dateRowShowing = true;
+
+                    MainActivity.repeatInterval = (AlarmManager.INTERVAL_DAY * 7);
+
+                    MainActivity.repeating = true;
+
+                    MainActivity.taskPropertiesShowing = false;
+
+                    notifyDataSetChanged();
+
+                }
+            });
+
+            //Actions to occur if user selects to repeat monthly
+            monthly.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    MainActivity.dateRowShowing = true;
+
+                    //TODO adjust to repeat same day each month
+                    MainActivity.repeatInterval = (AlarmManager.INTERVAL_DAY * 30);
+
+                    MainActivity.repeating = true;
+
+                    MainActivity.taskPropertiesShowing = false;
+
+                    notifyDataSetChanged();
 
                 }
             });
@@ -529,11 +600,16 @@ class MyAdapter extends ArrayAdapter<String> {
     public void setAlarm(TableRow dateRow, DatePicker datePicker, TimePicker timePicker){
 
         if(MainActivity.dateOrTime) {
+
             dateRow.setVisibility(View.VISIBLE);
             datePicker.setVisibility(View.GONE);
             timePicker.setVisibility(View.VISIBLE);
             MainActivity.dateOrTime = false;
-        }else {
+
+        }else{
+
+            MainActivity.alarmManager.cancel(MainActivity.pendingIntent
+                    .get(MainActivity.activeTask));
 
             Calendar calendar = Calendar.getInstance();
 
@@ -604,9 +680,14 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.broadcastID.get(MainActivity.activeTask),
                                 MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
-                //setting the notification
-                MainActivity.alarmManager.set(AlarmManager.RTC_WAKEUP, calendar
-                        .getTimeInMillis(), MainActivity.pendingIntent.get(MainActivity.activeTask));
+                //setting a repeating notification
+                if(MainActivity.repeating) {
+                    MainActivity.alarmManager.set(AlarmManager.RTC, calendar
+                            .getTimeInMillis(), MainActivity.pendingIntent.get(MainActivity.activeTask));
+                //setting a one-time notification
+                }else{
+                    MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), MainActivity.repeatInterval, MainActivity.pendingIntent.get(MainActivity.activeTask));
+                }
 
                 MainActivity.showTaskDueIcon.set(MainActivity.activeTask, true);
 
@@ -634,6 +715,10 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.add.setLayoutParams(MainActivity.params);
 
             MainActivity.dateRowShowing = false;
+
+            MainActivity.repeating = false;
+
+            notifyDataSetChanged();
 
         }
 
