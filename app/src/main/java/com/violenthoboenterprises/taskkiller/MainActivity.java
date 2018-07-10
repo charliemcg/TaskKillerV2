@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     //Used when displaying UI elements for either picking time or date
     static boolean dateOrTime;
     //Used to indicate an alarm is being set
-    static boolean alarmBeingSet;
+//    static boolean alarmBeingSet;
     //Used to indicate that user is in the note screen
     static boolean inNote;
     //Used to indicate that user is in the sub-tasks screen
@@ -66,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
     static boolean dateRowShowing;
     //Used to indicate that a repeating alarm is being set
     static boolean repeating;
+    //Used to indicate that date picker is showing
+    static boolean datePickerShowing;
+    //Used to indicate that time picker is showing
+    static boolean timePickerShowing;
+    //Used to indicate that alarm options are showing
+    static boolean alarmOptionsShowing;
+    //Used to indicate that repeat options is showing
+    static boolean repeatShowing;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -188,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         pendingIntent = new ArrayList<>();
         broadcastID = new ArrayList<>();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmBeingSet = false;
+//        alarmBeingSet = false;
         noteDb = new Database(this);
         lastToast = "";
         inNote = false;
@@ -197,6 +205,10 @@ public class MainActivity extends AppCompatActivity {
         dateRowShowing = false;
         repeating = false;
         repeatInterval = 0;
+        datePickerShowing = false;
+        timePickerShowing = false;
+        alarmOptionsShowing = false;
+        repeatShowing = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -834,7 +846,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         taskBeingEdited = false;
-        alarmBeingSet = false;
+//        alarmBeingSet = false;
         dateOrTime = false;
         removeTaskProperties();
 
@@ -891,28 +903,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    //Return to main screen when back pressed
+    //Return to previous selection when back is pressed
     public void onBackPressed() {
 
-        //Show task's main properties if options are showing
+        //options to properties
         if(taskOptionsShowing){
             theListView.setAdapter(theAdapter[0]);
             taskOptionsShowing = false;
-        }
-        //Remove task properties if they are visible
-        else if(taskPropertiesShowing){
-            if(dateRowShowing) {
-                if (dateOrTime) {
-                    removeTaskProperties();
-                    alarmBeingSet = false;
-                    dateOrTime = false;
-                } else {
-                    dateOrTime = false;
-                    theListView.setAdapter(theAdapter[0]);
-                }
+
+        }else if(datePickerShowing) {
+            //date picker to properties
+            if(!alarmOptionsShowing) {
+                datePickerShowing = false;
+                theListView.setAdapter(theAdapter[0]);
+            //change due date to alarm options
             }else{
-                removeTaskProperties();
+                datePickerShowing = false;
+                theListView.setAdapter(theAdapter[0]);
             }
+        //time picker to date picker
+        }else if(timePickerShowing) {
+            datePickerShowing = true;
+            timePickerShowing = false;
+            theListView.setAdapter(theAdapter[0]);
+        //repeat to alarm options
+        }else if(repeatShowing){
+            repeatShowing = false;
+            theListView.setAdapter(theAdapter[0]);
+        //alarm options to properties
+        }else if(alarmOptionsShowing){
+            alarmOptionsShowing = false;
+            theListView.setAdapter(theAdapter[0]);
+        //Properties to home
+        }else if (taskPropertiesShowing){
+            removeTaskProperties();
+        //Exit app
+        }else{
+            super.onBackPressed();
         }
 
     }

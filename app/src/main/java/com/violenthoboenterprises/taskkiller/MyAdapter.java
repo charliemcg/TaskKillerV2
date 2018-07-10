@@ -88,15 +88,81 @@ class MyAdapter extends ArrayAdapter<String> {
         if(MainActivity.taskPropertiesShowing && position == MainActivity.activeTask){
 
             //actions to occur if setting alarm
-            if(MainActivity.alarmBeingSet) {
+//            if(MainActivity.alarmBeingSet) {
+
+                Log.i(TAG, String.valueOf(MainActivity.datePickerShowing));
 
                 //Determine whether to show datepicker
-                if (!MainActivity.dateOrTime) {
+//                if (!MainActivity.dateOrTime) {
+            if(MainActivity.datePickerShowing) {
 
-                    dateRow.setVisibility(View.VISIBLE);
-                    MainActivity.dateOrTime = true;
-                }
+                dateRow.setVisibility(View.VISIBLE);
+                MainActivity.dateOrTime = true;
+//                }
+            //TODO put this in a separate method to avoid code duplication
+            }else if(MainActivity.alarmOptionsShowing){
+                Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
+                Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
+                Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
 
+                alarmOptionsRow.setVisibility(View.VISIBLE);
+
+                propertyRow.setVisibility(View.GONE);
+
+                MainActivity.alarmOptionsShowing = true;
+
+                //Actions to occur if user selects 'remove alarm'
+                killAlarmBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+
+                        MainActivity.showRepeatIcon.set(MainActivity.activeTask, false);
+
+                        MainActivity.alarmManager.cancel(MainActivity.pendingIntent
+                                .get(MainActivity.activeTask));
+
+                        MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
+                                "", "", "", "", "", "");
+
+                        MainActivity.alarmOptionsShowing = false;
+
+                        notifyDataSetChanged();
+
+                    }
+                });
+
+                //Actions to occur if user selects 'change due date'
+                resetAlarmBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+//                                MainActivity.alarmBeingSet = true;
+                        MainActivity.datePickerShowing = true;
+
+                        MainActivity.dateRowShowing = true;
+
+//                                MainActivity.alarmOptionsShowing = false;
+
+                        notifyDataSetChanged();
+
+                    }
+                });
+
+                //Actions to occur if user selects 'repeat alarm'
+                repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        alarmOptionsRow.setVisibility(View.GONE);
+
+                        repeatRow.setVisibility(View.VISIBLE);
+
+                        MainActivity.alarmOptionsShowing = false;
+
+                    }
+                });
             //show the tasks properties
             }else{
 
@@ -202,13 +268,15 @@ class MyAdapter extends ArrayAdapter<String> {
                     //actions to occur if alarm not already set
                     if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
 
-                        MainActivity.alarmBeingSet = true;
+//                        MainActivity.alarmBeingSet = true;
 
                         MainActivity.dateRowShowing = true;
 
+                        MainActivity.datePickerShowing = true;
+
                         notifyDataSetChanged();
 
-                    //actions to occur when cancelling alarm
+                    //actions to occur when viewing alarm properties
                     } else {
 
                         Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
@@ -218,6 +286,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         alarmOptionsRow.setVisibility(View.VISIBLE);
 
                         propertyRow.setVisibility(View.GONE);
+
+                        MainActivity.alarmOptionsShowing = true;
 
                         //Actions to occur if user selects 'remove alarm'
                         killAlarmBtn.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +304,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
                                         "", "", "", "", "", "");
 
+                                MainActivity.alarmOptionsShowing = false;
+
                                 notifyDataSetChanged();
 
                             }
@@ -244,9 +316,12 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                MainActivity.alarmBeingSet = true;
+//                                MainActivity.alarmBeingSet = true;
+                                MainActivity.datePickerShowing = true;
 
                                 MainActivity.dateRowShowing = true;
+
+//                                MainActivity.alarmOptionsShowing = false;
 
                                 notifyDataSetChanged();
 
@@ -261,6 +336,9 @@ class MyAdapter extends ArrayAdapter<String> {
                                 alarmOptionsRow.setVisibility(View.GONE);
 
                                 repeatRow.setVisibility(View.VISIBLE);
+
+//                                MainActivity.alarmOptionsShowing = false;
+                                MainActivity.repeatShowing = true;
 
                             }
                         });
@@ -626,6 +704,8 @@ class MyAdapter extends ArrayAdapter<String> {
             datePicker.setVisibility(View.GONE);
             timePicker.setVisibility(View.VISIBLE);
             MainActivity.dateOrTime = false;
+            MainActivity.datePickerShowing = false;
+            MainActivity.timePickerShowing = true;
 
         }else{
 
@@ -710,6 +790,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.showRepeatIcon.set(MainActivity.activeTask, true);
 
+                    MainActivity.repeatShowing = false;
+
                 //setting a one-time notification
                 }else{
 
@@ -736,7 +818,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //Marks properties as not showing
             MainActivity.taskPropertiesShowing = false;
 
-            MainActivity.alarmBeingSet = false;
+//            MainActivity.alarmBeingSet = false;
 
             //Returns the 'add' button
             MainActivity.params.height = MainActivity.addHeight;
@@ -746,6 +828,8 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.dateRowShowing = false;
 
             MainActivity.repeating = false;
+
+            MainActivity.timePickerShowing = false;
 
             notifyDataSetChanged();
 
