@@ -508,7 +508,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 due.setVisibility(View.VISIBLE);
             }
 
-            //If task due on same day show the due time
+            //If task due on same day show the due date
             if(!sameDay){
                 //TODO account for MM/DD/YYYY https://en.wikipedia.org/wiki/Date_format_by_country
                 //Formatting date
@@ -529,8 +529,11 @@ class MyAdapter extends ArrayAdapter<String> {
                 formattedDate = formattedDay + "/" + formattedMonth + "/" + year;
 
                 dueTextView.setText(formattedDate);
-            //If task due on different day show the due date
+            //If task due on different day show the due time
             }else{
+                if(Integer.valueOf(hour) == 0){
+                    hour = "12";
+                }
                 if(Integer.valueOf(minute) < 10){
                     if(Integer.valueOf(ampm) == 0) {
                         formattedTime = hour + ":0" + minute + "am";
