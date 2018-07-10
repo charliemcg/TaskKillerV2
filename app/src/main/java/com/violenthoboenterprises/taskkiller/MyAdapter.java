@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.Image;
 import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
@@ -225,6 +226,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
 
+                                MainActivity.showRepeatIcon.set(MainActivity.activeTask, false);
+
                                 MainActivity.alarmManager.cancel(MainActivity.pendingIntent
                                         .get(MainActivity.activeTask));
 
@@ -355,6 +358,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.taskPropertiesShowing = false;
 
+                    setAlarm(dateRow, datePicker, timePicker);
+
                     notifyDataSetChanged();
 
                 }
@@ -372,6 +377,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.repeating = true;
 
                     MainActivity.taskPropertiesShowing = false;
+
+                    setAlarm(dateRow, datePicker, timePicker);
 
                     notifyDataSetChanged();
 
@@ -391,6 +398,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.repeating = true;
 
                     MainActivity.taskPropertiesShowing = false;
+
+                    setAlarm(dateRow, datePicker, timePicker);
 
                     notifyDataSetChanged();
 
@@ -540,6 +549,15 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
+        //show repeat icon if required
+        if(MainActivity.showRepeatIcon.get(position)){
+
+            ImageView repeat = taskView.findViewById(R.id.repeatIcon);
+
+            repeat.setVisibility(View.VISIBLE);
+
+        }
+
         //Show checklist/note icon if required
         boolean showChecklist = false;
         String showNote = "";
@@ -682,11 +700,19 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 //setting a repeating notification
                 if(MainActivity.repeating) {
-                    MainActivity.alarmManager.set(AlarmManager.RTC, calendar
-                            .getTimeInMillis(), MainActivity.pendingIntent.get(MainActivity.activeTask));
+
+                    MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
+                            calendar.getTimeInMillis(), MainActivity.repeatInterval,
+                            MainActivity.pendingIntent.get(MainActivity.activeTask));
+
+                    MainActivity.showRepeatIcon.set(MainActivity.activeTask, true);
+
                 //setting a one-time notification
                 }else{
-                    MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), MainActivity.repeatInterval, MainActivity.pendingIntent.get(MainActivity.activeTask));
+
+                    MainActivity.alarmManager.set(AlarmManager.RTC, calendar
+                            .getTimeInMillis(), MainActivity.pendingIntent.get(MainActivity.activeTask));
+
                 }
 
                 MainActivity.showTaskDueIcon.set(MainActivity.activeTask, true);

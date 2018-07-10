@@ -98,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
     static ArrayList<Boolean> tasksKilled;
     //Keeps track of tasks which require a due date notification
     static ArrayList<Boolean> showTaskDueIcon;
+    //Keeps track of tasks which require repeat icon
+    static ArrayList<Boolean> showRepeatIcon;
 
     //Toasts which show up when adding new task
     String[] motivation = new String[] {"Get it done!", "Smash that task!",
@@ -168,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         taskList = new ArrayList<>();
         tasksKilled = new ArrayList<>();
         showTaskDueIcon = new ArrayList<>();
+        showRepeatIcon = new ArrayList<>();
         noTasksToShow = findViewById(R.id.noTasks);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
@@ -508,6 +511,8 @@ public class MainActivity extends AppCompatActivity {
 
         showTaskDueIcon.remove(position);
 
+        showRepeatIcon.remove(position);
+
         broadcastID.remove(position);
 
         //Checks to see if there are still tasks left
@@ -611,6 +616,8 @@ public class MainActivity extends AppCompatActivity {
                 tasksKilled.add(tasksKilled.size(), false);
 
                 showTaskDueIcon.add(showTaskDueIcon.size(), false);
+
+                showRepeatIcon.add(showRepeatIcon.size(), false);
 
                 alertIntent = new Intent(this, AlertReceiver.class);
 
@@ -808,6 +815,8 @@ public class MainActivity extends AppCompatActivity {
             mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
                     showTaskDueIcon.get(i)).apply();
 
+            mSharedPreferences.edit().putBoolean("showRepeatIcon" + String.valueOf(i),
+                    showRepeatIcon.get(i)).apply();
 
             mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i),
                     pendingIntent.get(i).toString()).apply();
@@ -843,6 +852,7 @@ public class MainActivity extends AppCompatActivity {
         taskList.clear();
         tasksKilled.clear();
         showTaskDueIcon.clear();
+        showRepeatIcon.clear();
         pendingIntent.clear();
         broadcastID.clear();
 
@@ -859,6 +869,9 @@ public class MainActivity extends AppCompatActivity {
                     String.valueOf(i), false));
 
             showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon"
+                    + String.valueOf(i), false));
+
+            showRepeatIcon.add(mSharedPreferences.getBoolean("showRepeatIcon"
                     + String.valueOf(i), false));
 
             alertIntent = new Intent(this, AlertReceiver.class);
