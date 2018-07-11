@@ -87,18 +87,12 @@ class MyAdapter extends ArrayAdapter<String> {
         //actions to occur in regards to selected task
         if(MainActivity.taskPropertiesShowing && position == MainActivity.activeTask){
 
-            //actions to occur if setting alarm
-//            if(MainActivity.alarmBeingSet) {
-
-                Log.i(TAG, String.valueOf(MainActivity.datePickerShowing));
-
-                //Determine whether to show datepicker
-//                if (!MainActivity.dateOrTime) {
+            //Determine whether to show datepicker
             if(MainActivity.datePickerShowing) {
 
                 dateRow.setVisibility(View.VISIBLE);
                 MainActivity.dateOrTime = true;
-//                }
+
             //TODO put this in a separate method to avoid code duplication
             }else if(MainActivity.alarmOptionsShowing){
                 Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
@@ -138,12 +132,9 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
-//                                MainActivity.alarmBeingSet = true;
                         MainActivity.datePickerShowing = true;
 
                         MainActivity.dateRowShowing = true;
-
-//                                MainActivity.alarmOptionsShowing = false;
 
                         notifyDataSetChanged();
 
@@ -268,8 +259,6 @@ class MyAdapter extends ArrayAdapter<String> {
                     //actions to occur if alarm not already set
                     if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
 
-//                        MainActivity.alarmBeingSet = true;
-
                         MainActivity.dateRowShowing = true;
 
                         MainActivity.datePickerShowing = true;
@@ -301,7 +290,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.alarmManager.cancel(MainActivity.pendingIntent
                                         .get(MainActivity.activeTask));
 
-                                MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
+                                MainActivity.noteDb.updateAlarmData
+                                        (String.valueOf(MainActivity.activeTask),
                                         "", "", "", "", "", "");
 
                                 MainActivity.alarmOptionsShowing = false;
@@ -316,12 +306,9 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-//                                MainActivity.alarmBeingSet = true;
                                 MainActivity.datePickerShowing = true;
 
                                 MainActivity.dateRowShowing = true;
-
-//                                MainActivity.alarmOptionsShowing = false;
 
                                 notifyDataSetChanged();
 
@@ -337,7 +324,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 repeatRow.setVisibility(View.VISIBLE);
 
-//                                MainActivity.alarmOptionsShowing = false;
                                 MainActivity.repeatShowing = true;
 
                             }
@@ -721,6 +707,15 @@ class MyAdapter extends ArrayAdapter<String> {
             calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
             calendar.set(Calendar.MINUTE, timePicker.getMinute());
 
+            //////////////////Trying to get future timestamp/////////////////////////////
+            Log.i(TAG, "Current time: " + String.valueOf(System.currentTimeMillis()));
+            //TODO find out what parameters GregorianCalendar takes
+            Calendar blahCalendar = new GregorianCalendar(datePicker.getYear(),
+                    datePicker.getMonth(), datePicker.getDayOfMonth());
+            calendar.getTimeInMillis();
+            Log.i(TAG, "Future time: " + blahCalendar.getTimeInMillis());
+            /////////////////////////////////////////////////////////////////////////////
+
             Calendar currentDate = new GregorianCalendar();
 
             //Checking that task due date is in the future
@@ -733,19 +728,24 @@ class MyAdapter extends ArrayAdapter<String> {
                         Toast.LENGTH_SHORT).show();
             } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
                     && currentDate.get(Calendar.MONTH) == Integer.valueOf(datePicker.getMonth())
-                    && currentDate.get(Calendar.DAY_OF_MONTH) > Integer.valueOf(datePicker.getDayOfMonth())) {
+                    && currentDate.get(Calendar.DAY_OF_MONTH) >
+                    Integer.valueOf(datePicker.getDayOfMonth())) {
                 Toast.makeText(getContext(), "Cannot set task to be completed in the past",
                         Toast.LENGTH_SHORT).show();
             } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
                     && currentDate.get(Calendar.MONTH) == Integer.valueOf(datePicker.getMonth())
-                    && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(datePicker.getDayOfMonth())
-                    && currentDate.get(Calendar.HOUR_OF_DAY) > Integer.valueOf(timePicker.getHour())) {
+                    && currentDate.get(Calendar.DAY_OF_MONTH) ==
+                    Integer.valueOf(datePicker.getDayOfMonth())
+                    && currentDate.get(Calendar.HOUR_OF_DAY) >
+                    Integer.valueOf(timePicker.getHour())) {
                 Toast.makeText(getContext(), "Cannot set task to be completed in the past",
                         Toast.LENGTH_SHORT).show();
             } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
                     && currentDate.get(Calendar.MONTH) == Integer.valueOf(datePicker.getMonth())
-                    && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(datePicker.getDayOfMonth())
-                    && currentDate.get(Calendar.HOUR_OF_DAY) == Integer.valueOf(timePicker.getHour())
+                    && currentDate.get(Calendar.DAY_OF_MONTH) ==
+                    Integer.valueOf(datePicker.getDayOfMonth())
+                    && currentDate.get(Calendar.HOUR_OF_DAY) ==
+                    Integer.valueOf(timePicker.getHour())
                     && currentDate.get(Calendar.MINUTE) > Integer.valueOf(timePicker.getMinute())) {
                 Toast.makeText(getContext(), "Cannot set task to be completed in the past",
                         Toast.LENGTH_SHORT).show();
@@ -796,7 +796,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 }else{
 
                     MainActivity.alarmManager.set(AlarmManager.RTC, calendar
-                            .getTimeInMillis(), MainActivity.pendingIntent.get(MainActivity.activeTask));
+                            .getTimeInMillis(), MainActivity.pendingIntent
+                            .get(MainActivity.activeTask));
 
                 }
 
@@ -817,8 +818,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //Marks properties as not showing
             MainActivity.taskPropertiesShowing = false;
-
-//            MainActivity.alarmBeingSet = false;
 
             //Returns the 'add' button
             MainActivity.params.height = MainActivity.addHeight;

@@ -56,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
     static boolean centerTask;
     //Used when displaying UI elements for either picking time or date
     static boolean dateOrTime;
-    //Used to indicate an alarm is being set
-//    static boolean alarmBeingSet;
     //Used to indicate that user is in the note screen
     static boolean inNote;
     //Used to indicate that user is in the sub-tasks screen
@@ -196,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
         pendingIntent = new ArrayList<>();
         broadcastID = new ArrayList<>();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        alarmBeingSet = false;
         noteDb = new Database(this);
         lastToast = "";
         inNote = false;
@@ -328,7 +325,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //create a record in the database for tracking icons
                     noteDb.insertData((taskList.size() - 1), "");
-                    noteDb.insertAlarmData((taskList.size() - 1), "", "", "", "", "", "");
+                    noteDb.insertAlarmData((taskList.size() - 1), "", "",
+                            "", "", "", "");
 
                     int i = random.nextInt(5);
 
@@ -910,7 +908,6 @@ public class MainActivity extends AppCompatActivity {
         if(taskOptionsShowing){
             theListView.setAdapter(theAdapter[0]);
             taskOptionsShowing = false;
-
         }else if(datePickerShowing) {
             //date picker to properties
             if(!alarmOptionsShowing) {
