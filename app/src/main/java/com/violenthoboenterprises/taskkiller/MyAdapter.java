@@ -21,13 +21,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.CollationElementIterator;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -82,6 +85,11 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
             });
             MainActivity.centerTask = false;
+        }
+
+        if(MainActivity.reorderList){
+            reorderList();
+            MainActivity.reorderList = false;
         }
 
         //actions to occur in regards to selected task
@@ -232,6 +240,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     //Marks task as complete
                     MainActivity.tasksKilled.set(MainActivity.activeTask, true);
 
+                    MainActivity.noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+
                     Toast.makeText(v.getContext(), "You killed this task!",
                             Toast.LENGTH_SHORT).show();
 
@@ -290,9 +300,15 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.alarmManager.cancel(MainActivity.pendingIntent
                                         .get(MainActivity.activeTask));
 
+//                                MainActivity.noteDb.updateAlarmData
+//                                        (String.valueOf(MainActivity.activeTask),
+//                                        "", "", "", "", "", "");
+
                                 MainActivity.noteDb.updateAlarmData
-                                        (String.valueOf(MainActivity.activeTask),
-                                        "", "", "", "", "", "");
+                                        (toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                                "", "", "", "", "", "");
+
+                                MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
 
                                 MainActivity.alarmOptionsShowing = false;
 
@@ -514,7 +530,8 @@ class MyAdapter extends ArrayAdapter<String> {
             String year;
 
             //Getting time data
-            result = MainActivity.noteDb.getAlarmData(position);
+            //TODO turns out second alarm overwrites first
+            result = MainActivity.noteDb.getAlarmData(Integer.parseInt(MainActivity.sortedIDs.get(position)));
             hour = "";
             minute = "";
             ampm = "";
@@ -595,6 +612,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 dueTextView.setText(formattedDate);
             //If task due on different day show the due time
             }else{
+
                 if(Integer.valueOf(hour) == 0){
                     hour = "12";
                 }
@@ -707,15 +725,6 @@ class MyAdapter extends ArrayAdapter<String> {
             calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
             calendar.set(Calendar.MINUTE, timePicker.getMinute());
 
-            //////////////////Trying to get future timestamp/////////////////////////////
-            Log.i(TAG, "Current time: " + String.valueOf(System.currentTimeMillis()));
-            //TODO find out what parameters GregorianCalendar takes
-            Calendar blahCalendar = new GregorianCalendar(datePicker.getYear(),
-                    datePicker.getMonth(), datePicker.getDayOfMonth());
-            calendar.getTimeInMillis();
-            Log.i(TAG, "Future time: " + blahCalendar.getTimeInMillis());
-            /////////////////////////////////////////////////////////////////////////////
-
             Calendar currentDate = new GregorianCalendar();
 
             //Checking that task due date is in the future
@@ -751,10 +760,21 @@ class MyAdapter extends ArrayAdapter<String> {
                         Toast.LENGTH_SHORT).show();
             } else {
 
+                //////////////////Trying to get future timestamp/////////////////////////////
+                Calendar futureDate= new GregorianCalendar(datePicker.getYear(),
+                        datePicker.getMonth(), datePicker.getDayOfMonth(),
+                        timePicker.getHour(), timePicker.getMinute());
+                MainActivity.noteDb.updateTimestamp(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                        String.valueOf(futureDate.getTimeInMillis() / 1000));
+                /////////////////////////////////////////////////////////////////////////////
+
+                MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+
                 //intention to execute AlertReceiver
                 MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
-                MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
+                //TODO problem here
+                MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)),
                         String.valueOf(calendar.get(calendar.HOUR)),
                         String.valueOf(calendar.get(calendar.MINUTE)),
                         String.valueOf(calendar.get(calendar.AM_PM)),
@@ -830,9 +850,149 @@ class MyAdapter extends ArrayAdapter<String> {
 
             MainActivity.timePickerShowing = false;
 
+            reorderList();
+
             notifyDataSetChanged();
 
         }
+
+    }
+
+    public void reorderList(){
+
+        //Reordering tasks by due date
+        ArrayList<Integer> tempList = new ArrayList<>();
+        //Saving timestamps into a temporary array
+        for(int i = 0; i < MainActivity.taskList.size(); i++){
+            int stamp = 0;
+            Cursor result = MainActivity.noteDb.getData(i);
+            while(result.moveToNext()){
+                stamp = result.getInt(3);
+            }
+            tempList.add(i, stamp);
+        }
+
+        ArrayList<String> yetAnotherList = new ArrayList<>();
+        ArrayList<String> tempTaskList = new ArrayList<>();
+        ArrayList<Boolean> tempShowTaskDueIcon = new ArrayList<>();
+        ArrayList<Boolean> tempTasksKilledList = new ArrayList<>();
+//        ArrayList<Boolean> tempShowRepeatIcon = new ArrayList<>();
+//        ArrayList<PendingIntent> tempPendingIntent = new ArrayList<>();
+//        ArrayList<Integer> tempBroadcastID = new ArrayList<>();
+
+        int count = 0;
+        for(int i = 0; i < MainActivity.taskList.size(); i++){
+            String id = "";
+            int stamp = 0;
+            String task = "";
+            Boolean dueStatus = false;
+            Boolean killed = false;
+            Cursor result = MainActivity.noteDb.getData(i);
+            while(result.moveToNext()){
+                id = result.getString(0);
+                stamp = result.getInt(3);
+                task = result.getString(4);
+                dueStatus = result.getInt(5) > 0;
+                killed = result.getInt(6) > 0;
+            }
+            if((tempList.get(i) == 0) && (stamp == 0)){
+                yetAnotherList.add(id);
+                tempTaskList.add(task);
+                tempShowTaskDueIcon.add(dueStatus);
+                tempTasksKilledList.add(killed);
+//                tempShowRepeatIcon.add(MainActivity.showRepeatIcon.get(i));
+//                tempPendingIntent.add(MainActivity.pendingIntent.get(i));
+//                tempBroadcastID.add(MainActivity.broadcastID.get(i));
+                count++;
+            }
+        }
+
+//        for(int i = 0; i < (MainActivity.taskList.size() - count); i++){
+//            yetAnotherList.add("0");
+//        }
+
+//        Collections.sort(tempList);
+
+//        Log.i(TAG, "/////////////////////////////////////");
+//        Log.i(TAG, String.valueOf(yetAnotherList));
+//        Log.i(TAG, String.valueOf(tempList));
+
+    //reordering tasks by matching the timestamps with the ones saved in the sorted list
+//    for (int i = 0; i < MainActivity.taskList.size(); i++) {
+//        String id = "";
+//        int stamp = 0;
+//        Cursor result = MainActivity.noteDb.getData(i);
+//        while (result.moveToNext()) {
+//            id = result.getString(0);
+//            stamp = result.getInt(3);
+//        }
+//        for (int j = 0; j < (MainActivity.taskList.size()); j++) {
+//            if (tempList.get(j) == stamp) {
+//                Log.i(TAG, String.valueOf(j));
+//                    yetAnotherList.add((j + count), id);
+////                yetAnotherList.set((j + count), id);
+//                tempTasksKilledList.add(MainActivity.tasksKilled.get(i));
+//                tempShowTaskKilledIcon.add(MainActivity.showTaskDueIcon.get(i));
+//                tempShowRepeatIcon.add(MainActivity.showRepeatIcon.get(i));
+//                tempPendingIntent.add(MainActivity.pendingIntent.get(i));
+//                tempBroadcastID.add(MainActivity.broadcastID.get(i));
+//            }
+//        }
+//    }
+
+        while(tempList.size() > 0) {
+            int minValue = Collections.min(tempList);
+            if(minValue != 0) {
+                for (int i = 0; i < MainActivity.taskList.size(); i++) {
+                    String id = "";
+                    int stamp = 0;
+                    String task = "";
+                    Boolean dueStatus = false;
+                    Boolean killed = false;
+                    Cursor result = MainActivity.noteDb.getData(i);
+                    while (result.moveToNext()) {
+                        id = result.getString(0);
+                        stamp = result.getInt(3);
+                        task = result.getString(4);
+                        dueStatus = result.getInt(5) > 0;
+                        killed = result.getInt(6) > 0;
+                    }
+                    if (minValue == stamp) {
+                        yetAnotherList.add(id);
+                        tempTaskList.add(task);
+                        tempShowTaskDueIcon.add(dueStatus);
+                        tempTasksKilledList.add(killed);
+//                        tempShowRepeatIcon.add(MainActivity.showRepeatIcon.get(i));
+//                        tempPendingIntent.add(MainActivity.pendingIntent.get(i));
+//                        tempBroadcastID.add(MainActivity.broadcastID.get(i));
+                        tempList.remove(Collections.min(tempList));
+                    }
+                }
+            }else{
+                tempList.remove(Collections.min(tempList));
+            }
+        }
+
+        MainActivity.sortedIDs.clear();
+        for(int i = 0; i < MainActivity.taskList.size(); i++){
+            MainActivity.sortedIDs.add(yetAnotherList.get(i));
+        }
+
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//            yetAnotherList.set(i, MainActivity.taskList.get(Integer.parseInt(yetAnotherList.get(i))));
+//        }
+
+        //Saving the sorted tasklist
+//        MainActivity.taskList = yetAnotherList;
+        MainActivity.taskList = tempTaskList;
+        MainActivity.showTaskDueIcon = tempShowTaskDueIcon;
+        MainActivity.tasksKilled = tempTasksKilledList;
+//        MainActivity.showRepeatIcon = tempShowRepeatIcon;
+//        MainActivity.pendingIntent = tempPendingIntent;
+//        MainActivity.broadcastID = tempBroadcastID;
+        //Updating the view with the new order
+        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(getContext(), MainActivity.taskList)};
+        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
     }
 

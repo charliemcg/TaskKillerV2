@@ -1,6 +1,7 @@
 package com.violenthoboenterprises.taskkiller;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean alarmOptionsShowing;
     //Used to indicate that repeat options is showing
     static boolean repeatShowing;
+    //Used to indicate that list needs to be reordered
+    static boolean reorderList;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -101,11 +104,13 @@ public class MainActivity extends AppCompatActivity {
     //List of tasks
     public static ArrayList<String> taskList;
     //Keeps track of tasks that are completed but not removed
-    static ArrayList<Boolean> tasksKilled;
+//    static ArrayList<Boolean> tasksKilled;
     //Keeps track of tasks which require a due date notification
     static ArrayList<Boolean> showTaskDueIcon;
     //Keeps track of tasks which require repeat icon
     static ArrayList<Boolean> showRepeatIcon;
+    //Keeps track of task IDs sorted by due date
+    static ArrayList<String> sortedIDs;
 
     //Toasts which show up when adding new task
     String[] motivation = new String[] {"Get it done!", "Smash that task!",
@@ -127,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
 
     //The button that facilitates the adding of tasks
     static Button add;
+    //TODO remove after debugging
+    Button showDb;
+    Button showAlarmDb;
 
     //Scrollable list
     static ListView theListView;
@@ -174,12 +182,14 @@ public class MainActivity extends AppCompatActivity {
         taskPropertiesShowing = false;
         tasksAreClickable = true;
         taskList = new ArrayList<>();
-        tasksKilled = new ArrayList<>();
+//        tasksKilled = new ArrayList<>();
         showTaskDueIcon = new ArrayList<>();
         showRepeatIcon = new ArrayList<>();
         noTasksToShow = findViewById(R.id.noTasks);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
+        showDb = findViewById(R.id.showDb);
+        showAlarmDb = findViewById(R.id.showAlarmDb);
         theListView = findViewById(R.id.theListView);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         params = (RelativeLayout.LayoutParams) add.getLayoutParams();
@@ -206,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
         timePickerShowing = false;
         alarmOptionsShowing = false;
         repeatShowing = false;
+        reorderList = false;
+        sortedIDs = new ArrayList<>();
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -221,13 +233,19 @@ public class MainActivity extends AppCompatActivity {
 
                     vibrate.vibrate(50);
 
+                    Boolean killed = false;
+                    Cursor result = MainActivity.noteDb.getData(Integer.parseInt(sortedIDs.get(MainActivity.activeTask)));
+                    while (result.moveToNext()) {
+                        killed = result.getInt(6) > 0;
+                    }
+
                     //Selecting a task to view options
-                    if (!taskPropertiesShowing && !tasksKilled.get(position)) {
+                    if (!taskPropertiesShowing && !killed/*tasksKilled.get(position)*/) {
 
                         viewProperties(position);
 
                     //Removes completed task
-                    } else if (!taskPropertiesShowing && tasksKilled.get(position)) {
+                    } else if (!taskPropertiesShowing && killed/*tasksKilled.get(position)*/) {
 
                         removeTask(position);
 
@@ -244,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        //Long click allows for editing the task name
+        //Long click allows for editing/reinstating task
         theListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
@@ -253,13 +271,19 @@ public class MainActivity extends AppCompatActivity {
 
                 int i = position;
 
+                Boolean killed = false;
+                Cursor result = MainActivity.noteDb.getData(Integer.parseInt(sortedIDs.get(MainActivity.activeTask)));
+                while (result.moveToNext()) {
+                    killed = result.getInt(6) > 0;
+                }
+
                 //Determine if it's possible to edit task
-                if (tasksAreClickable && !tasksKilled.get(i) && !taskPropertiesShowing) {
+                if (tasksAreClickable && !killed/*tasksKilled.get(i)*/ && !taskPropertiesShowing) {
 
                     rename(i);
 
                 //long click reinstates task that is crossed out
-                } else if (tasksAreClickable && tasksKilled.get(i) && !taskPropertiesShowing) {
+                } else if (tasksAreClickable && killed/*tasksKilled.get(i)*/ && !taskPropertiesShowing) {
 
                     reinstate(i);
 
@@ -296,6 +320,59 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        //TODO remove this after debugging
+        showDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = noteDb.getAllData();
+
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("NOTE: " + res.getString(1) + "\n");
+                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+                    buffer.append("TASK: " + res.getString(4) + "\n");
+                    buffer.append("DUE: " + res.getString(5) + "\n");
+                    buffer.append("KILLED: " + res.getString(6) + "\n\n");
+                }
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
+
+        //TODO remove this after debugging
+        showAlarmDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = noteDb.getAllAlarmData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("HOUR: " + res.getString(1) + "\n");
+                    buffer.append("MINUTE: " + res.getString(2) + "\n");
+                    buffer.append("AMPM: " + res.getString(3) + "\n");
+                    buffer.append("DAY: " + res.getString(4) + "\n");
+                    buffer.append("MONTH: " + res.getString(5) + "\n");
+                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
+                }
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
+
         //Actions to occur when user submits new task
         taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
 
@@ -324,9 +401,11 @@ public class MainActivity extends AppCompatActivity {
                     noTasksLeft();
 
                     //create a record in the database for tracking icons
-                    noteDb.insertData((taskList.size() - 1), "");
+                    noteDb.insertData((taskList.size() - 1), "", taskName);
                     noteDb.insertAlarmData((taskList.size() - 1), "", "",
                             "", "", "", "");
+
+                    reorderList = true;
 
                     int i = random.nextInt(5);
 
@@ -377,6 +456,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    //TODO remove after debugging
+    //////////For showing table results///////////////
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
+    }
+    ////////////////////////////////////////////////
 
     private void removeTask(int position) {
 
@@ -512,7 +602,9 @@ public class MainActivity extends AppCompatActivity {
         //Updates the view
         theListView.setAdapter(theAdapter[0]);
 
-        tasksKilled.remove(position);
+//        tasksKilled.remove(position);
+
+        noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
 
         //Cancel notification alarms if one is set
         alarmManager.cancel(pendingIntent.get(position));
@@ -608,7 +700,9 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "Task reinstated",
                 Toast.LENGTH_SHORT).show();
 
-        tasksKilled.set(i, false);
+//        tasksKilled.set(i, false);
+
+        noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
 
         theListView.setAdapter(theAdapter[0]);
     }
@@ -623,7 +717,9 @@ public class MainActivity extends AppCompatActivity {
 
                 taskList.add(taskList.size(), taskName);
 
-                tasksKilled.add(tasksKilled.size(), false);
+//                tasksKilled.add(tasksKilled.size(), false);
+
+                noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
 
                 showTaskDueIcon.add(showTaskDueIcon.size(), false);
 
@@ -819,8 +915,8 @@ public class MainActivity extends AppCompatActivity {
             mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
                     taskList.get(i)).apply();
 
-            mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
-                    tasksKilled.get(i)).apply();
+//            mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
+//                    tasksKilled.get(i)).apply();
 
             mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
                     showTaskDueIcon.get(i)).apply();
@@ -860,7 +956,7 @@ public class MainActivity extends AppCompatActivity {
 
         //clearing the lists before adding data back into them so as to avoid duplication
         taskList.clear();
-        tasksKilled.clear();
+//        tasksKilled.clear();
         showTaskDueIcon.clear();
         showRepeatIcon.clear();
         pendingIntent.clear();
@@ -875,8 +971,8 @@ public class MainActivity extends AppCompatActivity {
 
             taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
 
-            tasksKilled.add(mSharedPreferences.getBoolean("taskKilledKey" +
-                    String.valueOf(i), false));
+//            tasksKilled.add(mSharedPreferences.getBoolean("taskKilledKey" +
+//                    String.valueOf(i), false));
 
             showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon"
                     + String.valueOf(i), false));

@@ -17,6 +17,10 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL1 = "ID";
     public static final String COL2 = "NOTE";
     public static final String COL3 = "CHECKLIST";
+    public static final String COL4 = "TIMESTAMP";
+    public static final String COL5 = "TASK";
+    public static final String COL6 = "DUE";
+    public static final String COL7 = "KILLED";
 //    public static final String COL4 = "ALARM";
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -38,7 +42,7 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
-                "NOTE TEXT, CHECKLIST BOOLEAN)");
+                "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN, KILLED BOOLEAN)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT/*, TIMESTAMP INTEGER*/)");
     }
@@ -50,12 +54,16 @@ public class Database extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(int id, String note){
+    public boolean insertData(int id, String note, String task){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(COL1, id);
         content.put(COL2, note);
         content.put(COL3, false);
+        content.put(COL4, "0");
+        content.put(COL5, task);
+        content.put(COL6, false);
+        content.put(COL7, false);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -127,6 +135,22 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean updateDue(String id, Boolean due){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL6, due);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateKilled(String id, Boolean killed){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL7, killed);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
 //    public boolean updateAlarmData(String id, Date time){
 //        SQLiteDatabase db = this.getWritableDatabase();
 //        ContentValues content = new ContentValues();
@@ -134,6 +158,15 @@ public class Database extends SQLiteOpenHelper {
 //        db.update(TABLE, content, "ID = ?", new String[] {id});
 //        return true;
 //    }
+
+    //TODO why do all these methods return a boolean? can they be void?
+    public boolean updateTimestamp(String id, String timestamp){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content= new ContentValues();
+        content.put(COL4, timestamp);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
 
     public boolean updateAlarmData(String id, String hour, String minute, String ampm, String day, String month, String year){
         SQLiteDatabase db = this.getWritableDatabase();
