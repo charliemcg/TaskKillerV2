@@ -118,7 +118,9 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
-                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+//                        MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+
+                        MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
 
                         MainActivity.showRepeatIcon.set(MainActivity.activeTask, false);
 
@@ -212,8 +214,14 @@ class MyAdapter extends ArrayAdapter<String> {
             //put data in text view
             theTextView.setText(task);
 
+            Boolean due = false;
+            Cursor dueResult = MainActivity.noteDb.getData(Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)));
+            while (dueResult.moveToNext()) {
+                due = dueResult.getInt(5) > 0;
+            }
+
             //"set due date" button becomes "remove due date" button if due date already set
-            if (MainActivity.showTaskDueIcon.get(MainActivity.activeTask)){
+            if (due/*MainActivity.showTaskDueIcon.get(MainActivity.activeTask)*/){
 
                 alarm.setText("Alarm options");
 
@@ -230,15 +238,15 @@ class MyAdapter extends ArrayAdapter<String> {
                             .parseColor("#FFFFFF"));
 
                     //Visibly mark task as complete
-                    MainActivity.taskList.set(MainActivity.activeTask,
-                            MyAdapter.this.getItem(position));
+//                    MainActivity.taskList.set(MainActivity.activeTask,
+//                            MyAdapter.this.getItem(position));
 
                     notifyDataSetChanged();
 
                     MainActivity.taskPropertiesShowing = false;
 
                     //Marks task as complete
-                    MainActivity.tasksKilled.set(MainActivity.activeTask, true);
+//                    MainActivity.tasksKilled.set(MainActivity.activeTask, true);
 
                     MainActivity.noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
 
@@ -266,8 +274,14 @@ class MyAdapter extends ArrayAdapter<String> {
 //                    Toast.makeText(v.getContext(), "Upgrade to the Pro version to" +
 //                                    " get this feature", Toast.LENGTH_SHORT).show();
 
+                    Boolean due = false;
+                    Cursor dueResult = MainActivity.noteDb.getData(Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                    while (dueResult.moveToNext()) {
+                        due = dueResult.getInt(5) > 0;
+                    }
+
                     //actions to occur if alarm not already set
-                    if (!MainActivity.showTaskDueIcon.get(MainActivity.activeTask)) {
+                    if (!due/*MainActivity.showTaskDueIcon.get(MainActivity.activeTask)*/) {
 
                         MainActivity.dateRowShowing = true;
 
@@ -293,7 +307,9 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+//                                MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
+
+                                MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
 
                                 MainActivity.showRepeatIcon.set(MainActivity.activeTask, false);
 
@@ -503,18 +519,36 @@ class MyAdapter extends ArrayAdapter<String> {
         //put data in text view
         theTextView.setText(task);
 
+        Boolean killed = false;
+
+        Cursor killedResult = MainActivity.noteDb.getData(Integer.parseInt(MainActivity.sortedIDs.get(position/*MainActivity.activeTask*/)));
+        while (killedResult.moveToNext()) {
+            killed = killedResult.getInt(6) > 0;
+        }
+
         //crossing out completed tasks
 
         //check if task has to be crossed out
-        if (MainActivity.tasksKilled.get(position)) {
+        if (killed/*MainActivity.tasksKilled.get(position)*/) {
 
             theTextView.setPaintFlags(theTextView.getPaintFlags() |
                     Paint.STRIKE_THRU_TEXT_FLAG);
 
         }
 
+        Boolean isDue = false;
+
+//        try {
+
+            Cursor dueResult = MainActivity.noteDb.getData(Integer.parseInt(MainActivity.sortedIDs.get(position/*MainActivity.activeTask*/)));
+            while (dueResult.moveToNext()) {
+                isDue = dueResult.getInt(5) > 0;
+            }
+
+//        }catch(IndexOutOfBoundsException e){}//TODO don't leave this blank
+
         //Show due date notification if required
-        if(MainActivity.showTaskDueIcon.get(position)) {
+        if(isDue/*MainActivity.showTaskDueIcon.get(position)*/) {
 
             Calendar currentDate = new GregorianCalendar();
 
@@ -782,9 +816,15 @@ class MyAdapter extends ArrayAdapter<String> {
                         String.valueOf(calendar.get(calendar.MONTH)),
                         String.valueOf(calendar.get(calendar.YEAR)));
 
+                String task = "";
+                Cursor result = MainActivity.noteDb.getData(Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                while (result.moveToNext()) {
+                    task = result.getString(4);
+                }
+
                 //setting the name of the task for which the notification is being set
-                MainActivity.alertIntent.putExtra("ToDo", MainActivity.taskList
-                        .get(MainActivity.activeTask));
+                MainActivity.alertIntent.putExtra("ToDo", task/*MainActivity.taskList
+                        .get(MainActivity.activeTask)*/);
 
                 int i = 0;
 
@@ -821,7 +861,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
-                MainActivity.showTaskDueIcon.set(MainActivity.activeTask, true);
+//                MainActivity.showTaskDueIcon.set(MainActivity.activeTask, true);
+
+                MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
 
             }
 
@@ -863,7 +905,7 @@ class MyAdapter extends ArrayAdapter<String> {
         //Reordering tasks by due date
         ArrayList<Integer> tempList = new ArrayList<>();
         //Saving timestamps into a temporary array
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
+        for(int i = 0; i < MainActivity./*taskList.size()*/taskListSize; i++){
             int stamp = 0;
             Cursor result = MainActivity.noteDb.getData(i);
             while(result.moveToNext()){
@@ -881,7 +923,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //        ArrayList<Integer> tempBroadcastID = new ArrayList<>();
 
         int count = 0;
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
+        for(int i = 0; i < MainActivity./*taskList.size()*/taskListSize; i++){
             String id = "";
             int stamp = 0;
             String task = "";
@@ -943,7 +985,7 @@ class MyAdapter extends ArrayAdapter<String> {
         while(tempList.size() > 0) {
             int minValue = Collections.min(tempList);
             if(minValue != 0) {
-                for (int i = 0; i < MainActivity.taskList.size(); i++) {
+                for (int i = 0; i < MainActivity./*taskList.size()*/taskListSize; i++) {
                     String id = "";
                     int stamp = 0;
                     String task = "";
@@ -973,8 +1015,20 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
-        MainActivity.sortedIDs.clear();
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
+        Log.i(TAG, String.valueOf(MainActivity.sortedIDs));
+        Log.i(TAG, String.valueOf(MainActivity.taskList));
+
+        //TODO remove everything above count then add back in the sorted IDs
+//        MainActivity.sortedIDs.clear();
+//        for(int i = 0; i < MainActivity./*taskList.size()*/taskListSize; i++){
+//            MainActivity.sortedIDs.add(yetAnotherList.get(i));
+//        }
+
+        for (int i = MainActivity.taskListSize; i > count; i++){
+            MainActivity.sortedIDs.remove(i);
+        }
+
+        for(int i = count; i < MainActivity.taskListSize; i++){
             MainActivity.sortedIDs.add(yetAnotherList.get(i));
         }
 
@@ -984,12 +1038,19 @@ class MyAdapter extends ArrayAdapter<String> {
 
         //Saving the sorted tasklist
 //        MainActivity.taskList = yetAnotherList;
-        MainActivity.taskList = tempTaskList;
-        MainActivity.showTaskDueIcon = tempShowTaskDueIcon;
-        MainActivity.tasksKilled = tempTasksKilledList;
+//        MainActivity.taskList = tempTaskList;
+        //TODO might not need all this stuff
+//        MainActivity.showTaskDueIcon = tempShowTaskDueIcon;
+//        MainActivity.tasksKilled = tempTasksKilledList;
 //        MainActivity.showRepeatIcon = tempShowRepeatIcon;
 //        MainActivity.pendingIntent = tempPendingIntent;
 //        MainActivity.broadcastID = tempBroadcastID;
+
+
+        Log.i(TAG, String.valueOf(MainActivity.sortedIDs));
+        Log.i(TAG, String.valueOf(MainActivity.taskList));
+
+
         //Updating the view with the new order
         MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(getContext(), MainActivity.taskList)};
         MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);

@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     //Keeps track of tasks that are completed but not removed
 //    static ArrayList<Boolean> tasksKilled;
     //Keeps track of tasks which require a due date notification
-    static ArrayList<Boolean> showTaskDueIcon;
+//    static ArrayList<Boolean> showTaskDueIcon;
     //Keeps track of tasks which require repeat icon
     static ArrayList<Boolean> showRepeatIcon;
     //Keeps track of task IDs sorted by due date
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         tasksAreClickable = true;
         taskList = new ArrayList<>();
 //        tasksKilled = new ArrayList<>();
-        showTaskDueIcon = new ArrayList<>();
+//        showTaskDueIcon = new ArrayList<>();
         showRepeatIcon = new ArrayList<>();
         noTasksToShow = findViewById(R.id.noTasks);
         taskNameEditText = findViewById(R.id.taskNameEditText);
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                     vibrate.vibrate(50);
 
                     Boolean killed = false;
-                    Cursor result = MainActivity.noteDb.getData(Integer.parseInt(sortedIDs.get(MainActivity.activeTask)));
+                    Cursor result = MainActivity.noteDb.getData(Integer.parseInt(sortedIDs.get(position/*MainActivity.activeTask*/)));
                     while (result.moveToNext()) {
                         killed = result.getInt(6) > 0;
                     }
@@ -401,8 +401,12 @@ public class MainActivity extends AppCompatActivity {
                     noTasksLeft();
 
                     //create a record in the database for tracking icons
-                    noteDb.insertData((taskList.size() - 1), "", taskName);
-                    noteDb.insertAlarmData((taskList.size() - 1), "", "",
+//                    noteDb.insertData((taskList.size() - 1), "", taskName);
+//                    noteDb.insertAlarmData((taskList.size() - 1), "", "",
+//                            "", "", "", "");
+
+                    noteDb.insertData(Integer.parseInt(sortedIDs.get(taskListSize - 1)), "", taskName);
+                    noteDb.insertAlarmData(Integer.parseInt(sortedIDs.get(taskListSize - 1)), "", "",
                             "", "", "", "");
 
                     reorderList = true;
@@ -471,6 +475,7 @@ public class MainActivity extends AppCompatActivity {
     private void removeTask(int position) {
 
         taskList.remove(position);
+//        taskList.clear();
 
         MainActivity.checklistShowing = true;
 
@@ -579,24 +584,31 @@ public class MainActivity extends AppCompatActivity {
             //TODO don't leave this blank
         }
 
+        taskListSize--;
+
         //deleting note related to deleted task
-        noteDb.deleteData(String.valueOf(activeTask));
-        noteDb.deleteAlarmData(String.valueOf(activeTask));
+        noteDb.deleteData(String.valueOf(sortedIDs.get(position)/*position*//*activeTask*/));
+        noteDb.deleteAlarmData(String.valueOf(sortedIDs.get(position)/*position*//*activeTask*/));
+
+        sortedIDs.remove(position);
 
         Cursor result;
+        String id;
         String note;
         Boolean checklist;
 
         //Getting existing data before going to Database class to change ids.
-        for(int i = (activeTask + 1); i <= taskList.size(); i++){
-            result = noteDb.getData(i);
+        for(int i = (activeTask + 1); i < /*taskList.size()*/taskListSize; i++){
+            result = noteDb.getData(Integer.parseInt(sortedIDs.get(i)));
+            id = "";
             note = "";
             checklist = false;
             while(result.moveToNext()){
+                id = result.getString(0);
                 note = result.getString(1);
                 checklist = result.getInt(2) == 1;
             }
-            noteDb.updateData(String.valueOf(i), note, checklist);
+            noteDb.updateData(id/*String.valueOf(i)*/, note, checklist);
         }
 
         //Updates the view
@@ -604,14 +616,16 @@ public class MainActivity extends AppCompatActivity {
 
 //        tasksKilled.remove(position);
 
-        noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
+//        noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
 
         //Cancel notification alarms if one is set
         alarmManager.cancel(pendingIntent.get(position));
 
         pendingIntent.remove(position);
 
-        showTaskDueIcon.remove(position);
+//        showTaskDueIcon.remove(position);
+
+//        noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
 
         showRepeatIcon.remove(position);
 
@@ -715,13 +729,28 @@ public class MainActivity extends AppCompatActivity {
 
             if(!taskBeingEdited) {
 
-                taskList.add(taskList.size(), taskName);
+                taskList.add(/*taskList.size()*//*taskListSize*/taskListSize, taskName);
+
+                taskListSize++;
+
+//                sortedIDs.add(0, String.valueOf(taskListSize));
+
+                int i = 0;
+                boolean idIsSet = false;
+                while (!idIsSet) {
+                    if (sortedIDs.contains(String.valueOf(i))) {
+                        i++;
+                    } else {
+                        sortedIDs.add(taskListSize - 1, String.valueOf(i));
+                        idIsSet = true;
+                    }
+                }
 
 //                tasksKilled.add(tasksKilled.size(), false);
 
-                noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+//                noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
 
-                showTaskDueIcon.add(showTaskDueIcon.size(), false);
+//                showTaskDueIcon.add(showTaskDueIcon.size(), false);
 
                 showRepeatIcon.add(showRepeatIcon.size(), false);
 
@@ -735,6 +764,7 @@ public class MainActivity extends AppCompatActivity {
             }else{
 
                 taskList.set(activeTask, taskName);
+                noteDb.updateName(sortedIDs.get(activeTask), taskName);
 
             }
 
@@ -746,7 +776,7 @@ public class MainActivity extends AppCompatActivity {
     private void noTasksLeft() {
 
         //Checks if there are any existing tasks
-        if (taskList.size() == 0){
+        if (/*taskList.size()*/taskListSize == 0){
 
             //Inform user to add some tasks
             noTasksToShow.setVisibility(View.VISIBLE);
@@ -906,7 +936,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         //Tasks are saved in a manner so that they don't vanish when app closed
-        taskListSize = taskList.size();
+//        taskListSize = taskList.size();
 
         mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
 
@@ -918,8 +948,8 @@ public class MainActivity extends AppCompatActivity {
 //            mSharedPreferences.edit().putBoolean("taskKilledKey" + String.valueOf(i),
 //                    tasksKilled.get(i)).apply();
 
-            mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
-                    showTaskDueIcon.get(i)).apply();
+//            mSharedPreferences.edit().putBoolean("showTaskDueIcon" + String.valueOf(i),
+//                    showTaskDueIcon.get(i)).apply();
 
             mSharedPreferences.edit().putBoolean("showRepeatIcon" + String.valueOf(i),
                     showRepeatIcon.get(i)).apply();
@@ -957,7 +987,7 @@ public class MainActivity extends AppCompatActivity {
         //clearing the lists before adding data back into them so as to avoid duplication
         taskList.clear();
 //        tasksKilled.clear();
-        showTaskDueIcon.clear();
+//        showTaskDueIcon.clear();
         showRepeatIcon.clear();
         pendingIntent.clear();
         broadcastID.clear();
@@ -974,8 +1004,8 @@ public class MainActivity extends AppCompatActivity {
 //            tasksKilled.add(mSharedPreferences.getBoolean("taskKilledKey" +
 //                    String.valueOf(i), false));
 
-            showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon"
-                    + String.valueOf(i), false));
+//            showTaskDueIcon.add(mSharedPreferences.getBoolean("showTaskDueIcon"
+//                    + String.valueOf(i), false));
 
             showRepeatIcon.add(mSharedPreferences.getBoolean("showRepeatIcon"
                     + String.valueOf(i), false));

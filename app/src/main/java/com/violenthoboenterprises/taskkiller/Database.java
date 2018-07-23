@@ -127,7 +127,7 @@ public class Database extends SQLiteOpenHelper {
             content.put(COL3, checklist);
         }else{
             //decrementing id value because higher ranking task was deleted
-            content.put(COL1, (Integer.valueOf(id) - 1));
+            //content.put(COL1, (Integer.valueOf(id) - 1));
             content.put(COL2, note);
             content.put(COL3, checklist);
         }
@@ -147,6 +147,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(COL7, killed);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateName(String id, String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL5, name);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
