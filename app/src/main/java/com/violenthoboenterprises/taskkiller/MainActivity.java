@@ -716,7 +716,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        tasksKilled.set(i, false);
 
-        noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
+        noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
 
         theListView.setAdapter(theAdapter[0]);
     }
