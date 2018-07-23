@@ -143,6 +143,14 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean removeTimestamp(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL4, 0);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
     public boolean updateKilled(String id, Boolean killed){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();

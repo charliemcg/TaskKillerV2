@@ -310,6 +310,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                MainActivity.showTaskDueIcon.set(MainActivity.activeTask, false);
 
                                 MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
+                                MainActivity.noteDb.removeTimestamp(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)));
 
                                 MainActivity.showRepeatIcon.set(MainActivity.activeTask, false);
 
@@ -321,12 +322,14 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                        "", "", "", "", "", "");
 
                                 MainActivity.noteDb.updateAlarmData
-                                        (toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                        (toString().valueOf(MainActivity.sortedIDs.get(position/*MainActivity.activeTask*/)),
                                                 "", "", "", "", "", "");
 
-                                MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
+                                MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(/*MainActivity.activeTask*/position)), false);
 
                                 MainActivity.alarmOptionsShowing = false;
+
+                                reorderList();
 
                                 notifyDataSetChanged();
 
@@ -1015,22 +1018,22 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
-        Log.i(TAG, String.valueOf(MainActivity.sortedIDs));
-        Log.i(TAG, String.valueOf(MainActivity.taskList));
-
         //TODO remove everything above count then add back in the sorted IDs
 //        MainActivity.sortedIDs.clear();
 //        for(int i = 0; i < MainActivity./*taskList.size()*/taskListSize; i++){
 //            MainActivity.sortedIDs.add(yetAnotherList.get(i));
 //        }
 
-        for (int i = MainActivity.taskListSize; i > count; i++){
-            MainActivity.sortedIDs.remove(i);
-        }
+//        for (int i = (MainActivity.taskListSize - 1); i >= count; i--){
+//            MainActivity.sortedIDs.remove(i);
+//        }
+//
+//        for(int i = count; i < MainActivity.taskListSize; i++){
+//            MainActivity.sortedIDs.add(yetAnotherList.get(i));
+//        }
 
-        for(int i = count; i < MainActivity.taskListSize; i++){
-            MainActivity.sortedIDs.add(yetAnotherList.get(i));
-        }
+        MainActivity.sortedIDs = yetAnotherList;
+        MainActivity.taskList = tempTaskList;
 
 //        for(int i = 0; i < MainActivity.taskList.size(); i++){
 //            yetAnotherList.set(i, MainActivity.taskList.get(Integer.parseInt(yetAnotherList.get(i))));
@@ -1045,11 +1048,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //        MainActivity.showRepeatIcon = tempShowRepeatIcon;
 //        MainActivity.pendingIntent = tempPendingIntent;
 //        MainActivity.broadcastID = tempBroadcastID;
-
-
-        Log.i(TAG, String.valueOf(MainActivity.sortedIDs));
-        Log.i(TAG, String.valueOf(MainActivity.taskList));
-
 
         //Updating the view with the new order
         MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(getContext(), MainActivity.taskList)};
