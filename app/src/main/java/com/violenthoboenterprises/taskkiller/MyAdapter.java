@@ -121,13 +121,11 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.noteDb.updateDue(toString().valueOf(MainActivity
                                 .sortedIDs.get(MainActivity.activeTask)), false);
 
-                        MainActivity.showRepeatIcon.set(MainActivity.activeTask, false);
-
-//                        MainActivity.alarmManager.cancel(MainActivity.pendingIntent
-//                                .get(MainActivity.activeTask));
+                        MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                                .get(position), false);
 
                         MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
-                                getContext(), 0, MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
+                                getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position)), MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
 
                         MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
                                 "", "", "", "", "", "");
@@ -310,13 +308,11 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.noteDb.removeTimestamp(toString().valueOf(MainActivity
                                         .sortedIDs.get(MainActivity.activeTask)));
 
-                                MainActivity.showRepeatIcon.set(MainActivity.activeTask, false);
-
-//                                MainActivity.alarmManager.cancel(MainActivity.pendingIntent
-//                                        .get(MainActivity.activeTask));
+                                MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                                        .get(position), false);
 
                                 MainActivity.alarmManager.cancel(MainActivity.pendIntent
-                                        .getService(getContext(), 0,
+                                        .getService(getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position)),
                                                 MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
 
                                 MainActivity.noteDb.updateAlarmData
@@ -452,6 +448,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 public void onClick(View v) {
 
                     dateButton.setText("Set Time");
+
                     setAlarm(dateRow, datePicker, timePicker);
 
                 }
@@ -683,8 +680,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
+        boolean showRepeatIcon = false;
+        Cursor repeatResult = MainActivity.noteDb.getData(position);
+        while (repeatResult.moveToNext()){
+            showRepeatIcon = (repeatResult.getInt(8) > 0);
+        }
         //show repeat icon if required
-        if(MainActivity.showRepeatIcon.get(position)){
+        if(showRepeatIcon){
 
             ImageView repeat = taskView.findViewById(R.id.repeatIcon);
 
@@ -762,11 +764,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }else{
 
-//            MainActivity.alarmManager.cancel(MainActivity.pendingIntent
-//                    .get(MainActivity.activeTask));
-
             MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(getContext(),
-                    0, MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
+                    Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)), MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
 
             Calendar calendar = Calendar.getInstance();
 
@@ -845,27 +844,12 @@ class MyAdapter extends ArrayAdapter<String> {
                 //setting the name of the task for which the notification is being set
                 MainActivity.alertIntent.putExtra("ToDo", task);
 
-//                int i = 0;
-//
-//                while (MainActivity.broadcastID.contains(i)) {
-//
-//                    i++;
-//
-//                }
-//
-//                MainActivity.broadcastID.set(MainActivity.activeTask, i);
-
                 int broadcast = 0;
                 Cursor broadcastResult = MainActivity.noteDb.getData(Integer.parseInt(
                         MainActivity.sortedIDs.get(MainActivity.activeTask)));
                 while(result.moveToNext()){
                     broadcast = broadcastResult.getInt(7);
                 }
-
-//                MainActivity.pendingIntent.set(MainActivity.activeTask,
-//                        PendingIntent.getBroadcast(getContext(), broadcast
-//                                /*MainActivity.broadcastID.get(MainActivity.activeTask)*/,
-//                                MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
                 MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
                                 MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -875,10 +859,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
                             calendar.getTimeInMillis(), MainActivity.repeatInterval,
-                            MainActivity.pendIntent.getService(getContext(), 0,
-                                    MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
+                            MainActivity.pendIntent.getService(getContext(), broadcast,
+                                    MainActivity.alertIntent, 0));
 
-                    MainActivity.showRepeatIcon.set(MainActivity.activeTask, true);
+                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                     MainActivity.repeatShowing = false;
 
@@ -887,7 +871,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.alarmManager.set(AlarmManager.RTC, calendar
                             .getTimeInMillis(), MainActivity.pendIntent.getService(getContext(),
-                            0, MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
+                            broadcast, MainActivity.alertIntent, 0));
 
                 }
 
@@ -945,35 +929,21 @@ class MyAdapter extends ArrayAdapter<String> {
 
         ArrayList<String> yetAnotherList = new ArrayList<>();
         ArrayList<String> tempTaskList = new ArrayList<>();
-//        ArrayList<Boolean> tempShowTaskDueIcon = new ArrayList<>();
-//        ArrayList<Boolean> tempTasksKilledList = new ArrayList<>();
-//        ArrayList<Boolean> tempShowRepeatIcon = new ArrayList<>();
-//        ArrayList<PendingIntent> tempPendingIntent = new ArrayList<>();
-//        ArrayList<Integer> tempBroadcastID = new ArrayList<>();
 
         int count = 0;
         for(int i = 0; i < MainActivity.taskListSize; i++){
             String id = "";
             int stamp = 0;
             String task = "";
-//            Boolean dueStatus = false;
-//            Boolean killed = false;
             Cursor result = MainActivity.noteDb.getData(i);
             while(result.moveToNext()){
                 id = result.getString(0);
                 stamp = result.getInt(3);
                 task = result.getString(4);
-//                dueStatus = result.getInt(5) > 0;
-//                killed = result.getInt(6) > 0;
             }
             if((tempList.get(i) == 0) && (stamp == 0)){
                 yetAnotherList.add(id);
                 tempTaskList.add(task);
-//                tempShowTaskDueIcon.add(dueStatus);
-//                tempTasksKilledList.add(killed);
-//                tempShowRepeatIcon.add(MainActivity.showRepeatIcon.get(i));
-//                tempPendingIntent.add(MainActivity.pendingIntent.get(i));
-//                tempBroadcastID.add(MainActivity.broadcastID.get(i));
                 count++;
             }
         }
@@ -985,24 +955,15 @@ class MyAdapter extends ArrayAdapter<String> {
                     String id = "";
                     int stamp = 0;
                     String task = "";
-//                    Boolean dueStatus = false;
-//                    Boolean killed = false;
                     Cursor result = MainActivity.noteDb.getData(i);
                     while (result.moveToNext()) {
                         id = result.getString(0);
                         stamp = result.getInt(3);
                         task = result.getString(4);
-//                        dueStatus = result.getInt(5) > 0;
-//                        killed = result.getInt(6) > 0;
                     }
                     if (minValue == stamp) {
                         yetAnotherList.add(id);
                         tempTaskList.add(task);
-//                        tempShowTaskDueIcon.add(dueStatus);
-//                        tempTasksKilledList.add(killed);
-//                        tempShowRepeatIcon.add(MainActivity.showRepeatIcon.get(i));
-//                        tempPendingIntent.add(MainActivity.pendingIntent.get(i));
-//                        tempBroadcastID.add(MainActivity.broadcastID.get(i));
                         tempList.remove(Collections.min(tempList));
                     }
                 }
@@ -1014,18 +975,9 @@ class MyAdapter extends ArrayAdapter<String> {
         MainActivity.sortedIDs = yetAnotherList;
         MainActivity.taskList = tempTaskList;
 
-        //Saving the sorted tasklist
-//        MainActivity.taskList = yetAnotherList;
-//        MainActivity.taskList = tempTaskList;
-        //TODO might not need all this stuff
-//        MainActivity.showTaskDueIcon = tempShowTaskDueIcon;
-//        MainActivity.tasksKilled = tempTasksKilledList;
-//        MainActivity.showRepeatIcon = tempShowRepeatIcon;
-//        MainActivity.pendingIntent = tempPendingIntent;
-//        MainActivity.broadcastID = tempBroadcastID;
-
         //Updating the view with the new order
-        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(getContext(), MainActivity.taskList)};
+        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                getContext(), MainActivity.taskList)};
         MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
     }

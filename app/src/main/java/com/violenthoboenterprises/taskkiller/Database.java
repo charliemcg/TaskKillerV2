@@ -22,6 +22,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL6 = "DUE";
     public static final String COL7 = "KILLED";
     public static final String COL8 = "BROADCAST";
+    public static final String COL9 = "REPEAT";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -42,7 +43,7 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
-                "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN, KILLED BOOLEAN, BROADCAST INTEGER)");
+                "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN, KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
     }
@@ -65,6 +66,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL6, false);
         content.put(COL7, false);
         content.put(COL8, 0);
+        content.put(COL9, false);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -163,6 +165,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(COL5, name);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateRepeat(String id, Boolean repeat){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL9, repeat);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }

@@ -97,15 +97,8 @@ public class MainActivity extends AppCompatActivity {
     //Helps to determine if keyboard is up in landscape orientation
     private double landscapeKeyboardMeasure;
 
-    //Each task is assigned a unique broadcast ID when assigning a notification alarm
-//    static ArrayList<Integer> broadcastID;
-    //Each task is assigned a unique pending intent when assigning a notification alarm
-//    static ArrayList<PendingIntent> pendingIntent;
-    static PendingIntent pendIntent;
-    //List of tasks
+    //List of task names
     public static ArrayList<String> taskList;
-    //Keeps track of tasks which require repeat icon
-    static ArrayList<Boolean> showRepeatIcon;
     //Keeps track of task IDs sorted by due date
     static ArrayList<String> sortedIDs;
 
@@ -123,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Message that shows up when there are no tasks
     private TextView noTasksToShow;
+
+    static PendingIntent pendIntent;
 
     //The editable text box that allows for creating and editing task names
     static EditText taskNameEditText;
@@ -179,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
         taskPropertiesShowing = false;
         tasksAreClickable = true;
         taskList = new ArrayList<>();
-        showRepeatIcon = new ArrayList<>();
         noTasksToShow = findViewById(R.id.noTasks);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
@@ -196,8 +190,6 @@ public class MainActivity extends AppCompatActivity {
         activityRootView = findViewById(R.id.activityRoot);
         fadeTasks = false;
         dateOrTime = false;
-//        pendingIntent = new ArrayList<>();
-//        broadcastID = new ArrayList<>();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         noteDb = new Database(this);
         lastToast = "";
@@ -319,58 +311,58 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        //TODO remove this after debugging
-        showDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = noteDb.getAllData();
-
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("NOTE: " + res.getString(1) + "\n");
-                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-                    buffer.append("TASK: " + res.getString(4) + "\n");
-                    buffer.append("DUE: " + res.getString(5) + "\n");
-                    buffer.append("KILLED: " + res.getString(6) + "\n\n");
-                }
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
-
-        //TODO remove this after debugging
-        showAlarmDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = noteDb.getAllAlarmData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("HOUR: " + res.getString(1) + "\n");
-                    buffer.append("MINUTE: " + res.getString(2) + "\n");
-                    buffer.append("AMPM: " + res.getString(3) + "\n");
-                    buffer.append("DAY: " + res.getString(4) + "\n");
-                    buffer.append("MONTH: " + res.getString(5) + "\n");
-                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
-                }
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        //TODO remove this after debugging
+//        showDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = noteDb.getAllData();
+//
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("NOTE: " + res.getString(1) + "\n");
+//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+//                    buffer.append("TASK: " + res.getString(4) + "\n");
+//                    buffer.append("DUE: " + res.getString(5) + "\n");
+//                    buffer.append("KILLED: " + res.getString(6) + "\n\n");
+//                }
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
+//
+//        //TODO remove this after debugging
+//        showAlarmDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = noteDb.getAllAlarmData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("HOUR: " + res.getString(1) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(2) + "\n");
+//                    buffer.append("AMPM: " + res.getString(3) + "\n");
+//                    buffer.append("DAY: " + res.getString(4) + "\n");
+//                    buffer.append("MONTH: " + res.getString(5) + "\n");
+//                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
+//                }
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
         //Actions to occur when user submits new task
         taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
@@ -456,16 +448,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //TODO remove after debugging
-    //////////For showing table results///////////////
-    public void showMessage(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
-    }
-    ////////////////////////////////////////////////
+//    //TODO remove after debugging
+//    //////////For showing table results///////////////
+//    public void showMessage(String title, String message){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setCancelable(true);
+//        builder.setTitle(title);
+//        builder.setMessage(message);
+//        builder.show();
+//    }
+//    ////////////////////////////////////////////////
 
     private void removeTask(int position) {
 
@@ -608,16 +600,8 @@ public class MainActivity extends AppCompatActivity {
         //Updates the view
         theListView.setAdapter(theAdapter[0]);
 
-        //Cancel notification alarms if one is set
-//        alarmManager.cancel(pendingIntent.get(position));
-
-        alarmManager.cancel(pendIntent.getService(this, 0, alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
-
-//        pendingIntent.remove(position);
-
-        showRepeatIcon.remove(position);
-
-//        broadcastID.remove(position);
+        //Cancel notification alars if one is set
+        alarmManager.cancel(pendIntent.getService(this, Integer.parseInt(sortedIDs.get(position)), alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
 
         //Checks to see if there are still tasks left
         noTasksLeft();
@@ -642,8 +626,7 @@ public class MainActivity extends AppCompatActivity {
         //Updates the view
         theListView.setAdapter(theAdapter[0]);
 
-        //Can't change visibility of 'add' button. Have to set height to
-        //zero instead.
+        //Can't change visibility of 'add' button. Have to set height to zero instead.
         params.height = 0;
 
         add.setLayoutParams(params);
@@ -732,16 +715,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                showRepeatIcon.add(showRepeatIcon.size(), false);
-
                 alertIntent = new Intent(this, AlertReceiver.class);
 
-//                pendingIntent.add(pendingIntent.size(), PendingIntent.getBroadcast(this,
-//                        0, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-                pendIntent = PendingIntent.getBroadcast(this, 0, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-//                broadcastID.add(broadcastID.size(), 0);
+                pendIntent = PendingIntent.getBroadcast(this, i, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             }else{
 
@@ -927,15 +903,6 @@ public class MainActivity extends AppCompatActivity {
             mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
                     taskList.get(i)).apply();
 
-            mSharedPreferences.edit().putBoolean("showRepeatIcon" + String.valueOf(i),
-                    showRepeatIcon.get(i)).apply();
-
-//            mSharedPreferences.edit().putString("pendingIntentKey" + String.valueOf(i),
-//                    pendingIntent.get(i).toString()).apply();
-
-//            mSharedPreferences.edit().putInt("broadcastIDKey" + String.valueOf(i),
-//                    broadcastID.get(i)).apply();
-
         }
 
     }
@@ -961,9 +928,6 @@ public class MainActivity extends AppCompatActivity {
 
         //clearing the lists before adding data back into them so as to avoid duplication
         taskList.clear();
-        showRepeatIcon.clear();
-//        pendingIntent.clear();
-//        broadcastID.clear();
 
         checklistListSize = 0;
 
@@ -974,15 +938,7 @@ public class MainActivity extends AppCompatActivity {
 
             taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
 
-            showRepeatIcon.add(mSharedPreferences.getBoolean("showRepeatIcon"
-                    + String.valueOf(i), false));
-
             alertIntent = new Intent(this, AlertReceiver.class);
-
-//            broadcastID.add(mSharedPreferences.getInt("broadcastIDKey" + String.valueOf(i), 0));
-
-//            pendingIntent.add(PendingIntent.getBroadcast(this, broadcastID.get(i),
-//                    alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         }
 
