@@ -21,7 +21,8 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL5 = "TASK";
     public static final String COL6 = "DUE";
     public static final String COL7 = "KILLED";
-//    public static final String COL4 = "ALARM";
+    public static final String COL8 = "BROADCAST";
+
     //Alarm Table
     public static final String ATABLE = "alarms_table";
     public static final String ACOL1 = "ID";
@@ -31,7 +32,6 @@ public class Database extends SQLiteOpenHelper {
     public static final String ACOL5 = "DAY";
     public static final String ACOL6 = "MONTH";
     public static final String ACOL7 = "YEAR";
-    public static final String ACOL8 = "TIMESTAMP";
     String TAG = "Data";
 
     public Database(Context context) {
@@ -42,9 +42,9 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
-                "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN, KILLED BOOLEAN)");
+                "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN, KILLED BOOLEAN, BROADCAST INTEGER)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
-                "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT/*, TIMESTAMP INTEGER*/)");
+                "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
     }
 
     @Override
@@ -64,6 +64,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL5, task);
         content.put(COL6, false);
         content.put(COL7, false);
+        content.put(COL8, 0);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -72,7 +73,7 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertAlarmData(int id, String hour, String minute, String ampm, String day, String month, String year/*, int timestamp*/){
+    public boolean insertAlarmData(int id, String hour, String minute, String ampm, String day, String month, String year){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(ACOL1, id);
@@ -82,7 +83,6 @@ public class Database extends SQLiteOpenHelper {
         content.put(ACOL5, day);
         content.put(ACOL6, month);
         content.put(ACOL7, year);
-//        content.put(ACOL8, "timestampblah");
         long result = db.insert(ATABLE, null, content);
         if(result == -1){
             return false;
