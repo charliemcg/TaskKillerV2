@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.Image;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
@@ -26,6 +28,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.text.CollationElementIterator;
 import java.util.ArrayList;
@@ -59,9 +64,36 @@ class MyAdapter extends ArrayAdapter<String> {
         final TableRow optionsRow = taskView.findViewById(R.id.options);
         final TableRow alarmOptionsRow = taskView.findViewById(R.id.alarmOptions);
         final TableRow repeatRow = taskView.findViewById(R.id.repeat);
+        final TableRow adRow = taskView.findViewById(R.id.addRow);
         final DatePicker datePicker = taskView.findViewById(R.id.datePicker);
         final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
+
+        //Displaying ad if there are five or more tasks
+        if(position == 4) {
+            adRow.setVisibility(View.VISIBLE);
+            boolean networkAvailable = false;
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                networkAvailable = true;
+            }
+
+            //Initialising banner ad
+            final AdView adView = taskView.findViewById(R.id.adView);
+            ImageView banner = taskView.findViewById(R.id.banner);
+
+            if (networkAvailable) {
+                adView.setVisibility(View.VISIBLE);
+                final AdRequest banRequest = new AdRequest.Builder()
+                        .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
+                    (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
+                adView.loadAd(banRequest);
+            } else {
+                banner.setVisibility(View.VISIBLE);
+            }
+        }
 
         //TODO make sure hard coded values work on all devices
         //Task cannot be centered unless it's in view. Moving selected task into view
@@ -92,6 +124,52 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.reorderList = false;
         }
 
+        if(MainActivity.reinstateAlarm){
+
+            String stamp = "";
+            int broadcast = 0;
+            Boolean isDue = false;
+            Boolean isRepeating = false;
+            Cursor alarmResult = MainActivity.noteDb.getData(Integer.parseInt(
+                    MainActivity.sortedIDs.get(position)));
+            while (alarmResult.moveToNext()) {
+                stamp = alarmResult.getString(3);
+                isDue = alarmResult.getInt(5) > 0;
+                broadcast = alarmResult.getInt(7);
+                isRepeating = alarmResult.getInt(8) > 0;
+            }
+
+            //check if there's an alarm in the first place
+            if(isDue) {
+
+                //setting a repeating notification
+                if (isRepeating) {
+
+                    MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
+                            Long.parseLong(stamp), MainActivity.repeatInterval,
+                            MainActivity.pendIntent.getService(getContext(), broadcast,
+                                    MainActivity.alertIntent, 0));
+
+                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                            .get(MainActivity.activeTask), true);
+
+                    MainActivity.repeatShowing = false;
+
+                //setting a one-time notification
+                } else {
+
+                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(stamp),
+                            MainActivity.pendIntent.getService(getContext(),
+                                    broadcast, MainActivity.alertIntent, 0));
+
+                }
+
+            }
+
+            MainActivity.reinstateAlarm = false;
+
+        }
+
         //actions to occur in regards to selected task
         if(MainActivity.taskPropertiesShowing && position == MainActivity.activeTask){
 
@@ -103,6 +181,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //TODO put this in a separate method to avoid code duplication
             }else if(MainActivity.alarmOptionsShowing){
+
                 Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
                 Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
                 Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
@@ -125,7 +204,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 .get(position), false);
 
                         MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
-                                getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position)), MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
+                                getContext(), Integer.parseInt(MainActivity.sortedIDs
+                                        .get(position)), MainActivity.alertIntent, 0));
 
                         MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
                                 "", "", "", "", "", "");
@@ -248,6 +328,10 @@ class MyAdapter extends ArrayAdapter<String> {
                     Toast.makeText(v.getContext(), "You killed this task!",
                             Toast.LENGTH_SHORT).show();
 
+                    MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
+                            getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position))
+                            , MainActivity.alertIntent, 0));
+
                     MainActivity.add.setVisibility(View.VISIBLE);
 
                     MainActivity.vibrate.vibrate(50);
@@ -312,8 +396,9 @@ class MyAdapter extends ArrayAdapter<String> {
                                         .get(position), false);
 
                                 MainActivity.alarmManager.cancel(MainActivity.pendIntent
-                                        .getService(getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position)),
-                                                MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
+                                        .getService(getContext(), Integer.parseInt(MainActivity
+                                                        .sortedIDs.get(position)),
+                                                MainActivity.alertIntent, 0));
 
                                 MainActivity.noteDb.updateAlarmData
                                         (toString().valueOf(MainActivity.sortedIDs.get(position)),
@@ -501,7 +586,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.dateRowShowing = true;
 
-                    //TODO adjust to repeat same day each month
                     MainActivity.repeatInterval = (AlarmManager.INTERVAL_DAY * 30);
 
                     MainActivity.repeating = true;
@@ -575,7 +659,6 @@ class MyAdapter extends ArrayAdapter<String> {
             String year;
 
             //Getting time data
-            //TODO turns out second alarm overwrites first
             result = MainActivity.noteDb.getAlarmData(Integer.parseInt(
                     MainActivity.sortedIDs.get(position)));
             hour = "";
@@ -681,7 +764,8 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         boolean showRepeatIcon = false;
-        Cursor repeatResult = MainActivity.noteDb.getData(position);
+        Cursor repeatResult = MainActivity.noteDb.getData(Integer.parseInt(
+                MainActivity.sortedIDs.get(position)));
         while (repeatResult.moveToNext()){
             showRepeatIcon = (repeatResult.getInt(8) > 0);
         }
@@ -765,7 +849,8 @@ class MyAdapter extends ArrayAdapter<String> {
         }else{
 
             MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(getContext(),
-                    Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)), MainActivity.alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
+                    Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                    MainActivity.alertIntent, 0));
 
             Calendar calendar = Calendar.getInstance();
 
@@ -862,7 +947,8 @@ class MyAdapter extends ArrayAdapter<String> {
                             MainActivity.pendIntent.getService(getContext(), broadcast,
                                     MainActivity.alertIntent, 0));
 
-                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs.get(MainActivity.activeTask), true);
+                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                            .get(MainActivity.activeTask), true);
 
                     MainActivity.repeatShowing = false;
 

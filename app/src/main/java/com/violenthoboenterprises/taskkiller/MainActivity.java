@@ -30,6 +30,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean repeatShowing;
     //Used to indicate that list needs to be reordered
     static boolean reorderList;
+    //Reinstate alarm after reinstating task
+    static boolean reinstateAlarm;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -125,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
     //The button that facilitates the adding of tasks
     static Button add;
     //TODO remove after debugging
-    Button showDb;
-    Button showAlarmDb;
+//    Button showDb;
+//    Button showAlarmDb;
 
     //Scrollable list
     static ListView theListView;
@@ -177,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
         noTasksToShow = findViewById(R.id.noTasks);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
-        showDb = findViewById(R.id.showDb);
-        showAlarmDb = findViewById(R.id.showAlarmDb);
+//        showDb = findViewById(R.id.showDb);
+//        showAlarmDb = findViewById(R.id.showAlarmDb);
         theListView = findViewById(R.id.theListView);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         params = (RelativeLayout.LayoutParams) add.getLayoutParams();
@@ -205,6 +211,10 @@ public class MainActivity extends AppCompatActivity {
         repeatShowing = false;
         reorderList = false;
         sortedIDs = new ArrayList<>();
+        reinstateAlarm = false;
+
+        //Initialising the Google mobile ads SDK
+//        MobileAds.initialize(getApplicationContext(), "");//TODO get ID thing
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -576,6 +586,9 @@ public class MainActivity extends AppCompatActivity {
         noteDb.deleteData(String.valueOf(sortedIDs.get(position)));
         noteDb.deleteAlarmData(String.valueOf(sortedIDs.get(position)));
 
+        //Cancel notification alars if one is set
+        alarmManager.cancel(pendIntent.getService(this, Integer.parseInt(sortedIDs.get(position)), alertIntent, 0));
+
         sortedIDs.remove(position);
 
         Cursor result;
@@ -600,9 +613,6 @@ public class MainActivity extends AppCompatActivity {
         //Updates the view
         theListView.setAdapter(theAdapter[0]);
 
-        //Cancel notification alars if one is set
-        alarmManager.cancel(pendIntent.getService(this, Integer.parseInt(sortedIDs.get(position)), alertIntent, 0));//TODO these parameters are just placeholders. Need to find genuine parameters
-
         //Checks to see if there are still tasks left
         noTasksLeft();
     }
@@ -617,6 +627,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Marks task as having it's properties showing
         taskPropertiesShowing = true;
+
+        alarmOptionsShowing = false;
 
         centerTask = true;
 
@@ -644,6 +656,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Marks properties as not showing
         taskPropertiesShowing = false;
+
+        alarmOptionsShowing = false;
 
         //Returns the 'add' button
         params.height = addHeight;
@@ -687,6 +701,8 @@ public class MainActivity extends AppCompatActivity {
 
         //marks task as not killed in database
         noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
+
+        reinstateAlarm = true;
 
         theListView.setAdapter(theAdapter[0]);
     }
@@ -903,6 +919,9 @@ public class MainActivity extends AppCompatActivity {
             mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
                     taskList.get(i)).apply();
 
+            mSharedPreferences.edit().putString("sortedIDsKey" + String.valueOf(i),
+                    sortedIDs.get(i)).apply();
+
         }
 
     }
@@ -928,6 +947,7 @@ public class MainActivity extends AppCompatActivity {
 
         //clearing the lists before adding data back into them so as to avoid duplication
         taskList.clear();
+        sortedIDs.clear();
 
         checklistListSize = 0;
 
@@ -938,9 +958,11 @@ public class MainActivity extends AppCompatActivity {
 
             taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
 
-            alertIntent = new Intent(this, AlertReceiver.class);
+            sortedIDs.add(mSharedPreferences.getString("sortedIDsKey" + String.valueOf(i), ""));
 
         }
+
+        alertIntent = new Intent(this, AlertReceiver.class);
 
         theListView.setAdapter(theAdapter[0]);
 
