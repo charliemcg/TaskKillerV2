@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     //Indicates which task has it's properties showing
     static int activeTask;
     //Saves the size of the task list
-    static int taskListSize;
+    public static int taskListSize;
     //Height of the 'add' button
     static int addHeight;
     //Measures to determine if keyboard is up
@@ -106,7 +106,9 @@ public class MainActivity extends AppCompatActivity {
     //List of task names
     public static ArrayList<String> taskList;
     //Keeps track of task IDs sorted by due date
-    static ArrayList<String> sortedIDs;
+    public static ArrayList<String> sortedIDs;
+    //Keeps track of task IDs sorted by due date to be used by note class
+    public static ArrayList<String> sortedIdsForNote;
 
     //Toasts which show up when adding new task
     String[] motivation = new String[] {"Get it done!", "Smash that task!",
@@ -130,9 +132,10 @@ public class MainActivity extends AppCompatActivity {
 
     //The button that facilitates the adding of tasks
     static Button add;
-    //TODO remove after debugging
-//    Button showDb;
-//    Button showAlarmDb;
+
+    //Used for debugging purposes. Should not be visible in final version.
+    Button showDb;
+    Button showAlarmDb;
 
     //Scrollable list
     static ListView theListView;
@@ -183,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
         noTasksToShow = findViewById(R.id.noTasks);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
-//        showDb = findViewById(R.id.showDb);
-//        showAlarmDb = findViewById(R.id.showAlarmDb);
+        showDb = findViewById(R.id.showDb);
+        showAlarmDb = findViewById(R.id.showAlarmDb);
         theListView = findViewById(R.id.theListView);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         params = (RelativeLayout.LayoutParams) add.getLayoutParams();
@@ -321,58 +324,58 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-//        //TODO remove this after debugging
-//        showDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = noteDb.getAllData();
-//
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("NOTE: " + res.getString(1) + "\n");
-//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-//                    buffer.append("TASK: " + res.getString(4) + "\n");
-//                    buffer.append("DUE: " + res.getString(5) + "\n");
-//                    buffer.append("KILLED: " + res.getString(6) + "\n\n");
-//                }
-//
-//                showMessage("Data", buffer.toString());
-//
-//            }
-//
-//        });
-//
-//        //TODO remove this after debugging
-//        showAlarmDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = noteDb.getAllAlarmData();
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("HOUR: " + res.getString(1) + "\n");
-//                    buffer.append("MINUTE: " + res.getString(2) + "\n");
-//                    buffer.append("AMPM: " + res.getString(3) + "\n");
-//                    buffer.append("DAY: " + res.getString(4) + "\n");
-//                    buffer.append("MONTH: " + res.getString(5) + "\n");
-//                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
-//                }
-//
-//                showMessage("Data", buffer.toString());
-//
-//            }
-//
-//        });
+        //Used for debugging purposes
+        showDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = noteDb.getAllData();
+
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("NOTE: " + res.getString(1) + "\n");
+                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+                    buffer.append("TASK: " + res.getString(4) + "\n");
+                    buffer.append("DUE: " + res.getString(5) + "\n");
+                    buffer.append("KILLED: " + res.getString(6) + "\n\n");
+                }
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
+
+        //Used for debugging purposes
+        showAlarmDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = noteDb.getAllAlarmData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("HOUR: " + res.getString(1) + "\n");
+                    buffer.append("MINUTE: " + res.getString(2) + "\n");
+                    buffer.append("AMPM: " + res.getString(3) + "\n");
+                    buffer.append("DAY: " + res.getString(4) + "\n");
+                    buffer.append("MONTH: " + res.getString(5) + "\n");
+                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
+                }
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
 
         //Actions to occur when user submits new task
         taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
@@ -458,16 +461,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    //TODO remove after debugging
-//    //////////For showing table results///////////////
-//    public void showMessage(String title, String message){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setCancelable(true);
-//        builder.setTitle(title);
-//        builder.setMessage(message);
-//        builder.show();
-//    }
-//    ////////////////////////////////////////////////
+    ////Shows table results for debugging purposes////
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
+    }
+    /////////////////////////////////////////////////
 
     private void removeTask(int position) {
 
@@ -924,6 +926,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        sortedIdsForNote = sortedIDs;
+
     }
 
     @Override
@@ -949,7 +953,7 @@ public class MainActivity extends AppCompatActivity {
         taskList.clear();
         sortedIDs.clear();
 
-        checklistListSize = 0;
+//        checklistListSize = 0;
 
         //Existing tasks are recalled when app opened
         taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);

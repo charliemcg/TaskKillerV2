@@ -131,14 +131,15 @@ public class Note extends MainActivity {
                 //Keyboard is inactive without this line
                 noteEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
-                Cursor result = noteDb.getData(activeTask);
+                Cursor result = noteDb.getData(Integer.parseInt(
+                        MainActivity.sortedIdsForNote.get(activeTask)));
                 while(result.moveToNext()){
                     checklistExists = (result.getInt(2) == 1);
                 }
 
                 if(!noteEditText.getText().toString().equals("")) {
                     //new note being added
-                    noteDb.updateData(String.valueOf(activeTask),
+                    noteDb.updateData(MainActivity.sortedIdsForNote.get(activeTask),
                             noteEditText.getText().toString(), checklistExists);
                 }
 
@@ -161,7 +162,7 @@ public class Note extends MainActivity {
                 noteEditText.setText("");
 
                 //Getting note from database
-                result = noteDb.getData(activeTask);
+                result = noteDb.getData(Integer.parseInt(MainActivity.sortedIdsForNote.get(activeTask)));
                 while(result.moveToNext()){
                     theNote = result.getString(1);
                 }
@@ -236,14 +237,15 @@ public class Note extends MainActivity {
 
                 MainActivity.vibrate.vibrate(50);
 
-                Cursor result = noteDb.getData(activeTask);
+                Cursor result = noteDb.getData(Integer.parseInt(
+                        MainActivity.sortedIdsForNote.get(activeTask)));
                 while(result.moveToNext()){
                     checklistExists = (result.getInt(2) == 1);
-                    Log.i(TAG, String.valueOf(checklistExists));
                 }
 
                 //setting note in database to nothing
-                noteDb.updateData(String.valueOf(activeTask), "", checklistExists);
+                noteDb.updateData(MainActivity.sortedIdsForNote
+                        .get(activeTask), "", checklistExists);
 
                 noteTextView.setText("");
 
@@ -308,7 +310,8 @@ public class Note extends MainActivity {
     //Existing notes are recalled when app opened
     private void getSavedData() {
 
-        Cursor result = noteDb.getData(activeTask);
+        Cursor result = noteDb.getData(Integer.parseInt(
+                MainActivity.sortedIdsForNote.get(activeTask)));
         while(result.moveToNext()){
             theNote = result.getString(1);
         }

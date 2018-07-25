@@ -781,7 +781,8 @@ class MyAdapter extends ArrayAdapter<String> {
         //Show checklist/note icon if required
         boolean showChecklist = false;
         String showNote = "";
-        Cursor result = MainActivity.noteDb.getData(position);
+        Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
+                MainActivity.sortedIDs.get(position)));
         while(result.moveToNext()){
             showChecklist = (result.getInt(2) == 1);
             showNote = result.getString(1);
