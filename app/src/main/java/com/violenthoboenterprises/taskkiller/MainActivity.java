@@ -216,9 +216,6 @@ public class MainActivity extends AppCompatActivity {
         sortedIDs = new ArrayList<>();
         reinstateAlarm = false;
 
-        //Initialising the Google mobile ads SDK
-//        MobileAds.initialize(getApplicationContext(), "");//TODO get ID thing
-
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
 
@@ -342,7 +339,8 @@ public class MainActivity extends AppCompatActivity {
 //                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
 //                    buffer.append("TASK: " + res.getString(4) + "\n");
 //                    buffer.append("DUE: " + res.getString(5) + "\n");
-//                    buffer.append("KILLED: " + res.getString(6) + "\n\n");
+//                    buffer.append("KILLED: " + res.getString(6) + "\n");
+//                    buffer.append("BROADCAST: " + res.getString(7) + "\n\n");
 //                }
 //
 //                showMessage("Data", buffer.toString());
@@ -406,7 +404,8 @@ public class MainActivity extends AppCompatActivity {
 
                     //create records in database
                     noteDb.insertData(Integer.parseInt(sortedIDs
-                            .get(taskListSize - 1)), "", taskName);
+                            .get(taskListSize - 1)), "", taskName, Integer.parseInt(sortedIDs
+                            .get(taskListSize - 1)));
                     noteDb.insertAlarmData(Integer.parseInt(sortedIDs
                                     .get(taskListSize - 1)), "", "",
                             "", "", "", "");

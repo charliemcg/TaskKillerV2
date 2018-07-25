@@ -34,7 +34,7 @@ public class AlertReceiver extends BroadcastReceiver {
     public void createNotification(Context context, String msg, String msgText, String msgAlert){
 
         //defining intent and action to perform
-        PendingIntent notificIntent = PendingIntent.getActivity(context, 0,
+        PendingIntent notificIntent = PendingIntent.getActivity(context, 1,
                 new Intent(context, MainActivity.class), 0);
 
         //intent to execute when notification is clicked

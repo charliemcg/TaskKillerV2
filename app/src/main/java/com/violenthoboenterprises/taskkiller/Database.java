@@ -21,6 +21,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL5 = "TASK";
     public static final String COL6 = "DUE";
     public static final String COL7 = "KILLED";
+    //TODO probably don't need broadcast. Just need to set alarm to ID instead.
     public static final String COL8 = "BROADCAST";
     public static final String COL9 = "REPEAT";
 
@@ -55,7 +56,7 @@ public class Database extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(int id, String note, String task){
+    public boolean insertData(int id, String note, String task, int broadcast){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(COL1, id);
@@ -65,7 +66,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL5, task);
         content.put(COL6, false);
         content.put(COL7, false);
-        content.put(COL8, 0);
+        content.put(COL8, broadcast);
         content.put(COL9, false);
         long result = db.insert(TABLE, null, content);
         if(result == -1){

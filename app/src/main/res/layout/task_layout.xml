@@ -9,7 +9,7 @@
     android:background="@color/white">
 
     <TableRow
-        android:id="@+id/addRow"
+        android:id="@+id/adRow"
         android:visibility="gone">
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
@@ -107,6 +107,14 @@
             <include
                 layout="@layout/repeat_layout"
                 android:id="@+id/repeat"
+                android:visibility="gone"/>
+            <include
+                layout="@layout/snooze_layout"
+                android:id="@+id/snoozeRow"
+                android:visibility="gone"/>
+            <include
+                layout="@layout/task_overdue_layout"
+                android:id="@+id/taskIsOverdue"
                 android:visibility="gone"/>
         </LinearLayout>
     </TableRow>

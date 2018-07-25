@@ -64,7 +64,9 @@ class MyAdapter extends ArrayAdapter<String> {
         final TableRow optionsRow = taskView.findViewById(R.id.options);
         final TableRow alarmOptionsRow = taskView.findViewById(R.id.alarmOptions);
         final TableRow repeatRow = taskView.findViewById(R.id.repeat);
-        final TableRow adRow = taskView.findViewById(R.id.addRow);
+        final TableRow adRow = taskView.findViewById(R.id.adRow);
+        final TableRow snoozeRow = taskView.findViewById(R.id.snoozeRow);
+        final TableRow taskOverdueRow = taskView.findViewById(R.id.taskIsOverdue);
         final DatePicker datePicker = taskView.findViewById(R.id.datePicker);
         final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
@@ -682,15 +684,21 @@ class MyAdapter extends ArrayAdapter<String> {
             //Overdue
             if(currentDate.get(Calendar.YEAR) > Integer.valueOf(year)) {
                 overdue.setVisibility(View.VISIBLE);
+                propertyRow.setVisibility(View.GONE);
+                taskOverdueRow.setVisibility(View.VISIBLE);
             //Overdue
             }else if(currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
                     && currentDate.get(Calendar.MONTH) > Integer.valueOf(month)) {
                 overdue.setVisibility(View.VISIBLE);
+                propertyRow.setVisibility(View.GONE);
+                taskOverdueRow.setVisibility(View.VISIBLE);
             //Overdue
             }else if(currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
                     && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
                     && currentDate.get(Calendar.DAY_OF_MONTH) > Integer.valueOf(day)) {
                 overdue.setVisibility(View.VISIBLE);
+                propertyRow.setVisibility(View.GONE);
+                taskOverdueRow.setVisibility(View.VISIBLE);
             }else if(currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
                     && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
                     && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(day)){
@@ -705,10 +713,14 @@ class MyAdapter extends ArrayAdapter<String> {
                 //Overdue
                 if(currentDate.get(Calendar.HOUR_OF_DAY) > adjustedHour){
                     overdue.setVisibility(View.VISIBLE);
+                    propertyRow.setVisibility(View.GONE);
+                    taskOverdueRow.setVisibility(View.VISIBLE);
                 //Overdue
                 }else if(currentDate.get(Calendar.HOUR_OF_DAY) == adjustedHour
                         && currentDate.get(Calendar.MINUTE) > Integer.valueOf(minute)){
                     overdue.setVisibility(View.VISIBLE);
+                    propertyRow.setVisibility(View.GONE);
+                    taskOverdueRow.setVisibility(View.VISIBLE);
                 //Not overdue
                 }else{
                     due.setVisibility(View.VISIBLE);
@@ -929,24 +941,27 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 //setting the name of the task for which the notification is being set
                 MainActivity.alertIntent.putExtra("ToDo", task);
+//                Intent alertIntent = new Intent();
+//                alertIntent.putExtra("ToDo", task);
 
                 int broadcast = 0;
                 Cursor broadcastResult = MainActivity.noteDb.getData(Integer.parseInt(
                         MainActivity.sortedIDs.get(MainActivity.activeTask)));
-                while(result.moveToNext()){
+                while(broadcastResult.moveToNext()){
                     broadcast = broadcastResult.getInt(7);
                 }
 
                 MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
                                 MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                PendingIntent pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
+//                                /*MainActivity.*/alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 //setting a repeating notification
                 if(MainActivity.repeating) {
 
                     MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
                             calendar.getTimeInMillis(), MainActivity.repeatInterval,
-                            MainActivity.pendIntent.getService(getContext(), broadcast,
-                                    MainActivity.alertIntent, 0));
+                            MainActivity.pendIntent);
 
                     MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
                             .get(MainActivity.activeTask), true);
@@ -956,9 +971,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 //setting a one-time notification
                 }else{
 
-                    MainActivity.alarmManager.set(AlarmManager.RTC, calendar
-                            .getTimeInMillis(), MainActivity.pendIntent.getService(getContext(),
-                            broadcast, MainActivity.alertIntent, 0));
+                    MainActivity.alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),
+                            MainActivity.pendIntent);
 
                 }
 
