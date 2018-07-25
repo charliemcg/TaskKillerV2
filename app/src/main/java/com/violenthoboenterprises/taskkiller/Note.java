@@ -48,81 +48,6 @@ public class Note extends MainActivity {
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-//        noteEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
-//
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//
-//                //Keyboard is inactive without this line
-//                noteEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-//
-//                //Actions to occur when user submits note
-//                if (actionId == EditorInfo.IME_ACTION_DONE) {
-//
-//                    Cursor result = noteDb.getData(activeTask);
-//                    while(result.moveToNext()){
-//                        checklistExists = (result.getInt(2) == 1);
-//                        Log.i(TAG, String.valueOf(checklistExists));
-//                    }
-//
-//                    //new note being added
-//                    noteDb.updateData(String.valueOf(activeTask),
-//                            noteEditText.getText().toString(), checklistExists);
-//
-//                    ////////For showing table date////////
-////                    Cursor res = noteDb.getAllData();
-////                    if(res.getCount() == 0){
-////                        showMessage("Error", "Nothing found");
-////                    }
-////                    StringBuffer buffer = new StringBuffer();
-////                    while(res.moveToNext()){
-////                        buffer.append("ID: " + res.getString(0) + "\n");
-////                        buffer.append("NOTE: " + res.getString(1) + "\n");
-////                        buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
-////                    }
-////
-////                    showMessage("Data", buffer.toString());
-//                    ///////////////////////////////////////
-//
-//                    //Clear text from text box
-//                    noteEditText.setText("");
-//
-//                    //Getting note from database
-//                    result = noteDb.getData(activeTask);
-//                    while(result.moveToNext()){
-//                        theNote = result.getString(1);
-//                    }
-//
-//                    //Don't allow blank notes
-//                    if(!theNote.equals("")){
-//
-//                        //Set text view to the note content
-//                        noteTextView.setText(theNote);
-//
-//                    }
-//
-//                    //Hide text box
-//                    noteEditText.setVisibility(View.GONE);
-//
-//                    //Hide keyboard
-//                    keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-//
-//                    //Show edit button
-//                    editBtn.setVisibility(View.VISIBLE);
-//
-//                    //show remove button
-//                    removeBtn.setVisibility(View.VISIBLE);
-//
-//                    return true;
-//
-//                }
-//
-//                return false;
-//
-//            }
-//
-//        });
-
         //Actions to occur when user clicks submit
         submitNoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,21 +67,6 @@ public class Note extends MainActivity {
                     noteDb.updateData(MainActivity.sortedIdsForNote.get(activeTask),
                             noteEditText.getText().toString(), checklistExists);
                 }
-
-                ////////For showing table date////////
-//                Cursor res = noteDb.getAllData();
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("NOTE: " + res.getString(1) + "\n");
-//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n\n");
-//                }
-//
-//                showMessage("Data", buffer.toString());
-                ///////////////////////////////////////
 
                 //Clear text from text box
                 noteEditText.setText("");
@@ -276,16 +186,6 @@ public class Note extends MainActivity {
         });
 
     }
-
-    //////////For showing table results///////////////
-//    public void showMessage(String title, String message){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setCancelable(true);
-//        builder.setTitle(title);
-//        builder.setMessage(message);
-//        builder.show();
-//    }
-    ////////////////////////////////////////////////
 
     @Override
     protected void onPause(){

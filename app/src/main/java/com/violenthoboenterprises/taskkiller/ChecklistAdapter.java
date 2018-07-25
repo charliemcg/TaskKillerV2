@@ -69,11 +69,14 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 if (Checklist.subTasksClickable) {
 
                     //Marks sub task as complete
-                    if (!Checklist.subTasksKilled.get(MainActivity.activeTask).get(position)) {
+                    if (!Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
+                            .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
 
                         MainActivity.vibrate.vibrate(50);
 
-                        Checklist.subTasksKilled.get(MainActivity.activeTask).set(position, true);
+                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
+                                .sortedIdsForNote.get(MainActivity.activeTask)))
+                                .set(position, true);
 
                         notifyDataSetChanged();
 
@@ -82,21 +85,25 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
                         MainActivity.vibrate.vibrate(50);
 
-                        Checklist.checklistList.get(MainActivity.activeTask).remove(position);
+                        Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                                .get(MainActivity.activeTask))).remove(position);
 
-                        Checklist.subTasksKilled.get(MainActivity.activeTask).remove(position);
+                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                                .get(MainActivity.activeTask))).remove(position);
 
                         notifyDataSetChanged();
 
-                        Cursor result = MainActivity.noteDb.getData(MainActivity.activeTask);
+                        Cursor result = MainActivity.noteDb.getData(Integer.parseInt(MainActivity
+                                .sortedIdsForNote.get(MainActivity.activeTask)));
                         while(result.moveToNext()){
                             Checklist.noteExists = (result.getInt(2) == 1);
                         }
 
-                        if(Checklist.checklistList.get(MainActivity.activeTask).size() == 0){
+                        if(Checklist.checklistList.get(Integer.parseInt(MainActivity
+                                .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
                             //setting checklist in database to false
-                            MainActivity.noteDb.updateData(String.valueOf(MainActivity
-                                    .activeTask), "", false);
+                            MainActivity.noteDb.updateData(MainActivity.sortedIdsForNote
+                                    .get(MainActivity.activeTask), "", false);
                         }
 
                     }
@@ -111,7 +118,8 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         try {
             //sub task is crossed out if it is marked as done
-            if (Checklist.subTasksKilled.get(MainActivity.activeTask).get(position)) {
+            if (Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                    .get(MainActivity.activeTask))).get(position)) {
 
                 checklistTextView.setPaintFlags(checklistTextView.getPaintFlags() |
                         Paint.STRIKE_THRU_TEXT_FLAG);
@@ -160,7 +168,8 @@ class ChecklistAdapter extends ArrayAdapter<String> {
             //sub tasks are white when keyboard is down
             Checklist.checklistRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
-            if (Checklist.subTasksKilled.get(MainActivity.activeTask).get(position)) {
+            if (Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                    .get(MainActivity.activeTask))).get(position)) {
 
                 tick.setBackgroundColor(Color.parseColor("#FF0000"));
 

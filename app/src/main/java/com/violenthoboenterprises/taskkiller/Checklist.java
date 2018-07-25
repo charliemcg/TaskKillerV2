@@ -62,9 +62,11 @@ public class Checklist extends MainActivity {
         inChecklist = true;
 
         //Ensure there are array lists available to write data to
-        if(checklistList.size() <= activeSubTask){
+        if(checklistList.size() <= Integer.parseInt(MainActivity.sortedIdsForNote
+                .get(activeSubTask))){
 
-            for(int i = 0; i < (activeSubTask + 1); i++){
+            for(int i = 0; i < (Integer.parseInt(MainActivity.sortedIdsForNote
+                    .get(activeSubTask)) + 1); i++){
 
                 try{
 
@@ -91,7 +93,7 @@ public class Checklist extends MainActivity {
         }
 
         checklistAdapter = new ListAdapter[]{new ChecklistAdapter(this, checklistList
-                .get(activeSubTask))};
+                    .get(Integer.parseInt(sortedIdsForNote.get(activeSubTask))))};
 
         checklistView.setAdapter(checklistAdapter[0]);
 
@@ -102,8 +104,8 @@ public class Checklist extends MainActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
 
-                if(subTasksClickable && !subTasksKilled.get(MainActivity.activeTask)
-                        .get(position)) {
+                if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
+                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
 
                     keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 
@@ -147,15 +149,17 @@ public class Checklist extends MainActivity {
                     if(!checklistTaskName.equals("")) {
 
                         //Adds sub task to list
-                        checklistList.get(activeSubTask).add(checklistList
-                                        .get(activeSubTask).size(), checklistTaskName);
+                        checklistList.get(Integer.parseInt(sortedIdsForNote.get(activeSubTask)))
+                                .add(checklistList.get(Integer.parseInt(sortedIdsForNote
+                                        .get(activeSubTask))).size(), checklistTaskName);
 
                         //Marks sub task as incomplete
-                        subTasksKilled.get(activeSubTask).add(subTasksKilled
-                                .get(activeSubTask).size(), false);
+                        subTasksKilled.get(Integer.parseInt(sortedIdsForNote.get(activeSubTask)))
+                                .add(subTasksKilled.get(Integer.parseInt(sortedIdsForNote
+                                        .get(activeSubTask))).size(), false);
 
                         //marking task so that it displays checklist icon
-                        noteDb.updateData(String.valueOf(activeTask), "", true);
+                        noteDb.updateData(MainActivity.sortedIdsForNote.get(activeTask), "", true);
 
                     }
 
@@ -175,8 +179,9 @@ public class Checklist extends MainActivity {
                     //Don't allow blank sub tasks
                     if(!editedSubTaskString.equals("")) {
 
-                        checklistList.get(MainActivity.activeTask).set(activeSubTask,
-                                editedSubTaskString);
+                        checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                                .get(MainActivity.activeTask))).set(Integer.parseInt(
+                                sortedIdsForNote.get(activeSubTask)), editedSubTaskString);
 
                     }
 
@@ -239,7 +244,8 @@ public class Checklist extends MainActivity {
 
                     }
 
-                    if (checklistList.get(MainActivity.activeTask).size() == 0) {
+                    if (checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                            .get(MainActivity.activeTask))).size() == 0) {
 
                         checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
 
@@ -269,7 +275,8 @@ public class Checklist extends MainActivity {
 
                     }
 
-                    if (checklistList.get(MainActivity.activeTask).size() == 0) {
+                    if (checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                            .get(MainActivity.activeTask))).size() == 0) {
 
                         checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
 
@@ -367,8 +374,10 @@ public class Checklist extends MainActivity {
     //Existing tasks are recalled when app opened
     private void getSavedData() {
 
-        checklistList.get(MainActivity.activeTask).clear();
-        subTasksKilled.get(MainActivity.activeTask).clear();
+        checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                .get(MainActivity.activeTask))).clear();
+        subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                .get(MainActivity.activeTask))).clear();
 
         checkIfKeyboardShowing();
 
@@ -418,7 +427,8 @@ public class Checklist extends MainActivity {
         }
 
         //Only show keyboard if there are no existing sub tasks
-        if(checklistList.get(MainActivity.activeTask).size() != 0) {
+        if(checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                .get(MainActivity.activeTask))).size() != 0) {
 
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams
                     .SOFT_INPUT_STATE_ALWAYS_HIDDEN);
