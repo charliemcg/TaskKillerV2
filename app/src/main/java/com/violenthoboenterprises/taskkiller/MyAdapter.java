@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.nfc.Tag;
 import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
@@ -263,6 +264,9 @@ class MyAdapter extends ArrayAdapter<String> {
                 Button snoozeTask = taskView.findViewById(R.id.snoozeTask);
                 Button taskDone = taskView.findViewById(R.id.taskDone);
                 Button taskIgnore = taskView.findViewById(R.id.taskIgnore);
+                final Button oneHourBtn = taskView.findViewById(R.id.oneHour);
+                final Button fourHourBtn = taskView.findViewById(R.id.fourHours);
+                final Button tomorrowBtn = taskView.findViewById(R.id.tomorrow);
 
                 //Actions to occur if user selects 'snooze'
                 snoozeTask.setOnClickListener(new View.OnClickListener() {
@@ -273,6 +277,160 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         snoozeRow.setVisibility(View.VISIBLE);
 
+                        //Actions to occur if user selects '1 hour'
+                        oneHourBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(getContext(),
+                                        Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                        MainActivity.alertIntent, 0));
+
+                                Calendar currentDate = new GregorianCalendar();
+
+                                //Checking that task due date is in the future
+//                                if (currentDate.get(Calendar.YEAR) > Integer.valueOf(datePicker.getYear())) {
+//                                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+//                                            Toast.LENGTH_SHORT).show();
+//                                } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
+//                                        && currentDate.get(Calendar.MONTH) > Integer.valueOf(datePicker.getMonth())) {
+//                                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+//                                            Toast.LENGTH_SHORT).show();
+//                                } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
+//                                        && currentDate.get(Calendar.MONTH) == Integer.valueOf(datePicker.getMonth())
+//                                        && currentDate.get(Calendar.DAY_OF_MONTH) >
+//                                        Integer.valueOf(datePicker.getDayOfMonth())) {
+//                                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+//                                            Toast.LENGTH_SHORT).show();
+//                                } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
+//                                        && currentDate.get(Calendar.MONTH) == Integer.valueOf(datePicker.getMonth())
+//                                        && currentDate.get(Calendar.DAY_OF_MONTH) ==
+//                                        Integer.valueOf(datePicker.getDayOfMonth())
+//                                        && currentDate.get(Calendar.HOUR_OF_DAY) >
+//                                        Integer.valueOf(timePicker.getHour())) {
+//                                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+//                                            Toast.LENGTH_SHORT).show();
+//                                } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(datePicker.getYear())
+//                                        && currentDate.get(Calendar.MONTH) == Integer.valueOf(datePicker.getMonth())
+//                                        && currentDate.get(Calendar.DAY_OF_MONTH) ==
+//                                        Integer.valueOf(datePicker.getDayOfMonth())
+//                                        && currentDate.get(Calendar.HOUR_OF_DAY) ==
+//                                        Integer.valueOf(timePicker.getHour())
+//                                        && currentDate.get(Calendar.MINUTE) > Integer.valueOf(timePicker.getMinute())) {
+//                                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+//                                            Toast.LENGTH_SHORT).show();
+//                                } else {
+
+//                                    Calendar futureDate= new GregorianCalendar(datePicker.getYear(),
+//                                            datePicker.getMonth(), datePicker.getDayOfMonth(),
+//                                            timePicker.getHour(), timePicker.getMinute());
+//                                    MainActivity.noteDb.updateTimestamp(toString().valueOf(
+//                                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                                            String.valueOf(futureDate.getTimeInMillis() / 1000));
+
+                                    MainActivity.noteDb.updateDue(toString().valueOf(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
+
+                                    //intention to execute AlertReceiver
+                                    MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
+
+//                                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+//                                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                                            String.valueOf(calendar.get(calendar.HOUR)),
+//                                            String.valueOf(calendar.get(calendar.MINUTE)),
+//                                            String.valueOf(calendar.get(calendar.AM_PM)),
+//                                            String.valueOf(calendar.get(calendar.DAY_OF_MONTH)),
+//                                            String.valueOf(calendar.get(calendar.MONTH)),
+//                                            String.valueOf(calendar.get(calendar.YEAR)));
+                                //TODO need to account for if current hour is last hour of day.
+                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                            String.valueOf(currentDate.get(Calendar.HOUR)),
+                                            String.valueOf(currentDate.get(Calendar.MINUTE)),
+                                            String.valueOf(currentDate.get(Calendar.AM_PM)),
+                                            String.valueOf(currentDate.get(Calendar.DAY_OF_MONTH)),
+                                            String.valueOf(currentDate.get(Calendar.MONTH)),
+                                            String.valueOf(currentDate.get(Calendar.YEAR)));
+
+                                    String task = "";
+                                    Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                    while (result.moveToNext()) {
+                                        task = result.getString(4);
+                                    }
+
+                                    //setting the name of the task for which the notification is being set
+                                    MainActivity.alertIntent.putExtra("ToDo", task);
+
+                                    int broadcast = 0;
+                                    Cursor broadcastResult = MainActivity.noteDb.getData(Integer.parseInt(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                    while(broadcastResult.moveToNext()){
+                                        broadcast = broadcastResult.getInt(7);
+                                    }
+
+                                    broadcast = broadcast + 1000;
+
+                                    MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
+                                            MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                    MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + 3600000),
+                                            MainActivity.pendIntent);
+
+//                                }
+
+                                datePicker.setVisibility(View.VISIBLE);
+
+                                timePicker.setVisibility(View.GONE);
+
+                                MainActivity.dateOrTime = false;
+
+                                //set background to white
+                                MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                //Marks properties as not showing
+                                MainActivity.taskPropertiesShowing = false;
+
+                                //Returns the 'add' button
+                                MainActivity.params.height = MainActivity.addHeight;
+
+                                MainActivity.add.setLayoutParams(MainActivity.params);
+
+                                MainActivity.dateRowShowing = false;
+
+                                MainActivity.repeating = false;
+
+                                MainActivity.timePickerShowing = false;
+
+                                reorderList();
+
+                                notifyDataSetChanged();
+
+                            }
+                        });
+
+                        //Actions to occur if user selects '4 hours'
+                        fourHourBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Log.i(TAG, "In 4 hours");
+
+                            }
+                        });
+
+                        //Actions to occur if user selects 'tomorrow'
+                        tomorrowBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Log.i(TAG, "In tomorrow");
+
+                            }
+                        });
+
                     }
                 });
 
@@ -282,6 +440,9 @@ class MyAdapter extends ArrayAdapter<String> {
                     public void onClick(View v) {
 
                         taskOverdueRow.setVisibility(View.GONE);
+
+                        MainActivity.noteDb.updateOverdue(toString().valueOf(
+                                MainActivity.sortedIDs.get(position)));
 
                         //TODO code duplication warning
                         //set background white
@@ -322,12 +483,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.noteDb.updateOverdue(toString().valueOf(
                                 MainActivity.sortedIDs.get(position)));
-
-                        MainActivity.taskPropertiesShowing = false;
-
-                        //set background white
-                        MainActivity.activityRootView.setBackgroundColor(Color
-                                .parseColor("#FFFFFF"));
 
                         //Updates the view
                         MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
@@ -999,7 +1154,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 //intention to execute AlertReceiver
                 MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
-                //TODO problem here
                 MainActivity.noteDb.updateAlarmData(String.valueOf(
                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
                         String.valueOf(calendar.get(calendar.HOUR)),
@@ -1030,8 +1184,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
                                 MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                PendingIntent pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
-//                                /*MainActivity.*/alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 //setting a repeating notification
                 if(MainActivity.repeating) {

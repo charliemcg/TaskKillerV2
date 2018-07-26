@@ -409,6 +409,9 @@ public class MainActivity extends AppCompatActivity {
                     noteDb.insertAlarmData(Integer.parseInt(sortedIDs
                                     .get(taskListSize - 1)), "", "",
                             "", "", "", "");
+                    noteDb.insertSnoozeData(Integer.parseInt(sortedIDs
+                                    .get(taskListSize - 1)), "", "",
+                            "", "", "", "");
 
                     reorderList = true;
 

@@ -35,6 +35,17 @@ public class Database extends SQLiteOpenHelper {
     public static final String ACOL5 = "DAY";
     public static final String ACOL6 = "MONTH";
     public static final String ACOL7 = "YEAR";
+
+    //Snooze Table
+    public static final String STABLE = "snooze_table";
+    public static final String SCOL1 = "ID";
+    public static final String SCOL2 = "HOUR";
+    public static final String SCOL3 = "MINUTE";
+    public static final String SCOL4 = "AMPM";
+    public static final String SCOL5 = "DAY";
+    public static final String SCOL6 = "MONTH";
+    public static final String SCOL7 = "YEAR";
+
     String TAG = "Data";
 
     public Database(Context context) {
@@ -49,12 +60,15 @@ public class Database extends SQLiteOpenHelper {
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
+        db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
+                "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + ATABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + STABLE);
         onCreate(db);
     }
 
@@ -90,6 +104,24 @@ public class Database extends SQLiteOpenHelper {
         content.put(ACOL6, month);
         content.put(ACOL7, year);
         long result = db.insert(ATABLE, null, content);
+        if(result == -1){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public boolean insertSnoozeData(int id, String hour, String minute, String ampm, String day, String month, String year){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content= new ContentValues();
+        content.put(SCOL1, id);
+        content.put(SCOL2, hour);
+        content.put(SCOL3, minute);
+        content.put(SCOL4, ampm);
+        content.put(SCOL5, day);
+        content.put(SCOL6, month);
+        content.put(SCOL7, year);
+        long result = db.insert(STABLE, null, content);
         if(result == -1){
             return false;
         }else {
@@ -218,6 +250,20 @@ public class Database extends SQLiteOpenHelper {
         content.put(ACOL6, month);
         content.put(ACOL7, year);
         db.update(ATABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateSnoozeData(String id, String hour, String minute, String ampm, String day, String month, String year){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content= new ContentValues();
+        content.put(SCOL1, id);
+        content.put(SCOL2, hour);
+        content.put(SCOL3, minute);
+        content.put(SCOL4, ampm);
+        content.put(SCOL5, day);
+        content.put(SCOL6, month);
+        content.put(SCOL7, year);
+        db.update(STABLE, content, "ID = ?", new String[] {id});
         return true;
     }
 
