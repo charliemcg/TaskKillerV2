@@ -175,6 +175,13 @@ class MyAdapter extends ArrayAdapter<String> {
         //actions to occur in regards to selected task
         if(MainActivity.taskPropertiesShowing && position == MainActivity.activeTask){
 
+            Boolean showOverdue = false;
+            Cursor dueResult = MainActivity.noteDb.getData(Integer.parseInt(
+                    MainActivity.sortedIDs.get(position)));
+            while (dueResult.moveToNext()) {
+                showOverdue = dueResult.getInt(9) > 0;
+            }
+
             //Determine whether to show datepicker
             if(MainActivity.datePickerShowing) {
 
@@ -247,6 +254,87 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
                 });
             //show the tasks properties
+            }else if(showOverdue){
+
+                taskOverdueRow.setVisibility(View.VISIBLE);
+//                MainActivity.noteDb.updateOverdue(toString().valueOf(
+//                MainActivity.sortedIDs.get(position)));
+
+                Button snoozeTask = taskView.findViewById(R.id.snoozeTask);
+                Button taskDone = taskView.findViewById(R.id.taskDone);
+                Button taskIgnore = taskView.findViewById(R.id.taskIgnore);
+
+                //Actions to occur if user selects 'snooze'
+                snoozeTask.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        taskOverdueRow.setVisibility(View.GONE);
+
+                        snoozeRow.setVisibility(View.VISIBLE);
+
+                    }
+                });
+
+                //Actions to occur if user selects 'Done'
+                taskDone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        taskOverdueRow.setVisibility(View.GONE);
+
+                        //TODO code duplication warning
+                        //set background white
+                        MainActivity.activityRootView.setBackgroundColor(Color
+                                .parseColor("#FFFFFF"));
+
+                        notifyDataSetChanged();
+
+                        MainActivity.taskPropertiesShowing = false;
+
+                        MainActivity.noteDb.updateKilled(toString().valueOf(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+
+                        Toast.makeText(v.getContext(), "You killed this task!",
+                                Toast.LENGTH_SHORT).show();
+
+                        MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
+                                getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position))
+                                , MainActivity.alertIntent, 0));
+
+                        MainActivity.add.setVisibility(View.VISIBLE);
+
+                        MainActivity.vibrate.vibrate(50);
+
+                        MainActivity.params.height = MainActivity.addHeight;
+
+                        v.setLayoutParams(MainActivity.params);
+
+                    }
+                });
+
+                //Actions to occur if user selects 'ignore'
+                taskIgnore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        taskOverdueRow.setVisibility(View.GONE);
+
+                        MainActivity.noteDb.updateOverdue(toString().valueOf(
+                                MainActivity.sortedIDs.get(position)));
+
+                        MainActivity.taskPropertiesShowing = false;
+
+                        //set background white
+                        MainActivity.activityRootView.setBackgroundColor(Color
+                                .parseColor("#FFFFFF"));
+
+                        //Updates the view
+                        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                    }
+                });
+
             }else{
 
                 propertyRow.setVisibility(View.VISIBLE);
@@ -297,10 +385,10 @@ class MyAdapter extends ArrayAdapter<String> {
             theTextView.setText(task);
 
             Boolean due = false;
-            Cursor dueResult = MainActivity.noteDb.getData(Integer.parseInt(
+            Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
                     MainActivity.sortedIDs.get(MainActivity.activeTask)));
-            while (dueResult.moveToNext()) {
-                due = dueResult.getInt(5) > 0;
+            while (result.moveToNext()) {
+                due = result.getInt(5) > 0;
             }
 
             //"set due date" button becomes "remove due date" button if due date already set
@@ -637,7 +725,6 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         Boolean isDue = false;
-
         Cursor dueResult = MainActivity.noteDb.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(position)));
         while (dueResult.moveToNext()) {
@@ -684,21 +771,15 @@ class MyAdapter extends ArrayAdapter<String> {
             //Overdue
             if(currentDate.get(Calendar.YEAR) > Integer.valueOf(year)) {
                 overdue.setVisibility(View.VISIBLE);
-                propertyRow.setVisibility(View.GONE);
-                taskOverdueRow.setVisibility(View.VISIBLE);
             //Overdue
             }else if(currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
                     && currentDate.get(Calendar.MONTH) > Integer.valueOf(month)) {
                 overdue.setVisibility(View.VISIBLE);
-                propertyRow.setVisibility(View.GONE);
-                taskOverdueRow.setVisibility(View.VISIBLE);
             //Overdue
             }else if(currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
                     && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
                     && currentDate.get(Calendar.DAY_OF_MONTH) > Integer.valueOf(day)) {
                 overdue.setVisibility(View.VISIBLE);
-                propertyRow.setVisibility(View.GONE);
-                taskOverdueRow.setVisibility(View.VISIBLE);
             }else if(currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
                     && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
                     && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(day)){
@@ -713,14 +794,10 @@ class MyAdapter extends ArrayAdapter<String> {
                 //Overdue
                 if(currentDate.get(Calendar.HOUR_OF_DAY) > adjustedHour){
                     overdue.setVisibility(View.VISIBLE);
-                    propertyRow.setVisibility(View.GONE);
-                    taskOverdueRow.setVisibility(View.VISIBLE);
                 //Overdue
                 }else if(currentDate.get(Calendar.HOUR_OF_DAY) == adjustedHour
-                        && currentDate.get(Calendar.MINUTE) > Integer.valueOf(minute)){
+                        && currentDate.get(Calendar.MINUTE) >= Integer.valueOf(minute)){
                     overdue.setVisibility(View.VISIBLE);
-                    propertyRow.setVisibility(View.GONE);
-                    taskOverdueRow.setVisibility(View.VISIBLE);
                 //Not overdue
                 }else{
                     due.setVisibility(View.VISIBLE);

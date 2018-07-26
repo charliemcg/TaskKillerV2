@@ -24,6 +24,7 @@ public class Database extends SQLiteOpenHelper {
     //TODO probably don't need broadcast. Just need to set alarm to ID instead.
     public static final String COL8 = "BROADCAST";
     public static final String COL9 = "REPEAT";
+    public static final String COL10 = "OVERDUE";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -44,7 +45,8 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
-                "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN, KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN)");
+                "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
+                " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
     }
@@ -68,6 +70,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL7, false);
         content.put(COL8, broadcast);
         content.put(COL9, false);
+        content.put(COL10, false);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -191,6 +194,15 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(COL4, timestamp);
+        content.put(COL10, true);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateOverdue(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL10, false);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
