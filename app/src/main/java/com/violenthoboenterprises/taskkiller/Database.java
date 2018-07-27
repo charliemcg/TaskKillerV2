@@ -25,6 +25,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL8 = "BROADCAST";
     public static final String COL9 = "REPEAT";
     public static final String COL10 = "OVERDUE";
+    public static final String COL11 = "SNOOZED";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -57,7 +58,7 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
-                " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN)");
+                " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, SNOOZED BOOLEAN)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
@@ -85,6 +86,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL8, broadcast);
         content.put(COL9, false);
         content.put(COL10, false);
+        content.put(COL11, false);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -177,6 +179,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(COL6, due);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateSnooze(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL11, true);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
@@ -293,6 +303,11 @@ public class Database extends SQLiteOpenHelper {
     public Integer deleteAlarmData (String id){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(ATABLE, "ID = ?", new String[] {id});
+    }
+
+    public Integer deleteSnoozeData (String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(STABLE, "ID = ?", new String[] {id});
     }
 
 }

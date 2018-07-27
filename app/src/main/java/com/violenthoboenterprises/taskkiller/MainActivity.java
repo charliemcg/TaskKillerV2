@@ -589,6 +589,7 @@ public class MainActivity extends AppCompatActivity {
         //deleting data related to deleted task
         noteDb.deleteData(String.valueOf(sortedIDs.get(position)));
         noteDb.deleteAlarmData(String.valueOf(sortedIDs.get(position)));
+        noteDb.deleteSnoozeData(String.valueOf(sortedIDs.get(position)));
 
         //Cancel notification alars if one is set
         alarmManager.cancel(pendIntent.getService(this, Integer.parseInt(sortedIDs.get(position)), alertIntent, 0));
