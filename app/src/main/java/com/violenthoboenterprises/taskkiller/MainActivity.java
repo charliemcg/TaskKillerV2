@@ -340,7 +340,11 @@ public class MainActivity extends AppCompatActivity {
                     buffer.append("TASK: " + res.getString(4) + "\n");
                     buffer.append("DUE: " + res.getString(5) + "\n");
                     buffer.append("KILLED: " + res.getString(6) + "\n");
-                    buffer.append("BROADCAST: " + res.getString(7) + "\n\n");
+                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+                    buffer.append("SHOWONCE: " + res.getString(11) + "\n\n");
                 }
 
                 showMessage("Data", buffer.toString());

@@ -60,7 +60,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
-                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN)");
+                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, IGNORED BOOLEAN)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +

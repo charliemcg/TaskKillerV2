@@ -305,7 +305,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     }
                 });
-            //show the tasks properties
+            //show the overdue properties
             }else if(showOverdue && !isSnoozed){
 
                 taskOverdueRow.setVisibility(View.VISIBLE);
@@ -483,6 +483,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.noteDb.updateOverdue(
                                 MainActivity.sortedIDs.get(position), false);
+                        MainActivity.noteDb.updateShowOnce(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask), false);
 
                         //Updates the view
                         MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
@@ -1003,8 +1005,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.noteDb.updateOverdue(
                             MainActivity.sortedIDs.get(position), true);
-                    MainActivity.noteDb.updateDue(toString().valueOf(
-                            MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
+//                    MainActivity.noteDb.updateDue(toString().valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)), false);
 
                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -1280,15 +1282,10 @@ class MyAdapter extends ArrayAdapter<String> {
                         prevHour = String.valueOf(tempHour);
                     }
                     if(!prevHour.equals("")) {
-                        Log.i(TAG, "Minute: " + prevMinute);
                         //TODO adjust for am or pm
                         prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth), Integer.parseInt(prevDay),
                                 Integer.parseInt(prevHour), Integer.parseInt(prevMinute) /*Integer.parseInt(prevAmpm)*/);
                     }
-
-                    Log.i(TAG, String.valueOf((prevCalendar.getTimeInMillis() / 1000) / 60));
-                    Log.i(TAG, String.valueOf(prevCalendar));
-                    Log.i(TAG, String.valueOf((System.currentTimeMillis() / 1000) / 60));
 
                     MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
                             prevCalendar.getTimeInMillis()/*calendar.getTimeInMillis()*//*Integer.parseInt(stamp)*/,
