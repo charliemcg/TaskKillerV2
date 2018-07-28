@@ -26,6 +26,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL9 = "REPEAT";
     public static final String COL10 = "OVERDUE";
     public static final String COL11 = "SNOOZED";
+    public static final String COL12 = "SHOWONCE";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -58,7 +59,8 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
-                " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, SNOOZED BOOLEAN)");
+                " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
+                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
@@ -87,6 +89,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL9, false);
         content.put(COL10, false);
         content.put(COL11, false);
+        content.put(COL12, false);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -236,15 +239,23 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(COL4, timestamp);
-        content.put(COL10, true);
+//        content.put(COL10, true);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
 
-    public boolean updateOverdue(String id){
+    public boolean updateOverdue(String id, Boolean overdue){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
-        content.put(COL10, false);
+        content.put(COL10, overdue);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateShowOnce(String id, Boolean showOnce){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL12, showOnce);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
