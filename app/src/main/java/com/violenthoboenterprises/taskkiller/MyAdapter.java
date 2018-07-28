@@ -159,6 +159,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                    MainActivity.repeatShowing = false;
 
+                    //TODO Duplication warning
                     Calendar prevCalendar = new GregorianCalendar();
                     //Getting time data
                     Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
@@ -656,10 +657,14 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
                                         .get(position), false);
 
-                                MainActivity.alarmManager.cancel(MainActivity.pendIntent
-                                        .getService(getContext(), Integer.parseInt(MainActivity
-                                                        .sortedIDs.get(position)),
-                                                MainActivity.alertIntent, 0));
+//                                MainActivity.alarmManager.cancel(MainActivity.pendIntent
+//                                        .getService(getContext(), Integer.parseInt(MainActivity
+//                                                        .sortedIDs.get(position)),
+//                                                MainActivity.alertIntent, 0));
+                                MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                        Integer.parseInt(MainActivity.sortedIDs.get(position)),
+                                        MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                                 MainActivity.noteDb.updateAlarmData
                                         (toString().valueOf(MainActivity.sortedIDs.get(position)),
@@ -1235,6 +1240,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     while (broadcastResult.moveToNext()) {
                         broadcast = broadcastResult.getInt(7);
                     }
+
+                    Log.i(TAG, String.valueOf(broadcast));
 
                     MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
                             MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
