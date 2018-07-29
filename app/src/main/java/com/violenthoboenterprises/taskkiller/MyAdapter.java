@@ -159,61 +159,61 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                    MainActivity.repeatShowing = false;
 
-                    //TODO Duplication warning
-                    Calendar prevCalendar = new GregorianCalendar();
-                    //Getting time data
-                    Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
-                            MainActivity.sortedIDs.get(position)));
-                    String prevHour = "";
-                    String prevMinute = "";
-                    String prevAmpm = "";
-                    String prevDay = "";
-                    String prevMonth = "";
-                    String prevYear = "";
-                    while (prevCalResult.moveToNext()) {
-                        prevHour = prevCalResult.getString(1);
-                        prevMinute = prevCalResult.getString(2);
-                        prevAmpm = prevCalResult.getString(3);
-                        prevDay = prevCalResult.getString(4);
-                        prevMonth = prevCalResult.getString(5);
-                        prevYear = prevCalResult.getString(6);
-                    }
-                    if(!prevHour.equals("")) {
-                        //TODO adjust for am or pm
-                        prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth), Integer.parseInt(prevDay),
-                                Integer.parseInt(prevHour), Integer.parseInt(prevMinute), /*Integer.parseInt(prevAmpm)*/0);
-                        Log.i(TAG, String.valueOf(prevCalendar.getTimeInMillis()));
-                    }
-
-                    MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
-                            getContext(), Integer.parseInt(MainActivity.sortedIDs
-                                    .get(MainActivity.activeTask)),
-                            MainActivity.alertIntent, 0));
-
-//                    String stamp = "";
-//                    Cursor stampResult = MainActivity.noteDb.getData(Integer.parseInt(
-//                            MainActivity.sortedIDs.get(MainActivity.activeTask)));
-//                    while (stampResult.moveToNext()) {
-//                        stamp = stampResult.getString(3);
+//                    //TODO Duplication warning. This doesn't work anyway
+//                    Calendar prevCalendar = new GregorianCalendar();
+//                    //Getting time data
+//                    Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+//                            MainActivity.sortedIDs.get(position)));
+//                    String prevHour = "";
+//                    String prevMinute = "";
+//                    String prevAmpm = "";
+//                    String prevDay = "";
+//                    String prevMonth = "";
+//                    String prevYear = "";
+//                    while (prevCalResult.moveToNext()) {
+//                        prevHour = prevCalResult.getString(1);
+//                        prevMinute = prevCalResult.getString(2);
+//                        prevAmpm = prevCalResult.getString(3);
+//                        prevDay = prevCalResult.getString(4);
+//                        prevMonth = prevCalResult.getString(5);
+//                        prevYear = prevCalResult.getString(6);
 //                    }
-
-                    //TODO don't use timestamp, use alarm db value
-                    MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
-                            /*calendar.getTimeInMillis()*/Long.parseLong(stamp),
-                            MainActivity.repeatInterval, MainActivity.pendIntent);
-
-                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
-                            .get(MainActivity.activeTask), true);
-
-                    MainActivity.repeatShowing = false;
+//                    if(!prevHour.equals("")) {
+//                        //TODO adjust for am or pm
+//                        prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth), Integer.parseInt(prevDay),
+//                                Integer.parseInt(prevHour), Integer.parseInt(prevMinute), /*Integer.parseInt(prevAmpm)*/0);
+//                        Log.i(TAG, String.valueOf(prevCalendar.getTimeInMillis()));
+//                    }
+//
+//                    MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
+//                            getContext(), Integer.parseInt(MainActivity.sortedIDs
+//                                    .get(MainActivity.activeTask)),
+//                            MainActivity.alertIntent, 0));
+//
+////                    String stamp = "";
+////                    Cursor stampResult = MainActivity.noteDb.getData(Integer.parseInt(
+////                            MainActivity.sortedIDs.get(MainActivity.activeTask)));
+////                    while (stampResult.moveToNext()) {
+////                        stamp = stampResult.getString(3);
+////                    }
+//
+//                    //TODO don't use timestamp, use alarm db value
+//                    MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
+//                            /*calendar.getTimeInMillis()*/Long.parseLong(stamp),
+//                            MainActivity.repeatInterval, MainActivity.pendIntent);
+//
+//                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+//                            .get(MainActivity.activeTask), true);
+//
+//                    MainActivity.repeatShowing = false;
 
                 //setting a one-time notification
                 } else {
 
-                    //TODO don't use timestamp, use alarm db value
-                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(stamp),
-                            MainActivity.pendIntent.getService(getContext(),
-                                    broadcast, MainActivity.alertIntent, 0));
+//                    //TODO don't use timestamp, use alarm db value
+//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(stamp),
+//                            MainActivity.pendIntent.getService(getContext(),
+//                                    broadcast, MainActivity.alertIntent, 0));
 
                 }
 
@@ -583,9 +583,15 @@ class MyAdapter extends ArrayAdapter<String> {
                     Toast.makeText(v.getContext(), "You killed this task!",
                             Toast.LENGTH_SHORT).show();
 
-                    MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
-                            getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position))
-                            , MainActivity.alertIntent, 0));
+//                    MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
+//                            getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position))
+//                            , MainActivity.alertIntent, 0));
+
+                    MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                            Integer.parseInt(MainActivity.sortedIDs.get(position)),
+                            MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
 
                     MainActivity.add.setVisibility(View.VISIBLE);
 
@@ -1240,8 +1246,6 @@ class MyAdapter extends ArrayAdapter<String> {
                     while (broadcastResult.moveToNext()) {
                         broadcast = broadcastResult.getInt(7);
                     }
-
-                    Log.i(TAG, String.valueOf(broadcast));
 
                     MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
                             MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
