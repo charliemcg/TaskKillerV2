@@ -592,7 +592,6 @@ class MyAdapter extends ArrayAdapter<String> {
                             MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-
                     MainActivity.add.setVisibility(View.VISIBLE);
 
                     MainActivity.vibrate.vibrate(50);
@@ -921,7 +920,7 @@ class MyAdapter extends ArrayAdapter<String> {
             isDue = dueResult.getInt(5) > 0;
         }
 
-        //Show due date notification if required
+        //Show due icon and due date if required
         if(isDue) {
 
             Calendar currentDate = new GregorianCalendar();
@@ -962,7 +961,7 @@ class MyAdapter extends ArrayAdapter<String> {
             Boolean markAsOverdue = false;
             if(isSnoozed){
                 snoozed.setVisibility(View.VISIBLE);
-            }else {
+            }else if(!killed) {
                 //Overdue
                 if (currentDate.get(Calendar.YEAR) > Integer.valueOf(year)) {
                     overdue.setVisibility(View.VISIBLE);
