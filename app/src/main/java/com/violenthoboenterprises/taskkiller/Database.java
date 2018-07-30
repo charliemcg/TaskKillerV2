@@ -199,10 +199,10 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateSnooze(String id){
+    public boolean updateSnooze(String id, Boolean snooze){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
-        content.put(COL11, true);
+        content.put(COL11, snooze);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }

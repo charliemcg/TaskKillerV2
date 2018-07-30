@@ -492,7 +492,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + 240000/*60000*//*3600000*/),
                                         MainActivity.pendIntent);
 
-                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs.get(position));
+                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs.get(position), true);
 
                                 datePicker.setVisibility(View.VISIBLE);
 
@@ -1044,32 +1044,32 @@ class MyAdapter extends ArrayAdapter<String> {
             ImageView snoozed = taskView.findViewById(R.id.snoozeIcon);
 
             Cursor result;
-            String hour;
-            String minute;
-            String ampm;
-            String day;
-            String month;
-            String year;
+            String hour = "";
+            String minute = "";
+            String ampm = "";
+            String day = "";
+            String month = "";
+            String year = "";
 
             //Getting time data
-            if(isSnoozed) {
-
+//            if(isSnoozed) {
+//
                 result = MainActivity.noteDb.getSnoozeData(Integer.parseInt(
                         MainActivity.sortedIDs.get(position)));
+//
+//            }else{
+//
+//                result = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+//                        MainActivity.sortedIDs.get(position)));
+//
+//            }
 
-            }else{
-
-                result = MainActivity.noteDb.getAlarmData(Integer.parseInt(
-                        MainActivity.sortedIDs.get(position)));
-
-            }
-
-            hour = "";
-            minute = "";
-            ampm = "";
-            day = "";
-            month = "";
-            year = "";
+//            hour = "";
+//            minute = "";
+//            ampm = "";
+//            day = "";
+//            month = "";
+//            year = "";
             while(result.moveToNext()){
                 hour = result.getString(1);
                 minute = result.getString(2);
@@ -1077,6 +1077,20 @@ class MyAdapter extends ArrayAdapter<String> {
                 day = result.getString(4);
                 month = result.getString(5);
                 year = result.getString(6);
+            }
+
+            if(hour.equals("")){
+                result = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+                        MainActivity.sortedIDs.get(position)));
+
+                while(result.moveToNext()){
+                    hour = result.getString(1);
+                    minute = result.getString(2);
+                    ampm = result.getString(3);
+                    day = result.getString(4);
+                    month = result.getString(5);
+                    year = result.getString(6);
+                }
             }
 
             //Checking for overdue tasks
@@ -1141,6 +1155,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     if(markAsOverdue){
                         snoozed.setVisibility(View.GONE);
                         overdue.setVisibility(View.VISIBLE);
+                        MainActivity.noteDb.updateSnooze(
+                                MainActivity.sortedIDs.get(position), false);
                     //show snooze icon
                     }else{
                         snoozed.setVisibility(View.VISIBLE);
