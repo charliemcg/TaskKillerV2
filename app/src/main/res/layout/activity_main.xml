@@ -61,4 +61,14 @@
         android:layout_marginBottom="20dp"
         android:layout_marginRight="180dp"/>
 
+    <Button
+        android:id="@+id/showSnoozeDb"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="Show Snooze DB"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="260dp"/>
+
 </RelativeLayout>

@@ -153,9 +153,22 @@ public class Database extends SQLiteOpenHelper {
         return result;
     }
 
+    public Cursor getAllSnoozeData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + STABLE, null);
+        return result;
+    }
+
     public Cursor getAlarmData(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + ATABLE + " where " + ACOL1
+                + " == " + id, null);
+        return result;
+    }
+
+    public Cursor getSnoozeData(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + STABLE + " where " + SCOL1
                 + " == " + id, null);
         return result;
     }

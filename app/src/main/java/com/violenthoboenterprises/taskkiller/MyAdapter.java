@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.icu.util.DateInterval;
 import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -441,15 +442,29 @@ class MyAdapter extends ArrayAdapter<String> {
                                 //intention to execute AlertReceiver
                                 MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
+                                int newMin = currentDate.get(Calendar.MINUTE);
+                                newMin += 4;
+                                Log.i(TAG, String.valueOf(newMin));
+
                                 //TODO need to account for if current hour is last hour of day.
                                 MainActivity.noteDb.updateSnoozeData(String.valueOf(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                         String.valueOf(currentDate.get(Calendar.HOUR)),
-                                        String.valueOf(currentDate.get(Calendar.MINUTE)),
+                                        String.valueOf(newMin),
                                         String.valueOf(currentDate.get(Calendar.AM_PM)),
                                         String.valueOf(currentDate.get(Calendar.DAY_OF_MONTH)),
                                         String.valueOf(currentDate.get(Calendar.MONTH)),
                                         String.valueOf(currentDate.get(Calendar.YEAR)));
+
+                                Log.i(TAG, String.valueOf(Calendar.HOUR));
+                                Log.i(TAG, String.valueOf(currentDate.getTimeInMillis()));
+                                String stamp = "";
+                                Cursor blahResult = MainActivity.noteDb.getData(Integer.parseInt(
+                                        MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                while (blahResult.moveToNext()) {
+                                    stamp = blahResult.getString(3);
+                                }
+                                Log.i(TAG, String.valueOf(stamp));
 
                                 String task = "";
                                 Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
@@ -473,7 +488,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
                                         MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + 3600000),
+                                //TODO set this back to one hour
+                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + 240000/*60000*//*3600000*/),
                                         MainActivity.pendIntent);
 
                                 MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs.get(position));
@@ -1036,8 +1052,18 @@ class MyAdapter extends ArrayAdapter<String> {
             String year;
 
             //Getting time data
-            result = MainActivity.noteDb.getAlarmData(Integer.parseInt(
-                    MainActivity.sortedIDs.get(position)));
+            if(isSnoozed) {
+
+                result = MainActivity.noteDb.getSnoozeData(Integer.parseInt(
+                        MainActivity.sortedIDs.get(position)));
+
+            }else{
+
+                result = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+                        MainActivity.sortedIDs.get(position)));
+
+            }
+
             hour = "";
             minute = "";
             ampm = "";
@@ -1057,9 +1083,9 @@ class MyAdapter extends ArrayAdapter<String> {
             String formattedTime;
             Boolean sameDay = false;
             Boolean markAsOverdue = false;
-            if(isSnoozed){
+            /*if(isSnoozed){
                 snoozed.setVisibility(View.VISIBLE);
-            }else if(!killed) {
+            }else */if(!killed) {
                 //Overdue
                 if (currentDate.get(Calendar.YEAR) > Integer.valueOf(year)) {
                     overdue.setVisibility(View.VISIBLE);
@@ -1109,7 +1135,19 @@ class MyAdapter extends ArrayAdapter<String> {
                 while(showResult.moveToNext()){
                     showOnce = showResult.getInt(11) > 0;
                 }
-                if(markAsOverdue && showOnce){
+
+                if(isSnoozed){
+                    //Show overdue icon
+                    if(markAsOverdue){
+                        snoozed.setVisibility(View.GONE);
+                        overdue.setVisibility(View.VISIBLE);
+                    //show snooze icon
+                    }else{
+                        snoozed.setVisibility(View.VISIBLE);
+                        overdue.setVisibility(View.GONE);
+                        due.setVisibility(View.GONE);
+                    }
+                }else if(markAsOverdue && showOnce){
 
                     MainActivity.noteDb.updateOverdue(
                             MainActivity.sortedIDs.get(position), true);
