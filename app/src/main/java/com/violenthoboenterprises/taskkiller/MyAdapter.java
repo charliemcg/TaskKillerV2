@@ -644,7 +644,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //Initialising variables
             Button complete = taskView.findViewById(R.id.complete);
-            Button alarm = taskView.findViewById(R.id.alarm);
+            final Button alarm = taskView.findViewById(R.id.alarm);
             Button more = taskView.findViewById(R.id.more);
             final Button rename = taskView.findViewById(R.id.rename);
             Button subTasks = taskView.findViewById(R.id.subTasks);
@@ -755,7 +755,33 @@ class MyAdapter extends ArrayAdapter<String> {
                     //actions to occur when cancelling snooze
                     } else if (cancelSnooze){
 
-
+                        //marks task as not killed in database
+                        MainActivity.noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        //remove any associated snooze
+                        MainActivity.noteDb.updateSnooze(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        //marks task as not overdue
+                        MainActivity.noteDb.updateOverdue(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        //marks task as having no due date
+                        MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        //remove any associated timestamp
+                        MainActivity.noteDb.updateTimestamp(toString().valueOf(MainActivity.sortedIDs.get(position)), "");
+                        //marks showonce as false
+                        MainActivity.noteDb.updateShowOnce(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        //remove alarm time data
+                        MainActivity.noteDb.updateAlarmData
+                                (toString().valueOf(MainActivity.sortedIDs.get(position)),
+                                        "", "", "",
+                                        "", "", "");
+                        //remove snooze time data
+                        MainActivity.noteDb.updateSnoozeData
+                                (toString().valueOf(MainActivity.sortedIDs.get(position)),
+                                        "", "", "",
+                                        "", "", "");
+                        alarm.setText("Set Due Date");
+                        MainActivity.taskPropertiesShowing = false;
+                        MainActivity.activityRootView
+                                .setBackgroundColor(Color.parseColor("#FFFFFF"));
+                        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                     //actions to occur when viewing alarm properties
                     } else {
