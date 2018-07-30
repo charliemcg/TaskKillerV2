@@ -748,6 +748,8 @@ public class MainActivity extends AppCompatActivity {
         noteDb.updateTimestamp(toString().valueOf(MainActivity.sortedIDs.get(i)), "");
         //marks showonce as false
         noteDb.updateShowOnce(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
+        //marks repeat as false
+        noteDb.updateRepeat(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
         //remove alarm time data
         MainActivity.noteDb.updateAlarmData
                 (toString().valueOf(MainActivity.sortedIDs.get(i)),
