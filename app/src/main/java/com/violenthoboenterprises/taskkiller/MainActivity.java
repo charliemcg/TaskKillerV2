@@ -738,6 +738,27 @@ public class MainActivity extends AppCompatActivity {
 
         //marks task as not killed in database
         noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
+        //remove any associated snooze
+        noteDb.updateSnooze(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
+        //marks task as not overdue
+        noteDb.updateOverdue(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
+        //marks task as having no due date
+        noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
+        //remove any associated timestamp
+        noteDb.updateTimestamp(toString().valueOf(MainActivity.sortedIDs.get(i)), "");
+        //marks showonce as false
+        noteDb.updateShowOnce(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
+        //remove alarm time data
+        MainActivity.noteDb.updateAlarmData
+                (toString().valueOf(MainActivity.sortedIDs.get(i)),
+                        "", "", "",
+                        "", "", "");
+        //remove snooze time data
+        MainActivity.noteDb.updateSnoozeData
+                (toString().valueOf(MainActivity.sortedIDs.get(i)),
+                        "", "", "",
+                        "", "", "");
+
 
         reinstateAlarm = true;
 
