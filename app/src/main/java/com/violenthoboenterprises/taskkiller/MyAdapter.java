@@ -678,6 +678,7 @@ class MyAdapter extends ArrayAdapter<String> {
             }
 
             //Actions to occur if user selects 'complete'
+            final Boolean finalSnoozed = snoozed;
             complete.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -701,9 +702,15 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position))
 //                            , MainActivity.alertIntent, 0));
 
-                    MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                            Integer.parseInt(MainActivity.sortedIDs.get(position)),
-                            MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    if(!finalSnoozed) {
+                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                Integer.parseInt(MainActivity.sortedIDs.get(position)),
+                                MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    }else{
+                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                Integer.parseInt(MainActivity.sortedIDs.get(position) + 1000),
+                                MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    }
                     MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                     MainActivity.add.setVisibility(View.VISIBLE);
