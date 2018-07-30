@@ -442,29 +442,18 @@ class MyAdapter extends ArrayAdapter<String> {
                                 //intention to execute AlertReceiver
                                 MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
-                                int newMin = currentDate.get(Calendar.MINUTE);
-                                newMin += 4;
-                                Log.i(TAG, String.valueOf(newMin));
+                                int newHour = currentDate.get(Calendar.HOUR);
+                                newHour++;
 
                                 //TODO need to account for if current hour is last hour of day.
                                 MainActivity.noteDb.updateSnoozeData(String.valueOf(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                                        String.valueOf(currentDate.get(Calendar.HOUR)),
-                                        String.valueOf(newMin),
+                                        String.valueOf(newHour),
+                                        String.valueOf(currentDate.get(Calendar.MINUTE)),
                                         String.valueOf(currentDate.get(Calendar.AM_PM)),
                                         String.valueOf(currentDate.get(Calendar.DAY_OF_MONTH)),
                                         String.valueOf(currentDate.get(Calendar.MONTH)),
                                         String.valueOf(currentDate.get(Calendar.YEAR)));
-
-                                Log.i(TAG, String.valueOf(Calendar.HOUR));
-                                Log.i(TAG, String.valueOf(currentDate.getTimeInMillis()));
-                                String stamp = "";
-                                Cursor blahResult = MainActivity.noteDb.getData(Integer.parseInt(
-                                        MainActivity.sortedIDs.get(MainActivity.activeTask)));
-                                while (blahResult.moveToNext()) {
-                                    stamp = blahResult.getString(3);
-                                }
-                                Log.i(TAG, String.valueOf(stamp));
 
                                 String task = "";
                                 Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
@@ -489,7 +478,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                         MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                                 //TODO set this back to one hour
-                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + 240000/*60000*//*3600000*/),
+                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + /*60000*/3600000),
                                         MainActivity.pendIntent);
 
                                 MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs.get(position), true);
@@ -531,7 +520,85 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                Log.i(TAG, "In 4 hours");
+                                MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(getContext(),
+                                        Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                        MainActivity.alertIntent, 0));
+
+                                Calendar currentDate = new GregorianCalendar();
+
+                                //intention to execute AlertReceiver
+                                MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
+
+                                //TODO find out difference between HOUR and HOUR_OF_DAY
+                                int newHour = currentDate.get(Calendar.HOUR);
+                                newHour += 4;
+
+                                //TODO need to account for if current hour is within last four hours of day.
+                                MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                        String.valueOf(newHour),
+                                        String.valueOf(currentDate.get(Calendar.MINUTE)),
+                                        String.valueOf(currentDate.get(Calendar.AM_PM)),
+                                        String.valueOf(currentDate.get(Calendar.DAY_OF_MONTH)),
+                                        String.valueOf(currentDate.get(Calendar.MONTH)),
+                                        String.valueOf(currentDate.get(Calendar.YEAR)));
+
+                                String task = "";
+                                Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
+                                        MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                while (result.moveToNext()) {
+                                    task = result.getString(4);
+                                }
+
+                                //setting the name of the task for which the notification is being set
+                                MainActivity.alertIntent.putExtra("ToDo", task);
+
+                                int broadcast = 0;
+                                Cursor broadcastResult = MainActivity.noteDb.getData(Integer.parseInt(
+                                        MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                while(broadcastResult.moveToNext()){
+                                    broadcast = broadcastResult.getInt(7);
+                                }
+
+                                broadcast = broadcast + 1000;
+
+                                MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
+                                        MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                //TODO set this back to four hours
+                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + 14400000),
+                                        MainActivity.pendIntent);
+
+                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs.get(position), true);
+
+                                datePicker.setVisibility(View.VISIBLE);
+
+                                timePicker.setVisibility(View.GONE);
+
+                                MainActivity.dateOrTime = false;
+
+                                //set background to white
+                                MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                //Marks properties as not showing
+                                MainActivity.taskPropertiesShowing = false;
+
+                                //Returns the 'add' button
+                                MainActivity.params.height = MainActivity.addHeight;
+
+                                MainActivity.add.setLayoutParams(MainActivity.params);
+
+                                MainActivity.dateRowShowing = false;
+
+                                MainActivity.repeating = false;
+
+                                MainActivity.timePickerShowing = false;
+
+                                reorderList();
+
+                                notifyDataSetChanged();
 
                             }
                         });
@@ -541,7 +608,85 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                Log.i(TAG, "In tomorrow");
+                                MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(getContext(),
+                                        Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                        MainActivity.alertIntent, 0));
+
+                                Calendar currentDate = new GregorianCalendar();
+
+                                //intention to execute AlertReceiver
+                                MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
+
+                                //TODO figure difference between DAY_OF_WEEK/MONTH/YEAR
+                                int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                                newDay += 1;
+
+                                //TODO need to account for if current hour is last hour of day.
+                                MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                        String.valueOf(currentDate.get(Calendar.HOUR)),
+                                        String.valueOf(currentDate.get(Calendar.MINUTE)),
+                                        String.valueOf(currentDate.get(Calendar.AM_PM)),
+                                        String.valueOf(newDay),
+                                        String.valueOf(currentDate.get(Calendar.MONTH)),
+                                        String.valueOf(currentDate.get(Calendar.YEAR)));
+
+                                String task = "";
+                                Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
+                                        MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                while (result.moveToNext()) {
+                                    task = result.getString(4);
+                                }
+
+                                //setting the name of the task for which the notification is being set
+                                MainActivity.alertIntent.putExtra("ToDo", task);
+
+                                int broadcast = 0;
+                                Cursor broadcastResult = MainActivity.noteDb.getData(Integer.parseInt(
+                                        MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                while(broadcastResult.moveToNext()){
+                                    broadcast = broadcastResult.getInt(7);
+                                }
+
+                                broadcast = broadcast + 1000;
+
+                                MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
+                                        MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                //TODO set this back to one day
+                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + 86400000),
+                                        MainActivity.pendIntent);
+
+                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs.get(position), true);
+
+                                datePicker.setVisibility(View.VISIBLE);
+
+                                timePicker.setVisibility(View.GONE);
+
+                                MainActivity.dateOrTime = false;
+
+                                //set background to white
+                                MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                //Marks properties as not showing
+                                MainActivity.taskPropertiesShowing = false;
+
+                                //Returns the 'add' button
+                                MainActivity.params.height = MainActivity.addHeight;
+
+                                MainActivity.add.setLayoutParams(MainActivity.params);
+
+                                MainActivity.dateRowShowing = false;
+
+                                MainActivity.repeating = false;
+
+                                MainActivity.timePickerShowing = false;
+
+                                reorderList();
+
+                                notifyDataSetChanged();
 
                             }
                         });
