@@ -761,6 +761,28 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
+//                        //Getting time data
+//                        Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+//                                MainActivity.sortedIDs.get(MainActivity.activeTask)));
+//                        String prevHour = "";
+//                        String prevMinute = "";
+//                        String prevAmpm = "";
+//                        String prevDay = "";
+//                        String prevMonth = "";
+//                        String prevYear = "";
+//                        while (prevCalResult.moveToNext()) {
+//                            prevHour = prevCalResult.getString(1);
+//                            prevMinute = prevCalResult.getString(2);
+//                            prevAmpm = prevCalResult.getString(3);
+//                            prevDay = prevCalResult.getString(4);
+//                            prevMonth = prevCalResult.getString(5);
+//                            prevYear = prevCalResult.getString(6);
+//                        }
+//                        prevMinute = String.valueOf(Integer.parseInt(prevMinute) + 2);
+//                        MainActivity.noteDb.updateAlarmData(String.valueOf(
+//                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                                prevHour, prevMinute, prevAmpm, prevDay, prevMonth, prevYear);
+
                         taskOverdueRow.setVisibility(View.GONE);
 
                         MainActivity.noteDb.updateOverdue(
@@ -1421,6 +1443,38 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
+                }else if(markAsOverdue && !showOnce){
+
+                    //TODO account for correct repeat intervals
+                    if(currentDate.get(Calendar.MINUTE) >= (Integer.parseInt(minute) + 2)){
+
+                        //Getting time data
+                        Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                        String prevHour = "";
+                        String prevMinute = "";
+                        String prevAmpm = "";
+                        String prevDay = "";
+                        String prevMonth = "";
+                        String prevYear = "";
+                        while (prevCalResult.moveToNext()) {
+                            prevHour = prevCalResult.getString(1);
+                            prevMinute = prevCalResult.getString(2);
+                            prevAmpm = prevCalResult.getString(3);
+                            prevDay = prevCalResult.getString(4);
+                            prevMonth = prevCalResult.getString(5);
+                            prevYear = prevCalResult.getString(6);
+                        }
+                        prevMinute = String.valueOf(Integer.parseInt(prevMinute) + 2);
+                        MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                prevHour, prevMinute, prevAmpm, prevDay, prevMonth, prevYear);
+
+                                //only increase time if new repeat time has been surpassed
+//                        minute = String.valueOf(Integer.parseInt(minute) + 2);
+
+                    }
+
                 }
             }
 
@@ -1464,6 +1518,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         formattedTime = hour + ":" + minute + "pm";
                     }
                 }
+
                 dueTextView.setText(formattedTime);
             }
 
