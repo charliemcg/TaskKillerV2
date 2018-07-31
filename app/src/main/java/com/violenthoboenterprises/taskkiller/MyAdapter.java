@@ -78,8 +78,8 @@ class MyAdapter extends ArrayAdapter<String> {
         if(position == 4) {
             adRow.setVisibility(View.VISIBLE);
             boolean networkAvailable = false;
-            ConnectivityManager connectivityManager
-                    = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager connectivityManager = (ConnectivityManager)
+                    getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
             if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
                 networkAvailable = true;
@@ -164,8 +164,9 @@ class MyAdapter extends ArrayAdapter<String> {
             }
             if(!prevHour.equals("")) {
                 //TODO adjust for am or pm
-                prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth), Integer.parseInt(prevDay),
-                        Integer.parseInt(prevHour), Integer.parseInt(prevMinute));
+                prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth),
+                        Integer.parseInt(prevDay), Integer.parseInt(prevHour),
+                        Integer.parseInt(prevMinute));
             }
 
             //check if there's an alarm in the first place
@@ -427,14 +428,17 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(getContext(),
-                                        Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                MainActivity.alarmManager.cancel(MainActivity.pendIntent
+                                        .getService(getContext(), Integer.parseInt(
+                                                MainActivity.sortedIDs.get(
+                                                        MainActivity.activeTask)),
                                         MainActivity.alertIntent, 0));
 
                                 Calendar currentDate = new GregorianCalendar();
 
                                 //intention to execute AlertReceiver
-                                MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
+                                MainActivity.alertIntent = new Intent(getContext(),
+                                        AlertReceiver.class);
 
                                 int newHour = currentDate.get(Calendar.HOUR);
                                 newHour++;
@@ -456,11 +460,13 @@ class MyAdapter extends ArrayAdapter<String> {
                                     task = result.getString(4);
                                 }
 
-                                //setting the name of the task for which the notification is being set
+                                //setting the name of the task for which the
+                                // notification is being set
                                 MainActivity.alertIntent.putExtra("ToDo", task);
 
                                 int broadcast = 0;
-                                Cursor broadcastResult = MainActivity.noteDb.getData(Integer.parseInt(
+                                Cursor broadcastResult = MainActivity.noteDb
+                                        .getData(Integer.parseInt(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)));
                                 while(broadcastResult.moveToNext()){
                                     broadcast = broadcastResult.getInt(7);
@@ -468,14 +474,17 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 broadcast = broadcast + 1000;
 
-                                MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
-                                        MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                        getContext(), broadcast, MainActivity.alertIntent,
+                                        PendingIntent.FLAG_UPDATE_CURRENT);
 
                                 //TODO set this back to one hour
-                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + /*60000*/3600000),
+                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
+                                                .getTimeInMillis() + /*60000*/3600000),
                                         MainActivity.pendIntent);
 
-                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs.get(position), true);
+                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
+                                        .get(position), true);
 
                                 datePicker.setVisibility(View.VISIBLE);
 
@@ -484,7 +493,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.dateOrTime = false;
 
                                 //set background to white
-                                MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                MainActivity.activityRootView.setBackgroundColor(Color
+                                        .parseColor("#FFFFFF"));
 
                                 MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -514,20 +524,23 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(getContext(),
-                                        Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                MainActivity.alarmManager.cancel(MainActivity.pendIntent
+                                        .getService(getContext(), Integer.parseInt(MainActivity
+                                                        .sortedIDs.get(MainActivity.activeTask)),
                                         MainActivity.alertIntent, 0));
 
                                 Calendar currentDate = new GregorianCalendar();
 
                                 //intention to execute AlertReceiver
-                                MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
+                                MainActivity.alertIntent = new Intent(getContext(),
+                                        AlertReceiver.class);
 
                                 //TODO find out difference between HOUR and HOUR_OF_DAY
                                 int newHour = currentDate.get(Calendar.HOUR);
                                 newHour += 4;
 
-                                //TODO need to account for if current hour is within last four hours of day.
+                                //TODO need to account for if current hour is
+                                // within last four hours of day.
                                 MainActivity.noteDb.updateSnoozeData(String.valueOf(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                         String.valueOf(newHour),
@@ -544,11 +557,13 @@ class MyAdapter extends ArrayAdapter<String> {
                                     task = result.getString(4);
                                 }
 
-                                //setting the name of the task for which the notification is being set
+                                //setting the name of the task for which
+                                // the notification is being set
                                 MainActivity.alertIntent.putExtra("ToDo", task);
 
                                 int broadcast = 0;
-                                Cursor broadcastResult = MainActivity.noteDb.getData(Integer.parseInt(
+                                Cursor broadcastResult = MainActivity.noteDb
+                                        .getData(Integer.parseInt(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)));
                                 while(broadcastResult.moveToNext()){
                                     broadcast = broadcastResult.getInt(7);
@@ -556,14 +571,17 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 broadcast = broadcast + 1000;
 
-                                MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
-                                        MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                        getContext(), broadcast, MainActivity.alertIntent,
+                                        PendingIntent.FLAG_UPDATE_CURRENT);
 
                                 //TODO set this back to four hours
-                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + 14400000),
+                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
+                                                .getTimeInMillis() + 14400000),
                                         MainActivity.pendIntent);
 
-                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs.get(position), true);
+                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
+                                        .get(position), true);
 
                                 datePicker.setVisibility(View.VISIBLE);
 
@@ -572,7 +590,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.dateOrTime = false;
 
                                 //set background to white
-                                MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                MainActivity.activityRootView.setBackgroundColor(
+                                        Color.parseColor("#FFFFFF"));
 
                                 MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -602,14 +621,16 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(getContext(),
-                                        Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                MainActivity.alarmManager.cancel(MainActivity.pendIntent
+                                        .getService(getContext(), Integer.parseInt(MainActivity
+                                                        .sortedIDs.get(MainActivity.activeTask)),
                                         MainActivity.alertIntent, 0));
 
                                 Calendar currentDate = new GregorianCalendar();
 
                                 //intention to execute AlertReceiver
-                                MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
+                                MainActivity.alertIntent = new Intent(getContext(),
+                                        AlertReceiver.class);
 
                                 //TODO figure difference between DAY_OF_WEEK/MONTH/YEAR
                                 int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
@@ -632,11 +653,13 @@ class MyAdapter extends ArrayAdapter<String> {
                                     task = result.getString(4);
                                 }
 
-                                //setting the name of the task for which the notification is being set
+                                //setting the name of the task for which
+                                // the notification is being set
                                 MainActivity.alertIntent.putExtra("ToDo", task);
 
                                 int broadcast = 0;
-                                Cursor broadcastResult = MainActivity.noteDb.getData(Integer.parseInt(
+                                Cursor broadcastResult = MainActivity.noteDb
+                                        .getData(Integer.parseInt(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)));
                                 while(broadcastResult.moveToNext()){
                                     broadcast = broadcastResult.getInt(7);
@@ -644,14 +667,17 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 broadcast = broadcast + 1000;
 
-                                MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), broadcast,
-                                        MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                        getContext(), broadcast, MainActivity.alertIntent,
+                                        PendingIntent.FLAG_UPDATE_CURRENT);
 
                                 //TODO set this back to one day
-                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate.getTimeInMillis() + 86400000),
+                                MainActivity.alarmManager.set(AlarmManager.RTC,
+                                        (currentDate.getTimeInMillis() + 86400000),
                                         MainActivity.pendIntent);
 
-                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs.get(position), true);
+                                MainActivity.noteDb.updateSnooze(MainActivity
+                                        .sortedIDs.get(position), true);
 
                                 datePicker.setVisibility(View.VISIBLE);
 
@@ -660,7 +686,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.dateOrTime = false;
 
                                 //set background to white
-                                MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                MainActivity.activityRootView.setBackgroundColor(
+                                        Color.parseColor("#FFFFFF"));
 
                                 MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -730,9 +757,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         }
 
-//                        MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
-//                                getContext(), Integer.parseInt(MainActivity.sortedIDs.get(position))
-//                                , MainActivity.alertIntent, 0));
                         MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                         MainActivity.add.setVisibility(View.VISIBLE);
@@ -755,8 +779,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.noteDb.updateOverdue(
                                 MainActivity.sortedIDs.get(position), false);
+
                         MainActivity.noteDb.updateShowOnce(
-                                MainActivity.sortedIDs.get(MainActivity.activeTask), false);
+                                MainActivity.sortedIDs.get(
+                                        MainActivity.activeTask), false);
 
                         //Updates the view
                         MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
@@ -889,11 +915,13 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                    " get this feature", Toast.LENGTH_SHORT).show();
 
                     Boolean due = false;
+                    Boolean isRepeating = false;
                     Boolean cancelSnooze = false;
                     Cursor dueResult = MainActivity.noteDb.getData(Integer.parseInt(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)));
                     while (dueResult.moveToNext()) {
                         due = dueResult.getInt(5) > 0;
+                        isRepeating = dueResult.getInt(8) > 0;
                         cancelSnooze = dueResult.getInt(10) > 0;
                     }
 
@@ -910,17 +938,23 @@ class MyAdapter extends ArrayAdapter<String> {
                     } else if (cancelSnooze){
 
                         //marks task as not killed in database
-                        MainActivity.noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        MainActivity.noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs
+                                .get(position)), false);
                         //remove any associated snooze
-                        MainActivity.noteDb.updateSnooze(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        MainActivity.noteDb.updateSnooze(toString().valueOf(MainActivity.sortedIDs
+                                .get(position)), false);
                         //marks task as not overdue
-                        MainActivity.noteDb.updateOverdue(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        MainActivity.noteDb.updateOverdue(toString().valueOf(MainActivity.sortedIDs
+                                .get(position)), false);
                         //marks task as having no due date
-                        MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        MainActivity.noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs
+                                .get(position)), false);
                         //remove any associated timestamp
-                        MainActivity.noteDb.updateTimestamp(toString().valueOf(MainActivity.sortedIDs.get(position)), "");
+                        MainActivity.noteDb.updateTimestamp(toString().valueOf(MainActivity
+                                .sortedIDs.get(position)), "");
                         //marks showonce as false
-                        MainActivity.noteDb.updateShowOnce(toString().valueOf(MainActivity.sortedIDs.get(position)), false);
+                        MainActivity.noteDb.updateShowOnce(toString().valueOf(MainActivity
+                                .sortedIDs.get(position)), false);
                         //remove alarm time data
                         MainActivity.noteDb.updateAlarmData
                                 (toString().valueOf(MainActivity.sortedIDs.get(position)),
@@ -942,13 +976,19 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
                         Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
-                        Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
+                        final Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
 
                         alarmOptionsRow.setVisibility(View.VISIBLE);
 
                         propertyRow.setVisibility(View.GONE);
 
                         MainActivity.alarmOptionsShowing = true;
+
+                        if(isRepeating){
+
+                            repeatAlarmBtn.setText("Cancel Repeat");
+
+                        }
 
                         //Actions to occur if user selects 'remove alarm'
                         killAlarmBtn.setOnClickListener(new View.OnClickListener() {
@@ -965,7 +1005,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
                                         Integer.parseInt(MainActivity.sortedIDs.get(position)),
-                                        MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                        MainActivity.alertIntent,
+                                        PendingIntent.FLAG_UPDATE_CURRENT);
                                 MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                                 MainActivity.noteDb.updateAlarmData
@@ -1010,15 +1051,84 @@ class MyAdapter extends ArrayAdapter<String> {
                         });
 
                         //Actions to occur if user selects 'repeat alarm'
+                        final Boolean finalIsRepeating = isRepeating;
+                        final Boolean finalCancelSnooze = cancelSnooze;
                         repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
-                                alarmOptionsRow.setVisibility(View.GONE);
+                                if(finalIsRepeating) {
 
-                                repeatRow.setVisibility(View.VISIBLE);
+                                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                                            .get(MainActivity.activeTask), false);
+                                    if(!finalCancelSnooze) {
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                                Integer.parseInt(MainActivity.sortedIDs.get(position)),
+                                                MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    }else{
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                                Integer.parseInt(MainActivity.sortedIDs.get(position) + 1000),
+                                                MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    }
 
-                                MainActivity.repeatShowing = true;
+                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
+
+
+
+                                    Calendar prevCalendar = new GregorianCalendar();
+                                    //Getting time data
+                                    Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                    String prevHour = "";
+                                    String prevMinute = "";
+                                    String prevAmpm = "";
+                                    String prevDay = "";
+                                    String prevMonth = "";
+                                    String prevYear = "";
+                                    while (prevCalResult.moveToNext()) {
+                                        prevHour = prevCalResult.getString(1);
+                                        prevMinute = prevCalResult.getString(2);
+                                        prevAmpm = prevCalResult.getString(3);
+                                        prevDay = prevCalResult.getString(4);
+                                        prevMonth = prevCalResult.getString(5);
+                                        prevYear = prevCalResult.getString(6);
+                                    }
+                                    if(prevAmpm.equals("1")){
+                                        int tempHour = Integer.parseInt(prevHour) + 12;
+                                        prevHour = String.valueOf(tempHour);
+                                    }
+                                    if(!prevHour.equals("")) {
+                                        //TODO adjust for am or pm
+                                        prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth),
+                                                Integer.parseInt(prevDay), Integer.parseInt(prevHour),
+                                                Integer.parseInt(prevMinute));
+                                    }
+
+                                    MainActivity.alarmManager.set(AlarmManager.RTC,
+                                            prevCalendar.getTimeInMillis(), MainActivity.pendIntent);
+
+                                    //set background to white
+                                    MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                                    alarmOptionsRow.setVisibility(View.GONE);
+
+                                    MainActivity.repeatShowing = false;
+                                    MainActivity.repeating = false;
+                                    MainActivity.alarmOptionsShowing = false;
+                                    MainActivity.taskPropertiesShowing = false;
+
+                                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                }else{
+
+                                    alarmOptionsRow.setVisibility(View.GONE);
+
+                                    repeatRow.setVisibility(View.VISIBLE);
+
+                                    MainActivity.repeatShowing = true;
+
+                                }
 
                             }
                         });
@@ -1486,8 +1596,9 @@ class MyAdapter extends ArrayAdapter<String> {
             }
             if(!prevHour.equals("")) {
                 //TODO adjust for am or pm
-                prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth), Integer.parseInt(prevDay),
-                        Integer.parseInt(prevHour), Integer.parseInt(prevMinute));
+                prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth),
+                        Integer.parseInt(prevDay), Integer.parseInt(prevHour),
+                        Integer.parseInt(prevMinute));
             }
 
             MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
