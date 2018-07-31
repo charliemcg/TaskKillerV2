@@ -129,195 +129,139 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.reorderList = false;
         }
 
-        if(MainActivity.reinstateAlarm){
-
-            Boolean isDue = false;
-            Boolean isRepeating = false;
-            Cursor alarmResult = MainActivity.noteDb.getData(Integer.parseInt(
-                    MainActivity.sortedIDs.get(position)));
-            while (alarmResult.moveToNext()) {
-                isDue = alarmResult.getInt(5) > 0;
-                isRepeating = alarmResult.getInt(8) > 0;
-            }
-
-            Calendar prevCalendar = new GregorianCalendar();
-            //Getting time data
-            Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
-                    MainActivity.sortedIDs.get(MainActivity.activeTask)));
-            String prevHour = "";
-            String prevMinute = "";
-            String prevAmpm = "";
-            String prevDay = "";
-            String prevMonth = "";
-            String prevYear = "";
-            while (prevCalResult.moveToNext()) {
-                prevHour = prevCalResult.getString(1);
-                prevMinute = prevCalResult.getString(2);
-                prevAmpm = prevCalResult.getString(3);
-                prevDay = prevCalResult.getString(4);
-                prevMonth = prevCalResult.getString(5);
-                prevYear = prevCalResult.getString(6);
-            }
-            if(prevAmpm.equals("1")){
-                int tempHour = Integer.parseInt(prevHour) + 12;
-                prevHour = String.valueOf(tempHour);
-            }
-            if(!prevHour.equals("")) {
-                //TODO adjust for am or pm
-                prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth),
-                        Integer.parseInt(prevDay), Integer.parseInt(prevHour),
-                        Integer.parseInt(prevMinute));
-            }
-
-            //check if there's an alarm in the first place
-            if(isDue) {
-
-                //setting a repeating notification
-                if (isRepeating) {
-
-//                    MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
-//                            Long.parseLong(stamp), MainActivity.repeatInterval,
-//                            MainActivity.pendIntent.getService(getContext(), broadcast,
-//                                    MainActivity.alertIntent, 0));
+        //TODO decide if alarm reinstatement is to be a thing in the first place
+//        if(MainActivity.reinstateAlarm){
 //
-//                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
-//                            .get(MainActivity.activeTask), true);
+//            Boolean isDue = false;
+//            Boolean isRepeating = false;
+//            Cursor alarmResult = MainActivity.noteDb.getData(Integer.parseInt(
+//                    MainActivity.sortedIDs.get(position)));
+//            while (alarmResult.moveToNext()) {
+//                isDue = alarmResult.getInt(5) > 0;
+//                isRepeating = alarmResult.getInt(8) > 0;
+//            }
 //
-//                    MainActivity.repeatShowing = false;
-
-//                    //TODO Duplication warning. This doesn't work anyway
-//                    Calendar prevCalendar = new GregorianCalendar();
-//                    //Getting time data
-//                    Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
-//                            MainActivity.sortedIDs.get(position)));
-//                    String prevHour = "";
-//                    String prevMinute = "";
-//                    String prevAmpm = "";
-//                    String prevDay = "";
-//                    String prevMonth = "";
-//                    String prevYear = "";
-//                    while (prevCalResult.moveToNext()) {
-//                        prevHour = prevCalResult.getString(1);
-//                        prevMinute = prevCalResult.getString(2);
-//                        prevAmpm = prevCalResult.getString(3);
-//                        prevDay = prevCalResult.getString(4);
-//                        prevMonth = prevCalResult.getString(5);
-//                        prevYear = prevCalResult.getString(6);
-//                    }
-//                    if(!prevHour.equals("")) {
-//                        //TODO adjust for am or pm
-//                        prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth), Integer.parseInt(prevDay),
-//                                Integer.parseInt(prevHour), Integer.parseInt(prevMinute), /*Integer.parseInt(prevAmpm)*/0);
-//                        Log.i(TAG, String.valueOf(prevCalendar.getTimeInMillis()));
+//            Calendar prevCalendar = new GregorianCalendar();
+//            //Getting time data
+//            Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+//                    MainActivity.sortedIDs.get(MainActivity.activeTask)));
+//            String prevHour = "";
+//            String prevMinute = "";
+//            String prevAmpm = "";
+//            String prevDay = "";
+//            String prevMonth = "";
+//            String prevYear = "";
+//            while (prevCalResult.moveToNext()) {
+//                prevHour = prevCalResult.getString(1);
+//                prevMinute = prevCalResult.getString(2);
+//                prevAmpm = prevCalResult.getString(3);
+//                prevDay = prevCalResult.getString(4);
+//                prevMonth = prevCalResult.getString(5);
+//                prevYear = prevCalResult.getString(6);
+//            }
+//            if(prevAmpm.equals("1")){
+//                int tempHour = Integer.parseInt(prevHour) + 12;
+//                prevHour = String.valueOf(tempHour);
+//            }
+//            if(!prevHour.equals("")) {
+//                //TODO adjust for am or pm
+//                prevCalendar.set(Integer.parseInt(prevYear), Integer.parseInt(prevMonth),
+//                        Integer.parseInt(prevDay), Integer.parseInt(prevHour),
+//                        Integer.parseInt(prevMinute));
+//            }
+//
+//            //check if there's an alarm in the first place
+//            if(isDue) {
+//
+//                //setting a repeating notification
+//                if (isRepeating) {
+//
+//
+//                //setting a one-time notification
+//                } else {
+//
+//                    Calendar currentDate = new GregorianCalendar();
+//
+//                    ImageView due = taskView.findViewById(R.id.due);
+//                    ImageView overdue = taskView.findViewById(R.id.dueRed);
+//
+//                    Cursor result = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+//                            MainActivity.sortedIDs.get(position)));;
+//                    String hour = "";
+//                    String minute = "";
+//                    String ampm = "";
+//                    String day = "";
+//                    String month = "";
+//                    String year = "";
+//
+//                    while(result.moveToNext()){
+//                        hour = result.getString(1);
+//                        minute = result.getString(2);
+//                        ampm = result.getString(3);
+//                        day = result.getString(4);
+//                        month = result.getString(5);
+//                        year = result.getString(6);
 //                    }
 //
-//                    MainActivity.alarmManager.cancel(MainActivity.pendIntent.getService(
-//                            getContext(), Integer.parseInt(MainActivity.sortedIDs
-//                                    .get(MainActivity.activeTask)),
-//                            MainActivity.alertIntent, 0));
+//                    //Checking for overdue tasks
+//                    Boolean sameDay = false;
+//                    Boolean markAsOverdue = false;
+//                    //Overdue
+//                    if (currentDate.get(Calendar.YEAR) > Integer.valueOf(year)) {
+//                        overdue.setVisibility(View.VISIBLE);
+//                        markAsOverdue = true;
+//                        //Overdue
+//                    } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
+//                            && currentDate.get(Calendar.MONTH) > Integer.valueOf(month)) {
+//                        overdue.setVisibility(View.VISIBLE);
+//                        markAsOverdue = true;
+//                        //Overdue
+//                    } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
+//                            && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
+//                            && currentDate.get(Calendar.DAY_OF_MONTH) > Integer.valueOf(day)) {
+//                        overdue.setVisibility(View.VISIBLE);
+//                        markAsOverdue = true;
+//                    } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
+//                            && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
+//                            && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(day)) {
+//                        sameDay = true;
+//                        //Saved hours are in 12 hour time. Accounting for am/pm.
+//                        int adjustedHour = 0;
+//                        if (Integer.valueOf(ampm) == 1) {
+//                            adjustedHour = Integer.valueOf(hour) + 12;
+//                        } else {
+//                            adjustedHour = Integer.valueOf(hour);
+//                        }
+//                        //Overdue
+//                        if (currentDate.get(Calendar.HOUR_OF_DAY) > adjustedHour) {
+//                            overdue.setVisibility(View.VISIBLE);
+//                            markAsOverdue = true;
+//                            //Overdue
+//                        } else if (currentDate.get(Calendar.HOUR_OF_DAY) == adjustedHour
+//                                && currentDate.get(Calendar.MINUTE) >= Integer.valueOf(minute)) {
+//                            overdue.setVisibility(View.VISIBLE);
+//                            markAsOverdue = true;
+//                            //Not overdue
+//                        } else {
+//                            due.setVisibility(View.VISIBLE);
+//                        }
+//                        //Not overdue
+//                    } else {
+//                        due.setVisibility(View.VISIBLE);
+//                    }
 //
-////                    String stamp = "";
-////                    Cursor stampResult = MainActivity.noteDb.getData(Integer.parseInt(
-////                            MainActivity.sortedIDs.get(MainActivity.activeTask)));
-////                    while (stampResult.moveToNext()) {
-////                        stamp = stampResult.getString(3);
-////                    }
+//                    if(!markAsOverdue) {
+//                        MainActivity.alarmManager.set(AlarmManager.RTC, prevCalendar.getTimeInMillis(),
+//                                MainActivity.pendIntent);
+//                    }
 //
-//                    //TODO don't use timestamp, use alarm db value
-//                    MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
-//                            /*calendar.getTimeInMillis()*/Long.parseLong(stamp),
-//                            MainActivity.repeatInterval, MainActivity.pendIntent);
+//                }
 //
-//                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
-//                            .get(MainActivity.activeTask), true);
+//            }
 //
-//                    MainActivity.repeatShowing = false;
-
-                //setting a one-time notification
-                } else {
-
-                    Calendar currentDate = new GregorianCalendar();
-
-                    ImageView due = taskView.findViewById(R.id.due);
-                    ImageView overdue = taskView.findViewById(R.id.dueRed);
-
-                    Cursor result = MainActivity.noteDb.getAlarmData(Integer.parseInt(
-                            MainActivity.sortedIDs.get(position)));;
-                    String hour = "";
-                    String minute = "";
-                    String ampm = "";
-                    String day = "";
-                    String month = "";
-                    String year = "";
-
-                    while(result.moveToNext()){
-                        hour = result.getString(1);
-                        minute = result.getString(2);
-                        ampm = result.getString(3);
-                        day = result.getString(4);
-                        month = result.getString(5);
-                        year = result.getString(6);
-                    }
-
-                    //Checking for overdue tasks
-                    Boolean sameDay = false;
-                    Boolean markAsOverdue = false;
-                    //Overdue
-                    if (currentDate.get(Calendar.YEAR) > Integer.valueOf(year)) {
-                        overdue.setVisibility(View.VISIBLE);
-                        markAsOverdue = true;
-                        //Overdue
-                    } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
-                            && currentDate.get(Calendar.MONTH) > Integer.valueOf(month)) {
-                        overdue.setVisibility(View.VISIBLE);
-                        markAsOverdue = true;
-                        //Overdue
-                    } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
-                            && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
-                            && currentDate.get(Calendar.DAY_OF_MONTH) > Integer.valueOf(day)) {
-                        overdue.setVisibility(View.VISIBLE);
-                        markAsOverdue = true;
-                    } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
-                            && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
-                            && currentDate.get(Calendar.DAY_OF_MONTH) == Integer.valueOf(day)) {
-                        sameDay = true;
-                        //Saved hours are in 12 hour time. Accounting for am/pm.
-                        int adjustedHour = 0;
-                        if (Integer.valueOf(ampm) == 1) {
-                            adjustedHour = Integer.valueOf(hour) + 12;
-                        } else {
-                            adjustedHour = Integer.valueOf(hour);
-                        }
-                        //Overdue
-                        if (currentDate.get(Calendar.HOUR_OF_DAY) > adjustedHour) {
-                            overdue.setVisibility(View.VISIBLE);
-                            markAsOverdue = true;
-                            //Overdue
-                        } else if (currentDate.get(Calendar.HOUR_OF_DAY) == adjustedHour
-                                && currentDate.get(Calendar.MINUTE) >= Integer.valueOf(minute)) {
-                            overdue.setVisibility(View.VISIBLE);
-                            markAsOverdue = true;
-                            //Not overdue
-                        } else {
-                            due.setVisibility(View.VISIBLE);
-                        }
-                        //Not overdue
-                    } else {
-                        due.setVisibility(View.VISIBLE);
-                    }
-
-                    if(!markAsOverdue) {
-                        MainActivity.alarmManager.set(AlarmManager.RTC, prevCalendar.getTimeInMillis(),
-                                MainActivity.pendIntent);
-                    }
-
-                }
-
-            }
-
-            MainActivity.reinstateAlarm = false;
-
-        }
+//            MainActivity.reinstateAlarm = false;
+//
+//        }
 
         //actions to occur in regards to selected task
         if(MainActivity.taskPropertiesShowing && position == MainActivity.activeTask){
@@ -402,6 +346,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     }
                 });
+
             //show the overdue properties
             }else if(showOverdue && !isSnoozed){
 
@@ -721,51 +666,92 @@ class MyAdapter extends ArrayAdapter<String> {
                     public void onClick(View v) {
 
                         Boolean snoozed = false;
+                        Boolean isRepeating = false;
                         Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)));
                         while (result.moveToNext()) {
                             snoozed = result.getInt(10) > 0;
+                            isRepeating = result.getInt(8) > 0;
                         }
 
-                        taskOverdueRow.setVisibility(View.GONE);
+                        if(!isRepeating) {
+                            taskOverdueRow.setVisibility(View.GONE);
 
-                        MainActivity.noteDb.updateOverdue(toString().valueOf(
-                                MainActivity.sortedIDs.get(position)), false);
+                            MainActivity.noteDb.updateOverdue(toString().valueOf(
+                                    MainActivity.sortedIDs.get(position)), false);
 
-                        //TODO code duplication warning
-                        //set background white
-                        MainActivity.activityRootView.setBackgroundColor(Color
-                                .parseColor("#FFFFFF"));
+                            //TODO code duplication warning
+                            //set background white
+                            MainActivity.activityRootView.setBackgroundColor(Color
+                                    .parseColor("#FFFFFF"));
 
-                        notifyDataSetChanged();
+                            notifyDataSetChanged();
 
-                        MainActivity.taskPropertiesShowing = false;
+                            MainActivity.taskPropertiesShowing = false;
 
-                        MainActivity.noteDb.updateKilled(toString().valueOf(
-                                MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+                            MainActivity.noteDb.updateKilled(toString().valueOf(
+                                    MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
 
-                        Toast.makeText(v.getContext(), "You killed this task!",
-                                Toast.LENGTH_SHORT).show();
+                            Toast.makeText(v.getContext(), "You killed this task!",
+                                    Toast.LENGTH_SHORT).show();
 
-                        if(!snoozed) {
-                            MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                    Integer.parseInt(MainActivity.sortedIDs.get(position)),
-                                    MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        }else{
-                            MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                    Integer.parseInt(MainActivity.sortedIDs.get(position) + 1000),
-                                    MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            if (!snoozed) {
+                                MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                        Integer.parseInt(MainActivity.sortedIDs.get(position)),
+                                        MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            } else {
+                                MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                        Integer.parseInt(MainActivity.sortedIDs.get(position) + 1000),
+                                        MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            }
+
+                            MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
+                            MainActivity.add.setVisibility(View.VISIBLE);
+
+                            MainActivity.vibrate.vibrate(50);
+
+                            MainActivity.params.height = MainActivity.addHeight;
+
+                            v.setLayoutParams(MainActivity.params);
+
+                        }else {
+
+                            //Getting time data
+                            Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+                                    MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                            String prevHour = "";
+                            String prevMinute = "";
+                            String prevAmpm = "";
+                            String prevDay = "";
+                            String prevMonth = "";
+                            String prevYear = "";
+                            while (prevCalResult.moveToNext()) {
+                                prevHour = prevCalResult.getString(1);
+                                prevMinute = prevCalResult.getString(2);
+                                prevAmpm = prevCalResult.getString(3);
+                                prevDay = prevCalResult.getString(4);
+                                prevMonth = prevCalResult.getString(5);
+                                prevYear = prevCalResult.getString(6);
+                            }
+                            prevMinute = String.valueOf(Integer.parseInt(prevMinute) + 2);
+                            MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                    MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                    prevHour, prevMinute, prevAmpm, prevDay, prevMonth, prevYear);
+
+                            //set background to white
+                            MainActivity.activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                            taskOverdueRow.setVisibility(View.GONE);
+
+                            MainActivity.taskPropertiesShowing = false;
+
+                            MainActivity.noteDb.updateOverdue(
+                                    MainActivity.sortedIDs.get(position), false);
+
+                            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
                         }
-
-                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-
-                        MainActivity.add.setVisibility(View.VISIBLE);
-
-                        MainActivity.vibrate.vibrate(50);
-
-                        MainActivity.params.height = MainActivity.addHeight;
-
-                        v.setLayoutParams(MainActivity.params);
 
                     }
                 });
@@ -1073,9 +1059,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-
-
-
                                     Calendar prevCalendar = new GregorianCalendar();
                                     //Getting time data
                                     Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
@@ -1223,7 +1206,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     //TODO set this back to Interval_Day
 //                    MainActivity.repeatInterval = AlarmManager.INTERVAL_DAY;
-                    MainActivity.repeatInterval = 60000;
+                    MainActivity.repeatInterval = 120000;
 
                     MainActivity.repeating = true;
 
