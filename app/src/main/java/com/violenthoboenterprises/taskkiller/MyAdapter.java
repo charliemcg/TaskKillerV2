@@ -850,11 +850,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
             Boolean due = false;
             Boolean snoozed = false;
+            Boolean repeating = false;
             Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
                     MainActivity.sortedIDs.get(MainActivity.activeTask)));
             while (result.moveToNext()) {
                 due = result.getInt(5) > 0;
                 snoozed = result.getInt(10) > 0;
+                repeating = result.getInt(8) > 0;
             }
 
             //"set due date" button becomes "remove due date" button if due date already set
@@ -870,44 +872,83 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //Actions to occur if user selects 'complete'
             final Boolean finalSnoozed = snoozed;
+            final Boolean finalRepeating = repeating;
             complete.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
-                    //set background white
-                    MainActivity.activityRootView.setBackgroundColor(Color
-                            .parseColor("#FFFFFF"));
+                    if(!finalRepeating) {
 
-                    notifyDataSetChanged();
+                        //set background white
+                        MainActivity.activityRootView.setBackgroundColor(Color
+                                .parseColor("#FFFFFF"));
 
-                    MainActivity.taskPropertiesShowing = false;
+                        notifyDataSetChanged();
 
-                    MainActivity.noteDb.updateKilled(toString().valueOf(
-                            MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+                        MainActivity.taskPropertiesShowing = false;
 
-                    Toast.makeText(v.getContext(), "You killed this task!",
-                            Toast.LENGTH_SHORT).show();
+                        MainActivity.noteDb.updateKilled(toString().valueOf(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
 
-                    if(!finalSnoozed) {
-                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                Integer.parseInt(MainActivity.sortedIDs.get(position)),
-                                MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        Toast.makeText(v.getContext(), "You killed this task!",
+                                Toast.LENGTH_SHORT).show();
+
+                        if (!finalSnoozed) {
+                            MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                    Integer.parseInt(MainActivity.sortedIDs.get(position)),
+                                    MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        } else {
+                            MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                    Integer.parseInt(MainActivity.sortedIDs.get(position) + 1000),
+                                    MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        }
+
+                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
+                        MainActivity.add.setVisibility(View.VISIBLE);
+
+                        MainActivity.vibrate.vibrate(50);
+
+                        MainActivity.params.height = MainActivity.addHeight;
+
+                        v.setLayoutParams(MainActivity.params);
+
                     }else{
-                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                Integer.parseInt(MainActivity.sortedIDs.get(position) + 1000),
-                                MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                        //Getting time data
+                        Cursor prevCalResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                        String prevHour = "";
+                        String prevMinute = "";
+                        String prevAmpm = "";
+                        String prevDay = "";
+                        String prevMonth = "";
+                        String prevYear = "";
+                        while (prevCalResult.moveToNext()) {
+                            prevHour = prevCalResult.getString(1);
+                            prevMinute = prevCalResult.getString(2);
+                            prevAmpm = prevCalResult.getString(3);
+                            prevDay = prevCalResult.getString(4);
+                            prevMonth = prevCalResult.getString(5);
+                            prevYear = prevCalResult.getString(6);
+                        }
+                        prevMinute = String.valueOf(Integer.parseInt(prevMinute) + 2);
+                        MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                prevHour, prevMinute, prevAmpm, prevDay, prevMonth, prevYear);
+
+                        MainActivity.noteDb.updateShowOnce(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask), true);
+
+                        Toast.makeText(v.getContext(), "Now do it again in two minutes", Toast.LENGTH_SHORT).show();
+
+                        propertyRow.setVisibility(View.GONE);
+
+                        MainActivity.activityRootView
+                                .setBackgroundColor(Color.parseColor("#FFFFFF"));
+
                     }
-
-                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-
-                    MainActivity.add.setVisibility(View.VISIBLE);
-
-                    MainActivity.vibrate.vibrate(50);
-
-                    MainActivity.params.height = MainActivity.addHeight;
-
-                    v.setLayoutParams(MainActivity.params);
 
                 }
 
@@ -1470,8 +1511,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 prevHour, prevMinute, prevAmpm, prevDay, prevMonth, prevYear);
 
-                                //only increase time if new repeat time has been surpassed
-//                        minute = String.valueOf(Integer.parseInt(minute) + 2);
+                        MainActivity.noteDb.updateShowOnce(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                     }
 
