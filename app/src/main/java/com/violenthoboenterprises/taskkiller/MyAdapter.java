@@ -268,11 +268,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
             Boolean showOverdue = false;
             Boolean isSnoozed = false;
+            Boolean isRepeating = false;
             Cursor dueResult = MainActivity.noteDb.getData(Integer.parseInt(
                     MainActivity.sortedIDs.get(position)));
             while (dueResult.moveToNext()) {
                 showOverdue = dueResult.getInt(9) > 0;
                 isSnoozed = dueResult.getInt(10) > 0;
+                isRepeating = dueResult.getInt(8) > 0;
             }
 
             //Determine whether to show datepicker
@@ -360,6 +362,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 final Button tomorrowBtn = taskView.findViewById(R.id.tomorrow);
 
                 //Actions to occur if user selects 'snooze'
+                final Boolean finalIsRepeating = isRepeating;
                 snoozeTask.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -373,93 +376,139 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                MainActivity.alarmManager.cancel(MainActivity.pendIntent
-                                        .getService(getContext(), Integer.parseInt(
-                                                MainActivity.sortedIDs.get(
-                                                        MainActivity.activeTask)),
-                                        MainActivity.alertIntent, 0));
+                                Calendar dateNow = new GregorianCalendar();
 
-                                Calendar currentDate = new GregorianCalendar();
+                                Cursor prevResult = MainActivity.noteDb.getAlarmData(Integer.parseInt(
+                                        MainActivity.sortedIDs.get(position)));
 
-                                //intention to execute AlertReceiver
-                                MainActivity.alertIntent = new Intent(getContext(),
-                                        AlertReceiver.class);
+                                String prevHour = "";
+                                String prevMinute = "";
+                                String prevAmpm = "";
+                                String prevDay = "";
+                                String prevMonth = "";
+                                String prevYear = "";
 
-                                int newHour = currentDate.get(Calendar.HOUR);
-                                newHour++;
-
-                                //TODO need to account for if current hour is last hour of day.
-                                MainActivity.noteDb.updateSnoozeData(String.valueOf(
-                                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                                        String.valueOf(newHour),
-                                        String.valueOf(currentDate.get(Calendar.MINUTE)),
-                                        String.valueOf(currentDate.get(Calendar.AM_PM)),
-                                        String.valueOf(currentDate.get(Calendar.DAY_OF_MONTH)),
-                                        String.valueOf(currentDate.get(Calendar.MONTH)),
-                                        String.valueOf(currentDate.get(Calendar.YEAR)));
-
-                                String task = "";
-                                Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
-                                        MainActivity.sortedIDs.get(MainActivity.activeTask)));
-                                while (result.moveToNext()) {
-                                    task = result.getString(4);
+                                while(prevResult.moveToNext()){
+                                    prevHour = prevResult.getString(1);
+                                    prevMinute = prevResult.getString(2);
+                                    prevAmpm = prevResult.getString(3);
+                                    prevDay = prevResult.getString(4);
+                                    prevMonth = prevResult.getString(5);
+                                    prevYear = prevResult.getString(6);
                                 }
 
-                                //setting the name of the task for which the
-                                // notification is being set
-                                MainActivity.alertIntent.putExtra("ToDo", task);
+                                if(dateNow.get(Calendar.MINUTE) >= (Integer.parseInt(prevMinute) + 1)){
 
-                                int broadcast = 0;
-                                Cursor broadcastResult = MainActivity.noteDb
-                                        .getData(Integer.parseInt(
-                                        MainActivity.sortedIDs.get(MainActivity.activeTask)));
-                                while(broadcastResult.moveToNext()){
-                                    broadcast = broadcastResult.getInt(7);
+                                    Toast.makeText(v.getContext(), "Task not snoozed because repeat alarm is due.",
+                                            Toast.LENGTH_SHORT).show();
+
+                                    prevMinute = String.valueOf(Integer.parseInt(prevMinute) + 2);
+                                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                            prevHour, prevMinute, prevAmpm, prevDay, prevMonth, prevYear);
+
+                                    MainActivity.noteDb.updateOverdue(toString().valueOf(
+                                            MainActivity.sortedIDs.get(position)), false);
+
+                                    //set background to white
+                                    MainActivity.activityRootView.setBackgroundColor(Color
+                                            .parseColor("#FFFFFF"));
+
+                                    MainActivity.taskPropertiesShowing = false;
+
+                                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                }else {
+
+                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent
+                                            .getService(getContext(), Integer.parseInt(
+                                                    MainActivity.sortedIDs.get(
+                                                            MainActivity.activeTask)),
+                                                    MainActivity.alertIntent, 0));
+
+                                    Calendar currentDate = new GregorianCalendar();
+
+                                    //intention to execute AlertReceiver
+                                    MainActivity.alertIntent = new Intent(getContext(),
+                                            AlertReceiver.class);
+
+                                    int newHour = currentDate.get(Calendar.HOUR);
+                                    newHour++;
+
+                                    //TODO need to account for if current hour is last hour of day.
+                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                            String.valueOf(newHour),
+                                            String.valueOf(currentDate.get(Calendar.MINUTE)),
+                                            String.valueOf(currentDate.get(Calendar.AM_PM)),
+                                            String.valueOf(currentDate.get(Calendar.DAY_OF_MONTH)),
+                                            String.valueOf(currentDate.get(Calendar.MONTH)),
+                                            String.valueOf(currentDate.get(Calendar.YEAR)));
+
+                                    String task = "";
+                                    Cursor result = MainActivity.noteDb.getData(Integer.parseInt(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                    while (result.moveToNext()) {
+                                        task = result.getString(4);
+                                    }
+
+                                    //setting the name of the task for which the
+                                    // notification is being set
+                                    MainActivity.alertIntent.putExtra("ToDo", task);
+
+                                    int broadcast = 0;
+                                    Cursor broadcastResult = MainActivity.noteDb
+                                            .getData(Integer.parseInt(
+                                                    MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                                    while (broadcastResult.moveToNext()) {
+                                        broadcast = broadcastResult.getInt(7);
+                                    }
+
+                                    broadcast = broadcast + 1000;
+
+                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                            getContext(), broadcast, MainActivity.alertIntent,
+                                            PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                    //TODO set this back to one hour
+                                    MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
+                                                    .getTimeInMillis() + 60000/*3600000*/),
+                                            MainActivity.pendIntent);
+
+                                    MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
+                                            .get(position), true);
+
+                                    datePicker.setVisibility(View.VISIBLE);
+
+                                    timePicker.setVisibility(View.GONE);
+
+                                    MainActivity.dateOrTime = false;
+
+                                    //set background to white
+                                    MainActivity.activityRootView.setBackgroundColor(Color
+                                            .parseColor("#FFFFFF"));
+
+                                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                    //Marks properties as not showing
+                                    MainActivity.taskPropertiesShowing = false;
+
+                                    //Returns the 'add' button
+                                    MainActivity.params.height = MainActivity.addHeight;
+
+                                    MainActivity.add.setLayoutParams(MainActivity.params);
+
+                                    MainActivity.dateRowShowing = false;
+
+                                    MainActivity.repeating = false;
+
+                                    MainActivity.timePickerShowing = false;
+
+                                    reorderList();
+
+                                    notifyDataSetChanged();
+
                                 }
-
-                                broadcast = broadcast + 1000;
-
-                                MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                        getContext(), broadcast, MainActivity.alertIntent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                //TODO set this back to one hour
-                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
-                                                .getTimeInMillis() + /*60000*/3600000),
-                                        MainActivity.pendIntent);
-
-                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
-                                        .get(position), true);
-
-                                datePicker.setVisibility(View.VISIBLE);
-
-                                timePicker.setVisibility(View.GONE);
-
-                                MainActivity.dateOrTime = false;
-
-                                //set background to white
-                                MainActivity.activityRootView.setBackgroundColor(Color
-                                        .parseColor("#FFFFFF"));
-
-                                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-
-                                //Marks properties as not showing
-                                MainActivity.taskPropertiesShowing = false;
-
-                                //Returns the 'add' button
-                                MainActivity.params.height = MainActivity.addHeight;
-
-                                MainActivity.add.setLayoutParams(MainActivity.params);
-
-                                MainActivity.dateRowShowing = false;
-
-                                MainActivity.repeating = false;
-
-                                MainActivity.timePickerShowing = false;
-
-                                reorderList();
-
-                                notifyDataSetChanged();
 
                             }
                         });
@@ -941,12 +990,17 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.noteDb.updateShowOnce(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
-                        Toast.makeText(v.getContext(), "Now do it again in two minutes", Toast.LENGTH_SHORT).show();
+                        //Show this only when necessary
+                        Toast.makeText(v.getContext(), "HINT: You can cancel repeat in alarm options.", Toast.LENGTH_LONG).show();
 
                         propertyRow.setVisibility(View.GONE);
 
                         MainActivity.activityRootView
                                 .setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                        MainActivity.taskPropertiesShowing = false;
+
+                        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                     }
 
