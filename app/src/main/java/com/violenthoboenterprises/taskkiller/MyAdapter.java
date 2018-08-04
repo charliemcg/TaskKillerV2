@@ -417,6 +417,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 Calendar dateNow = new GregorianCalendar();
 
+                                //TODO implement these conditions for the other snooze intervals
                                 if(dateNow.get(Calendar.MINUTE) >= (
                                         Integer.parseInt(finalAlarmMinute1) + 1)){
 
@@ -493,7 +494,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                         //TODO account for February
                                         }else{
                                             newDay++;
-                                            newMonth++;
                                         }
                                     }
 
@@ -582,20 +582,61 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.alertIntent = new Intent(getContext(),
                                         AlertReceiver.class);
 
-                                //TODO find out difference between HOUR and HOUR_OF_DAY
+                                int newAmpm = currentDate.get(Calendar.AM_PM);
+                                if(currentDate.get(Calendar.HOUR) >= 8){
+                                    if(currentDate.get(Calendar.AM_PM) == 0){
+                                        newAmpm = 1;
+                                    }else{
+                                        newAmpm = 0;
+                                    }
+                                }
+
+                                int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                                int newMonth = currentDate.get(Calendar.MONTH);
+                                int newYear = currentDate.get(Calendar.YEAR);
+                                if((newAmpm == 0) && (currentDate.get(Calendar.HOUR) >= 8)){
+                                    if(((currentDate.get(Calendar.MONTH)) == 0
+                                            || (currentDate.get(Calendar.MONTH)) == 2
+                                            || (currentDate.get(Calendar.MONTH)) == 4
+                                            || (currentDate.get(Calendar.MONTH)) == 6
+                                            || (currentDate.get(Calendar.MONTH)) == 7
+                                            || (currentDate.get(Calendar.MONTH)) == 9 )
+                                            && (newDay == 31)) {
+                                        newDay = 1;
+                                        newMonth++;
+                                    }else if(((currentDate.get(Calendar.MONTH)) == 1
+                                            || (currentDate.get(Calendar.MONTH)) == 3
+                                            || (currentDate.get(Calendar.MONTH)) == 5
+                                            || (currentDate.get(Calendar.MONTH)) == 8
+                                            || (currentDate.get(Calendar.MONTH)) == 10 )
+                                            && (newDay == 30)) {
+                                        newDay = 1;
+                                    }else if((currentDate.get(Calendar.MONTH) == 11 )
+                                            && (newDay == 31)){
+                                        newDay = 1;
+                                        newMonth = 0;
+                                        newYear++;
+                                        //TODO account for February
+                                    }else{
+                                        newDay++;
+                                    }
+                                }
+
                                 int newHour = currentDate.get(Calendar.HOUR);
                                 newHour += 4;
+                                if(newHour > 12){
+                                    newHour -= 12;
+                                }
 
-                                //TODO need to account for if current hour is
-                                // within last four hours of day.
+                                //TODO need to account for if current hour is last hour of day.
                                 MainActivity.noteDb.updateSnoozeData(String.valueOf(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                         String.valueOf(newHour),
                                         String.valueOf(currentDate.get(Calendar.MINUTE)),
-                                        String.valueOf(currentDate.get(Calendar.AM_PM)),
-                                        String.valueOf(currentDate.get(Calendar.DAY_OF_MONTH)),
-                                        String.valueOf(currentDate.get(Calendar.MONTH)),
-                                        String.valueOf(currentDate.get(Calendar.YEAR)));
+                                        String.valueOf(newAmpm),
+                                        String.valueOf(newDay),
+                                        String.valueOf(newMonth),
+                                        String.valueOf(newYear));
 
                                 //setting the name of the task for which
                                 // the notification is being set
@@ -667,9 +708,34 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.alertIntent = new Intent(getContext(),
                                         AlertReceiver.class);
 
-                                //TODO figure difference between DAY_OF_WEEK/MONTH/YEAR
                                 int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
-                                newDay += 1;
+                                int newMonth = currentDate.get(Calendar.MONTH);
+                                int newYear = currentDate.get(Calendar.YEAR);
+                                    if(((currentDate.get(Calendar.MONTH)) == 0
+                                            || (currentDate.get(Calendar.MONTH)) == 2
+                                            || (currentDate.get(Calendar.MONTH)) == 4
+                                            || (currentDate.get(Calendar.MONTH)) == 6
+                                            || (currentDate.get(Calendar.MONTH)) == 7
+                                            || (currentDate.get(Calendar.MONTH)) == 9 )
+                                            && (newDay == 31)) {
+                                        newDay = 1;
+                                        newMonth++;
+                                    }else if(((currentDate.get(Calendar.MONTH)) == 1
+                                            || (currentDate.get(Calendar.MONTH)) == 3
+                                            || (currentDate.get(Calendar.MONTH)) == 5
+                                            || (currentDate.get(Calendar.MONTH)) == 8
+                                            || (currentDate.get(Calendar.MONTH)) == 10 )
+                                            && (newDay == 30)) {
+                                        newDay = 1;
+                                    }else if((currentDate.get(Calendar.MONTH) == 11 )
+                                            && (newDay == 31)){
+                                        newDay = 1;
+                                        newMonth = 0;
+                                        newYear++;
+                                        //TODO account for February
+                                    }else{
+                                        newDay++;
+                                    }
 
                                 //TODO need to account for if current hour is last hour of day.
                                 MainActivity.noteDb.updateSnoozeData(String.valueOf(
@@ -678,8 +744,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                         String.valueOf(currentDate.get(Calendar.MINUTE)),
                                         String.valueOf(currentDate.get(Calendar.AM_PM)),
                                         String.valueOf(newDay),
-                                        String.valueOf(currentDate.get(Calendar.MONTH)),
-                                        String.valueOf(currentDate.get(Calendar.YEAR)));
+                                        String.valueOf(newMonth),
+                                        String.valueOf(newYear));
 
                                 //setting the name of the task for which
                                 // the notification is being set
