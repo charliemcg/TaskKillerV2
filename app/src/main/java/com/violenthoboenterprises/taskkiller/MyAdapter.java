@@ -456,6 +456,47 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.alertIntent = new Intent(getContext(),
                                             AlertReceiver.class);
 
+                                    int newAmpm = currentDate.get(Calendar.AM_PM);
+                                    if(currentDate.get(Calendar.HOUR) == 11){
+                                        if(currentDate.get(Calendar.AM_PM) == 0){
+                                            newAmpm = 1;
+                                        }else{
+                                            newAmpm = 0;
+                                        }
+                                    }
+
+                                    int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                                    int newMonth = currentDate.get(Calendar.MONTH);
+                                    int newYear = currentDate.get(Calendar.YEAR);
+                                    if((newAmpm == 0) && (currentDate.get(Calendar.HOUR) == 11)){
+                                        if(((currentDate.get(Calendar.MONTH)) == 0
+                                                || (currentDate.get(Calendar.MONTH)) == 2
+                                                || (currentDate.get(Calendar.MONTH)) == 4
+                                                || (currentDate.get(Calendar.MONTH)) == 6
+                                                || (currentDate.get(Calendar.MONTH)) == 7
+                                                || (currentDate.get(Calendar.MONTH)) == 9 )
+                                                && (newDay == 31)) {
+                                            newDay = 1;
+                                            newMonth++;
+                                        }else if(((currentDate.get(Calendar.MONTH)) == 1
+                                                || (currentDate.get(Calendar.MONTH)) == 3
+                                                || (currentDate.get(Calendar.MONTH)) == 5
+                                                || (currentDate.get(Calendar.MONTH)) == 8
+                                                || (currentDate.get(Calendar.MONTH)) == 10 )
+                                                && (newDay == 30)) {
+                                            newDay = 1;
+                                        }else if((currentDate.get(Calendar.MONTH) == 11 )
+                                                && (newDay == 31)){
+                                            newDay = 1;
+                                            newMonth = 0;
+                                            newYear++;
+                                        //TODO account for February
+                                        }else{
+                                            newDay++;
+                                            newMonth++;
+                                        }
+                                    }
+
                                     int newHour = currentDate.get(Calendar.HOUR);
                                     newHour++;
 
@@ -464,10 +505,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             String.valueOf(newHour),
                                             String.valueOf(currentDate.get(Calendar.MINUTE)),
-                                            String.valueOf(currentDate.get(Calendar.AM_PM)),
-                                            String.valueOf(currentDate.get(Calendar.DAY_OF_MONTH)),
-                                            String.valueOf(currentDate.get(Calendar.MONTH)),
-                                            String.valueOf(currentDate.get(Calendar.YEAR)));
+                                            String.valueOf(newAmpm),
+                                            String.valueOf(newDay),
+                                            String.valueOf(newMonth),
+                                            String.valueOf(newYear));
 
                                     //setting the name of the task for which the
                                     // notification is being set
@@ -792,8 +833,15 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.sortedIDs.get(position), false);
 
                         MainActivity.noteDb.updateShowOnce(
-                                MainActivity.sortedIDs.get(
-                                        MainActivity.activeTask), false);
+                                MainActivity.sortedIDs.get(position), false);
+
+//                        taskOverdueRow.setVisibility(View.GONE);
+
+                        //set background to white
+                        MainActivity.activityRootView.setBackgroundColor(Color
+                                .parseColor("#FFFFFF"));
+
+                        MainActivity.taskPropertiesShowing = false;
 
                         //Updates the view
                         MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
@@ -1479,12 +1527,10 @@ class MyAdapter extends ArrayAdapter<String> {
                     if(currentDate.get(Calendar.MINUTE) >= (Integer.parseInt(hour) + dbInterval)){
 
                         alarmHour = String.valueOf(Integer.parseInt(alarmHour) + dbInterval);
+
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 alarmHour, alarmMinute, alarmAmpm, alarmDay, alarmMonth, alarmYear);
-
-                        MainActivity.noteDb.updateShowOnce(
-                                MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                     }
 
@@ -1495,21 +1541,51 @@ class MyAdapter extends ArrayAdapter<String> {
             if(!sameDay){
                 //TODO account for MM/DD/YYYY https://en.wikipedia.org/wiki/Date_format_by_country
                 //Formatting date
-                String formattedDay;
-                String formattedMonth;
+//                String formattedDay;
+                String formattedMonth = "";
                 String formattedDate;
-                if(Integer.valueOf(day) < 10){
-                    formattedDay = "0" + day;
-                }else{
-                    formattedDay = day;
-                }
-                if(Integer.valueOf(month) < 10){
-                    formattedMonth = "0" + String.valueOf(Integer.valueOf(month) + 1);
-                }else{
-                    formattedMonth = String.valueOf(Integer.valueOf(month) + 1);
+//                if(Integer.valueOf(day) < 10){
+//                    formattedDay = "0" + day;
+//                }else{
+//                    formattedDay = day;
+//                }
+
+//                if(Integer.valueOf(month) < 10){
+//                    formattedMonth = "0" + String.valueOf(Integer.valueOf(month) + 1);
+//                }else{
+//                    formattedMonth = String.valueOf(Integer.valueOf(month) + 1);
+//                }
+
+                int intMonth = Integer.valueOf(month) + 1;
+                if(intMonth == 1){
+                    formattedMonth = "Jan";
+                }else if(intMonth == 2){
+                    formattedMonth = "Feb";
+                }else if(intMonth == 3){
+                    formattedMonth = "Mar";
+                }else if(intMonth == 4){
+                    formattedMonth = "Apr";
+                }else if(intMonth == 5){
+                    formattedMonth = "May";
+                }else if(intMonth == 6){
+                    formattedMonth = "Jun";
+                }else if(intMonth == 7){
+                    formattedMonth = "Jul";
+                }else if(intMonth == 8){
+                    formattedMonth = "Aug";
+                }else if(intMonth == 9){
+                    formattedMonth = "Sep";
+                }else if(intMonth == 10){
+                    formattedMonth = "Oct";
+                }else if(intMonth == 11){
+                    formattedMonth = "Nov";
+                }else if(intMonth == 12){
+                    formattedMonth = "Dec";
                 }
 
-                formattedDate = formattedDay + "/" + formattedMonth + "/" + year;
+//                formattedDate = formattedDay + "/" + formattedMonth + "/" + year;
+//                formattedDate = formattedDay + " " + formattedMonth;
+                formattedDate = day + " " + formattedMonth;
 
                 dueTextView.setText(formattedDate);
             //If task due on different day show the due time
