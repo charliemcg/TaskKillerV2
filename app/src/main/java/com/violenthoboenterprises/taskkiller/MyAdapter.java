@@ -935,19 +935,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             if(finalDbRepeatInterval.equals("day")) {
 
-//                                int newAmpm = currentDate.get(Calendar.AM_PM);
-//                                if (currentDate.get(Calendar.HOUR) == 11) {
-//                                    if (currentDate.get(Calendar.AM_PM) == 0) {
-//                                        newAmpm = 1;
-//                                    } else {
-//                                        newAmpm = 0;
-//                                    }
-//                                }
-
                                 int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
                                 int newMonth = currentDate.get(Calendar.MONTH);
                                 int newYear = currentDate.get(Calendar.YEAR);
-//                                if ((newAmpm == 0) && (currentDate.get(Calendar.HOUR) == 11)) {
                                 if (((currentDate.get(Calendar.MONTH)) == 0
                                         || (currentDate.get(Calendar.MONTH)) == 2
                                         || (currentDate.get(Calendar.MONTH)) == 4
@@ -969,15 +959,50 @@ class MyAdapter extends ArrayAdapter<String> {
                                     newDay = 1;
                                     newMonth = 0;
                                     newYear++;
-                                    //TODO account for February
+                                //TODO account for February
                                 } else {
                                     newDay++;
                                 }
 
                                 MainActivity.noteDb.updateAlarmData(String.valueOf(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                                        finalAlarmHour1, finalAlarmMinute2, finalAlarmAmpm1, /*finalAlarmDay1*/String.valueOf(newDay),
-                                        /*finalAlarmMonth1*/String.valueOf(newMonth), /*finalAlarmYear1*/String.valueOf(newYear));
+                                        finalAlarmHour1, finalAlarmMinute2, finalAlarmAmpm1, String.valueOf(newDay),
+                                        String.valueOf(newMonth), String.valueOf(newYear));
+
+                            }else if(finalDbRepeatInterval.equals("week")) {
+
+                                int newDay = currentDate.get(Calendar.DAY_OF_MONTH) + 7;
+                                int newMonth = currentDate.get(Calendar.MONTH);
+                                int newYear = currentDate.get(Calendar.YEAR);
+                                if (((currentDate.get(Calendar.MONTH)) == 0
+                                        || (currentDate.get(Calendar.MONTH)) == 2
+                                        || (currentDate.get(Calendar.MONTH)) == 4
+                                        || (currentDate.get(Calendar.MONTH)) == 6
+                                        || (currentDate.get(Calendar.MONTH)) == 7
+                                        || (currentDate.get(Calendar.MONTH)) == 9)
+                                        && (newDay > 31)) {
+                                    newDay -= 31;
+                                    newMonth++;
+                                } else if (((currentDate.get(Calendar.MONTH)) == 1
+                                        || (currentDate.get(Calendar.MONTH)) == 3
+                                        || (currentDate.get(Calendar.MONTH)) == 5
+                                        || (currentDate.get(Calendar.MONTH)) == 8
+                                        || (currentDate.get(Calendar.MONTH)) == 10)
+                                        && (newDay > 30)) {
+                                    newDay -= 30;
+                                    newMonth++;
+                                } else if ((currentDate.get(Calendar.MONTH) == 11)
+                                        && (newDay == 31)) {
+                                    newDay -= 31;
+                                    newMonth = 0;
+                                    newYear++;
+                                //TODO account for February
+                                }
+
+                                MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                        finalAlarmHour1, finalAlarmMinute2, finalAlarmAmpm1, String.valueOf(newDay),
+                                        String.valueOf(newMonth), String.valueOf(newYear));
 
                             }
 
@@ -1508,6 +1533,9 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.dateRowShowing = true;
 
                     MainActivity.repeatInterval = (AlarmManager.INTERVAL_DAY * 7);
+
+                    MainActivity.noteDb.updateRepeatInterval(toString().valueOf(
+                            MainActivity.sortedIDs.get(position)), "week");
 
                     MainActivity.repeating = true;
 
