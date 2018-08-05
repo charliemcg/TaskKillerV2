@@ -79,6 +79,7 @@ class MyAdapter extends ArrayAdapter<String> {
         Boolean dbSnooze = false;
         Boolean dbShowOnce = false;
         int dbInterval = 0;
+        String dbRepeatInterval = "";
         Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(position)));
         while (dbResult.moveToNext()) {
@@ -95,6 +96,7 @@ class MyAdapter extends ArrayAdapter<String> {
             dbSnooze = dbResult.getInt(10) > 0;
             dbShowOnce = dbResult.getInt(11) > 0;
             dbInterval = dbResult.getInt(12);
+            dbRepeatInterval = dbResult.getString(13);
         }
 
         //getting alarm data
@@ -399,6 +401,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 final String finalAlarmMonth = alarmMonth;
                 final String finalAlarmYear = alarmYear;
                 final String finalAlarmMinute1 = alarmMinute;
+                final Boolean finalDbRepeat4 = dbRepeat;
                 snoozeTask.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -417,9 +420,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 Calendar dateNow = new GregorianCalendar();
 
-                                //TODO implement these conditions for the other snooze intervals
-                                if(dateNow.get(Calendar.MINUTE) >= (
-                                        Integer.parseInt(finalAlarmMinute1) + 1)){
+                                //TODO account for rollover
+                                if((dateNow.get(Calendar.HOUR) >= (
+                                        Integer.parseInt(finalAlarmHour) + 1)) && finalDbRepeat4){
 
                                     Toast.makeText(v.getContext(),
                                             "Task not snoozed because repeat alarm is due.",
@@ -571,121 +574,152 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.noteDb.updateInterval(toString().valueOf(
                                         MainActivity.sortedIDs.get(position)), String.valueOf(4));
 
-                                MainActivity.alarmManager.cancel(MainActivity.pendIntent
-                                        .getService(getContext(), Integer.parseInt(MainActivity
-                                                        .sortedIDs.get(MainActivity.activeTask)),
-                                        MainActivity.alertIntent, 0));
+                                Calendar dateNow = new GregorianCalendar();
 
-                                Calendar currentDate = new GregorianCalendar();
+                                //TODO account for roll over
+                                if((dateNow.get(Calendar.HOUR) >= (
+                                        Integer.parseInt(finalAlarmHour) + 4)) && finalDbRepeat4){
 
-                                //intention to execute AlertReceiver
-                                MainActivity.alertIntent = new Intent(getContext(),
-                                        AlertReceiver.class);
+                                    Toast.makeText(v.getContext(),
+                                            "Task not snoozed because repeat alarm is due.",
+                                            Toast.LENGTH_SHORT).show();
 
-                                int newAmpm = currentDate.get(Calendar.AM_PM);
-                                if(currentDate.get(Calendar.HOUR) >= 8){
-                                    if(currentDate.get(Calendar.AM_PM) == 0){
-                                        newAmpm = 1;
-                                    }else{
-                                        newAmpm = 0;
+                                    String newMinute = String.valueOf(Integer
+                                            .parseInt(finalAlarmMinute1) + 2);
+                                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                            finalAlarmHour, newMinute, finalAlarmAmpm[0],
+                                            finalAlarmDay, finalAlarmMonth, finalAlarmYear);
+
+                                    MainActivity.noteDb.updateOverdue(toString().valueOf(
+                                            MainActivity.sortedIDs.get(position)), false);
+
+                                    //set background to white
+                                    MainActivity.activityRootView.setBackgroundColor(Color
+                                            .parseColor("#FFFFFF"));
+
+                                    MainActivity.taskPropertiesShowing = false;
+
+                                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                }else {
+
+                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent
+                                            .getService(getContext(), Integer.parseInt(MainActivity
+                                                            .sortedIDs.get(MainActivity.activeTask)),
+                                                    MainActivity.alertIntent, 0));
+
+                                    Calendar currentDate = new GregorianCalendar();
+
+                                    //intention to execute AlertReceiver
+                                    MainActivity.alertIntent = new Intent(getContext(),
+                                            AlertReceiver.class);
+
+                                    int newAmpm = currentDate.get(Calendar.AM_PM);
+                                    if (currentDate.get(Calendar.HOUR) >= 8) {
+                                        if (currentDate.get(Calendar.AM_PM) == 0) {
+                                            newAmpm = 1;
+                                        } else {
+                                            newAmpm = 0;
+                                        }
                                     }
-                                }
 
-                                int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
-                                int newMonth = currentDate.get(Calendar.MONTH);
-                                int newYear = currentDate.get(Calendar.YEAR);
-                                if((newAmpm == 0) && (currentDate.get(Calendar.HOUR) >= 8)){
-                                    if(((currentDate.get(Calendar.MONTH)) == 0
-                                            || (currentDate.get(Calendar.MONTH)) == 2
-                                            || (currentDate.get(Calendar.MONTH)) == 4
-                                            || (currentDate.get(Calendar.MONTH)) == 6
-                                            || (currentDate.get(Calendar.MONTH)) == 7
-                                            || (currentDate.get(Calendar.MONTH)) == 9 )
-                                            && (newDay == 31)) {
-                                        newDay = 1;
-                                        newMonth++;
-                                    }else if(((currentDate.get(Calendar.MONTH)) == 1
-                                            || (currentDate.get(Calendar.MONTH)) == 3
-                                            || (currentDate.get(Calendar.MONTH)) == 5
-                                            || (currentDate.get(Calendar.MONTH)) == 8
-                                            || (currentDate.get(Calendar.MONTH)) == 10 )
-                                            && (newDay == 30)) {
-                                        newDay = 1;
-                                    }else if((currentDate.get(Calendar.MONTH) == 11 )
-                                            && (newDay == 31)){
-                                        newDay = 1;
-                                        newMonth = 0;
-                                        newYear++;
-                                        //TODO account for February
-                                    }else{
-                                        newDay++;
+                                    int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                                    int newMonth = currentDate.get(Calendar.MONTH);
+                                    int newYear = currentDate.get(Calendar.YEAR);
+                                    if ((newAmpm == 0) && (currentDate.get(Calendar.HOUR) >= 8)) {
+                                        if (((currentDate.get(Calendar.MONTH)) == 0
+                                                || (currentDate.get(Calendar.MONTH)) == 2
+                                                || (currentDate.get(Calendar.MONTH)) == 4
+                                                || (currentDate.get(Calendar.MONTH)) == 6
+                                                || (currentDate.get(Calendar.MONTH)) == 7
+                                                || (currentDate.get(Calendar.MONTH)) == 9)
+                                                && (newDay == 31)) {
+                                            newDay = 1;
+                                            newMonth++;
+                                        } else if (((currentDate.get(Calendar.MONTH)) == 1
+                                                || (currentDate.get(Calendar.MONTH)) == 3
+                                                || (currentDate.get(Calendar.MONTH)) == 5
+                                                || (currentDate.get(Calendar.MONTH)) == 8
+                                                || (currentDate.get(Calendar.MONTH)) == 10)
+                                                && (newDay == 30)) {
+                                            newDay = 1;
+                                        } else if ((currentDate.get(Calendar.MONTH) == 11)
+                                                && (newDay == 31)) {
+                                            newDay = 1;
+                                            newMonth = 0;
+                                            newYear++;
+                                            //TODO account for February
+                                        } else {
+                                            newDay++;
+                                        }
                                     }
+
+                                    int newHour = currentDate.get(Calendar.HOUR);
+                                    newHour += 4;
+                                    if (newHour > 12) {
+                                        newHour -= 12;
+                                    }
+
+                                    //TODO need to account for if current hour is last hour of day.
+                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                            String.valueOf(newHour),
+                                            String.valueOf(currentDate.get(Calendar.MINUTE)),
+                                            String.valueOf(newAmpm),
+                                            String.valueOf(newDay),
+                                            String.valueOf(newMonth),
+                                            String.valueOf(newYear));
+
+                                    //setting the name of the task for which
+                                    // the notification is being set
+                                    MainActivity.alertIntent.putExtra("ToDo", task);
+
+                                    int newBroadcast = finalDbBroadcast + 1000;
+
+                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                            getContext(), newBroadcast, MainActivity.alertIntent,
+                                            PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                    //TODO set this back to four hours
+                                    MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
+                                                    .getTimeInMillis() + 14400000),
+                                            MainActivity.pendIntent);
+
+                                    MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
+                                            .get(position), true);
+
+                                    datePicker.setVisibility(View.VISIBLE);
+
+                                    timePicker.setVisibility(View.GONE);
+
+                                    MainActivity.dateOrTime = false;
+
+                                    //set background to white
+                                    MainActivity.activityRootView.setBackgroundColor(
+                                            Color.parseColor("#FFFFFF"));
+
+                                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                    //Marks properties as not showing
+                                    MainActivity.taskPropertiesShowing = false;
+
+                                    //Returns the 'add' button
+                                    MainActivity.params.height = MainActivity.addHeight;
+
+                                    MainActivity.add.setLayoutParams(MainActivity.params);
+
+                                    MainActivity.dateRowShowing = false;
+
+                                    MainActivity.repeating = false;
+
+                                    MainActivity.timePickerShowing = false;
+
+                                    reorderList();
+
+                                    notifyDataSetChanged();
+
                                 }
-
-                                int newHour = currentDate.get(Calendar.HOUR);
-                                newHour += 4;
-                                if(newHour > 12){
-                                    newHour -= 12;
-                                }
-
-                                //TODO need to account for if current hour is last hour of day.
-                                MainActivity.noteDb.updateSnoozeData(String.valueOf(
-                                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                                        String.valueOf(newHour),
-                                        String.valueOf(currentDate.get(Calendar.MINUTE)),
-                                        String.valueOf(newAmpm),
-                                        String.valueOf(newDay),
-                                        String.valueOf(newMonth),
-                                        String.valueOf(newYear));
-
-                                //setting the name of the task for which
-                                // the notification is being set
-                                MainActivity.alertIntent.putExtra("ToDo", task);
-
-                                int newBroadcast = finalDbBroadcast + 1000;
-
-                                MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                        getContext(), newBroadcast, MainActivity.alertIntent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                //TODO set this back to four hours
-                                MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
-                                                .getTimeInMillis() + 14400000),
-                                        MainActivity.pendIntent);
-
-                                MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
-                                        .get(position), true);
-
-                                datePicker.setVisibility(View.VISIBLE);
-
-                                timePicker.setVisibility(View.GONE);
-
-                                MainActivity.dateOrTime = false;
-
-                                //set background to white
-                                MainActivity.activityRootView.setBackgroundColor(
-                                        Color.parseColor("#FFFFFF"));
-
-                                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-
-                                //Marks properties as not showing
-                                MainActivity.taskPropertiesShowing = false;
-
-                                //Returns the 'add' button
-                                MainActivity.params.height = MainActivity.addHeight;
-
-                                MainActivity.add.setLayoutParams(MainActivity.params);
-
-                                MainActivity.dateRowShowing = false;
-
-                                MainActivity.repeating = false;
-
-                                MainActivity.timePickerShowing = false;
-
-                                reorderList();
-
-                                notifyDataSetChanged();
-
                             }
                         });
 
@@ -697,104 +731,135 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.noteDb.updateInterval(toString().valueOf(
                                         MainActivity.sortedIDs.get(position)), String.valueOf(24));
 
-                                MainActivity.alarmManager.cancel(MainActivity.pendIntent
-                                        .getService(getContext(), Integer.parseInt(MainActivity
-                                                        .sortedIDs.get(MainActivity.activeTask)),
-                                        MainActivity.alertIntent, 0));
+                                Calendar dateNow = new GregorianCalendar();
 
-                                Calendar currentDate = new GregorianCalendar();
+                                //TODO account for rollover
+                                if ((dateNow.get(Calendar.DAY_OF_MONTH) >= (
+                                        Integer.parseInt(finalAlarmDay) + 1)) && finalDbRepeat4) {
 
-                                //intention to execute AlertReceiver
-                                MainActivity.alertIntent = new Intent(getContext(),
-                                        AlertReceiver.class);
+                                    Toast.makeText(v.getContext(),
+                                            "Task not snoozed because repeat alarm is due.",
+                                            Toast.LENGTH_SHORT).show();
 
-                                int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
-                                int newMonth = currentDate.get(Calendar.MONTH);
-                                int newYear = currentDate.get(Calendar.YEAR);
-                                    if(((currentDate.get(Calendar.MONTH)) == 0
+                                    String newMinute = String.valueOf(Integer
+                                            .parseInt(finalAlarmMinute1) + 2);
+                                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                            finalAlarmHour, newMinute, finalAlarmAmpm[0],
+                                            finalAlarmDay, finalAlarmMonth, finalAlarmYear);
+
+                                    MainActivity.noteDb.updateOverdue(toString().valueOf(
+                                            MainActivity.sortedIDs.get(position)), false);
+
+                                    //set background to white
+                                    MainActivity.activityRootView.setBackgroundColor(Color
+                                            .parseColor("#FFFFFF"));
+
+                                    MainActivity.taskPropertiesShowing = false;
+
+                                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                } else {
+
+                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent
+                                            .getService(getContext(), Integer.parseInt(MainActivity
+                                                            .sortedIDs.get(MainActivity.activeTask)),
+                                                    MainActivity.alertIntent, 0));
+
+                                    Calendar currentDate = new GregorianCalendar();
+
+                                    //intention to execute AlertReceiver
+                                    MainActivity.alertIntent = new Intent(getContext(),
+                                            AlertReceiver.class);
+
+                                    int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                                    int newMonth = currentDate.get(Calendar.MONTH);
+                                    int newYear = currentDate.get(Calendar.YEAR);
+                                    if (((currentDate.get(Calendar.MONTH)) == 0
                                             || (currentDate.get(Calendar.MONTH)) == 2
                                             || (currentDate.get(Calendar.MONTH)) == 4
                                             || (currentDate.get(Calendar.MONTH)) == 6
                                             || (currentDate.get(Calendar.MONTH)) == 7
-                                            || (currentDate.get(Calendar.MONTH)) == 9 )
+                                            || (currentDate.get(Calendar.MONTH)) == 9)
                                             && (newDay == 31)) {
                                         newDay = 1;
                                         newMonth++;
-                                    }else if(((currentDate.get(Calendar.MONTH)) == 1
+                                    } else if (((currentDate.get(Calendar.MONTH)) == 1
                                             || (currentDate.get(Calendar.MONTH)) == 3
                                             || (currentDate.get(Calendar.MONTH)) == 5
                                             || (currentDate.get(Calendar.MONTH)) == 8
-                                            || (currentDate.get(Calendar.MONTH)) == 10 )
+                                            || (currentDate.get(Calendar.MONTH)) == 10)
                                             && (newDay == 30)) {
                                         newDay = 1;
-                                    }else if((currentDate.get(Calendar.MONTH) == 11 )
-                                            && (newDay == 31)){
+                                    } else if ((currentDate.get(Calendar.MONTH) == 11)
+                                            && (newDay == 31)) {
                                         newDay = 1;
                                         newMonth = 0;
                                         newYear++;
                                         //TODO account for February
-                                    }else{
+                                    } else {
                                         newDay++;
                                     }
 
-                                //TODO need to account for if current hour is last hour of day.
-                                MainActivity.noteDb.updateSnoozeData(String.valueOf(
-                                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                                        String.valueOf(currentDate.get(Calendar.HOUR)),
-                                        String.valueOf(currentDate.get(Calendar.MINUTE)),
-                                        String.valueOf(currentDate.get(Calendar.AM_PM)),
-                                        String.valueOf(newDay),
-                                        String.valueOf(newMonth),
-                                        String.valueOf(newYear));
+                                    //TODO need to account for if current hour is last hour of day.
+                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                            String.valueOf(currentDate.get(Calendar.HOUR)),
+                                            String.valueOf(currentDate.get(Calendar.MINUTE)),
+                                            String.valueOf(currentDate.get(Calendar.AM_PM)),
+                                            String.valueOf(newDay),
+                                            String.valueOf(newMonth),
+                                            String.valueOf(newYear));
 
-                                //setting the name of the task for which
-                                // the notification is being set
-                                MainActivity.alertIntent.putExtra("ToDo", task);
+                                    //setting the name of the task for which
+                                    // the notification is being set
+                                    MainActivity.alertIntent.putExtra("ToDo", task);
 
-                                int newBroadcast = finalDbBroadcast + 1000;
+                                    int newBroadcast = finalDbBroadcast + 1000;
 
-                                MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                        getContext(), newBroadcast, MainActivity.alertIntent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT);
+                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                            getContext(), newBroadcast, MainActivity.alertIntent,
+                                            PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                //TODO set this back to one day
-                                MainActivity.alarmManager.set(AlarmManager.RTC,
-                                        (currentDate.getTimeInMillis() + 86400000),
-                                        MainActivity.pendIntent);
+                                    //TODO set this back to one day
+                                    MainActivity.alarmManager.set(AlarmManager.RTC,
+                                            (currentDate.getTimeInMillis() + 86400000),
+                                            MainActivity.pendIntent);
 
-                                MainActivity.noteDb.updateSnooze(MainActivity
-                                        .sortedIDs.get(position), true);
+                                    MainActivity.noteDb.updateSnooze(MainActivity
+                                            .sortedIDs.get(position), true);
 
-                                datePicker.setVisibility(View.VISIBLE);
+                                    datePicker.setVisibility(View.VISIBLE);
 
-                                timePicker.setVisibility(View.GONE);
+                                    timePicker.setVisibility(View.GONE);
 
-                                MainActivity.dateOrTime = false;
+                                    MainActivity.dateOrTime = false;
 
-                                //set background to white
-                                MainActivity.activityRootView.setBackgroundColor(
-                                        Color.parseColor("#FFFFFF"));
+                                    //set background to white
+                                    MainActivity.activityRootView.setBackgroundColor(
+                                            Color.parseColor("#FFFFFF"));
 
-                                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+                                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
-                                //Marks properties as not showing
-                                MainActivity.taskPropertiesShowing = false;
+                                    //Marks properties as not showing
+                                    MainActivity.taskPropertiesShowing = false;
 
-                                //Returns the 'add' button
-                                MainActivity.params.height = MainActivity.addHeight;
+                                    //Returns the 'add' button
+                                    MainActivity.params.height = MainActivity.addHeight;
 
-                                MainActivity.add.setLayoutParams(MainActivity.params);
+                                    MainActivity.add.setLayoutParams(MainActivity.params);
 
-                                MainActivity.dateRowShowing = false;
+                                    MainActivity.dateRowShowing = false;
 
-                                MainActivity.repeating = false;
+                                    MainActivity.repeating = false;
 
-                                MainActivity.timePickerShowing = false;
+                                    MainActivity.timePickerShowing = false;
 
-                                reorderList();
+                                    reorderList();
 
-                                notifyDataSetChanged();
+                                    notifyDataSetChanged();
 
+                                }
                             }
                         });
 
@@ -810,6 +875,9 @@ class MyAdapter extends ArrayAdapter<String> {
                 final String finalAlarmMonth1 = alarmMonth;
                 final String finalAlarmYear1 = alarmYear;
                 final String finalAlarmMinute2 = alarmMinute;
+                final int finalDbInterval = dbInterval;
+                final Boolean finalDbRepeat5 = dbRepeat;
+                final String finalDbRepeatInterval = dbRepeatInterval;
                 taskDone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -863,12 +931,55 @@ class MyAdapter extends ArrayAdapter<String> {
                         //update repeating task to be due at next available date
                         }else {
 
-                            String newMinute = String.valueOf(
-                                    Integer.parseInt(finalAlarmMinute2) + 2);
-                            MainActivity.noteDb.updateAlarmData(String.valueOf(
-                                    MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                                    finalAlarmHour1, newMinute, finalAlarmAmpm1, finalAlarmDay1,
-                                    finalAlarmMonth1, finalAlarmYear1);
+                            Calendar currentDate = new GregorianCalendar();
+
+                            if(finalDbRepeatInterval.equals("day")) {
+
+//                                int newAmpm = currentDate.get(Calendar.AM_PM);
+//                                if (currentDate.get(Calendar.HOUR) == 11) {
+//                                    if (currentDate.get(Calendar.AM_PM) == 0) {
+//                                        newAmpm = 1;
+//                                    } else {
+//                                        newAmpm = 0;
+//                                    }
+//                                }
+
+                                int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                                int newMonth = currentDate.get(Calendar.MONTH);
+                                int newYear = currentDate.get(Calendar.YEAR);
+//                                if ((newAmpm == 0) && (currentDate.get(Calendar.HOUR) == 11)) {
+                                if (((currentDate.get(Calendar.MONTH)) == 0
+                                        || (currentDate.get(Calendar.MONTH)) == 2
+                                        || (currentDate.get(Calendar.MONTH)) == 4
+                                        || (currentDate.get(Calendar.MONTH)) == 6
+                                        || (currentDate.get(Calendar.MONTH)) == 7
+                                        || (currentDate.get(Calendar.MONTH)) == 9)
+                                        && (newDay == 31)) {
+                                    newDay = 1;
+                                    newMonth++;
+                                } else if (((currentDate.get(Calendar.MONTH)) == 1
+                                        || (currentDate.get(Calendar.MONTH)) == 3
+                                        || (currentDate.get(Calendar.MONTH)) == 5
+                                        || (currentDate.get(Calendar.MONTH)) == 8
+                                        || (currentDate.get(Calendar.MONTH)) == 10)
+                                        && (newDay == 30)) {
+                                    newDay = 1;
+                                } else if ((currentDate.get(Calendar.MONTH) == 11)
+                                        && (newDay == 31)) {
+                                    newDay = 1;
+                                    newMonth = 0;
+                                    newYear++;
+                                    //TODO account for February
+                                } else {
+                                    newDay++;
+                                }
+
+                                MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                        finalAlarmHour1, finalAlarmMinute2, finalAlarmAmpm1, /*finalAlarmDay1*/String.valueOf(newDay),
+                                        /*finalAlarmMonth1*/String.valueOf(newMonth), /*finalAlarmYear1*/String.valueOf(newYear));
+
+                            }
 
                             //set background to white
                             MainActivity.activityRootView.setBackgroundColor(
@@ -1368,8 +1479,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.dateRowShowing = true;
 
-                    //TODO set this back to Interval_Day
                     MainActivity.repeatInterval = AlarmManager.INTERVAL_DAY;
+
+                    MainActivity.noteDb.updateRepeatInterval(toString().valueOf(
+                            MainActivity.sortedIDs.get(position)), "day");
 
                     MainActivity.repeating = true;
 

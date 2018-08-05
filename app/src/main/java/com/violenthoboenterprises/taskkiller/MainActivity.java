@@ -347,7 +347,8 @@ public class MainActivity extends AppCompatActivity {
                     buffer.append("OVERDUE: " + res.getString(9) + "\n");
                     buffer.append("SNOOZED: " + res.getString(10) + "\n");
                     buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-                    buffer.append("INTERVAL: " + res.getString(12) + "\n\n");
+                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n\n");
                 }
 
                 showMessage("Data", buffer.toString());
