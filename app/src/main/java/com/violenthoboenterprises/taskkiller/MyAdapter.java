@@ -1134,6 +1134,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                         String.valueOf(newDay), String.valueOf(newMonth),
                                         String.valueOf(newYear));
 
+                            }else if(finalDbRepeatInterval.equals("month")) {
+
+                                //TODO finish this
+
                             }
 
                             //set background to white
@@ -1863,211 +1867,253 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            ignoredTooLong = true;
 //                        }
                     }else if(dbRepeatInterval.equals("week")){
-                        if((dateNow.get(Calendar.YEAR) > Integer.parseInt(alarmYear))){
-                            if(Integer.parseInt(alarmYear) > (dateNow.get(Calendar.YEAR + 1))){
-                                ignoredTooLong = true;
-                            }else if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
-                                    && (Integer.parseInt(alarmDay) <= 25))
-                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
-                                    && (Integer.parseInt(alarmDay) <= 26))
-                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
-                                    && (Integer.parseInt(alarmDay) <= 27))
-                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
-                                    && (Integer.parseInt(alarmDay) <= 28))
-                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
-                                    && (Integer.parseInt(alarmDay) <= 29))
-                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
-                                    && (Integer.parseInt(alarmDay) <= 30))
-                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
-                                    && (Integer.parseInt(alarmDay) <= 31))){
-                                ignoredTooLong = true;
-                            }
-                        }else if(dateNow.get(Calendar.MONTH) > (Integer.parseInt(alarmMonth))){
-                            if(Integer.parseInt(alarmMonth) > (dateNow.get(Calendar.MONTH + 1))){
-                                ignoredTooLong = true;
-                            }else if(((currentDate.get(Calendar.MONTH)) == 0
-                                    || (currentDate.get(Calendar.MONTH)) == 2
-                                    || (currentDate.get(Calendar.MONTH)) == 4
-                                    || (currentDate.get(Calendar.MONTH)) == 6
-                                    || (currentDate.get(Calendar.MONTH)) == 7
-                                    || (currentDate.get(Calendar.MONTH)) == 9 )){
-                                if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
-                                        && (Integer.parseInt(alarmDay) <= 25))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
-                                        && (Integer.parseInt(alarmDay) <= 26))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
-                                        && (Integer.parseInt(alarmDay) <= 27))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
-                                        && (Integer.parseInt(alarmDay) <= 28))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
-                                        && (Integer.parseInt(alarmDay) <= 29))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
-                                        && (Integer.parseInt(alarmDay) <= 30))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
-                                        && (Integer.parseInt(alarmDay) <= 31))){
-                                    ignoredTooLong = true;
-                                }
-                            }else if(((currentDate.get(Calendar.MONTH)) == 3
-                                    || (currentDate.get(Calendar.MONTH)) == 5
-                                    || (currentDate.get(Calendar.MONTH)) == 8
-                                    || (currentDate.get(Calendar.MONTH)) == 10 )){
-                                if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
-                                        && (Integer.parseInt(alarmDay) <= 24))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
-                                        && (Integer.parseInt(alarmDay) <= 25))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
-                                        && (Integer.parseInt(alarmDay) <= 26))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
-                                        && (Integer.parseInt(alarmDay) <= 27))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
-                                        && (Integer.parseInt(alarmDay) <= 28))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
-                                        && (Integer.parseInt(alarmDay) <= 29))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
-                                        && (Integer.parseInt(alarmDay) <= 30))){
-                                    ignoredTooLong = true;
-                                }
-                            }else if(currentDate.get(Calendar.MONTH) == 1
-                                    && (dateNow.get(Calendar.DAY_OF_MONTH) == 28)
-                                    && (dateNow.get(Calendar.YEAR) % 4 != 0)) {
-                                if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
-                                        && (Integer.parseInt(alarmDay) <= 22))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
-                                        && (Integer.parseInt(alarmDay) <= 23))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
-                                        && (Integer.parseInt(alarmDay) <= 24))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
-                                        && (Integer.parseInt(alarmDay) <= 25))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
-                                        && (Integer.parseInt(alarmDay) <= 26))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
-                                        && (Integer.parseInt(alarmDay) <= 27))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
-                                        && (Integer.parseInt(alarmDay) <= 28))){
-                                    ignoredTooLong = true;
-                                }
-                            }else if(currentDate.get(Calendar.MONTH) == 1
-                                    && (dateNow.get(Calendar.DAY_OF_MONTH) == 29)
-                                    && (dateNow.get(Calendar.YEAR) % 4 == 0)){
-                                if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
-                                        && (Integer.parseInt(alarmDay) <= 23))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
-                                        && (Integer.parseInt(alarmDay) <= 24))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
-                                        && (Integer.parseInt(alarmDay) <= 25))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
-                                        && (Integer.parseInt(alarmDay) <= 26))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
-                                        && (Integer.parseInt(alarmDay) <= 27))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
-                                        && (Integer.parseInt(alarmDay) <= 28))
-                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
-                                        && (Integer.parseInt(alarmDay) <= 29))){
-                                    ignoredTooLong = true;
-                                }
-                            }
-                        }else if(dateNow.get(Calendar.DAY_OF_MONTH) >= (Integer
-                                .parseInt(alarmDay) + 7)){
+                        if((Integer.parseInt(dbTimestamp) / 60) <= ((dateNow.getTimeInMillis() / 60000) - 10080)){
                             ignoredTooLong = true;
                         }
+//                        if((dateNow.get(Calendar.YEAR) > Integer.parseInt(alarmYear))){
+//                            if(Integer.parseInt(alarmYear) > (dateNow.get(Calendar.YEAR + 1))){
+//                                ignoredTooLong = true;
+//                            }else if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
+//                                    && (Integer.parseInt(alarmDay) <= 25))
+//                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
+//                                    && (Integer.parseInt(alarmDay) <= 26))
+//                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
+//                                    && (Integer.parseInt(alarmDay) <= 27))
+//                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
+//                                    && (Integer.parseInt(alarmDay) <= 28))
+//                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
+//                                    && (Integer.parseInt(alarmDay) <= 29))
+//                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
+//                                    && (Integer.parseInt(alarmDay) <= 30))
+//                                    || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
+//                                    && (Integer.parseInt(alarmDay) <= 31))){
+//                                ignoredTooLong = true;
+//                            }
+//                        }else if(dateNow.get(Calendar.MONTH) > (Integer.parseInt(alarmMonth))){
+//                            if(Integer.parseInt(alarmMonth) > (dateNow.get(Calendar.MONTH + 1))){
+//                                ignoredTooLong = true;
+//                            }else if(((currentDate.get(Calendar.MONTH)) == 0
+//                                    || (currentDate.get(Calendar.MONTH)) == 2
+//                                    || (currentDate.get(Calendar.MONTH)) == 4
+//                                    || (currentDate.get(Calendar.MONTH)) == 6
+//                                    || (currentDate.get(Calendar.MONTH)) == 7
+//                                    || (currentDate.get(Calendar.MONTH)) == 9 )){
+//                                if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
+//                                        && (Integer.parseInt(alarmDay) <= 25))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
+//                                        && (Integer.parseInt(alarmDay) <= 26))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
+//                                        && (Integer.parseInt(alarmDay) <= 27))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
+//                                        && (Integer.parseInt(alarmDay) <= 28))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
+//                                        && (Integer.parseInt(alarmDay) <= 29))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
+//                                        && (Integer.parseInt(alarmDay) <= 30))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
+//                                        && (Integer.parseInt(alarmDay) <= 31))){
+//                                    ignoredTooLong = true;
+//                                }
+//                            }else if(((currentDate.get(Calendar.MONTH)) == 3
+//                                    || (currentDate.get(Calendar.MONTH)) == 5
+//                                    || (currentDate.get(Calendar.MONTH)) == 8
+//                                    || (currentDate.get(Calendar.MONTH)) == 10 )){
+//                                if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
+//                                        && (Integer.parseInt(alarmDay) <= 24))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
+//                                        && (Integer.parseInt(alarmDay) <= 25))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
+//                                        && (Integer.parseInt(alarmDay) <= 26))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
+//                                        && (Integer.parseInt(alarmDay) <= 27))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
+//                                        && (Integer.parseInt(alarmDay) <= 28))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
+//                                        && (Integer.parseInt(alarmDay) <= 29))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
+//                                        && (Integer.parseInt(alarmDay) <= 30))){
+//                                    ignoredTooLong = true;
+//                                }
+//                            }else if(currentDate.get(Calendar.MONTH) == 1
+//                                    && (dateNow.get(Calendar.DAY_OF_MONTH) == 28)
+//                                    && (dateNow.get(Calendar.YEAR) % 4 != 0)) {
+//                                if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
+//                                        && (Integer.parseInt(alarmDay) <= 22))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
+//                                        && (Integer.parseInt(alarmDay) <= 23))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
+//                                        && (Integer.parseInt(alarmDay) <= 24))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
+//                                        && (Integer.parseInt(alarmDay) <= 25))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
+//                                        && (Integer.parseInt(alarmDay) <= 26))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
+//                                        && (Integer.parseInt(alarmDay) <= 27))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
+//                                        && (Integer.parseInt(alarmDay) <= 28))){
+//                                    ignoredTooLong = true;
+//                                }
+//                            }else if(currentDate.get(Calendar.MONTH) == 1
+//                                    && (dateNow.get(Calendar.DAY_OF_MONTH) == 29)
+//                                    && (dateNow.get(Calendar.YEAR) % 4 == 0)){
+//                                if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
+//                                        && (Integer.parseInt(alarmDay) <= 23))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
+//                                        && (Integer.parseInt(alarmDay) <= 24))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
+//                                        && (Integer.parseInt(alarmDay) <= 25))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
+//                                        && (Integer.parseInt(alarmDay) <= 26))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
+//                                        && (Integer.parseInt(alarmDay) <= 27))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
+//                                        && (Integer.parseInt(alarmDay) <= 28))
+//                                        || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
+//                                        && (Integer.parseInt(alarmDay) <= 29))){
+//                                    ignoredTooLong = true;
+//                                }
+//                            }
+//                        }else if(dateNow.get(Calendar.DAY_OF_MONTH) >= (Integer
+//                                .parseInt(alarmDay) + 7)){
+//                            ignoredTooLong = true;
+//                        }
                     }else if(dbRepeatInterval.equals("month")){
-                        if(dateNow.get(Calendar.YEAR) > (Integer.parseInt(alarmYear))){
-                            if(Integer.parseInt(alarmYear) > (dateNow.get(Calendar.YEAR + 1))){
-                                ignoredTooLong = true;
-                            }else if(((dateNow.get(Calendar.MONTH) == 1) && (Integer
-                                    .parseInt(alarmMonth) == 12))){
-                                if(dateNow.get(Calendar.DAY_OF_MONTH) <= Integer.parseInt(alarmDay)){
-                                    ignoredTooLong = true;
-                                }
-                            }
-                        }else if(dateNow.get(Calendar.MONTH) > (Integer.parseInt(alarmMonth))){
-                            if(Integer.parseInt(alarmMonth) > (dateNow.get(Calendar.MONTH) + 1)) {
-                                ignoredTooLong = true;
-                            }else if(Integer.parseInt(alarmMonth) == (dateNow
-                                    .get(Calendar.MONTH) + 1)){
-                                if(((currentDate.get(Calendar.MONTH)) == 0
-                                        || (currentDate.get(Calendar.MONTH)) == 2
-                                        || (currentDate.get(Calendar.MONTH)) == 4
-                                        || (currentDate.get(Calendar.MONTH)) == 6
-                                        || (currentDate.get(Calendar.MONTH)) == 7
-                                        || (currentDate.get(Calendar.MONTH)) == 9 )){
-                                    if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1) && (Integer
-                                            .parseInt(alarmDay) <= 25))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
-                                            && (Integer.parseInt(alarmDay) <= 26))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
-                                            && (Integer.parseInt(alarmDay) <= 27))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
-                                            && (Integer.parseInt(alarmDay) <= 28))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
-                                            && (Integer.parseInt(alarmDay) <= 29))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
-                                            && (Integer.parseInt(alarmDay) <= 30))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
-                                            && (Integer.parseInt(alarmDay) <= 31))){
-                                        ignoredTooLong = true;
-                                    }
-                                }else if(((currentDate.get(Calendar.MONTH)) == 3
-                                        || (currentDate.get(Calendar.MONTH)) == 5
-                                        || (currentDate.get(Calendar.MONTH)) == 8
-                                        || (currentDate.get(Calendar.MONTH)) == 10 )){
-                                    if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
-                                            && (Integer.parseInt(alarmDay) <= 24))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
-                                            && (Integer.parseInt(alarmDay) <= 25))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
-                                            && (Integer.parseInt(alarmDay) <= 26))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
-                                            && (Integer.parseInt(alarmDay) <= 27))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
-                                            && (Integer.parseInt(alarmDay) <= 28))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
-                                            && (Integer.parseInt(alarmDay) <= 29))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
-                                            && (Integer.parseInt(alarmDay) <= 30))){
-                                        ignoredTooLong = true;
-                                    }
-                                }else if(currentDate.get(Calendar.MONTH) == 1
-                                        && (dateNow.get(Calendar.DAY_OF_MONTH) == 28)
-                                        && (dateNow.get(Calendar.YEAR) % 4 != 0)) {
-                                    if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
-                                            && (Integer.parseInt(alarmDay) <= 22))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
-                                            && (Integer.parseInt(alarmDay) <= 23))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
-                                            && (Integer.parseInt(alarmDay) <= 24))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
-                                            && (Integer.parseInt(alarmDay) <= 25))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
-                                            && (Integer.parseInt(alarmDay) <= 26))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
-                                            && (Integer.parseInt(alarmDay) <= 27))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
-                                            && (Integer.parseInt(alarmDay) <= 28))){
-                                        ignoredTooLong = true;
-                                    }
-                                }else if(currentDate.get(Calendar.MONTH) == 1
-                                        && (dateNow.get(Calendar.DAY_OF_MONTH) == 29)
-                                        && (dateNow.get(Calendar.YEAR) % 4 == 0)){
-                                    if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
-                                            && (Integer.parseInt(alarmDay) <= 23))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
-                                            && (Integer.parseInt(alarmDay) <= 24))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
-                                            && (Integer.parseInt(alarmDay) <= 25))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
-                                            && (Integer.parseInt(alarmDay) <= 26))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
-                                            && (Integer.parseInt(alarmDay) <= 27))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
-                                            && (Integer.parseInt(alarmDay) <= 28))
-                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
-                                            && (Integer.parseInt(alarmDay) <= 29))){
-                                        ignoredTooLong = true;
-                                    }
-                                }
-                            }
+                        //TODO adjust for different types of months
+                        //Month January and day is 29 non leap year 43200
+                        //Month January and day is 30 non leap year 41760
+                        //Month January and day is 31 non leap year 40320
+                        //Month January and day is 30 leap year 43200
+                        //Month January and day is 31 leap year 41760
+                        //Month March||May||August||October and day is 31 43200
+                        //Month January||March||May||July||August||October||December 44640
+                        //Month April||June||September||November 43200
+                        //Month February non leap year 40320
+                        //Month February leap year 41760
+                        int subtractThis = 0;
+                        int theYear = Integer.parseInt(alarmYear);
+                        int theMonth = Integer.parseInt(alarmMonth);
+                        int theDay = Integer.parseInt(alarmDay);
+                        if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
+                            subtractThis = 43200;
+                        }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
+                            subtractThis = 41760;
+                        }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
+                            subtractThis = 40320;
+                        }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
+                            subtractThis = 43200;
+                        }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
+                            subtractThis = 41760;
+                        }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7) || (theMonth == 9)) && (theDay == 31)){
+                            subtractThis = 43200;
+                        }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4) || (theMonth == 6) || (theMonth == 7) || (theMonth == 9) || (theMonth == 11)){
+                            subtractThis = 44640;
+                        }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8) || (theMonth == 10)){
+                            subtractThis = 43200;
+                        }else if((theMonth == 1) && (theYear % 4 != 0)){
+                            subtractThis = 40320;
+                        }else if((theMonth == 1) && (theYear % 4 == 0)){
+                            subtractThis = 41760;
                         }
+                        if((Integer.parseInt(dbTimestamp) / 60) <= ((dateNow.getTimeInMillis() / 60000) - subtractThis)){
+                            ignoredTooLong = true;
+                        }
+//                        if(dateNow.get(Calendar.YEAR) > (Integer.parseInt(alarmYear))){
+//                            if(Integer.parseInt(alarmYear) > (dateNow.get(Calendar.YEAR + 1))){
+//                                ignoredTooLong = true;
+//                            }else if(((dateNow.get(Calendar.MONTH) == 1) && (Integer
+//                                    .parseInt(alarmMonth) == 12))){
+//                                if(dateNow.get(Calendar.DAY_OF_MONTH) <= Integer.parseInt(alarmDay)){
+//                                    ignoredTooLong = true;
+//                                }
+//                            }
+//                        }else if(dateNow.get(Calendar.MONTH) > (Integer.parseInt(alarmMonth))){
+//                            if(Integer.parseInt(alarmMonth) > (dateNow.get(Calendar.MONTH) + 1)) {
+//                                ignoredTooLong = true;
+//                            }else if(Integer.parseInt(alarmMonth) == (dateNow
+//                                    .get(Calendar.MONTH) + 1)){
+//                                if(((currentDate.get(Calendar.MONTH)) == 0
+//                                        || (currentDate.get(Calendar.MONTH)) == 2
+//                                        || (currentDate.get(Calendar.MONTH)) == 4
+//                                        || (currentDate.get(Calendar.MONTH)) == 6
+//                                        || (currentDate.get(Calendar.MONTH)) == 7
+//                                        || (currentDate.get(Calendar.MONTH)) == 9 )){
+//                                    if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1) && (Integer
+//                                            .parseInt(alarmDay) <= 25))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
+//                                            && (Integer.parseInt(alarmDay) <= 26))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
+//                                            && (Integer.parseInt(alarmDay) <= 27))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
+//                                            && (Integer.parseInt(alarmDay) <= 28))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
+//                                            && (Integer.parseInt(alarmDay) <= 29))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
+//                                            && (Integer.parseInt(alarmDay) <= 30))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
+//                                            && (Integer.parseInt(alarmDay) <= 31))){
+//                                        ignoredTooLong = true;
+//                                    }
+//                                }else if(((currentDate.get(Calendar.MONTH)) == 3
+//                                        || (currentDate.get(Calendar.MONTH)) == 5
+//                                        || (currentDate.get(Calendar.MONTH)) == 8
+//                                        || (currentDate.get(Calendar.MONTH)) == 10 )){
+//                                    if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
+//                                            && (Integer.parseInt(alarmDay) <= 24))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
+//                                            && (Integer.parseInt(alarmDay) <= 25))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
+//                                            && (Integer.parseInt(alarmDay) <= 26))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
+//                                            && (Integer.parseInt(alarmDay) <= 27))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
+//                                            && (Integer.parseInt(alarmDay) <= 28))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
+//                                            && (Integer.parseInt(alarmDay) <= 29))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
+//                                            && (Integer.parseInt(alarmDay) <= 30))){
+//                                        ignoredTooLong = true;
+//                                    }
+//                                }else if(currentDate.get(Calendar.MONTH) == 1
+//                                        && (dateNow.get(Calendar.DAY_OF_MONTH) == 28)
+//                                        && (dateNow.get(Calendar.YEAR) % 4 != 0)) {
+//                                    if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
+//                                            && (Integer.parseInt(alarmDay) <= 22))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
+//                                            && (Integer.parseInt(alarmDay) <= 23))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
+//                                            && (Integer.parseInt(alarmDay) <= 24))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
+//                                            && (Integer.parseInt(alarmDay) <= 25))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
+//                                            && (Integer.parseInt(alarmDay) <= 26))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
+//                                            && (Integer.parseInt(alarmDay) <= 27))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
+//                                            && (Integer.parseInt(alarmDay) <= 28))){
+//                                        ignoredTooLong = true;
+//                                    }
+//                                }else if(currentDate.get(Calendar.MONTH) == 1
+//                                        && (dateNow.get(Calendar.DAY_OF_MONTH) == 29)
+//                                        && (dateNow.get(Calendar.YEAR) % 4 == 0)){
+//                                    if(((dateNow.get(Calendar.DAY_OF_MONTH) == 1)
+//                                            && (Integer.parseInt(alarmDay) <= 23))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 2)
+//                                            && (Integer.parseInt(alarmDay) <= 24))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 3)
+//                                            && (Integer.parseInt(alarmDay) <= 25))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 4)
+//                                            && (Integer.parseInt(alarmDay) <= 26))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 5)
+//                                            && (Integer.parseInt(alarmDay) <= 27))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 6)
+//                                            && (Integer.parseInt(alarmDay) <= 28))
+//                                            || ((dateNow.get(Calendar.DAY_OF_MONTH) == 7)
+//                                            && (Integer.parseInt(alarmDay) <= 29))){
+//                                        ignoredTooLong = true;
+//                                    }
+//                                }
+//                            }
+//                        }
                     }
                 }
 
@@ -2090,13 +2136,9 @@ class MyAdapter extends ArrayAdapter<String> {
                 //check if ignored task is beyond the next repeat time
                 }else if(ignoredTooLong){
                     if(dbRepeatInterval.equals("day")){
-//                        int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
-//                        int newMonth = currentDate.get(Calendar.MONTH);
-//                        int newYear = currentDate.get(Calendar.YEAR);
                         int newDay = Integer.parseInt(alarmDay);
                         int newMonth = Integer.parseInt(alarmMonth);
                         int newYear = Integer.parseInt(alarmYear);
-                        Log.i(TAG, "newDay: " + newDay);
                         if (((currentDate.get(Calendar.MONTH)) == 0
                                 || (currentDate.get(Calendar.MONTH)) == 2
                                 || (currentDate.get(Calendar.MONTH)) == 4
@@ -2129,7 +2171,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         } else {
                             newDay++;
                         }
-                        Log.i(TAG, "newDay: " + newDay);
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 alarmHour, alarmMinute, alarmAmpm, String.valueOf(newDay),
@@ -2140,8 +2181,52 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 String.valueOf(tempTimestamp));
                     }else if(dbRepeatInterval.equals("week")){
+                        int newDay = Integer.parseInt(alarmDay);
+                        int newMonth = Integer.parseInt(alarmMonth);
+                        int newYear = Integer.parseInt(alarmYear);
+                        if (((currentDate.get(Calendar.MONTH)) == 0
+                                || (currentDate.get(Calendar.MONTH)) == 2
+                                || (currentDate.get(Calendar.MONTH)) == 4
+                                || (currentDate.get(Calendar.MONTH)) == 6
+                                || (currentDate.get(Calendar.MONTH)) == 7
+                                || (currentDate.get(Calendar.MONTH)) == 9)
+                                && (newDay > 31)) {
+                            newDay -= 31;
+                            newMonth++;
+                        } else if (((currentDate.get(Calendar.MONTH)) == 1
+                                || (currentDate.get(Calendar.MONTH)) == 3
+                                || (currentDate.get(Calendar.MONTH)) == 5
+                                || (currentDate.get(Calendar.MONTH)) == 8
+                                || (currentDate.get(Calendar.MONTH)) == 10)
+                                && (newDay > 30)) {
+                            newDay -= 30;
+                            newMonth++;
+                        } else if ((currentDate.get(Calendar.MONTH) == 11)
+                                && (newDay == 31)) {
+                            newDay -= 31;
+                            newMonth = 0;
+                            newYear++;
+                        }else if(currentDate.get(Calendar.MONTH) == 1
+                                && (newDay == 28) && (newYear % 4 != 0)) {
+                            newDay = 1;
+                            newMonth++;
+                        }else if(currentDate.get(Calendar.MONTH) == 1
+                                && (newDay == 29) && (newYear % 4 == 0)){
+                            newDay = 1;
+                            newMonth++;
+                        }
+                        MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                alarmHour, alarmMinute, alarmAmpm, String.valueOf(newDay),
+                                String.valueOf(newMonth), String.valueOf(newYear));
 
+                        int tempTimestamp = Integer.parseInt(dbTimestamp) + 10080;
+                        MainActivity.noteDb.updateTimestamp(String.valueOf(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                String.valueOf(tempTimestamp));
                     }else if(dbRepeatInterval.equals("month")){
+
+                        //TODO finish this
 
                     }
                 //Show the once off overdue options
