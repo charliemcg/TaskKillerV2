@@ -1805,17 +1805,20 @@ class MyAdapter extends ArrayAdapter<String> {
                 //Overdue
                 if (currentDate.get(Calendar.YEAR) > Integer.valueOf(year)) {
                     overdue.setVisibility(View.VISIBLE);
+                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     markAsOverdue = true;
                 //Overdue
                 } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
                         && currentDate.get(Calendar.MONTH) > Integer.valueOf(month)) {
                     overdue.setVisibility(View.VISIBLE);
+                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     markAsOverdue = true;
                 //Overdue
                 } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
                         && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
                         && currentDate.get(Calendar.DAY_OF_MONTH) > Integer.valueOf(day)) {
                     overdue.setVisibility(View.VISIBLE);
+                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     markAsOverdue = true;
                 } else if (currentDate.get(Calendar.YEAR) == Integer.valueOf(year)
                         && currentDate.get(Calendar.MONTH) == Integer.valueOf(month)
@@ -1831,11 +1834,13 @@ class MyAdapter extends ArrayAdapter<String> {
                     //Overdue
                     if (currentDate.get(Calendar.HOUR_OF_DAY) > adjustedHour) {
                         overdue.setVisibility(View.VISIBLE);
+                        dueTextView.setTextColor(Color.parseColor("#FF0000"));
                         markAsOverdue = true;
                     //Overdue
                     } else if (currentDate.get(Calendar.HOUR_OF_DAY) == adjustedHour
                             && currentDate.get(Calendar.MINUTE) >= Integer.valueOf(minute)) {
                         overdue.setVisibility(View.VISIBLE);
+                        dueTextView.setTextColor(Color.parseColor("#FF0000"));
                         markAsOverdue = true;
                     //Not overdue
                     } else {
