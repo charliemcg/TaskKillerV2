@@ -1851,6 +1851,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 if(dbRepeat) {
                     if(dbRepeatInterval.equals("day")) {
                         if((Integer.parseInt(dbTimestamp) / 60) <= ((dateNow.getTimeInMillis() / 60000) - 1440)){
+                            MainActivity.noteDb.updateOverdue(
+                                    MainActivity.sortedIDs.get(position), true);
                             ignoredTooLong = true;
                         }
 //                        if (dateNow.get(Calendar.YEAR) > (Integer.parseInt(alarmYear))) {
@@ -1868,6 +1870,8 @@ class MyAdapter extends ArrayAdapter<String> {
 //                        }
                     }else if(dbRepeatInterval.equals("week")){
                         if((Integer.parseInt(dbTimestamp) / 60) <= ((dateNow.getTimeInMillis() / 60000) - 10080)){
+                            MainActivity.noteDb.updateOverdue(
+                                    MainActivity.sortedIDs.get(position), true);
                             ignoredTooLong = true;
                         }
 //                        if((dateNow.get(Calendar.YEAR) > Integer.parseInt(alarmYear))){
@@ -1978,43 +1982,44 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            ignoredTooLong = true;
 //                        }
                     }else if(dbRepeatInterval.equals("month")){
-                        //TODO adjust for different types of months
-                        //Month January and day is 29 non leap year 43200
-                        //Month January and day is 30 non leap year 41760
-                        //Month January and day is 31 non leap year 40320
-                        //Month January and day is 30 leap year 43200
-                        //Month January and day is 31 leap year 41760
-                        //Month March||May||August||October and day is 31 43200
-                        //Month January||March||May||July||August||October||December 44640
-                        //Month April||June||September||November 43200
-                        //Month February non leap year 40320
-                        //Month February leap year 41760
                         int subtractThis = 0;
                         int theYear = Integer.parseInt(alarmYear);
                         int theMonth = Integer.parseInt(alarmMonth);
                         int theDay = Integer.parseInt(alarmDay);
+                        //Month January and day is 29 non leap year 43200
                         if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
                             subtractThis = 43200;
+                        //Month January and day is 30 non leap year 41760
                         }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
                             subtractThis = 41760;
+                        //Month January and day is 31 non leap year 40320
                         }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
                             subtractThis = 40320;
+                        //Month January and day is 30 leap year 43200
                         }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
                             subtractThis = 43200;
+                        //Month January and day is 31 leap year 41760
                         }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
                             subtractThis = 41760;
+                        //Month March||May||August||October and day is 31 43200
                         }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7) || (theMonth == 9)) && (theDay == 31)){
                             subtractThis = 43200;
+                        //Month January||March||May||July||August||October||December 44640
                         }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4) || (theMonth == 6) || (theMonth == 7) || (theMonth == 9) || (theMonth == 11)){
                             subtractThis = 44640;
+                        //Month April||June||September||November 43200
                         }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8) || (theMonth == 10)){
                             subtractThis = 43200;
+                        //Month February non leap year 40320
                         }else if((theMonth == 1) && (theYear % 4 != 0)){
                             subtractThis = 40320;
+                        //Month February leap year 41760
                         }else if((theMonth == 1) && (theYear % 4 == 0)){
                             subtractThis = 41760;
                         }
                         if((Integer.parseInt(dbTimestamp) / 60) <= ((dateNow.getTimeInMillis() / 60000) - subtractThis)){
+                            MainActivity.noteDb.updateOverdue(
+                                    MainActivity.sortedIDs.get(position), true);
                             ignoredTooLong = true;
                         }
 //                        if(dateNow.get(Calendar.YEAR) > (Integer.parseInt(alarmYear))){
@@ -2126,7 +2131,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         overdue.setVisibility(View.VISIBLE);
                         MainActivity.noteDb.updateSnooze(
                                 MainActivity.sortedIDs.get(position), false);
-                        //show snooze icon
+                    //show snooze icon
                     } else {
                         snoozed.setVisibility(View.VISIBLE);
                         overdue.setVisibility(View.GONE);
@@ -2136,9 +2141,11 @@ class MyAdapter extends ArrayAdapter<String> {
                 //check if ignored task is beyond the next repeat time
                 }else if(ignoredTooLong){
                     if(dbRepeatInterval.equals("day")){
+
                         int newDay = Integer.parseInt(alarmDay);
                         int newMonth = Integer.parseInt(alarmMonth);
                         int newYear = Integer.parseInt(alarmYear);
+
                         if (((currentDate.get(Calendar.MONTH)) == 0
                                 || (currentDate.get(Calendar.MONTH)) == 2
                                 || (currentDate.get(Calendar.MONTH)) == 4
@@ -2171,6 +2178,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         } else {
                             newDay++;
                         }
+
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 alarmHour, alarmMinute, alarmAmpm, String.valueOf(newDay),
@@ -2180,10 +2188,61 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.noteDb.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 String.valueOf(tempTimestamp));
+
                     }else if(dbRepeatInterval.equals("week")){
+
                         int newDay = Integer.parseInt(alarmDay);
                         int newMonth = Integer.parseInt(alarmMonth);
                         int newYear = Integer.parseInt(alarmYear);
+
+//                        if (((currentDate.get(Calendar.MONTH)) == 0
+//                                || (currentDate.get(Calendar.MONTH)) == 2
+//                                || (currentDate.get(Calendar.MONTH)) == 4
+//                                || (currentDate.get(Calendar.MONTH)) == 6
+//                                || (currentDate.get(Calendar.MONTH)) == 7
+//                                || (currentDate.get(Calendar.MONTH)) == 9)
+//                                && (newDay > 31)) {
+//                            newDay -= 31;
+//                            newMonth++;
+//                        } else if (((currentDate.get(Calendar.MONTH)) == 1
+//                                || (currentDate.get(Calendar.MONTH)) == 3
+//                                || (currentDate.get(Calendar.MONTH)) == 5
+//                                || (currentDate.get(Calendar.MONTH)) == 8
+//                                || (currentDate.get(Calendar.MONTH)) == 10)
+//                                && (newDay > 30)) {
+//                            newDay -= 30;
+//                            newMonth++;
+//                        } else if ((currentDate.get(Calendar.MONTH) == 11)
+//                                && (newDay == 31)) {
+//                            newDay -= 31;
+//                            newMonth = 0;
+//                            newYear++;
+//                        }else if(currentDate.get(Calendar.MONTH) == 1
+//                                && (newDay == 28) && (newYear % 4 != 0)) {
+//                            newDay = 1;
+//                            newMonth++;
+//                        }else if(currentDate.get(Calendar.MONTH) == 1
+//                                && (newDay == 29) && (newYear % 4 == 0)){
+//                            newDay = 1;
+//                            newMonth++;
+//                        }
+
+                        MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                alarmHour, alarmMinute, alarmAmpm, String.valueOf(newDay),
+                                String.valueOf(newMonth), String.valueOf(newYear));
+
+                        int tempTimestamp = Integer.parseInt(dbTimestamp) + 10080;
+                        MainActivity.noteDb.updateTimestamp(String.valueOf(
+                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                                String.valueOf(tempTimestamp));
+
+                    }else if(dbRepeatInterval.equals("month")){
+
+                        int newDay = Integer.parseInt(alarmDay);
+                        int newMonth = Integer.parseInt(alarmMonth);
+                        int newYear = Integer.parseInt(alarmYear);
+
                         if (((currentDate.get(Calendar.MONTH)) == 0
                                 || (currentDate.get(Calendar.MONTH)) == 2
                                 || (currentDate.get(Calendar.MONTH)) == 4
@@ -2215,18 +2274,17 @@ class MyAdapter extends ArrayAdapter<String> {
                             newDay = 1;
                             newMonth++;
                         }
+
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 alarmHour, alarmMinute, alarmAmpm, String.valueOf(newDay),
                                 String.valueOf(newMonth), String.valueOf(newYear));
 
-                        int tempTimestamp = Integer.parseInt(dbTimestamp) + 10080;
+                        //TODO get correct timestamp
+                        int tempTimestamp = Integer.parseInt(dbTimestamp) + 0;
                         MainActivity.noteDb.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 String.valueOf(tempTimestamp));
-                    }else if(dbRepeatInterval.equals("month")){
-
-                        //TODO finish this
 
                     }
                 //Show the once off overdue options
