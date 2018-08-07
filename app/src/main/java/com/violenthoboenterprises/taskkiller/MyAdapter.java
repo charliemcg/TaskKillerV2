@@ -80,6 +80,7 @@ class MyAdapter extends ArrayAdapter<String> {
         Boolean dbShowOnce = false;
         int dbInterval = 0;
         String dbRepeatInterval = "";
+        Boolean dbIgnored = false;
         Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(position)));
         while (dbResult.moveToNext()) {
@@ -97,6 +98,7 @@ class MyAdapter extends ArrayAdapter<String> {
             dbShowOnce = dbResult.getInt(11) > 0;
             dbInterval = dbResult.getInt(12);
             dbRepeatInterval = dbResult.getString(13);
+            dbIgnored = dbResult.getInt(14) > 0;
         }
 
         //getting alarm data
@@ -1171,6 +1173,9 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.noteDb.updateShowOnce(
                                 MainActivity.sortedIDs.get(position), false);
 
+                        MainActivity.noteDb.updateIgnored(String.valueOf(
+                                MainActivity.sortedIDs.get(position)), true);
+
 //                        taskOverdueRow.setVisibility(View.GONE);
 
                         //set background to white
@@ -1178,6 +1183,11 @@ class MyAdapter extends ArrayAdapter<String> {
                                 .parseColor("#FFFFFF"));
 
                         MainActivity.taskPropertiesShowing = false;
+
+                        //Returns the 'add' button
+                        MainActivity.params.height = MainActivity.addHeight;
+
+                        MainActivity.add.setLayoutParams(MainActivity.params);
 
                         //Updates the view
                         MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
@@ -1244,6 +1254,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 alarm.setText("Alarm Options");
 
+            }
+
+            if(dbIgnored){
+                alarm.setText("Turn Off Alarm");
             }
 
             //Actions to occur if user selects 'complete'
@@ -1342,158 +1356,206 @@ class MyAdapter extends ArrayAdapter<String> {
             final String finalAlarmDay3 = alarmDay;
             final String finalAlarmMinute = alarmMinute;
             final String finalAlarmHour3 = alarmHour;
+            final Boolean finalDbIgnored = dbIgnored;
             alarm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    //TODO reword this
-//                    Toast.makeText(v.getContext(), "Upgrade to the Pro version to" +
-//                                    " get this feature", Toast.LENGTH_SHORT).show();
+                    if(finalDbIgnored){
 
-                    //actions to occur if alarm not already set
-                    if (!finalDbDue) {
+                        MainActivity.noteDb.updateDue(String.valueOf(MainActivity
+                                .sortedIDs.get(MainActivity.activeTask)), false);
+                        MainActivity.noteDb.removeTimestamp(String.valueOf(MainActivity
+                                .sortedIDs.get(MainActivity.activeTask)));
 
-                        MainActivity.dateRowShowing = true;
+                        MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                                .get(position), false);
 
-                        MainActivity.datePickerShowing = true;
-
-                        notifyDataSetChanged();
-
-                    //actions to occur when cancelling snooze
-                    } else if (finalDbSnooze2){
-
-                        //marks task as not killed in database
-                        MainActivity.noteDb.updateKilled(String.valueOf(MainActivity.sortedIDs
-                                .get(position)), false);
-                        //remove any associated snooze
-                        MainActivity.noteDb.updateSnooze(String.valueOf(MainActivity.sortedIDs
-                                .get(position)), false);
-                        //marks task as not overdue
-                        MainActivity.noteDb.updateOverdue(String.valueOf(MainActivity.sortedIDs
-                                .get(position)), false);
-                        //marks task as having no due date
-                        MainActivity.noteDb.updateDue(String.valueOf(MainActivity.sortedIDs
-                                .get(position)), false);
-                        //remove any associated timestamp
-                        MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
-                                .sortedIDs.get(position)), "");
-                        //marks showonce as false
-                        MainActivity.noteDb.updateShowOnce(String.valueOf(MainActivity
-                                .sortedIDs.get(position)), false);
-                        //remove alarm time data
-                        MainActivity.noteDb.updateAlarmData
-                                (String.valueOf(MainActivity.sortedIDs.get(position)),
-                                        "", "", "",
-                                        "", "", "");
-                        //remove snooze time data
-                        MainActivity.noteDb.updateSnoozeData
-                                (String.valueOf(MainActivity.sortedIDs.get(position)),
-                                        "", "", "",
-                                        "", "", "");
+                        MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
+                                .get(position), false);
 
                         MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                Integer.parseInt(
-                                        MainActivity.sortedIDs.get(position) + 1000),
+                                Integer.parseInt(MainActivity.sortedIDs.get(position)),
                                 MainActivity.alertIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT);
 
                         MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                        alarm.setText("Set Due Date");
+                        MainActivity.noteDb.updateAlarmData
+                                (String.valueOf(MainActivity.sortedIDs.get(position)),
+                                        "", "", "",
+                                        "", "", "");
+
+                        MainActivity.alarmOptionsShowing = false;
+
+                        reorderList();
+
                         MainActivity.taskPropertiesShowing = false;
+
                         MainActivity.activityRootView
                                 .setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
-                    //actions to occur when viewing alarm properties
-                    } else {
+                        MainActivity.add.setVisibility(View.VISIBLE);
 
-                        Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
-                        Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
-                        final Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
+                        MainActivity.vibrate.vibrate(50);
 
-                        alarmOptionsRow.setVisibility(View.VISIBLE);
+                        alarm.setText("Set Due Date");
 
-                        propertyRow.setVisibility(View.GONE);
+                        MainActivity.params.height = MainActivity.addHeight;
 
-                        MainActivity.alarmOptionsShowing = true;
+                        v.setLayoutParams(MainActivity.params);
 
-                        if(finalDbRepeat2){
+                        notifyDataSetChanged();
 
-                            repeatAlarmBtn.setText("Cancel Repeat");
+                    }else {
+                        //TODO reword this
+//                    Toast.makeText(v.getContext(), "Upgrade to the Pro version to" +
+//                                    " get this feature", Toast.LENGTH_SHORT).show();
 
-                        }
+                        //actions to occur if alarm not already set
+                        if (!finalDbDue) {
 
-                        //Actions to occur if user selects 'remove alarm'
-                        killAlarmBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                            MainActivity.dateRowShowing = true;
 
-                                MainActivity.noteDb.updateDue(String.valueOf(MainActivity
-                                        .sortedIDs.get(MainActivity.activeTask)), false);
-                                MainActivity.noteDb.removeTimestamp(String.valueOf(MainActivity
-                                        .sortedIDs.get(MainActivity.activeTask)));
+                            MainActivity.datePickerShowing = true;
 
-                                MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
-                                        .get(position), false);
+                            notifyDataSetChanged();
 
-                                MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                        Integer.parseInt(MainActivity.sortedIDs.get(position)),
-                                        MainActivity.alertIntent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT);
+                        //actions to occur when cancelling snooze
+                        } else if (finalDbSnooze2) {
 
-                                MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+                            //marks task as not killed in database
+                            MainActivity.noteDb.updateKilled(String.valueOf(MainActivity.sortedIDs
+                                    .get(position)), false);
+                            //remove any associated snooze
+                            MainActivity.noteDb.updateSnooze(String.valueOf(MainActivity.sortedIDs
+                                    .get(position)), false);
+                            //marks task as not overdue
+                            MainActivity.noteDb.updateOverdue(String.valueOf(MainActivity.sortedIDs
+                                    .get(position)), false);
+                            //marks task as having no due date
+                            MainActivity.noteDb.updateDue(String.valueOf(MainActivity.sortedIDs
+                                    .get(position)), false);
+                            //remove any associated timestamp
+                            MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                                    .sortedIDs.get(position)), "");
+                            //marks showonce as false
+                            MainActivity.noteDb.updateShowOnce(String.valueOf(MainActivity
+                                    .sortedIDs.get(position)), false);
+                            //remove alarm time data
+                            MainActivity.noteDb.updateAlarmData
+                                    (String.valueOf(MainActivity.sortedIDs.get(position)),
+                                            "", "", "",
+                                            "", "", "");
+                            //remove snooze time data
+                            MainActivity.noteDb.updateSnoozeData
+                                    (String.valueOf(MainActivity.sortedIDs.get(position)),
+                                            "", "", "",
+                                            "", "", "");
 
-                                MainActivity.noteDb.updateAlarmData
-                                        (String.valueOf(MainActivity.sortedIDs.get(position)),
-                                                "", "", "",
-                                                "", "", "");
+                            MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                    Integer.parseInt(
+                                            MainActivity.sortedIDs.get(position) + 1000),
+                                    MainActivity.alertIntent,
+                                    PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                MainActivity.alarmOptionsShowing = false;
+                            MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                                reorderList();
+                            alarm.setText("Set Due Date");
+                            MainActivity.taskPropertiesShowing = false;
+                            MainActivity.activityRootView
+                                    .setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
-                                MainActivity.taskPropertiesShowing = false;
+                            //actions to occur when viewing alarm properties
+                        } else {
 
-                                MainActivity.activityRootView
-                                        .setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
+                            Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
+                            final Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
 
-                                MainActivity.add.setVisibility(View.VISIBLE);
+                            alarmOptionsRow.setVisibility(View.VISIBLE);
 
-                                MainActivity.vibrate.vibrate(50);
+                            propertyRow.setVisibility(View.GONE);
 
-                                MainActivity.params.height = MainActivity.addHeight;
+                            MainActivity.alarmOptionsShowing = true;
 
-                                v.setLayoutParams(MainActivity.params);
+                            if (finalDbRepeat2) {
 
-                                notifyDataSetChanged();
+                                repeatAlarmBtn.setText("Cancel Repeat");
 
                             }
-                        });
 
-                        //Actions to occur if user selects 'change due date'
-                        resetAlarmBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                            //Actions to occur if user selects 'remove alarm'
+                            killAlarmBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
-                                MainActivity.datePickerShowing = true;
-
-                                MainActivity.dateRowShowing = true;
-
-                                notifyDataSetChanged();
-
-                            }
-                        });
-
-                        //Actions to occur if user selects 'repeat alarm'
-                        repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                if(finalDbRepeat3) {
+                                    MainActivity.noteDb.updateDue(String.valueOf(MainActivity
+                                            .sortedIDs.get(MainActivity.activeTask)), false);
+                                    MainActivity.noteDb.removeTimestamp(String.valueOf(MainActivity
+                                            .sortedIDs.get(MainActivity.activeTask)));
 
                                     MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
-                                            .get(MainActivity.activeTask), false);
+                                            .get(position), false);
+
+                                    MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                            Integer.parseInt(MainActivity.sortedIDs.get(position)),
+                                            MainActivity.alertIntent,
+                                            PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
+                                    MainActivity.noteDb.updateAlarmData
+                                            (String.valueOf(MainActivity.sortedIDs.get(position)),
+                                                    "", "", "",
+                                                    "", "", "");
+
+                                    MainActivity.alarmOptionsShowing = false;
+
+                                    reorderList();
+
+                                    MainActivity.taskPropertiesShowing = false;
+
+                                    MainActivity.activityRootView
+                                            .setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                                    MainActivity.add.setVisibility(View.VISIBLE);
+
+                                    MainActivity.vibrate.vibrate(50);
+
+                                    MainActivity.params.height = MainActivity.addHeight;
+
+                                    v.setLayoutParams(MainActivity.params);
+
+                                    notifyDataSetChanged();
+
+                                }
+                            });
+
+                            //Actions to occur if user selects 'change due date'
+                            resetAlarmBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    MainActivity.datePickerShowing = true;
+
+                                    MainActivity.dateRowShowing = true;
+
+                                    notifyDataSetChanged();
+
+                                }
+                            });
+
+                            //Actions to occur if user selects 'repeat alarm'
+                            repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    if (finalDbRepeat3) {
+
+                                        MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                                                .get(MainActivity.activeTask), false);
 //                                    if(!finalDbSnooze3) {
 //                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
 //                                                getContext(), Integer.parseInt(MainActivity
@@ -1501,64 +1563,65 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                                        .alertIntent, PendingIntent
 //                                                        .FLAG_UPDATE_CURRENT);
 //                                    }else{
-                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                            getContext(), Integer.parseInt(MainActivity
-                                                    .sortedIDs.get(position) + 1000),
-                                            MainActivity.alertIntent, PendingIntent
-                                                    .FLAG_UPDATE_CURRENT);
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                                getContext(), Integer.parseInt(MainActivity
+                                                        .sortedIDs.get(position) + 1000),
+                                                MainActivity.alertIntent, PendingIntent
+                                                        .FLAG_UPDATE_CURRENT);
 //                                    }
 
-                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+                                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                                    Calendar prevCalendar = new GregorianCalendar();
-                                    String newHour = "";
-                                    if(finalAlarmAmpm3.equals("1")){
-                                        int tempHour = Integer.parseInt(finalAlarmHour3) + 12;
-                                        newHour = String.valueOf(tempHour);
+                                        Calendar prevCalendar = new GregorianCalendar();
+                                        String newHour = "";
+                                        if (finalAlarmAmpm3.equals("1")) {
+                                            int tempHour = Integer.parseInt(finalAlarmHour3) + 12;
+                                            newHour = String.valueOf(tempHour);
+                                        }
+                                        if (!finalAlarmHour3.equals("")) {
+                                            prevCalendar.set(Integer.parseInt(finalAlarmYear3), Integer
+                                                    .parseInt(finalAlarmMonth3), Integer
+                                                    .parseInt(finalAlarmDay3), Integer
+                                                    .parseInt(newHour), Integer
+                                                    .parseInt(finalAlarmMinute));
+                                        }
+
+                                        MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                prevCalendar.getTimeInMillis(),
+                                                MainActivity.pendIntent);
+
+                                        //set background to white
+                                        MainActivity.activityRootView.setBackgroundColor(
+                                                Color.parseColor("#FFFFFF"));
+
+                                        alarmOptionsRow.setVisibility(View.GONE);
+
+                                        MainActivity.repeatShowing = false;
+                                        MainActivity.repeating = false;
+                                        MainActivity.alarmOptionsShowing = false;
+                                        MainActivity.taskPropertiesShowing = false;
+
+                                        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                                        //Returns the 'add' button
+                                        MainActivity.params.height = MainActivity.addHeight;
+
+                                        MainActivity.add.setLayoutParams(MainActivity.params);
+
+                                    } else {
+
+                                        alarmOptionsRow.setVisibility(View.GONE);
+
+                                        repeatRow.setVisibility(View.VISIBLE);
+
+                                        MainActivity.repeatShowing = true;
+
                                     }
-                                    if(!finalAlarmHour3.equals("")) {
-                                        prevCalendar.set(Integer.parseInt(finalAlarmYear3), Integer
-                                                        .parseInt(finalAlarmMonth3), Integer
-                                                        .parseInt(finalAlarmDay3), Integer
-                                                        .parseInt(newHour), Integer
-                                                        .parseInt(finalAlarmMinute));
-                                    }
-
-                                    MainActivity.alarmManager.set(AlarmManager.RTC,
-                                            prevCalendar.getTimeInMillis(),
-                                            MainActivity.pendIntent);
-
-                                    //set background to white
-                                    MainActivity.activityRootView.setBackgroundColor(
-                                            Color.parseColor("#FFFFFF"));
-
-                                    alarmOptionsRow.setVisibility(View.GONE);
-
-                                    MainActivity.repeatShowing = false;
-                                    MainActivity.repeating = false;
-                                    MainActivity.alarmOptionsShowing = false;
-                                    MainActivity.taskPropertiesShowing = false;
-
-                                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-
-                                    //Returns the 'add' button
-                                    MainActivity.params.height = MainActivity.addHeight;
-
-                                    MainActivity.add.setLayoutParams(MainActivity.params);
-
-                                }else{
-
-                                    alarmOptionsRow.setVisibility(View.GONE);
-
-                                    repeatRow.setVisibility(View.VISIBLE);
-
-                                    MainActivity.repeatShowing = true;
 
                                 }
+                            });
 
-                            }
-                        });
-
+                        }
                     }
 
                 }

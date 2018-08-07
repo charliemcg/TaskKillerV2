@@ -29,6 +29,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL12 = "SHOWONCE";
     public static final String COL13 = "INTERVAL";
     public static final String COL14 = "REPEATINTERVAL";
+    public static final String COL15 = "IGNORED";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -62,7 +63,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
-                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT)");
+                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT, IGNORED BOOLEAN)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
@@ -94,6 +95,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL12, false);
         content.put(COL13, 0);
         content.put(COL14, "");
+        content.put(COL15, false);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -289,6 +291,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(COL14, interval);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateIgnored(String id, boolean ignored){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL15, ignored);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
