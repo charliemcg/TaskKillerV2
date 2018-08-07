@@ -412,6 +412,10 @@ class MyAdapter extends ArrayAdapter<String> {
                 final String finalAlarmMinute1 = alarmMinute;
                 final Boolean finalDbRepeat4 = dbRepeat;
                 final Boolean finalDbSnooze4 = dbSnooze;
+                final String finalAlarmAmpm4 = alarmAmpm;
+                final String finalAlarmDay1 = alarmDay;
+                final String finalDbRepeatInterval1 = dbRepeatInterval;
+                final String finalDbTimestamp = dbTimestamp;
                 snoozeTask.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -431,15 +435,22 @@ class MyAdapter extends ArrayAdapter<String> {
                                 Calendar dateNow = new GregorianCalendar();
 
                                 boolean dontSnooze = false;
-                                if(finalDbRepeat4) {
-                                    if(dateNow.get(Calendar.HOUR) >= (Integer
-                                            .parseInt(finalAlarmHour) - 1)){
-                                        dontSnooze = true;
-                                    }else if((dateNow.get(Calendar.HOUR) == 12) && (Integer
-                                            .parseInt(finalAlarmHour) == 1)){
-                                        dontSnooze = true;
+//                                if(finalDbRepeat4) {
+//                                    if((dateNow.get(Calendar.HOUR) >= (Integer.parseInt(finalAlarmHour) - 1))){
+//                                        dontSnooze = true;
+//                                    }else if((dateNow.get(Calendar.HOUR) == 12) && (Integer
+//                                            .parseInt(finalAlarmHour) == 1)){
+//                                        dontSnooze = true;
+//                                    }
+//                                }
+                                if(finalDbRepeat4){
+                                    if(finalDbRepeatInterval1.equals("day")){
+                                        if((dateNow.getTimeInMillis() / 1000) >= (Integer.parseInt(finalDbTimestamp) + 1380)) {
+                                            dontSnooze = true;
+                                        }
                                     }
                                 }
+
                                 if(dontSnooze){
 
                                     Toast.makeText(v.getContext(),
@@ -1005,6 +1016,9 @@ class MyAdapter extends ArrayAdapter<String> {
                             MainActivity.noteDb.updateOverdue(String.valueOf(
                                     MainActivity.sortedIDs.get(position)), false);
 
+                            MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
+                                    .get(position), false);
+
                             //set background white
                             MainActivity.activityRootView.setBackgroundColor(Color
                                     .parseColor("#FFFFFF"));
@@ -1287,6 +1301,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.noteDb.updateKilled(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+
+                        MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
+                                .get(position), false);
 
                         Toast.makeText(v.getContext(), "You killed this task!",
                                 Toast.LENGTH_SHORT).show();
