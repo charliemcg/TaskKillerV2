@@ -30,6 +30,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL13 = "INTERVAL";
     public static final String COL14 = "REPEATINTERVAL";
     public static final String COL15 = "IGNORED";
+//    public static final String COL16 = "SNOOZETIMESTAMP";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -63,7 +64,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
-                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT, IGNORED BOOLEAN)");
+                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT, IGNORED BOOLEAN/*, SNOOZETIMESTAMP TEXT*/)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
@@ -96,6 +97,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL13, 0);
         content.put(COL14, "");
         content.put(COL15, false);
+//        content.put(COL16, "0");
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -259,6 +261,7 @@ public class Database extends SQLiteOpenHelper {
         ContentValues content= new ContentValues();
         content.put(COL4, timestamp);
 //        content.put(COL10, true);
+        Log.i(TAG, "New stamp: " + timestamp);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
@@ -302,6 +305,14 @@ public class Database extends SQLiteOpenHelper {
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
+
+//    public boolean updateSnoozeTimestamp(String id, String stamp){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues content = new ContentValues();
+//        content.put(COL16, stamp);
+//        db.update(TABLE, content, "ID = ?", new String[] {id});
+//        return true;
+//    }
 
     public boolean updateAlarmData(String id, String hour, String minute, String ampm, String day, String month, String year){
         SQLiteDatabase db = this.getWritableDatabase();

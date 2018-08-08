@@ -350,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
                     buffer.append("INTERVAL: " + res.getString(12) + "\n");
                     buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
                     buffer.append("IGNORED: " + res.getString(14) + "\n\n");
+//                    buffer.append("SNOOZETIMESTAMP: " + res.getString(13) + "\n\n");
                 }
 
                 showMessage("Data", buffer.toString());
