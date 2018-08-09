@@ -319,51 +319,55 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.noteDb.updateTimestamp(MainActivity.sortedIDs
                         .get(position), String.valueOf(newStamp));
 
-                int newDay = Integer.parseInt(alarmDay);
-                int newMonth = Integer.parseInt(alarmMonth);
-                int newYear = Integer.parseInt(alarmYear);
-                if (((newMonth == 0)
-                        || (newMonth == 2)
-                        || (newMonth == 4)
-                        || (newMonth == 6)
-                        || (newMonth == 7)
-                        || (newMonth == 9))
-                        && (newDay == 31)) {
-                    newDay = 1;
-                    newMonth++;
-                } else if (((newMonth == 1)
-                        || (newMonth == 3)
-                        || (newMonth == 5)
-                        || (newMonth == 8)
-                        || (newMonth == 10))
-                        && (newDay == 30)) {
-                    newDay = 1;
-                    newMonth++;
-                } else if ((newMonth == 11)
-                        && (newDay == 31)) {
-                    newDay = 1;
-                    newMonth = 0;
-                    newYear++;
-                }else if(newMonth == 1
-                        && (newDay == 28) && (newYear % 4 != 0)) {
-                    newDay = 1;
-                    newMonth++;
-                }else if(newMonth == 1
-                        && (newDay == 29) && (newYear % 4 == 0)){
-                    newDay = 1;
-                    newMonth++;
-                } else {
-                    newDay++;
+                if(!alarmDay.equals("")) {
+                    int newDay = Integer.parseInt(alarmDay);
+                    int newMonth = Integer.parseInt(alarmMonth);
+                    int newYear = Integer.parseInt(alarmYear);
+                    if (((newMonth == 0)
+                            || (newMonth == 2)
+                            || (newMonth == 4)
+                            || (newMonth == 6)
+                            || (newMonth == 7)
+                            || (newMonth == 9))
+                            && (newDay == 31)) {
+                        newDay = 1;
+                        newMonth++;
+                    } else if (((newMonth == 1)
+                            || (newMonth == 3)
+                            || (newMonth == 5)
+                            || (newMonth == 8)
+                            || (newMonth == 10))
+                            && (newDay == 30)) {
+                        newDay = 1;
+                        newMonth++;
+                    } else if ((newMonth == 11)
+                            && (newDay == 31)) {
+                        newDay = 1;
+                        newMonth = 0;
+                        newYear++;
+                    } else if (newMonth == 1
+                            && (newDay == 28) && (newYear % 4 != 0)) {
+                        newDay = 1;
+                        newMonth++;
+                    } else if (newMonth == 1
+                            && (newDay == 29) && (newYear % 4 == 0)) {
+                        newDay = 1;
+                        newMonth++;
+                    } else {
+                        newDay++;
+                    }
+
+                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                            alarmHour, alarmMinute, alarmAmpm,
+                            String.valueOf(newDay), String.valueOf(newMonth),
+                            String.valueOf(newYear));
+
+                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                            "", "", "", "", "", "");
+
                 }
-
-                Log.i(TAG, "I'm in here 1");
-
-                MainActivity.noteDb.updateAlarmData(String.valueOf(
-                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                        alarmHour, alarmMinute, alarmAmpm,
-                        String.valueOf(newDay), String.valueOf(newMonth),
-                        String.valueOf(newYear));
-
             }
         }
 
@@ -593,8 +597,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                     } else {
                                         newDay++;
                                     }
-
-                                    Log.i(TAG, "I'm in here 2");
 
                                     MainActivity.noteDb.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -831,8 +833,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     String newMinute = String.valueOf(Integer
                                             .parseInt(finalAlarmMinute1) + 2);
-
-                                    Log.i(TAG, "I'm in here 3");
 
                                     MainActivity.noteDb.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -1089,8 +1089,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                     String newMinute = String.valueOf(Integer
                                             .parseInt(finalAlarmMinute1) + 2);
 
-                                    Log.i(TAG, "I'm in here 4");
-
                                     MainActivity.noteDb.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             finalAlarmHour, newMinute, finalAlarmAmpm[0],
@@ -1342,8 +1340,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                     newDay++;
                                 }
 
-                                Log.i(TAG, "I'm in here 5");
-
                                 MainActivity.noteDb.updateAlarmData(String.valueOf(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                         finalAlarmHour1, finalAlarmMinute2, finalAlarmAmpm1,
@@ -1386,8 +1382,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                     newDay = 1;
                                     newMonth++;
                                 }
-
-                                Log.i(TAG, "I'm in here 6");
 
                                 MainActivity.noteDb.updateAlarmData(String.valueOf(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -1588,8 +1582,6 @@ class MyAdapter extends ArrayAdapter<String> {
                     }else{
 
                         String newMinute = String.valueOf(Integer.parseInt(finalAlarmMinute3) + 2);
-
-                        Log.i(TAG, "I'm in here 7");
 
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -2198,16 +2190,13 @@ class MyAdapter extends ArrayAdapter<String> {
                             ignoredTooLong = true;
                         }
 //                        if (dateNow.get(Calendar.YEAR) > (Integer.parseInt(alarmYear))) {
-//                            Log.i(TAG, "I'm in here 1");
 //                            ignoredTooLong = true;
 //                        } else if (dateNow.get(Calendar.MONTH) > (Integer.parseInt(alarmMonth))) {
-//                            Log.i(TAG, "I'm in here 2");
 //                            ignoredTooLong = true;
 //                        } else if ((dateNow.get(Calendar.DAY_OF_MONTH) > (Integer
 //                                .parseInt(alarmDay))) && dateNow.get(Calendar.HOUR)
 //                                >= Integer.parseInt(alarmHour) && dateNow.get(Calendar.MINUTE)
 //                                >= Integer.parseInt(alarmMinute)) {
-//                            Log.i(TAG, "I'm in here 3");
 //                            ignoredTooLong = true;
 //                        }
                     }else if(dbRepeatInterval.equals("week")){
@@ -2521,8 +2510,6 @@ class MyAdapter extends ArrayAdapter<String> {
                             newDay++;
                         }
 
-                        Log.i(TAG, "I'm in here 8");
-
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 alarmHour, alarmMinute, alarmAmpm, String.valueOf(newDay),
@@ -2570,8 +2557,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            newDay = 1;
 //                            newMonth++;
 //                        }
-
-                        Log.i(TAG, "I'm in here 9");
 
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -2621,8 +2606,6 @@ class MyAdapter extends ArrayAdapter<String> {
                             newMonth++;
                         }
 
-                        Log.i(TAG, "I'm in here 10");
-
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 alarmHour, alarmMinute, alarmAmpm, String.valueOf(newDay),
@@ -2650,8 +2633,6 @@ class MyAdapter extends ArrayAdapter<String> {
                     if((currentDate.get(Calendar.MINUTE) >= (Integer.parseInt(hour) + dbInterval)) && !dbRepeat){
 
                         alarmHour = String.valueOf(Integer.parseInt(alarmHour) + dbInterval);
-
-                        Log.i(TAG, "I'm in here 11");
 
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -2947,8 +2928,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 //intention to execute AlertReceiver
                 MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
-
-                Log.i(TAG, "I'm in here 12");
 
                 MainActivity.noteDb.updateAlarmData(String.valueOf(
                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
