@@ -1590,6 +1590,13 @@ class MyAdapter extends ArrayAdapter<String> {
             final String finalAlarmMonth2 = alarmMonth;
             final String finalAlarmYear2 = alarmYear;
             final String finalAlarmMinute3 = alarmMinute;
+            final String finalDbTimestamp2 = dbTimestamp;
+            final String finalAlarmDay6 = alarmDay;
+            final String finalAlarmMonth5 = alarmMonth;
+            final String finalAlarmYear5 = alarmYear;
+            final String finalAlarmHour4 = alarmHour;
+            final String finalAlarmMinute4 = alarmMinute;
+            final String finalAlarmAmpm5 = alarmAmpm;
             complete.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -1640,14 +1647,64 @@ class MyAdapter extends ArrayAdapter<String> {
                     //task is updated to be due at next repeat
                     }else{
 
-                        String newMinute = String.valueOf(Integer.parseInt(finalAlarmMinute3) + 2);
+                        //TODO adjust for correct interval
+                        int adjustedStamp = Integer.parseInt(finalDbTimestamp2) + 86400;
+                        MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                                .sortedIDs.get(position)), String.valueOf(adjustedStamp));
+
+                        int newDay = Integer.parseInt(finalAlarmDay6);
+                        int newMonth = Integer.parseInt(finalAlarmMonth5);
+                        int newYear = Integer.parseInt(finalAlarmYear5);
+                        if (((Integer.parseInt(finalAlarmMonth5) == 0)
+                                || (Integer.parseInt(finalAlarmMonth5) == 2)
+                                || (Integer.parseInt(finalAlarmMonth5) == 4)
+                                || (Integer.parseInt(finalAlarmMonth5) == 6)
+                                || (Integer.parseInt(finalAlarmMonth5) == 7)
+                                || (Integer.parseInt(finalAlarmMonth5) == 9))
+                                && (newDay == 31)) {
+                            newDay = 1;
+                            newMonth++;
+                        } else if (((Integer.parseInt(finalAlarmMonth5) == 1)
+                                || (Integer.parseInt(finalAlarmMonth5) == 3)
+                                || (Integer.parseInt(finalAlarmMonth5) == 5)
+                                || (Integer.parseInt(finalAlarmMonth5) == 8)
+                                || (Integer.parseInt(finalAlarmMonth5) == 10))
+                                && (newDay == 30)) {
+                            newDay = 1;
+                            newMonth++;
+                        } else if ((Integer.parseInt(finalAlarmMonth5) == 11)
+                                && (newDay == 31)) {
+                            newDay = 1;
+                            newMonth = 0;
+                            newYear++;
+                        }else if((Integer.parseInt(finalAlarmMonth5) == 1)
+                                && (newDay == 28) && (newYear % 4 != 0)) {
+                            newDay = 1;
+                            newMonth++;
+                        }else if((Integer.parseInt(finalAlarmMonth5) == 1)
+                                && (newDay == 29) && (newYear % 4 == 0)){
+                            newDay = 1;
+                            newMonth++;
+                        } else {
+                            newDay++;
+                        }
 
                         Log.i(TAG, "I'm in here 7");
 
                         MainActivity.noteDb.updateAlarmData(String.valueOf(
-                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                                finalAlarmHour2, newMinute, finalAlarmAmpm2, finalAlarmDay2,
-                                finalAlarmMonth2, finalAlarmYear2);
+                                MainActivity.sortedIDs.get(position)),
+                                finalAlarmHour4, finalAlarmMinute4, finalAlarmAmpm5,
+                                String.valueOf(newDay), String.valueOf(newMonth),
+                                String.valueOf(newYear));
+
+//                        String newMinute = String.valueOf(Integer.parseInt(finalAlarmMinute3) + 2);
+//
+//                        Log.i(TAG, "I'm in here 7");
+//
+//                        MainActivity.noteDb.updateAlarmData(String.valueOf(
+//                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                                finalAlarmHour2, newMinute, finalAlarmAmpm2, finalAlarmDay2,
+//                                finalAlarmMonth2, finalAlarmYear2);
 
                         MainActivity.noteDb.updateShowOnce(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask), true);
