@@ -1353,6 +1353,11 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                } else {
 //                                    newDay++;
 //                                }
+
+                                int adjustedStamp = Integer.parseInt(finalDbTimestamp) + 86400;
+                                MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                                        .sortedIDs.get(position)), String.valueOf(adjustedStamp));
+
                                 int newDay = Integer.parseInt(finalAlarmDay5);
                                 int newMonth = Integer.parseInt(finalAlarmMonth4);
                                 int newYear = Integer.parseInt(finalAlarmYear4);
