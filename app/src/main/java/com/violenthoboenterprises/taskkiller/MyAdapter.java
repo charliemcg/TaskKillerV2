@@ -1864,6 +1864,9 @@ class MyAdapter extends ArrayAdapter<String> {
                 final String finalAlarmDay5 = alarmDay;
                 final String finalAlarmMonth4 = alarmMonth;
                 final String finalAlarmYear4 = alarmYear;
+                final String finalAlarmDay8 = alarmDay;
+                final String finalAlarmMonth7 = alarmMonth;
+                final String finalAlarmYear7 = alarmYear;
                 taskDone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -2061,9 +2064,12 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 .sortedIDs.get(position)),
                                         String.valueOf(adjustedStamp));
 
-                                int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
-                                int newMonth = currentDate.get(Calendar.MONTH);
-                                int newYear = currentDate.get(Calendar.YEAR);
+//                                int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
+//                                int newMonth = currentDate.get(Calendar.MONTH);
+//                                int newYear = currentDate.get(Calendar.YEAR);
+                                int newDay = Integer.parseInt(finalAlarmDay8);
+                                int newMonth = Integer.parseInt(finalAlarmMonth7);
+                                int newYear = Integer.parseInt(finalAlarmYear7);
                                 if (((newMonth == 2)
                                         || (newMonth == 4)
                                         || (newMonth == 7)
@@ -2082,6 +2088,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 } else if (newMonth == 1
                                         && (newDay > 29) && (newYear % 4 == 0)) {
                                     newDay = 28;
+                                    newMonth++;
+                                }else{
                                     newMonth++;
                                 }
 
