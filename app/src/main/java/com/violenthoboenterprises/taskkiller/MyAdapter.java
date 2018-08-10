@@ -413,45 +413,45 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }else if(dbRepeatInterval.equals("month")){
 
-                        int interval = 0;
-                        int theYear = Integer.parseInt(alarmYear);
-                        int theMonth = Integer.parseInt(alarmMonth);
-                        int theDay = Integer.parseInt(alarmDay);
-                        //Month January and day is 29 non leap year 2592000
-                        if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
-                            interval = 2592000;
-                        //Month January and day is 30 non leap year 2505600
-                        }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
-                            interval = 2505600;
-                        //Month January and day is 31 non leap year 2419200
-                        }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
-                            interval = 2419200;
-                        //Month January and day is 30 leap year 2592000
-                        }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
-                            interval = 2592000;
-                        //Month January and day is 31 leap year 2505600
-                        }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
-                            interval = 2505600;
-                        //Month March||May||August||October and day is 31 2592000
-                        }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
-                                || (theMonth == 9)) && (theDay == 31)){
-                            interval = 2592000;
-                        //Month January||March||May||July||August||October||December 2678400
-                        }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
-                                || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
-                                || (theMonth == 11)){
-                            interval = 2678400;
-                        //Month April||June||September||November 2592000
-                        }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
-                                || (theMonth == 10)){
-                            interval = 2592000;
-                        //Month February non leap year 2419200
-                        }else if((theMonth == 1) && (theYear % 4 != 0)){
-                            interval = 2419200;
-                        //Month February leap year 2505600
-                        }else if((theMonth == 1) && (theYear % 4 == 0)){
-                            interval = 2505600;
-                        }
+            int interval = 0;
+            int theYear = Integer.parseInt(alarmYear);
+            int theMonth = Integer.parseInt(alarmMonth);
+            int theDay = Integer.parseInt(alarmDay);
+            //Month January and day is 29 non leap year 2592000
+            if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
+                interval = 2592000;
+            //Month January and day is 30 non leap year 2505600
+            }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
+                interval = 2505600;
+            //Month January and day is 31 non leap year 2419200
+            }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
+                interval = 2419200;
+            //Month January and day is 30 leap year 2592000
+            }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
+                interval = 2592000;
+            //Month January and day is 31 leap year 2505600
+            }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
+                interval = 2505600;
+            //Month March||May||August||October and day is 31 2592000
+            }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
+                    || (theMonth == 9)) && (theDay == 31)){
+                interval = 2592000;
+            //Month January||March||May||July||August||October||December 2678400
+            }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
+                    || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
+                    || (theMonth == 11)){
+                interval = 2678400;
+            //Month April||June||September||November 2592000
+            }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
+                    || (theMonth == 10)){
+                interval = 2592000;
+            //Month February non leap year 2419200
+            }else if((theMonth == 1) && (theYear % 4 != 0)){
+                interval = 2419200;
+            //Month February leap year 2505600
+            }else if((theMonth == 1) && (theYear % 4 == 0)){
+                 interval = 2505600;
+            }
 
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + interval)) {
                 int newStamp = Integer.parseInt(dbTimestamp) + interval;
@@ -481,6 +481,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     } else if (newMonth == 1
                             && (newDay > 29) && (newYear % 4 == 0)) {
                         newDay = 28;
+                        newMonth++;
+                    } else {
                         newMonth++;
                     }
 
