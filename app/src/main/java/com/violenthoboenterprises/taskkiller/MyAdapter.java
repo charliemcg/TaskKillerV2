@@ -2495,6 +2495,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         v.setLayoutParams(MainActivity.params);
 
+                        reorderList();
+
                     //task is updated to be due at next repeat
                     }else{
 
@@ -4151,7 +4153,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
-        ArrayList<String> yetAnotherList = new ArrayList<>();
+        ArrayList<String> idsList = new ArrayList<>();
         ArrayList<String> tempTaskList = new ArrayList<>();
 
         for(int i = 0; i < MainActivity.taskListSize; i++){
@@ -4189,7 +4191,7 @@ class MyAdapter extends ArrayAdapter<String> {
             }
 
             if((tempList.get(i) == 0) && (Integer.parseInt(dbTimestamp) == 0)){
-                yetAnotherList.add(String.valueOf(dbId));
+                idsList.add(String.valueOf(dbId));
                 tempTaskList.add(dbTask);
             }
         }
@@ -4232,7 +4234,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
 
                     if (minValue == Integer.parseInt(dbTimestamp)) {
-                        yetAnotherList.add(String.valueOf(dbId));
+                        idsList.add(String.valueOf(dbId));
                         tempTaskList.add(dbTask);
                         tempList.remove(Collections.min(tempList));
                     }
@@ -4242,7 +4244,71 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
-        MainActivity.sortedIDs = yetAnotherList;
+        ArrayList<String> tempKilledList = new ArrayList<>();
+        ArrayList<String> tempKilledIds = new ArrayList<>();
+
+        for (int i = 0; i < MainActivity.taskListSize; i++) {
+
+            //getting task data
+            int dbId = 0;
+//        String dbNote = "";
+//        Boolean dbChecklist = false;
+            String dbTimestamp = "";
+            String dbTask = "";
+            Boolean dbDue = false;
+            Boolean dbKilled = false;
+//        Integer dbBroadcast = 0;
+//        Boolean dbRepeat = false;
+//        Boolean dbOverdue = false;
+//        Boolean dbSnooze = false;
+//        Boolean dbShowOnce = false;
+//        int dbInterval = 0;
+            Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
+                    MainActivity.sortedIDs.get(Integer.parseInt(idsList.get(i)))));
+            while (dbResult.moveToNext()) {
+                dbId = dbResult.getInt(0);
+//            dbNote = dbResult.getString(1);
+//            dbChecklist = dbResult.getInt(2) > 0;
+                dbTimestamp = dbResult.getString(3);
+                dbTask = dbResult.getString(4);
+                dbDue = dbResult.getInt(5) > 0;
+                dbKilled = dbResult.getInt(6) > 0;
+//            dbBroadcast = dbResult.getInt(7);
+//            dbRepeat = dbResult.getInt(8) > 0;
+//            dbOverdue = dbResult.getInt(9) > 0;
+//            dbSnooze = dbResult.getInt(10) > 0;
+//            dbShowOnce = dbResult.getInt(11) > 0;
+//            dbInterval = dbResult.getInt(12);
+            }
+
+            if(dbKilled){
+//                tempKilledList.add(dbTask);
+//                tempKilledIds.add(String.valueOf(dbId));
+                idsList.add(String.valueOf(dbId));
+                tempTaskList.add(dbTask);
+                idsList.remove(i);
+                tempTaskList.remove(i);
+            }
+
+        }
+
+//        for (int i = 0; i < tempKilledList.size(); i++) {
+//            idsList.add(tempKilledIds.get(i));
+//            tempTaskList.add(tempKilledList.get(i));
+//        }
+//
+//        for (int i = 0; i < idsList.size(); i++){
+//            for (int j = 0; j < tempKilledIds.size(); j++){
+//                if(idsList.get(i).equals(tempKilledIds.get(j))){
+//                    idsList.remove(i);
+//                    tempKilledIds.remove(j);
+//                    tempTaskList.remove(i);
+//                    tempKilledList.remove(j);
+//                }
+//            }
+//        }
+
+        MainActivity.sortedIDs = idsList;
         MainActivity.taskList = tempTaskList;
 
         //Updating the view with the new order
