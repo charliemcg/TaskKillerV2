@@ -312,7 +312,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
         //Determining if ignored repeating task has reached next repeat time
         Calendar nowness = new GregorianCalendar();
-        if(dbRepeatInterval.equals("day")){
+        if(dbRepeatInterval.equals("day") && !dbTimestamp.equals("")){
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + 86400)) {
                 int newStamp = Integer.parseInt(dbTimestamp) + 86400;
                 MainActivity.noteDb.updateTimestamp(MainActivity.sortedIDs
@@ -368,7 +368,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
             }
-        }else if(dbRepeatInterval.equals("week")){
+        }else if(dbRepeatInterval.equals("week") && !dbTimestamp.equals("")){
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + 604800)) {
                 int newStamp = Integer.parseInt(dbTimestamp) + 604800;
                 MainActivity.noteDb.updateTimestamp(MainActivity.sortedIDs
@@ -411,7 +411,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
             }
-        }else if(dbRepeatInterval.equals("month")){
+        }else if(dbRepeatInterval.equals("month") && !dbTimestamp.equals("")){
 
             int interval = 0;
             int theYear = Integer.parseInt(alarmYear);
@@ -457,6 +457,15 @@ class MyAdapter extends ArrayAdapter<String> {
                 int newStamp = Integer.parseInt(dbTimestamp) + interval;
                 MainActivity.noteDb.updateTimestamp(MainActivity.sortedIDs
                         .get(position), String.valueOf(newStamp));
+
+                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                        getContext(), Integer.parseInt(MainActivity
+                                .sortedIDs.get(position)),
+                        MainActivity.alertIntent, PendingIntent
+                                .FLAG_UPDATE_CURRENT);
+
+                MainActivity.alarmManager.set(AlarmManager.RTC,
+                        newStamp, MainActivity.pendIntent);
 
                 if(!alarmDay.equals("")) {
                     int newDay = Integer.parseInt(alarmDay);
@@ -850,6 +859,15 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
 
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                                getContext(), Integer.parseInt(MainActivity
+                                                        .sortedIDs.get(position)),
+                                                MainActivity.alertIntent, PendingIntent
+                                                        .FLAG_UPDATE_CURRENT);
+
+                                        MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                adjustedStamp, MainActivity.pendIntent);
+
                                         if (((newMonth == 2)
                                                 || (newMonth == 4)
                                                 || (newMonth == 7)
@@ -990,12 +1008,59 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     int newBroadcast = finalDbBroadcast + 1000;
 
+                                    int interval = 0;
+                                    //TODO adjust for day/week/month
+                                    if(finalDbRepeatInterval1.equals("day")){
+                                        interval = 86400;
+                                    }else if(finalDbRepeatInterval1.equals("week")){
+                                        interval = 604800;
+                                    }else if(finalDbRepeatInterval1.equals("month")) {
+                                        int theYear = Integer.parseInt(finalAlarmYear);
+                                        int theMonth = Integer.parseInt(finalAlarmMonth);
+                                        int theDay = Integer.parseInt(finalAlarmDay);
+                                        //Month January and day is 29 non leap year 2592000
+                                        if ((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)) {
+                                            interval = 2592000;
+                                            //Month January and day is 30 non leap year 2505600
+                                        } else if ((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)) {
+                                            interval = 2505600;
+                                            //Month January and day is 31 non leap year 2419200
+                                        } else if ((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)) {
+                                            interval = 2419200;
+                                            //Month January and day is 30 leap year 2592000
+                                        } else if ((theMonth == 0) && (theDay == 30) && (theYear % 4 == 0)) {
+                                            interval = 2592000;
+                                            //Month January and day is 31 leap year 2505600
+                                        } else if ((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)) {
+                                            interval = 2505600;
+                                            //Month March||May||August||October and day is 31 2592000
+                                        } else if (((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
+                                                || (theMonth == 9)) && (theDay == 31)) {
+                                            interval = 2592000;
+                                            //Month January||March||May||July||August||October||December 2678400
+                                        } else if ((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
+                                                || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
+                                                || (theMonth == 11)) {
+                                            interval = 2678400;
+                                            //Month April||June||September||November 2592000
+                                        } else if ((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
+                                                || (theMonth == 10)) {
+                                            interval = 2592000;
+                                            //Month February non leap year 2419200
+                                        } else if ((theMonth == 1) && (theYear % 4 != 0)) {
+                                            interval = 2419200;
+                                            //Month February leap year 2505600
+                                        } else if ((theMonth == 1) && (theYear % 4 == 0)) {
+                                            interval = 2505600;
+                                        }
+                                    }
+
                                     MainActivity.pendIntent = PendingIntent.getBroadcast(
                                             getContext(), newBroadcast, MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
                                     MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
-                                                    .getTimeInMillis() + 3600000),
+                                                    .getTimeInMillis() + interval),
                                             MainActivity.pendIntent);
 
                                     MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
@@ -1272,6 +1337,15 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
 
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                                getContext(), Integer.parseInt(MainActivity
+                                                        .sortedIDs.get(position)),
+                                                MainActivity.alertIntent, PendingIntent
+                                                        .FLAG_UPDATE_CURRENT);
+
+                                        MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                adjustedStamp, MainActivity.pendIntent);
+
                                         if (((newMonth == 2)
                                                 || (newMonth == 4)
                                                 || (newMonth == 7)
@@ -1415,13 +1489,68 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     int newBroadcast = finalDbBroadcast + 1000;
 
+                                    int interval = 0;
+                                    //TODO adjust for day/week/month
+                                    if(finalDbRepeatInterval1.equals("day")){
+                                        interval = 86400;
+                                    }else if(finalDbRepeatInterval1.equals("week")){
+                                        interval = 604800;
+                                    }else if(finalDbRepeatInterval1.equals("month")) {
+                                        int theYear = Integer.parseInt(finalAlarmYear);
+                                        int theMonth = Integer.parseInt(finalAlarmMonth);
+                                        int theDay = Integer.parseInt(finalAlarmDay);
+                                        //Month January and day is 29 non leap year 2592000
+                                        if ((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)) {
+                                            interval = 2592000;
+                                            //Month January and day is 30 non leap year 2505600
+                                        } else if ((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)) {
+                                            interval = 2505600;
+                                            //Month January and day is 31 non leap year 2419200
+                                        } else if ((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)) {
+                                            interval = 2419200;
+                                            //Month January and day is 30 leap year 2592000
+                                        } else if ((theMonth == 0) && (theDay == 30) && (theYear % 4 == 0)) {
+                                            interval = 2592000;
+                                            //Month January and day is 31 leap year 2505600
+                                        } else if ((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)) {
+                                            interval = 2505600;
+                                            //Month March||May||August||October and day is 31 2592000
+                                        } else if (((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
+                                                || (theMonth == 9)) && (theDay == 31)) {
+                                            interval = 2592000;
+                                            //Month January||March||May||July||August||October||December 2678400
+                                        } else if ((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
+                                                || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
+                                                || (theMonth == 11)) {
+                                            interval = 2678400;
+                                            //Month April||June||September||November 2592000
+                                        } else if ((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
+                                                || (theMonth == 10)) {
+                                            interval = 2592000;
+                                            //Month February non leap year 2419200
+                                        } else if ((theMonth == 1) && (theYear % 4 != 0)) {
+                                            interval = 2419200;
+                                            //Month February leap year 2505600
+                                        } else if ((theMonth == 1) && (theYear % 4 == 0)) {
+                                            interval = 2505600;
+                                        }
+                                    }
+
                                     MainActivity.pendIntent = PendingIntent.getBroadcast(
                                             getContext(), newBroadcast, MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
                                     MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
-                                                    .getTimeInMillis() + 14400000),
+                                                    .getTimeInMillis() + interval),
                                             MainActivity.pendIntent);
+
+//                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                                            getContext(), newBroadcast, MainActivity.alertIntent,
+//                                            PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                                    MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
+//                                                    .getTimeInMillis() + 14400000),
+//                                            MainActivity.pendIntent);
 
                                     MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
                                             .get(position), true);
@@ -1677,6 +1806,15 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
 
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                                getContext(), Integer.parseInt(MainActivity
+                                                        .sortedIDs.get(position)),
+                                                MainActivity.alertIntent, PendingIntent
+                                                        .FLAG_UPDATE_CURRENT);
+
+                                        MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                adjustedStamp, MainActivity.pendIntent);
+
                                         if (((newMonth == 2)
                                                 || (newMonth == 4)
                                                 || (newMonth == 7)
@@ -1803,13 +1941,68 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     int newBroadcast = finalDbBroadcast + 1000;
 
+                                    int interval = 0;
+                                    //TODO adjust for day/week/month
+                                    if(finalDbRepeatInterval1.equals("day")){
+                                        interval = 86400;
+                                    }else if(finalDbRepeatInterval1.equals("week")){
+                                        interval = 604800;
+                                    }else if(finalDbRepeatInterval1.equals("month")) {
+                                        int theYear = Integer.parseInt(finalAlarmYear);
+                                        int theMonth = Integer.parseInt(finalAlarmMonth);
+                                        int theDay = Integer.parseInt(finalAlarmDay);
+                                        //Month January and day is 29 non leap year 2592000
+                                        if ((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)) {
+                                            interval = 2592000;
+                                            //Month January and day is 30 non leap year 2505600
+                                        } else if ((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)) {
+                                            interval = 2505600;
+                                            //Month January and day is 31 non leap year 2419200
+                                        } else if ((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)) {
+                                            interval = 2419200;
+                                            //Month January and day is 30 leap year 2592000
+                                        } else if ((theMonth == 0) && (theDay == 30) && (theYear % 4 == 0)) {
+                                            interval = 2592000;
+                                            //Month January and day is 31 leap year 2505600
+                                        } else if ((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)) {
+                                            interval = 2505600;
+                                            //Month March||May||August||October and day is 31 2592000
+                                        } else if (((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
+                                                || (theMonth == 9)) && (theDay == 31)) {
+                                            interval = 2592000;
+                                            //Month January||March||May||July||August||October||December 2678400
+                                        } else if ((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
+                                                || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
+                                                || (theMonth == 11)) {
+                                            interval = 2678400;
+                                            //Month April||June||September||November 2592000
+                                        } else if ((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
+                                                || (theMonth == 10)) {
+                                            interval = 2592000;
+                                            //Month February non leap year 2419200
+                                        } else if ((theMonth == 1) && (theYear % 4 != 0)) {
+                                            interval = 2419200;
+                                            //Month February leap year 2505600
+                                        } else if ((theMonth == 1) && (theYear % 4 == 0)) {
+                                            interval = 2505600;
+                                        }
+                                    }
+
                                     MainActivity.pendIntent = PendingIntent.getBroadcast(
                                             getContext(), newBroadcast, MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                    MainActivity.alarmManager.set(AlarmManager.RTC,
-                                            (currentDate.getTimeInMillis() + 86400000),
+                                    MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
+                                                    .getTimeInMillis() + interval),
                                             MainActivity.pendIntent);
+
+//                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                                            getContext(), newBroadcast, MainActivity.alertIntent,
+//                                            PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                                    MainActivity.alarmManager.set(AlarmManager.RTC,
+//                                            (currentDate.getTimeInMillis() + 86400000),
+//                                            MainActivity.pendIntent);
 
                                     MainActivity.noteDb.updateSnooze(MainActivity
                                             .sortedIDs.get(position), true);
@@ -2065,6 +2258,15 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
                                                 .sortedIDs.get(position)),
                                         String.valueOf(adjustedStamp));
+
+                                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                        getContext(), Integer.parseInt(MainActivity
+                                                .sortedIDs.get(position)),
+                                        MainActivity.alertIntent, PendingIntent
+                                                .FLAG_UPDATE_CURRENT);
+
+                                MainActivity.alarmManager.set(AlarmManager.RTC,
+                                        adjustedStamp, MainActivity.pendIntent);
 
 //                                int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
 //                                int newMonth = currentDate.get(Calendar.MONTH);
@@ -2443,6 +2645,16 @@ class MyAdapter extends ArrayAdapter<String> {
                                 newMonth++;
                             }
 
+                            int newStamp = Integer.parseInt(finalDbTimestamp2) + interval;
+                            MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                    getContext(), Integer.parseInt(MainActivity
+                                            .sortedIDs.get(position)),
+                                    MainActivity.alertIntent, PendingIntent
+                                            .FLAG_UPDATE_CURRENT);
+
+                            MainActivity.alarmManager.set(AlarmManager.RTC,
+                                    newStamp, MainActivity.pendIntent);
+
 //                            MainActivity.noteDb.updateAlarmData(String.valueOf(
 //                                    MainActivity.sortedIDs.get(MainActivity.activeTask)),
 //                                    finalAlarmHour2, finalAlarmMinute3, finalAlarmAmpm2,
@@ -2565,33 +2777,35 @@ class MyAdapter extends ArrayAdapter<String> {
                         } else if (finalDbSnooze2) {
 
                             //marks task as not killed in database
-                            MainActivity.noteDb.updateKilled(String.valueOf(MainActivity.sortedIDs
-                                    .get(position)), false);
+//                            MainActivity.noteDb.updateKilled(String.valueOf(MainActivity.sortedIDs
+//                                    .get(position)), false);
                             //remove any associated snooze
                             MainActivity.noteDb.updateSnooze(String.valueOf(MainActivity.sortedIDs
                                     .get(position)), false);
                             //marks task as not overdue
-                            MainActivity.noteDb.updateOverdue(String.valueOf(MainActivity.sortedIDs
-                                    .get(position)), false);
+//                            MainActivity.noteDb.updateOverdue(String.valueOf(MainActivity.sortedIDs
+//                                    .get(position)), false);
                             //marks task as having no due date
-                            MainActivity.noteDb.updateDue(String.valueOf(MainActivity.sortedIDs
-                                    .get(position)), false);
+//                            MainActivity.noteDb.updateDue(String.valueOf(MainActivity.sortedIDs
+//                                    .get(position)), false);
                             //remove any associated timestamp
-                            MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
-                                    .sortedIDs.get(position)), "");
+//                            MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+//                                    .sortedIDs.get(position)), "");
                             //marks showonce as false
                             MainActivity.noteDb.updateShowOnce(String.valueOf(MainActivity
                                     .sortedIDs.get(position)), false);
                             //remove alarm time data
-                            MainActivity.noteDb.updateAlarmData
-                                    (String.valueOf(MainActivity.sortedIDs.get(position)),
-                                            "", "", "",
-                                            "", "", "");
+//                            MainActivity.noteDb.updateAlarmData
+//                                    (String.valueOf(MainActivity.sortedIDs.get(position)),
+//                                            "", "", "",
+//                                            "", "", "");
                             //remove snooze time data
                             MainActivity.noteDb.updateSnoozeData
                                     (String.valueOf(MainActivity.sortedIDs.get(position)),
                                             "", "", "",
                                             "", "", "");
+
+                            //TODO accounting for monthly repeats
 
                             MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
                                     Integer.parseInt(
@@ -2601,13 +2815,18 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                            alarm.setText("Set Due Date");
+                            alarm.setText("Alarm Options");
                             MainActivity.taskPropertiesShowing = false;
                             MainActivity.activityRootView
                                     .setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+                            MainActivity.params.height = MainActivity.addHeight;
+
+                            v.setLayoutParams(MainActivity.params);
+
                             MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
-                            //actions to occur when viewing alarm properties
+                        //actions to occur when viewing alarm properties
                         } else {
 
                             Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
@@ -3805,44 +4024,128 @@ class MyAdapter extends ArrayAdapter<String> {
 
     }
 
+//    public void reorderList(){
+//
+//        //getting task data
+//        int dbId = 0;
+////        String dbNote = "";
+////        Boolean dbChecklist = false;
+//        String dbTimestamp = "";
+//        String dbTask = "";
+//        Boolean dbDue = false;
+//        Boolean dbKilled = false;
+////        Integer dbBroadcast = 0;
+////        Boolean dbRepeat = false;
+////        Boolean dbOverdue = false;
+////        Boolean dbSnooze = false;
+////        Boolean dbShowOnce = false;
+////        int dbInterval = 0;
+//        Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
+//                MainActivity.sortedIDs.get(MainActivity.activeTask)));
+//        while (dbResult.moveToNext()) {
+//            dbId = dbResult.getInt(0);
+////            dbNote = dbResult.getString(1);
+////            dbChecklist = dbResult.getInt(2) > 0;
+//            dbTimestamp = dbResult.getString(3);
+//            dbTask = dbResult.getString(4);
+//            dbDue = dbResult.getInt(5) > 0;
+//            dbKilled = dbResult.getInt(6) > 0;
+////            dbBroadcast = dbResult.getInt(7);
+////            dbRepeat = dbResult.getInt(8) > 0;
+////            dbOverdue = dbResult.getInt(9) > 0;
+////            dbSnooze = dbResult.getInt(10) > 0;
+////            dbShowOnce = dbResult.getInt(11) > 0;
+////            dbInterval = dbResult.getInt(12);
+//        }
+//
+//        //Reordering tasks by due date
+//        ArrayList<Integer> tempList = new ArrayList<>();
+//        //Saving timestamps into a temporary array
+//        for(int i = 0; i < MainActivity.taskListSize; i++){
+//
+//            tempList.add(i, Integer.valueOf(dbTimestamp));
+//
+//        }
+//
+//        ArrayList<String> yetAnotherList = new ArrayList<>();
+//        ArrayList<String> tempTaskList = new ArrayList<>();
+//
+//        Log.i(TAG, "Tasks: " + tempTaskList);
+//
+//        for(int i = 0; i < MainActivity.taskListSize; i++){
+//            if((tempList.get(i) == 0) && (Integer.parseInt(dbTimestamp) == 0)){
+//                yetAnotherList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//            }
+//        }
+//
+//        Log.i(TAG, "Tasks: " + tempTaskList);
+//
+//        while(tempList.size() > 0) {
+//            int minValue = Collections.min(tempList);
+//            if(minValue != 0) {
+//                for (int i = 0; i < MainActivity.taskListSize; i++) {
+//                    if (minValue == Integer.parseInt(dbTimestamp)) {
+//                        yetAnotherList.add(String.valueOf(dbId));
+//                        tempTaskList.add(dbTask);
+//                        tempList.remove(Collections.min(tempList));
+//                    }
+//                }
+//            }else{
+//                tempList.remove(Collections.min(tempList));
+//            }
+//        }
+//
+//        MainActivity.sortedIDs = yetAnotherList;
+//        MainActivity.taskList = tempTaskList;
+//
+//        Log.i(TAG, "Tasks: " + tempTaskList);
+//
+//        //Updating the view with the new order
+//        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+//                getContext(), MainActivity.taskList)};
+//        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//
+//    }
+
     public void reorderList(){
 
-        //getting task data
-        int dbId = 0;
+        //Reordering tasks by due date
+        ArrayList<Integer> tempList = new ArrayList<>();
+        //Saving timestamps into a temporary array
+        for(int i = 0; i < MainActivity.taskListSize; i++){
+
+            //getting task data
+            int dbId = 0;
 //        String dbNote = "";
 //        Boolean dbChecklist = false;
-        String dbTimestamp = "";
-        String dbTask = "";
-        Boolean dbDue = false;
-        Boolean dbKilled = false;
+            String dbTimestamp = "";
+            String dbTask = "";
+            Boolean dbDue = false;
+            Boolean dbKilled = false;
 //        Integer dbBroadcast = 0;
 //        Boolean dbRepeat = false;
 //        Boolean dbOverdue = false;
 //        Boolean dbSnooze = false;
 //        Boolean dbShowOnce = false;
 //        int dbInterval = 0;
-        Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
-                MainActivity.sortedIDs.get(MainActivity.activeTask)));
-        while (dbResult.moveToNext()) {
-            dbId = dbResult.getInt(0);
+            Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
+                    MainActivity.sortedIDs.get(i)));
+            while (dbResult.moveToNext()) {
+                dbId = dbResult.getInt(0);
 //            dbNote = dbResult.getString(1);
 //            dbChecklist = dbResult.getInt(2) > 0;
-            dbTimestamp = dbResult.getString(3);
-            dbTask = dbResult.getString(4);
-            dbDue = dbResult.getInt(5) > 0;
-            dbKilled = dbResult.getInt(6) > 0;
+                dbTimestamp = dbResult.getString(3);
+                dbTask = dbResult.getString(4);
+                dbDue = dbResult.getInt(5) > 0;
+                dbKilled = dbResult.getInt(6) > 0;
 //            dbBroadcast = dbResult.getInt(7);
 //            dbRepeat = dbResult.getInt(8) > 0;
 //            dbOverdue = dbResult.getInt(9) > 0;
 //            dbSnooze = dbResult.getInt(10) > 0;
 //            dbShowOnce = dbResult.getInt(11) > 0;
 //            dbInterval = dbResult.getInt(12);
-        }
-
-        //Reordering tasks by due date
-        ArrayList<Integer> tempList = new ArrayList<>();
-        //Saving timestamps into a temporary array
-        for(int i = 0; i < MainActivity.taskListSize; i++){
+            }
 
             tempList.add(i, Integer.valueOf(dbTimestamp));
 
@@ -3852,6 +4155,39 @@ class MyAdapter extends ArrayAdapter<String> {
         ArrayList<String> tempTaskList = new ArrayList<>();
 
         for(int i = 0; i < MainActivity.taskListSize; i++){
+
+            //getting task data
+            int dbId = 0;
+//        String dbNote = "";
+//        Boolean dbChecklist = false;
+            String dbTimestamp = "";
+            String dbTask = "";
+            Boolean dbDue = false;
+            Boolean dbKilled = false;
+//        Integer dbBroadcast = 0;
+//        Boolean dbRepeat = false;
+//        Boolean dbOverdue = false;
+//        Boolean dbSnooze = false;
+//        Boolean dbShowOnce = false;
+//        int dbInterval = 0;
+            Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
+                    MainActivity.sortedIDs.get(i)));
+            while (dbResult.moveToNext()) {
+                dbId = dbResult.getInt(0);
+//            dbNote = dbResult.getString(1);
+//            dbChecklist = dbResult.getInt(2) > 0;
+                dbTimestamp = dbResult.getString(3);
+                dbTask = dbResult.getString(4);
+                dbDue = dbResult.getInt(5) > 0;
+                dbKilled = dbResult.getInt(6) > 0;
+//            dbBroadcast = dbResult.getInt(7);
+//            dbRepeat = dbResult.getInt(8) > 0;
+//            dbOverdue = dbResult.getInt(9) > 0;
+//            dbSnooze = dbResult.getInt(10) > 0;
+//            dbShowOnce = dbResult.getInt(11) > 0;
+//            dbInterval = dbResult.getInt(12);
+            }
+
             if((tempList.get(i) == 0) && (Integer.parseInt(dbTimestamp) == 0)){
                 yetAnotherList.add(String.valueOf(dbId));
                 tempTaskList.add(dbTask);
@@ -3862,6 +4198,39 @@ class MyAdapter extends ArrayAdapter<String> {
             int minValue = Collections.min(tempList);
             if(minValue != 0) {
                 for (int i = 0; i < MainActivity.taskListSize; i++) {
+
+                    //getting task data
+                    int dbId = 0;
+//        String dbNote = "";
+//        Boolean dbChecklist = false;
+                    String dbTimestamp = "";
+                    String dbTask = "";
+                    Boolean dbDue = false;
+                    Boolean dbKilled = false;
+//        Integer dbBroadcast = 0;
+//        Boolean dbRepeat = false;
+//        Boolean dbOverdue = false;
+//        Boolean dbSnooze = false;
+//        Boolean dbShowOnce = false;
+//        int dbInterval = 0;
+                    Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(i)));
+                    while (dbResult.moveToNext()) {
+                        dbId = dbResult.getInt(0);
+//            dbNote = dbResult.getString(1);
+//            dbChecklist = dbResult.getInt(2) > 0;
+                        dbTimestamp = dbResult.getString(3);
+                        dbTask = dbResult.getString(4);
+                        dbDue = dbResult.getInt(5) > 0;
+                        dbKilled = dbResult.getInt(6) > 0;
+//            dbBroadcast = dbResult.getInt(7);
+//            dbRepeat = dbResult.getInt(8) > 0;
+//            dbOverdue = dbResult.getInt(9) > 0;
+//            dbSnooze = dbResult.getInt(10) > 0;
+//            dbShowOnce = dbResult.getInt(11) > 0;
+//            dbInterval = dbResult.getInt(12);
+                    }
+
                     if (minValue == Integer.parseInt(dbTimestamp)) {
                         yetAnotherList.add(String.valueOf(dbId));
                         tempTaskList.add(dbTask);
