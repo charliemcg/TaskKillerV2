@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     static AlarmManager alarmManager;
 
     //Message that shows up when there are no tasks
-    private TextView noTasksToShow;
+    private ImageView noTasksToShow;
 
     static PendingIntent pendIntent;
 
@@ -749,7 +750,7 @@ public class MainActivity extends AppCompatActivity {
         //marks task as having no due date
         noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
         //remove any associated timestamp
-        noteDb.updateTimestamp(toString().valueOf(MainActivity.sortedIDs.get(i)), "");
+        noteDb.updateTimestamp(toString().valueOf(MainActivity.sortedIDs.get(i)), "0");
         //marks showonce as false
         noteDb.updateShowOnce(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
         //marks repeat as false

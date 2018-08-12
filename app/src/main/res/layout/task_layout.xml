@@ -35,7 +35,8 @@
             android:layout_height="80dp"
             android:id="@+id/textView"
             android:padding="15dp"
-            android:layout_weight="4"/>
+            android:layout_weight="4"
+            android:textSize="20sp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,6 +47,36 @@
             android:layout_weight="4"/>
 
         <ImageView
+            android:id="@+id/checklistIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/checklist"
+            android:layout_weight="1"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/checklistIconGrey"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/checklist_grey"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/noteIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/note"
+            android:layout_weight="1"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/noteIconGrey"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/note_grey"
+            android:layout_weight="1"/>
+
+        <ImageView
             android:id="@+id/repeatIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -54,12 +85,26 @@
             android:visibility="gone"/>
 
         <ImageView
+            android:id="@+id/repeatGreyIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/repeat_grey"
+            android:layout_weight="1"/>
+
+        <ImageView
             android:id="@+id/due"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/due"
             android:layout_weight="1"
             android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/dueGrey"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/due_grey"
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/dueRed"
@@ -77,21 +122,6 @@
             android:layout_weight="1"
             android:visibility="gone"/>
 
-        <ImageView
-            android:id="@+id/checklistIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/checklist"
-            android:layout_weight="1"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/noteIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/note"
-            android:layout_weight="1"
-            android:visibility="gone"/>
     </TableRow>
 
     <TableRow>

@@ -12,11 +12,18 @@
         android:layout_height="match_parent"
         android:id="@+id/theListView"/>
 
-    <TextView
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/noTasks"-->
+        <!--android:text="@string/noTasks"-->
+        <!--android:visibility="gone"/>-->
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/noTasks"
-        android:text="@string/noTasks"
+        android:src="@drawable/no_tasks"
         android:visibility="gone"/>
 
     <EditText

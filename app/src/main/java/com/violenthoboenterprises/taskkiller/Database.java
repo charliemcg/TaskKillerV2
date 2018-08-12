@@ -30,7 +30,6 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL13 = "INTERVAL";
     public static final String COL14 = "REPEATINTERVAL";
     public static final String COL15 = "IGNORED";
-//    public static final String COL16 = "SNOOZETIMESTAMP";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
