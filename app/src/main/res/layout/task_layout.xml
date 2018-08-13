@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:background="@color/white">
 
@@ -15,7 +14,6 @@
             android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             ads:adSize="SMART_BANNER"
             ads:adUnitId="@string/banner_ad_unit_id"
             android:visibility="gone"/>
@@ -29,132 +27,161 @@
     </TableRow>
 
     <TableRow
+        android:layout_height="match_parent"
         android:id="@+id/taskName">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="80dp"
             android:id="@+id/textView"
             android:padding="15dp"
-            android:layout_weight="4"
             android:textSize="20sp"/>
+    </TableRow>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:id="@+id/dueTextView"
-            android:padding="15dp"
-            android:layout_marginTop="40dp"
-            android:layout_weight="4"/>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="350dp"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:id="@+id/dueTextView"
+                android:layout_weight="15"
+                android:textAlignment="center"/>
 
-        <ImageView
-            android:id="@+id/checklistIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/checklist"
-            android:layout_weight="1"
-            android:visibility="gone"/>
+            <ImageView
+                android:id="@+id/checklistIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/checklist"
+                android:visibility="gone"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/checklistIconGrey"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/checklist_grey"
-            android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/checklistIconGrey"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/checklist_grey"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/noteIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/note"
-            android:layout_weight="1"
-            android:visibility="gone"/>
+            <ImageView
+                android:id="@+id/noteIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/note"
+                android:visibility="gone"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/noteIconGrey"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/note_grey"
-            android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/noteIconGrey"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/note_grey"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/repeatIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/repeat"
-            android:layout_weight="1"
-            android:visibility="gone"/>
+            <ImageView
+                android:id="@+id/repeatIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/repeat"
+                android:visibility="gone"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/repeatGreyIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/repeat_grey"
-            android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/repeatIconDay"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/repeat_day"
+                android:visibility="gone"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/due"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/due"
-            android:layout_weight="1"
-            android:visibility="gone"/>
+            <ImageView
+                android:id="@+id/repeatIconWeek"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/repeat_week"
+                android:visibility="gone"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/dueGrey"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/due_grey"
-            android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/repeatIconMonth"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/repeat_month"
+                android:visibility="gone"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/dueRed"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/due_red"
-            android:layout_weight="1"
-            android:visibility="gone"/>
+            <ImageView
+                android:id="@+id/repeatGreyIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/repeat_grey"
+                android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/snoozeIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/snooze"
-            android:layout_weight="1"
-            android:visibility="gone"/>
+            <ImageView
+                android:id="@+id/due"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/due"
+                android:visibility="gone"
+                android:layout_weight="1"/>
 
+            <ImageView
+                android:id="@+id/dueGrey"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/due_grey"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/dueRed"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/due_red"
+                android:visibility="gone"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/snoozeIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/snooze"
+                android:visibility="gone"
+                android:layout_weight="1"/>
+        </LinearLayout>
     </TableRow>
 
     <TableRow>
-        <LinearLayout>
-            <include
-                layout="@layout/task_properties_layout"
-                android:id="@+id/properties"
-                android:visibility="gone"/>
-            <include
-                layout="@layout/date_layout"
-                android:id="@+id/dateTime"
-                android:visibility="gone"/>
-            <include
-                layout="@layout/options"
-                android:id="@+id/options"
-                android:visibility="gone"/>
-            <include
-                layout="@layout/alarm_options"
-                android:id="@+id/alarmOptions"
-                android:visibility="gone"/>
-            <include
-                layout="@layout/repeat_layout"
-                android:id="@+id/repeat"
-                android:visibility="gone"/>
-            <include
-                layout="@layout/snooze_layout"
-                android:id="@+id/snoozeRow"
-                android:visibility="gone"/>
-            <include
-                layout="@layout/task_overdue_layout"
-                android:id="@+id/taskIsOverdue"
-                android:visibility="gone"/>
-        </LinearLayout>
+        <include
+            layout="@layout/task_properties_layout"
+            android:id="@+id/properties"
+            android:visibility="gone"/>
+        <include
+           layout="@layout/date_layout"
+            android:id="@+id/dateTime"
+            android:visibility="gone"/>
+        <include
+            layout="@layout/options"
+            android:id="@+id/options"
+            android:visibility="gone"/>
+        <include
+            layout="@layout/alarm_options"
+            android:id="@+id/alarmOptions"
+            android:visibility="gone"/>
+        <include
+            layout="@layout/repeat_layout"
+            android:id="@+id/repeat"
+            android:visibility="gone"/>
+        <include
+            layout="@layout/snooze_layout"
+            android:id="@+id/snoozeRow"
+            android:visibility="gone"/>
+        <include
+            layout="@layout/task_overdue_layout"
+            android:id="@+id/taskIsOverdue"
+            android:visibility="gone"/>
     </TableRow>
 
 </TableLayout>

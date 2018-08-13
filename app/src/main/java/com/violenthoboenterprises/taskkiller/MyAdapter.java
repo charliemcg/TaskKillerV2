@@ -81,7 +81,10 @@ class MyAdapter extends ArrayAdapter<String> {
         ImageView dueGrey = taskView.findViewById(R.id.dueGrey);
         ImageView overdue = taskView.findViewById(R.id.dueRed);
         ImageView snoozed = taskView.findViewById(R.id.snoozeIcon);
-        ImageView repeat = taskView.findViewById(R.id.repeatIcon);
+//        ImageView repeat = taskView.findViewById(R.id.repeatIcon);
+        ImageView repeatDay = taskView.findViewById(R.id.repeatIconDay);
+        ImageView repeatWeek = taskView.findViewById(R.id.repeatIconWeek);
+        ImageView repeatMonth = taskView.findViewById(R.id.repeatIconMonth);
         ImageView repeatGrey = taskView.findViewById(R.id.repeatGreyIcon);
         ImageView noteImg = taskView.findViewById(R.id.noteIcon);
         ImageView noteGrey = taskView.findViewById(R.id.noteIconGrey);
@@ -3280,7 +3283,13 @@ class MyAdapter extends ArrayAdapter<String> {
         if(dbRepeat && !dbKilled){
 
             repeatGrey.setVisibility(View.GONE);
-            repeat.setVisibility(View.VISIBLE);
+            if(dbRepeatInterval.equals("day")){
+                repeatDay.setVisibility(View.VISIBLE);
+            }else if(dbRepeatInterval.equals("week")){
+                repeatWeek.setVisibility(View.VISIBLE);
+            }else if(dbRepeatInterval.equals("month")){
+                repeatMonth.setVisibility(View.VISIBLE);
+            }
 
         }
 
