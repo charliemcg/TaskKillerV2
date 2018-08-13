@@ -2446,7 +2446,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         reorderList();
 
-                    //task is updated to be due at next repeat
+                        //task is updated to be due at next repeat
                     }else{
 
                         int interval = 0;
@@ -3603,6 +3603,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
         ArrayList<String> idsList = new ArrayList<>();
         ArrayList<String> tempTaskList = new ArrayList<>();
+        ArrayList<String> tempKilledIdsList = new ArrayList<>();
+        ArrayList<String> tempKilledTaskList = new ArrayList<>();
 
         //getting tasks which have no due date
         for(int i = 0; i < MainActivity.taskListSize; i++){
@@ -3611,21 +3613,28 @@ class MyAdapter extends ArrayAdapter<String> {
             int dbId = 0;
             String dbTimestamp = "";
             String dbTask = "";
+            Boolean dbKilled = false;
             Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
                     MainActivity.sortedIDs.get(i)));
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
                 dbTimestamp = dbResult.getString(3);
                 dbTask = dbResult.getString(4);
+                dbKilled = dbResult.getInt(6) > 0;
             }
 
-            if((tempList.get(i) == 0) && (Integer.parseInt(dbTimestamp) == 0)){
+            //Filtering out killed tasks
+            if((tempList.get(i) == 0) && (Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
                 idsList.add(String.valueOf(dbId));
                 tempTaskList.add(dbTask);
+            }else if((tempList.get(i) == 0) && (Integer.parseInt(dbTimestamp) == 0) && (dbKilled)){
+                tempKilledIdsList.add(String.valueOf(dbId));
+                tempKilledTaskList.add(dbTask);
             }
 
         }
 
+        //Adding non-killed tasks to main task list
         while(tempList.size() > 0) {
             int minValue = Collections.min(tempList);
             if(minValue != 0) {
@@ -3635,17 +3644,23 @@ class MyAdapter extends ArrayAdapter<String> {
                     int dbId = 0;
                     String dbTimestamp = "";
                     String dbTask = "";
+                    Boolean dbKilled = false;
                     Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
                             MainActivity.sortedIDs.get(i)));
                     while (dbResult.moveToNext()) {
                         dbId = dbResult.getInt(0);
                         dbTimestamp = dbResult.getString(3);
                         dbTask = dbResult.getString(4);
+                        dbKilled = dbResult.getInt(6) > 0;
                     }
 
-                    if (minValue == Integer.parseInt(dbTimestamp)) {
+                    if ((minValue == Integer.parseInt(dbTimestamp)) && (!dbKilled)) {
                         idsList.add(String.valueOf(dbId));
                         tempTaskList.add(dbTask);
+                        tempList.remove(Collections.min(tempList));
+                    }else if((minValue == Integer.parseInt(dbTimestamp)) && (!dbKilled)){
+                        tempKilledIdsList.add(String.valueOf(dbId));
+                        tempKilledTaskList.add(dbTask);
                         tempList.remove(Collections.min(tempList));
                     }
                 }
@@ -3654,28 +3669,10 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
-        //moving killed tasks to the end of the list
-        for (int i = 0; i < MainActivity.taskListSize; i++) {
-
-            //getting task data
-            int dbId = 0;
-            String dbTask = "";
-            Boolean dbKilled = false;
-            Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
-                    MainActivity.sortedIDs.get(Integer.parseInt(idsList.get(i)))));
-            while (dbResult.moveToNext()) {
-                dbId = dbResult.getInt(0);
-                dbTask = dbResult.getString(4);
-                dbKilled = dbResult.getInt(6) > 0;
-            }
-
-            if(dbKilled){
-                idsList.add(String.valueOf(dbId));
-                tempTaskList.add(dbTask);
-                idsList.remove(i);
-                tempTaskList.remove(i);
-            }
-
+        //Adding killed tasks to end of task list
+        for(int i = 0; i < tempKilledIdsList.size(); i++){
+            tempTaskList.add(tempKilledTaskList.get(i));
+            idsList.add(tempKilledIdsList.get(i));
         }
 
         MainActivity.sortedIDs = idsList;
