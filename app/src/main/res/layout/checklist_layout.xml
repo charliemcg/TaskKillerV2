@@ -3,13 +3,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/checklistRoot"
-    android:background="@color/gray">
+    android:id="@+id/checklistRoot">
 
     <ListView
         android:id="@+id/theChecklist"
         android:layout_width="match_parent"
-        android:layout_height="518dp"/>
+        android:layout_height="518dp"
+        android:background="@color/dark_gray"
+        android:dividerHeight="1dp"
+        android:divider="@color/green"/>
     <!--TODO make sure hard coded height works on all devices-->
 
     <!--<TextView-->
@@ -28,6 +30,6 @@
         android:layout_alignParentBottom="true"
         android:hint="@string/checklistItem"
         android:imeOptions="actionDone"
-        android:background="@color/white"/>
+        android:background="@color/green"/>
 
 </RelativeLayout>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
-    android:background="@color/white">
+    android:background="@color/dark_gray">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,30 +13,53 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/alarm"
-            android:background="@color/red"
+            android:background="@color/dark_gray"
             android:text="Set due date"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:textColor="@color/gray"/>
+
+        <!--<Button-->
+            <!--android:id="@+id/complete"-->
+            <!--android:background="@color/green"-->
+            <!--android:text="Complete"-->
+            <!--android:layout_weight="2"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"/>-->
 
         <Button
-            android:id="@+id/complete"
-            android:background="@color/green"
-            android:text="Complete"
-            android:layout_weight="2"
+            android:id="@+id/subTasks"
+            android:text="Sub-Tasks"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:background="@color/dark_gray"
+            android:textColor="@color/gray"/>
 
         <Button
-            android:id="@+id/more"
-            android:text="More..."
-            android:layout_weight="2.5"
+            android:id="@+id/note"
+            android:text="Add Note"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:background="@color/dark_gray"
+            android:textColor="@color/gray"/>
+
+        <!--<Button-->
+            <!--android:id="@+id/more"-->
+            <!--android:text="More..."-->
+            <!--android:layout_weight="2.5"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="10sp"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
     </LinearLayout>
 
 </TableRow>

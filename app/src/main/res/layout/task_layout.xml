@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
-    android:background="@color/white">
+    android:background="@color/dark_gray">
 
     <TableRow
         android:id="@+id/adRow"
@@ -27,14 +27,34 @@
     </TableRow>
 
     <TableRow
-        android:layout_height="match_parent"
+        android:layout_height="100dp"
         android:id="@+id/taskName">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:id="@+id/textView"
-            android:padding="15dp"
-            android:textSize="20sp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+            <TextView
+                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/textView"
+                android:padding="15dp"
+                android:textSize="20sp"
+                android:background="@color/dark_gray"
+                android:textColor="@color/gray"/>
+
+            <Button
+                android:id="@+id/complete"
+                android:layout_width="match_parent"
+                android:layout_weight="4"
+                android:text="Complete"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@color/dark_gray"
+                android:textColor="@color/gray"
+                android:focusable="false"/>
+        </LinearLayout>
+
     </TableRow>
 
     <TableRow
@@ -43,13 +63,15 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="350dp"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:background="@color/dark_gray">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
                 android:id="@+id/dueTextView"
                 android:layout_weight="15"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textColor="@color/gray"/>
 
             <ImageView
                 android:id="@+id/checklistIcon"

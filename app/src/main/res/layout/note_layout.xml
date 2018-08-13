@@ -3,12 +3,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/noteRoot">
+    android:id="@+id/noteRoot"
+    android:background="@color/dark_gray">
 
     <TextView
         android:id="@+id/noteTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:textColor="@color/gray"
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/editBtn"
@@ -18,7 +21,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:background="@color/dark_gray"
+        android:textColor="@color/gray"/>
 
     <Button
         android:id="@+id/addNoteBtn"
@@ -28,7 +33,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:background="@color/dark_gray"
+        android:textColor="@color/gray"/>
 
     <Button
         android:id="@+id/removeBtn"
@@ -58,7 +65,7 @@
         android:inputType="textCapSentences|textMultiLine"
         android:layout_alignParentBottom="true"
         android:hint="Add your note here..."
-        android:background="@color/white"/>
+        android:background="@color/green"/>
 
     <Button
         android:id="@+id/submitNoteBtn"
@@ -66,7 +73,9 @@
         android:layout_height="40dp"
         android:layout_marginLeft="17dp"
         android:layout_marginBottom="17dp"
-        android:text="Submit"/>
+        android:text="Submit"
+        android:background="@color/dark_gray"
+        android:textColor="@color/gray"/>
     </LinearLayout>
 
 </RelativeLayout>

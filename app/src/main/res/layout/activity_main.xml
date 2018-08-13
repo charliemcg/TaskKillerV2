@@ -10,7 +10,10 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/theListView"/>
+        android:id="@+id/theListView"
+        android:background="@color/dark_gray"
+        android:divider="@color/green"
+        android:dividerHeight="1dp"/>
 
     <!--<TextView-->
         <!--android:layout_width="match_parent"-->
@@ -37,45 +40,45 @@
         android:visibility="gone"
         android:hint="@string/taskTitle"
         android:imeOptions="actionDone"
-        android:background="@color/white"/>
+        android:background="@color/green"/>
 
     <Button
         android:id="@+id/add"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:text="@string/add"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/fab_margin"/>
+        android:layout_margin="@dimen/fab_margin"
+        android:background="@drawable/add"/>
 
-    <Button
-        android:id="@+id/showDb"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:text="Show DB"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="100dp"
-        android:layout_marginBottom="20dp"/>
+    <!--<Button-->
+        <!--android:id="@+id/showDb"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:text="Show DB"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginRight="100dp"-->
+        <!--android:layout_marginBottom="20dp"/>-->
 
-    <Button
-        android:id="@+id/showAlarmDb"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:text="Show Alarm DB"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="180dp"/>
+    <!--<Button-->
+        <!--android:id="@+id/showAlarmDb"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:text="Show Alarm DB"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginRight="180dp"/>-->
 
-    <Button
-        android:id="@+id/showSnoozeDb"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:text="Show Snooze DB"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="260dp"/>
+    <!--<Button-->
+        <!--android:id="@+id/showSnoozeDb"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:text="Show Snooze DB"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginRight="260dp"/>-->
 
 </RelativeLayout>

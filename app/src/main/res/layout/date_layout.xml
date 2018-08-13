@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
-    android:background="@color/white">
+    android:background="@color/dark_gray">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +26,9 @@
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="Set Date"/>
+            android:text="Set Date"
+            android:background="@color/dark_gray"
+            android:textColor="@color/gray"/>
     </LinearLayout>
 
 </TableRow>

@@ -5,35 +5,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
-    android:background="@color/white">
+    android:background="@color/dark_gray">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <Button
-            android:id="@+id/rename"
-            android:text="Rename"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"/>
+        <!--<Button-->
+            <!--android:id="@+id/rename"-->
+            <!--android:text="Rename"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
 
-        <Button
-            android:id="@+id/subTasks"
-            android:text="Sub-Tasks"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"/>
+        <!--<Button-->
+            <!--android:id="@+id/subTasks"-->
+            <!--android:text="Sub-Tasks"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
 
-        <Button
-            android:id="@+id/note"
-            android:text="Add Note"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"/>
+        <!--<Button-->
+            <!--android:id="@+id/note"-->
+            <!--android:text="Add Note"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
     </LinearLayout>
 
 </TableRow>
