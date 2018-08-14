@@ -65,7 +65,8 @@
                 android:src="@drawable/tick"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="complete"/>
+                android:onClick="complete"
+                android:visibility="visible"/>
         </LinearLayout>
     </TableRow>
 

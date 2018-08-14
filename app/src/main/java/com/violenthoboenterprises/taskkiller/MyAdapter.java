@@ -2576,6 +2576,8 @@ class MyAdapter extends ArrayAdapter<String> {
             //show tasks properties
             }else{
 
+                complete.setVisibility(View.GONE);
+
                 propertyRow.setVisibility(View.VISIBLE);
 
             }
