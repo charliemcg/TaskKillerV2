@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean reorderList;
     //Reinstate alarm after reinstating task
     static boolean reinstateAlarm;
+    //Used to determine that task is being set to complete
+    static boolean completeTask;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -218,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
         reorderList = false;
         sortedIDs = new ArrayList<>();
         reinstateAlarm = false;
+        completeTask = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -229,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 //Tasks are not clickable if keyboard is up
-                if(tasksAreClickable) {
+                if(tasksAreClickable && !completeTask) {
 
                     vibrate.vibrate(50);
 
@@ -257,6 +261,10 @@ public class MainActivity extends AppCompatActivity {
                         removeTaskProperties();
 
                     }
+
+                }else {
+
+                    completeTask = false;
 
                 }
 
@@ -1082,4 +1090,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void complete(View view) {
+        LinearLayout parentLayout = (LinearLayout)view.getParent();
+
+        int thePosition = theListView.getPositionForView(parentLayout);
+
+        completeTask = true;
+
+        theListView.performItemClick(theListView.getAdapter().getView(thePosition, null, null),
+                thePosition,
+                theListView.getAdapter().getItemId(thePosition));
+
+    }
 }

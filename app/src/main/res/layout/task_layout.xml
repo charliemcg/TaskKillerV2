@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
-    android:background="@color/dark_gray">
+    android:background="@color/dark_gray"
+    android:descendantFocusability="beforeDescendants">
 
     <TableRow
         android:id="@+id/adRow"
@@ -32,7 +33,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_height="match_parent"
-            android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:descendantFocusability="blocksDescendants">
             <TextView
                 android:layout_height="80dp"
                 android:layout_width="match_parent"
@@ -41,20 +43,30 @@
                 android:padding="15dp"
                 android:textSize="20sp"
                 android:background="@color/dark_gray"
-                android:textColor="@color/gray"/>
-
-            <Button
-                android:id="@+id/complete"
-                android:layout_width="match_parent"
-                android:layout_weight="4"
-                android:text="Complete"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@color/dark_gray"
                 android:textColor="@color/gray"
-                android:focusable="false"/>
-        </LinearLayout>
+                android:text="zero"/>
 
+            <!--<Button-->
+                <!--android:id="@+id/complete"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_weight="4"-->
+                <!--android:text="Complete"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="8dp"-->
+                <!--android:background="@color/dark_gray"-->
+                <!--android:textColor="@color/gray"-->
+                <!--android:focusable="false"/>-->
+
+            <ImageView
+                android:id="@+id/complete"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/tick"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="complete"/>
+        </LinearLayout>
     </TableRow>
 
     <TableRow
@@ -175,7 +187,9 @@
         </LinearLayout>
     </TableRow>
 
-    <TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <include
             layout="@layout/task_properties_layout"
             android:id="@+id/properties"
