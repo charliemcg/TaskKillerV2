@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".Checklist"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <!--<activity android:name=".MoreInfoNotification"-->
             <!--android:label="More on Notification"-->
             <!--android:parentActivityName=".MainActivity">-->
