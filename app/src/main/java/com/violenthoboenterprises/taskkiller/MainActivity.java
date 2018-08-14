@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         //TODO figure out what to do about older versions
         if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.dark_gray)); //status bar or the time bar at the top
+            getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.dark_gray));
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -806,7 +806,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(!taskBeingEdited) {
 
-                taskList.add(taskListSize, taskName);
+                taskList.add(taskName);
 
                 taskListSize++;
 

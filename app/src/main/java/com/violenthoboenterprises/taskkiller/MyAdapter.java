@@ -3897,6 +3897,11 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
+        Collections.reverse(idsList);
+        Collections.reverse(tempTaskList);
+        Collections.reverse(tempKilledIdsList);
+        Collections.reverse(tempKilledTaskList);
+
         //Adding non-killed tasks to main task list
         while(tempList.size() > 0) {
             int minValue = Collections.min(tempList);
