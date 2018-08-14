@@ -12,9 +12,10 @@
         android:layout_height="match_parent"
         android:id="@+id/theListView"
         android:background="@color/dark_gray"
-        android:divider="@color/green"
-        android:dividerHeight="1dp"
         android:descendantFocusability="blocksDescendants"/>
+
+    <!--android:divider="@color/green"-->
+    <!--android:dividerHeight="1dp"-->
 
     <!--<TextView-->
         <!--android:layout_width="match_parent"-->

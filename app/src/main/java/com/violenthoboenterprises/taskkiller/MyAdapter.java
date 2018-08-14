@@ -553,6 +553,24 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
+//        if(MainActivity.taskPropertiesShowing){
+//            Log.i(TAG, "Task properties showing");
+//            complete.setVisibility(View.INVISIBLE);
+//            theTextView.setVisibility(View.INVISIBLE);
+//            due.setVisibility(View.INVISIBLE);
+//            overdue.setVisibility(View.INVISIBLE);
+//            snoozed.setVisibility(View.INVISIBLE);
+//            dueGrey.setVisibility(View.INVISIBLE);
+//            repeatDay.setVisibility(View.INVISIBLE);
+//            repeatWeek.setVisibility(View.INVISIBLE);
+//            repeatMonth.setVisibility(View.INVISIBLE);
+//            repeatGrey.setVisibility(View.INVISIBLE);
+//            noteImg.setVisibility(View.INVISIBLE);
+//            noteGrey.setVisibility(View.INVISIBLE);
+//            checklistImg.setVisibility(View.INVISIBLE);
+//            checklistGrey.setVisibility(View.INVISIBLE);
+//        }
+
         //actions to occur in regards to selected task
         if(MainActivity.completeTask){
 
@@ -2576,8 +2594,6 @@ class MyAdapter extends ArrayAdapter<String> {
             //show tasks properties
             }else{
 
-                complete.setVisibility(View.GONE);
-
                 propertyRow.setVisibility(View.VISIBLE);
 
             }
@@ -3540,7 +3556,21 @@ class MyAdapter extends ArrayAdapter<String> {
         if (MainActivity.taskPropertiesShowing && (position != MainActivity.activeTask)) {
 
             //fade out inactive tasks//Change fading to blurring
-            taskView.setBackgroundColor(Color.parseColor("#888888"));
+//            taskView.setBackgroundColor(Color.parseColor("#888888"));
+            complete.setVisibility(View.INVISIBLE);
+            theTextView.setVisibility(View.INVISIBLE);
+            due.setVisibility(View.INVISIBLE);
+            overdue.setVisibility(View.INVISIBLE);
+            snoozed.setVisibility(View.INVISIBLE);
+            dueGrey.setVisibility(View.INVISIBLE);
+            repeatDay.setVisibility(View.INVISIBLE);
+            repeatWeek.setVisibility(View.INVISIBLE);
+            repeatMonth.setVisibility(View.INVISIBLE);
+            repeatGrey.setVisibility(View.INVISIBLE);
+            noteImg.setVisibility(View.INVISIBLE);
+            noteGrey.setVisibility(View.INVISIBLE);
+            checklistImg.setVisibility(View.INVISIBLE);
+            checklistGrey.setVisibility(View.INVISIBLE);
 
         }
 

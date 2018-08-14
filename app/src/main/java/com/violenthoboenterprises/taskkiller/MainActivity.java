@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -225,6 +227,11 @@ public class MainActivity extends AppCompatActivity {
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
+
+        //Set list view dividers
+        int[] colors = {0, 0xFF00FF00, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
 
         //Make task clickable
         theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
