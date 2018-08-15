@@ -162,6 +162,13 @@ public class Database extends SQLiteOpenHelper {
         return result;
     }
 
+    public Cursor getDataByDueTime(String stamp){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL4
+                + " == " + stamp, null);
+        return result;
+    }
+
     public Cursor getAllAlarmData() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + ATABLE, null);
