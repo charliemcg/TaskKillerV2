@@ -30,6 +30,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL13 = "INTERVAL";
     public static final String COL14 = "REPEATINTERVAL";
     public static final String COL15 = "IGNORED";
+    public static final String COL16 = "TIMECREATED";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -63,7 +64,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
-                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT, IGNORED BOOLEAN/*, SNOOZETIMESTAMP TEXT*/)");
+                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT, IGNORED BOOLEAN, TIMECREATED TEXT)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
@@ -78,7 +79,7 @@ public class Database extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(int id, String note, String task, int broadcast){
+    public boolean insertData(int id, String note, String task, int broadcast, String timeCreated){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(COL1, id);
@@ -96,7 +97,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL13, 0);
         content.put(COL14, "");
         content.put(COL15, false);
-//        content.put(COL16, "0");
+        content.put(COL16, timeCreated);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -151,6 +152,13 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL1
                 + " == " + id, null);
+        return result;
+    }
+
+    public Cursor getDataByTimestamp(String stamp){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL16
+                + " == " + stamp, null);
         return result;
     }
 

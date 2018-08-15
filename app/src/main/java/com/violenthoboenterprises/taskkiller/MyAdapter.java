@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -169,31 +170,34 @@ class MyAdapter extends ArrayAdapter<String> {
         final String finalAlarmMonth = alarmMonth;
         final String finalAlarmYear = alarmYear;
 
-        //Displaying ad if there are five or more tasks
-        if(position == 4) {
-            adRow.setVisibility(View.VISIBLE);
-            boolean networkAvailable = false;
-            ConnectivityManager connectivityManager = (ConnectivityManager)
-                    getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-                networkAvailable = true;
-            }
+//        Log.i(TAG, String.valueOf(MainActivity.taskList));
+//        Log.i(TAG, task);
 
-            //Initialising banner ad
-            final AdView adView = taskView.findViewById(R.id.adView);
-            ImageView banner = taskView.findViewById(R.id.banner);
-
-            if (networkAvailable) {
-                adView.setVisibility(View.VISIBLE);
-                final AdRequest banRequest = new AdRequest.Builder()
-                        .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
-                    (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
-                adView.loadAd(banRequest);
-            } else {
-                banner.setVisibility(View.VISIBLE);
-            }
-        }
+//        //Displaying ad if there are five or more tasks
+//        if(position == 4) {
+//            adRow.setVisibility(View.VISIBLE);
+//            boolean networkAvailable = false;
+//            ConnectivityManager connectivityManager = (ConnectivityManager)
+//                    getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+//            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+//            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+//                networkAvailable = true;
+//            }
+//
+//            //Initialising banner ad
+//            final AdView adView = taskView.findViewById(R.id.adView);
+//            ImageView banner = taskView.findViewById(R.id.banner);
+//
+//            if (networkAvailable) {
+//                adView.setVisibility(View.VISIBLE);
+//                final AdRequest banRequest = new AdRequest.Builder()
+//                        .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
+//                    (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
+//                adView.loadAd(banRequest);
+//            } else {
+//                banner.setVisibility(View.VISIBLE);
+//            }
+//        }
 
         //TODO make sure hard coded values work on all devices
         //Task cannot be centered unless it's in view. Moving selected task into view
@@ -553,26 +557,8 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
-//        if(MainActivity.taskPropertiesShowing){
-//            Log.i(TAG, "Task properties showing");
-//            complete.setVisibility(View.INVISIBLE);
-//            theTextView.setVisibility(View.INVISIBLE);
-//            due.setVisibility(View.INVISIBLE);
-//            overdue.setVisibility(View.INVISIBLE);
-//            snoozed.setVisibility(View.INVISIBLE);
-//            dueGrey.setVisibility(View.INVISIBLE);
-//            repeatDay.setVisibility(View.INVISIBLE);
-//            repeatWeek.setVisibility(View.INVISIBLE);
-//            repeatMonth.setVisibility(View.INVISIBLE);
-//            repeatGrey.setVisibility(View.INVISIBLE);
-//            noteImg.setVisibility(View.INVISIBLE);
-//            noteGrey.setVisibility(View.INVISIBLE);
-//            checklistImg.setVisibility(View.INVISIBLE);
-//            checklistGrey.setVisibility(View.INVISIBLE);
-//        }
-
         //actions to occur in regards to selected task
-        if(MainActivity.completeTask){
+        if((MainActivity.completeTask) && (MainActivity.thePosition == position)){
 
             //task is killed if not repeating
             if(!finalDbRepeat) {
@@ -586,7 +572,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.taskPropertiesShowing = false;
 
                 MainActivity.noteDb.updateKilled(String.valueOf(
-                        MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+                        MainActivity.sortedIDs.get(position)), true);
 
                 MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
                         .get(position), false);
@@ -3864,6 +3850,19 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
+        //Ordering list by time task was created
+        ArrayList<String> whenTaskCreated = new ArrayList<>();
+        for(int i = 0; i < MainActivity.taskListSize; i++){
+            String created = "";
+            Cursor createdResult = MainActivity.noteDb.getData(Integer.parseInt(MainActivity.sortedIDs.get(i)));
+            while (createdResult.moveToNext()) {
+                created = createdResult.getString(15);
+            }
+            whenTaskCreated.add(created);
+        }
+        Collections.sort(whenTaskCreated);
+        Collections.reverse(whenTaskCreated);
+
         ArrayList<String> idsList = new ArrayList<>();
         ArrayList<String> tempTaskList = new ArrayList<>();
         ArrayList<String> tempKilledIdsList = new ArrayList<>();
@@ -3877,8 +3876,8 @@ class MyAdapter extends ArrayAdapter<String> {
             String dbTimestamp = "";
             String dbTask = "";
             Boolean dbKilled = false;
-            Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
-                    MainActivity.sortedIDs.get(i)));
+            Cursor dbResult = MainActivity.noteDb.getDataByTimestamp(
+                    whenTaskCreated.get(i));
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
                 dbTimestamp = dbResult.getString(3);
@@ -3896,11 +3895,6 @@ class MyAdapter extends ArrayAdapter<String> {
             }
 
         }
-
-        Collections.reverse(idsList);
-        Collections.reverse(tempTaskList);
-        Collections.reverse(tempKilledIdsList);
-        Collections.reverse(tempKilledTaskList);
 
         //Adding non-killed tasks to main task list
         while(tempList.size() > 0) {
@@ -3943,8 +3937,14 @@ class MyAdapter extends ArrayAdapter<String> {
             idsList.add(tempKilledIdsList.get(i));
         }
 
+//        Log.i(TAG, String.valueOf(idsList));
+//        Log.i(TAG, String.valueOf(tempTaskList));
+//        Log.i(TAG, "/////////////////////////////////////////////////////");
+
         MainActivity.sortedIDs = idsList;
         MainActivity.taskList = tempTaskList;
+
+        Log.i(TAG, String.valueOf(tempTaskList) + "*");
 
         //Updating the view with the new order
         MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
