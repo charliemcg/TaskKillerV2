@@ -3906,6 +3906,16 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
+        Log.i(TAG, "Due Timestamps: " + String.valueOf(tempList));
+        Log.i(TAG, "Creation Timestamps: " + String.valueOf(whenTaskCreated));
+        Log.i(TAG, "Due Ids: " + String.valueOf(tempDueIdsList));
+        Log.i(TAG, "Due: " + String.valueOf(tempDueTaskList));
+        Log.i(TAG, "Killed Ids: " + String.valueOf(tempKilledIdsList));
+        Log.i(TAG, "Killed: " + String.valueOf(tempKilledTaskList));
+        Log.i(TAG, "Task Ids: " + String.valueOf(tempIdsList));
+        Log.i(TAG, "Task: " + String.valueOf(tempTaskList));
+        Log.i(TAG, ".");
+
         Collections.sort(tempList);
 
         //Adding due tasks to middle of task list
@@ -3921,7 +3931,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 dbTask = dbResult.getString(4);
             }
 
-            //Filtering out killed tasks
             if((tempList.get(i) != 0)){
                 tempIdsList.add(String.valueOf(dbId));
                 tempTaskList.add(dbTask);
