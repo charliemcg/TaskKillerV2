@@ -3310,6 +3310,8 @@ class MyAdapter extends ArrayAdapter<String> {
             theTextView.setPaintFlags(theTextView.getPaintFlags() |
                     Paint.STRIKE_THRU_TEXT_FLAG);
 
+            complete.setVisibility(View.INVISIBLE);
+
         }
 
         //Show due icon and due date if required
@@ -3561,6 +3563,7 @@ class MyAdapter extends ArrayAdapter<String> {
             noteGrey.setVisibility(View.INVISIBLE);
             checklistImg.setVisibility(View.INVISIBLE);
             checklistGrey.setVisibility(View.INVISIBLE);
+            dueTextView.setVisibility(View.INVISIBLE);
 
         }
 
