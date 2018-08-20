@@ -113,7 +113,7 @@ public class Note extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                MainActivity.vibrate.vibrate(50);
+//                MainActivity.vibrate.vibrate(50);
 
                 //show edit text
                 noteEditText.setVisibility(View.VISIBLE);
@@ -145,7 +145,7 @@ public class Note extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                MainActivity.vibrate.vibrate(50);
+//                MainActivity.vibrate.vibrate(50);
 
                 Cursor result = noteDb.getData(Integer.parseInt(
                         MainActivity.sortedIdsForNote.get(activeTask)));

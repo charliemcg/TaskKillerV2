@@ -170,7 +170,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final String finalAlarmMonth = alarmMonth;
         final String finalAlarmYear = alarmYear;
 
-//        Log.i(TAG, String.valueOf(MainActivity.taskList));
+//        Log.i(TAG, String.valueOf(MainActivity.taskList) + "*");
 //        Log.i(TAG, task);
 
 //        //Displaying ad if there are five or more tasks
@@ -560,6 +560,8 @@ class MyAdapter extends ArrayAdapter<String> {
         //actions to occur in regards to selected task
         if((MainActivity.completeTask) && (MainActivity.thePosition == position)){
 
+            MainActivity.vibrate.vibrate(100);
+
             //task is killed if not repeating
             if(!finalDbRepeat) {
 
@@ -596,7 +598,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.add.setVisibility(View.VISIBLE);
 
-                MainActivity.vibrate.vibrate(50);
+//                MainActivity.vibrate.vibrate(50);
 
                 MainActivity.params.height = MainActivity.addHeight;
 
@@ -2273,6 +2275,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
+                        MainActivity.vibrate.vibrate(100);
+
                         //kill task if not repeating
                         if(!finalDbRepeat) {
                             taskOverdueRow.setVisibility(View.GONE);
@@ -2308,7 +2312,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             MainActivity.add.setVisibility(View.VISIBLE);
 
-                            MainActivity.vibrate.vibrate(50);
+//                            MainActivity.vibrate.vibrate(50);
 
                             MainActivity.params.height = MainActivity.addHeight;
 
@@ -2673,7 +2677,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.add.setVisibility(View.VISIBLE);
 
-                        MainActivity.vibrate.vibrate(50);
+//                        MainActivity.vibrate.vibrate(50);
 
                         MainActivity.params.height = MainActivity.addHeight;
 
@@ -2912,7 +2916,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.add.setVisibility(View.VISIBLE);
 
-                        MainActivity.vibrate.vibrate(50);
+//                        MainActivity.vibrate.vibrate(50);
 
                         alarm.setText("Set Due Date");
 
@@ -3029,7 +3033,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.add.setVisibility(View.VISIBLE);
 
-                                    MainActivity.vibrate.vibrate(50);
+//                                    MainActivity.vibrate.vibrate(50);
 
                                     MainActivity.params.height = MainActivity.addHeight;
 
@@ -3174,7 +3178,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.checklistShowing = true;
 
-                    MainActivity.vibrate.vibrate(50);
+//                    MainActivity.vibrate.vibrate(50);
 
                     getContext().startActivity(intent);
 
@@ -3186,7 +3190,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                    MainActivity.vibrate.vibrate(50);
+//                    MainActivity.vibrate.vibrate(50);
 
                     getContext().startActivity(noteIntent);
 
@@ -3200,7 +3204,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     dateButton.setText("Set Time");
 
-                    setAlarm(dateRow, datePicker, timePicker);
+                    setAlarm(dateRow, datePicker, timePicker, position);
 
                 }
             });
@@ -3221,7 +3225,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.taskPropertiesShowing = false;
 
-                    setAlarm(dateRow, datePicker, timePicker);
+                    setAlarm(dateRow, datePicker, timePicker, position);
 
                     //Returns the 'add' button
                     MainActivity.params.height = MainActivity.addHeight;
@@ -3249,7 +3253,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.taskPropertiesShowing = false;
 
-                    setAlarm(dateRow, datePicker, timePicker);
+                    setAlarm(dateRow, datePicker, timePicker, position);
 
                     //Returns the 'add' button
                     MainActivity.params.height = MainActivity.addHeight;
@@ -3273,7 +3277,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.taskPropertiesShowing = false;
 
-                    setAlarm(dateRow, datePicker, timePicker);
+                    setAlarm(dateRow, datePicker, timePicker, position);
 
                     //Returns the 'add' button
                     MainActivity.params.height = MainActivity.addHeight;
@@ -3355,6 +3359,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //Checking for overdue tasks
             String formattedTime;
             Boolean sameDay = false;
+            Boolean tomorrow = false;
             Boolean markAsOverdue = false;
             if(!dbKilled) {
                 //Overdue
@@ -3409,57 +3414,85 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
                 //Not overdue
                 } else {
+                    //Checking if date due tomorrow
+                    //Incrementing day
+                    if (((currentDate.get(Calendar.MONTH) == 0) || (currentDate.get(Calendar.MONTH) == 2)
+                            || (currentDate.get(Calendar.MONTH) == 4) || (currentDate.get(Calendar.MONTH) == 6)
+                            || (currentDate.get(Calendar.MONTH) == 7) || (currentDate.get(Calendar.MONTH) == 9))
+                            && (currentDate.get(Calendar.DAY_OF_MONTH) == 31) && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if (((currentDate.get(Calendar.MONTH) == 1) || (currentDate.get(Calendar.MONTH) == 3)
+                            || (currentDate.get(Calendar.MONTH) == 5) || (currentDate.get(Calendar.MONTH) == 8)
+                            || (currentDate.get(Calendar.MONTH) == 10)) && (currentDate.get(Calendar.DAY_OF_MONTH) == 30)
+                            && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if ((currentDate.get(Calendar.MONTH) == 11) && (currentDate.get(Calendar.DAY_OF_MONTH) == 31)
+                            && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if ((currentDate.get(Calendar.MONTH) == 1) && (currentDate.get(Calendar.DAY_OF_MONTH) == 28)
+                            && (currentDate.get(Calendar.YEAR) % 4 != 0) && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if ((currentDate.get(Calendar.MONTH) == 1) && (currentDate.get(Calendar.DAY_OF_MONTH) == 29)
+                            && (currentDate.get(Calendar.YEAR) % 4 == 0) && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if (currentDate.get(Calendar.DAY_OF_MONTH) == (Integer.valueOf(day) - 1)){
+                        tomorrow = true;
+                    }
                     dueGrey.setVisibility(View.GONE);
                     due.setVisibility(View.VISIBLE);
                 }
 
+            }
+
+            //determine if snoozed alarm is overdue or not
+            if(dbSnooze) {
+
+                //Show overdue icon
+                if (markAsOverdue) {
+                    snoozed.setVisibility(View.GONE);
+                    overdue.setVisibility(View.VISIBLE);
+                    MainActivity.noteDb.updateSnooze(
+                            MainActivity.sortedIDs.get(position), false);
+                //show snooze icon
+                } else {
+                    dueGrey.setVisibility(View.GONE);
+                    snoozed.setVisibility(View.VISIBLE);
+                    overdue.setVisibility(View.GONE);
+                    due.setVisibility(View.GONE);
                 }
 
-                //determine if snoozed alarm is overdue or not
-                if(dbSnooze) {
+            //Show the once off overdue options
+//            }else if(markAsOverdue && dbShowOnce){
+//
+//                MainActivity.noteDb.updateOverdue(
+//                        MainActivity.sortedIDs.get(position), true);
+//
+//                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//
+//            }else if(markAsOverdue){
+//
+//                //if ignored task is ignored beyond the next repeat then
+//                // the due time is updated to that new repeat time
+//                if((currentDate.get(Calendar.MINUTE) >= (Integer
+//                        .parseInt(hour) + dbInterval)) && !dbRepeat){
+//
+//                    alarmHour = String.valueOf(Integer.parseInt(alarmHour) + dbInterval);
+//
+//                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            alarmHour, alarmMinute, alarmAmpm, alarmDay, alarmMonth, alarmYear);
+//
+//                }
 
-                    //Show overdue icon
-                    if (markAsOverdue) {
-                        snoozed.setVisibility(View.GONE);
-                        overdue.setVisibility(View.VISIBLE);
-                        MainActivity.noteDb.updateSnooze(
-                                MainActivity.sortedIDs.get(position), false);
-                    //show snooze icon
-                    } else {
-                        dueGrey.setVisibility(View.GONE);
-                        snoozed.setVisibility(View.VISIBLE);
-                        overdue.setVisibility(View.GONE);
-                        due.setVisibility(View.GONE);
-                    }
+            }
 
-                //Show the once off overdue options
-                }else if(markAsOverdue && dbShowOnce){
+            //If task due on following day say "Tomorrow"
+            if (tomorrow){
 
-                    MainActivity.noteDb.updateOverdue(
-                            MainActivity.sortedIDs.get(position), true);
-
-                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-
-                }else if(markAsOverdue){
-
-                    //if ignored task is ignored beyond the next repeat then
-                    // the due time is updated to that new repeat time
-                    if((currentDate.get(Calendar.MINUTE) >= (Integer
-                            .parseInt(hour) + dbInterval)) && !dbRepeat){
-
-                        alarmHour = String.valueOf(Integer.parseInt(alarmHour) + dbInterval);
-
-                        MainActivity.noteDb.updateAlarmData(String.valueOf(
-                                MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                                alarmHour, alarmMinute, alarmAmpm, alarmDay, alarmMonth, alarmYear);
-
-                    }
-
-                }
-
+                dueTextView.setText("Tomorrow");
 
             //If task due on same day show the due date
-            if(!sameDay){
+            } else if(!sameDay){
                 //TODO account for MM/DD/YYYY https://en.wikipedia.org/wiki/Date_format_by_country
                 //Formatting date
                 String formattedMonth = "";
@@ -3495,6 +3528,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 formattedDate = day + " " + formattedMonth;
 
                 dueTextView.setText(formattedDate);
+
             //If task due on different day show the due time
             }else{
 
@@ -3599,7 +3633,7 @@ class MyAdapter extends ArrayAdapter<String> {
     }
 
     //set notification alarm for selected task
-    private void setAlarm(TableRow dateRow, DatePicker datePicker, TimePicker timePicker){
+    private void setAlarm(TableRow dateRow, DatePicker datePicker, TimePicker timePicker, int position){
 
         //getting task data
         String dbTask = "";
@@ -3607,7 +3641,7 @@ class MyAdapter extends ArrayAdapter<String> {
         Boolean dbSnooze = false;
         String dbRepeatInterval = "";
         Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
-                MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                MainActivity.sortedIDs.get(position)));
         while (dbResult.moveToNext()) {
             dbTask = dbResult.getString(4);
             dbBroadcast = dbResult.getInt(7);
@@ -3617,7 +3651,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
         //getting alarm data
         Cursor alarmResult = MainActivity.noteDb.getAlarmData(
-                Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)));
+                Integer.parseInt(MainActivity.sortedIDs.get(position)));
         String alarmHour = "";
         String alarmMinute = "";
         String alarmAmpm = "";
@@ -3662,7 +3696,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.repeatInterval, MainActivity.pendIntent);
 
             MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
-                    .get(MainActivity.activeTask), true);
+                    .get(position), true);
 
             MainActivity.repeatShowing = false;
             MainActivity.repeating = false;
@@ -3675,13 +3709,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
             if (!dbSnooze) {
                 MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                        Integer.parseInt(MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                        Integer.parseInt(MainActivity.sortedIDs.get(position)),
                         MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
             } else {
                 MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
                         Integer.parseInt(
-                                MainActivity.sortedIDs.get(MainActivity.activeTask) + 1000),
+                                MainActivity.sortedIDs.get(position) + 1000),
                         MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
             }
@@ -3690,7 +3724,7 @@ class MyAdapter extends ArrayAdapter<String> {
             if(dbRepeatInterval.equals("month")){
 
                 MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
-                        .get(MainActivity.activeTask), true);
+                        .get(position), true);
 
                 //set background to white
 //                MainActivity.activityRootView.setBackgroundColor
@@ -3752,7 +3786,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     //updating timestamp
                     MainActivity.noteDb.updateTimestamp(String.valueOf(
-                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                            MainActivity.sortedIDs.get(position)),
                             String.valueOf(futureDate.getTimeInMillis() / 1000));
 
                     //intention to execute AlertReceiver
@@ -3760,7 +3794,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     //updating due time in database
                     MainActivity.noteDb.updateAlarmData(String.valueOf(
-                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                            MainActivity.sortedIDs.get(position)),
                             String.valueOf(calendar.get(calendar.HOUR)),
                             String.valueOf(calendar.get(calendar.MINUTE)),
                             String.valueOf(calendar.get(calendar.AM_PM)),
@@ -3777,13 +3811,13 @@ class MyAdapter extends ArrayAdapter<String> {
                     if (!dbSnooze) {
                         MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
                                 Integer.parseInt(MainActivity.sortedIDs
-                                        .get(MainActivity.activeTask)), MainActivity.alertIntent,
+                                        .get(position)), MainActivity.alertIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT);
                     } else {
                         MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
                                 Integer.parseInt(
                                         MainActivity.sortedIDs.get
-                                                (MainActivity.activeTask) + 1000),
+                                                (position) + 1000),
                                 MainActivity.alertIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT);
                     }
@@ -3794,10 +3828,10 @@ class MyAdapter extends ArrayAdapter<String> {
                             MainActivity.pendIntent);
 
                     MainActivity.noteDb.updateDue(
-                            MainActivity.sortedIDs.get(MainActivity.activeTask), true);
+                            MainActivity.sortedIDs.get(position), true);
 
                     MainActivity.noteDb.updateShowOnce(
-                            MainActivity.sortedIDs.get(MainActivity.activeTask), true);
+                            MainActivity.sortedIDs.get(position), true);
 
                 }
 
@@ -3909,16 +3943,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
-        Log.i(TAG, "Due Timestamps: " + String.valueOf(tempList));
-        Log.i(TAG, "Creation Timestamps: " + String.valueOf(whenTaskCreated));
-        Log.i(TAG, "Due Ids: " + String.valueOf(tempDueIdsList));
-        Log.i(TAG, "Due: " + String.valueOf(tempDueTaskList));
-        Log.i(TAG, "Killed Ids: " + String.valueOf(tempKilledIdsList));
-        Log.i(TAG, "Killed: " + String.valueOf(tempKilledTaskList));
-        Log.i(TAG, "Task Ids: " + String.valueOf(tempIdsList));
-        Log.i(TAG, "Task: " + String.valueOf(tempTaskList));
-        Log.i(TAG, ".");
-
         Collections.sort(tempList);
 
         //Adding due tasks to middle of task list
@@ -3946,16 +3970,6 @@ class MyAdapter extends ArrayAdapter<String> {
             tempTaskList.add(tempKilledTaskList.get(i));
             tempIdsList.add(tempKilledIdsList.get(i));
         }
-
-        Log.i(TAG, "Due Timestamps: " + String.valueOf(tempList));
-        Log.i(TAG, "Creation Timestamps: " + String.valueOf(whenTaskCreated));
-        Log.i(TAG, "Due Ids: " + String.valueOf(tempDueIdsList));
-        Log.i(TAG, "Due: " + String.valueOf(tempDueTaskList));
-        Log.i(TAG, "Killed Ids: " + String.valueOf(tempKilledIdsList));
-        Log.i(TAG, "Killed: " + String.valueOf(tempKilledTaskList));
-        Log.i(TAG, "Task Ids: " + String.valueOf(tempIdsList));
-        Log.i(TAG, "Task: " + String.valueOf(tempTaskList));
-        Log.i(TAG, "/////////////////////////////////////////////////////");
 
         MainActivity.sortedIDs = tempIdsList;
         MainActivity.taskList = tempTaskList;
