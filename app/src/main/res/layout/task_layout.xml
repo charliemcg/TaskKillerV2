@@ -163,12 +163,33 @@
                 android:visibility="gone"
                 android:layout_weight="1"/>
 
-            <ImageView
-                android:id="@+id/dueGrey"
+            <!--<ImageView-->
+                <!--android:id="@+id/dueGrey"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:src="@drawable/due_grey"-->
+                <!--android:layout_weight="1"/>-->
+
+            <FrameLayout
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/due_grey"
-                android:layout_weight="1"/>
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/dueClear"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/due_clear"/>
+
+                <!--<Button-->
+                    <!--android:id="@+id/dueBackground"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:background="@color/green"-->
+                    <!--android:clickable="false" />-->
+
+            </FrameLayout>
 
             <ImageView
                 android:id="@+id/dueRed"
