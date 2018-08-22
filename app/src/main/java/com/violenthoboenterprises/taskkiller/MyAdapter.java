@@ -3421,7 +3421,7 @@ class MyAdapter extends ArrayAdapter<String> {
             int currentYear = currentDate.get(Calendar.YEAR);
             int currentMonth = currentDate.get(Calendar.MONTH);
             int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
-            int currentHour = currentDate.get(Calendar.HOUR);
+            int currentHour = currentDate.get(Calendar.HOUR_OF_DAY);
             int currentMinute = currentDate.get(Calendar.MINUTE);
 
             //Checking for overdue tasks
@@ -3437,7 +3437,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     dueLayout.setVisibility(View.GONE);
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
-//                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                    overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
                     markAsOverdue = true;
                 //Overdue
                 } else if (currentYear == Integer.valueOf(year)
@@ -3447,7 +3448,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     dueLayout.setVisibility(View.GONE);
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
-//                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                    overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
                     markAsOverdue = true;
                 //Overdue
                 } else if (currentYear == Integer.valueOf(year)
@@ -3458,7 +3460,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     dueLayout.setVisibility(View.GONE);
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
-//                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                    overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
                     markAsOverdue = true;
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth == Integer.valueOf(month)
@@ -3479,6 +3482,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         overdueClear.setVisibility(View.VISIBLE);
                         overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                        overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
                         markAsOverdue = true;
                     //Overdue
                     } else if (currentHour == adjustedHour
@@ -3489,6 +3493,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         overdueClear.setVisibility(View.VISIBLE);
                         overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                        overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
                         markAsOverdue = true;
                     //Not overdue
                     } else {
