@@ -86,8 +86,7 @@
             android:id="@+id/addIcon"
             android:text="+"
             android:gravity="center"
-            android:textSize="140sp"
-            android:textColor="@color/green"/>
+            android:textSize="140sp"/>
 
     </RelativeLayout>
 

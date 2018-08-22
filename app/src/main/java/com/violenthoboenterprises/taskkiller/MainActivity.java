@@ -190,6 +190,9 @@ public class MainActivity extends AppCompatActivity {
     //for generating random number to select toast phrases
     Random random = new Random();
 
+    //The user selectable highlight color
+    static String highlight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO figure out what to do about older versions
@@ -241,12 +244,16 @@ public class MainActivity extends AppCompatActivity {
         sortedIDs = new ArrayList<>();
         reinstateAlarm = false;
         completeTask = false;
+        highlight = "#F4F142";
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
 
+        addIcon.setTextColor(Color.parseColor(highlight));
+
         //Set list view dividers
         int[] colors = {0, 0xFF00FF00, 0};
+//        int[] colors = {0, Integer.parseInt(highlight), 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
         theListView.setDividerHeight(1);
 
