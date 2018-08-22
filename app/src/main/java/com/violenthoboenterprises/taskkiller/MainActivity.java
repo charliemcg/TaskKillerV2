@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     public static int taskListSize;
     //Height of the 'add' button
     static int addHeight;
+    static int addIconHeight;
     //Measures to determine if keyboard is up
     private int heightDiff;
     //Size of checklist of checklists
@@ -145,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     //The button that facilitates the adding of tasks
     static Button add;
+    static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
 //    Button showDb;
@@ -162,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Parameters of 'add' button
     static RelativeLayout.LayoutParams params;
+    static RelativeLayout.LayoutParams iconParams;
 
     //Save data from main activity on close
     static SharedPreferences mSharedPreferences;
@@ -204,15 +207,18 @@ public class MainActivity extends AppCompatActivity {
         noTasksToShow = findViewById(R.id.noTasks);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
+        addIcon = findViewById(R.id.addIcon);
 //        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showSnoozeDb = findViewById(R.id.showSnoozeDb);
         theListView = findViewById(R.id.theListView);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         params = (RelativeLayout.LayoutParams) add.getLayoutParams();
+        iconParams = (RelativeLayout.LayoutParams) addIcon.getLayoutParams();
         vibrate = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         inflater = LayoutInflater.from(getApplicationContext());
         addHeight = params.height;
+        addIconHeight = iconParams.height;
         theAdapter = new ListAdapter[]{new MyAdapter(this, taskList)};
         TAG = "MainActivity";
         activityRootView = findViewById(R.id.activityRoot);
@@ -518,8 +524,10 @@ public class MainActivity extends AppCompatActivity {
 
                     //Bringing back the 'add' button
                     params.height = addHeight;
+                    iconParams.height = addIconHeight;
 
                     add.setLayoutParams(params);
+                    addIcon.setLayoutParams(iconParams);
 
                     return true;
 
@@ -715,8 +723,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Can't change visibility of 'add' button. Have to set height to zero instead.
         params.height = 0;
+        iconParams.height = 0;
 
         add.setLayoutParams(params);
+        addIcon.setLayoutParams(iconParams);
 
     }
 
@@ -736,8 +746,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Returns the 'add' button
         params.height = addHeight;
+        iconParams.height = addIconHeight;
 
         add.setLayoutParams(params);
+        addIcon.setLayoutParams(iconParams);
     }
 
     //renames task
@@ -764,8 +776,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Can't change visibility of 'add' button. Have to set height to zero instead.
         params.height = 0;
+        iconParams.height = 0;
 
         add.setLayoutParams(params);
+        addIcon.setLayoutParams(iconParams);
     }
 
     //reinstates completed task
@@ -1039,8 +1053,10 @@ public class MainActivity extends AppCompatActivity {
                             taskNameEditText.setVisibility(View.VISIBLE);
 
                             params.height = 0;
+                            iconParams.height = 0;
 
                             add.setLayoutParams(params);
+                            addIcon.setLayoutParams(iconParams);
 
                             tasksAreClickable = false;
 
@@ -1077,8 +1093,10 @@ public class MainActivity extends AppCompatActivity {
                             taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
                             params.height = 0;
+                            iconParams.height = 0;
 
                             add.setLayoutParams(params);
+                            addIcon.setLayoutParams(iconParams);
 
                             tasksAreClickable = false;
 
@@ -1097,8 +1115,10 @@ public class MainActivity extends AppCompatActivity {
                             taskNameEditText.setVisibility(View.GONE);
 
                             params.height = addHeight;
+                            iconParams.height = addIconHeight;
 
                             add.setLayoutParams(params);
+                            addIcon.setLayoutParams(iconParams);
 
                             tasksAreClickable = true;
 

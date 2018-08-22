@@ -67,11 +67,8 @@ class MyAdapter extends ArrayAdapter<String> {
         final DatePicker datePicker = taskView.findViewById(R.id.datePicker);
         final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
-//        Button complete = taskView.findViewById(R.id.complete);
         ImageView complete = taskView.findViewById(R.id.complete);
         final Button alarm = taskView.findViewById(R.id.alarm);
-//        Button more = taskView.findViewById(R.id.more);
-//        final Button rename = taskView.findViewById(R.id.rename);
         Button subTasks = taskView.findViewById(R.id.subTasks);
         Button note = taskView.findViewById(R.id.note);
         final Button dateButton = taskView.findViewById(R.id.date);
@@ -81,17 +78,12 @@ class MyAdapter extends ArrayAdapter<String> {
         final Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
         final Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
         final Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
-//        ImageView due = taskView.findViewById(R.id.due);
-//        ImageView dueGrey = taskView.findViewById(R.id.dueGrey);
         ImageView dueClear = taskView.findViewById(R.id.dueClear);
         RelativeLayout dueLayout = taskView.findViewById(R.id.dueLayout);
-//        ImageView overdue = taskView.findViewById(R.id.dueRed);
         ImageView overdueClear = taskView.findViewById(R.id.overdueClear);
         RelativeLayout overdueLayout = taskView.findViewById(R.id.overdueLayout);
-//        ImageView snoozed = taskView.findViewById(R.id.snoozeIcon);
         ImageView snoozeClear = taskView.findViewById(R.id.snoozeClear);
         RelativeLayout snoozeLayout = taskView.findViewById(R.id.snoozeLayout);
-//        ImageView repeat = taskView.findViewById(R.id.repeatIcon);
         ImageView repeatDayClear = taskView.findViewById(R.id.repeatDayClear);
         RelativeLayout repeatDayLayout = taskView.findViewById(R.id.repeatDayLayout);
         ImageView repeatWeekClear = taskView.findViewById(R.id.repeatWeekClear);
@@ -100,12 +92,7 @@ class MyAdapter extends ArrayAdapter<String> {
         RelativeLayout repeatMonthLayout = taskView.findViewById(R.id.repeatMonthLayout);
         ImageView repeatClear = taskView.findViewById(R.id.repeatClear);
         RelativeLayout repeatLayout = taskView.findViewById(R.id.repeatLayout);
-//        ImageView noteImg = taskView.findViewById(R.id.noteIcon);
-//        ImageView noteGrey = taskView.findViewById(R.id.noteIconGrey);
         ImageView noteClear = taskView.findViewById(R.id.noteClear);
-//        RelativeLayout noteLayout = taskView.findViewById(R.id.noteLayout);
-//        ImageView checklistImg = taskView.findViewById(R.id.checklistIcon);
-//        ImageView checklistGrey = taskView.findViewById(R.id.checklistIconGrey);
         ImageView checklistClear = taskView.findViewById(R.id.checklistClear);
         Button snoozeTask = taskView.findViewById(R.id.snoozeTask);
         Button taskDone = taskView.findViewById(R.id.taskDone);
@@ -612,12 +599,15 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                 MainActivity.add.setVisibility(View.VISIBLE);
+                MainActivity.addIcon.setVisibility(View.VISIBLE);
 
 //                MainActivity.vibrate.vibrate(50);
 
                 MainActivity.params.height = MainActivity.addHeight;
+                MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                 taskView.setLayoutParams(MainActivity.params);
+                taskView.setLayoutParams(MainActivity.iconParams);
 
                 reorderList();
 
@@ -1165,8 +1155,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     //Returns the 'add' button
                                     MainActivity.params.height = MainActivity.addHeight;
+                                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
-                                    MainActivity.add.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.iconParams);
 
                                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -1341,8 +1333,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     //Returns the 'add' button
                                     MainActivity.params.height = MainActivity.addHeight;
+                                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
-                                    MainActivity.add.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.iconParams);
 
                                     MainActivity.dateRowShowing = false;
 
@@ -1636,8 +1630,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     //Returns the 'add' button
                                     MainActivity.params.height = MainActivity.addHeight;
+                                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
-                                    MainActivity.add.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.iconParams);
 
                                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -1814,8 +1810,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     //Returns the 'add' button
                                     MainActivity.params.height = MainActivity.addHeight;
+                                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
-                                    MainActivity.add.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.iconParams);
 
                                     MainActivity.dateRowShowing = false;
 
@@ -2106,8 +2104,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     //Returns the 'add' button
                                     MainActivity.params.height = MainActivity.addHeight;
+                                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
-                                    MainActivity.add.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.iconParams);
 
                                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -2265,8 +2265,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     //Returns the 'add' button
                                     MainActivity.params.height = MainActivity.addHeight;
+                                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
-                                    MainActivity.add.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.iconParams);
 
                                     MainActivity.dateRowShowing = false;
 
@@ -2350,12 +2352,15 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                            "", "", "");
 
                             MainActivity.add.setVisibility(View.VISIBLE);
+                            MainActivity.addIcon.setVisibility(View.VISIBLE);
 
 //                            MainActivity.vibrate.vibrate(50);
 
                             MainActivity.params.height = MainActivity.addHeight;
+                            MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                             v.setLayoutParams(MainActivity.params);
+                            v.setLayoutParams(MainActivity.iconParams);
 
                         //update repeating task to be due at next available date
                         }else {
@@ -2611,8 +2616,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         //Returns the 'add' button
                         MainActivity.params.height = MainActivity.addHeight;
+                        MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                         MainActivity.add.setLayoutParams(MainActivity.params);
+                        MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
 
                         //Updates the view
                         MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
@@ -2644,8 +2651,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     //Returns the 'add' button
                     MainActivity.params.height = MainActivity.addHeight;
+                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                     MainActivity.add.setLayoutParams(MainActivity.params);
+                    MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
 
                 }
             });
@@ -2738,12 +2747,15 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                        "", "", "");
 
                         MainActivity.add.setVisibility(View.VISIBLE);
+                        MainActivity.addIcon.setVisibility(View.VISIBLE);
 
 //                        MainActivity.vibrate.vibrate(50);
 
                         MainActivity.params.height = MainActivity.addHeight;
+                        MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                         v.setLayoutParams(MainActivity.params);
+                        v.setLayoutParams(MainActivity.iconParams);
 
                         reorderList();
 
@@ -2977,14 +2989,17 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                .setBackgroundColor(Color.parseColor("#FFFFFF"));
 
                         MainActivity.add.setVisibility(View.VISIBLE);
+                        MainActivity.addIcon.setVisibility(View.VISIBLE);
 
 //                        MainActivity.vibrate.vibrate(50);
 
                         alarm.setText("Set Due Date");
 
                         MainActivity.params.height = MainActivity.addHeight;
+                        MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                         v.setLayoutParams(MainActivity.params);
+                        v.setLayoutParams(MainActivity.iconParams);
 
                         notifyDataSetChanged();
 
@@ -3033,8 +3048,10 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                    .setBackgroundColor(Color.parseColor("#FFFFFF"));
 
                             MainActivity.params.height = MainActivity.addHeight;
+                            MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                             v.setLayoutParams(MainActivity.params);
+                            v.setLayoutParams(MainActivity.iconParams);
 
                             MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -3094,12 +3111,15 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                                    .parseColor("#FFFFFF"));
 
                                     MainActivity.add.setVisibility(View.VISIBLE);
+                                    MainActivity.addIcon.setVisibility(View.VISIBLE);
 
 //                                    MainActivity.vibrate.vibrate(50);
 
                                     MainActivity.params.height = MainActivity.addHeight;
+                                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                                     v.setLayoutParams(MainActivity.params);
+                                    v.setLayoutParams(MainActivity.iconParams);
 
                                     notifyDataSetChanged();
 
@@ -3172,8 +3192,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         //Returns the 'add' button
                                         MainActivity.params.height = MainActivity.addHeight;
+                                        MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                                         MainActivity.add.setLayoutParams(MainActivity.params);
+                                        MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
 
                                     //show repeat row
                                     } else {
@@ -3291,8 +3313,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     //Returns the 'add' button
                     MainActivity.params.height = MainActivity.addHeight;
+                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                     MainActivity.add.setLayoutParams(MainActivity.params);
+                    MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
 
                     notifyDataSetChanged();
 
@@ -3319,8 +3343,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     //Returns the 'add' button
                     MainActivity.params.height = MainActivity.addHeight;
+                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                     MainActivity.add.setLayoutParams(MainActivity.params);
+                    MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
 
                     notifyDataSetChanged();
 
@@ -3343,8 +3369,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     //Returns the 'add' button
                     MainActivity.params.height = MainActivity.addHeight;
+                    MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                     MainActivity.add.setLayoutParams(MainActivity.params);
+                    MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
 
                     notifyDataSetChanged();
 
@@ -3432,36 +3460,36 @@ class MyAdapter extends ArrayAdapter<String> {
             if(!dbKilled) {
                 //Overdue
                 if (currentYear > Integer.valueOf(year)) {
-//                    dueGrey.setVisibility(View.GONE);
                     dueClear.setVisibility(View.GONE);
                     dueLayout.setVisibility(View.GONE);
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                    overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                    overdueClear.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.red));
                     markAsOverdue = true;
                 //Overdue
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth > Integer.valueOf(month)) {
-//                    dueGrey.setVisibility(View.GONE);
                     dueClear.setVisibility(View.GONE);
                     dueLayout.setVisibility(View.GONE);
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                    overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                    overdueClear.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.red));
                     markAsOverdue = true;
                 //Overdue
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth == Integer.valueOf(month)
                         && currentDay > Integer.valueOf(day)) {
-//                    dueGrey.setVisibility(View.GONE);
                     dueClear.setVisibility(View.GONE);
                     dueLayout.setVisibility(View.GONE);
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                    overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                    overdueClear.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.red));
                     markAsOverdue = true;
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth == Integer.valueOf(month)
@@ -3476,30 +3504,29 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
                     //Overdue
                     if (currentHour > adjustedHour) {
-//                        dueGrey.setVisibility(View.GONE);
                         dueClear.setVisibility(View.GONE);
                         dueLayout.setVisibility(View.GONE);
                         overdueClear.setVisibility(View.VISIBLE);
                         overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                        overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.red));
                         markAsOverdue = true;
                     //Overdue
                     } else if (currentHour == adjustedHour
                             && currentMinute >= Integer.valueOf(minute)) {
-//                        dueGrey.setVisibility(View.GONE);
                         dueClear.setVisibility(View.GONE);
                         dueLayout.setVisibility(View.GONE);
                         overdueClear.setVisibility(View.VISIBLE);
                         overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                        overdueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.red));
                         markAsOverdue = true;
                     //Not overdue
                     } else {
-//                        dueGrey.setVisibility(View.GONE);
-//                        due.setVisibility(View.VISIBLE);
-                        dueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
+                        dueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.green));
                     }
                 //Not overdue
                 } else {
@@ -3527,9 +3554,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     } else if (currentDay == (Integer.valueOf(day) - 1)){
                         tomorrow = true;
                     }
-//                    dueGrey.setVisibility(View.GONE);
-//                    due.setVisibility(View.VISIBLE);
-                    dueClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
+                    dueClear.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.green));
                 }
 
             }
@@ -3547,12 +3573,10 @@ class MyAdapter extends ArrayAdapter<String> {
                             MainActivity.sortedIDs.get(position), false);
                 //show snooze icon
                 } else {
-//                    dueGrey.setVisibility(View.GONE);
                     snoozeClear.setVisibility(View.VISIBLE);
                     snoozeLayout.setVisibility(View.VISIBLE);
                     overdueClear.setVisibility(View.GONE);
                     overdueLayout.setVisibility(View.GONE);
-//                    due.setVisibility(View.GONE);
                 }
 
             //Show the once off overdue options
@@ -3656,15 +3680,18 @@ class MyAdapter extends ArrayAdapter<String> {
             if(dbRepeatInterval.equals("day")){
                 repeatDayClear.setVisibility(View.VISIBLE);
                 repeatDayLayout.setVisibility(View.VISIBLE);
-                repeatDayClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
+                repeatDayClear.setBackgroundColor(ContextCompat
+                        .getColor(getContext(), R.color.green));
             }else if(dbRepeatInterval.equals("week")){
                 repeatWeekClear.setVisibility(View.VISIBLE);
                 repeatWeekLayout.setVisibility(View.VISIBLE);
-                repeatWeekClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
+                repeatWeekClear.setBackgroundColor(ContextCompat
+                        .getColor(getContext(), R.color.green));
             }else if(dbRepeatInterval.equals("month")){
                 repeatMonthClear.setVisibility(View.VISIBLE);
                 repeatMonthLayout.setVisibility(View.VISIBLE);
-                repeatMonthClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
+                repeatMonthClear.setBackgroundColor(ContextCompat
+                        .getColor(getContext(), R.color.green));
             }
 
         }
@@ -3672,13 +3699,9 @@ class MyAdapter extends ArrayAdapter<String> {
         //Show checklist/note icon if required
         if(dbChecklist){
             checklistClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
-//            checklistGrey.setVisibility(View.GONE);
-//            checklistImg.setVisibility(View.VISIBLE);
         }
         if(!dbNote.equals("")){
             noteClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
-//            noteGrey.setVisibility(View.GONE);
-//            noteImg.setVisibility(View.VISIBLE);
         }
 
         //greying out unselected tasks
@@ -3955,8 +3978,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 //Returns the 'add' button
                 MainActivity.params.height = MainActivity.addHeight;
+                MainActivity.iconParams.height = MainActivity.addIconHeight;
 
                 MainActivity.add.setLayoutParams(MainActivity.params);
+                MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
 
                 MainActivity.dateRowShowing = false;
 
