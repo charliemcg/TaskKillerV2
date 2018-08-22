@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -83,17 +84,29 @@ class MyAdapter extends ArrayAdapter<String> {
 //        ImageView due = taskView.findViewById(R.id.due);
 //        ImageView dueGrey = taskView.findViewById(R.id.dueGrey);
         ImageView dueClear = taskView.findViewById(R.id.dueClear);
-        ImageView overdue = taskView.findViewById(R.id.dueRed);
-        ImageView snoozed = taskView.findViewById(R.id.snoozeIcon);
+        RelativeLayout dueLayout = taskView.findViewById(R.id.dueLayout);
+//        ImageView overdue = taskView.findViewById(R.id.dueRed);
+        ImageView overdueClear = taskView.findViewById(R.id.overdueClear);
+        RelativeLayout overdueLayout = taskView.findViewById(R.id.overdueLayout);
+//        ImageView snoozed = taskView.findViewById(R.id.snoozeIcon);
+        ImageView snoozeClear = taskView.findViewById(R.id.snoozeClear);
+        RelativeLayout snoozeLayout = taskView.findViewById(R.id.snoozeLayout);
 //        ImageView repeat = taskView.findViewById(R.id.repeatIcon);
-        ImageView repeatDay = taskView.findViewById(R.id.repeatIconDay);
-        ImageView repeatWeek = taskView.findViewById(R.id.repeatIconWeek);
-        ImageView repeatMonth = taskView.findViewById(R.id.repeatIconMonth);
-        ImageView repeatGrey = taskView.findViewById(R.id.repeatGreyIcon);
-        ImageView noteImg = taskView.findViewById(R.id.noteIcon);
-        ImageView noteGrey = taskView.findViewById(R.id.noteIconGrey);
-        ImageView checklistImg = taskView.findViewById(R.id.checklistIcon);
-        ImageView checklistGrey = taskView.findViewById(R.id.checklistIconGrey);
+        ImageView repeatDayClear = taskView.findViewById(R.id.repeatDayClear);
+        RelativeLayout repeatDayLayout = taskView.findViewById(R.id.repeatDayLayout);
+        ImageView repeatWeekClear = taskView.findViewById(R.id.repeatWeekClear);
+        RelativeLayout repeatWeekLayout = taskView.findViewById(R.id.repeatWeekLayout);
+        ImageView repeatMonthClear = taskView.findViewById(R.id.repeatMonthClear);
+        RelativeLayout repeatMonthLayout = taskView.findViewById(R.id.repeatMonthLayout);
+        ImageView repeatClear = taskView.findViewById(R.id.repeatClear);
+        RelativeLayout repeatLayout = taskView.findViewById(R.id.repeatLayout);
+//        ImageView noteImg = taskView.findViewById(R.id.noteIcon);
+//        ImageView noteGrey = taskView.findViewById(R.id.noteIconGrey);
+        ImageView noteClear = taskView.findViewById(R.id.noteClear);
+//        RelativeLayout noteLayout = taskView.findViewById(R.id.noteLayout);
+//        ImageView checklistImg = taskView.findViewById(R.id.checklistIcon);
+//        ImageView checklistGrey = taskView.findViewById(R.id.checklistIconGrey);
+        ImageView checklistClear = taskView.findViewById(R.id.checklistClear);
         Button snoozeTask = taskView.findViewById(R.id.snoozeTask);
         Button taskDone = taskView.findViewById(R.id.taskDone);
         Button taskIgnore = taskView.findViewById(R.id.taskIgnore);
@@ -3420,14 +3433,20 @@ class MyAdapter extends ArrayAdapter<String> {
                 //Overdue
                 if (currentYear > Integer.valueOf(year)) {
 //                    dueGrey.setVisibility(View.GONE);
-                    overdue.setVisibility(View.VISIBLE);
+                    dueClear.setVisibility(View.GONE);
+                    dueLayout.setVisibility(View.GONE);
+                    overdueClear.setVisibility(View.VISIBLE);
+                    overdueLayout.setVisibility(View.VISIBLE);
 //                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     markAsOverdue = true;
                 //Overdue
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth > Integer.valueOf(month)) {
 //                    dueGrey.setVisibility(View.GONE);
-                    overdue.setVisibility(View.VISIBLE);
+                    dueClear.setVisibility(View.GONE);
+                    dueLayout.setVisibility(View.GONE);
+                    overdueClear.setVisibility(View.VISIBLE);
+                    overdueLayout.setVisibility(View.VISIBLE);
 //                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     markAsOverdue = true;
                 //Overdue
@@ -3435,7 +3454,10 @@ class MyAdapter extends ArrayAdapter<String> {
                         && currentMonth == Integer.valueOf(month)
                         && currentDay > Integer.valueOf(day)) {
 //                    dueGrey.setVisibility(View.GONE);
-                    overdue.setVisibility(View.VISIBLE);
+                    dueClear.setVisibility(View.GONE);
+                    dueLayout.setVisibility(View.GONE);
+                    overdueClear.setVisibility(View.VISIBLE);
+                    overdueLayout.setVisibility(View.VISIBLE);
 //                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     markAsOverdue = true;
                 } else if (currentYear == Integer.valueOf(year)
@@ -3452,14 +3474,20 @@ class MyAdapter extends ArrayAdapter<String> {
                     //Overdue
                     if (currentHour > adjustedHour) {
 //                        dueGrey.setVisibility(View.GONE);
-                        overdue.setVisibility(View.VISIBLE);
+                        dueClear.setVisibility(View.GONE);
+                        dueLayout.setVisibility(View.GONE);
+                        overdueClear.setVisibility(View.VISIBLE);
+                        overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
                         markAsOverdue = true;
                     //Overdue
                     } else if (currentHour == adjustedHour
                             && currentMinute >= Integer.valueOf(minute)) {
 //                        dueGrey.setVisibility(View.GONE);
-                        overdue.setVisibility(View.VISIBLE);
+                        dueClear.setVisibility(View.GONE);
+                        dueLayout.setVisibility(View.GONE);
+                        overdueClear.setVisibility(View.VISIBLE);
+                        overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
                         markAsOverdue = true;
                     //Not overdue
@@ -3506,15 +3534,19 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 //Show overdue icon
                 if (markAsOverdue) {
-                    snoozed.setVisibility(View.GONE);
-                    overdue.setVisibility(View.VISIBLE);
+                    snoozeClear.setVisibility(View.GONE);
+                    snoozeLayout.setVisibility(View.GONE);
+                    overdueClear.setVisibility(View.VISIBLE);
+                    overdueLayout.setVisibility(View.VISIBLE);
                     MainActivity.noteDb.updateSnooze(
                             MainActivity.sortedIDs.get(position), false);
                 //show snooze icon
                 } else {
 //                    dueGrey.setVisibility(View.GONE);
-                    snoozed.setVisibility(View.VISIBLE);
-                    overdue.setVisibility(View.GONE);
+                    snoozeClear.setVisibility(View.VISIBLE);
+                    snoozeLayout.setVisibility(View.VISIBLE);
+                    overdueClear.setVisibility(View.GONE);
+                    overdueLayout.setVisibility(View.GONE);
 //                    due.setVisibility(View.GONE);
                 }
 
@@ -3614,25 +3646,34 @@ class MyAdapter extends ArrayAdapter<String> {
         //show repeat icon if required
         if(dbRepeat && !dbKilled){
 
-            repeatGrey.setVisibility(View.GONE);
+            repeatClear.setVisibility(View.GONE);
+            repeatLayout.setVisibility(View.GONE);
             if(dbRepeatInterval.equals("day")){
-                repeatDay.setVisibility(View.VISIBLE);
+                repeatDayClear.setVisibility(View.VISIBLE);
+                repeatDayLayout.setVisibility(View.VISIBLE);
+                repeatDayClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
             }else if(dbRepeatInterval.equals("week")){
-                repeatWeek.setVisibility(View.VISIBLE);
+                repeatWeekClear.setVisibility(View.VISIBLE);
+                repeatWeekLayout.setVisibility(View.VISIBLE);
+                repeatWeekClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
             }else if(dbRepeatInterval.equals("month")){
-                repeatMonth.setVisibility(View.VISIBLE);
+                repeatMonthClear.setVisibility(View.VISIBLE);
+                repeatMonthLayout.setVisibility(View.VISIBLE);
+                repeatMonthClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
             }
 
         }
 
         //Show checklist/note icon if required
         if(dbChecklist){
-            checklistGrey.setVisibility(View.GONE);
-            checklistImg.setVisibility(View.VISIBLE);
+            checklistClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
+//            checklistGrey.setVisibility(View.GONE);
+//            checklistImg.setVisibility(View.VISIBLE);
         }
         if(!dbNote.equals("")){
-            noteGrey.setVisibility(View.GONE);
-            noteImg.setVisibility(View.VISIBLE);
+            noteClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
+//            noteGrey.setVisibility(View.GONE);
+//            noteImg.setVisibility(View.VISIBLE);
         }
 
         //greying out unselected tasks
@@ -3643,17 +3684,17 @@ class MyAdapter extends ArrayAdapter<String> {
             complete.setVisibility(View.INVISIBLE);
             theTextView.setVisibility(View.INVISIBLE);
 //            due.setVisibility(View.INVISIBLE);
-            overdue.setVisibility(View.INVISIBLE);
-            snoozed.setVisibility(View.INVISIBLE);
+//            overdue.setVisibility(View.INVISIBLE);
+            snoozeClear.setVisibility(View.INVISIBLE);
 //            dueGrey.setVisibility(View.INVISIBLE);
-            repeatDay.setVisibility(View.INVISIBLE);
-            repeatWeek.setVisibility(View.INVISIBLE);
-            repeatMonth.setVisibility(View.INVISIBLE);
-            repeatGrey.setVisibility(View.INVISIBLE);
-            noteImg.setVisibility(View.INVISIBLE);
-            noteGrey.setVisibility(View.INVISIBLE);
-            checklistImg.setVisibility(View.INVISIBLE);
-            checklistGrey.setVisibility(View.INVISIBLE);
+//            repeatDay.setVisibility(View.INVISIBLE);
+//            repeatWeek.setVisibility(View.INVISIBLE);
+//            repeatMonth.setVisibility(View.INVISIBLE);
+//            repeatGrey.setVisibility(View.INVISIBLE);
+//            noteImg.setVisibility(View.INVISIBLE);
+//            noteGrey.setVisibility(View.INVISIBLE);
+//            checklistImg.setVisibility(View.INVISIBLE);
+//            checklistGrey.setVisibility(View.INVISIBLE);
             dueTextView.setVisibility(View.INVISIBLE);
 
         }
