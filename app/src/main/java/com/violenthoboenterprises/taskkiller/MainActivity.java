@@ -244,16 +244,23 @@ public class MainActivity extends AppCompatActivity {
         sortedIDs = new ArrayList<>();
         reinstateAlarm = false;
         completeTask = false;
-        highlight = "#F4F142";
+        highlight = "#FFFF69B4";
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
 
         addIcon.setTextColor(Color.parseColor(highlight));
+        taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
 
         //Set list view dividers
-        int[] colors = {0, 0xFF00FF00, 0};
-//        int[] colors = {0, Integer.parseInt(highlight), 0};
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16*val + d;
+        }
+        int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
         theListView.setDividerHeight(1);
 
