@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
@@ -193,6 +194,8 @@ public class MainActivity extends AppCompatActivity {
     //The user selectable highlight color
     static String highlight;
 
+    MediaPlayer punch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO figure out what to do about older versions
@@ -245,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
         reinstateAlarm = false;
         completeTask = false;
         highlight = "#FFFFA500";
+        punch = MediaPlayer.create(this, R.raw.punch);
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -1261,6 +1265,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void complete(View view) {
+
+        punch.start();
 
         LinearLayout parentLayout = (LinearLayout)view.getParent();
 

@@ -3720,6 +3720,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //fade out inactive tasks
 //            taskView.setBackgroundColor(Color.parseColor("#888888"));
             complete.setVisibility(View.INVISIBLE);
+            completed.setVisibility(View.INVISIBLE);
             theTextView.setVisibility(View.INVISIBLE);
 //            due.setVisibility(View.INVISIBLE);
             dueClear.setVisibility(View.INVISIBLE);
