@@ -65,8 +65,18 @@
                 android:src="@drawable/tick"
                 android:clickable="true"
                 android:focusable="true"
+                android:onClick="complete"/>
+
+            <ImageView
+                android:id="@+id/completed"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/tick_complete"
+                android:clickable="true"
+                android:focusable="true"
                 android:onClick="complete"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
         </LinearLayout>
     </TableRow>
 

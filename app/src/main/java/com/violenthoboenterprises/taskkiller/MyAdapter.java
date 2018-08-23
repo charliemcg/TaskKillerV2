@@ -68,6 +68,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
         ImageView complete = taskView.findViewById(R.id.complete);
+        ImageView completed = taskView.findViewById(R.id.completed);
         final Button alarm = taskView.findViewById(R.id.alarm);
         Button subTasks = taskView.findViewById(R.id.subTasks);
         Button note = taskView.findViewById(R.id.note);
@@ -3405,6 +3406,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     Paint.STRIKE_THRU_TEXT_FLAG);
 
             complete.setVisibility(View.INVISIBLE);
+            completed.setVisibility(View.VISIBLE);
+            completed.setClickable(false);
 
         }
 

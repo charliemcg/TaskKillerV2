@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         sortedIDs = new ArrayList<>();
         reinstateAlarm = false;
         completeTask = false;
-        highlight = "#FFFF69B4";
+        highlight = "#FFFFA500";
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
