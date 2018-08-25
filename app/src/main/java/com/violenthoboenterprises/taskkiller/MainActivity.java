@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 1; i < highlight.length(); i++) {
             char c = highlight.charAt(i);
             int d = digits.indexOf(c);
-            val = 16*val + d;
+            val = 16 * val + d;
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
@@ -688,7 +688,8 @@ public class MainActivity extends AppCompatActivity {
         noteDb.deleteSnoozeData(String.valueOf(sortedIDs.get(position)));
 
         //Cancel notification alars if one is set
-        alarmManager.cancel(pendIntent.getService(this, Integer.parseInt(sortedIDs.get(position)), alertIntent, 0));
+        alarmManager.cancel(pendIntent.getService(this,
+                Integer.parseInt(sortedIDs.get(position)), alertIntent, 0));
 
         sortedIDs.remove(position);
 
@@ -721,9 +722,6 @@ public class MainActivity extends AppCompatActivity {
     //Show selected task's properties
     private void viewProperties(int position) {
 
-        //fade out inactive tasks//TODO change fading to blurring
-//        activityRootView.setBackgroundColor(Color.parseColor("#888888"));
-
         onPause();
 
         //Marks task as having it's properties showing
@@ -750,9 +748,6 @@ public class MainActivity extends AppCompatActivity {
 
     //remove selected task's properties
     private void removeTaskProperties() {
-
-        //set background to white
-//        activityRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         //Updates the view
         theListView.setAdapter(theAdapter[0]);
@@ -808,30 +803,6 @@ public class MainActivity extends AppCompatActivity {
 
         //marks task as not killed in database
         noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
-//        //remove any associated snooze
-//        noteDb.updateSnooze(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
-//        //marks task as not overdue
-//        noteDb.updateOverdue(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
-//        //marks task as having no due date
-//        noteDb.updateDue(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
-//        //remove any associated timestamp
-//        noteDb.updateTimestamp(toString().valueOf(MainActivity.sortedIDs.get(i)), "0");
-//        //marks showonce as false
-//        noteDb.updateShowOnce(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
-//        //marks repeat as false
-//        noteDb.updateRepeat(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
-//        //remove alarm time data
-//        MainActivity.noteDb.updateAlarmData
-//                (toString().valueOf(MainActivity.sortedIDs.get(i)),
-//                        "", "", "",
-//                        "", "", "");
-//        //remove snooze time data
-//        MainActivity.noteDb.updateSnoozeData
-//                (toString().valueOf(MainActivity.sortedIDs.get(i)),
-//                        "", "", "",
-//                        "", "", "");
-
-//        reorderList = true;
 
         reinstateAlarm = true;
 
@@ -977,7 +948,8 @@ public class MainActivity extends AppCompatActivity {
 
                 alertIntent = new Intent(this, AlertReceiver.class);
 
-                pendIntent = PendingIntent.getBroadcast(this, i, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                pendIntent = PendingIntent.getBroadcast(this, i, alertIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
 
             }else{
 
@@ -1058,10 +1030,6 @@ public class MainActivity extends AppCompatActivity {
 
                             }
 
-                            //fade background when something is in focus//TODO change fading o blurring
-//                            activityRootView.setBackgroundColor(Color
-//                                    .parseColor("#888888"));
-
                             taskNameEditText.setFocusable(true);
 
                             taskNameEditText.requestFocus();
@@ -1095,10 +1063,6 @@ public class MainActivity extends AppCompatActivity {
 
                             }
 
-                            //fade background when something is in focus//TODO change fading to blurring
-//                            activityRootView.setBackgroundColor(Color
-//                                    .parseColor("#888888"));
-
                             taskNameEditText.setFocusable(true);
 
                             taskNameEditText.requestFocus();
@@ -1123,10 +1087,6 @@ public class MainActivity extends AppCompatActivity {
                         }else if(restoreNormalListView){
 
                             fadeTasks = false;
-
-                            //setting background to white
-//                            activityRootView.setBackgroundColor(Color
-//                                    .parseColor("#FFFFFF"));
 
                             //Textbox is gone and 'add' button is visible whenever
                             // keyboard is not showing
@@ -1201,8 +1161,6 @@ public class MainActivity extends AppCompatActivity {
         taskList.clear();
         sortedIDs.clear();
 
-//        checklistListSize = 0;
-
         //Existing tasks are recalled when app opened
         taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
 
@@ -1210,7 +1168,8 @@ public class MainActivity extends AppCompatActivity {
 
             taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
 
-            sortedIDs.add(mSharedPreferences.getString("sortedIDsKey" + String.valueOf(i), ""));
+            sortedIDs.add(mSharedPreferences.getString("sortedIDsKey" +
+                    String.valueOf(i), ""));
 
         }
 
@@ -1274,8 +1233,8 @@ public class MainActivity extends AppCompatActivity {
 
         completeTask = true;
 
-        theListView.performItemClick(theListView.getAdapter().getView(thePosition, null, null),
-                thePosition,
+        theListView.performItemClick(theListView.getAdapter().getView(
+                thePosition, null, null), thePosition,
                 theListView.getAdapter().getItemId(thePosition));
 
     }

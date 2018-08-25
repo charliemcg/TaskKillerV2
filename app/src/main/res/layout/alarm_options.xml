@@ -33,15 +33,6 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/killAlarmBtn"-->
-            <!--android:text="Turn off alarm"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
 
         <LinearLayout
             android:id="@+id/resetAlarmBtn"
@@ -65,15 +56,6 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/resetAlarmBtn"-->
-            <!--android:text="Change due date"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
 
         <LinearLayout
             android:id="@+id/repeatBtn"
@@ -97,15 +79,7 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/repeatBtn"-->
-            <!--android:text="Set repeat"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
+
     </LinearLayout>
 
 </TableRow>

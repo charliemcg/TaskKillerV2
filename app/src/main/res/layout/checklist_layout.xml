@@ -9,16 +9,8 @@
         android:id="@+id/theChecklist"
         android:layout_width="match_parent"
         android:layout_height="518dp"
-        android:background="@color/dark_gray"
-        android:dividerHeight="1dp"
-        android:divider="@color/green"/>
+        android:background="@color/dark_gray"/>
     <!--TODO make sure hard coded height works on all devices-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/checklistTextView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:background="@color/colorAccent"/>-->
 
     <EditText
         android:id="@+id/checklistEditText"
@@ -29,7 +21,6 @@
         android:inputType="textCapSentences"
         android:layout_alignParentBottom="true"
         android:hint="@string/checklistItem"
-        android:imeOptions="actionDone"
-        android:background="@color/green"/>
+        android:imeOptions="actionDone"/>
 
 </RelativeLayout>

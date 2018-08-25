@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,7 +33,9 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         final View checklistItemView = theInflater.inflate
                 (R.layout.checklist_item, parent, false);
         TextView checklistTextView = checklistItemView.findViewById(R.id.checklistTextView);
-        final Button tick = checklistItemView.findViewById(R.id.tick);
+//        final Button tick = checklistItemView.findViewById(R.id.tick);
+        final ImageView tick = checklistItemView.findViewById(R.id.subtaskComplete);
+        final ImageView ticked = checklistItemView.findViewById(R.id.subtaskCompleted);
         TAG = "ChecklistAdapter";
 
         //actions to occur when sub task marked as done
@@ -127,7 +131,9 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 //The 'done' button changes to say 'remove' if task is complete
                 tick.setBackgroundColor(Color.RED);
 
-                tick.setText("Remove");
+//                tick.setText("Remove");
+                tick.setVisibility(View.GONE);
+                ticked.setVisibility(View.VISIBLE);
 
             }
         } catch (IndexOutOfBoundsException e){
@@ -156,30 +162,30 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         }
 
-        if (Checklist.fadeSubTasks) {
-
-            //fade sub tasks when keyboard is up
-            Checklist.checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
-
-            tick.setBackgroundColor(Color.parseColor("#888888"));
-
-        } else {
-
-            //sub tasks are white when keyboard is down
-            Checklist.checklistRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-            if (Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
-                    .get(MainActivity.activeTask))).get(position)) {
-
-                tick.setBackgroundColor(Color.parseColor("#FF0000"));
-
-            } else {
-
-                tick.setBackgroundColor(Color.parseColor("#00FF00"));
-
-            }
-
-        }
+//        if (Checklist.fadeSubTasks) {
+//
+//            //fade sub tasks when keyboard is up
+////            Checklist.checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
+//
+////            tick.setBackgroundColor(Color.parseColor("#888888"));
+//
+//        } else {
+//
+//            //sub tasks are white when keyboard is down
+//            Checklist.checklistRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//
+//            if (Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+//                    .get(MainActivity.activeTask))).get(position)) {
+//
+////                tick.setBackgroundColor(Color.parseColor("#FF0000"));
+//
+//            } else {
+//
+////                tick.setBackgroundColor(Color.parseColor("#00FF00"));
+//
+//            }
+//
+//        }
 
         return checklistItemView;
 

@@ -33,15 +33,6 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/snoozeTask"-->
-            <!--android:text="Snooze"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
 
         <LinearLayout
             android:id="@+id/taskDone"
@@ -65,15 +56,6 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/taskDone"-->
-            <!--android:text="Done"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
 
         <LinearLayout
             android:id="@+id/taskIgnore"
@@ -97,15 +79,6 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/taskIgnore"-->
-            <!--android:text="Ignore"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
 
     </LinearLayout>
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -60,6 +61,20 @@ public class Checklist extends MainActivity {
         fadeSubTasks = false;
         noteExists = false;
         inChecklist = true;
+
+        checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+
+        //Set list view dividers
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {val, val, 0};
+        checklistView.setDivider(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors));
+        checklistView.setDividerHeight(1);
 
         //Ensure there are array lists available to write data to
         if(checklistList.size() <= Integer.parseInt(MainActivity.sortedIdsForNote

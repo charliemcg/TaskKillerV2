@@ -54,45 +54,60 @@ class MyAdapter extends ArrayAdapter<String> {
         //Uses unique layout for the new item
         final LayoutInflater theInflater = LayoutInflater.from(getContext());
         final View taskView = theInflater.inflate(R.layout.task_layout, parent, false);
+        //Where the task text is displayed
         final TextView theTextView = taskView.findViewById(R.id.textView);
         final Intent intent = new Intent(getContext(), Checklist.class);
         final Intent noteIntent = new Intent(getContext(), Note.class);
+        //This row changes content depending on what needs to be displayed
         final TableRow propertyRow = taskView.findViewById(R.id.properties);
+        //For displaying the date and time pickers
         final TableRow dateRow = taskView.findViewById(R.id.dateTime);
-        final TableRow optionsRow = taskView.findViewById(R.id.options);
+        //For displaying the alarm options
         final TableRow alarmOptionsRow = taskView.findViewById(R.id.alarmOptions);
+        //For displaying the repeat options
         final TableRow repeatRow = taskView.findViewById(R.id.repeat);
+        //For displaying the ad
         final TableRow adRow = taskView.findViewById(R.id.adRow);
+        //For displaying the snooze options
         final TableRow snoozeRow = taskView.findViewById(R.id.snoozeRow);
+        //For displaying the overdue options
         final TableRow taskOverdueRow = taskView.findViewById(R.id.taskIsOverdue);
+        //Date and time picker allow user to set due time
         final DatePicker datePicker = taskView.findViewById(R.id.datePicker);
         final TimePicker timePicker = taskView.findViewById(R.id.timePicker);
+        //Displays the tasks due date
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
+        //Button used for marking task as complete
         ImageView complete = taskView.findViewById(R.id.complete);
+        //Graphically depicts a task as being complete
         ImageView completed = taskView.findViewById(R.id.completed);
-//        final Button alarm = taskView.findViewById(R.id.alarm);
+        //Gives user ability to set alarm on click
         final LinearLayout alarm = taskView.findViewById(R.id.alarm);
+        //The text on this button needs to change depending on the state of the alarm
         final TextView alarmBtnText = taskView.findViewById(R.id.alarmBtnText);
-//        Button subTasks = taskView.findViewById(R.id.subTasks);
+        //Takes user to sub task activity
         final LinearLayout subTasks = taskView.findViewById(R.id.subTasks);
-        final TextView subtasksBtnText = taskView.findViewById(R.id.subtasksBtnText);
-//        Button note = taskView.findViewById(R.id.note);
+        //Takes user to note activity
         final LinearLayout note = taskView.findViewById(R.id.note);
-        final TextView noteBtnText = taskView.findViewById(R.id.noteBtnText);
+        //For setting the due date
         final Button dateButton = taskView.findViewById(R.id.date);
-//        final Button daily = taskView.findViewById(R.id.daily);
+        //Sets task to repeat daily
         final LinearLayout daily = taskView.findViewById(R.id.daily);
-//        final Button weekly = taskView.findViewById(R.id.weekly);
+        //Sets task to repeat weekly
         final LinearLayout weekly = taskView.findViewById(R.id.weekly);
-//        final Button monthly = taskView.findViewById(R.id.monthly);
+        //Sets task to repeat monthly
         final LinearLayout monthly = taskView.findViewById(R.id.monthly);
-//        final Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
+        //Removes alarm from task
         final LinearLayout killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
-//        final Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
+        //Allows user to change the due date of a task
         final LinearLayout resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
-//        final Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
+        //Displays repeat options
         final LinearLayout repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
+        //Repeat button text needs to change depending on what state the repeat is in
         final TextView repeatAlarmBtnText = taskView.findViewById(R.id.repeatAlarmBtnText);
+        //Task status icons are transparent. This is so the background colour can be
+        // changed giving the illusion that the icon image color has changed.
+        // Each icon has it's own relative layout.
         ImageView dueClear = taskView.findViewById(R.id.dueClear);
         RelativeLayout dueLayout = taskView.findViewById(R.id.dueLayout);
         ImageView overdueClear = taskView.findViewById(R.id.overdueClear);
@@ -109,17 +124,15 @@ class MyAdapter extends ArrayAdapter<String> {
         RelativeLayout repeatLayout = taskView.findViewById(R.id.repeatLayout);
         ImageView noteClear = taskView.findViewById(R.id.noteClear);
         ImageView checklistClear = taskView.findViewById(R.id.checklistClear);
-//        Button snoozeTask = taskView.findViewById(R.id.snoozeTask);
+        //Displays the snooze options on click
         LinearLayout snoozeTask = taskView.findViewById(R.id.snoozeTask);
-//        Button taskDone = taskView.findViewById(R.id.taskDone);
+        //Marks overdue task as done
         LinearLayout taskDone = taskView.findViewById(R.id.taskDone);
-//        Button taskIgnore = taskView.findViewById(R.id.taskIgnore);
+        //Ignores overdue task so that regular task properties can be accessed
         LinearLayout taskIgnore = taskView.findViewById(R.id.taskIgnore);
-//        final Button oneHourBtn = taskView.findViewById(R.id.oneHour);
+        //Buttons which set the snooze interval
         final LinearLayout oneHourBtn = taskView.findViewById(R.id.oneHour);
-//        final Button fourHourBtn = taskView.findViewById(R.id.fourHours);
         final LinearLayout fourHourBtn = taskView.findViewById(R.id.fourHours);
-//        final Button tomorrowBtn = taskView.findViewById(R.id.tomorrow);
         final LinearLayout tomorrowBtn = taskView.findViewById(R.id.tomorrow);
 
         //getting task data
@@ -588,10 +601,6 @@ class MyAdapter extends ArrayAdapter<String> {
             //task is killed if not repeating
             if(!finalDbRepeat) {
 
-                //set background white
-//                        MainActivity.activityRootView.setBackgroundColor(Color
-//                                .parseColor("#FFFFFF"));
-
                 notifyDataSetChanged();
 
                 MainActivity.taskPropertiesShowing = false;
@@ -632,7 +641,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 reorderList();
 
-                //task is updated to be due at next repeat
+            //task is updated to be due at next repeat
             }else{
 
                 int interval = 0;
@@ -806,9 +815,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         "repeat in alarm options.", Toast.LENGTH_LONG).show();
 
                 propertyRow.setVisibility(View.GONE);
-
-//                        MainActivity.activityRootView
-//                                .setBackgroundColor(Color.parseColor("#FFFFFF"));
 
                 MainActivity.taskPropertiesShowing = false;
 

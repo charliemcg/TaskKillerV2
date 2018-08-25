@@ -33,15 +33,6 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/oneHour"-->
-            <!--android:text="1 Hour"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
 
         <LinearLayout
             android:id="@+id/fourHours"
@@ -65,15 +56,6 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/fourHours"-->
-            <!--android:text="4 Hours"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
 
         <LinearLayout
             android:id="@+id/tomorrow"
@@ -97,15 +79,7 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/tomorrow"-->
-            <!--android:text="Tomorrow"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
+
     </LinearLayout>
 
 </TableRow>

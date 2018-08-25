@@ -33,15 +33,6 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/daily"-->
-            <!--android:text="Daily"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
 
         <LinearLayout
             android:id="@+id/weekly"
@@ -65,15 +56,6 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/weekly"-->
-            <!--android:text="Weekly"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
 
         <LinearLayout
             android:id="@+id/monthly"
@@ -97,15 +79,7 @@
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
-        <!--<Button-->
-            <!--android:id="@+id/monthly"-->
-            <!--android:text="Monthly"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
+
     </LinearLayout>
 
 </TableRow>
