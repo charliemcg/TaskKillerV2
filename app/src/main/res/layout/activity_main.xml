@@ -3,9 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:orientation="vertical"
     android:id="@+id/activityRoot">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderBar"
+        android:elevation="4dp"/>
+
+    <!--app:theme="@style/ActionBarThemeOverlay"-->
+    <!--app:popupTheme="@style/ActionBarPopupThemeOverlay"-->
 
     <ListView
         android:layout_width="match_parent"

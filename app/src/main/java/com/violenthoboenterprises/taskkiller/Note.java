@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -47,6 +48,8 @@ public class Note extends MainActivity {
         inNote = true;
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+        noteEditText.setBackgroundColor(Color.parseColor(highlight));
 
         //Actions to occur when user clicks submit
         submitNoteBtn.setOnClickListener(new View.OnClickListener() {

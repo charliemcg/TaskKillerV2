@@ -17,9 +17,12 @@ import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -196,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
 
     MediaPlayer punch;
 
+    private Toolbar mTopToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO figure out what to do about older versions
@@ -205,6 +210,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mSharedPreferences = getPreferences(MODE_PRIVATE);
+
+        mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mTopToolbar);
 
         //Initialising variables
         taskPropertiesShowing = false;
@@ -557,6 +565,38 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.mute) {
+            Toast.makeText(MainActivity.this, "Mute/unmute clicked", Toast.LENGTH_LONG).show();
+            return true;
+        }else if (id == R.id.lightDark) {
+            Toast.makeText(MainActivity.this, "Light/dark clicked", Toast.LENGTH_LONG).show();
+            return true;
+        }else if (id == R.id.highlight) {
+            Toast.makeText(MainActivity.this, "Highlight clicked", Toast.LENGTH_LONG).show();
+            return true;
+        }else if (id == R.id.buy) {
+            Toast.makeText(MainActivity.this, "Buy clicked", Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     ////Shows table results for debugging purposes////
