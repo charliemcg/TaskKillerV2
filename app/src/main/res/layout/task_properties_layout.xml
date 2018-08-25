@@ -11,15 +11,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <Button
+        <!--<Button-->
+            <!--android:id="@+id/alarm"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:text="Set due date"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:textColor="@color/gray"-->
+            <!--android:drawableRight="@drawable/due"/>-->
+        <LinearLayout
             android:id="@+id/alarm"
-            android:background="@color/dark_gray"
-            android:text="Set due date"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="12dp" >
+
+            <TextView
+                android:id="@+id/alarmBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center_vertical"
+                android:text="Set Due Date"
+                android:textColor="@color/gray"/>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:src="@drawable/due" />
+
+        </LinearLayout>
 
         <!--<Button-->
             <!--android:id="@+id/complete"-->
@@ -30,25 +55,75 @@
             <!--android:layout_height="wrap_content"-->
             <!--android:layout_margin="8dp"/>-->
 
-        <Button
-            android:id="@+id/subTasks"
-            android:text="Sub-Tasks"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+        <!--<Button-->
+            <!--android:id="@+id/subTasks"-->
+            <!--android:text="Sub-Tasks"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
 
-        <Button
-            android:id="@+id/note"
-            android:text="Add Note"
-            android:layout_weight="1"
+        <LinearLayout
+            android:id="@+id/subTasks"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="12dp" >
+
+            <TextView
+                android:id="@+id/subtasksBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center_vertical"
+                android:text="Sub-Tasks"
+                android:textColor="@color/gray"/>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:src="@drawable/checklist" />
+
+        </LinearLayout>
+
+        <!--<Button-->
+            <!--android:id="@+id/note"-->
+            <!--android:text="Add Note"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
+
+        <LinearLayout
+            android:id="@+id/note"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="12dp" >
+
+            <TextView
+                android:id="@+id/noteBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center_vertical"
+                android:text="Add Note"
+                android:textColor="@color/gray"/>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:src="@drawable/note" />
+
+        </LinearLayout>
 
         <!--<Button-->
             <!--android:id="@+id/more"-->

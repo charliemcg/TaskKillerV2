@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
@@ -69,9 +70,15 @@ class MyAdapter extends ArrayAdapter<String> {
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
         ImageView complete = taskView.findViewById(R.id.complete);
         ImageView completed = taskView.findViewById(R.id.completed);
-        final Button alarm = taskView.findViewById(R.id.alarm);
-        Button subTasks = taskView.findViewById(R.id.subTasks);
-        Button note = taskView.findViewById(R.id.note);
+//        final Button alarm = taskView.findViewById(R.id.alarm);
+        final LinearLayout alarm = taskView.findViewById(R.id.alarm);
+        final TextView alarmBtnText = taskView.findViewById(R.id.alarmBtnText);
+//        Button subTasks = taskView.findViewById(R.id.subTasks);
+        final LinearLayout subTasks = taskView.findViewById(R.id.subTasks);
+        final TextView subtasksBtnText = taskView.findViewById(R.id.subtasksBtnText);
+//        Button note = taskView.findViewById(R.id.note);
+        final LinearLayout note = taskView.findViewById(R.id.note);
+        final TextView noteBtnText = taskView.findViewById(R.id.noteBtnText);
         final Button dateButton = taskView.findViewById(R.id.date);
         final Button daily = taskView.findViewById(R.id.daily);
         final Button weekly = taskView.findViewById(R.id.weekly);
@@ -2671,17 +2678,17 @@ class MyAdapter extends ArrayAdapter<String> {
             //"set due date" button becomes "remove due date" button if due date already set
             if (dbDue && dbSnooze){
 
-                alarm.setText("Cancel snooze");
+                alarmBtnText.setText("Cancel snooze");//TODO fix this
 
             }else if(dbDue){
 
-                alarm.setText("Alarm Options");
+                alarmBtnText.setText("Alarm Options");//TODO fix this
 
             }
 
             //if alarm is ignored user has option to turn alarm off
             if(dbIgnored){
-                alarm.setText("Turn Off Alarm");
+                alarmBtnText.setText("Turn Off Alarm");//TODO fix this
             }
 
             //Actions to occur if user selects 'complete'
@@ -2994,7 +3001,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                        MainActivity.vibrate.vibrate(50);
 
-                        alarm.setText("Set Due Date");
+                        alarmBtnText.setText("Set Due Date");//TODO fix this
 
                         MainActivity.params.height = MainActivity.addHeight;
                         MainActivity.iconParams.height = MainActivity.addIconHeight;
@@ -3043,7 +3050,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                            alarm.setText("Alarm Options");
+                            alarmBtnText.setText("Alarm Options");//TODO fix this
                             MainActivity.taskPropertiesShowing = false;
 //                            MainActivity.activityRootView
 //                                    .setBackgroundColor(Color.parseColor("#FFFFFF"));
