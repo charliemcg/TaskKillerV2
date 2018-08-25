@@ -11,35 +11,101 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <Button
+        <LinearLayout
             android:id="@+id/killAlarmBtn"
-            android:text="Turn off alarm"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
 
-        <Button
+            <TextView
+                android:id="@+id/killAlarmBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center"
+                android:text="Turn Off Alarm"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/killAlarmBtn"-->
+            <!--android:text="Turn off alarm"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
+
+        <LinearLayout
             android:id="@+id/resetAlarmBtn"
-            android:text="Change due date"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
 
-        <Button
+            <TextView
+                android:id="@+id/resetAlarmBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center"
+                android:text="Change Due Date"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/resetAlarmBtn"-->
+            <!--android:text="Change due date"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
+
+        <LinearLayout
             android:id="@+id/repeatBtn"
-            android:text="Set repeat"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
+
+            <TextView
+                android:id="@+id/repeatAlarmBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center"
+                android:text="Set Repeat"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/repeatBtn"-->
+            <!--android:text="Set repeat"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
     </LinearLayout>
 
 </TableRow>

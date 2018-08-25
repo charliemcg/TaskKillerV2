@@ -11,35 +11,101 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <Button
+        <LinearLayout
             android:id="@+id/daily"
-            android:text="Daily"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
 
-        <Button
+            <TextView
+                android:id="@+id/dailyBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center"
+                android:text="Daily"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/daily"-->
+            <!--android:text="Daily"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
+
+        <LinearLayout
             android:id="@+id/weekly"
-            android:text="Weekly"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
 
-        <Button
+            <TextView
+                android:id="@+id/weeklyBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center"
+                android:text="Weekly"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/weekly"-->
+            <!--android:text="Weekly"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
+
+        <LinearLayout
             android:id="@+id/monthly"
-            android:text="Monthly"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
+
+            <TextView
+                android:id="@+id/monthlyBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center"
+                android:text="Monthly"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/monthly"-->
+            <!--android:text="Monthly"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
     </LinearLayout>
 
 </TableRow>

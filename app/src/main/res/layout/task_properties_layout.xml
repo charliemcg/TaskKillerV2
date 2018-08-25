@@ -10,24 +10,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <!--<Button-->
-            <!--android:id="@+id/alarm"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:text="Set due date"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:textColor="@color/gray"-->
-            <!--android:drawableRight="@drawable/due"/>-->
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
         <LinearLayout
             android:id="@+id/alarm"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="12dp" >
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/alarmBtnText"
@@ -35,8 +29,9 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:lines="1"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="Set Due Date"
+                android:paddingLeft="8dp"
                 android:textColor="@color/gray"/>
 
             <ImageView
@@ -46,32 +41,15 @@
 
         </LinearLayout>
 
-        <!--<Button-->
-            <!--android:id="@+id/complete"-->
-            <!--android:background="@color/green"-->
-            <!--android:text="Complete"-->
-            <!--android:layout_weight="2"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"/>-->
-
-        <!--<Button-->
-            <!--android:id="@+id/subTasks"-->
-            <!--android:text="Sub-Tasks"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
-
         <LinearLayout
             android:id="@+id/subTasks"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="12dp" >
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/subtasksBtnText"
@@ -79,8 +57,9 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:lines="1"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="Sub-Tasks"
+                android:paddingLeft="8dp"
                 android:textColor="@color/gray"/>
 
             <ImageView
@@ -90,23 +69,15 @@
 
         </LinearLayout>
 
-        <!--<Button-->
-            <!--android:id="@+id/note"-->
-            <!--android:text="Add Note"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
-
         <LinearLayout
             android:id="@+id/note"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="12dp" >
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/noteBtnText"
@@ -114,8 +85,9 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:lines="1"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="Add Note"
+                android:paddingLeft="8dp"
                 android:textColor="@color/gray"/>
 
             <ImageView
@@ -125,16 +97,6 @@
 
         </LinearLayout>
 
-        <!--<Button-->
-            <!--android:id="@+id/more"-->
-            <!--android:text="More..."-->
-            <!--android:layout_weight="2.5"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textSize="10sp"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:textColor="@color/gray"/>-->
     </LinearLayout>
 
 </TableRow>

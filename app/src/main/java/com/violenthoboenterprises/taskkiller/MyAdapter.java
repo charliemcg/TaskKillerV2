@@ -80,12 +80,19 @@ class MyAdapter extends ArrayAdapter<String> {
         final LinearLayout note = taskView.findViewById(R.id.note);
         final TextView noteBtnText = taskView.findViewById(R.id.noteBtnText);
         final Button dateButton = taskView.findViewById(R.id.date);
-        final Button daily = taskView.findViewById(R.id.daily);
-        final Button weekly = taskView.findViewById(R.id.weekly);
-        final Button monthly = taskView.findViewById(R.id.monthly);
-        final Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
-        final Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
-        final Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
+//        final Button daily = taskView.findViewById(R.id.daily);
+        final LinearLayout daily = taskView.findViewById(R.id.daily);
+//        final Button weekly = taskView.findViewById(R.id.weekly);
+        final LinearLayout weekly = taskView.findViewById(R.id.weekly);
+//        final Button monthly = taskView.findViewById(R.id.monthly);
+        final LinearLayout monthly = taskView.findViewById(R.id.monthly);
+//        final Button killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
+        final LinearLayout killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
+//        final Button resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
+        final LinearLayout resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
+//        final Button repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
+        final LinearLayout repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
+        final TextView repeatAlarmBtnText = taskView.findViewById(R.id.repeatAlarmBtnText);
         ImageView dueClear = taskView.findViewById(R.id.dueClear);
         RelativeLayout dueLayout = taskView.findViewById(R.id.dueLayout);
         ImageView overdueClear = taskView.findViewById(R.id.overdueClear);
@@ -102,12 +109,18 @@ class MyAdapter extends ArrayAdapter<String> {
         RelativeLayout repeatLayout = taskView.findViewById(R.id.repeatLayout);
         ImageView noteClear = taskView.findViewById(R.id.noteClear);
         ImageView checklistClear = taskView.findViewById(R.id.checklistClear);
-        Button snoozeTask = taskView.findViewById(R.id.snoozeTask);
-        Button taskDone = taskView.findViewById(R.id.taskDone);
-        Button taskIgnore = taskView.findViewById(R.id.taskIgnore);
-        final Button oneHourBtn = taskView.findViewById(R.id.oneHour);
-        final Button fourHourBtn = taskView.findViewById(R.id.fourHours);
-        final Button tomorrowBtn = taskView.findViewById(R.id.tomorrow);
+//        Button snoozeTask = taskView.findViewById(R.id.snoozeTask);
+        LinearLayout snoozeTask = taskView.findViewById(R.id.snoozeTask);
+//        Button taskDone = taskView.findViewById(R.id.taskDone);
+        LinearLayout taskDone = taskView.findViewById(R.id.taskDone);
+//        Button taskIgnore = taskView.findViewById(R.id.taskIgnore);
+        LinearLayout taskIgnore = taskView.findViewById(R.id.taskIgnore);
+//        final Button oneHourBtn = taskView.findViewById(R.id.oneHour);
+        final LinearLayout oneHourBtn = taskView.findViewById(R.id.oneHour);
+//        final Button fourHourBtn = taskView.findViewById(R.id.fourHours);
+        final LinearLayout fourHourBtn = taskView.findViewById(R.id.fourHours);
+//        final Button tomorrowBtn = taskView.findViewById(R.id.tomorrow);
+        final LinearLayout tomorrowBtn = taskView.findViewById(R.id.tomorrow);
 
         //getting task data
         String dbNote = "";
@@ -3074,7 +3087,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             if (finalDbRepeat) {
 
-                                repeatAlarmBtn.setText("Cancel Repeat");
+                                repeatAlarmBtnText.setText("Cancel Repeat");
 
                             }
 

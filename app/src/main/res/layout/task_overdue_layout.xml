@@ -11,35 +11,101 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <Button
+        <LinearLayout
             android:id="@+id/snoozeTask"
-            android:text="Snooze"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
 
-        <Button
+            <TextView
+                android:id="@+id/snoozeTaskBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center"
+                android:text="Snooze"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/snoozeTask"-->
+            <!--android:text="Snooze"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
+
+        <LinearLayout
             android:id="@+id/taskDone"
-            android:text="Done"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
 
-        <Button
+            <TextView
+                android:id="@+id/taskDoneBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center"
+                android:text="Done"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/taskDone"-->
+            <!--android:text="Done"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
+
+        <LinearLayout
             android:id="@+id/taskIgnore"
-            android:text="Ignore"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/dark_gray"
-            android:textColor="@color/gray"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/layout_border">
+
+            <TextView
+                android:id="@+id/taskIgnoreBtnText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:lines="1"
+                android:gravity="center"
+                android:text="Ignore"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/taskIgnore"-->
+            <!--android:text="Ignore"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:background="@color/dark_gray"-->
+            <!--android:textColor="@color/gray"/>-->
 
     </LinearLayout>
 
