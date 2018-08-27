@@ -108,11 +108,11 @@ class MyAdapter extends ArrayAdapter<String> {
         //Task status icons are transparent. This is so the background colour can be
         // changed giving the illusion that the icon image color has changed.
         // Each icon has it's own relative layout.
-        ImageView dueClear = taskView.findViewById(R.id.dueClear);
+        final ImageView dueClear = taskView.findViewById(R.id.dueClear);
         RelativeLayout dueLayout = taskView.findViewById(R.id.dueLayout);
         ImageView overdueClear = taskView.findViewById(R.id.overdueClear);
         RelativeLayout overdueLayout = taskView.findViewById(R.id.overdueLayout);
-        ImageView snoozeClear = taskView.findViewById(R.id.snoozeClear);
+        final ImageView snoozeClear = taskView.findViewById(R.id.snoozeClear);
         RelativeLayout snoozeLayout = taskView.findViewById(R.id.snoozeLayout);
         ImageView repeatDayClear = taskView.findViewById(R.id.repeatDayClear);
         RelativeLayout repeatDayLayout = taskView.findViewById(R.id.repeatDayLayout);
@@ -206,8 +206,26 @@ class MyAdapter extends ArrayAdapter<String> {
         final String finalAlarmMonth = alarmMonth;
         final String finalAlarmYear = alarmYear;
 
-//        Log.i(TAG, String.valueOf(MainActivity.taskList) + "*");
-//        Log.i(TAG, task);
+        if(MainActivity.mute){
+            complete.setSoundEffectsEnabled(false);
+            alarm.setSoundEffectsEnabled(false);
+            subTasks.setSoundEffectsEnabled(false);
+            note.setSoundEffectsEnabled(false);
+            dateButton.setSoundEffectsEnabled(false);
+            daily.setSoundEffectsEnabled(false);
+            weekly.setSoundEffectsEnabled(false);
+            monthly.setSoundEffectsEnabled(false);
+            killAlarmBtn.setSoundEffectsEnabled(false);
+            resetAlarmBtn.setSoundEffectsEnabled(false);
+            repeatAlarmBtn.setSoundEffectsEnabled(false);
+            snoozeTask.setSoundEffectsEnabled(false);
+            taskDone.setSoundEffectsEnabled(false);
+            taskIgnore.setSoundEffectsEnabled(false);
+            oneHourBtn.setSoundEffectsEnabled(false);
+            fourHourBtn.setSoundEffectsEnabled(false);
+            tomorrowBtn.setSoundEffectsEnabled(false);
+            taskView.setSoundEffectsEnabled(false);
+        }
 
 //        //Displaying ad if there are five or more tasks
 //        if(position == 4) {
@@ -593,6 +611,16 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
+        if(dbSnooze){
+
+            dueLayout.setVisibility(View.GONE);
+
+            snoozeClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+
+        }
+
+        Log.i(TAG, String.valueOf(dbIgnored));
+
         //actions to occur in regards to selected task
         if((MainActivity.completeTask) && (MainActivity.thePosition == position)){
 
@@ -896,7 +924,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 });
 
             //show the overdue properties
-            }else if(dbOverdue && !dbSnooze){
+            }else if(dbOverdue && !dbSnooze && !dbIgnored){
 
                 taskOverdueRow.setVisibility(View.VISIBLE);
 
@@ -2321,6 +2349,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.vibrate.vibrate(100);
 
+                        MainActivity.punch.start();
+
                         //kill task if not repeating
                         if(!finalDbRepeat) {
 
@@ -3618,10 +3648,10 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 //
-//            }else if(markAsOverdue){
-//
-//                //if ignored task is ignored beyond the next repeat then
-//                // the due time is updated to that new repeat time
+            }else if(markAsOverdue){
+
+                //if ignored task is ignored beyond the next repeat then
+                // the due time is updated to that new repeat time
 //                if((currentDate.get(Calendar.MINUTE) >= (Integer
 //                        .parseInt(hour) + dbInterval)) && !dbRepeat){
 //
@@ -3632,6 +3662,9 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            alarmHour, alarmMinute, alarmAmpm, alarmDay, alarmMonth, alarmYear);
 //
 //                }
+
+                MainActivity.noteDb.updateOverdue(String.valueOf(
+                        MainActivity.sortedIDs.get(position)), true);
 
             }
 

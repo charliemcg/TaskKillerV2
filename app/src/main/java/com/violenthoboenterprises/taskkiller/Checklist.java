@@ -72,7 +72,7 @@ public class Checklist extends MainActivity {
             int d = digits.indexOf(c);
             val = 16 * val + d;
         }
-        int[] colors = {val, val, 0};
+        int[] colors = {0, val, val};
         checklistView.setDivider(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors));
         checklistView.setDividerHeight(1);
 

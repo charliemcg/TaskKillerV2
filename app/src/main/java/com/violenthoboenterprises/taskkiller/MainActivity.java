@@ -14,6 +14,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -97,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean reinstateAlarm;
     //Used to determine that task is being set to complete
     static boolean completeTask;
+    //Used to determine if sound effects should play or not
+    static boolean mute;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -197,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
     //The user selectable highlight color
     static String highlight;
 
-    MediaPlayer punch;
+    static MediaPlayer punch;
 
     private Toolbar mTopToolbar;
 
@@ -211,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mSharedPreferences = getPreferences(MODE_PRIVATE);
 
-        mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        mTopToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
 
         //Initialising variables
@@ -255,14 +258,19 @@ public class MainActivity extends AppCompatActivity {
         sortedIDs = new ArrayList<>();
         reinstateAlarm = false;
         completeTask = false;
-        highlight = "#FFFFA500";
+        highlight = "#FF00FFFF";
         punch = MediaPlayer.create(this, R.raw.punch);
+        mute = false;
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
 
+        mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
+
         addIcon.setTextColor(Color.parseColor(highlight));
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+
+        muteSounds(mute);
 
         //Set list view dividers
         String digits = "0123456789ABCDEF";
@@ -581,22 +589,39 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //TODO find out if return statements are necessary
         //noinspection SimplifiableIfStatement
         if (id == R.id.mute) {
-            Toast.makeText(MainActivity.this, "Mute/unmute clicked", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Mute/unmute clicked", Toast.LENGTH_SHORT).show();
+            if(mute){
+                mute = false;
+            }else{
+                mute = true;
+            }
+            muteSounds(mute);
             return true;
         }else if (id == R.id.lightDark) {
-            Toast.makeText(MainActivity.this, "Light/dark clicked", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Light/dark clicked", Toast.LENGTH_SHORT).show();
             return true;
         }else if (id == R.id.highlight) {
-            Toast.makeText(MainActivity.this, "Highlight clicked", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Highlight clicked", Toast.LENGTH_SHORT).show();
             return true;
         }else if (id == R.id.buy) {
-            Toast.makeText(MainActivity.this, "Buy clicked", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Buy clicked", Toast.LENGTH_SHORT).show();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void muteSounds(boolean mute) {
+        if(mute){
+            add.setSoundEffectsEnabled(false);
+            theListView.setSoundEffectsEnabled(false);
+        }else{
+            add.setSoundEffectsEnabled(true);
+            theListView.setSoundEffectsEnabled(true);
+        }
     }
 
     ////Shows table results for debugging purposes////
@@ -1164,6 +1189,8 @@ public class MainActivity extends AppCompatActivity {
 
         mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
 
+        mSharedPreferences.edit().putBoolean("muteKey", mute).apply();
+
         for (int i = 0; i < taskListSize; i++) {
 
             mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
@@ -1203,6 +1230,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Existing tasks are recalled when app opened
         taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
+
+        mute = mSharedPreferences.getBoolean("muteKey", false);
 
         for( int i = 0 ; i < taskListSize ; i++ ) {
 

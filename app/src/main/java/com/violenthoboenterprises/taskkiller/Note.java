@@ -47,6 +47,15 @@ public class Note extends MainActivity {
         checklistExists = false;
         inNote = true;
 
+        mute = mSharedPreferences.getBoolean("muteKey", false);
+
+        if(mute){
+            editBtn.setSoundEffectsEnabled(false);
+            removeBtn.setSoundEffectsEnabled(false);
+            addNoteBtn.setSoundEffectsEnabled(false);
+            submitNoteBtn.setSoundEffectsEnabled(false);
+        }
+
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         noteEditText.setBackgroundColor(Color.parseColor(highlight));
@@ -218,6 +227,8 @@ public class Note extends MainActivity {
         while(result.moveToNext()){
             theNote = result.getString(1);
         }
+
+        mute = mSharedPreferences.getBoolean("muteKey", false);
 
         //Don't allow blank notes
         if(!theNote.equals("")){

@@ -12,31 +12,31 @@
         <!--app:showAsAction="ifRoom"/>-->
 
     <item
-        android:id="@+id/mute"
+        android:id="@+id/buy"
         android:orderInCategory="300"
         android:title="User"
-        android:icon="@drawable/bell"
+        android:icon="@drawable/pro"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/lightDark"
         android:orderInCategory="300"
         android:title="User"
-        android:icon="@drawable/bell"
+        android:icon="@drawable/light_dark"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/highlight"
         android:orderInCategory="300"
         android:title="User"
-        android:icon="@drawable/bell"
+        android:icon="@drawable/customise"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/buy"
+        android:id="@+id/mute"
         android:orderInCategory="300"
         android:title="User"
-        android:icon="@drawable/bell"
+        android:icon="@drawable/unmuted"
         app:showAsAction="always"/>
 
 </menu>
