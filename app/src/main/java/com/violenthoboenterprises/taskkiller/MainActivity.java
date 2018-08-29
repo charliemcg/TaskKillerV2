@@ -3,6 +3,7 @@ package com.violenthoboenterprises.taskkiller;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -204,6 +206,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mTopToolbar;
 
+    MenuItem muteBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO figure out what to do about older versions
@@ -261,6 +265,9 @@ public class MainActivity extends AppCompatActivity {
         highlight = "#FFFF69B4";
         punch = MediaPlayer.create(this, R.raw.punch);
         mute = false;
+//        blah = mTopToolbar.getMenu().getItem(R.id.mute);
+//        blah = mTopToolbar.getMenu().getItem(0);
+//        muteBtn = mTopToolbar.getMenu().findItem(R.id.mute);
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -594,11 +601,13 @@ public class MainActivity extends AppCompatActivity {
         //TODO find out if return statements are necessary
         //noinspection SimplifiableIfStatement
         if (id == R.id.mute) {
-            Toast.makeText(MainActivity.this, "Mute/unmute clicked", Toast.LENGTH_SHORT).show();
+            muteBtn = this.mTopToolbar.getMenu().findItem(R.id.mute);
             if(mute){
                 mute = false;
+                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
             }else{
                 mute = true;
+                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
             }
             muteSounds(mute);
             return true;
