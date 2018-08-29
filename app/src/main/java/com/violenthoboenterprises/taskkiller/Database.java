@@ -275,7 +275,6 @@ public class Database extends SQLiteOpenHelper {
         ContentValues content= new ContentValues();
         content.put(COL4, timestamp);
 //        content.put(COL10, true);
-        Log.i(TAG, "New stamp: " + timestamp);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }

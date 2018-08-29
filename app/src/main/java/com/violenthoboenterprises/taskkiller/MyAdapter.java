@@ -619,7 +619,279 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
-        Log.i(TAG, String.valueOf(dbIgnored));
+        Log.i(TAG, "position " + position);
+        Log.i(TAG, "sortedIDs " + MainActivity.sortedIDs);
+
+        //Show due icon and due date if required
+        if (dbDue) {
+
+            Calendar currentDate = new GregorianCalendar();
+
+            //Getting time data
+            Cursor result = MainActivity.noteDb.getSnoozeData(Integer.parseInt(
+                    MainActivity.sortedIDs.get(position)));
+            String hour = "";
+            String minute = "";
+            String ampm = "";
+            String day = "";
+            String month = "";
+            String year = "";
+            while(result.moveToNext()){
+                hour = result.getString(1);
+                minute = result.getString(2);
+                ampm = result.getString(3);
+                day = result.getString(4);
+                month = result.getString(5);
+                year = result.getString(6);
+            }
+
+            //If there is no snoozed alarm then get initial alarm
+            if(hour.equals("")){
+                //getting alarm data
+                result = MainActivity.noteDb.getAlarmData(
+                        Integer.parseInt(MainActivity.sortedIDs.get(position)));
+                while(result.moveToNext()){
+                    hour = result.getString(1);
+                    minute = result.getString(2);
+                    ampm = result.getString(3);
+                    day = result.getString(4);
+                    month = result.getString(5);
+                    year = result.getString(6);
+                }
+            }
+
+            int currentYear = currentDate.get(Calendar.YEAR);
+            int currentMonth = currentDate.get(Calendar.MONTH);
+            int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
+            int currentHour = currentDate.get(Calendar.HOUR_OF_DAY);
+            int currentMinute = currentDate.get(Calendar.MINUTE);
+
+            //Checking for overdue tasks
+            String formattedTime;
+            Boolean sameDay = false;
+            Boolean tomorrow = false;
+            Boolean markAsOverdue = false;
+            if(!dbKilled) {
+                //Overdue
+                if (currentYear > Integer.valueOf(year)) {
+                    dueClear.setVisibility(View.GONE);
+                    dueLayout.setVisibility(View.GONE);
+                    overdueClear.setVisibility(View.VISIBLE);
+                    overdueLayout.setVisibility(View.VISIBLE);
+                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                    overdueClear.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.red));
+                    markAsOverdue = true;
+                    //Overdue
+                } else if (currentYear == Integer.valueOf(year)
+                        && currentMonth > Integer.valueOf(month)) {
+                    dueClear.setVisibility(View.GONE);
+                    dueLayout.setVisibility(View.GONE);
+                    overdueClear.setVisibility(View.VISIBLE);
+                    overdueLayout.setVisibility(View.VISIBLE);
+                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                    overdueClear.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.red));
+                    markAsOverdue = true;
+                    //Overdue
+                } else if (currentYear == Integer.valueOf(year)
+                        && currentMonth == Integer.valueOf(month)
+                        && currentDay > Integer.valueOf(day)) {
+                    dueClear.setVisibility(View.GONE);
+                    dueLayout.setVisibility(View.GONE);
+                    overdueClear.setVisibility(View.VISIBLE);
+                    overdueLayout.setVisibility(View.VISIBLE);
+                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                    overdueClear.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.red));
+                    markAsOverdue = true;
+                } else if (currentYear == Integer.valueOf(year)
+                        && currentMonth == Integer.valueOf(month)
+                        && currentDay == Integer.valueOf(day)) {
+                    sameDay = true;
+                    //Saved hours are in 12 hour time. Accounting for am/pm.
+                    int adjustedHour;
+                    if (Integer.valueOf(ampm) == 1) {
+                        adjustedHour = Integer.valueOf(hour) + 12;
+                    } else {
+                        adjustedHour = Integer.valueOf(hour);
+                    }
+                    //Overdue
+                    if (currentHour > adjustedHour) {
+                        dueClear.setVisibility(View.GONE);
+                        dueLayout.setVisibility(View.GONE);
+                        overdueClear.setVisibility(View.VISIBLE);
+                        overdueLayout.setVisibility(View.VISIBLE);
+                        dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.red));
+                        markAsOverdue = true;
+                        //Overdue
+                    } else if (currentHour == adjustedHour
+                            && currentMinute >= Integer.valueOf(minute)) {
+                        dueClear.setVisibility(View.GONE);
+                        dueLayout.setVisibility(View.GONE);
+                        overdueClear.setVisibility(View.VISIBLE);
+                        overdueLayout.setVisibility(View.VISIBLE);
+                        dueTextView.setTextColor(Color.parseColor("#FF0000"));
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.red));
+                        markAsOverdue = true;
+                        //Not overdue
+                    } else {
+//                        dueClear.setBackgroundColor(ContextCompat
+//                                .getColor(getContext(), R.color.green));
+                        dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                    }
+                    //Not overdue
+                } else {
+                    //Checking if date due tomorrow
+                    //Incrementing day
+                    if (((currentMonth == 0) || (currentMonth == 2)
+                            || (currentMonth == 4) || (currentMonth == 6)
+                            || (currentMonth == 7) || (currentMonth == 9))
+                            && (currentDay == 31) && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if (((currentMonth == 1) || (currentMonth == 3)
+                            || (currentMonth == 5) || (currentMonth == 8)
+                            || (currentMonth == 10)) && (currentDay == 30)
+                            && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if ((currentMonth == 11) && (currentDay == 31)
+                            && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if ((currentMonth == 1) && (currentDay == 28)
+                            && (currentYear % 4 != 0) && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if ((currentMonth == 1) && (currentDay == 29)
+                            && (currentYear % 4 == 0) && (Integer.valueOf(day) == 1)) {
+                        tomorrow = true;
+                    } else if (currentDay == (Integer.valueOf(day) - 1)){
+                        tomorrow = true;
+                    }
+//                    dueClear.setBackgroundColor(ContextCompat
+//                            .getColor(getContext(), R.color.green));
+                    dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                }
+
+            }
+
+            //determine if snoozed alarm is overdue or not
+            if(dbSnooze) {
+
+                //Show overdue icon
+                if (markAsOverdue) {
+                    snoozeClear.setVisibility(View.GONE);
+                    snoozeLayout.setVisibility(View.GONE);
+                    overdueClear.setVisibility(View.VISIBLE);
+                    overdueLayout.setVisibility(View.VISIBLE);
+                    MainActivity.noteDb.updateSnooze(
+                            MainActivity.sortedIDs.get(position), false);
+                    //show snooze icon
+                } else {
+                    snoozeClear.setVisibility(View.VISIBLE);
+                    snoozeLayout.setVisibility(View.VISIBLE);
+                    overdueClear.setVisibility(View.GONE);
+                    overdueLayout.setVisibility(View.GONE);
+                }
+
+                //Show the once off overdue options
+//            }else if(markAsOverdue && dbShowOnce){
+//
+//                MainActivity.noteDb.updateOverdue(
+//                        MainActivity.sortedIDs.get(position), true);
+//
+//                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//
+            }else if(markAsOverdue){
+
+                //if ignored task is ignored beyond the next repeat then
+                // the due time is updated to that new repeat time
+//                if((currentDate.get(Calendar.MINUTE) >= (Integer
+//                        .parseInt(hour) + dbInterval)) && !dbRepeat){
+//
+//                    alarmHour = String.valueOf(Integer.parseInt(alarmHour) + dbInterval);
+//
+//                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            alarmHour, alarmMinute, alarmAmpm, alarmDay, alarmMonth, alarmYear);
+//
+//                }
+
+                MainActivity.noteDb.updateOverdue(String.valueOf(
+                        MainActivity.sortedIDs.get(position)), true);
+
+            }
+
+            //If task due on following day say "Tomorrow"
+            if (tomorrow){
+
+                dueTextView.setText("Tomorrow");
+
+                //If task due on same day show the due date
+            } else if(!sameDay){
+                //TODO account for MM/DD/YYYY https://en.wikipedia.org/wiki/Date_format_by_country
+                //Formatting date
+                String formattedMonth = "";
+                String formattedDate;
+
+                int intMonth = Integer.valueOf(month) + 1;
+                if(intMonth == 1){
+                    formattedMonth = "Jan";
+                }else if(intMonth == 2){
+                    formattedMonth = "Feb";
+                }else if(intMonth == 3){
+                    formattedMonth = "Mar";
+                }else if(intMonth == 4){
+                    formattedMonth = "Apr";
+                }else if(intMonth == 5){
+                    formattedMonth = "May";
+                }else if(intMonth == 6){
+                    formattedMonth = "Jun";
+                }else if(intMonth == 7){
+                    formattedMonth = "Jul";
+                }else if(intMonth == 8){
+                    formattedMonth = "Aug";
+                }else if(intMonth == 9){
+                    formattedMonth = "Sep";
+                }else if(intMonth == 10){
+                    formattedMonth = "Oct";
+                }else if(intMonth == 11){
+                    formattedMonth = "Nov";
+                }else if(intMonth == 12){
+                    formattedMonth = "Dec";
+                }
+
+                formattedDate = day + " " + formattedMonth;
+
+                dueTextView.setText(formattedDate);
+
+                //If task due on different day show the due time
+            }else{
+
+                if(Integer.valueOf(hour) == 0){
+                    hour = "12";
+                }
+                if(Integer.valueOf(minute) < 10){
+                    if(Integer.valueOf(ampm) == 0) {
+                        formattedTime = hour + ":0" + minute + "am";
+                    }else{
+                        formattedTime = hour + ":0" + minute + "pm";
+                    }
+                }else{
+                    if(Integer.valueOf(ampm) == 0) {
+                        formattedTime = hour + ":" + minute + "am";
+                    }else{
+                        formattedTime = hour + ":" + minute + "pm";
+                    }
+                }
+
+                dueTextView.setText(formattedTime);
+            }
+
+//            reorderList();
+
+        }
 
         //actions to occur in regards to selected task
         if((MainActivity.completeTask) && (MainActivity.thePosition == position)){
@@ -3467,274 +3739,279 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
-        //Show due icon and due date if required
-        if (dbDue) {
-
-            Calendar currentDate = new GregorianCalendar();
-
-            //Getting time data
-            Cursor result = MainActivity.noteDb.getSnoozeData(Integer.parseInt(
-                    MainActivity.sortedIDs.get(position)));;
-            String hour = "";
-            String minute = "";
-            String ampm = "";
-            String day = "";
-            String month = "";
-            String year = "";
-            while(result.moveToNext()){
-                hour = result.getString(1);
-                minute = result.getString(2);
-                ampm = result.getString(3);
-                day = result.getString(4);
-                month = result.getString(5);
-                year = result.getString(6);
-            }
-
-            //If there is no snoozed alarm then get initial alarm
-            if(hour.equals("")){
-                //getting alarm data
-                result = MainActivity.noteDb.getAlarmData(
-                        Integer.parseInt(MainActivity.sortedIDs.get(position)));
-                while(result.moveToNext()){
-                    hour = result.getString(1);
-                    minute = result.getString(2);
-                    ampm = result.getString(3);
-                    day = result.getString(4);
-                    month = result.getString(5);
-                    year = result.getString(6);
-                }
-            }
-
-            int currentYear = currentDate.get(Calendar.YEAR);
-            int currentMonth = currentDate.get(Calendar.MONTH);
-            int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
-            int currentHour = currentDate.get(Calendar.HOUR_OF_DAY);
-            int currentMinute = currentDate.get(Calendar.MINUTE);
-
-            //Checking for overdue tasks
-            String formattedTime;
-            Boolean sameDay = false;
-            Boolean tomorrow = false;
-            Boolean markAsOverdue = false;
-            if(!dbKilled) {
-                //Overdue
-                if (currentYear > Integer.valueOf(year)) {
-                    dueClear.setVisibility(View.GONE);
-                    dueLayout.setVisibility(View.GONE);
-                    overdueClear.setVisibility(View.VISIBLE);
-                    overdueLayout.setVisibility(View.VISIBLE);
-                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                    overdueClear.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.red));
-                    markAsOverdue = true;
-                //Overdue
-                } else if (currentYear == Integer.valueOf(year)
-                        && currentMonth > Integer.valueOf(month)) {
-                    dueClear.setVisibility(View.GONE);
-                    dueLayout.setVisibility(View.GONE);
-                    overdueClear.setVisibility(View.VISIBLE);
-                    overdueLayout.setVisibility(View.VISIBLE);
-                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                    overdueClear.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.red));
-                    markAsOverdue = true;
-                //Overdue
-                } else if (currentYear == Integer.valueOf(year)
-                        && currentMonth == Integer.valueOf(month)
-                        && currentDay > Integer.valueOf(day)) {
-                    dueClear.setVisibility(View.GONE);
-                    dueLayout.setVisibility(View.GONE);
-                    overdueClear.setVisibility(View.VISIBLE);
-                    overdueLayout.setVisibility(View.VISIBLE);
-                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                    overdueClear.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.red));
-                    markAsOverdue = true;
-                } else if (currentYear == Integer.valueOf(year)
-                        && currentMonth == Integer.valueOf(month)
-                        && currentDay == Integer.valueOf(day)) {
-                    sameDay = true;
-                    //Saved hours are in 12 hour time. Accounting for am/pm.
-                    int adjustedHour;
-                    if (Integer.valueOf(ampm) == 1) {
-                        adjustedHour = Integer.valueOf(hour) + 12;
-                    } else {
-                        adjustedHour = Integer.valueOf(hour);
-                    }
-                    //Overdue
-                    if (currentHour > adjustedHour) {
-                        dueClear.setVisibility(View.GONE);
-                        dueLayout.setVisibility(View.GONE);
-                        overdueClear.setVisibility(View.VISIBLE);
-                        overdueLayout.setVisibility(View.VISIBLE);
-                        dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                        overdueClear.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.red));
-                        markAsOverdue = true;
-                    //Overdue
-                    } else if (currentHour == adjustedHour
-                            && currentMinute >= Integer.valueOf(minute)) {
-                        dueClear.setVisibility(View.GONE);
-                        dueLayout.setVisibility(View.GONE);
-                        overdueClear.setVisibility(View.VISIBLE);
-                        overdueLayout.setVisibility(View.VISIBLE);
-                        dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                        overdueClear.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.red));
-                        markAsOverdue = true;
-                    //Not overdue
-                    } else {
-//                        dueClear.setBackgroundColor(ContextCompat
-//                                .getColor(getContext(), R.color.green));
-                        dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-                    }
-                //Not overdue
-                } else {
-                    //Checking if date due tomorrow
-                    //Incrementing day
-                    if (((currentMonth == 0) || (currentMonth == 2)
-                            || (currentMonth == 4) || (currentMonth == 6)
-                            || (currentMonth == 7) || (currentMonth == 9))
-                            && (currentDay == 31) && (Integer.valueOf(day) == 1)) {
-                        tomorrow = true;
-                    } else if (((currentMonth == 1) || (currentMonth == 3)
-                            || (currentMonth == 5) || (currentMonth == 8)
-                            || (currentMonth == 10)) && (currentDay == 30)
-                            && (Integer.valueOf(day) == 1)) {
-                        tomorrow = true;
-                    } else if ((currentMonth == 11) && (currentDay == 31)
-                            && (Integer.valueOf(day) == 1)) {
-                        tomorrow = true;
-                    } else if ((currentMonth == 1) && (currentDay == 28)
-                            && (currentYear % 4 != 0) && (Integer.valueOf(day) == 1)) {
-                        tomorrow = true;
-                    } else if ((currentMonth == 1) && (currentDay == 29)
-                            && (currentYear % 4 == 0) && (Integer.valueOf(day) == 1)) {
-                        tomorrow = true;
-                    } else if (currentDay == (Integer.valueOf(day) - 1)){
-                        tomorrow = true;
-                    }
-//                    dueClear.setBackgroundColor(ContextCompat
-//                            .getColor(getContext(), R.color.green));
-                    dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-                }
-
-            }
-
-            //determine if snoozed alarm is overdue or not
-            if(dbSnooze) {
-
-                //Show overdue icon
-                if (markAsOverdue) {
-                    snoozeClear.setVisibility(View.GONE);
-                    snoozeLayout.setVisibility(View.GONE);
-                    overdueClear.setVisibility(View.VISIBLE);
-                    overdueLayout.setVisibility(View.VISIBLE);
-                    MainActivity.noteDb.updateSnooze(
-                            MainActivity.sortedIDs.get(position), false);
-                //show snooze icon
-                } else {
-                    snoozeClear.setVisibility(View.VISIBLE);
-                    snoozeLayout.setVisibility(View.VISIBLE);
-                    overdueClear.setVisibility(View.GONE);
-                    overdueLayout.setVisibility(View.GONE);
-                }
-
-            //Show the once off overdue options
-//            }else if(markAsOverdue && dbShowOnce){
+//        Log.i(TAG, "position " + position);
+//        Log.i(TAG, "sortedIDs " + MainActivity.sortedIDs);
 //
-//                MainActivity.noteDb.updateOverdue(
-//                        MainActivity.sortedIDs.get(position), true);
+//        //Show due icon and due date if required
+//        if (dbDue) {
 //
-//                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//            Calendar currentDate = new GregorianCalendar();
 //
-            }else if(markAsOverdue){
-
-                //if ignored task is ignored beyond the next repeat then
-                // the due time is updated to that new repeat time
-//                if((currentDate.get(Calendar.MINUTE) >= (Integer
-//                        .parseInt(hour) + dbInterval)) && !dbRepeat){
+//            //Getting time data
+//            Cursor result = MainActivity.noteDb.getSnoozeData(Integer.parseInt(
+//                    MainActivity.sortedIDs.get(position)));
+//            String hour = "";
+//            String minute = "";
+//            String ampm = "";
+//            String day = "";
+//            String month = "";
+//            String year = "";
+//            while(result.moveToNext()){
+//                hour = result.getString(1);
+//                minute = result.getString(2);
+//                ampm = result.getString(3);
+//                day = result.getString(4);
+//                month = result.getString(5);
+//                year = result.getString(6);
+//            }
 //
-//                    alarmHour = String.valueOf(Integer.parseInt(alarmHour) + dbInterval);
-//
-//                    MainActivity.noteDb.updateAlarmData(String.valueOf(
-//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
-//                            alarmHour, alarmMinute, alarmAmpm, alarmDay, alarmMonth, alarmYear);
-//
+//            //If there is no snoozed alarm then get initial alarm
+//            if(hour.equals("")){
+//                //getting alarm data
+//                result = MainActivity.noteDb.getAlarmData(
+//                        Integer.parseInt(MainActivity.sortedIDs.get(position)));
+//                while(result.moveToNext()){
+//                    hour = result.getString(1);
+//                    minute = result.getString(2);
+//                    ampm = result.getString(3);
+//                    day = result.getString(4);
+//                    month = result.getString(5);
+//                    year = result.getString(6);
 //                }
-
-                MainActivity.noteDb.updateOverdue(String.valueOf(
-                        MainActivity.sortedIDs.get(position)), true);
-
-            }
-
-            //If task due on following day say "Tomorrow"
-            if (tomorrow){
-
-                dueTextView.setText("Tomorrow");
-
-            //If task due on same day show the due date
-            } else if(!sameDay){
-                //TODO account for MM/DD/YYYY https://en.wikipedia.org/wiki/Date_format_by_country
-                //Formatting date
-                String formattedMonth = "";
-                String formattedDate;
-
-                int intMonth = Integer.valueOf(month) + 1;
-                if(intMonth == 1){
-                    formattedMonth = "Jan";
-                }else if(intMonth == 2){
-                    formattedMonth = "Feb";
-                }else if(intMonth == 3){
-                    formattedMonth = "Mar";
-                }else if(intMonth == 4){
-                    formattedMonth = "Apr";
-                }else if(intMonth == 5){
-                    formattedMonth = "May";
-                }else if(intMonth == 6){
-                    formattedMonth = "Jun";
-                }else if(intMonth == 7){
-                    formattedMonth = "Jul";
-                }else if(intMonth == 8){
-                    formattedMonth = "Aug";
-                }else if(intMonth == 9){
-                    formattedMonth = "Sep";
-                }else if(intMonth == 10){
-                    formattedMonth = "Oct";
-                }else if(intMonth == 11){
-                    formattedMonth = "Nov";
-                }else if(intMonth == 12){
-                    formattedMonth = "Dec";
-                }
-
-                formattedDate = day + " " + formattedMonth;
-
-                dueTextView.setText(formattedDate);
-
-            //If task due on different day show the due time
-            }else{
-
-                if(Integer.valueOf(hour) == 0){
-                    hour = "12";
-                }
-                if(Integer.valueOf(minute) < 10){
-                    if(Integer.valueOf(ampm) == 0) {
-                        formattedTime = hour + ":0" + minute + "am";
-                    }else{
-                        formattedTime = hour + ":0" + minute + "pm";
-                    }
-                }else{
-                    if(Integer.valueOf(ampm) == 0) {
-                        formattedTime = hour + ":" + minute + "am";
-                    }else{
-                        formattedTime = hour + ":" + minute + "pm";
-                    }
-                }
-
-                dueTextView.setText(formattedTime);
-            }
-
-        }
+//            }
+//
+//            int currentYear = currentDate.get(Calendar.YEAR);
+//            int currentMonth = currentDate.get(Calendar.MONTH);
+//            int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
+//            int currentHour = currentDate.get(Calendar.HOUR_OF_DAY);
+//            int currentMinute = currentDate.get(Calendar.MINUTE);
+//
+//            //Checking for overdue tasks
+//            String formattedTime;
+//            Boolean sameDay = false;
+//            Boolean tomorrow = false;
+//            Boolean markAsOverdue = false;
+//            if(!dbKilled) {
+//                //Overdue
+//                if (currentYear > Integer.valueOf(year)) {
+//                    dueClear.setVisibility(View.GONE);
+//                    dueLayout.setVisibility(View.GONE);
+//                    overdueClear.setVisibility(View.VISIBLE);
+//                    overdueLayout.setVisibility(View.VISIBLE);
+//                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+//                    overdueClear.setBackgroundColor(ContextCompat
+//                            .getColor(getContext(), R.color.red));
+//                    markAsOverdue = true;
+//                //Overdue
+//                } else if (currentYear == Integer.valueOf(year)
+//                        && currentMonth > Integer.valueOf(month)) {
+//                    dueClear.setVisibility(View.GONE);
+//                    dueLayout.setVisibility(View.GONE);
+//                    overdueClear.setVisibility(View.VISIBLE);
+//                    overdueLayout.setVisibility(View.VISIBLE);
+//                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+//                    overdueClear.setBackgroundColor(ContextCompat
+//                            .getColor(getContext(), R.color.red));
+//                    markAsOverdue = true;
+//                //Overdue
+//                } else if (currentYear == Integer.valueOf(year)
+//                        && currentMonth == Integer.valueOf(month)
+//                        && currentDay > Integer.valueOf(day)) {
+//                    dueClear.setVisibility(View.GONE);
+//                    dueLayout.setVisibility(View.GONE);
+//                    overdueClear.setVisibility(View.VISIBLE);
+//                    overdueLayout.setVisibility(View.VISIBLE);
+//                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
+//                    overdueClear.setBackgroundColor(ContextCompat
+//                            .getColor(getContext(), R.color.red));
+//                    markAsOverdue = true;
+//                } else if (currentYear == Integer.valueOf(year)
+//                        && currentMonth == Integer.valueOf(month)
+//                        && currentDay == Integer.valueOf(day)) {
+//                    sameDay = true;
+//                    //Saved hours are in 12 hour time. Accounting for am/pm.
+//                    int adjustedHour;
+//                    if (Integer.valueOf(ampm) == 1) {
+//                        adjustedHour = Integer.valueOf(hour) + 12;
+//                    } else {
+//                        adjustedHour = Integer.valueOf(hour);
+//                    }
+//                    //Overdue
+//                    if (currentHour > adjustedHour) {
+//                        dueClear.setVisibility(View.GONE);
+//                        dueLayout.setVisibility(View.GONE);
+//                        overdueClear.setVisibility(View.VISIBLE);
+//                        overdueLayout.setVisibility(View.VISIBLE);
+//                        dueTextView.setTextColor(Color.parseColor("#FF0000"));
+//                        overdueClear.setBackgroundColor(ContextCompat
+//                                .getColor(getContext(), R.color.red));
+//                        markAsOverdue = true;
+//                    //Overdue
+//                    } else if (currentHour == adjustedHour
+//                            && currentMinute >= Integer.valueOf(minute)) {
+//                        dueClear.setVisibility(View.GONE);
+//                        dueLayout.setVisibility(View.GONE);
+//                        overdueClear.setVisibility(View.VISIBLE);
+//                        overdueLayout.setVisibility(View.VISIBLE);
+//                        dueTextView.setTextColor(Color.parseColor("#FF0000"));
+//                        overdueClear.setBackgroundColor(ContextCompat
+//                                .getColor(getContext(), R.color.red));
+//                        markAsOverdue = true;
+//                    //Not overdue
+//                    } else {
+////                        dueClear.setBackgroundColor(ContextCompat
+////                                .getColor(getContext(), R.color.green));
+//                        dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+//                    }
+//                //Not overdue
+//                } else {
+//                    //Checking if date due tomorrow
+//                    //Incrementing day
+//                    if (((currentMonth == 0) || (currentMonth == 2)
+//                            || (currentMonth == 4) || (currentMonth == 6)
+//                            || (currentMonth == 7) || (currentMonth == 9))
+//                            && (currentDay == 31) && (Integer.valueOf(day) == 1)) {
+//                        tomorrow = true;
+//                    } else if (((currentMonth == 1) || (currentMonth == 3)
+//                            || (currentMonth == 5) || (currentMonth == 8)
+//                            || (currentMonth == 10)) && (currentDay == 30)
+//                            && (Integer.valueOf(day) == 1)) {
+//                        tomorrow = true;
+//                    } else if ((currentMonth == 11) && (currentDay == 31)
+//                            && (Integer.valueOf(day) == 1)) {
+//                        tomorrow = true;
+//                    } else if ((currentMonth == 1) && (currentDay == 28)
+//                            && (currentYear % 4 != 0) && (Integer.valueOf(day) == 1)) {
+//                        tomorrow = true;
+//                    } else if ((currentMonth == 1) && (currentDay == 29)
+//                            && (currentYear % 4 == 0) && (Integer.valueOf(day) == 1)) {
+//                        tomorrow = true;
+//                    } else if (currentDay == (Integer.valueOf(day) - 1)){
+//                        tomorrow = true;
+//                    }
+////                    dueClear.setBackgroundColor(ContextCompat
+////                            .getColor(getContext(), R.color.green));
+//                    dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+//                }
+//
+//            }
+//
+//            //determine if snoozed alarm is overdue or not
+//            if(dbSnooze) {
+//
+//                //Show overdue icon
+//                if (markAsOverdue) {
+//                    snoozeClear.setVisibility(View.GONE);
+//                    snoozeLayout.setVisibility(View.GONE);
+//                    overdueClear.setVisibility(View.VISIBLE);
+//                    overdueLayout.setVisibility(View.VISIBLE);
+//                    MainActivity.noteDb.updateSnooze(
+//                            MainActivity.sortedIDs.get(position), false);
+//                //show snooze icon
+//                } else {
+//                    snoozeClear.setVisibility(View.VISIBLE);
+//                    snoozeLayout.setVisibility(View.VISIBLE);
+//                    overdueClear.setVisibility(View.GONE);
+//                    overdueLayout.setVisibility(View.GONE);
+//                }
+//
+//            //Show the once off overdue options
+////            }else if(markAsOverdue && dbShowOnce){
+////
+////                MainActivity.noteDb.updateOverdue(
+////                        MainActivity.sortedIDs.get(position), true);
+////
+////                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+////
+//            }else if(markAsOverdue){
+//
+//                //if ignored task is ignored beyond the next repeat then
+//                // the due time is updated to that new repeat time
+////                if((currentDate.get(Calendar.MINUTE) >= (Integer
+////                        .parseInt(hour) + dbInterval)) && !dbRepeat){
+////
+////                    alarmHour = String.valueOf(Integer.parseInt(alarmHour) + dbInterval);
+////
+////                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+////                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+////                            alarmHour, alarmMinute, alarmAmpm, alarmDay, alarmMonth, alarmYear);
+////
+////                }
+//
+//                MainActivity.noteDb.updateOverdue(String.valueOf(
+//                        MainActivity.sortedIDs.get(position)), true);
+//
+//            }
+//
+//            //If task due on following day say "Tomorrow"
+//            if (tomorrow){
+//
+//                dueTextView.setText("Tomorrow");
+//
+//            //If task due on same day show the due date
+//            } else if(!sameDay){
+//                //TODO account for MM/DD/YYYY https://en.wikipedia.org/wiki/Date_format_by_country
+//                //Formatting date
+//                String formattedMonth = "";
+//                String formattedDate;
+//
+//                int intMonth = Integer.valueOf(month) + 1;
+//                if(intMonth == 1){
+//                    formattedMonth = "Jan";
+//                }else if(intMonth == 2){
+//                    formattedMonth = "Feb";
+//                }else if(intMonth == 3){
+//                    formattedMonth = "Mar";
+//                }else if(intMonth == 4){
+//                    formattedMonth = "Apr";
+//                }else if(intMonth == 5){
+//                    formattedMonth = "May";
+//                }else if(intMonth == 6){
+//                    formattedMonth = "Jun";
+//                }else if(intMonth == 7){
+//                    formattedMonth = "Jul";
+//                }else if(intMonth == 8){
+//                    formattedMonth = "Aug";
+//                }else if(intMonth == 9){
+//                    formattedMonth = "Sep";
+//                }else if(intMonth == 10){
+//                    formattedMonth = "Oct";
+//                }else if(intMonth == 11){
+//                    formattedMonth = "Nov";
+//                }else if(intMonth == 12){
+//                    formattedMonth = "Dec";
+//                }
+//
+//                formattedDate = day + " " + formattedMonth;
+//
+//                dueTextView.setText(formattedDate);
+//
+//            //If task due on different day show the due time
+//            }else{
+//
+//                if(Integer.valueOf(hour) == 0){
+//                    hour = "12";
+//                }
+//                if(Integer.valueOf(minute) < 10){
+//                    if(Integer.valueOf(ampm) == 0) {
+//                        formattedTime = hour + ":0" + minute + "am";
+//                    }else{
+//                        formattedTime = hour + ":0" + minute + "pm";
+//                    }
+//                }else{
+//                    if(Integer.valueOf(ampm) == 0) {
+//                        formattedTime = hour + ":" + minute + "am";
+//                    }else{
+//                        formattedTime = hour + ":" + minute + "pm";
+//                    }
+//                }
+//
+//                dueTextView.setText(formattedTime);
+//            }
+//
+////            reorderList();
+//
+//        }
 
         //show repeat icon if required
         if(dbRepeat && !dbKilled){
