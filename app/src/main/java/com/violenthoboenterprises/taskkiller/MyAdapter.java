@@ -619,9 +619,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
-        Log.i(TAG, "position " + position);
-        Log.i(TAG, "sortedIDs " + MainActivity.sortedIDs);
-
         //Show due icon and due date if required
         if (dbDue) {
 
