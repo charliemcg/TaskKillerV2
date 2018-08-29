@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
 //    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
+    Button showUniversalDb;
 
     //Scrollable list
     static ListView theListView;
@@ -232,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
 //        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showSnoozeDb = findViewById(R.id.showSnoozeDb);
+        showUniversalDb = findViewById(R.id.showUniversalDb);
         theListView = findViewById(R.id.theListView);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         params = (RelativeLayout.LayoutParams) add.getLayoutParams();
@@ -268,6 +270,8 @@ public class MainActivity extends AppCompatActivity {
 //        blah = mTopToolbar.getMenu().getItem(R.id.mute);
 //        blah = mTopToolbar.getMenu().getItem(0);
 //        muteBtn = mTopToolbar.getMenu().findItem(R.id.mute);
+
+        noteDb.insertUniversalData(mute);
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -488,6 +492,30 @@ public class MainActivity extends AppCompatActivity {
 //
 //        });
 
+        //Used for debugging purposes
+        showUniversalDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = noteDb.getAllUniversalData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("MUTE: " + res.getString(1) + "\n\n");
+                }
+
+                showMessage("Data", buffer.toString());
+
+//                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
+//                        Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+
         //Actions to occur when user submits new task
         taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
 
@@ -605,9 +633,11 @@ public class MainActivity extends AppCompatActivity {
             if(mute){
                 mute = false;
                 muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+                noteDb.updateMute(mute);
             }else{
                 mute = true;
                 muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+                noteDb.updateMute(mute);
             }
             muteSounds(mute);
             return true;
@@ -1200,7 +1230,7 @@ public class MainActivity extends AppCompatActivity {
 
         mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
 
-        mSharedPreferences.edit().putBoolean("muteKey", mute).apply();
+//        mSharedPreferences.edit().putBoolean("muteKey", mute).apply();
 
         for (int i = 0; i < taskListSize; i++) {
 
@@ -1243,6 +1273,14 @@ public class MainActivity extends AppCompatActivity {
         taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
 
         mute = mSharedPreferences.getBoolean("muteKey", false);
+
+        //getting app-wide data
+        Cursor dbResult = MainActivity.noteDb.getUniversalData();
+        while (dbResult.moveToNext()) {
+            mute = dbResult.getInt(1) > 0;
+        }
+
+        muteSounds(mute);
 
         for( int i = 0 ; i < taskListSize ; i++ ) {
 
@@ -1305,7 +1343,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void complete(View view) {
 
-        punch.start();
+        if(!mute) {
+            punch.start();
+        }
 
         LinearLayout parentLayout = (LinearLayout)view.getParent();
 

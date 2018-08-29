@@ -2618,7 +2618,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.vibrate.vibrate(100);
 
-                        MainActivity.punch.start();
+                        if(!MainActivity.mute) {
+                            MainActivity.punch.start();
+                        }
 
                         //kill task if not repeating
                         if(!finalDbRepeat) {

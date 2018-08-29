@@ -52,6 +52,11 @@ public class Database extends SQLiteOpenHelper {
     public static final String SCOL6 = "MONTH";
     public static final String SCOL7 = "YEAR";
 
+    //Universal data
+    public static final String UTABLE = "universal_table";
+    public static final String UCOL1 = "ID";
+    public static final String UCOL2 = "MUTE";
+
     String TAG = "Data";
 
     public Database(Context context) {
@@ -69,6 +74,7 @@ public class Database extends SQLiteOpenHelper {
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
+        db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN)");
     }
 
     @Override
@@ -76,6 +82,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + ATABLE);
         db.execSQL("DROP TABLE IF EXISTS " + STABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + UTABLE);
         onCreate(db);
     }
 
@@ -142,6 +149,19 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
+    public boolean insertUniversalData(boolean mute){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content= new ContentValues();
+        content.put(UCOL1, 0);
+        content.put(UCOL2, mute);
+        long result = db.insert(UTABLE, null, content);
+        if(result == -1){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
     public Cursor getAllData(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + TABLE, null);
@@ -181,6 +201,12 @@ public class Database extends SQLiteOpenHelper {
         return result;
     }
 
+    public Cursor getAllUniversalData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + UTABLE, null);
+        return result;
+    }
+
     public Cursor getAlarmData(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + ATABLE + " where " + ACOL1
@@ -192,6 +218,13 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + STABLE + " where " + SCOL1
                 + " == " + id, null);
+        return result;
+    }
+
+    public Cursor getUniversalData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + UTABLE + " where " + UCOL1
+                + " == " + 0, null);
         return result;
     }
 
@@ -361,6 +394,14 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL1, id);
         content.put(COL2, note);
         db.update(TABLE, content, "NOTE = ?", new String[] {note});
+        return true;
+    }
+
+    public boolean updateMute(Boolean mute){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL2, mute);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }
 

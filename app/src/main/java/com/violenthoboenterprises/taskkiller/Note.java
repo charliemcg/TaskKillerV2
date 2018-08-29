@@ -49,6 +49,12 @@ public class Note extends MainActivity {
 
         mute = mSharedPreferences.getBoolean("muteKey", false);
 
+        //getting app-wide data
+        Cursor dbResult = MainActivity.noteDb.getUniversalData();
+        while (dbResult.moveToNext()) {
+            mute = dbResult.getInt(1) > 0;
+        }
+
         if(mute){
             editBtn.setSoundEffectsEnabled(false);
             removeBtn.setSoundEffectsEnabled(false);
