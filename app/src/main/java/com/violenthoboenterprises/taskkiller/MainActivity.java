@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 //    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
-    Button showUniversalDb;
+//    Button showUniversalDb;
 
     //Scrollable list
     static ListView theListView;
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 //        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showSnoozeDb = findViewById(R.id.showSnoozeDb);
-        showUniversalDb = findViewById(R.id.showUniversalDb);
+//        showUniversalDb = findViewById(R.id.showUniversalDb);
         theListView = findViewById(R.id.theListView);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         params = (RelativeLayout.LayoutParams) add.getLayoutParams();
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         sortedIDs = new ArrayList<>();
         reinstateAlarm = false;
         completeTask = false;
-        highlight = "#FFFF69B4";
+//        highlight = "#FFFF69B4";
         punch = MediaPlayer.create(this, R.raw.punch);
         mute = false;
 //        blah = mTopToolbar.getMenu().getItem(R.id.mute);
@@ -272,6 +272,12 @@ public class MainActivity extends AppCompatActivity {
 //        muteBtn = mTopToolbar.getMenu().findItem(R.id.mute);
 
         noteDb.insertUniversalData(mute);
+
+        //getting app-wide data
+        Cursor dbResult = MainActivity.noteDb.getUniversalData();
+        while (dbResult.moveToNext()) {
+            highlight = dbResult.getString(2);
+        }
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -492,29 +498,30 @@ public class MainActivity extends AppCompatActivity {
 //
 //        });
 
-        //Used for debugging purposes
-        showUniversalDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = noteDb.getAllUniversalData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("MUTE: " + res.getString(1) + "\n\n");
-                }
-
-                showMessage("Data", buffer.toString());
-
-//                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
-//                        Toast.LENGTH_LONG).show();
-
-            }
-
-        });
+//        //Used for debugging purposes
+//        showUniversalDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = noteDb.getAllUniversalData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("MUTE: " + res.getString(1) + "\n");
+//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n\n");
+//                }
+//
+//                showMessage("Data", buffer.toString());
+//
+////                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
+////                        Toast.LENGTH_LONG).show();
+//
+//            }
+//
+//        });
 
         //Actions to occur when user submits new task
         taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
@@ -647,7 +654,30 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Light/dark clicked", Toast.LENGTH_SHORT).show();
             return true;
         }else if (id == R.id.highlight) {
-            Toast.makeText(MainActivity.this, "Highlight clicked", Toast.LENGTH_SHORT).show();
+            //Change this to a color picker
+            String[] highlightColor = new String[] {"#FFFF69B4", "#FFFFFF00", "#FFFF0000", "#FF00FF00", "#FF0000FF", "#FFFF00FF"};
+            int i = random.nextInt(6);
+            while (highlightColor[i].equals(highlight)) {
+                i = random.nextInt(6);
+            }
+            highlight = highlightColor[i];
+            noteDb.updateHighlight(highlight);
+
+            mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
+            addIcon.setTextColor(Color.parseColor(highlight));
+            taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+            //Set list view dividers
+            String digits = "0123456789ABCDEF";
+            int val = 0;
+            for (int j = 1; j < highlight.length(); j++) {
+                char c = highlight.charAt(j);
+                int d = digits.indexOf(c);
+                val = 16 * val + d;
+            }
+            int[] colors = {0, val, 0};
+            theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+            theListView.setDividerHeight(1);
+            theListView.setAdapter(theAdapter[0]);
             return true;
         }else if (id == R.id.buy) {
             Toast.makeText(MainActivity.this, "Buy clicked", Toast.LENGTH_SHORT).show();
@@ -1280,6 +1310,7 @@ public class MainActivity extends AppCompatActivity {
         Cursor dbResult = MainActivity.noteDb.getUniversalData();
         while (dbResult.moveToNext()) {
             mute = dbResult.getInt(1) > 0;
+            highlight = dbResult.getString(2);
         }
 
         muteSounds(mute);
