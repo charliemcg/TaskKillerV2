@@ -614,16 +614,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        muteBtn = this.mTopToolbar.getMenu().findItem(R.id.mute);
+        if(mute){
+            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+        }else{
+            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //TODO find out if return statements are necessary
