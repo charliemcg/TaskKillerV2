@@ -60,6 +60,8 @@ class MyAdapter extends ArrayAdapter<String> {
         final Intent noteIntent = new Intent(getContext(), Note.class);
         //This row changes content depending on what needs to be displayed
         final TableRow propertyRow = taskView.findViewById(R.id.properties);
+        //Part of the task view which displays the task name
+        TableRow taskNameRow = taskView.findViewById(R.id.taskName);
         //For displaying the date and time pickers
         final TableRow dateRow = taskView.findViewById(R.id.dateTime);
         //For displaying the alarm options
@@ -103,6 +105,8 @@ class MyAdapter extends ArrayAdapter<String> {
         final LinearLayout resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
         //Displays repeat options
         final LinearLayout repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
+        //The display of status icons
+        final LinearLayout statusLayout = taskView.findViewById(R.id.statusLayout);
         //Repeat button text needs to change depending on what state the repeat is in
         final TextView repeatAlarmBtnText = taskView.findViewById(R.id.repeatAlarmBtnText);
         //Task status icons are transparent. This is so the background colour can be
@@ -225,6 +229,36 @@ class MyAdapter extends ArrayAdapter<String> {
             fourHourBtn.setSoundEffectsEnabled(false);
             tomorrowBtn.setSoundEffectsEnabled(false);
             taskView.setSoundEffectsEnabled(false);
+            theTextView.setSoundEffectsEnabled(false);
+            taskNameRow.setSoundEffectsEnabled(false);
+        }
+
+        if(!MainActivity.lightDark){
+            taskView.setBackgroundColor(Color.parseColor("#333333"));
+            propertyRow.setBackgroundColor(Color.parseColor("#333333"));
+            dueTextView.setBackgroundColor(Color.parseColor("#333333"));
+            statusLayout.setBackgroundColor(Color.parseColor("#333333"));
+            theTextView.setBackgroundColor(Color.parseColor("#333333"));
+            dateButton.setBackgroundColor(Color.parseColor("#333333"));
+            alarmOptionsRow.setBackgroundColor(Color.parseColor("#333333"));
+            snoozeRow.setBackgroundColor(Color.parseColor("#333333"));
+            taskOverdueRow.setBackgroundColor(Color.parseColor("#333333"));
+            repeatRow.setBackgroundColor(Color.parseColor("#333333"));
+            datePicker.setBackgroundColor(Color.parseColor("#333333"));
+            timePicker.setBackgroundColor(Color.parseColor("#333333"));
+        }else{
+            taskView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            propertyRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            dueTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            statusLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            theTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            dateButton.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            alarmOptionsRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            snoozeRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            taskOverdueRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            repeatRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            datePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            timePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
 //        //Displaying ad if there are five or more tasks
@@ -2963,7 +2997,7 @@ class MyAdapter extends ArrayAdapter<String> {
             }
 
             //Making extra row visible removes clickability. Clickability needs to be reinstated.
-            taskView.findViewById(R.id.taskName).setOnClickListener(new View.OnClickListener(){
+            /*taskView.findViewById(R.id.taskName)*/taskNameRow.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
 

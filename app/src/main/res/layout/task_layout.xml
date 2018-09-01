@@ -74,6 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <LinearLayout
+            android:id="@+id/statusLayout"
             android:orientation="horizontal"
             android:layout_width="350dp"
             android:layout_height="50dp"

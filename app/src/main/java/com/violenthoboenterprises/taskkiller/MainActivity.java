@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean completeTask;
     //Used to determine if sound effects should play or not
     static boolean mute;
+    //Used to determine what colour scheme to use
+    static boolean lightDark;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -270,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
 //        blah = mTopToolbar.getMenu().getItem(R.id.mute);
 //        blah = mTopToolbar.getMenu().getItem(0);
 //        muteBtn = mTopToolbar.getMenu().findItem(R.id.mute);
+        lightDark = false;
 
         noteDb.insertUniversalData(mute);
 
@@ -651,7 +654,18 @@ public class MainActivity extends AppCompatActivity {
             muteSounds(mute);
             return true;
         }else if (id == R.id.lightDark) {
-            Toast.makeText(MainActivity.this, "Light/dark clicked", Toast.LENGTH_SHORT).show();
+            if(lightDark){
+                lightDark = false;
+                theListView.setBackgroundColor(Color.parseColor("#333333"));
+                mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
+                theListView.setAdapter(theAdapter[0]);
+            }else{
+                lightDark = true;
+                theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                theListView.setAdapter(theAdapter[0]);
+            }
+            Toast.makeText(MainActivity.this, "Light/dark clicked " + lightDark, Toast.LENGTH_SHORT).show();
             return true;
         }else if (id == R.id.highlight) {
             //Change this to a color picker
