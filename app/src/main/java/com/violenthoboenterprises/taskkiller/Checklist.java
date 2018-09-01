@@ -76,6 +76,19 @@ public class Checklist extends MainActivity {
         checklistView.setDivider(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors));
         checklistView.setDividerHeight(1);
 
+        //getting app-wide data
+        Cursor dbResult = MainActivity.noteDb.getUniversalData();
+        while (dbResult.moveToNext()) {
+            lightDark = dbResult.getInt(3) > 0;
+        }
+
+        if(!lightDark){
+            checklistView.setBackgroundColor(Color.parseColor("#333333"));
+        }else{
+            checklistView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+        }
+
         //Ensure there are array lists available to write data to
         if(checklistList.size() <= Integer.parseInt(MainActivity.sortedIdsForNote
                 .get(activeSubTask))){

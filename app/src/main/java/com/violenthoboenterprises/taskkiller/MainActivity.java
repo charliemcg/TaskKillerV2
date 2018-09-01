@@ -293,18 +293,16 @@ public class MainActivity extends AppCompatActivity {
 
         muteSounds(mute);
 
-        if(lightDark){
-            lightDark = false;
+        if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
             theListView.setAdapter(theAdapter[0]);
-            noteDb.updateDarkLight(false);
+//            noteDb.updateDarkLight(false);
         }else{
-            lightDark = true;
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             theListView.setAdapter(theAdapter[0]);
-            noteDb.updateDarkLight(true);
+//            noteDb.updateDarkLight(true);
         }
 
         //Set list view dividers
@@ -529,7 +527,8 @@ public class MainActivity extends AppCompatActivity {
 //                while(res.moveToNext()){
 //                    buffer.append("ID: " + res.getString(0) + "\n");
 //                    buffer.append("MUTE: " + res.getString(1) + "\n");
-//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n\n");
+//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
+//                    buffer.append("LIGHTDARK: " + res.getString(3) + "\n\n");
 //                }
 //
 //                showMessage("Data", buffer.toString());
@@ -682,7 +681,6 @@ public class MainActivity extends AppCompatActivity {
                 theListView.setAdapter(theAdapter[0]);
                 noteDb.updateDarkLight(true);
             }
-            Toast.makeText(MainActivity.this, "Light/dark clicked " + lightDark, Toast.LENGTH_SHORT).show();
             return true;
         }else if (id == R.id.highlight) {
             //Change this to a color picker
@@ -1347,18 +1345,16 @@ public class MainActivity extends AppCompatActivity {
 
         muteSounds(mute);
 
-        if(lightDark){
-            lightDark = false;
+        if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
             theListView.setAdapter(theAdapter[0]);
-            noteDb.updateDarkLight(false);
+//            noteDb.updateDarkLight(false);
         }else{
-            lightDark = true;
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             theListView.setAdapter(theAdapter[0]);
-            noteDb.updateDarkLight(true);
+//            noteDb.updateDarkLight(true);
         }
 
         for( int i = 0 ; i < taskListSize ; i++ ) {

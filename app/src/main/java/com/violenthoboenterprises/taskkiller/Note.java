@@ -30,6 +30,7 @@ public class Note extends MainActivity {
     String theNote;
     //Indicates that the active task has subtasks
     Boolean checklistExists;
+    View noteRoot;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -46,6 +47,7 @@ public class Note extends MainActivity {
         theNote = "";
         checklistExists = false;
         inNote = true;
+        noteRoot = findViewById(R.id.noteRoot);
 
         mute = mSharedPreferences.getBoolean("muteKey", false);
 
@@ -53,6 +55,7 @@ public class Note extends MainActivity {
         Cursor dbResult = MainActivity.noteDb.getUniversalData();
         while (dbResult.moveToNext()) {
             mute = dbResult.getInt(1) > 0;
+            lightDark = dbResult.getInt(3) > 0;
         }
 
         if(mute){
@@ -60,6 +63,12 @@ public class Note extends MainActivity {
             removeBtn.setSoundEffectsEnabled(false);
             addNoteBtn.setSoundEffectsEnabled(false);
             submitNoteBtn.setSoundEffectsEnabled(false);
+        }
+
+        if(!lightDark){
+            noteRoot.setBackgroundColor(Color.parseColor("#333333"));
+        }else{
+            noteRoot.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
