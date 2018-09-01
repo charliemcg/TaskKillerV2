@@ -57,6 +57,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL1 = "ID";
     public static final String UCOL2 = "MUTE";
     public static final String UCOL3 = "HIGHLIGHT";
+    public static final String UCOL4 = "DARKLIGHT";
 
     String TAG = "Data";
 
@@ -75,7 +76,7 @@ public class Database extends SQLiteOpenHelper {
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
-        db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN, HIGHLIGHT TEXT)");
+        db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN, HIGHLIGHT TEXT, DARKLIGHT BOOLEAN)");
     }
 
     @Override
@@ -156,6 +157,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL1, 0);
         content.put(UCOL2, mute);
         content.put(UCOL3, "#FFFF69B4");
+        content.put(UCOL4, false);
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -411,6 +413,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL3, highlight);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateDarkLight(boolean darkLight){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL4, darkLight);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }

@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
 //        blah = mTopToolbar.getMenu().getItem(R.id.mute);
 //        blah = mTopToolbar.getMenu().getItem(0);
 //        muteBtn = mTopToolbar.getMenu().findItem(R.id.mute);
-        lightDark = false;
+//        lightDark = false;
 
         noteDb.insertUniversalData(mute);
 
@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
         Cursor dbResult = MainActivity.noteDb.getUniversalData();
         while (dbResult.moveToNext()) {
             highlight = dbResult.getString(2);
+            lightDark = dbResult.getInt(3) > 0;
         }
 
         //Put data in list
@@ -291,6 +292,20 @@ public class MainActivity extends AppCompatActivity {
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
 
         muteSounds(mute);
+
+        if(lightDark){
+            lightDark = false;
+            theListView.setBackgroundColor(Color.parseColor("#333333"));
+            mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
+            theListView.setAdapter(theAdapter[0]);
+            noteDb.updateDarkLight(false);
+        }else{
+            lightDark = true;
+            theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            theListView.setAdapter(theAdapter[0]);
+            noteDb.updateDarkLight(true);
+        }
 
         //Set list view dividers
         String digits = "0123456789ABCDEF";
@@ -659,11 +674,13 @@ public class MainActivity extends AppCompatActivity {
                 theListView.setBackgroundColor(Color.parseColor("#333333"));
                 mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
                 theListView.setAdapter(theAdapter[0]);
+                noteDb.updateDarkLight(false);
             }else{
                 lightDark = true;
                 theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 theListView.setAdapter(theAdapter[0]);
+                noteDb.updateDarkLight(true);
             }
             Toast.makeText(MainActivity.this, "Light/dark clicked " + lightDark, Toast.LENGTH_SHORT).show();
             return true;
@@ -1325,9 +1342,24 @@ public class MainActivity extends AppCompatActivity {
         while (dbResult.moveToNext()) {
             mute = dbResult.getInt(1) > 0;
             highlight = dbResult.getString(2);
+            lightDark = dbResult.getInt(3) > 0;
         }
 
         muteSounds(mute);
+
+        if(lightDark){
+            lightDark = false;
+            theListView.setBackgroundColor(Color.parseColor("#333333"));
+            mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
+            theListView.setAdapter(theAdapter[0]);
+            noteDb.updateDarkLight(false);
+        }else{
+            lightDark = true;
+            theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            theListView.setAdapter(theAdapter[0]);
+            noteDb.updateDarkLight(true);
+        }
 
         for( int i = 0 ; i < taskListSize ; i++ ) {
 
