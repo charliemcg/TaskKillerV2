@@ -1027,6 +1027,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //            reorderList();
 
+        }else if(MainActivity.lightDark){
+            dueClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
 
         //actions to occur in regards to selected task
@@ -4184,6 +4186,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 repeatMonthClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
             }
 
+        }else if(MainActivity.lightDark){
+            repeatClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
 
         //Show checklist/note icon if required
@@ -4191,11 +4195,15 @@ class MyAdapter extends ArrayAdapter<String> {
 //            checklistClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
             checklistClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
             checklistClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+        }else if(MainActivity.lightDark){
+            checklistClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
         if(!dbNote.equals("")){
 //            noteClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
             noteClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
             noteClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+        }else if(MainActivity.lightDark){
+            noteClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
 
         //greying out unselected tasks
