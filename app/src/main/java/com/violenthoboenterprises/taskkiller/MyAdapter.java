@@ -87,11 +87,20 @@ class MyAdapter extends ArrayAdapter<String> {
         ImageView completedWhite = taskView.findViewById(R.id.completedWhite);
         //Gives user ability to set alarm on click
         final LinearLayout alarm = taskView.findViewById(R.id.alarm);
+        //Icon needs to changed based on light/dark mode
+        ImageView alarmBtnIcon = taskView.findViewById(R.id.alarmBtnIcon);
+        ImageView alarmBtnIconWhite = taskView.findViewById(R.id.alarmBtnIconWhite);
         //The text on this button needs to change depending on the state of the alarm
         final TextView alarmBtnText = taskView.findViewById(R.id.alarmBtnText);
         //Need the following texts for color changing
         final TextView subtasksBtnText = taskView.findViewById(R.id.subtasksBtnText);
+        //Icon needs to changed based on light/dark mode
+        ImageView subTasksBtnIcon = taskView.findViewById(R.id.subTasksBtnIcon);
+        ImageView subTasksBtnIconWhite = taskView.findViewById(R.id.subTasksBtnIconWhite);
         final TextView noteBtnText = taskView.findViewById(R.id.noteBtnText);
+        //Icon needs to changed based on light/dark mode
+        ImageView noteBtnIcon = taskView.findViewById(R.id.noteBtnIcon);
+        ImageView noteBtnIconWhite = taskView.findViewById(R.id.noteBtnIconWhite);
         final TextView killAlarmBtnText = taskView.findViewById(R.id.killAlarmBtnText);
         final TextView resetAlarmBtnText = taskView.findViewById(R.id.resetAlarmBtnText);
         final TextView dailyBtnText = taskView.findViewById(R.id.dailyBtnText);
@@ -309,6 +318,12 @@ class MyAdapter extends ArrayAdapter<String> {
             snoozeClearWhite.setVisibility(View.GONE);
             complete.setVisibility(View.VISIBLE);
             completeWhite.setVisibility(View.GONE);
+            alarmBtnIcon.setVisibility(View.VISIBLE);
+            subTasksBtnIcon.setVisibility(View.VISIBLE);
+            noteBtnIcon.setVisibility(View.VISIBLE);
+            alarmBtnIconWhite.setVisibility(View.GONE);
+            subTasksBtnIconWhite.setVisibility(View.GONE);
+            noteBtnIconWhite.setVisibility(View.GONE);
         }else{
             taskView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             propertyRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -360,6 +375,12 @@ class MyAdapter extends ArrayAdapter<String> {
             snoozeClearWhite.setVisibility(View.VISIBLE);
             complete.setVisibility(View.GONE);
             completeWhite.setVisibility(View.VISIBLE);
+            alarmBtnIcon.setVisibility(View.GONE);
+            subTasksBtnIcon.setVisibility(View.GONE);
+            noteBtnIcon.setVisibility(View.GONE);
+            alarmBtnIconWhite.setVisibility(View.VISIBLE);
+            subTasksBtnIconWhite.setVisibility(View.VISIBLE);
+            noteBtnIconWhite.setVisibility(View.VISIBLE);
         }
 
 //        //Displaying ad if there are five or more tasks

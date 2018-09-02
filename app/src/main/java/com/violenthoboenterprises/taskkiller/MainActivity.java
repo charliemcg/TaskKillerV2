@@ -32,6 +32,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ActionMenuView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Message that shows up when there are no tasks
     private ImageView noTasksToShow;
+    private ImageView noTasksToShowWhite;
 
     static PendingIntent pendIntent;
 
@@ -232,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
         tasksAreClickable = true;
         taskList = new ArrayList<>();
         noTasksToShow = findViewById(R.id.noTasks);
+        noTasksToShowWhite = findViewById(R.id.noTasksWhite);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
         addIcon = findViewById(R.id.addIcon);
@@ -734,6 +737,7 @@ public class MainActivity extends AppCompatActivity {
                 theListView.setAdapter(theAdapter[0]);
                 noteDb.updateDarkLight(true);
             }
+            noTasksLeft();
 //            if(lightDark){
 ////            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
 //
@@ -1195,11 +1199,19 @@ public class MainActivity extends AppCompatActivity {
     //Tells user to add tasks when task list is empty
     private void noTasksLeft() {
 
+        Log.i(TAG, "lighDark " + lightDark);
+
         //Checks if there are any existing tasks
         if (taskListSize == 0){
 
             //Inform user to add some tasks
-            noTasksToShow.setVisibility(View.VISIBLE);
+            if(lightDark) {
+//                noTasksToShow.setVisibility(View.VISIBLE);
+                noTasksToShowWhite.setVisibility(View.VISIBLE);
+            }else{
+//                noTasksToShow.setVisibility(View.GONE);
+                noTasksToShowWhite.setVisibility(View.GONE);
+            }
 
         }else{
 

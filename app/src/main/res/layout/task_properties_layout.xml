@@ -35,9 +35,16 @@
                 android:textColor="@color/gray"/>
 
             <ImageView
+                android:id="@+id/alarmBtnIcon"
                 android:layout_width="50dp"
                 android:layout_height="fill_parent"
                 android:src="@drawable/due" />
+
+            <ImageView
+                android:id="@+id/alarmBtnIconWhite"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:src="@drawable/due_white" />
 
         </LinearLayout>
 
@@ -63,9 +70,16 @@
                 android:textColor="@color/gray"/>
 
             <ImageView
+                android:id="@+id/subTasksBtnIcon"
                 android:layout_width="50dp"
                 android:layout_height="fill_parent"
                 android:src="@drawable/checklist" />
+
+            <ImageView
+                android:id="@+id/subTasksBtnIconWhite"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:src="@drawable/checklist_white" />
 
         </LinearLayout>
 
@@ -91,9 +105,16 @@
                 android:textColor="@color/gray"/>
 
             <ImageView
+                android:id="@+id/noteBtnIcon"
                 android:layout_width="50dp"
                 android:layout_height="fill_parent"
                 android:src="@drawable/note" />
+
+            <ImageView
+                android:id="@+id/noteBtnIconWhite"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:src="@drawable/note_white" />
 
         </LinearLayout>
 

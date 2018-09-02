@@ -52,8 +52,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/noTasks"
-        android:src="@drawable/no_tasks"
-        android:visibility="gone"/>
+        android:src="@drawable/no_tasks"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/noTasksWhite"
+        android:src="@drawable/no_tasks_white"/>
 
     <EditText
         android:id="@+id/taskNameEditText"
