@@ -74,6 +74,8 @@ public class Note extends MainActivity {
             noteRoot.setBackgroundColor(Color.parseColor("#333333"));
         }else{
             noteRoot.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            noteToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            noteTextView.setTextColor(Color.parseColor("#000000"));
         }
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);

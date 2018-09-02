@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 
 import android.app.Activity;
@@ -16,7 +17,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.ImageView;
 
 public class AlertReceiver extends BroadcastReceiver {
 
@@ -27,7 +31,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
         //retrieving task name to set as notification name
         createNotification(context, String.valueOf(intent.getStringExtra("ToDo")),
-                "This is message text", "This is a message alert");
+                "", "");
 
     }
 
@@ -37,12 +41,23 @@ public class AlertReceiver extends BroadcastReceiver {
         PendingIntent notificIntent = PendingIntent.getActivity(context, 1,
                 new Intent(context, MainActivity.class), 0);
 
+        NotificationCompat.Builder mBuilder;
+
         //intent to execute when notification is clicked
-        //TODO find out what's going on with setSmallIcon()
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.bell).setLargeIcon(BitmapFactory.decodeResource(context
-                .getResources(), R.drawable.bell)).setContentTitle(msg).setTicker(msgAlert)
-                .setContentText(msgText);
+        if(!MainActivity.lightDark) {
+            mBuilder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.small_bell).setLargeIcon(BitmapFactory.decodeResource(context
+                            .getResources(), R.drawable.bell))./*setContentTitle(msg)*/setContentTitle("Kill This Task!").setTicker(msgAlert)
+                    .setContentText(msg/*Text*/);
+        }else{
+            mBuilder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.small_bell).setLargeIcon(BitmapFactory.decodeResource(context
+                            .getResources(), R.drawable.bell_white))./*setContentTitle(msg)*/setContentTitle("Kill This Task!").setTicker(msgAlert)
+                    .setContentText(msg/*Text*/);
+        }
+
+        //Sets background of small icon
+//        mBuilder.setColorized(true).setColor(Color.parseColor("#00FF00"));
 
         //use phone's default notification sound
         mBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND);

@@ -836,6 +836,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     overdueClear.setBackgroundColor(ContextCompat
                             .getColor(getContext(), R.color.red));
+                    overdueClearWhite.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.red));
                     markAsOverdue = true;
                     //Overdue
                 } else if (currentYear == Integer.valueOf(year)
@@ -846,6 +848,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     overdueClear.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.red));
+                    overdueClearWhite.setBackgroundColor(ContextCompat
                             .getColor(getContext(), R.color.red));
                     markAsOverdue = true;
                     //Overdue
@@ -858,6 +862,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     overdueClear.setBackgroundColor(ContextCompat
+                            .getColor(getContext(), R.color.red));
+                    overdueClearWhite.setBackgroundColor(ContextCompat
                             .getColor(getContext(), R.color.red));
                     markAsOverdue = true;
                 } else if (currentYear == Integer.valueOf(year)
@@ -880,6 +886,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
                         overdueClear.setBackgroundColor(ContextCompat
                                 .getColor(getContext(), R.color.red));
+                        overdueClearWhite.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.red));
                         markAsOverdue = true;
                         //Overdue
                     } else if (currentHour == adjustedHour
@@ -890,6 +898,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
                         overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.red));
+                        overdueClearWhite.setBackgroundColor(ContextCompat
                                 .getColor(getContext(), R.color.red));
                         markAsOverdue = true;
                         //Not overdue
@@ -4227,33 +4237,44 @@ class MyAdapter extends ArrayAdapter<String> {
             noteClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
 
-        //greying out unselected tasks//TODO Is this even necessary any more?
+        //greying out unselected tasks
         if (MainActivity.taskPropertiesShowing && (position != MainActivity.activeTask)) {
 
             //fade out inactive tasks
 //            taskView.setBackgroundColor(Color.parseColor("#888888"));
             complete.setVisibility(View.INVISIBLE);
             completed.setVisibility(View.INVISIBLE);
+            completeWhite.setVisibility(View.INVISIBLE);
+            completedWhite.setVisibility(View.INVISIBLE);
             theTextView.setVisibility(View.INVISIBLE);
 //            due.setVisibility(View.INVISIBLE);
             dueClear.setVisibility(View.INVISIBLE);
+            dueClearWhite.setVisibility(View.INVISIBLE);
 //            overdue.setVisibility(View.INVISIBLE);
             overdueClear.setVisibility(View.INVISIBLE);
+            overdueClearWhite.setVisibility(View.INVISIBLE);
             snoozeClear.setVisibility(View.INVISIBLE);
+            snoozeClearWhite.setVisibility(View.INVISIBLE);
 //            dueGrey.setVisibility(View.INVISIBLE);
 //            repeatDay.setVisibility(View.INVISIBLE);
             repeatDayClear.setVisibility(View.INVISIBLE);
+            repeatDayClearWhite.setVisibility(View.INVISIBLE);
 //            repeatWeek.setVisibility(View.INVISIBLE);
             repeatWeekClear.setVisibility(View.INVISIBLE);
+            repeatWeekClearWhite.setVisibility(View.INVISIBLE);
 //            repeatMonth.setVisibility(View.INVISIBLE);
             repeatMonthClear.setVisibility(View.INVISIBLE);
+            repeatMonthClearWhite.setVisibility(View.INVISIBLE);
 //            repeatGrey.setVisibility(View.INVISIBLE);
             repeatClear.setVisibility(View.INVISIBLE);
+            repeatClearWhite.setVisibility(View.INVISIBLE);
 //            noteImg.setVisibility(View.INVISIBLE);
             noteClear.setVisibility(View.INVISIBLE);
+            noteClearWhite.setVisibility(View.INVISIBLE);
 //            noteGrey.setVisibility(View.INVISIBLE);
 //            checklistImg.setVisibility(View.INVISIBLE);
             checklistClear.setVisibility(View.INVISIBLE);
+            checklistClearWhite.setVisibility(View.INVISIBLE);
 //            checklistGrey.setVisibility(View.INVISIBLE);
             dueTextView.setVisibility(View.INVISIBLE);
 
