@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
-    android:background="@color/dark_gray">
+    android:background="@color/dark_gray"
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/checklistTextView"
@@ -35,7 +36,6 @@
         android:src="@drawable/tick_complete"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="complete"
         android:visibility="gone"/>
     <!--<Button-->
         <!--android:id="@+id/tick"-->

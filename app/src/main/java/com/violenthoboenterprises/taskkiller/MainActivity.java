@@ -299,7 +299,6 @@ public class MainActivity extends AppCompatActivity {
 
         muteSounds(mute);
 
-        Log.i(TAG, "In onCreate() " + lightDark);
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
@@ -650,12 +649,6 @@ public class MainActivity extends AppCompatActivity {
         lightDarkBtn = this.mTopToolbar.getMenu().findItem(R.id.lightDark);
         customiseBtn = this.mTopToolbar.getMenu().findItem(R.id.highlight);
         proBtn = this.mTopToolbar.getMenu().findItem(R.id.buy);
-//        if(mute){
-//            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
-//        }else{
-//            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
-//        }
-        Log.i(TAG, "onCreateOptionsMenu() " + lightDark);
         if(!lightDark){
             if(mute) {
                 muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
@@ -738,15 +731,6 @@ public class MainActivity extends AppCompatActivity {
                 noteDb.updateDarkLight(true);
             }
             noTasksLeft();
-//            if(lightDark){
-////            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
-//
-//            }else{
-//                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
-//                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
-//                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
-//                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
-//            }
             return true;
         }else if (id == R.id.highlight) {
             //Change this to a color picker
@@ -1199,23 +1183,20 @@ public class MainActivity extends AppCompatActivity {
     //Tells user to add tasks when task list is empty
     private void noTasksLeft() {
 
-        Log.i(TAG, "lighDark " + lightDark);
-
         //Checks if there are any existing tasks
         if (taskListSize == 0){
 
             //Inform user to add some tasks
             if(lightDark) {
-//                noTasksToShow.setVisibility(View.VISIBLE);
                 noTasksToShowWhite.setVisibility(View.VISIBLE);
             }else{
-//                noTasksToShow.setVisibility(View.GONE);
                 noTasksToShowWhite.setVisibility(View.GONE);
             }
 
         }else{
 
             noTasksToShow.setVisibility(View.GONE);
+            noTasksToShowWhite.setVisibility(View.GONE);
 
         }
 
@@ -1419,7 +1400,6 @@ public class MainActivity extends AppCompatActivity {
 
         muteSounds(mute);
 
-        Log.i(TAG, "In getSavedData() " + lightDark);
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));

@@ -76,7 +76,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                     if (!Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
                             .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
 
-                        MainActivity.vibrate.vibrate(50);
+//                        MainActivity.vibrate.vibrate(50);
 
                         Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
                                 .sortedIdsForNote.get(MainActivity.activeTask)))
@@ -87,7 +87,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                     //Removes sub task
                     } else {
 
-                        MainActivity.vibrate.vibrate(50);
+//                        MainActivity.vibrate.vibrate(50);
 
                         Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
                                 .get(MainActivity.activeTask))).remove(position);

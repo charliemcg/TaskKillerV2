@@ -9,7 +9,8 @@
         android:id="@+id/theChecklist"
         android:layout_width="match_parent"
         android:layout_height="518dp"
-        android:background="@color/dark_gray"/>
+        android:background="@color/dark_gray"
+        android:descendantFocusability="blocksDescendants"/>
     <!--TODO make sure hard coded height works on all devices-->
 
     <EditText

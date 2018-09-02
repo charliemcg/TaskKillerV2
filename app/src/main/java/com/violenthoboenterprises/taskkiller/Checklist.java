@@ -17,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -125,12 +126,57 @@ public class Checklist extends MainActivity {
 
         checklistView.setAdapter(checklistAdapter[0]);
 
+        //Make task clickable
+        checklistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+
+                if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
+                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)){
+
+                    Log.i(TAG, "I've been clicked");
+
+                }else if(subTasksClickable && subTasksKilled.get(Integer.parseInt(MainActivity
+                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)){
+
+                    checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                            .get(MainActivity.activeTask))).remove(position);
+
+                    subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                            .get(MainActivity.activeTask))).remove(position);
+
+                    Cursor result = MainActivity.noteDb.getData(Integer.parseInt(MainActivity
+                            .sortedIdsForNote.get(MainActivity.activeTask)));
+                    while(result.moveToNext()){
+                        noteExists = (result.getInt(2) == 1);
+                    }
+
+                    if(checklistList.get(Integer.parseInt(MainActivity
+                            .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
+                        //setting checklist in database to false
+                        MainActivity.noteDb.updateData(MainActivity.sortedIdsForNote
+                                .get(MainActivity.activeTask), "", false);
+                    }
+
+                    //Updates the view
+                    checklistView.setAdapter(checklistAdapter[0]);
+
+                }
+
+            }
+
+        });
+
         //Long click allows for editing the sub task name
         checklistView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
+
+                Log.i(TAG, "I've been long clicked");
 
                 if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
                         .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
