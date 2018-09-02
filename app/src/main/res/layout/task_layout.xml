@@ -67,6 +67,28 @@
                 android:focusable="true"
                 android:onClick="complete"
                 android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/completeWhite"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/tick_white"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="complete"
+                android:soundEffectsEnabled="false"/>
+
+            <ImageView
+                android:id="@+id/completedWhite"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/tick_complete_white"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="complete"
+                android:visibility="gone"/>
         </LinearLayout>
     </TableRow>
 
@@ -100,6 +122,14 @@
                     android:background="@color/mid_gray"
                     android:src="@drawable/checklist_clear"/>
 
+                <ImageView
+                    android:id="@+id/checklistClearWhite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/checklist_clear_white"
+                    android:visibility="gone"/>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -114,6 +144,14 @@
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/note_clear"/>
+
+                <ImageView
+                    android:id="@+id/noteClearWhite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/note_clear_white"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 
@@ -131,6 +169,14 @@
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_day_clear"/>
 
+                <ImageView
+                    android:id="@+id/repeatDayClearWhite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/repeat_day_clear_white"
+                    android:visibility="gone"/>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -146,6 +192,14 @@
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_week_clear"/>
+
+                <ImageView
+                    android:id="@+id/repeatWeekClearWhite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/repeat_week_clear_white"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 
@@ -163,6 +217,14 @@
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_month_clear"/>
 
+                <ImageView
+                    android:id="@+id/repeatMonthClearWhite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/repeat_month_clear_white"
+                    android:visibility="gone"/>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -177,6 +239,14 @@
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_clear"/>
+
+                <ImageView
+                    android:id="@+id/repeatClearWhite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/repeat_clear_white"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 
@@ -201,6 +271,14 @@
                     android:background="@color/mid_gray"
                     android:src="@drawable/due_clear"/>
 
+                <ImageView
+                    android:id="@+id/dueClearWhite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/due_clear_white"
+                    android:visibility="gone"/>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -217,6 +295,14 @@
                     android:background="@color/mid_gray"
                     android:src="@drawable/overdue_clear"/>
 
+                <ImageView
+                    android:id="@+id/overdueClearWhite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/overdue_clear_white"
+                    android:visibility="gone"/>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -232,6 +318,14 @@
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/snooze_clear"/>
+
+                <ImageView
+                    android:id="@+id/snoozeClearWhite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/snooze_clear_white"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 

@@ -81,12 +81,28 @@ class MyAdapter extends ArrayAdapter<String> {
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
         //Button used for marking task as complete
         ImageView complete = taskView.findViewById(R.id.complete);
+        ImageView completeWhite = taskView.findViewById(R.id.completeWhite);
         //Graphically depicts a task as being complete
         ImageView completed = taskView.findViewById(R.id.completed);
+        ImageView completedWhite = taskView.findViewById(R.id.completedWhite);
         //Gives user ability to set alarm on click
         final LinearLayout alarm = taskView.findViewById(R.id.alarm);
         //The text on this button needs to change depending on the state of the alarm
         final TextView alarmBtnText = taskView.findViewById(R.id.alarmBtnText);
+        //Need the following texts for color changing
+        final TextView subtasksBtnText = taskView.findViewById(R.id.subtasksBtnText);
+        final TextView noteBtnText = taskView.findViewById(R.id.noteBtnText);
+        final TextView killAlarmBtnText = taskView.findViewById(R.id.killAlarmBtnText);
+        final TextView resetAlarmBtnText = taskView.findViewById(R.id.resetAlarmBtnText);
+        final TextView dailyBtnText = taskView.findViewById(R.id.dailyBtnText);
+        final TextView weeklyBtnText = taskView.findViewById(R.id.weeklyBtnText);
+        final TextView monthlyBtnText = taskView.findViewById(R.id.monthlyBtnText);
+        final TextView oneHourBtnText = taskView.findViewById(R.id.oneHourBtnText);
+        final TextView fourHoursBtnText = taskView.findViewById(R.id.fourHoursBtnText);
+        final TextView tomorrowBtnText = taskView.findViewById(R.id.tomorrowBtnText);
+        final TextView snoozeTaskBtnText = taskView.findViewById(R.id.snoozeTaskBtnText);
+        final TextView taskDoneBtnText = taskView.findViewById(R.id.taskDoneBtnText);
+        final TextView taskIgnoreBtnText = taskView.findViewById(R.id.taskIgnoreBtnText);
         //Takes user to sub task activity
         final LinearLayout subTasks = taskView.findViewById(R.id.subTasks);
         //Takes user to note activity
@@ -113,21 +129,30 @@ class MyAdapter extends ArrayAdapter<String> {
         // changed giving the illusion that the icon image color has changed.
         // Each icon has it's own relative layout.
         final ImageView dueClear = taskView.findViewById(R.id.dueClear);
+        final ImageView dueClearWhite = taskView.findViewById(R.id.dueClearWhite);
         RelativeLayout dueLayout = taskView.findViewById(R.id.dueLayout);
         ImageView overdueClear = taskView.findViewById(R.id.overdueClear);
+        ImageView overdueClearWhite = taskView.findViewById(R.id.overdueClearWhite);
         RelativeLayout overdueLayout = taskView.findViewById(R.id.overdueLayout);
         final ImageView snoozeClear = taskView.findViewById(R.id.snoozeClear);
+        final ImageView snoozeClearWhite = taskView.findViewById(R.id.snoozeClearWhite);
         RelativeLayout snoozeLayout = taskView.findViewById(R.id.snoozeLayout);
         ImageView repeatDayClear = taskView.findViewById(R.id.repeatDayClear);
+        ImageView repeatDayClearWhite = taskView.findViewById(R.id.repeatDayClearWhite);
         RelativeLayout repeatDayLayout = taskView.findViewById(R.id.repeatDayLayout);
         ImageView repeatWeekClear = taskView.findViewById(R.id.repeatWeekClear);
+        ImageView repeatWeekClearWhite = taskView.findViewById(R.id.repeatWeekClearWhite);
         RelativeLayout repeatWeekLayout = taskView.findViewById(R.id.repeatWeekLayout);
         ImageView repeatMonthClear = taskView.findViewById(R.id.repeatMonthClear);
+        ImageView repeatMonthClearWhite = taskView.findViewById(R.id.repeatMonthClearWhite);
         RelativeLayout repeatMonthLayout = taskView.findViewById(R.id.repeatMonthLayout);
         ImageView repeatClear = taskView.findViewById(R.id.repeatClear);
+        ImageView repeatClearWhite = taskView.findViewById(R.id.repeatClearWhite);
         RelativeLayout repeatLayout = taskView.findViewById(R.id.repeatLayout);
         ImageView noteClear = taskView.findViewById(R.id.noteClear);
+        ImageView noteClearWhite = taskView.findViewById(R.id.noteClearWhite);
         ImageView checklistClear = taskView.findViewById(R.id.checklistClear);
+        ImageView checklistClearWhite = taskView.findViewById(R.id.checklistClearWhite);
         //Displays the snooze options on click
         LinearLayout snoozeTask = taskView.findViewById(R.id.snoozeTask);
         //Marks overdue task as done
@@ -246,6 +271,44 @@ class MyAdapter extends ArrayAdapter<String> {
             repeatRow.setBackgroundColor(Color.parseColor("#333333"));
             datePicker.setBackgroundColor(Color.parseColor("#333333"));
             timePicker.setBackgroundColor(Color.parseColor("#333333"));
+            theTextView.setTextColor(Color.parseColor("#AAAAAA"));
+            dueTextView.setTextColor(Color.parseColor("#AAAAAA"));
+            dateButton.setTextColor(Color.parseColor("#AAAAAA"));
+            alarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            subtasksBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            noteBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            killAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            resetAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            repeatAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            dailyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            weeklyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            monthlyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            oneHourBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            fourHoursBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            tomorrowBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            snoozeTaskBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            taskDoneBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            taskIgnoreBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            checklistClear.setVisibility(View.VISIBLE);
+            noteClear.setVisibility(View.VISIBLE);
+            repeatClear.setVisibility(View.VISIBLE);
+            repeatDayClear.setVisibility(View.VISIBLE);
+            repeatWeekClear.setVisibility(View.VISIBLE);
+            repeatMonthClear.setVisibility(View.VISIBLE);
+            dueClear.setVisibility(View.VISIBLE);
+            overdueClear.setVisibility(View.VISIBLE);
+            snoozeClear.setVisibility(View.VISIBLE);
+            checklistClearWhite.setVisibility(View.GONE);
+            noteClearWhite.setVisibility(View.GONE);
+            repeatClearWhite.setVisibility(View.GONE);
+            repeatDayClearWhite.setVisibility(View.GONE);
+            repeatWeekClearWhite.setVisibility(View.GONE);
+            repeatMonthClearWhite.setVisibility(View.GONE);
+            dueClearWhite.setVisibility(View.GONE);
+            overdueClearWhite.setVisibility(View.GONE);
+            snoozeClearWhite.setVisibility(View.GONE);
+            complete.setVisibility(View.VISIBLE);
+            completeWhite.setVisibility(View.GONE);
         }else{
             taskView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             propertyRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -259,6 +322,44 @@ class MyAdapter extends ArrayAdapter<String> {
             repeatRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
             datePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
             timePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            theTextView.setTextColor(Color.parseColor("#000000"));
+            dueTextView.setTextColor(Color.parseColor("#000000"));
+            dateButton.setTextColor(Color.parseColor("#000000"));
+            alarmBtnText.setTextColor(Color.parseColor("#000000"));
+            subtasksBtnText.setTextColor(Color.parseColor("#000000"));
+            noteBtnText.setTextColor(Color.parseColor("#000000"));
+            killAlarmBtnText.setTextColor(Color.parseColor("#000000"));
+            resetAlarmBtnText.setTextColor(Color.parseColor("#000000"));
+            repeatAlarmBtnText.setTextColor(Color.parseColor("#000000"));
+            dailyBtnText.setTextColor(Color.parseColor("#000000"));
+            weeklyBtnText.setTextColor(Color.parseColor("#000000"));
+            monthlyBtnText.setTextColor(Color.parseColor("#000000"));
+            oneHourBtnText.setTextColor(Color.parseColor("#000000"));
+            fourHoursBtnText.setTextColor(Color.parseColor("#000000"));
+            tomorrowBtnText.setTextColor(Color.parseColor("#000000"));
+            snoozeTaskBtnText.setTextColor(Color.parseColor("#000000"));
+            taskDoneBtnText.setTextColor(Color.parseColor("#000000"));
+            taskIgnoreBtnText.setTextColor(Color.parseColor("#000000"));
+            checklistClear.setVisibility(View.GONE);
+            noteClear.setVisibility(View.GONE);
+            repeatClear.setVisibility(View.GONE);
+            repeatDayClear.setVisibility(View.GONE);
+            repeatWeekClear.setVisibility(View.GONE);
+            repeatMonthClear.setVisibility(View.GONE);
+            dueClear.setVisibility(View.GONE);
+            overdueClear.setVisibility(View.GONE);
+            snoozeClear.setVisibility(View.GONE);
+            checklistClearWhite.setVisibility(View.VISIBLE);
+            noteClearWhite.setVisibility(View.VISIBLE);
+            repeatClearWhite.setVisibility(View.VISIBLE);
+            repeatDayClearWhite.setVisibility(View.VISIBLE);
+            repeatWeekClearWhite.setVisibility(View.VISIBLE);
+            repeatMonthClearWhite.setVisibility(View.VISIBLE);
+            dueClearWhite.setVisibility(View.VISIBLE);
+            overdueClearWhite.setVisibility(View.VISIBLE);
+            snoozeClearWhite.setVisibility(View.VISIBLE);
+            complete.setVisibility(View.GONE);
+            completeWhite.setVisibility(View.VISIBLE);
         }
 
 //        //Displaying ad if there are five or more tasks
@@ -650,6 +751,8 @@ class MyAdapter extends ArrayAdapter<String> {
             dueLayout.setVisibility(View.GONE);
 
             snoozeClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+            snoozeClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+            snoozeClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
 
         }
 
@@ -773,6 +876,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //                        dueClear.setBackgroundColor(ContextCompat
 //                                .getColor(getContext(), R.color.green));
                         dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                        dueClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
                     }
                     //Not overdue
                 } else {
@@ -803,6 +907,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //                    dueClear.setBackgroundColor(ContextCompat
 //                            .getColor(getContext(), R.color.green));
                     dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                    dueClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
                 }
 
             }
@@ -3766,8 +3871,13 @@ class MyAdapter extends ArrayAdapter<String> {
             theTextView.setPaintFlags(theTextView.getPaintFlags() |
                     Paint.STRIKE_THRU_TEXT_FLAG);
 
-            complete.setVisibility(View.INVISIBLE);
-            completed.setVisibility(View.VISIBLE);
+            if(!MainActivity.lightDark) {
+                complete.setVisibility(View.INVISIBLE);
+                completed.setVisibility(View.VISIBLE);
+            }else{
+                completeWhite.setVisibility(View.INVISIBLE);
+                completedWhite.setVisibility(View.VISIBLE);
+            }
             completed.setClickable(false);
 
         }
@@ -4057,18 +4167,21 @@ class MyAdapter extends ArrayAdapter<String> {
 //                repeatDayClear.setBackgroundColor(ContextCompat
 //                        .getColor(getContext(), R.color.green));
                 repeatDayClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                repeatDayClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
             }else if(dbRepeatInterval.equals("week")){
                 repeatWeekClear.setVisibility(View.VISIBLE);
                 repeatWeekLayout.setVisibility(View.VISIBLE);
 //                repeatWeekClear.setBackgroundColor(ContextCompat
 //                        .getColor(getContext(), R.color.green));
                 repeatWeekClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                repeatWeekClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
             }else if(dbRepeatInterval.equals("month")){
                 repeatMonthClear.setVisibility(View.VISIBLE);
                 repeatMonthLayout.setVisibility(View.VISIBLE);
 //                repeatMonthClear.setBackgroundColor(ContextCompat
 //                        .getColor(getContext(), R.color.green));
                 repeatMonthClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                repeatMonthClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
             }
 
         }
@@ -4077,10 +4190,12 @@ class MyAdapter extends ArrayAdapter<String> {
         if(dbChecklist){
 //            checklistClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
             checklistClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+            checklistClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
         }
         if(!dbNote.equals("")){
 //            noteClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
             noteClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+            noteClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
         }
 
         //greying out unselected tasks

@@ -296,13 +296,13 @@ public class MainActivity extends AppCompatActivity {
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
+            mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
             theListView.setAdapter(theAdapter[0]);
-//            noteDb.updateDarkLight(false);
         }else{
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
             theListView.setAdapter(theAdapter[0]);
-//            noteDb.updateDarkLight(true);
         }
 
         //Set list view dividers
@@ -1348,11 +1348,13 @@ public class MainActivity extends AppCompatActivity {
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
+            mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
             theListView.setAdapter(theAdapter[0]);
 //            noteDb.updateDarkLight(false);
         }else{
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
             theListView.setAdapter(theAdapter[0]);
 //            noteDb.updateDarkLight(true);
         }
