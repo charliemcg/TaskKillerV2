@@ -4227,7 +4227,7 @@ class MyAdapter extends ArrayAdapter<String> {
             noteClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
 
-        //greying out unselected tasks
+        //greying out unselected tasks//TODO Is this even necessary any more?
         if (MainActivity.taskPropertiesShowing && (position != MainActivity.activeTask)) {
 
             //fade out inactive tasks

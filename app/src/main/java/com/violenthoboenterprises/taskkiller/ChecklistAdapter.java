@@ -36,7 +36,20 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 //        final Button tick = checklistItemView.findViewById(R.id.tick);
         final ImageView tick = checklistItemView.findViewById(R.id.subtaskComplete);
         final ImageView ticked = checklistItemView.findViewById(R.id.subtaskCompleted);
+        final ImageView tickWhite = checklistItemView.findViewById(R.id.subtaskCompleteWhite);
+        final ImageView tickedWhite = checklistItemView.findViewById(R.id.subtaskCompletedWhite);
         TAG = "ChecklistAdapter";
+
+        if(!MainActivity.lightDark){
+            checklistItemView.setBackgroundColor(Color.parseColor("#333333"));
+            tick.setVisibility(View.VISIBLE);
+            tickWhite.setVisibility(View.GONE);
+        }else{
+            checklistItemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            checklistTextView.setTextColor(Color.parseColor("#000000"));
+            tick.setVisibility(View.GONE);
+            tickWhite.setVisibility(View.VISIBLE);
+        }
 
         //actions to occur when sub task marked as done
         tick.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +131,85 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         });
 
+        tickWhite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Rect screen = new Rect();
+
+                Checklist.checklistRootView.getWindowVisibleDisplayFrame(screen);
+
+                //Screen pixel values are used to determine how much of the screen is visible
+                int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
+                        (screen.bottom - screen.top);
+
+                //Value of more than 800 seems to indicate that the keyboard is showing
+                //in portrait mode
+                if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
+                        .getConfiguration().orientation == 1)) {
+
+                    Checklist.subTasksClickable = false;
+
+                    //Similar to above but for landscape mode
+                }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
+                        .getResources().getConfiguration().orientation == 2)){
+
+                    Checklist.subTasksClickable = false;
+
+                }else{
+
+                    Checklist.subTasksClickable = true;
+
+                }
+
+                if (Checklist.subTasksClickable) {
+
+                    //Marks sub task as complete
+                    if (!Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
+                            .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
+
+//                        MainActivity.vibrate.vibrate(50);
+
+                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
+                                .sortedIdsForNote.get(MainActivity.activeTask)))
+                                .set(position, true);
+
+                        notifyDataSetChanged();
+
+                        //Removes sub task
+                    } else {
+
+//                        MainActivity.vibrate.vibrate(50);
+
+                        Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                                .get(MainActivity.activeTask))).remove(position);
+
+                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+                                .get(MainActivity.activeTask))).remove(position);
+
+                        notifyDataSetChanged();
+
+                        Cursor result = MainActivity.noteDb.getData(Integer.parseInt(MainActivity
+                                .sortedIdsForNote.get(MainActivity.activeTask)));
+                        while(result.moveToNext()){
+                            Checklist.noteExists = (result.getInt(2) == 1);
+                        }
+
+                        if(Checklist.checklistList.get(Integer.parseInt(MainActivity
+                                .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
+                            //setting checklist in database to false
+                            MainActivity.noteDb.updateData(MainActivity.sortedIdsForNote
+                                    .get(MainActivity.activeTask), "", false);
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
         checklistTextView.setText(item);
 
         try {
@@ -134,6 +226,15 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 //                tick.setText("Remove");
                 tick.setVisibility(View.GONE);
                 ticked.setVisibility(View.VISIBLE);
+
+                if(!MainActivity.lightDark) {
+                    tick.setVisibility(View.INVISIBLE);
+                    ticked.setVisibility(View.VISIBLE);
+                }else{
+                    tickWhite.setVisibility(View.INVISIBLE);
+                    ticked.setVisibility(View.INVISIBLE);
+                    tickedWhite.setVisibility(View.VISIBLE);
+                }
 
             }
         } catch (IndexOutOfBoundsException e){

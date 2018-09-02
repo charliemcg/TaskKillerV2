@@ -37,6 +37,27 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompleteWhite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_white"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="complete"
+        android:soundEffectsEnabled="false"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompletedWhite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_complete_white"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"/>
     <!--<Button-->
         <!--android:id="@+id/tick"-->
         <!--android:background="@color/green"-->

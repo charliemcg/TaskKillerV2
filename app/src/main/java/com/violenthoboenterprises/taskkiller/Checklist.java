@@ -89,8 +89,10 @@ public class Checklist extends MainActivity {
 
         if(!lightDark){
             checklistView.setBackgroundColor(Color.parseColor("#333333"));
+            subTasksToolbar.setBackgroundColor(Color.parseColor("#333333"));
         }else{
             checklistView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            subTasksToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         //Ensure there are array lists available to write data to
