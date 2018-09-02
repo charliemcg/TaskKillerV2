@@ -210,6 +210,9 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mTopToolbar;
 
     MenuItem muteBtn;
+    MenuItem lightDarkBtn;
+    MenuItem customiseBtn;
+    MenuItem proBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
 
         muteSounds(mute);
 
+        Log.i(TAG, "In onCreate() " + lightDark);
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
@@ -640,10 +644,33 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         muteBtn = this.mTopToolbar.getMenu().findItem(R.id.mute);
-        if(mute){
-            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+        lightDarkBtn = this.mTopToolbar.getMenu().findItem(R.id.lightDark);
+        customiseBtn = this.mTopToolbar.getMenu().findItem(R.id.highlight);
+        proBtn = this.mTopToolbar.getMenu().findItem(R.id.buy);
+//        if(mute){
+//            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+//        }else{
+//            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+//        }
+        Log.i(TAG, "onCreateOptionsMenu() " + lightDark);
+        if(!lightDark){
+            if(mute) {
+                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+            }else{
+                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+            }
+            lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark));
+            customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise));
+            proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro));
         }else{
-            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+            if(mute) {
+                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
+            }else{
+                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted_white));
+            }
+            lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
+            customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
+            proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
         }
         return true;
     }
@@ -658,11 +685,19 @@ public class MainActivity extends AppCompatActivity {
             muteBtn = this.mTopToolbar.getMenu().findItem(R.id.mute);
             if(mute){
                 mute = false;
-                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+                if(lightDark) {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted_white));
+                }else{
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+                }
                 noteDb.updateMute(mute);
             }else{
                 mute = true;
-                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+                if(lightDark) {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
+                }else{
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+                }
                 noteDb.updateMute(mute);
             }
             muteSounds(mute);
@@ -672,15 +707,42 @@ public class MainActivity extends AppCompatActivity {
                 lightDark = false;
                 theListView.setBackgroundColor(Color.parseColor("#333333"));
                 mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
+                mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
+                if(mute) {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+                }else{
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+                }
+                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark));
+                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise));
+                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro));
                 theListView.setAdapter(theAdapter[0]);
                 noteDb.updateDarkLight(false);
             }else{
                 lightDark = true;
                 theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
+                if(mute) {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
+                }else{
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted_white));
+                }
+                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
+                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
+                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
                 theListView.setAdapter(theAdapter[0]);
                 noteDb.updateDarkLight(true);
             }
+//            if(lightDark){
+////            muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+//
+//            }else{
+//                muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
+//                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
+//                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
+//                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
+//            }
             return true;
         }else if (id == R.id.highlight) {
             //Change this to a color picker
@@ -1345,6 +1407,7 @@ public class MainActivity extends AppCompatActivity {
 
         muteSounds(mute);
 
+        Log.i(TAG, "In getSavedData() " + lightDark);
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
