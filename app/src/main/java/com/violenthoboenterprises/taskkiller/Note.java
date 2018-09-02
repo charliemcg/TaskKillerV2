@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,10 +32,12 @@ public class Note extends MainActivity {
     //Indicates that the active task has subtasks
     Boolean checklistExists;
     View noteRoot;
+    private Toolbar noteToolbar;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_layout);
+        noteToolbar = findViewById(R.id.noteToolbar);
 
         noteTextView = findViewById(R.id.noteTextView);
         noteEditText = findViewById(R.id.noteEditText);
@@ -48,6 +51,8 @@ public class Note extends MainActivity {
         checklistExists = false;
         inNote = true;
         noteRoot = findViewById(R.id.noteRoot);
+
+        noteToolbar.setSubtitleTextColor(Color.parseColor(highlight));
 
         mute = mSharedPreferences.getBoolean("muteKey", false);
 

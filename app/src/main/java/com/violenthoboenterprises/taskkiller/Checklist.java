@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,11 +44,13 @@ public class Checklist extends MainActivity {
     private static String TAG;
     static boolean fadeSubTasks;
     static boolean noteExists;
+    private Toolbar subTasksToolbar;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checklist_layout);
         MainActivity.nSharedPreferences = getPreferences(MODE_PRIVATE);
+        subTasksToolbar = findViewById(R.id.subTasksToolbar);
 
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         checklistEditText = findViewById(R.id.checklistEditText);
@@ -64,6 +67,7 @@ public class Checklist extends MainActivity {
         inChecklist = true;
 
         checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+        subTasksToolbar.setSubtitleTextColor(Color.parseColor(highlight));
 
         //Set list view dividers
         String digits = "0123456789ABCDEF";
@@ -87,7 +91,6 @@ public class Checklist extends MainActivity {
             checklistView.setBackgroundColor(Color.parseColor("#333333"));
         }else{
             checklistView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-
         }
 
         //Ensure there are array lists available to write data to
@@ -131,7 +134,6 @@ public class Checklist extends MainActivity {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
 
                 if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
                         .sortedIdsForNote.get(MainActivity.activeTask))).get(position)){

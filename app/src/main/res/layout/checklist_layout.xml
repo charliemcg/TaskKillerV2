@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/checklistRoot">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/subTasksToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderBar"
+        app:subtitle="Sub Tasks"
+        app:subtitleTextColor="@color/gray"
+        android:elevation="4dp"/>
+
     <ListView
         android:id="@+id/theChecklist"
         android:layout_width="match_parent"
         android:layout_height="518dp"
+        android:layout_below="@+id/subTasksToolbar"
         android:background="@color/dark_gray"
         android:descendantFocusability="blocksDescendants"/>
     <!--TODO make sure hard coded height works on all devices-->
