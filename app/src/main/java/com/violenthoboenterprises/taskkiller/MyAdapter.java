@@ -3767,6 +3767,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                    MainActivity.vibrate.vibrate(50);
 
+                    MainActivity.noteDb.updateActiveTaskTemp(task);
+
                     getContext().startActivity(intent);
 
                 }
@@ -3778,6 +3780,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 public void onClick(View v) {
 
 //                    MainActivity.vibrate.vibrate(50);
+
+                    MainActivity.noteDb.updateActiveTaskTemp(task);
 
                     getContext().startActivity(noteIntent);
 

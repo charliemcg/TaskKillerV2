@@ -55,19 +55,14 @@ public class Note extends MainActivity {
 
         noteToolbar.setTitleTextColor(Color.parseColor(highlight));
 
-//        //getting task data
-//        String dbTask = "";
-//        Cursor dbTaskResult = MainActivity.noteDb.getData(Integer.parseInt(
-//                MainActivity.sortedIDs.get(MainActivity.activeTask)));
-//        while (dbTaskResult.moveToNext()) {
-//            dbTask = dbTaskResult.getString(4);
-//        }
+        //getting task data
+        String dbTask = "";
+        Cursor dbTaskResult = MainActivity.noteDb.getUniversalData();
+        while (dbTaskResult.moveToNext()) {
+            dbTask = dbTaskResult.getString(4);
+        }
 
-        Log.i(TAG, "Sorted Ids " + sortedIDs);
-        Log.i(TAG, "Tasklist " + taskList);
-        Log.i(TAG, "Active task " + activeTask);
-
-        noteToolbar.setTitle("Blah");
+        noteToolbar.setTitle(dbTask);
 
         mute = mSharedPreferences.getBoolean("muteKey", false);
 

@@ -58,6 +58,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL2 = "MUTE";
     public static final String UCOL3 = "HIGHLIGHT";
     public static final String UCOL4 = "DARKLIGHT";
+    public static final String UCOL5 = "ACTIVETASKNAME";
 
     String TAG = "Data";
 
@@ -76,7 +77,7 @@ public class Database extends SQLiteOpenHelper {
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
-        db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN, HIGHLIGHT TEXT, DARKLIGHT BOOLEAN)");
+        db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN, HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT)");
     }
 
     @Override
@@ -158,6 +159,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL2, mute);
         content.put(UCOL3, "#FFFF69B4");
         content.put(UCOL4, false);
+        content.put(UCOL5, "");
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -421,6 +423,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL4, darkLight);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateActiveTaskTemp(String tempTask){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL5, tempTask);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }

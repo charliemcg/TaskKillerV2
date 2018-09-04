@@ -11,8 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
-        app:subtitle="Sub Tasks"
-        app:subtitleTextColor="@color/gray"
         android:elevation="4dp"/>
 
     <ListView

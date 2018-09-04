@@ -67,7 +67,16 @@ public class Checklist extends MainActivity {
         inChecklist = true;
 
         checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-        subTasksToolbar.setSubtitleTextColor(Color.parseColor(highlight));
+        subTasksToolbar.setTitleTextColor(Color.parseColor(highlight));
+
+        //getting task data
+        String dbTask = "";
+        Cursor dbTaskResult = MainActivity.noteDb.getUniversalData();
+        while (dbTaskResult.moveToNext()) {
+            dbTask = dbTaskResult.getString(4);
+        }
+
+        subTasksToolbar.setTitle(dbTask);
 
         //Set list view dividers
         String digits = "0123456789ABCDEF";
