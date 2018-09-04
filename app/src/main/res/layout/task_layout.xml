@@ -62,8 +62,9 @@
 
             <ImageView
                 android:id="@+id/completed"
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
+                android:layout_weight="1"
                 android:layout_margin="8dp"
                 android:src="@drawable/tick_complete"
                 android:clickable="true"
@@ -73,8 +74,9 @@
 
             <ImageView
                 android:id="@+id/completeWhite"
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
+                android:layout_weight="1"
                 android:layout_margin="8dp"
                 android:src="@drawable/tick_white"
                 android:clickable="true"
@@ -84,8 +86,9 @@
 
             <ImageView
                 android:id="@+id/completedWhite"
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
+                android:layout_weight="1"
                 android:layout_margin="8dp"
                 android:src="@drawable/tick_complete_white"
                 android:clickable="true"

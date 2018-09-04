@@ -32,7 +32,6 @@
                 android:paddingLeft="8dp"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
-                <!--android:layout_weight="1"-->
 
             <ImageView
                 android:id="@+id/alarmBtnIcon"
@@ -57,7 +56,6 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:background="@drawable/layout_border">
-            <!--android:layout_weight="1"-->
 
             <TextView
                 android:id="@+id/subtasksBtnText"
@@ -68,7 +66,6 @@
                 android:paddingLeft="8dp"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
-            <!--android:layout_weight="1"-->
 
             <ImageView
                 android:id="@+id/subTasksBtnIcon"
@@ -93,7 +90,6 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:background="@drawable/layout_border">
-            <!--android:layout_weight="1"-->
 
             <TextView
                 android:id="@+id/noteBtnText"
@@ -104,7 +100,6 @@
                 android:paddingLeft="8dp"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
-            <!--android:layout_weight="1"-->
 
             <ImageView
                 android:id="@+id/noteBtnIcon"

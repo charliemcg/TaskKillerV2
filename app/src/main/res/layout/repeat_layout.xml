@@ -3,17 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:background="@color/dark_gray">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
         <LinearLayout
             android:id="@+id/daily"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
@@ -23,20 +25,18 @@
 
             <TextView
                 android:id="@+id/dailyBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
                 android:text="Daily"
-                android:paddingLeft="8dp"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/weekly"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
@@ -46,20 +46,18 @@
 
             <TextView
                 android:id="@+id/weeklyBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
                 android:text="Weekly"
-                android:paddingLeft="8dp"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/monthly"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
@@ -69,13 +67,11 @@
 
             <TextView
                 android:id="@+id/monthlyBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
                 android:text="Monthly"
-                android:paddingLeft="8dp"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>

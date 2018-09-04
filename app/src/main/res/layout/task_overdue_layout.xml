@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:background="@color/dark_gray">
 
@@ -13,7 +13,7 @@
         android:orientation="horizontal">
         <LinearLayout
             android:id="@+id/snoozeTask"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
@@ -23,20 +23,18 @@
 
             <TextView
                 android:id="@+id/snoozeTaskBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
                 android:text="Snooze"
-                android:paddingLeft="8dp"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/taskDone"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
@@ -46,20 +44,18 @@
 
             <TextView
                 android:id="@+id/taskDoneBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
                 android:text="Done"
-                android:paddingLeft="8dp"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/taskIgnore"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
@@ -69,13 +65,11 @@
 
             <TextView
                 android:id="@+id/taskIgnoreBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
                 android:text="Ignore"
-                android:paddingLeft="8dp"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>

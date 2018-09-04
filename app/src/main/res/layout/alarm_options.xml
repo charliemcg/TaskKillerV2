@@ -3,40 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:background="@color/dark_gray">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
         <LinearLayout
             android:id="@+id/killAlarmBtn"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="50dp"
-            android:orientation="horizontal"
             android:layout_weight="1"
+            android:orientation="horizontal"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/killAlarmBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:lines="1"
-                android:gravity="center"
                 android:text="Turn Off Alarm"
-                android:paddingLeft="8dp"
+                android:gravity="center"
                 android:textColor="@color/gray"/>
+            <!--android:paddingLeft="8dp"-->
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/resetAlarmBtn"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
@@ -46,20 +47,19 @@
 
             <TextView
                 android:id="@+id/resetAlarmBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:lines="1"
-                android:gravity="center"
                 android:text="Change Due Date"
-                android:paddingLeft="8dp"
+                android:gravity="center"
                 android:textColor="@color/gray"/>
+            <!--android:paddingLeft="8dp"-->
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/repeatBtn"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
@@ -69,14 +69,13 @@
 
             <TextView
                 android:id="@+id/repeatAlarmBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:lines="1"
-                android:gravity="center"
                 android:text="Set Repeat"
-                android:paddingLeft="8dp"
+                android:gravity="center"
                 android:textColor="@color/gray"/>
+            <!--android:paddingLeft="8dp"-->
 
         </LinearLayout>
 
