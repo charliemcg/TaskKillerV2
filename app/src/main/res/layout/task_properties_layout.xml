@@ -15,105 +15,107 @@
 
         <LinearLayout
             android:id="@+id/alarm"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:orientation="horizontal"
             android:layout_weight="1"
+            android:orientation="horizontal"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/alarmBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="85dp"
+                android:layout_height="match_parent"
                 android:lines="1"
-                android:gravity="center"
-                android:text="Set Due Date"
+                android:text="Set Due"
                 android:paddingLeft="8dp"
+                android:gravity="center"
                 android:textColor="@color/gray"/>
+                <!--android:layout_weight="1"-->
 
             <ImageView
                 android:id="@+id/alarmBtnIcon"
-                android:layout_width="50dp"
-                android:layout_height="fill_parent"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/due" />
 
             <ImageView
                 android:id="@+id/alarmBtnIconWhite"
-                android:layout_width="50dp"
-                android:layout_height="fill_parent"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/due_white" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/subTasks"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:orientation="horizontal"
             android:layout_weight="1"
+            android:orientation="horizontal"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:background="@drawable/layout_border">
+            <!--android:layout_weight="1"-->
 
             <TextView
                 android:id="@+id/subtasksBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="85dp"
+                android:layout_height="match_parent"
                 android:lines="1"
-                android:gravity="center"
                 android:text="Sub-Tasks"
                 android:paddingLeft="8dp"
+                android:gravity="center"
                 android:textColor="@color/gray"/>
+            <!--android:layout_weight="1"-->
 
             <ImageView
                 android:id="@+id/subTasksBtnIcon"
-                android:layout_width="50dp"
-                android:layout_height="fill_parent"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/checklist" />
 
             <ImageView
                 android:id="@+id/subTasksBtnIconWhite"
-                android:layout_width="50dp"
-                android:layout_height="fill_parent"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/checklist_white" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/note"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:orientation="horizontal"
             android:layout_weight="1"
+            android:orientation="horizontal"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:background="@drawable/layout_border">
+            <!--android:layout_weight="1"-->
 
             <TextView
                 android:id="@+id/noteBtnText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_width="85dp"
+                android:layout_height="match_parent"
                 android:lines="1"
-                android:gravity="center"
                 android:text="Add Note"
                 android:paddingLeft="8dp"
+                android:gravity="center"
                 android:textColor="@color/gray"/>
+            <!--android:layout_weight="1"-->
 
             <ImageView
                 android:id="@+id/noteBtnIcon"
-                android:layout_width="50dp"
-                android:layout_height="fill_parent"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/note" />
 
             <ImageView
                 android:id="@+id/noteBtnIconWhite"
-                android:layout_width="50dp"
-                android:layout_height="fill_parent"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/note_white" />
 
         </LinearLayout>

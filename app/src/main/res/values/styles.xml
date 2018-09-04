@@ -8,8 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-        <style name="HeaderBar">
-            <item name="android:background">#333333</item>
-        </style>
+    <style name="HeaderBar">
+        <item name="android:background">#333333</item>
+    </style>
+
+    <style name="ThemeOverlay.MyTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/mid_gray</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
 </resources>

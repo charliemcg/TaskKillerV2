@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
-    android:background="@color/dark_gray"
-    android:descendantFocusability="beforeDescendants">
+    android:descendantFocusability="beforeDescendants"
+    android:background="@color/dark_gray">
 
     <TableRow
         android:id="@+id/adRow"
@@ -29,33 +29,36 @@
 
     <TableRow
         android:layout_height="100dp"
+        android:layout_width="match_parent"
         android:id="@+id/taskName">
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:descendantFocusability="blocksDescendants">
             <TextView
-                android:layout_height="80dp"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
+                android:layout_height="60dp"
+                android:layout_width="0dp"
+                android:layout_weight="8"
                 android:id="@+id/textView"
-                android:padding="15dp"
+                android:padding="5dp"
                 android:textSize="20sp"
-                android:background="@color/dark_gray"
                 android:textColor="@color/gray"
                 android:text="zero"/>
+            <!--android:background="@color/dark_gray"-->
 
             <ImageView
                 android:id="@+id/complete"
-                android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_margin="8dp"
                 android:src="@drawable/tick"
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="complete"
                 android:soundEffectsEnabled="false"/>
+            <!--android:layout_width="50dp"-->
 
             <ImageView
                 android:id="@+id/completed"
@@ -99,11 +102,11 @@
             android:id="@+id/statusLayout"
             android:orientation="horizontal"
             android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:background="@color/dark_gray">
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="80dp"
+                android:layout_height="35dp"
                 android:id="@+id/dueTextView"
                 android:layout_weight="15"
                 android:textAlignment="center"

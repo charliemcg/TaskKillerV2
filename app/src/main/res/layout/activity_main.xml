@@ -15,7 +15,8 @@
         style="@style/HeaderBar"
         app:subtitle="No Excuses"
         app:subtitleTextColor="@color/gray"
-        android:elevation="4dp"/>
+        android:elevation="4dp"
+        app:popupTheme="@style/ThemeOverlay.MyTheme"/>
 
     <!--<Button-->
         <!--android:id="@+id/showDb"-->

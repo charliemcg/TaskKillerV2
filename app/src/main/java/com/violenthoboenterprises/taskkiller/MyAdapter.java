@@ -87,6 +87,7 @@ class MyAdapter extends ArrayAdapter<String> {
         ImageView completedWhite = taskView.findViewById(R.id.completedWhite);
         //Gives user ability to set alarm on click
         final LinearLayout alarm = taskView.findViewById(R.id.alarm);
+//        final RelativeLayout alarm = taskView.findViewById(R.id.alarm);
         //Icon needs to changed based on light/dark mode
         ImageView alarmBtnIcon = taskView.findViewById(R.id.alarmBtnIcon);
         ImageView alarmBtnIconWhite = taskView.findViewById(R.id.alarmBtnIconWhite);
@@ -114,8 +115,10 @@ class MyAdapter extends ArrayAdapter<String> {
         final TextView taskIgnoreBtnText = taskView.findViewById(R.id.taskIgnoreBtnText);
         //Takes user to sub task activity
         final LinearLayout subTasks = taskView.findViewById(R.id.subTasks);
+//        final RelativeLayout subTasks = taskView.findViewById(R.id.subTasks);
         //Takes user to note activity
         final LinearLayout note = taskView.findViewById(R.id.note);
+//        final RelativeLayout note = taskView.findViewById(R.id.note);
         //For setting the due date
         final Button dateButton = taskView.findViewById(R.id.date);
         //Sets task to repeat daily
