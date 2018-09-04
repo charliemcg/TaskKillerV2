@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -65,6 +66,8 @@ public class Note extends MainActivity {
         noteToolbar.setTitle(dbTask);
 
         mute = mSharedPreferences.getBoolean("muteKey", false);
+
+        noteTextView.setMovementMethod(new ScrollingMovementMethod());
 
         //getting app-wide data
         Cursor dbResult = MainActivity.noteDb.getUniversalData();

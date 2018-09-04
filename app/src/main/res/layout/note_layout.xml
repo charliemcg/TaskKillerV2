@@ -17,10 +17,11 @@
     <TextView
         android:id="@+id/noteTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="410dp"
         android:layout_below="@+id/noteToolbar"
         android:textColor="@color/gray"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:scrollbars="vertical"/>
 
     <Button
         android:id="@+id/editBtn"
@@ -73,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:maxLines="3"
-            android:maxLength="600"
+            android:maxLength="2000"
             android:imeOptions="actionDone"
             android:inputType="textCapSentences|textMultiLine"
             android:layout_alignParentBottom="true"
