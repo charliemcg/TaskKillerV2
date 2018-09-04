@@ -170,6 +170,24 @@
                     android:background="@color/darkPink"
                     android:onClick="setHighlightDarkPink"/>
 
+                <Button
+                    android:id="@+id/lightGreen"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightGreen"
+                    android:onClick="setHighlightLightGreen"/>
+
+                <Button
+                    android:id="@+id/darkGreen"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/darkGreen"
+                    android:onClick="setHighlightDarkGreen"/>
+
             </TableRow>
 
         </TableLayout>

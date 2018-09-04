@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+    <!--https://www.rapidtables.com/web/color/RGB_Color.html-->
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
@@ -8,18 +9,18 @@
     <color name="dark_gray">#333333</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="lightRed">#FF0000</color>
+    <color name="lightRed">#FF6347</color>
     <color name="darkRed">#FF0000</color>
     <color name="lightGreen">#00FF00</color>
-    <color name="darkGreen">#00FF00</color>
+    <color name="darkGreen">#228B22</color>
     <color name="lightYellow">#FFFF00</color>
-    <color name="darkYellow">#FFFF00</color>
-    <color name="lightBlue">#0000FF</color>
-    <color name="darkBlue">#0000FF</color>
+    <color name="darkYellow">#FFD700</color>
+    <color name="lightBlue">#00FFFF</color>
+    <color name="darkBlue">#4169E1</color>
     <color name="lightOrange">#FFA500</color>
-    <color name="darkOrange">#FFA500</color>
-    <color name="lightPurple">#800080</color>
-    <color name="darkPurple">#800080</color>
-    <color name="lightPink">#FFC0CB</color>
-    <color name="darkPink">#FFC0CB</color>
+    <color name="darkOrange">#FF8C00</color>
+    <color name="lightPurple">#9370DB</color>
+    <color name="darkPurple">#8A2BE2</color>
+    <color name="lightPink">#FF69B4</color>
+    <color name="darkPink">#FF1493</color>
 </resources>

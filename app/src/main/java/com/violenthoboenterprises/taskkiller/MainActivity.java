@@ -1504,19 +1504,41 @@ public class MainActivity extends AppCompatActivity {
     //TODO make sure these colors are all correct
     public void setHighlightWhite(View view) {
         noteDb.updateHighlight("#FFFFFFFF");
+        highlight = "#FFFFFFFF";
         colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFFFF"));
         addIcon.setTextColor(Color.parseColor("#FFFFFFFF"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightBlack(View view) {
         noteDb.updateHighlight("#FF000000");
+        highlight = "FF000000";
         colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FF000000"));
         addIcon.setTextColor(Color.parseColor("#FF000000"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FF000000"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -1526,105 +1548,276 @@ public class MainActivity extends AppCompatActivity {
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFF00"));
         addIcon.setTextColor(Color.parseColor("#FFFFFF00"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFF00"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightDarkYellow(View view) {
-        noteDb.updateHighlight("#FFFFFF00");
+        noteDb.updateHighlight("#FFFFD700");
+        highlight = "#FFFFD700";
         colorPicker.setVisibility(View.GONE);
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFF00"));
-        addIcon.setTextColor(Color.parseColor("#FFFFFF00"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFF00"));
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFD700"));
+        addIcon.setTextColor(Color.parseColor("#FFFFD700"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFD700"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightLightBlue(View view) {
-        noteDb.updateHighlight("#FF0000FF");
+        noteDb.updateHighlight("#FF00FFFF");
+        highlight = "#FF00FFFF";
         colorPicker.setVisibility(View.GONE);
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF0000FF"));
-        addIcon.setTextColor(Color.parseColor("#FF0000FF"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF0000FF"));
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF00FFFF"));
+        addIcon.setTextColor(Color.parseColor("#FF00FFFF"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF00FFFF"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightDarkBlue(View view) {
-        noteDb.updateHighlight("#FF0000FF");
+        noteDb.updateHighlight("#FF4169E1");
+        highlight = "#FF4169E1";
         colorPicker.setVisibility(View.GONE);
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF0000FF"));
-        addIcon.setTextColor(Color.parseColor("#FF0000FF"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF0000FF"));
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF4169E1"));
+        addIcon.setTextColor(Color.parseColor("#FF4169E1"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF4169E1"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightLightOrange(View view) {
         noteDb.updateHighlight("#FFFFA500");
+        highlight = "#FFFFA500";
         colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFA500"));
         addIcon.setTextColor(Color.parseColor("#FFFFA500"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFA500"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightDarkOrange(View view) {
-        noteDb.updateHighlight("#FFFFA500");
+        noteDb.updateHighlight("#FFFF8C00");
+        highlight = "#FFFF8C00";
         colorPicker.setVisibility(View.GONE);
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFA500"));
-        addIcon.setTextColor(Color.parseColor("#FFFFA500"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFA500"));
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF8C00"));
+        addIcon.setTextColor(Color.parseColor("#FFFF8C00"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF8C00"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightLightPurple(View view) {
-        noteDb.updateHighlight("#FF800080");
+        noteDb.updateHighlight("#FF9370DB");
+        highlight = "#FF9370DB";
         colorPicker.setVisibility(View.GONE);
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF800080"));
-        addIcon.setTextColor(Color.parseColor("#FF800080"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF800080"));
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF9370DB"));
+        addIcon.setTextColor(Color.parseColor("#FF9370DB"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF9370DB"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightDarkPurple(View view) {
-        noteDb.updateHighlight("#FF800080");
+        noteDb.updateHighlight("#FF8A2BE2");
+        highlight = "#FF8A2BE2";
         colorPicker.setVisibility(View.GONE);
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF800080"));
-        addIcon.setTextColor(Color.parseColor("#FF800080"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF800080"));
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF8A2BE2"));
+        addIcon.setTextColor(Color.parseColor("#FF8A2BE2"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF8A2BE2"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightDarkRed(View view) {
         noteDb.updateHighlight("#FFFF0000");
+        highlight = "#FFFF0000";
         colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF0000"));
         addIcon.setTextColor(Color.parseColor("#FFFF0000"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF0000"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightLightRed(View view) {
-        noteDb.updateHighlight("#FFFF0000");
+        noteDb.updateHighlight("#FFFF6347");
+        highlight = "#FFFF6347";
         colorPicker.setVisibility(View.GONE);
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF0000"));
-        addIcon.setTextColor(Color.parseColor("#FFFF0000"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF0000"));
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF6347"));
+        addIcon.setTextColor(Color.parseColor("#FFFF6347"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF6347"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightLightPink(View view) {
-        noteDb.updateHighlight("#FFFFC0CB");
+        noteDb.updateHighlight("#FFFF69B4");
+        highlight = "#FFFF69B4";
         colorPicker.setVisibility(View.GONE);
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFC0CB"));
-        addIcon.setTextColor(Color.parseColor("#FFFFC0CB"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFC0CB"));
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF69B4"));
+        addIcon.setTextColor(Color.parseColor("#FFFF69B4"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF69B4"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightDarkPink(View view) {
-        noteDb.updateHighlight("#FFFFC0CB");
+        noteDb.updateHighlight("#FFFF1493");
+        highlight = "#FFFF1493";
         colorPicker.setVisibility(View.GONE);
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFC0CB"));
-        addIcon.setTextColor(Color.parseColor("#FFFFC0CB"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFC0CB"));
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF1493"));
+        addIcon.setTextColor(Color.parseColor("#FFFF1493"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF1493"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightLightGreen(View view) {
+        noteDb.updateHighlight("#FF00FF00");
+        highlight = "#FF00FF00";
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF00FF00"));
+        addIcon.setTextColor(Color.parseColor("#FF00FF00"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF00FF00"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightDarkGreen(View view) {
+        noteDb.updateHighlight("#FF228B22");
+        highlight = "#FF228B22";
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF228B22"));
+        addIcon.setTextColor(Color.parseColor("#FF228B22"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF228B22"));
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
 }
