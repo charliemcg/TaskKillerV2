@@ -220,6 +220,23 @@ public class MainActivity extends AppCompatActivity {
 
     LinearLayout colorPicker;
 
+    Button white;
+    Button black;
+    Button lightYellow;
+    Button darkYellow;
+    Button lightBlue;
+    Button darkBlue;
+    Button lightOrange;
+    Button darkOrange;
+    Button lightPurple;
+    Button darkPurple;
+    Button lightRed;
+    Button darkRed;
+    Button lightPink;
+    Button darkPink;
+    Button lightGreen;
+    Button darkGreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO figure out what to do about older versions
@@ -280,6 +297,22 @@ public class MainActivity extends AppCompatActivity {
         punch = MediaPlayer.create(this, R.raw.punch);
         mute = false;
         colorPicker = findViewById(R.id.colorPicker);
+        white = findViewById(R.id.white);
+        black = findViewById(R.id.black);
+        lightYellow = findViewById(R.id.lightYellow);
+        darkYellow = findViewById(R.id.darkYellow);
+        lightBlue = findViewById(R.id.lightBlue);
+        darkBlue = findViewById(R.id.darkBlue);
+        lightOrange = findViewById(R.id.lightOrange);
+        darkOrange = findViewById(R.id.darkOrange);
+        lightPurple = findViewById(R.id.lightPurple);
+        darkPurple = findViewById(R.id.darkPurple);
+        lightRed = findViewById(R.id.lightRed);
+        darkRed = findViewById(R.id.darkRed);
+        lightPink = findViewById(R.id.lightPink);
+        darkPink = findViewById(R.id.darkPink);
+        darkGreen = findViewById(R.id.darkGreen);
+        lightGreen = findViewById(R.id.lightGreen);
 //        blah = mTopToolbar.getMenu().getItem(R.id.mute);
 //        blah = mTopToolbar.getMenu().getItem(0);
 //        muteBtn = mTopToolbar.getMenu().findItem(R.id.mute);
@@ -308,11 +341,35 @@ public class MainActivity extends AppCompatActivity {
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
+            black.setVisibility(View.GONE);
+            darkYellow.setVisibility(View.GONE);
+            darkBlue.setVisibility(View.GONE);
+            darkOrange.setVisibility(View.GONE);
+            darkPurple.setVisibility(View.GONE);
+            darkRed.setVisibility(View.GONE);
+            darkPink.setVisibility(View.GONE);
+            darkGreen.setVisibility(View.GONE);
+            if(highlight.equals("#FF000000")){
+                highlight = "#FFFFFFFF";
+            }
+            noteDb.updateHighlight(highlight);
             theListView.setAdapter(theAdapter[0]);
         }else{
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
+            white.setVisibility(View.GONE);
+            lightYellow.setVisibility(View.GONE);
+            lightBlue.setVisibility(View.GONE);
+            lightOrange.setVisibility(View.GONE);
+            lightPurple.setVisibility(View.GONE);
+            lightRed.setVisibility(View.GONE);
+            lightPurple.setVisibility(View.GONE);
+            lightGreen.setVisibility(View.GONE);
+            if(highlight.equals("#FFFFFFFF")){
+                highlight = "#FF000000";
+            }
+            noteDb.updateHighlight(highlight);
             theListView.setAdapter(theAdapter[0]);
         }
 
@@ -709,6 +766,53 @@ public class MainActivity extends AppCompatActivity {
                 theListView.setBackgroundColor(Color.parseColor("#333333"));
                 mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
                 mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
+                black.setVisibility(View.GONE);
+                darkYellow.setVisibility(View.GONE);
+                darkBlue.setVisibility(View.GONE);
+                darkOrange.setVisibility(View.GONE);
+                darkPurple.setVisibility(View.GONE);
+                darkRed.setVisibility(View.GONE);
+                darkPink.setVisibility(View.GONE);
+                darkGreen.setVisibility(View.GONE);
+                white.setVisibility(View.VISIBLE);
+                lightYellow.setVisibility(View.VISIBLE);
+                lightBlue.setVisibility(View.VISIBLE);
+                lightOrange.setVisibility(View.VISIBLE);
+                lightPurple.setVisibility(View.VISIBLE);
+                lightRed.setVisibility(View.VISIBLE);
+                lightPurple.setVisibility(View.VISIBLE);
+                lightGreen.setVisibility(View.VISIBLE);
+                if(highlight.equals("#FF000000")){
+                    highlight = "#FFFFFFFF";
+                }else if(highlight.equals("#FFFF0000")){
+                    highlight = "#FFFF6347";
+                }else if(highlight.equals("#FF228B22")){
+                    highlight = "#FF00FF00";
+                }else if(highlight.equals("#FFFFD700")){
+                    highlight = "#FFFFFF00";
+                }else if(highlight.equals("#FF4169E1")){
+                    highlight = "#FF00FFFF";
+                }else if(highlight.equals("#FFFF8C00")){
+                    highlight = "#FFFFA500";
+                }else if(highlight.equals("#FF8A2BE2")){
+                    highlight = "#FF9370DB";
+                }else if(highlight.equals("#FFFF69B4")){
+                    highlight = "#FFFF1493";
+                }
+                mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
+                addIcon.setTextColor(Color.parseColor(highlight));
+                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+                String digits = "0123456789ABCDEF";
+                int val = 0;
+                for (int i = 1; i < highlight.length(); i++) {
+                    char c = highlight.charAt(i);
+                    int d = digits.indexOf(c);
+                    val = 16 * val + d;
+                }
+                int[] colors = {0, val, 0};
+                theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+                theListView.setDividerHeight(1);
+                noteDb.updateHighlight(highlight);
                 if(mute) {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
                 }else{
@@ -724,6 +828,53 @@ public class MainActivity extends AppCompatActivity {
                 theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
+                white.setVisibility(View.GONE);
+                lightYellow.setVisibility(View.GONE);
+                lightBlue.setVisibility(View.GONE);
+                lightOrange.setVisibility(View.GONE);
+                lightPurple.setVisibility(View.GONE);
+                lightRed.setVisibility(View.GONE);
+                lightPurple.setVisibility(View.GONE);
+                lightGreen.setVisibility(View.GONE);
+                black.setVisibility(View.VISIBLE);
+                darkYellow.setVisibility(View.VISIBLE);
+                darkBlue.setVisibility(View.VISIBLE);
+                darkOrange.setVisibility(View.VISIBLE);
+                darkPurple.setVisibility(View.VISIBLE);
+                darkRed.setVisibility(View.VISIBLE);
+                darkPurple.setVisibility(View.VISIBLE);
+                darkGreen.setVisibility(View.VISIBLE);
+                if(highlight.equals("#FFFFFFFF")){
+                    highlight = "#FF000000";
+                }else if(highlight.equals("#FFFF6347")){
+                    highlight = "#FFFF0000";
+                }else if(highlight.equals("#FF00FF00")){
+                    highlight = "#FF228B22";
+                }else if(highlight.equals("#FFFFFF00")){
+                    highlight = "#FFFFD700";
+                }else if(highlight.equals("#FF00FFFF")){
+                    highlight = "#FF4169E1";
+                }else if(highlight.equals("#FFFFA500")){
+                    highlight = "#FFFF8C00";
+                }else if(highlight.equals("#FF9370DB")){
+                    highlight = "#FF8A2BE2";
+                }else if(highlight.equals("#FFFF1493")){
+                    highlight = "#FFFF69B4";
+                }
+                mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
+                addIcon.setTextColor(Color.parseColor(highlight));
+                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+                String digits = "0123456789ABCDEF";
+                int val = 0;
+                for (int i = 1; i < highlight.length(); i++) {
+                    char c = highlight.charAt(i);
+                    int d = digits.indexOf(c);
+                    val = 16 * val + d;
+                }
+                int[] colors = {0, val, 0};
+                theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+                theListView.setDividerHeight(1);
+                noteDb.updateHighlight(highlight);
                 if(mute) {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
                 }else{
@@ -1407,18 +1558,54 @@ public class MainActivity extends AppCompatActivity {
 
         muteSounds(mute);
 
+//        if(!lightDark){
+//            theListView.setBackgroundColor(Color.parseColor("#333333"));
+//            mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
+//            mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
+//            theListView.setAdapter(theAdapter[0]);
+////            noteDb.updateDarkLight(false);
+//        }else{
+//            theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
+//            theListView.setAdapter(theAdapter[0]);
+////            noteDb.updateDarkLight(true);
+//        }
+
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
             mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
+            black.setVisibility(View.GONE);
+            darkYellow.setVisibility(View.GONE);
+            darkBlue.setVisibility(View.GONE);
+            darkOrange.setVisibility(View.GONE);
+            darkPurple.setVisibility(View.GONE);
+            darkRed.setVisibility(View.GONE);
+            darkPink.setVisibility(View.GONE);
+            darkGreen.setVisibility(View.GONE);
+            if(highlight.equals("#FF000000")){
+                highlight = "#FFFFFFFF";
+            }
+            noteDb.updateHighlight(highlight);
             theListView.setAdapter(theAdapter[0]);
-//            noteDb.updateDarkLight(false);
         }else{
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
+            white.setVisibility(View.GONE);
+            lightYellow.setVisibility(View.GONE);
+            lightBlue.setVisibility(View.GONE);
+            lightOrange.setVisibility(View.GONE);
+            lightPurple.setVisibility(View.GONE);
+            lightRed.setVisibility(View.GONE);
+            lightPurple.setVisibility(View.GONE);
+            lightGreen.setVisibility(View.GONE);
+            if(highlight.equals("#FFFFFFFF")){
+                highlight = "#FF000000";
+            }
+            noteDb.updateHighlight(highlight);
             theListView.setAdapter(theAdapter[0]);
-//            noteDb.updateDarkLight(true);
         }
 
         for( int i = 0 ; i < taskListSize ; i++ ) {
