@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
-        app:subtitle="Note"
-        app:subtitleTextColor="@color/gray"
+        app:title="Note"
         android:elevation="4dp"/>
 
     <TextView
@@ -52,42 +51,47 @@
         android:id="@+id/removeBtn"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:text="Remove Note"
+        android:text="Remove"
         android:background="@drawable/red_layout_border"
         android:textColor="@color/red"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="100dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="16dp"
         android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp"
         android:layout_alignParentBottom="true">
+        <!--android:layout_height="150dp"-->
 
         <EditText
             android:id="@+id/noteEditText"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:maxLines="10"
-            android:maxLength="500"
+            android:layout_weight="4"
+            android:maxLines="3"
+            android:maxLength="600"
             android:imeOptions="actionDone"
             android:inputType="textCapSentences|textMultiLine"
             android:layout_alignParentBottom="true"
             android:hint="Add your note here..."/>
+        <!--android:layout_width="300dp"-->
 
         <Button
             android:id="@+id/submitNoteBtn"
-            android:layout_width="60dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="40dp"
             android:layout_marginLeft="17dp"
             android:layout_marginBottom="17dp"
             android:text="Submit"
             android:background="@drawable/layout_border"
             android:textColor="@color/gray"/>
+        <!--android:layout_width="60dp"-->
     </LinearLayout>
 
 </RelativeLayout>

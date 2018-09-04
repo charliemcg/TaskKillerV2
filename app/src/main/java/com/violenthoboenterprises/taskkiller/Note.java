@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -52,7 +53,21 @@ public class Note extends MainActivity {
         inNote = true;
         noteRoot = findViewById(R.id.noteRoot);
 
-        noteToolbar.setSubtitleTextColor(Color.parseColor(highlight));
+        noteToolbar.setTitleTextColor(Color.parseColor(highlight));
+
+//        //getting task data
+//        String dbTask = "";
+//        Cursor dbTaskResult = MainActivity.noteDb.getData(Integer.parseInt(
+//                MainActivity.sortedIDs.get(MainActivity.activeTask)));
+//        while (dbTaskResult.moveToNext()) {
+//            dbTask = dbTaskResult.getString(4);
+//        }
+
+        Log.i(TAG, "Sorted Ids " + sortedIDs);
+        Log.i(TAG, "Tasklist " + taskList);
+        Log.i(TAG, "Active task " + activeTask);
+
+        noteToolbar.setTitle("Blah");
 
         mute = mSharedPreferences.getBoolean("muteKey", false);
 
@@ -149,27 +164,31 @@ public class Note extends MainActivity {
 
 //                MainActivity.vibrate.vibrate(50);
 
+                //hide edit button
+                editBtn.setVisibility(View.GONE);
+
+                //hide remove button
+                removeBtn.setVisibility(View.GONE);
+
                 //show edit text
                 noteEditText.setVisibility(View.VISIBLE);
 
                 //show submit button
                 submitNoteBtn.setVisibility(View.VISIBLE);
 
-                //set text to existing note
-                noteEditText.setText(theNote);
-
-                //put cursor at end of text
+                //Focus on edit text so that keyboard does not cover it up
                 noteEditText.requestFocus();
-                noteEditText.setSelection(noteEditText.getText().length());
 
                 //show keyboard
                 keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-                //hide edit button
-                editBtn.setVisibility(View.GONE);
+                //set text to existing note
+                noteEditText.setText(theNote);
 
-                //hide remove button
-                removeBtn.setVisibility(View.GONE);
+                //put cursor at end of text
+                noteEditText.setSelection(noteEditText.getText().length());
+
+                noteTextView.setText("");
 
             }
         });
