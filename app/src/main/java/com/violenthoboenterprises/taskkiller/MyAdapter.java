@@ -838,9 +838,9 @@ class MyAdapter extends ArrayAdapter<String> {
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     overdueClear.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.red));
+                            .getColor(getContext(), R.color.lightRed));
                     overdueClearWhite.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.red));
+                            .getColor(getContext(), R.color.lightRed));
                     markAsOverdue = true;
                     //Overdue
                 } else if (currentYear == Integer.valueOf(year)
@@ -851,9 +851,9 @@ class MyAdapter extends ArrayAdapter<String> {
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     overdueClear.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.red));
+                            .getColor(getContext(), R.color.lightRed));
                     overdueClearWhite.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.red));
+                            .getColor(getContext(), R.color.lightRed));
                     markAsOverdue = true;
                     //Overdue
                 } else if (currentYear == Integer.valueOf(year)
@@ -865,9 +865,9 @@ class MyAdapter extends ArrayAdapter<String> {
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
                     overdueClear.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.red));
+                            .getColor(getContext(), R.color.lightRed));
                     overdueClearWhite.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.red));
+                            .getColor(getContext(), R.color.lightRed));
                     markAsOverdue = true;
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth == Integer.valueOf(month)
@@ -888,9 +888,9 @@ class MyAdapter extends ArrayAdapter<String> {
                         overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
                         overdueClear.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.red));
+                                .getColor(getContext(), R.color.lightRed));
                         overdueClearWhite.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.red));
+                                .getColor(getContext(), R.color.lightRed));
                         markAsOverdue = true;
                         //Overdue
                     } else if (currentHour == adjustedHour
@@ -901,9 +901,9 @@ class MyAdapter extends ArrayAdapter<String> {
                         overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
                         overdueClear.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.red));
+                                .getColor(getContext(), R.color.lightRed));
                         overdueClearWhite.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.red));
+                                .getColor(getContext(), R.color.lightRed));
                         markAsOverdue = true;
                         //Not overdue
                     } else {

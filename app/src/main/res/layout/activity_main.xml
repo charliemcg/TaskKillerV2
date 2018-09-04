@@ -18,6 +18,163 @@
         android:elevation="4dp"
         app:popupTheme="@style/ThemeOverlay.MyTheme"/>
 
+    <LinearLayout
+        android:id="@+id/colorPicker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        android:elevation="4dp"
+        android:visibility="gone">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/white"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:onClick="setHighlightWhite"/>
+
+                <Button
+                    android:id="@+id/black"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/black"
+                    android:onClick="setHighlightBlack"/>
+
+                <Button
+                    android:id="@+id/lightYellow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightYellow"
+                    android:onClick="setHighlightLightYellow"/>
+
+                <Button
+                    android:id="@+id/darkYellow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/darkYellow"
+                    android:onClick="setHighlightDarkYellow"/>
+
+            </TableRow>
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/lightBlue"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightBlue"
+                    android:onClick="setHighlightLightBlue"/>
+
+                <Button
+                    android:id="@+id/darkBlue"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/darkBlue"
+                    android:onClick="setHighlightDarkBlue"/>
+
+                <Button
+                    android:id="@+id/lightOrange"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightOrange"
+                    android:onClick="setHighlightLightOrange"/>
+
+                <Button
+                    android:id="@+id/darkOrange"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/darkOrange"
+                    android:onClick="setHighlightDarkOrange"/>
+
+            </TableRow>
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/lightPurple"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightPurple"
+                    android:onClick="setHighlightLightPurple"/>
+
+                <Button
+                    android:id="@+id/darkPurple"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/darkPurple"
+                    android:onClick="setHighlightDarkPurple"/>
+
+                <Button
+                    android:id="@+id/lightRed"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightRed"
+                    android:onClick="setHighlightLightRed"/>
+
+                <Button
+                    android:id="@+id/darkRed"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/darkRed"
+                    android:onClick="setHighlightDarkRed"/>
+
+            </TableRow>
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/lightPink"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightPink"
+                    android:onClick="setHighlightLightPink"/>
+
+                <Button
+                    android:id="@+id/darkPink"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/darkPink"
+                    android:onClick="setHighlightDarkPink"/>
+
+            </TableRow>
+
+        </TableLayout>
+    </LinearLayout>
+
     <!--<Button-->
         <!--android:id="@+id/showDb"-->
         <!--android:layout_marginTop="50dp"-->
@@ -71,8 +228,7 @@
         android:layout_alignParentBottom="true"
         android:visibility="gone"
         android:hint="@string/taskTitle"
-        android:imeOptions="actionDone"
-        android:background="@color/green"/>
+        android:imeOptions="actionDone"/>
 
     <RelativeLayout
         android:layout_width="130dp"

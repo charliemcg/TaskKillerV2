@@ -3,10 +3,23 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="red">#FF0000</color>
-    <color name="green">#00FF00</color>
     <color name="gray">#AAAAAA</color>
     <color name="mid_gray">#444444</color>
     <color name="dark_gray">#333333</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="lightRed">#FF0000</color>
+    <color name="darkRed">#FF0000</color>
+    <color name="lightGreen">#00FF00</color>
+    <color name="darkGreen">#00FF00</color>
+    <color name="lightYellow">#FFFF00</color>
+    <color name="darkYellow">#FFFF00</color>
+    <color name="lightBlue">#0000FF</color>
+    <color name="darkBlue">#0000FF</color>
+    <color name="lightOrange">#FFA500</color>
+    <color name="darkOrange">#FFA500</color>
+    <color name="lightPurple">#800080</color>
+    <color name="darkPurple">#800080</color>
+    <color name="lightPink">#FFC0CB</color>
+    <color name="darkPink">#FFC0CB</color>
 </resources>

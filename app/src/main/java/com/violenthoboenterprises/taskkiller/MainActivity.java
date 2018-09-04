@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean mute;
     //Used to determine what colour scheme to use
     static boolean lightDark;
+    //used to indicate if color picker is showing
+    boolean colorPickerShowing;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -216,6 +218,8 @@ public class MainActivity extends AppCompatActivity {
     MenuItem customiseBtn;
     MenuItem proBtn;
 
+    LinearLayout colorPicker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO figure out what to do about older versions
@@ -275,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
 //        highlight = "#FFFF69B4";
         punch = MediaPlayer.create(this, R.raw.punch);
         mute = false;
+        colorPicker = findViewById(R.id.colorPicker);
 //        blah = mTopToolbar.getMenu().getItem(R.id.mute);
 //        blah = mTopToolbar.getMenu().getItem(0);
 //        muteBtn = mTopToolbar.getMenu().findItem(R.id.mute);
@@ -733,30 +738,32 @@ public class MainActivity extends AppCompatActivity {
             noTasksLeft();
             return true;
         }else if (id == R.id.highlight) {
-            //Change this to a color picker
-            String[] highlightColor = new String[] {"#FFFF69B4", "#FFFFFF00", "#FFFF0000", "#FF00FF00", "#FF0000FF", "#FFFF00FF"};
-            int i = random.nextInt(6);
-            while (highlightColor[i].equals(highlight)) {
-                i = random.nextInt(6);
-            }
-            highlight = highlightColor[i];
-            noteDb.updateHighlight(highlight);
-
-            mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
-            addIcon.setTextColor(Color.parseColor(highlight));
-            taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
-            //Set list view dividers
-            String digits = "0123456789ABCDEF";
-            int val = 0;
-            for (int j = 1; j < highlight.length(); j++) {
-                char c = highlight.charAt(j);
-                int d = digits.indexOf(c);
-                val = 16 * val + d;
-            }
-            int[] colors = {0, val, 0};
-            theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-            theListView.setDividerHeight(1);
-            theListView.setAdapter(theAdapter[0]);
+            colorPicker.setVisibility(View.VISIBLE);
+            colorPickerShowing = true;
+            //TODO Change this to a color picker
+//            String[] highlightColor = new String[] {"#FFFF69B4", "#FFFFFF00", "#FFFF0000", "#FF00FF00", "#FF0000FF", "#FFFF00FF"};
+//            int i = random.nextInt(6);
+//            while (highlightColor[i].equals(highlight)) {
+//                i = random.nextInt(6);
+//            }
+//            highlight = highlightColor[i];
+//            noteDb.updateHighlight(highlight);
+//
+//            mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
+//            addIcon.setTextColor(Color.parseColor(highlight));
+//            taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+//            //Set list view dividers
+//            String digits = "0123456789ABCDEF";
+//            int val = 0;
+//            for (int j = 1; j < highlight.length(); j++) {
+//                char c = highlight.charAt(j);
+//                int d = digits.indexOf(c);
+//                val = 16 * val + d;
+//            }
+//            int[] colors = {0, val, 0};
+//            theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+//            theListView.setDividerHeight(1);
+//            theListView.setAdapter(theAdapter[0]);
             return true;
         }else if (id == R.id.buy) {
             Toast.makeText(MainActivity.this, "Buy clicked", Toast.LENGTH_SHORT).show();
@@ -1437,7 +1444,10 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         //options to properties
-        if(taskOptionsShowing){
+        if(colorPickerShowing){
+            colorPicker.setVisibility(View.GONE);
+            colorPickerShowing = false;
+        }else if(taskOptionsShowing){
             theListView.setAdapter(theAdapter[0]);
             taskOptionsShowing = false;
         }else if(datePickerShowing) {
@@ -1491,4 +1501,130 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //TODO make sure these colors are all correct
+    public void setHighlightWhite(View view) {
+        noteDb.updateHighlight("#FFFFFFFF");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFFFF"));
+        addIcon.setTextColor(Color.parseColor("#FFFFFFFF"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightBlack(View view) {
+        noteDb.updateHighlight("#FF000000");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF000000"));
+        addIcon.setTextColor(Color.parseColor("#FF000000"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF000000"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightLightYellow(View view) {
+        noteDb.updateHighlight("#FFFFFF00");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFF00"));
+        addIcon.setTextColor(Color.parseColor("#FFFFFF00"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFF00"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightDarkYellow(View view) {
+        noteDb.updateHighlight("#FFFFFF00");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFF00"));
+        addIcon.setTextColor(Color.parseColor("#FFFFFF00"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFF00"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightLightBlue(View view) {
+        noteDb.updateHighlight("#FF0000FF");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF0000FF"));
+        addIcon.setTextColor(Color.parseColor("#FF0000FF"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF0000FF"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightDarkBlue(View view) {
+        noteDb.updateHighlight("#FF0000FF");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF0000FF"));
+        addIcon.setTextColor(Color.parseColor("#FF0000FF"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF0000FF"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightLightOrange(View view) {
+        noteDb.updateHighlight("#FFFFA500");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFA500"));
+        addIcon.setTextColor(Color.parseColor("#FFFFA500"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFA500"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightDarkOrange(View view) {
+        noteDb.updateHighlight("#FFFFA500");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFA500"));
+        addIcon.setTextColor(Color.parseColor("#FFFFA500"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFA500"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightLightPurple(View view) {
+        noteDb.updateHighlight("#FF800080");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF800080"));
+        addIcon.setTextColor(Color.parseColor("#FF800080"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF800080"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightDarkPurple(View view) {
+        noteDb.updateHighlight("#FF800080");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FF800080"));
+        addIcon.setTextColor(Color.parseColor("#FF800080"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FF800080"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightDarkRed(View view) {
+        noteDb.updateHighlight("#FFFF0000");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF0000"));
+        addIcon.setTextColor(Color.parseColor("#FFFF0000"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF0000"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightLightRed(View view) {
+        noteDb.updateHighlight("#FFFF0000");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF0000"));
+        addIcon.setTextColor(Color.parseColor("#FFFF0000"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF0000"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightLightPink(View view) {
+        noteDb.updateHighlight("#FFFFC0CB");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFC0CB"));
+        addIcon.setTextColor(Color.parseColor("#FFFFC0CB"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFC0CB"));
+        theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void setHighlightDarkPink(View view) {
+        noteDb.updateHighlight("#FFFFC0CB");
+        colorPicker.setVisibility(View.GONE);
+        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFC0CB"));
+        addIcon.setTextColor(Color.parseColor("#FFFFC0CB"));
+        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFC0CB"));
+        theListView.setAdapter(theAdapter[0]);
+    }
 }

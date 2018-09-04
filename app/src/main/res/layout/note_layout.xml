@@ -53,7 +53,7 @@
         android:layout_height="80dp"
         android:text="Remove"
         android:background="@drawable/red_layout_border"
-        android:textColor="@color/red"
+        android:textColor="@color/lightRed"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="100dp"
