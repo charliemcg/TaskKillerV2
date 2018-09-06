@@ -384,6 +384,9 @@ class MyAdapter extends ArrayAdapter<String> {
             alarmBtnIconWhite.setVisibility(View.VISIBLE);
             subTasksBtnIconWhite.setVisibility(View.VISIBLE);
             noteBtnIconWhite.setVisibility(View.VISIBLE);
+            alarm.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.layout_border_white));
+            subTasks.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.layout_border_white));
+            note.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.layout_border_white));
         }
 
 //        //Displaying ad if there are five or more tasks
@@ -768,6 +771,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
             }
+        }
+
+        if(MainActivity.colorPickerShowing || MainActivity.purchasesShowing){
+            complete.setClickable(false);
+            completed.setClickable(false);
+            completeWhite.setClickable(false);
+            completedWhite.setClickable(false);
         }
 
         if(dbSnooze){
