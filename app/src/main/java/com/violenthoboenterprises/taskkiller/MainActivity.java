@@ -3,39 +3,32 @@ package com.violenthoboenterprises.taskkiller;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Vibrator;
-import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ActionMenuView;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,12 +36,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -57,7 +48,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler {
 
     //Indicates if a tasks properties are showing
     static boolean taskPropertiesShowing;
@@ -107,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
     static boolean lightDark;
     //used to indicate if color picker is showing
     boolean colorPickerShowing;
+    //used to indicate if purchase options are showing
+    boolean purchasesShowing;
+    //used to indicate that user purchased ad removal
+    boolean adsRemoved;
+    //used to indicate that user purchased reminders
+    boolean remindersAvailable;
+    //used to indicate that user purchased color cycling
+    boolean cycleColors;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -237,6 +236,33 @@ public class MainActivity extends AppCompatActivity {
     Button lightGreen;
     Button darkGreen;
 
+    TextView colorPickerTitle;
+    TextView removeAdsTitle;
+    TextView removeAdsDescription;
+    TextView getRemindersTitle;
+    TextView getRemindersDescription;
+    TextView cycleColorsTitle;
+    TextView cycleColorsDescription;
+    TextView unlockAllTitle;
+    TextView unlockAllDescription;
+
+    BillingProcessor bp;
+
+    LinearLayout purchases;
+    LinearLayout removeAdsLayout;
+    LinearLayout getRemindersLayout;
+    LinearLayout cycleColorsLayout;
+    LinearLayout unlockAllLayout;
+
+    ImageView removeAdsImageWhite;
+    ImageView getRemindersImageWhite;
+    ImageView cycleColorsImageWhite;
+    ImageView unlockAllImageWhite;
+    ImageView removeAdsImage;
+    ImageView getRemindersImage;
+    ImageView cycleColorsImage;
+    ImageView unlockAllImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO figure out what to do about older versions
@@ -259,10 +285,6 @@ public class MainActivity extends AppCompatActivity {
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
         addIcon = findViewById(R.id.addIcon);
-//        showDb = findViewById(R.id.showDb);
-//        showAlarmDb = findViewById(R.id.showAlarmDb);
-//        showSnoozeDb = findViewById(R.id.showSnoozeDb);
-//        showUniversalDb = findViewById(R.id.showUniversalDb);
         theListView = findViewById(R.id.theListView);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         params = (RelativeLayout.LayoutParams) add.getLayoutParams();
@@ -293,7 +315,6 @@ public class MainActivity extends AppCompatActivity {
         sortedIDs = new ArrayList<>();
         reinstateAlarm = false;
         completeTask = false;
-//        highlight = "#FFFF69B4";
         punch = MediaPlayer.create(this, R.raw.punch);
         mute = false;
         colorPicker = findViewById(R.id.colorPicker);
@@ -313,10 +334,34 @@ public class MainActivity extends AppCompatActivity {
         darkPink = findViewById(R.id.darkPink);
         darkGreen = findViewById(R.id.darkGreen);
         lightGreen = findViewById(R.id.lightGreen);
-//        blah = mTopToolbar.getMenu().getItem(R.id.mute);
-//        blah = mTopToolbar.getMenu().getItem(0);
-//        muteBtn = mTopToolbar.getMenu().findItem(R.id.mute);
-//        lightDark = false;
+        colorPickerTitle = findViewById(R.id.colorPickerTitle);
+        removeAdsTitle = findViewById(R.id.removeAdsTitle);
+        removeAdsDescription = findViewById(R.id.removeAdsDescription);
+        getRemindersTitle = findViewById(R.id.getRemindersTitle);
+        getRemindersDescription = findViewById(R.id.getremindersDescription);
+        cycleColorsTitle = findViewById(R.id.cycleColorsTitle);
+        cycleColorsDescription = findViewById(R.id.cycleColorsDescription);
+        unlockAllTitle = findViewById(R.id.unlockAllTitle);
+        unlockAllDescription = findViewById(R.id.unlockAllDescription);
+        bp = new BillingProcessor(this, /*TODO"YOUR LICENSE KEY FROM GOOGLE PLAY CONSOLE HERE"*/null, this);
+        purchases = findViewById(R.id.purchases);
+//        removeAds = findViewById(R.id.removeAds);
+//        getReminders = findViewById(R.id.getReminders);
+        adsRemoved = false;
+        remindersAvailable = false;
+        cycleColors = false;
+        removeAdsLayout = findViewById(R.id.removeAds);
+        getRemindersLayout = findViewById(R.id.getReminders);
+        cycleColorsLayout = findViewById(R.id.cycleColors);
+        unlockAllLayout = findViewById(R.id.unlockAll);
+        removeAdsImage = findViewById(R.id.removeAdsImage);
+        removeAdsImageWhite = findViewById(R.id.removeAdsImageWhite);
+        getRemindersImage = findViewById(R.id.getRemindersImage);
+        getRemindersImageWhite = findViewById(R.id.getRemindersImageWhite);
+        cycleColorsImage = findViewById(R.id.cycleColorsImage);
+        cycleColorsImageWhite = findViewById(R.id.cycleColorsImageWhite);
+        unlockAllImage = findViewById(R.id.unlockAllImage);
+        unlockAllImageWhite = findViewById(R.id.unlockAllImageWhite);
 
         noteDb.insertUniversalData(mute);
 
@@ -325,6 +370,9 @@ public class MainActivity extends AppCompatActivity {
         while (dbResult.moveToNext()) {
             highlight = dbResult.getString(2);
             lightDark = dbResult.getInt(3) > 0;
+            adsRemoved = dbResult.getInt(5) > 0;
+            remindersAvailable = dbResult.getInt(6) > 0;
+            cycleColors = dbResult.getInt(7) > 0;
         }
 
         //Put data in list
@@ -353,6 +401,29 @@ public class MainActivity extends AppCompatActivity {
                 highlight = "#FFFFFFFF";
             }
             noteDb.updateHighlight(highlight);
+            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            colorPickerTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            removeAdsTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            removeAdsDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            getRemindersTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            getRemindersDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            cycleColorsTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            cycleColorsDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            unlockAllTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            unlockAllDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            removeAdsImage.setVisibility(View.GONE);
+            removeAdsImageWhite.setVisibility(View.VISIBLE);
+            getRemindersImage.setVisibility(View.GONE);
+            getRemindersImageWhite.setVisibility(View.VISIBLE);
+            cycleColorsImage.setVisibility(View.GONE);
+            cycleColorsImageWhite.setVisibility(View.VISIBLE);
+            unlockAllImage.setVisibility(View.GONE);
+            unlockAllImageWhite.setVisibility(View.VISIBLE);
             theListView.setAdapter(theAdapter[0]);
         }else{
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -365,11 +436,35 @@ public class MainActivity extends AppCompatActivity {
             lightPurple.setVisibility(View.GONE);
             lightRed.setVisibility(View.GONE);
             lightPurple.setVisibility(View.GONE);
+            lightPink.setVisibility(View.GONE);
             lightGreen.setVisibility(View.GONE);
             if(highlight.equals("#FFFFFFFF")){
                 highlight = "#FF000000";
             }
             noteDb.updateHighlight(highlight);
+            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
+            colorPickerTitle.setTextColor(Color.parseColor("#000000"));
+            removeAdsTitle.setTextColor(Color.parseColor("#000000"));
+            removeAdsDescription.setTextColor(Color.parseColor("#000000"));
+            getRemindersTitle.setTextColor(Color.parseColor("#000000"));
+            getRemindersDescription.setTextColor(Color.parseColor("#000000"));
+            cycleColorsTitle.setTextColor(Color.parseColor("#000000"));
+            cycleColorsDescription.setTextColor(Color.parseColor("#000000"));
+            unlockAllTitle.setTextColor(Color.parseColor("#000000"));
+            unlockAllDescription.setTextColor(Color.parseColor("#000000"));
+            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
+            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            removeAdsImage.setVisibility(View.VISIBLE);
+            removeAdsImageWhite.setVisibility(View.GONE);
+            getRemindersImage.setVisibility(View.VISIBLE);
+            getRemindersImageWhite.setVisibility(View.GONE);
+            cycleColorsImage.setVisibility(View.VISIBLE);
+            cycleColorsImageWhite.setVisibility(View.GONE);
+            unlockAllImage.setVisibility(View.VISIBLE);
+            unlockAllImageWhite.setVisibility(View.GONE);
             theListView.setAdapter(theAdapter[0]);
         }
 
@@ -780,7 +875,7 @@ public class MainActivity extends AppCompatActivity {
                 lightOrange.setVisibility(View.VISIBLE);
                 lightPurple.setVisibility(View.VISIBLE);
                 lightRed.setVisibility(View.VISIBLE);
-                lightPurple.setVisibility(View.VISIBLE);
+                lightPink.setVisibility(View.VISIBLE);
                 lightGreen.setVisibility(View.VISIBLE);
                 if(highlight.equals("#FF000000")){
                     highlight = "#FFFFFFFF";
@@ -821,6 +916,29 @@ public class MainActivity extends AppCompatActivity {
                 lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark));
                 customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise));
                 proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro));
+                colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+                colorPickerTitle.setTextColor(Color.parseColor("#AAAAAA"));
+                removeAdsTitle.setTextColor(Color.parseColor("#AAAAAA"));
+                removeAdsDescription.setTextColor(Color.parseColor("#AAAAAA"));
+                getRemindersTitle.setTextColor(Color.parseColor("#AAAAAA"));
+                getRemindersDescription.setTextColor(Color.parseColor("#AAAAAA"));
+                cycleColorsTitle.setTextColor(Color.parseColor("#AAAAAA"));
+                cycleColorsDescription.setTextColor(Color.parseColor("#AAAAAA"));
+                unlockAllTitle.setTextColor(Color.parseColor("#AAAAAA"));
+                unlockAllDescription.setTextColor(Color.parseColor("#AAAAAA"));
+                purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+                removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+                getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+                cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+                unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+                removeAdsImage.setVisibility(View.VISIBLE);
+                removeAdsImageWhite.setVisibility(View.GONE);
+                getRemindersImage.setVisibility(View.VISIBLE);
+                getRemindersImageWhite.setVisibility(View.GONE);
+                cycleColorsImage.setVisibility(View.VISIBLE);
+                cycleColorsImageWhite.setVisibility(View.GONE);
+                unlockAllImage.setVisibility(View.VISIBLE);
+                unlockAllImageWhite.setVisibility(View.GONE);
                 theListView.setAdapter(theAdapter[0]);
                 noteDb.updateDarkLight(false);
             }else{
@@ -834,7 +952,7 @@ public class MainActivity extends AppCompatActivity {
                 lightOrange.setVisibility(View.GONE);
                 lightPurple.setVisibility(View.GONE);
                 lightRed.setVisibility(View.GONE);
-                lightPurple.setVisibility(View.GONE);
+                lightPink.setVisibility(View.GONE);
                 lightGreen.setVisibility(View.GONE);
                 black.setVisibility(View.VISIBLE);
                 darkYellow.setVisibility(View.VISIBLE);
@@ -842,7 +960,7 @@ public class MainActivity extends AppCompatActivity {
                 darkOrange.setVisibility(View.VISIBLE);
                 darkPurple.setVisibility(View.VISIBLE);
                 darkRed.setVisibility(View.VISIBLE);
-                darkPurple.setVisibility(View.VISIBLE);
+                darkPink.setVisibility(View.VISIBLE);
                 darkGreen.setVisibility(View.VISIBLE);
                 if(highlight.equals("#FFFFFFFF")){
                     highlight = "#FF000000";
@@ -883,6 +1001,29 @@ public class MainActivity extends AppCompatActivity {
                 lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
                 customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
                 proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
+                colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
+                colorPickerTitle.setTextColor(Color.parseColor("#000000"));
+                removeAdsTitle.setTextColor(Color.parseColor("#000000"));
+                removeAdsDescription.setTextColor(Color.parseColor("#000000"));
+                getRemindersTitle.setTextColor(Color.parseColor("#000000"));
+                getRemindersDescription.setTextColor(Color.parseColor("#000000"));
+                cycleColorsTitle.setTextColor(Color.parseColor("#000000"));
+                cycleColorsDescription.setTextColor(Color.parseColor("#000000"));
+                unlockAllTitle.setTextColor(Color.parseColor("#000000"));
+                unlockAllDescription.setTextColor(Color.parseColor("#000000"));
+                purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
+                removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+                getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+                cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+                unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+                removeAdsImage.setVisibility(View.GONE);
+                removeAdsImageWhite.setVisibility(View.VISIBLE);
+                getRemindersImage.setVisibility(View.GONE);
+                getRemindersImageWhite.setVisibility(View.VISIBLE);
+                cycleColorsImage.setVisibility(View.GONE);
+                cycleColorsImageWhite.setVisibility(View.VISIBLE);
+                unlockAllImage.setVisibility(View.GONE);
+                unlockAllImageWhite.setVisibility(View.VISIBLE);
                 theListView.setAdapter(theAdapter[0]);
                 noteDb.updateDarkLight(true);
             }
@@ -891,33 +1032,10 @@ public class MainActivity extends AppCompatActivity {
         }else if (id == R.id.highlight) {
             colorPicker.setVisibility(View.VISIBLE);
             colorPickerShowing = true;
-            //TODO Change this to a color picker
-//            String[] highlightColor = new String[] {"#FFFF69B4", "#FFFFFF00", "#FFFF0000", "#FF00FF00", "#FF0000FF", "#FFFF00FF"};
-//            int i = random.nextInt(6);
-//            while (highlightColor[i].equals(highlight)) {
-//                i = random.nextInt(6);
-//            }
-//            highlight = highlightColor[i];
-//            noteDb.updateHighlight(highlight);
-//
-//            mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
-//            addIcon.setTextColor(Color.parseColor(highlight));
-//            taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
-//            //Set list view dividers
-//            String digits = "0123456789ABCDEF";
-//            int val = 0;
-//            for (int j = 1; j < highlight.length(); j++) {
-//                char c = highlight.charAt(j);
-//                int d = digits.indexOf(c);
-//                val = 16 * val + d;
-//            }
-//            int[] colors = {0, val, 0};
-//            theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-//            theListView.setDividerHeight(1);
-//            theListView.setAdapter(theAdapter[0]);
             return true;
         }else if (id == R.id.buy) {
-            Toast.makeText(MainActivity.this, "Buy clicked", Toast.LENGTH_SHORT).show();
+            purchases.setVisibility(View.VISIBLE);
+            purchasesShowing = true;
             return true;
         }
 
@@ -1349,6 +1467,7 @@ public class MainActivity extends AppCompatActivity {
                 noTasksToShowWhite.setVisibility(View.VISIBLE);
             }else{
                 noTasksToShowWhite.setVisibility(View.GONE);
+                noTasksToShow.setVisibility(View.VISIBLE);
             }
 
         }else{
@@ -1554,23 +1673,12 @@ public class MainActivity extends AppCompatActivity {
             mute = dbResult.getInt(1) > 0;
             highlight = dbResult.getString(2);
             lightDark = dbResult.getInt(3) > 0;
+            adsRemoved = dbResult.getInt(5) > 0;
+            remindersAvailable = dbResult.getInt(6) > 0;
+            cycleColors = dbResult.getInt(7) > 0;
         }
 
         muteSounds(mute);
-
-//        if(!lightDark){
-//            theListView.setBackgroundColor(Color.parseColor("#333333"));
-//            mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
-//            mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
-//            theListView.setAdapter(theAdapter[0]);
-////            noteDb.updateDarkLight(false);
-//        }else{
-//            theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//            mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//            mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
-//            theListView.setAdapter(theAdapter[0]);
-////            noteDb.updateDarkLight(true);
-//        }
 
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
@@ -1588,6 +1696,29 @@ public class MainActivity extends AppCompatActivity {
                 highlight = "#FFFFFFFF";
             }
             noteDb.updateHighlight(highlight);
+            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            colorPickerTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            removeAdsTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            removeAdsDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            getRemindersTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            getRemindersDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            cycleColorsTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            cycleColorsDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            unlockAllTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            unlockAllDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            removeAdsImage.setVisibility(View.VISIBLE);
+            removeAdsImageWhite.setVisibility(View.GONE);
+            getRemindersImage.setVisibility(View.VISIBLE);
+            getRemindersImageWhite.setVisibility(View.GONE);
+            cycleColorsImage.setVisibility(View.VISIBLE);
+            cycleColorsImageWhite.setVisibility(View.GONE);
+            unlockAllImage.setVisibility(View.VISIBLE);
+            unlockAllImageWhite.setVisibility(View.GONE);
             theListView.setAdapter(theAdapter[0]);
         }else{
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -1599,12 +1730,36 @@ public class MainActivity extends AppCompatActivity {
             lightOrange.setVisibility(View.GONE);
             lightPurple.setVisibility(View.GONE);
             lightRed.setVisibility(View.GONE);
+            lightPink.setVisibility(View.GONE);
             lightPurple.setVisibility(View.GONE);
             lightGreen.setVisibility(View.GONE);
             if(highlight.equals("#FFFFFFFF")){
                 highlight = "#FF000000";
             }
             noteDb.updateHighlight(highlight);
+            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
+            colorPickerTitle.setTextColor(Color.parseColor("#000000"));
+            removeAdsTitle.setTextColor(Color.parseColor("#000000"));
+            removeAdsDescription.setTextColor(Color.parseColor("#000000"));
+            getRemindersTitle.setTextColor(Color.parseColor("#000000"));
+            getRemindersDescription.setTextColor(Color.parseColor("#000000"));
+            cycleColorsTitle.setTextColor(Color.parseColor("#000000"));
+            cycleColorsDescription.setTextColor(Color.parseColor("#000000"));
+            unlockAllTitle.setTextColor(Color.parseColor("#000000"));
+            unlockAllDescription.setTextColor(Color.parseColor("#000000"));
+            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
+            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            removeAdsImage.setVisibility(View.GONE);
+            removeAdsImageWhite.setVisibility(View.VISIBLE);
+            getRemindersImage.setVisibility(View.GONE);
+            getRemindersImageWhite.setVisibility(View.VISIBLE);
+            cycleColorsImage.setVisibility(View.GONE);
+            cycleColorsImageWhite.setVisibility(View.VISIBLE);
+            unlockAllImage.setVisibility(View.GONE);
+            unlockAllImageWhite.setVisibility(View.VISIBLE);
             theListView.setAdapter(theAdapter[0]);
         }
 
@@ -1631,9 +1786,12 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         //options to properties
-        if(colorPickerShowing){
+        if(colorPickerShowing) {
             colorPicker.setVisibility(View.GONE);
             colorPickerShowing = false;
+        }else if (purchasesShowing){
+            purchases.setVisibility(View.GONE);
+            purchasesShowing = false;
         }else if(taskOptionsShowing){
             theListView.setAdapter(theAdapter[0]);
             taskOptionsShowing = false;
@@ -2007,4 +2165,89 @@ public class MainActivity extends AppCompatActivity {
         theListView.setDividerHeight(1);
         theListView.setAdapter(theAdapter[0]);
     }
+
+    @Override
+    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
+        Toast.makeText(this, "You purchased something", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, @Nullable Throwable error) {
+        Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null) {
+            bp.release();
+        }
+        super.onDestroy();
+    }
+
+    public void removeAds(View view) {
+        //TODO replace this test stuff with real stuff
+        bp.purchase(this, "android.test.purchased");
+//        purchases.setVisibility(View.GONE);
+        //TODO verify purchase before updating to true
+        noteDb.updateAdsRemoved(true);
+    }
+
+    public void getReminders(View view) {
+        //TODO replace this test stuff with real stuff
+        bp.purchase(this, "android.test.purchased");
+//        purchases.setVisibility(View.GONE);
+//        //TODO verify purchase before updating to true
+        noteDb.updateRemindersAvailable(true);
+    }
+
+    public void cycleColors(View view) {
+        //TODO replace this test stuff with real stuff
+        bp.purchase(this, "android.test.purchased");
+//        purchases.setVisibility(View.GONE);
+//        //TODO verify purchase before updating to true
+        noteDb.updateCycleColors(true);
+    }
+
+    public void unlockAll(View view) {
+        //TODO replace this test stuff with real stuff
+        bp.purchase(this, "android.test.purchased");
+//        purchases.setVisibility(View.GONE);
+//        //TODO verify purchase before updating to true
+        noteDb.updateAdsRemoved(true);
+        noteDb.updateRemindersAvailable(true);
+        noteDb.updateCycleColors(true);
+    }
+
+//TODO use the following where users make purchases
+    //bp.purchase(MainActivity.this, "android.test.purchased");
+    //TODO fill in information
+    //Without developer payload
+    //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE");
+    //With developer payload
+    //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE", "DEVELOPER PAYLOAD HERE");
+
+    //TODO find out if this is required
+//            Bundle extraParams = new Bundle()
+//            extraParams.putString("accountId", "MY_ACCOUNT_ID");
+//            bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE", null /*or developer payload*/, extraParams);
+//            bp.subscribe(YOUR_ACTIVITY, "YOUR SUBSCRIPTION ID FROM GOOGLE PLAY CONSOLE HERE", null /*or developer payload*/, extraParams);
+
 }

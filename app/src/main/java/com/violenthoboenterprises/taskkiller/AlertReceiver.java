@@ -47,6 +47,7 @@ public class AlertReceiver extends BroadcastReceiver {
         if(!MainActivity.lightDark) {
             mBuilder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.small_bell).setLargeIcon(BitmapFactory.decodeResource(context
+                            //TODO extract sring resource
                             .getResources(), R.drawable.bell))./*setContentTitle(msg)*/setContentTitle("Kill This Task!").setTicker(msgAlert)
                     .setContentText(msg/*Text*/);
         }else{

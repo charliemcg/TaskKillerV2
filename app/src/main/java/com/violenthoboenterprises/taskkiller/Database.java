@@ -59,6 +59,9 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL3 = "HIGHLIGHT";
     public static final String UCOL4 = "DARKLIGHT";
     public static final String UCOL5 = "ACTIVETASKNAME";
+    public static final String UCOL6 = "ADSREMOVED";
+    public static final String UCOL7 = "REMINDERSAVAILABLE";
+    public static final String UCOL8 = "CYCLECOLORS";
 
     String TAG = "Data";
 
@@ -72,12 +75,15 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("create table " + TABLE + " (ID INTEGER PRIMARY KEY, " +
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
-                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT, IGNORED BOOLEAN, TIMECREATED TEXT)");
+                "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT," +
+                " IGNORED BOOLEAN, TIMECREATED TEXT)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
-        db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN, HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT)");
+        db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN," +
+                " HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT, ADSREMOVED BOOLEAN," +
+                " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN)");
     }
 
     @Override
@@ -157,9 +163,12 @@ public class Database extends SQLiteOpenHelper {
         ContentValues content= new ContentValues();
         content.put(UCOL1, 0);
         content.put(UCOL2, mute);
-        content.put(UCOL3, "#FFFF69B4");
+        content.put(UCOL3, "#FF00FF00");
         content.put(UCOL4, false);
         content.put(UCOL5, "");
+        content.put(UCOL6, false);
+        content.put(UCOL7, false);
+        content.put(UCOL8, false);
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -431,6 +440,30 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL5, tempTask);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateAdsRemoved(boolean removal){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL6, removal);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateRemindersAvailable(boolean reminder){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL7, reminder);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateCycleColors(boolean cycle){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL8, cycle);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }

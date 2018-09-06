@@ -149,8 +149,6 @@ public class Checklist extends MainActivity {
                 if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
                         .sortedIdsForNote.get(MainActivity.activeTask))).get(position)){
 
-                    Log.i(TAG, "I've been clicked");
-
                 }else if(subTasksClickable && subTasksKilled.get(Integer.parseInt(MainActivity
                         .sortedIdsForNote.get(MainActivity.activeTask))).get(position)){
 
