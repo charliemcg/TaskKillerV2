@@ -836,11 +836,19 @@ class MyAdapter extends ArrayAdapter<String> {
                     dueLayout.setVisibility(View.GONE);
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
-                    dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                    overdueClear.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.lightRed));
-                    overdueClearWhite.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.lightRed));
+                    if(MainActivity.lightDark) {
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.darkRed));
+                        overdueClearWhite.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.darkRed));
+                        dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.darkRed));
+                    }else{
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.lightRed));
+                        overdueClearWhite.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.lightRed));
+                        dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.lightRed));
+                    }
                     markAsOverdue = true;
                     //Overdue
                 } else if (currentYear == Integer.valueOf(year)
@@ -850,10 +858,19 @@ class MyAdapter extends ArrayAdapter<String> {
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                    overdueClear.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.lightRed));
-                    overdueClearWhite.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.lightRed));
+                    if(MainActivity.lightDark) {
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.darkRed));
+                        overdueClearWhite.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.darkRed));
+                        dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.darkRed));
+                    }else{
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.lightRed));
+                        overdueClearWhite.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.lightRed));
+                        dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.lightRed));
+                    }
                     markAsOverdue = true;
                     //Overdue
                 } else if (currentYear == Integer.valueOf(year)
@@ -864,10 +881,19 @@ class MyAdapter extends ArrayAdapter<String> {
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
                     dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                    overdueClear.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.lightRed));
-                    overdueClearWhite.setBackgroundColor(ContextCompat
-                            .getColor(getContext(), R.color.lightRed));
+                    if(MainActivity.lightDark) {
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.darkRed));
+                        overdueClearWhite.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.darkRed));
+                        dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.darkRed));
+                    }else{
+                        overdueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.lightRed));
+                        overdueClearWhite.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.lightRed));
+                        dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.lightRed));
+                    }
                     markAsOverdue = true;
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth == Integer.valueOf(month)
@@ -887,10 +913,19 @@ class MyAdapter extends ArrayAdapter<String> {
                         overdueClear.setVisibility(View.VISIBLE);
                         overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                        overdueClear.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.lightRed));
-                        overdueClearWhite.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.lightRed));
+                        if(MainActivity.lightDark) {
+                            overdueClear.setBackgroundColor(ContextCompat
+                                    .getColor(getContext(), R.color.darkRed));
+                            overdueClearWhite.setBackgroundColor(ContextCompat
+                                    .getColor(getContext(), R.color.darkRed));
+                            dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.darkRed));
+                        }else{
+                            overdueClear.setBackgroundColor(ContextCompat
+                                    .getColor(getContext(), R.color.lightRed));
+                            overdueClearWhite.setBackgroundColor(ContextCompat
+                                    .getColor(getContext(), R.color.lightRed));
+                            dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.lightRed));
+                        }
                         markAsOverdue = true;
                         //Overdue
                     } else if (currentHour == adjustedHour
@@ -900,10 +935,19 @@ class MyAdapter extends ArrayAdapter<String> {
                         overdueClear.setVisibility(View.VISIBLE);
                         overdueLayout.setVisibility(View.VISIBLE);
                         dueTextView.setTextColor(Color.parseColor("#FF0000"));
-                        overdueClear.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.lightRed));
-                        overdueClearWhite.setBackgroundColor(ContextCompat
-                                .getColor(getContext(), R.color.lightRed));
+                        if(MainActivity.lightDark) {
+                            overdueClear.setBackgroundColor(ContextCompat
+                                    .getColor(getContext(), R.color.darkRed));
+                            overdueClearWhite.setBackgroundColor(ContextCompat
+                                    .getColor(getContext(), R.color.darkRed));
+                            dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.darkRed));
+                        }else{
+                            overdueClear.setBackgroundColor(ContextCompat
+                                    .getColor(getContext(), R.color.lightRed));
+                            overdueClearWhite.setBackgroundColor(ContextCompat
+                                    .getColor(getContext(), R.color.lightRed));
+                            dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.lightRed));
+                        }
                         markAsOverdue = true;
                         //Not overdue
                     } else {
@@ -3912,10 +3956,10 @@ class MyAdapter extends ArrayAdapter<String> {
                     Paint.STRIKE_THRU_TEXT_FLAG);
 
             if(!MainActivity.lightDark) {
-                complete.setVisibility(View.INVISIBLE);
+                complete.setVisibility(View.GONE);
                 completed.setVisibility(View.VISIBLE);
             }else{
-                completeWhite.setVisibility(View.INVISIBLE);
+                completeWhite.setVisibility(View.GONE);
                 completedWhite.setVisibility(View.VISIBLE);
             }
             completed.setClickable(false);

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -89,6 +90,8 @@ public class Note extends MainActivity {
             noteRoot.setBackgroundColor(Color.parseColor("#FFFFFF"));
             noteToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             noteTextView.setTextColor(Color.parseColor("#000000"));
+            removeBtn.setTextColor(Color.parseColor("#FF0000"));
+            removeBtn.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.dark_red_layout_border));
         }
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);

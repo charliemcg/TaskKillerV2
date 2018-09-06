@@ -424,6 +424,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             cycleColorsImageWhite.setVisibility(View.VISIBLE);
             unlockAllImage.setVisibility(View.GONE);
             unlockAllImageWhite.setVisibility(View.VISIBLE);
+            //Set list view dividers
+            String digits = "0123456789ABCDEF";
+            int val = 0;
+            for (int i = 1; i < highlight.length(); i++) {
+                char c = highlight.charAt(i);
+                int d = digits.indexOf(c);
+                val = 16 * val + d;
+            }
+            int[] colors = {0, val, 0};
+            theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+            theListView.setDividerHeight(1);
             theListView.setAdapter(theAdapter[0]);
         }else{
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -465,20 +476,19 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             cycleColorsImageWhite.setVisibility(View.GONE);
             unlockAllImage.setVisibility(View.VISIBLE);
             unlockAllImageWhite.setVisibility(View.GONE);
+            //Set list view dividers
+            String digits = "0123456789ABCDEF";
+            int val = 0;
+            for (int i = 1; i < highlight.length(); i++) {
+                char c = highlight.charAt(i);
+                int d = digits.indexOf(c);
+                val = 16 * val + d;
+            }
+            int[] colors = {0, val, 0};
+            theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+            theListView.setDividerHeight(3);
             theListView.setAdapter(theAdapter[0]);
         }
-
-        //Set list view dividers
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
 
         //Make task clickable
         theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -991,7 +1001,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 }
                 int[] colors = {0, val, 0};
                 theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-                theListView.setDividerHeight(1);
+                theListView.setDividerHeight(3);
                 noteDb.updateHighlight(highlight);
                 if(mute) {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
@@ -1707,7 +1717,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             unlockAllTitle.setTextColor(Color.parseColor("#AAAAAA"));
             unlockAllDescription.setTextColor(Color.parseColor("#AAAAAA"));
             purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
             getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
             cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
             unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
@@ -1846,7 +1856,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
-    //TODO make sure these colors are all correct
     public void setHighlightWhite(View view) {
         noteDb.updateHighlight("#FFFFFFFF");
         highlight = "#FFFFFFFF";
@@ -1863,13 +1872,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightBlack(View view) {
         noteDb.updateHighlight("#FF000000");
-        highlight = "FF000000";
+        highlight = "#FF000000";
         colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FF000000"));
         addIcon.setTextColor(Color.parseColor("#FF000000"));
@@ -1883,12 +1896,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
     public void setHighlightLightYellow(View view) {
         noteDb.updateHighlight("#FFFFFF00");
+        highlight = "#FFFFFF00";
         colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFF00"));
         addIcon.setTextColor(Color.parseColor("#FFFFFF00"));
@@ -1902,7 +1920,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -1922,7 +1944,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -1942,7 +1968,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -1962,7 +1992,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -1982,7 +2016,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -2002,7 +2040,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -2022,7 +2064,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -2042,7 +2088,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -2062,7 +2112,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -2082,7 +2136,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -2102,7 +2160,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -2122,7 +2184,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -2142,7 +2208,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
@@ -2162,7 +2232,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         int[] colors = {0, val, 0};
         theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        theListView.setDividerHeight(1);
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
         theListView.setAdapter(theAdapter[0]);
     }
 
