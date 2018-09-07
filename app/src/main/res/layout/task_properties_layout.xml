@@ -28,7 +28,7 @@
                 android:layout_width="85dp"
                 android:layout_height="match_parent"
                 android:lines="1"
-                android:text="Set Due"
+                android:text="@string/setDue"
                 android:paddingLeft="8dp"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
@@ -62,7 +62,7 @@
                 android:layout_width="85dp"
                 android:layout_height="match_parent"
                 android:lines="1"
-                android:text="Sub-Tasks"
+                android:text="@string/subTasks"
                 android:paddingLeft="8dp"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
@@ -96,7 +96,7 @@
                 android:layout_width="85dp"
                 android:layout_height="match_parent"
                 android:lines="1"
-                android:text="Add Note"
+                android:text="@string/addNote"
                 android:paddingLeft="8dp"
                 android:gravity="center"
                 android:textColor="@color/gray"/>

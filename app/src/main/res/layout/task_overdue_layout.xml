@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
-                android:text="Snooze"
+                android:text="@string/snooze"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
@@ -48,7 +48,7 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
-                android:text="Done"
+                android:text="@string/done"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
@@ -69,7 +69,7 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
-                android:text="Ignore"
+                android:text="@string/ignore"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>

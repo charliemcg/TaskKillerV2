@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lines="1"
-                android:text="Turn Off Alarm"
+                android:text="@string/turnOffAlarm"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
             <!--android:paddingLeft="8dp"-->
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lines="1"
-                android:text="Change Due Date"
+                android:text="@string/changeDueDate"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
             <!--android:paddingLeft="8dp"-->
@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lines="1"
-                android:text="Set Repeat"
+                android:text="@string/setRepeat"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
             <!--android:paddingLeft="8dp"-->

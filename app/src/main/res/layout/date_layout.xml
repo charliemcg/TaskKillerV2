@@ -26,7 +26,7 @@
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="Set Date"
+            android:text="@string/setDate"
             android:background="@color/dark_gray"
             android:textColor="@color/gray"/>
     </LinearLayout>

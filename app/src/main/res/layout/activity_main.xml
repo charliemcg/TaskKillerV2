@@ -40,7 +40,7 @@
                     android:textColor="@color/gray"
                     android:layout_margin="20dp"
                     android:layout_span="4"
-                    android:text="Pick a color..."/>
+                    android:text="@string/pickAColor"/>
             </TableRow>
 
             <TableRow>
@@ -239,7 +239,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="Remove Ads"/>
+                    android:text="@string/removeAds"/>
 
                 <TextView
                     android:id="@+id/removeAdsDescription"
@@ -248,7 +248,7 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
-                    android:text="Permanently remove all ads"/>
+                    android:text="@string/permanentlyRemoveAds"/>
 
             </LinearLayout>
 
@@ -311,7 +311,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="Get Reminders"/>
+                    android:text="@string/getReminders"/>
 
                 <TextView
                     android:id="@+id/getremindersDescription"
@@ -320,7 +320,7 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
-                    android:text="Set unlimited due dates and get notifications on your phone."/>
+                    android:text="@string/setUnlimitedDueDates"/>
 
             </LinearLayout>
 
@@ -349,7 +349,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="Cycle Colors"/>
+                    android:text="@string/cycleColors"/>
 
                 <TextView
                     android:id="@+id/cycleColorsDescription"
@@ -358,7 +358,7 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
-                    android:text="Feature color slowly changes automatically."/>
+                    android:text="@string/featureColorSlowly"/>
 
             </LinearLayout>
 
@@ -421,7 +421,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="Unlock All"/>
+                    android:text="@string/unlockAll"/>
 
                 <TextView
                     android:id="@+id/unlockAllDescription"
@@ -430,7 +430,7 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
-                    android:text="Ultimate value pack. Unlock all in-app purchases."/>
+                    android:text="@string/ultimateValuePack"/>
 
             </LinearLayout>
 

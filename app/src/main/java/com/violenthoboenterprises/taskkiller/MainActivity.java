@@ -139,8 +139,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     public static ArrayList<String> sortedIdsForNote;
 
     //Toasts which show up when adding new task
-    String[] motivation = new String[] {"Get it done!", "Smash that task!",
-            "Be a winner!", "Only wimps give up!", "Don't be a failure!", "Be Victorious"};
+    String[] motivation = new String[] {getString(R.string.getItDone),
+            getString(R.string.smashThatTask), getString(R.string.beAWinner),
+            getString(R.string.onlyWimpsGiveUp), getString(R.string.dontBeAFailure),
+            getString(R.string.beVictorious)};
     //Keep track of last phrase used so as to not have the same thing twice in a row
     String lastToast;
 
@@ -1324,7 +1326,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //reinstates completed task
     public void reinstate(int i) {
 
-        Toast.makeText(MainActivity.this, "Task reinstated",
+        Toast.makeText(MainActivity.this, R.string.taskReinstated,
                 Toast.LENGTH_SHORT).show();
 
         //marks task as not killed in database
@@ -1820,105 +1822,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //options to properties
         if(colorPickerShowing) {
-            colorPicker.setVisibility(View.GONE);
-            colorPickerShowing = false;
-            theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-                    //Tasks are not clickable if keyboard is up
-                    if(tasksAreClickable && !completeTask) {
-
-//                    vibrate.vibrate(50);
-
-                        //checking if task has been killed
-                        Boolean killed = false;
-                        Cursor result = MainActivity.noteDb.getData(Integer
-                                .parseInt(sortedIDs.get(position)));
-                        while (result.moveToNext()) {
-                            killed = result.getInt(6) > 0;
-                        }
-
-                        //Selecting a task to view options
-                        if (!taskPropertiesShowing && !killed) {
-
-                            viewProperties(position);
-
-                            //Removes completed task
-                        } else if (!taskPropertiesShowing && killed) {
-
-                            removeTask(position);
-
-                            //Removes task options from view
-                        } else {
-
-                            removeTaskProperties();
-
-                        }
-
-                    }else {
-
-                        completeTask = false;
-
-                    }
-
-                }
-
-            });
-            add.setClickable(true);
-            onCreateOptionsMenu(mTopToolbar.getMenu());
-            theListView.setAdapter(theAdapter[0]);
+            colorPickerShowing();
         }else if (purchasesShowing){
-            purchases.setVisibility(View.GONE);
-            purchasesShowing = false;
-            theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-                    //Tasks are not clickable if keyboard is up
-                    if(tasksAreClickable && !completeTask) {
-
-//                    vibrate.vibrate(50);
-
-                        //checking if task has been killed
-                        Boolean killed = false;
-                        Cursor result = MainActivity.noteDb.getData(Integer
-                                .parseInt(sortedIDs.get(position)));
-                        while (result.moveToNext()) {
-                            killed = result.getInt(6) > 0;
-                        }
-
-                        //Selecting a task to view options
-                        if (!taskPropertiesShowing && !killed) {
-
-                            viewProperties(position);
-
-                            //Removes completed task
-                        } else if (!taskPropertiesShowing && killed) {
-
-                            removeTask(position);
-
-                            //Removes task options from view
-                        } else {
-
-                            removeTaskProperties();
-
-                        }
-
-                    }else {
-
-                        completeTask = false;
-
-                    }
-
-                }
-
-            });
-            add.setClickable(true);
-            onCreateOptionsMenu(mTopToolbar.getMenu());
-            theListView.setAdapter(theAdapter[0]);
+            colorPickerShowing();
         }else if(taskOptionsShowing){
             theListView.setAdapter(theAdapter[0]);
             taskOptionsShowing = false;
@@ -1955,6 +1861,63 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
+    private void colorPickerShowing() {
+        if(colorPickerShowing) {
+            colorPicker.setVisibility(View.GONE);
+            colorPickerShowing = false;
+        }else{
+            purchases.setVisibility(View.GONE);
+            purchasesShowing = false;
+        }
+            theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                    //Tasks are not clickable if keyboard is up
+                    if(tasksAreClickable && !completeTask) {
+
+//                    vibrate.vibrate(50);
+
+                        //checking if task has been killed
+                        Boolean killed = false;
+                        Cursor result = MainActivity.noteDb.getData(Integer
+                                .parseInt(sortedIDs.get(position)));
+                        while (result.moveToNext()) {
+                            killed = result.getInt(6) > 0;
+                        }
+
+                        //Selecting a task to view options
+                        if (!taskPropertiesShowing && !killed) {
+
+                            viewProperties(position);
+
+                            //Removes completed task
+                        } else if (!taskPropertiesShowing && killed) {
+
+                            removeTask(position);
+
+                            //Removes task options from view
+                        } else {
+
+                            removeTaskProperties();
+
+                        }
+
+                    }else {
+
+                        completeTask = false;
+
+                    }
+
+                }
+
+            });
+            add.setClickable(true);
+            onCreateOptionsMenu(mTopToolbar.getMenu());
+            theListView.setAdapter(theAdapter[0]);
+    }
+
     public void complete(View view) {
 
         if(!mute) {
@@ -1976,7 +1939,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     public void setHighlightWhite(View view) {
         noteDb.updateHighlight("#FFFFFFFF");
         highlight = "#FFFFFFFF";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFFFF"));
         addIcon.setTextColor(Color.parseColor("#FFFFFFFF"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
@@ -1994,13 +1956,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightBlack(View view) {
         noteDb.updateHighlight("#FF000000");
         highlight = "#FF000000";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FF000000"));
         addIcon.setTextColor(Color.parseColor("#FF000000"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FF000000"));
@@ -2018,13 +1979,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightLightYellow(View view) {
         noteDb.updateHighlight("#FFFFFF00");
         highlight = "#FFFFFF00";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFF00"));
         addIcon.setTextColor(Color.parseColor("#FFFFFF00"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFF00"));
@@ -2042,13 +2002,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightDarkYellow(View view) {
         noteDb.updateHighlight("#FFFFD700");
         highlight = "#FFFFD700";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFD700"));
         addIcon.setTextColor(Color.parseColor("#FFFFD700"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFD700"));
@@ -2066,13 +2025,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightLightBlue(View view) {
         noteDb.updateHighlight("#FF00FFFF");
         highlight = "#FF00FFFF";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FF00FFFF"));
         addIcon.setTextColor(Color.parseColor("#FF00FFFF"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FF00FFFF"));
@@ -2090,13 +2048,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightDarkBlue(View view) {
         noteDb.updateHighlight("#FF4169E1");
         highlight = "#FF4169E1";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FF4169E1"));
         addIcon.setTextColor(Color.parseColor("#FF4169E1"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FF4169E1"));
@@ -2114,13 +2071,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightLightOrange(View view) {
         noteDb.updateHighlight("#FFFFA500");
         highlight = "#FFFFA500";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFA500"));
         addIcon.setTextColor(Color.parseColor("#FFFFA500"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFA500"));
@@ -2138,13 +2094,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightDarkOrange(View view) {
         noteDb.updateHighlight("#FFFF8C00");
         highlight = "#FFFF8C00";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF8C00"));
         addIcon.setTextColor(Color.parseColor("#FFFF8C00"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF8C00"));
@@ -2162,13 +2117,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightLightPurple(View view) {
         noteDb.updateHighlight("#FF9370DB");
         highlight = "#FF9370DB";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FF9370DB"));
         addIcon.setTextColor(Color.parseColor("#FF9370DB"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FF9370DB"));
@@ -2186,13 +2140,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightDarkPurple(View view) {
         noteDb.updateHighlight("#FF8A2BE2");
         highlight = "#FF8A2BE2";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FF8A2BE2"));
         addIcon.setTextColor(Color.parseColor("#FF8A2BE2"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FF8A2BE2"));
@@ -2210,13 +2163,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightDarkRed(View view) {
         noteDb.updateHighlight("#FFFF0000");
         highlight = "#FFFF0000";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF0000"));
         addIcon.setTextColor(Color.parseColor("#FFFF0000"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF0000"));
@@ -2234,13 +2186,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightLightRed(View view) {
         noteDb.updateHighlight("#FFFF6347");
         highlight = "#FFFF6347";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF6347"));
         addIcon.setTextColor(Color.parseColor("#FFFF6347"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF6347"));
@@ -2258,13 +2209,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightLightPink(View view) {
         noteDb.updateHighlight("#FFFF69B4");
         highlight = "#FFFF69B4";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF69B4"));
         addIcon.setTextColor(Color.parseColor("#FFFF69B4"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF69B4"));
@@ -2282,13 +2232,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightDarkPink(View view) {
         noteDb.updateHighlight("#FFFF1493");
         highlight = "#FFFF1493";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF1493"));
         addIcon.setTextColor(Color.parseColor("#FFFF1493"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF1493"));
@@ -2306,13 +2255,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightLightGreen(View view) {
         noteDb.updateHighlight("#FF00FF00");
         highlight = "#FF00FF00";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FF00FF00"));
         addIcon.setTextColor(Color.parseColor("#FF00FF00"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FF00FF00"));
@@ -2330,13 +2278,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     public void setHighlightDarkGreen(View view) {
         noteDb.updateHighlight("#FF228B22");
         highlight = "#FF228B22";
-        colorPicker.setVisibility(View.GONE);
         mTopToolbar.setTitleTextColor(Color.parseColor("#FF228B22"));
         addIcon.setTextColor(Color.parseColor("#FF228B22"));
         taskNameEditText.setBackgroundColor(Color.parseColor("#FF228B22"));
@@ -2354,7 +2301,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else{
             theListView.setDividerHeight(3);
         }
-        theListView.setAdapter(theAdapter[0]);
+        colorPickerShowing();
     }
 
     @Override

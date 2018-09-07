@@ -187,8 +187,6 @@ public class Checklist extends MainActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
 
-                Log.i(TAG, "I've been long clicked");
-
                 if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
                         .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
 

@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
-                android:text="1 Hour"
+                android:text="@string/oneHour"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
@@ -48,7 +48,7 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
-                android:text="4 Hours"
+                android:text="@string/fourHours"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
@@ -69,7 +69,7 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
-                android:text="Tomorrow"
+                android:text="@string/tomorrow"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>

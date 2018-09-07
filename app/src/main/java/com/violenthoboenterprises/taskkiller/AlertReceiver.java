@@ -48,12 +48,12 @@ public class AlertReceiver extends BroadcastReceiver {
             mBuilder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.small_bell).setLargeIcon(BitmapFactory.decodeResource(context
                             //TODO extract sring resource
-                            .getResources(), R.drawable.bell))./*setContentTitle(msg)*/setContentTitle("Kill This Task!").setTicker(msgAlert)
+                            .getResources(), R.drawable.bell))./*setContentTitle(msg)*/setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
                     .setContentText(msg/*Text*/);
         }else{
             mBuilder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.small_bell).setLargeIcon(BitmapFactory.decodeResource(context
-                            .getResources(), R.drawable.bell_white))./*setContentTitle(msg)*/setContentTitle("Kill This Task!").setTicker(msgAlert)
+                            .getResources(), R.drawable.bell_white))./*setContentTitle(msg)*/setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
                     .setContentText(msg/*Text*/);
         }
 

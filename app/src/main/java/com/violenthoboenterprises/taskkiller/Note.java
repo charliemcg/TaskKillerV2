@@ -136,10 +136,10 @@ public class Note extends MainActivity {
                     //show remove button
                     removeBtn.setVisibility(View.VISIBLE);
 
-                    editBtn.setText("Edit");
+                    editBtn.setText(R.string.edit);
 
                 }else{
-                    editBtn.setText("Add Note");
+                    editBtn.setText(R.string.addNote);
                 }
 
                 //Hide text box

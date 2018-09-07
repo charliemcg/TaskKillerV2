@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
-                android:text="Daily"
+                android:text="@string/daily"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
@@ -50,7 +50,7 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
-                android:text="Weekly"
+                android:text="@string/weekly"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>
@@ -71,7 +71,7 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
-                android:text="Monthly"
+                android:text="@string/monthly"
                 android:textColor="@color/gray"/>
 
         </LinearLayout>

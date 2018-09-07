@@ -407,6 +407,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //            if (networkAvailable) {
 //                adView.setVisibility(View.VISIBLE);
 //                final AdRequest banRequest = new AdRequest.Builder()
+        //TODO probably need a new ID
 //                        .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
 //                    (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
 //                adView.loadAd(banRequest);
@@ -1050,7 +1051,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //If task due on following day say "Tomorrow"
             if (tomorrow){
 
-                dueTextView.setText("Tomorrow");
+                dueTextView.setText(R.string.tomorrow);
 
                 //If task due on same day show the due date
             } else if(!sameDay){
@@ -1059,31 +1060,32 @@ class MyAdapter extends ArrayAdapter<String> {
                 String formattedMonth = "";
                 String formattedDate;
 
+                //TODO account for all these numbers in different languages
                 int intMonth = Integer.valueOf(month) + 1;
                 if(intMonth == 1){
-                    formattedMonth = "Jan";
+                    formattedMonth = String.valueOf(R.string.jan);
                 }else if(intMonth == 2){
-                    formattedMonth = "Feb";
+                    formattedMonth = String.valueOf(R.string.feb);
                 }else if(intMonth == 3){
-                    formattedMonth = "Mar";
+                    formattedMonth = String.valueOf(R.string.mar);
                 }else if(intMonth == 4){
-                    formattedMonth = "Apr";
+                    formattedMonth = String.valueOf(R.string.apr);
                 }else if(intMonth == 5){
-                    formattedMonth = "May";
+                    formattedMonth = String.valueOf(R.string.may);
                 }else if(intMonth == 6){
-                    formattedMonth = "Jun";
+                    formattedMonth = String.valueOf(R.string.jun);
                 }else if(intMonth == 7){
-                    formattedMonth = "Jul";
+                    formattedMonth = String.valueOf(R.string.jul);
                 }else if(intMonth == 8){
-                    formattedMonth = "Aug";
+                    formattedMonth = String.valueOf(R.string.aug);
                 }else if(intMonth == 9){
-                    formattedMonth = "Sep";
+                    formattedMonth = String.valueOf(R.string.sep);
                 }else if(intMonth == 10){
-                    formattedMonth = "Oct";
+                    formattedMonth = String.valueOf(R.string.oct);
                 }else if(intMonth == 11){
-                    formattedMonth = "Nov";
+                    formattedMonth = String.valueOf(R.string.nov);
                 }else if(intMonth == 12){
-                    formattedMonth = "Dec";
+                    formattedMonth = String.valueOf(R.string.dec);
                 }
 
                 formattedDate = day + " " + formattedMonth;
@@ -1094,19 +1096,19 @@ class MyAdapter extends ArrayAdapter<String> {
             }else{
 
                 if(Integer.valueOf(hour) == 0){
-                    hour = "12";
+                    hour = String.valueOf(R.string.twelveNumerals);
                 }
                 if(Integer.valueOf(minute) < 10){
                     if(Integer.valueOf(ampm) == 0) {
-                        formattedTime = hour + ":0" + minute + "am";
+                        formattedTime = hour + String.valueOf(R.string.colonZero) + minute + String.valueOf(R.string.am);
                     }else{
-                        formattedTime = hour + ":0" + minute + "pm";
+                        formattedTime = hour + String.valueOf(R.string.colonZero) + minute + String.valueOf(R.string.pm);
                     }
                 }else{
                     if(Integer.valueOf(ampm) == 0) {
-                        formattedTime = hour + ":" + minute + "am";
+                        formattedTime = hour + ":" + minute + String.valueOf(R.string.am);
                     }else{
-                        formattedTime = hour + ":" + minute + "pm";
+                        formattedTime = hour + ":" + minute + String.valueOf(R.string.pm);
                     }
                 }
 
@@ -1137,7 +1139,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
                         .get(position), false);
 
-                Toast.makeText(taskView.getContext(), "You killed this task!",
+                Toast.makeText(taskView.getContext(), R.string.youKilledThisTask,
                         Toast.LENGTH_SHORT).show();
 
                 //need to kill the right alarm. Need to know if
@@ -1337,8 +1339,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                 //TODO Show this only when necessary
-                Toast.makeText(taskView.getContext(), "HINT: You can cancel " +
-                        "repeat in alarm options.", Toast.LENGTH_LONG).show();
+                Toast.makeText(taskView.getContext(), R.string.youCanCancelRepeat, Toast.LENGTH_LONG).show();
 
                 propertyRow.setVisibility(View.GONE);
 
@@ -1518,7 +1519,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 if(dontSnooze){
 
                                     Toast.makeText(v.getContext(),
-                                            "Task not snoozed because repeat alarm is due.",
+                                            R.string.taskNotSnoozedBecause,
                                             Toast.LENGTH_SHORT).show();
 
                                     int newDay = Integer.parseInt(finalAlarmDay);
@@ -1991,8 +1992,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 if(dontSnooze){
 
-                                    Toast.makeText(v.getContext(),
-                                            "Task not snoozed because repeat alarm is due.",
+                                    Toast.makeText(v.getContext(), R.string.taskNotSnoozedBecause,
                                             Toast.LENGTH_SHORT).show();
 
                                     int newDay = Integer.parseInt(finalAlarmDay);
@@ -2466,7 +2466,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 if (dontSnooze) {
 
                                     Toast.makeText(v.getContext(),
-                                            "Task not snoozed because repeat alarm is due.",
+                                            R.string.taskNotSnoozedBecause,
                                             Toast.LENGTH_SHORT).show();
 
                                     int newDay = Integer.parseInt(finalAlarmDay);
@@ -2874,7 +2874,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.sortedIDs.get(
                                             MainActivity.activeTask)), true);
 
-                            Toast.makeText(v.getContext(), "You killed this task!",
+                            Toast.makeText(v.getContext(), R.string.youKilledThisTask,
                                     Toast.LENGTH_SHORT).show();
 
                             MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
@@ -3227,17 +3227,17 @@ class MyAdapter extends ArrayAdapter<String> {
             //"set due date" button becomes "remove due date" button if due date already set
             if (dbDue && dbSnooze){
 
-                alarmBtnText.setText("Cancel snooze");//TODO fix this
+                alarmBtnText.setText(R.string.cancelSnooze);
 
             }else if(dbDue){
 
-                alarmBtnText.setText("Alarm Options");//TODO fix this
+                alarmBtnText.setText(R.string.alarmOptions);
 
             }
 
             //if alarm is ignored user has option to turn alarm off
             if(dbIgnored){
-                alarmBtnText.setText("Turn Off Alarm");//TODO fix this
+                alarmBtnText.setText(R.string.turnOffAlarm);
             }
 
             //Actions to occur if user selects 'complete'
@@ -3263,7 +3263,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
                                 .get(position), false);
 
-                        Toast.makeText(v.getContext(), "You killed this task!",
+                        Toast.makeText(v.getContext(), R.string.youKilledThisTask,
                                 Toast.LENGTH_SHORT).show();
 
                         //need to kill the right alarm. Need to know if
@@ -3486,8 +3486,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                         //TODO Show this only when necessary
-                        Toast.makeText(v.getContext(), "HINT: You can cancel " +
-                                "repeat in alarm options.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(), R.string.youCanCancelRepeat, Toast.LENGTH_LONG).show();
 
                         propertyRow.setVisibility(View.GONE);
 
@@ -3550,7 +3549,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                        MainActivity.vibrate.vibrate(50);
 
-                        alarmBtnText.setText("Set Due Date");//TODO fix this
+                        alarmBtnText.setText(R.string.setDueDate);
 
                         MainActivity.params.height = MainActivity.addHeight;
                         MainActivity.iconParams.height = MainActivity.addIconHeight;
@@ -3599,7 +3598,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                            alarmBtnText.setText("Alarm Options");//TODO fix this
+                            alarmBtnText.setText(R.string.alarmOptions);//TODO fix this
                             MainActivity.taskPropertiesShowing = false;
 //                            MainActivity.activityRootView
 //                                    .setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -3623,7 +3622,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             if (finalDbRepeat) {
 
-                                repeatAlarmBtnText.setText("Cancel Repeat");
+                                repeatAlarmBtnText.setText(R.string.cancelRepeat);
 
                             }
 
@@ -3847,7 +3846,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                    dateButton.setText("Set Time");
+                    dateButton.setText(R.string.setTime);
 
                     setAlarm(dateRow, datePicker, timePicker, position);
 
@@ -4489,17 +4488,17 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 //Checking that task due date is in the future
                 if (currentDate.get(Calendar.YEAR) > datePicker.getYear()) {
-                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                    Toast.makeText(getContext(), R.string.cannotSetTask,
                             Toast.LENGTH_SHORT).show();
                 } else if (currentDate.get(Calendar.YEAR) == datePicker.getYear()
                         && currentDate.get(Calendar.MONTH) > datePicker.getMonth()) {
-                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                    Toast.makeText(getContext(), R.string.cannotSetTask,
                             Toast.LENGTH_SHORT).show();
                 } else if (currentDate.get(Calendar.YEAR) == datePicker.getYear()
                         && currentDate.get(Calendar.MONTH) == datePicker.getMonth()
                         && currentDate.get(Calendar.DAY_OF_MONTH) >
                         datePicker.getDayOfMonth()) {
-                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                    Toast.makeText(getContext(), R.string.cannotSetTask,
                             Toast.LENGTH_SHORT).show();
                 } else if (currentDate.get(Calendar.YEAR) == datePicker.getYear()
                         && currentDate.get(Calendar.MONTH) == datePicker.getMonth()
@@ -4507,7 +4506,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         datePicker.getDayOfMonth()
                         && currentDate.get(Calendar.HOUR_OF_DAY) >
                         timePicker.getHour()) {
-                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                    Toast.makeText(getContext(), R.string.cannotSetTask,
                             Toast.LENGTH_SHORT).show();
                 } else if (currentDate.get(Calendar.YEAR) == datePicker.getYear()
                         && currentDate.get(Calendar.MONTH) == datePicker.getMonth()
@@ -4516,7 +4515,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         && currentDate.get(Calendar.HOUR_OF_DAY) ==
                         timePicker.getHour()
                         && currentDate.get(Calendar.MINUTE) > timePicker.getMinute()) {
-                    Toast.makeText(getContext(), "Cannot set task to be completed in the past",
+                    Toast.makeText(getContext(), R.string.cannotSetTask,
                             Toast.LENGTH_SHORT).show();
                 } else {
 

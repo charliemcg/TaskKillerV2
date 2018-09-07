@@ -27,7 +27,7 @@
         android:id="@+id/editBtn"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:text="Edit"
+        android:text="@string/edit"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
@@ -39,7 +39,7 @@
         android:id="@+id/addNoteBtn"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:text="Add Note"
+        android:text="@string/addNote"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
@@ -51,7 +51,7 @@
         android:id="@+id/removeBtn"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:text="Remove"
+        android:text="@string/remove"
         android:background="@drawable/red_layout_border"
         android:textColor="@color/lightRed"
         android:layout_alignParentBottom="true"
@@ -78,7 +78,7 @@
             android:imeOptions="actionDone"
             android:inputType="textCapSentences|textMultiLine"
             android:layout_alignParentBottom="true"
-            android:hint="Add your note here..."/>
+            android:hint="@string/addYourNote"/>
         <!--android:layout_width="300dp"-->
 
         <Button
@@ -88,7 +88,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="17dp"
             android:layout_marginBottom="17dp"
-            android:text="Submit"
+            android:text="@string/submit"
             android:background="@drawable/layout_border"
             android:textColor="@color/gray"/>
         <!--android:layout_width="60dp"-->
