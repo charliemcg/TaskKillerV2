@@ -66,7 +66,7 @@ public class Note extends MainActivity {
 
         noteToolbar.setTitle(dbTask);
 
-        mute = mSharedPreferences.getBoolean("muteKey", false);
+//        mute = mSharedPreferences.getBoolean("muteKey", false);
 
         noteTextView.setMovementMethod(new ScrollingMovementMethod());
 
@@ -270,7 +270,13 @@ public class Note extends MainActivity {
             theNote = result.getString(1);
         }
 
-        mute = mSharedPreferences.getBoolean("muteKey", false);
+//        mute = mSharedPreferences.getBoolean("muteKey", false);
+
+        Cursor dbResult = MainActivity.db.getUniversalData();
+        while (dbResult.moveToNext()) {
+            mute = dbResult.getInt(1) > 0;
+            lightDark = dbResult.getInt(3) > 0;
+        }
 
         //Don't allow blank notes
         if(!theNote.equals("")){

@@ -1063,29 +1063,29 @@ class MyAdapter extends ArrayAdapter<String> {
                 //TODO account for all these numbers in different languages
                 int intMonth = Integer.valueOf(month) + 1;
                 if(intMonth == 1){
-                    formattedMonth = String.valueOf(R.string.jan);
+                    formattedMonth = getContext().getString(R.string.jan);
                 }else if(intMonth == 2){
-                    formattedMonth = String.valueOf(R.string.feb);
+                    formattedMonth = getContext().getString(R.string.feb);
                 }else if(intMonth == 3){
-                    formattedMonth = String.valueOf(R.string.mar);
+                    formattedMonth = getContext().getString(R.string.mar);
                 }else if(intMonth == 4){
-                    formattedMonth = String.valueOf(R.string.apr);
+                    formattedMonth = getContext().getString(R.string.apr);
                 }else if(intMonth == 5){
-                    formattedMonth = String.valueOf(R.string.may);
+                    formattedMonth = getContext().getString(R.string.may);
                 }else if(intMonth == 6){
-                    formattedMonth = String.valueOf(R.string.jun);
+                    formattedMonth = getContext().getString(R.string.jun);
                 }else if(intMonth == 7){
-                    formattedMonth = String.valueOf(R.string.jul);
+                    formattedMonth = getContext().getString(R.string.jul);
                 }else if(intMonth == 8){
-                    formattedMonth = String.valueOf(R.string.aug);
+                    formattedMonth = getContext().getString(R.string.aug);
                 }else if(intMonth == 9){
-                    formattedMonth = String.valueOf(R.string.sep);
+                    formattedMonth = getContext().getString(R.string.sep);
                 }else if(intMonth == 10){
-                    formattedMonth = String.valueOf(R.string.oct);
+                    formattedMonth = getContext().getString(R.string.oct);
                 }else if(intMonth == 11){
-                    formattedMonth = String.valueOf(R.string.nov);
+                    formattedMonth = getContext().getString(R.string.nov);
                 }else if(intMonth == 12){
-                    formattedMonth = String.valueOf(R.string.dec);
+                    formattedMonth = getContext().getString(R.string.dec);
                 }
 
                 formattedDate = day + " " + formattedMonth;
@@ -1096,19 +1096,19 @@ class MyAdapter extends ArrayAdapter<String> {
             }else{
 
                 if(Integer.valueOf(hour) == 0){
-                    hour = String.valueOf(R.string.twelveNumerals);
+                    hour = getContext().getString(R.string.twelveNumerals);
                 }
                 if(Integer.valueOf(minute) < 10){
                     if(Integer.valueOf(ampm) == 0) {
-                        formattedTime = hour + String.valueOf(R.string.colonZero) + minute + String.valueOf(R.string.am);
+                        formattedTime = hour + getContext().getString(R.string.colonZero) + minute + getContext().getString(R.string.am);
                     }else{
-                        formattedTime = hour + String.valueOf(R.string.colonZero) + minute + String.valueOf(R.string.pm);
+                        formattedTime = hour + getContext().getString(R.string.colonZero) + minute + getContext().getString(R.string.pm);
                     }
                 }else{
                     if(Integer.valueOf(ampm) == 0) {
-                        formattedTime = hour + ":" + minute + String.valueOf(R.string.am);
+                        formattedTime = hour + ":" + minute + getContext().getString(R.string.am);
                     }else{
-                        formattedTime = hour + ":" + minute + String.valueOf(R.string.pm);
+                        formattedTime = hour + ":" + minute + getContext().getString(R.string.pm);
                     }
                 }
 

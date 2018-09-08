@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     Button showAlarmDb;
     Button showSnoozeDb;
     Button showUniversalDb;
+    Button showSubtasksDb;
 
     //Scrollable list
     static ListView theListView;
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static RelativeLayout.LayoutParams iconParams;
 
     //Save data from main activity on close
-    static SharedPreferences mSharedPreferences;
+//    static SharedPreferences mSharedPreferences;
 
     //Save data related to checklist on close
     static SharedPreferences nSharedPreferences;
@@ -274,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mSharedPreferences = getPreferences(MODE_PRIVATE);
+//        mSharedPreferences = getPreferences(MODE_PRIVATE);
 
         topToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(topToolbar);
@@ -371,6 +372,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         showDb = findViewById(R.id.showDb);
 //      showAlarmDb = findViewById(R.id.showAlarmDb);
         showUniversalDb = findViewById(R.id.showUniversalDb);
+        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
         db.insertUniversalData(mute);
 
@@ -531,7 +533,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
                     buffer.append("IGNORED: " + res.getString(14) + "\n");
                     buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
-                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n\n");
+                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
+                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(17) + "\n\n");
                 }
 
                 showMessage("Data", buffer.toString());
@@ -615,6 +618,31 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
                     buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
                     buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n\n");
+                }
+
+                showMessage("Data", buffer.toString());
+
+//                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
+//                        Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+
+        //Used for debugging purposes
+        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllSubtaskData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("SUBTASKID: " + res.getString(1) + "\n");
+                    buffer.append("SUBTASK: " + res.getString(2) + "\n\n");
                 }
 
                 showMessage("Data", buffer.toString());
@@ -1011,6 +1039,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             checklistListSize = nSharedPreferences
                     .getInt("checklistListSizeKey", 0);
+            Cursor dbResult = db.getUniversalData();
+            while (dbResult.moveToNext()) {
+                checklistListSize = dbResult.getInt(9);
+            }
 
             for (int i = 0; i < checklistListSize; i++) {
 
@@ -1054,6 +1086,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //onPause
 
             checklistListSize = Checklist.checklistList.size();
+            db.updateChecklistListSize(checklistListSize);
 
             for (int i = 0; i < checklistListSize; i++) {
 
@@ -1067,8 +1100,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             }
 
-            //Getting and saving the size of the task array list
+            //Getting and saving the size of the task array list//TODO why is this here twice?
             checklistListSize = Checklist.checklistList.size();
+            db.updateChecklistListSize(checklistListSize);
 
             nSharedPreferences.edit().putInt("checklistListSizeKey",
                     Checklist.checklistListSize).apply();

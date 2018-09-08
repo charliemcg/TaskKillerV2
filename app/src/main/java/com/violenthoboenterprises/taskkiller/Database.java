@@ -64,6 +64,13 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL7 = "REMINDERSAVAILABLE";
     public static final String UCOL8 = "CYCLECOLORS";
     public static final String UCOL9 = "TASKLISTSIZE";
+    public static final String UCOL10 = "CHECKLISTLISTSIZE";
+
+    //Subtasks
+    public static final String CTABLE = "subtasks_table";
+    public static final String CCOL1 = "ID";
+    public static final String CCOL2 = "SUBTASKID";
+    public static final String CCOL3 = "SUBTASK";
 
     String TAG = "Data";
 
@@ -85,7 +92,10 @@ public class Database extends SQLiteOpenHelper {
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN," +
                 " HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT, ADSREMOVED BOOLEAN," +
-                " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER)");
+                " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
+                "CHECKLISTLISTSIZE INTEGER)");
+        db.execSQL("create table " + CTABLE + " (ID INTEGER PRIMARY KEY, SUBTASKID INTEGER," +
+                " SUBTASK TEXT)");
     }
 
     @Override
@@ -94,6 +104,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + ATABLE);
         db.execSQL("DROP TABLE IF EXISTS " + STABLE);
         db.execSQL("DROP TABLE IF EXISTS " + UTABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CTABLE);
         onCreate(db);
     }
 
@@ -173,7 +184,22 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL7, false);
         content.put(UCOL8, false);
         content.put(UCOL9, 0);
+        content.put(UCOL10, 0);
         long result = db.insert(UTABLE, null, content);
+        if(result == -1){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public boolean insertSubtaskData(int id, int subtaskID, String subtask){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content= new ContentValues();
+        content.put(CCOL1, id);
+        content.put(CCOL2, subtaskID);
+        content.put(CCOL3, subtask);
+        long result = db.insert(CTABLE, null, content);
         if(result == -1){
             return false;
         }else {
@@ -244,6 +270,19 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + UTABLE + " where " + UCOL1
                 + " == " + 0, null);
+        return result;
+    }
+
+    public Cursor getAllSubtaskData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + CTABLE, null);
+        return result;
+    }
+
+    public Cursor getSubtaskData(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + CTABLE + " where " + CCOL1
+                + " == " + id, null);
         return result;
     }
 
@@ -485,6 +524,22 @@ public class Database extends SQLiteOpenHelper {
         ContentValues content = new ContentValues();
         content.put(UCOL9, size);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateChecklistListSize(int size){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL10, size);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateSubtask(String id, String subtask){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(CCOL3, subtask);
+        db.update(CTABLE, content, "ID = ?", new String[] {id});
         return true;
     }
 
