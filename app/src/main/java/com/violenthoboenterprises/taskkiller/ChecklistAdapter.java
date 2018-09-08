@@ -33,7 +33,6 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         final View checklistItemView = theInflater.inflate
                 (R.layout.checklist_item, parent, false);
         TextView checklistTextView = checklistItemView.findViewById(R.id.checklistTextView);
-//        final Button tick = checklistItemView.findViewById(R.id.tick);
         final ImageView tick = checklistItemView.findViewById(R.id.subtaskComplete);
         final ImageView ticked = checklistItemView.findViewById(R.id.subtaskCompleted);
         final ImageView tickFaded = checklistItemView.findViewById(R.id.subtaskCompleteFaded);
@@ -197,7 +196,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
                         notifyDataSetChanged();
 
-                        //Removes sub task
+                    //Removes sub task
                     } else {
 
 //                        MainActivity.vibrate.vibrate(50);
@@ -253,7 +252,6 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                     }
                 }else{
                     checklistItemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                    checklistTextView.setTextColor(Color.parseColor("#000000"));
                     if(Checklist.fadeSubTasks){
                         tickWhiteFaded.setVisibility(View.GONE);
                         tickedWhiteFaded.setVisibility(View.VISIBLE);
@@ -262,46 +260,6 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                         tickedWhite.setVisibility(View.VISIBLE);
                     }
                 }
-
-
-//                tick.setText("Remove");
-//                if(Checklist.fadeSubTasks){
-//
-//                }else {
-//                    tick.setVisibility(View.GONE);
-//                    ticked.setVisibility(View.VISIBLE);
-//                }
-
-//                if(MainActivity.lightDark) {
-//                    tickWhite.setVisibility(View.GONE);
-//                    tickWhiteFaded.setVisibility(View.GONE);
-//                    tick.setVisibility(View.GONE);
-//                    tickFaded.setVisibility(View.GONE);
-//                }else{
-//                    tick.setVisibility(View.GONE);
-//                    ticked.setVisibility(View.GONE);
-//                    tickWhite.setVisibility(View.GONE);
-//                }
-
-//                if(Checklist.fadeSubTasks){
-//
-//                    Log.i(TAG, "I'm in here " + position);
-//
-//                    tickedFaded.setVisibility(View.VISIBLE);
-//                    tick.setVisibility(View.GONE);
-//                    tickFaded.setVisibility(View.GONE);
-//                }else{
-//                    ticked.setVisibility(View.VISIBLE);
-//                }
-
-//                if(!MainActivity.lightDark) {
-//                    tick.setVisibility(View.INVISIBLE);
-//                    ticked.setVisibility(View.VISIBLE);
-//                }else{
-//                    tickWhite.setVisibility(View.INVISIBLE);
-//                    ticked.setVisibility(View.INVISIBLE);
-//                    tickedWhite.setVisibility(View.VISIBLE);
-//                }
 
             }
         } catch (IndexOutOfBoundsException e){
