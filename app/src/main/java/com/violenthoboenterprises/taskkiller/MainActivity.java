@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -139,10 +140,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     public static ArrayList<String> sortedIdsForNote;
 
     //Toasts which show up when adding new task
-    String[] motivation = new String[] {getString(R.string.getItDone),
-            getString(R.string.smashThatTask), getString(R.string.beAWinner),
-            getString(R.string.onlyWimpsGiveUp), getString(R.string.dontBeAFailure),
-            getString(R.string.beVictorious)};
+    String[] motivation;
     //Keep track of last phrase used so as to not have the same thing twice in a row
     String lastToast;
 
@@ -203,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     String TAG;
 
     //Database for keeping track of notes
-    static Database noteDb;
+    static Database db;
 
     //for generating random number to select toast phrases
     Random random = new Random();
@@ -211,17 +209,20 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //The user selectable highlight color
     static String highlight;
 
+    //Sound played when task marked as complete
     static MediaPlayer punch;
 
-    private Toolbar mTopToolbar;
+    //The action bar
+    private Toolbar topToolbar;
 
+    //Action bar options
     MenuItem muteBtn;
     MenuItem lightDarkBtn;
     MenuItem customiseBtn;
     MenuItem proBtn;
 
+    //The color picker view and it's corresponding buttons
     LinearLayout colorPicker;
-
     Button white;
     Button black;
     Button lightYellow;
@@ -239,6 +240,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     Button lightGreen;
     Button darkGreen;
 
+    BillingProcessor bp;
+
+    //In-app purchases view and it's elements
+    LinearLayout purchases;
+    LinearLayout removeAdsLayout;
+    LinearLayout getRemindersLayout;
+    LinearLayout cycleColorsLayout;
+    LinearLayout unlockAllLayout;
     TextView colorPickerTitle;
     TextView removeAdsTitle;
     TextView removeAdsDescription;
@@ -248,15 +257,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     TextView cycleColorsDescription;
     TextView unlockAllTitle;
     TextView unlockAllDescription;
-
-    BillingProcessor bp;
-
-    LinearLayout purchases;
-    LinearLayout removeAdsLayout;
-    LinearLayout getRemindersLayout;
-    LinearLayout cycleColorsLayout;
-    LinearLayout unlockAllLayout;
-
     ImageView removeAdsImageWhite;
     ImageView getRemindersImageWhite;
     ImageView cycleColorsImageWhite;
@@ -276,8 +276,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         setContentView(R.layout.activity_main);
         mSharedPreferences = getPreferences(MODE_PRIVATE);
 
-        mTopToolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(mTopToolbar);
+        topToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(topToolbar);
 
         //Initialising variables
         taskPropertiesShowing = false;
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         fadeTasks = false;
         dateOrTime = false;
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        noteDb = new Database(this);
+        db = new Database(this);
         lastToast = "";
         inNote = false;
         inChecklist = false;
@@ -348,8 +348,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         unlockAllDescription = findViewById(R.id.unlockAllDescription);
         bp = new BillingProcessor(this, /*TODO"YOUR LICENSE KEY FROM GOOGLE PLAY CONSOLE HERE"*/null, this);
         purchases = findViewById(R.id.purchases);
-//        removeAds = findViewById(R.id.removeAds);
-//        getReminders = findViewById(R.id.getReminders);
         adsRemoved = false;
         remindersAvailable = false;
         cycleColors = false;
@@ -365,11 +363,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         cycleColorsImageWhite = findViewById(R.id.cycleColorsImageWhite);
         unlockAllImage = findViewById(R.id.unlockAllImage);
         unlockAllImageWhite = findViewById(R.id.unlockAllImageWhite);
+        motivation = new String[] {getString(R.string.getItDone),
+                getString(R.string.smashThatTask), getString(R.string.beAWinner),
+                getString(R.string.onlyWimpsGiveUp), getString(R.string.dontBeAFailure),
+                getString(R.string.beVictorious)};
 
-        noteDb.insertUniversalData(mute);
+        db.insertUniversalData(mute);
 
         //getting app-wide data
-        Cursor dbResult = MainActivity.noteDb.getUniversalData();
+        Cursor dbResult = MainActivity.db.getUniversalData();
         while (dbResult.moveToNext()) {
             highlight = dbResult.getString(2);
             lightDark = dbResult.getInt(3) > 0;
@@ -381,117 +383,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
 
-        mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
+        topToolbar.setTitleTextColor(Color.parseColor(highlight));
 
         addIcon.setTextColor(Color.parseColor(highlight));
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
 
         muteSounds(mute);
 
-        if(!lightDark){
-            theListView.setBackgroundColor(Color.parseColor("#333333"));
-            mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
-            mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
-            black.setVisibility(View.GONE);
-            darkYellow.setVisibility(View.GONE);
-            darkBlue.setVisibility(View.GONE);
-            darkOrange.setVisibility(View.GONE);
-            darkPurple.setVisibility(View.GONE);
-            darkRed.setVisibility(View.GONE);
-            darkPink.setVisibility(View.GONE);
-            darkGreen.setVisibility(View.GONE);
-            if(highlight.equals("#FF000000")){
-                highlight = "#FFFFFFFF";
-            }
-            noteDb.updateHighlight(highlight);
-            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            colorPickerTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            removeAdsTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            removeAdsDescription.setTextColor(Color.parseColor("#AAAAAA"));
-            getRemindersTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            getRemindersDescription.setTextColor(Color.parseColor("#AAAAAA"));
-            cycleColorsTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            cycleColorsDescription.setTextColor(Color.parseColor("#AAAAAA"));
-            unlockAllTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            unlockAllDescription.setTextColor(Color.parseColor("#AAAAAA"));
-            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            removeAdsImage.setVisibility(View.GONE);
-            removeAdsImageWhite.setVisibility(View.VISIBLE);
-            getRemindersImage.setVisibility(View.GONE);
-            getRemindersImageWhite.setVisibility(View.VISIBLE);
-            cycleColorsImage.setVisibility(View.GONE);
-            cycleColorsImageWhite.setVisibility(View.VISIBLE);
-            unlockAllImage.setVisibility(View.GONE);
-            unlockAllImageWhite.setVisibility(View.VISIBLE);
-            //Set list view dividers
-            String digits = "0123456789ABCDEF";
-            int val = 0;
-            for (int i = 1; i < highlight.length(); i++) {
-                char c = highlight.charAt(i);
-                int d = digits.indexOf(c);
-                val = 16 * val + d;
-            }
-            int[] colors = {0, val, 0};
-            theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-            theListView.setDividerHeight(1);
-            theListView.setAdapter(theAdapter[0]);
-        }else{
-            theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
-            white.setVisibility(View.GONE);
-            lightYellow.setVisibility(View.GONE);
-            lightBlue.setVisibility(View.GONE);
-            lightOrange.setVisibility(View.GONE);
-            lightPurple.setVisibility(View.GONE);
-            lightRed.setVisibility(View.GONE);
-            lightPurple.setVisibility(View.GONE);
-            lightPink.setVisibility(View.GONE);
-            lightGreen.setVisibility(View.GONE);
-            if(highlight.equals("#FFFFFFFF")){
-                highlight = "#FF000000";
-            }
-            noteDb.updateHighlight(highlight);
-            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
-            colorPickerTitle.setTextColor(Color.parseColor("#000000"));
-            removeAdsTitle.setTextColor(Color.parseColor("#000000"));
-            removeAdsDescription.setTextColor(Color.parseColor("#000000"));
-            getRemindersTitle.setTextColor(Color.parseColor("#000000"));
-            getRemindersDescription.setTextColor(Color.parseColor("#000000"));
-            cycleColorsTitle.setTextColor(Color.parseColor("#000000"));
-            cycleColorsDescription.setTextColor(Color.parseColor("#000000"));
-            unlockAllTitle.setTextColor(Color.parseColor("#000000"));
-            unlockAllDescription.setTextColor(Color.parseColor("#000000"));
-            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
-            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-            removeAdsImage.setVisibility(View.VISIBLE);
-            removeAdsImageWhite.setVisibility(View.GONE);
-            getRemindersImage.setVisibility(View.VISIBLE);
-            getRemindersImageWhite.setVisibility(View.GONE);
-            cycleColorsImage.setVisibility(View.VISIBLE);
-            cycleColorsImageWhite.setVisibility(View.GONE);
-            unlockAllImage.setVisibility(View.VISIBLE);
-            unlockAllImageWhite.setVisibility(View.GONE);
-            //Set list view dividers
-            String digits = "0123456789ABCDEF";
-            int val = 0;
-            for (int i = 1; i < highlight.length(); i++) {
-                char c = highlight.charAt(i);
-                int d = digits.indexOf(c);
-                val = 16 * val + d;
-            }
-            int[] colors = {0, val, 0};
-            theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-            theListView.setDividerHeight(3);
-            theListView.setAdapter(theAdapter[0]);
-        }
+        checkLightDark(lightDark);
 
         //Make task clickable
         theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -506,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                     //checking if task has been killed
                     Boolean killed = false;
-                    Cursor result = MainActivity.noteDb.getData(Integer
+                    Cursor result = db.getData(Integer
                             .parseInt(sortedIDs.get(position)));
                     while (result.moveToNext()) {
                         killed = result.getInt(6) > 0;
@@ -550,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 //checking if task has been killed
                 Boolean killed = false;
-                Cursor result = MainActivity.noteDb.getData(Integer
+                Cursor result = db.getData(Integer
                         .parseInt(sortedIDs.get(i)));
                 while (result.moveToNext()) {
                     killed = result.getInt(6) > 0;
@@ -746,13 +645,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     Calendar timeNow = new GregorianCalendar();
 
                     //create records in database
-                    noteDb.insertData(Integer.parseInt(sortedIDs
+                    db.insertData(Integer.parseInt(sortedIDs
                             .get(taskListSize - 1)), "", taskName, Integer.parseInt(sortedIDs
                             .get(taskListSize - 1)), String.valueOf(timeNow.getTimeInMillis() / 1000));
-                    noteDb.insertAlarmData(Integer.parseInt(sortedIDs
+                    db.insertAlarmData(Integer.parseInt(sortedIDs
                                     .get(taskListSize - 1)), "", "",
                             "", "", "", "");
-                    noteDb.insertSnoozeData(Integer.parseInt(sortedIDs
+                    db.insertSnoozeData(Integer.parseInt(sortedIDs
                                     .get(taskListSize - 1)), "", "",
                             "", "", "", "");
 
@@ -812,14 +711,93 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
+    private void checkLightDark(boolean lightDark) {
+        if(!lightDark){
+            theListView.setBackgroundColor(Color.parseColor("#333333"));
+            topToolbar.setBackgroundColor(Color.parseColor("#333333"));
+            topToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
+            black.setVisibility(View.GONE);
+            darkYellow.setVisibility(View.GONE);
+            darkBlue.setVisibility(View.GONE);
+            darkOrange.setVisibility(View.GONE);
+            darkPurple.setVisibility(View.GONE);
+            darkRed.setVisibility(View.GONE);
+            darkPink.setVisibility(View.GONE);
+            darkGreen.setVisibility(View.GONE);
+            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            colorPickerTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            removeAdsTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            removeAdsDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            getRemindersTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            getRemindersDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            cycleColorsTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            cycleColorsDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            unlockAllTitle.setTextColor(Color.parseColor("#AAAAAA"));
+            unlockAllDescription.setTextColor(Color.parseColor("#AAAAAA"));
+            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
+            removeAdsImage.setVisibility(View.GONE);
+            removeAdsImageWhite.setVisibility(View.VISIBLE);
+            getRemindersImage.setVisibility(View.GONE);
+            getRemindersImageWhite.setVisibility(View.VISIBLE);
+            cycleColorsImage.setVisibility(View.GONE);
+            cycleColorsImageWhite.setVisibility(View.VISIBLE);
+            unlockAllImage.setVisibility(View.GONE);
+            unlockAllImageWhite.setVisibility(View.VISIBLE);
+            setDividers(lightDark);
+            theListView.setAdapter(theAdapter[0]);
+        }else{
+            theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            topToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            topToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
+            white.setVisibility(View.GONE);
+            lightYellow.setVisibility(View.GONE);
+            lightBlue.setVisibility(View.GONE);
+            lightOrange.setVisibility(View.GONE);
+            lightPurple.setVisibility(View.GONE);
+            lightRed.setVisibility(View.GONE);
+            lightPurple.setVisibility(View.GONE);
+            lightPink.setVisibility(View.GONE);
+            lightGreen.setVisibility(View.GONE);
+            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
+            colorPickerTitle.setTextColor(Color.parseColor("#000000"));
+            removeAdsTitle.setTextColor(Color.parseColor("#000000"));
+            removeAdsDescription.setTextColor(Color.parseColor("#000000"));
+            getRemindersTitle.setTextColor(Color.parseColor("#000000"));
+            getRemindersDescription.setTextColor(Color.parseColor("#000000"));
+            cycleColorsTitle.setTextColor(Color.parseColor("#000000"));
+            cycleColorsDescription.setTextColor(Color.parseColor("#000000"));
+            unlockAllTitle.setTextColor(Color.parseColor("#000000"));
+            unlockAllDescription.setTextColor(Color.parseColor("#000000"));
+            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
+            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
+            removeAdsImage.setVisibility(View.VISIBLE);
+            removeAdsImageWhite.setVisibility(View.GONE);
+            getRemindersImage.setVisibility(View.VISIBLE);
+            getRemindersImageWhite.setVisibility(View.GONE);
+            cycleColorsImage.setVisibility(View.VISIBLE);
+            cycleColorsImageWhite.setVisibility(View.GONE);
+            unlockAllImage.setVisibility(View.VISIBLE);
+            unlockAllImageWhite.setVisibility(View.GONE);
+            setDividers(lightDark);
+            theListView.setAdapter(theAdapter[0]);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_main, menu);
-            muteBtn = this.mTopToolbar.getMenu().findItem(R.id.mute);
-            lightDarkBtn = this.mTopToolbar.getMenu().findItem(R.id.lightDark);
-            customiseBtn = this.mTopToolbar.getMenu().findItem(R.id.highlight);
-            proBtn = this.mTopToolbar.getMenu().findItem(R.id.buy);
+            muteBtn = this.topToolbar.getMenu().findItem(R.id.mute);
+            lightDarkBtn = this.topToolbar.getMenu().findItem(R.id.lightDark);
+            customiseBtn = this.topToolbar.getMenu().findItem(R.id.highlight);
+            proBtn = this.topToolbar.getMenu().findItem(R.id.buy);
             if (!lightDark) {
                 if (mute) {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
@@ -855,224 +833,134 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-//        if(!colorPickerShowing && !purchasesShowing) {
-            //TODO find out if return statements are necessary
-            //noinspection SimplifiableIfStatement
-            if (id == R.id.mute) {
-                muteBtn = this.mTopToolbar.getMenu().findItem(R.id.mute);
-                if (mute) {
-                    mute = false;
-                    if (lightDark) {
-                        muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted_white));
-                    } else {
-                        muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
-                    }
-                    noteDb.updateMute(mute);
-                } else {
-                    mute = true;
-                    if (lightDark) {
-                        muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
-                    } else {
-                        muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
-                    }
-                    noteDb.updateMute(mute);
-                }
-                muteSounds(mute);
-                return true;
-            } else if (id == R.id.lightDark) {
+        //TODO find out if return statements are necessary
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.mute) {
+            muteBtn = this.topToolbar.getMenu().findItem(R.id.mute);
+            if (mute) {
+                mute = false;
                 if (lightDark) {
-                    lightDark = false;
-                    theListView.setBackgroundColor(Color.parseColor("#333333"));
-                    mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
-                    mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
-                    black.setVisibility(View.GONE);
-                    darkYellow.setVisibility(View.GONE);
-                    darkBlue.setVisibility(View.GONE);
-                    darkOrange.setVisibility(View.GONE);
-                    darkPurple.setVisibility(View.GONE);
-                    darkRed.setVisibility(View.GONE);
-                    darkPink.setVisibility(View.GONE);
-                    darkGreen.setVisibility(View.GONE);
-                    white.setVisibility(View.VISIBLE);
-                    lightYellow.setVisibility(View.VISIBLE);
-                    lightBlue.setVisibility(View.VISIBLE);
-                    lightOrange.setVisibility(View.VISIBLE);
-                    lightPurple.setVisibility(View.VISIBLE);
-                    lightRed.setVisibility(View.VISIBLE);
-                    lightPink.setVisibility(View.VISIBLE);
-                    lightGreen.setVisibility(View.VISIBLE);
-                    if (highlight.equals("#FF000000")) {
-                        highlight = "#FFFFFFFF";
-                    } else if (highlight.equals("#FFFF0000")) {
-                        highlight = "#FFFF6347";
-                    } else if (highlight.equals("#FF228B22")) {
-                        highlight = "#FF00FF00";
-                    } else if (highlight.equals("#FFFFD700")) {
-                        highlight = "#FFFFFF00";
-                    } else if (highlight.equals("#FF4169E1")) {
-                        highlight = "#FF00FFFF";
-                    } else if (highlight.equals("#FFFF8C00")) {
-                        highlight = "#FFFFA500";
-                    } else if (highlight.equals("#FF8A2BE2")) {
-                        highlight = "#FF9370DB";
-                    } else if (highlight.equals("#FFFF69B4")) {
-                        highlight = "#FFFF1493";
-                    }
-                    mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
-                    addIcon.setTextColor(Color.parseColor(highlight));
-                    taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
-                    String digits = "0123456789ABCDEF";
-                    int val = 0;
-                    for (int i = 1; i < highlight.length(); i++) {
-                        char c = highlight.charAt(i);
-                        int d = digits.indexOf(c);
-                        val = 16 * val + d;
-                    }
-                    int[] colors = {0, val, 0};
-                    theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-                    theListView.setDividerHeight(1);
-                    noteDb.updateHighlight(highlight);
-                    if (mute) {
-                        muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
-                    } else {
-                        muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
-                    }
-                    lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark));
-                    customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise));
-                    proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro));
-                    colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-                    colorPickerTitle.setTextColor(Color.parseColor("#AAAAAA"));
-                    removeAdsTitle.setTextColor(Color.parseColor("#AAAAAA"));
-                    removeAdsDescription.setTextColor(Color.parseColor("#AAAAAA"));
-                    getRemindersTitle.setTextColor(Color.parseColor("#AAAAAA"));
-                    getRemindersDescription.setTextColor(Color.parseColor("#AAAAAA"));
-                    cycleColorsTitle.setTextColor(Color.parseColor("#AAAAAA"));
-                    cycleColorsDescription.setTextColor(Color.parseColor("#AAAAAA"));
-                    unlockAllTitle.setTextColor(Color.parseColor("#AAAAAA"));
-                    unlockAllDescription.setTextColor(Color.parseColor("#AAAAAA"));
-                    purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-                    removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-                    getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-                    cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-                    unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-                    removeAdsImage.setVisibility(View.VISIBLE);
-                    removeAdsImageWhite.setVisibility(View.GONE);
-                    getRemindersImage.setVisibility(View.VISIBLE);
-                    getRemindersImageWhite.setVisibility(View.GONE);
-                    cycleColorsImage.setVisibility(View.VISIBLE);
-                    cycleColorsImageWhite.setVisibility(View.GONE);
-                    unlockAllImage.setVisibility(View.VISIBLE);
-                    unlockAllImageWhite.setVisibility(View.GONE);
-                    theListView.setAdapter(theAdapter[0]);
-                    noteDb.updateDarkLight(false);
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted_white));
                 } else {
-                    lightDark = true;
-                    theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
-                    white.setVisibility(View.GONE);
-                    lightYellow.setVisibility(View.GONE);
-                    lightBlue.setVisibility(View.GONE);
-                    lightOrange.setVisibility(View.GONE);
-                    lightPurple.setVisibility(View.GONE);
-                    lightRed.setVisibility(View.GONE);
-                    lightPink.setVisibility(View.GONE);
-                    lightGreen.setVisibility(View.GONE);
-                    black.setVisibility(View.VISIBLE);
-                    darkYellow.setVisibility(View.VISIBLE);
-                    darkBlue.setVisibility(View.VISIBLE);
-                    darkOrange.setVisibility(View.VISIBLE);
-                    darkPurple.setVisibility(View.VISIBLE);
-                    darkRed.setVisibility(View.VISIBLE);
-                    darkPink.setVisibility(View.VISIBLE);
-                    darkGreen.setVisibility(View.VISIBLE);
-                    if (highlight.equals("#FFFFFFFF")) {
-                        highlight = "#FF000000";
-                    } else if (highlight.equals("#FFFF6347")) {
-                        highlight = "#FFFF0000";
-                    } else if (highlight.equals("#FF00FF00")) {
-                        highlight = "#FF228B22";
-                    } else if (highlight.equals("#FFFFFF00")) {
-                        highlight = "#FFFFD700";
-                    } else if (highlight.equals("#FF00FFFF")) {
-                        highlight = "#FF4169E1";
-                    } else if (highlight.equals("#FFFFA500")) {
-                        highlight = "#FFFF8C00";
-                    } else if (highlight.equals("#FF9370DB")) {
-                        highlight = "#FF8A2BE2";
-                    } else if (highlight.equals("#FFFF1493")) {
-                        highlight = "#FFFF69B4";
-                    }
-                    mTopToolbar.setTitleTextColor(Color.parseColor(highlight));
-                    addIcon.setTextColor(Color.parseColor(highlight));
-                    taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
-                    String digits = "0123456789ABCDEF";
-                    int val = 0;
-                    for (int i = 1; i < highlight.length(); i++) {
-                        char c = highlight.charAt(i);
-                        int d = digits.indexOf(c);
-                        val = 16 * val + d;
-                    }
-                    int[] colors = {0, val, 0};
-                    theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-                    theListView.setDividerHeight(3);
-                    noteDb.updateHighlight(highlight);
-                    if (mute) {
-                        muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
-                    } else {
-                        muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted_white));
-                    }
-                    lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
-                    customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
-                    proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
-                    colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
-                    colorPickerTitle.setTextColor(Color.parseColor("#000000"));
-                    removeAdsTitle.setTextColor(Color.parseColor("#000000"));
-                    removeAdsDescription.setTextColor(Color.parseColor("#000000"));
-                    getRemindersTitle.setTextColor(Color.parseColor("#000000"));
-                    getRemindersDescription.setTextColor(Color.parseColor("#000000"));
-                    cycleColorsTitle.setTextColor(Color.parseColor("#000000"));
-                    cycleColorsDescription.setTextColor(Color.parseColor("#000000"));
-                    unlockAllTitle.setTextColor(Color.parseColor("#000000"));
-                    unlockAllDescription.setTextColor(Color.parseColor("#000000"));
-                    purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
-                    removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-                    getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-                    cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-                    unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-                    removeAdsImage.setVisibility(View.GONE);
-                    removeAdsImageWhite.setVisibility(View.VISIBLE);
-                    getRemindersImage.setVisibility(View.GONE);
-                    getRemindersImageWhite.setVisibility(View.VISIBLE);
-                    cycleColorsImage.setVisibility(View.GONE);
-                    cycleColorsImageWhite.setVisibility(View.VISIBLE);
-                    unlockAllImage.setVisibility(View.GONE);
-                    unlockAllImageWhite.setVisibility(View.VISIBLE);
-                    theListView.setAdapter(theAdapter[0]);
-                    noteDb.updateDarkLight(true);
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
                 }
-                noTasksLeft();
-                return true;
-            } else if (id == R.id.highlight) {
-                colorPicker.setVisibility(View.VISIBLE);
-                colorPickerShowing = true;
-                add.setClickable(false);
-                theListView.setOnItemClickListener(null);
-                taskPropertiesShowing = false;
-                onCreateOptionsMenu(mTopToolbar.getMenu());
-                theListView.setAdapter(theAdapter[0]);
-                return true;
-            } else if (id == R.id.buy) {
-                purchases.setVisibility(View.VISIBLE);
-                purchasesShowing = true;
-                add.setClickable(false);
-                theListView.setOnItemClickListener(null);
-                taskPropertiesShowing = false;
-                onCreateOptionsMenu(mTopToolbar.getMenu());
-                theListView.setAdapter(theAdapter[0]);
-                return true;
+                db.updateMute(mute);
+            } else {
+                mute = true;
+                if (lightDark) {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
+                } else {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+                }
+                db.updateMute(mute);
             }
-//        }
+            muteSounds(mute);
+            return true;
+        } else if (id == R.id.lightDark) {
+            if (lightDark) {
+                lightDark = false;
+                white.setVisibility(View.VISIBLE);
+                lightYellow.setVisibility(View.VISIBLE);
+                lightBlue.setVisibility(View.VISIBLE);
+                lightOrange.setVisibility(View.VISIBLE);
+                lightPurple.setVisibility(View.VISIBLE);
+                lightRed.setVisibility(View.VISIBLE);
+                lightPink.setVisibility(View.VISIBLE);
+                lightGreen.setVisibility(View.VISIBLE);
+                if (highlight.equals("#FF000000")) {
+                    highlight = "#FFFFFFFF";
+                } else if (highlight.equals("#FFFF0000")) {
+                    highlight = "#FFFF6347";
+                } else if (highlight.equals("#FF228B22")) {
+                    highlight = "#FF00FF00";
+                } else if (highlight.equals("#FFFFD700")) {
+                    highlight = "#FFFFFF00";
+                } else if (highlight.equals("#FF4169E1")) {
+                    highlight = "#FF00FFFF";
+                } else if (highlight.equals("#FFFF8C00")) {
+                    highlight = "#FFFFA500";
+                } else if (highlight.equals("#FF8A2BE2")) {
+                    highlight = "#FF9370DB";
+                } else if (highlight.equals("#FFFF69B4")) {
+                    highlight = "#FFFF1493";
+                }
+                db.updateHighlight(highlight);
+                checkLightDark(lightDark);
+                topToolbar.setTitleTextColor(Color.parseColor(highlight));
+                addIcon.setTextColor(Color.parseColor(highlight));
+                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+                if (mute) {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+                } else {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+                }
+                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark));
+                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise));
+                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro));
+                db.updateDarkLight(false);
+            } else {
+                lightDark = true;
+                black.setVisibility(View.VISIBLE);
+                darkYellow.setVisibility(View.VISIBLE);
+                darkBlue.setVisibility(View.VISIBLE);
+                darkOrange.setVisibility(View.VISIBLE);
+                darkPurple.setVisibility(View.VISIBLE);
+                darkRed.setVisibility(View.VISIBLE);
+                darkPink.setVisibility(View.VISIBLE);
+                darkGreen.setVisibility(View.VISIBLE);
+                if (highlight.equals("#FFFFFFFF")) {
+                    highlight = "#FF000000";
+                } else if (highlight.equals("#FFFF6347")) {
+                    highlight = "#FFFF0000";
+                } else if (highlight.equals("#FF00FF00")) {
+                    highlight = "#FF228B22";
+                } else if (highlight.equals("#FFFFFF00")) {
+                    highlight = "#FFFFD700";
+                } else if (highlight.equals("#FF00FFFF")) {
+                    highlight = "#FF4169E1";
+                } else if (highlight.equals("#FFFFA500")) {
+                    highlight = "#FFFF8C00";
+                } else if (highlight.equals("#FF9370DB")) {
+                    highlight = "#FF8A2BE2";
+                } else if (highlight.equals("#FFFF1493")) {
+                    highlight = "#FFFF69B4";
+                }
+                db.updateHighlight(highlight);
+                checkLightDark(lightDark);
+                topToolbar.setTitleTextColor(Color.parseColor(highlight));
+                addIcon.setTextColor(Color.parseColor(highlight));
+                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+                if (mute) {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
+                } else {
+                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted_white));
+                }
+                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
+                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
+                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
+                db.updateDarkLight(true);
+            }
+            noTasksLeft();
+            return true;
+        } else if (id == R.id.highlight) {
+            colorPicker.setVisibility(View.VISIBLE);
+            colorPickerShowing = true;
+            add.setClickable(false);
+            theListView.setOnItemClickListener(null);
+            taskPropertiesShowing = false;
+            onCreateOptionsMenu(topToolbar.getMenu());
+            theListView.setAdapter(theAdapter[0]);
+            return true;
+        } else if (id == R.id.buy) {
+            purchases.setVisibility(View.VISIBLE);
+            purchasesShowing = true;
+            add.setClickable(false);
+            theListView.setOnItemClickListener(null);
+            taskPropertiesShowing = false;
+            onCreateOptionsMenu(topToolbar.getMenu());
+            theListView.setAdapter(theAdapter[0]);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -1211,9 +1099,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         taskListSize--;
 
         //deleting data related to deleted task
-        noteDb.deleteData(String.valueOf(sortedIDs.get(position)));
-        noteDb.deleteAlarmData(String.valueOf(sortedIDs.get(position)));
-        noteDb.deleteSnoozeData(String.valueOf(sortedIDs.get(position)));
+        db.deleteData(String.valueOf(sortedIDs.get(position)));
+        db.deleteAlarmData(String.valueOf(sortedIDs.get(position)));
+        db.deleteSnoozeData(String.valueOf(sortedIDs.get(position)));
 
         //Cancel notification alars if one is set
         alarmManager.cancel(pendIntent.getService(this,
@@ -1228,7 +1116,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //Getting existing data before going to Database class to change ids.
         for(int i = (activeTask + 1); i < taskListSize; i++){
-            result = noteDb.getData(Integer.parseInt(sortedIDs.get(i)));
+            result = db.getData(Integer.parseInt(sortedIDs.get(i)));
             id = "";
             note = "";
             checklist = false;
@@ -1237,7 +1125,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 note = result.getString(1);
                 checklist = result.getInt(2) == 1;
             }
-            noteDb.updateData(id, note, checklist);
+            db.updateData(id, note, checklist);
         }
 
         //Updates the view
@@ -1330,7 +1218,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 Toast.LENGTH_SHORT).show();
 
         //marks task as not killed in database
-        noteDb.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
+        db.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
 
         reinstateAlarm = true;
 
@@ -1350,8 +1238,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             //getting timestamp
             String dbTimestamp = "";
-            Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
-                    MainActivity.sortedIDs.get(i)));
+            Cursor dbResult = db.getData(Integer.parseInt(
+                    sortedIDs.get(i)));
             while (dbResult.moveToNext()) {
                 dbTimestamp = dbResult.getString(3);
             }
@@ -1364,8 +1252,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         ArrayList<String> whenTaskCreated = new ArrayList<>();
         for(int i = 0; i < MainActivity.taskListSize; i++){
             String created = "";
-            Cursor createdResult = MainActivity.noteDb.getData(Integer.parseInt
-                    (MainActivity.sortedIDs.get(i)));
+            Cursor createdResult = db.getData(Integer.parseInt
+                    (sortedIDs.get(i)));
             while (createdResult.moveToNext()) {
                 created = createdResult.getString(15);
             }
@@ -1389,7 +1277,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             String dbTimestamp = "";
             String dbTask = "";
             Boolean dbKilled = false;
-            Cursor dbResult = MainActivity.noteDb.getDataByTimestamp(
+            Cursor dbResult = db.getDataByTimestamp(
                     whenTaskCreated.get(i));
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
@@ -1420,7 +1308,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //getting task data
             int dbId = 0;
             String dbTask = "";
-            Cursor dbResult = MainActivity.noteDb.getDataByDueTime(
+            Cursor dbResult = db.getDataByDueTime(
                     String.valueOf(tempList.get(i)));
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
@@ -1483,7 +1371,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 taskList.set(activeTask, taskName);
 
-                noteDb.updateName(sortedIDs.get(activeTask), taskName);
+                db.updateName(sortedIDs.get(activeTask), taskName);
 
             }
 
@@ -1649,6 +1537,256 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
+    private void colorPickerShowing() {
+        if(colorPickerShowing) {
+            colorPicker.setVisibility(View.GONE);
+            colorPickerShowing = false;
+        }else{
+            purchases.setVisibility(View.GONE);
+            purchasesShowing = false;
+        }
+            theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                    //Tasks are not clickable if keyboard is up
+                    if(tasksAreClickable && !completeTask) {
+
+//                    vibrate.vibrate(50);
+
+                        //checking if task has been killed
+                        Boolean killed = false;
+                        Cursor result = db.getData(Integer
+                                .parseInt(sortedIDs.get(position)));
+                        while (result.moveToNext()) {
+                            killed = result.getInt(6) > 0;
+                        }
+
+                        //Selecting a task to view options
+                        if (!taskPropertiesShowing && !killed) {
+
+                            viewProperties(position);
+
+                            //Removes completed task
+                        } else if (!taskPropertiesShowing && killed) {
+
+                            removeTask(position);
+
+                            //Removes task options from view
+                        } else {
+
+                            removeTaskProperties();
+
+                        }
+
+                    }else {
+
+                        completeTask = false;
+
+                    }
+
+                }
+
+            });
+            add.setClickable(true);
+            onCreateOptionsMenu(topToolbar.getMenu());
+            theListView.setAdapter(theAdapter[0]);
+    }
+
+    public void complete(View view) {
+
+        if(!mute) {
+            punch.start();
+        }
+
+        LinearLayout parentLayout = (LinearLayout)view.getParent();
+
+        thePosition = theListView.getPositionForView(parentLayout);
+
+        completeTask = true;
+
+        theListView.performItemClick(theListView.getAdapter().getView(
+                thePosition, null, null), thePosition,
+                theListView.getAdapter().getItemId(thePosition));
+
+    }
+
+    public void setHighlightWhite(View view) {
+        setHighlight("#FFFFFFFF");
+    }
+
+    public void setHighlightBlack(View view) {
+        setHighlight("#FFFFFFFF");
+    }
+
+    public void setHighlightLightYellow(View view) {
+        setHighlight("#FFFFFF00");
+    }
+
+    public void setHighlightDarkYellow(View view) {
+        setHighlight("#FFFFD700");
+    }
+
+    public void setHighlightLightBlue(View view) {
+        setHighlight("#FF00FFFF");
+    }
+
+    public void setHighlightDarkBlue(View view) {
+        setHighlight("#FF4169E1");
+    }
+
+    public void setHighlightLightOrange(View view) {
+        setHighlight("#FFFFA500");
+    }
+
+    public void setHighlightDarkOrange(View view) {
+        setHighlight("#FFFF8C00");
+    }
+
+    public void setHighlightLightPurple(View view) {
+        setHighlight("#FF9370DB");
+    }
+
+    public void setHighlightDarkPurple(View view) {
+        setHighlight("#FF8A2BE2");
+    }
+
+    public void setHighlightDarkRed(View view) {
+        setHighlight("#FFFF0000");
+    }
+
+    public void setHighlightLightRed(View view) {
+        setHighlight("#FFFF6347");
+    }
+
+    public void setHighlightLightPink(View view) {
+        setHighlight("#FFFF69B4");
+    }
+
+    public void setHighlightDarkPink(View view) {
+        setHighlight("#FFFF1493");
+    }
+
+    public void setHighlightLightGreen(View view) {
+        setHighlight("#FF00FF00");
+    }
+
+    public void setHighlightDarkGreen(View view) {
+        setHighlight("#FF228B22");
+    }
+
+    private void setHighlight(String s) {
+        db.updateHighlight(s);
+        highlight = s;
+        topToolbar.setTitleTextColor(Color.parseColor(s));
+        addIcon.setTextColor(Color.parseColor(s));
+        taskNameEditText.setBackgroundColor(Color.parseColor(s));
+        setDividers(lightDark);
+        colorPickerShowing();
+    }
+
+    private void setDividers(boolean lightDark) {
+        String digits = "0123456789ABCDEF";
+        int val = 0;
+        for (int i = 1; i < highlight.length(); i++) {
+            char c = highlight.charAt(i);
+            int d = digits.indexOf(c);
+            val = 16 * val + d;
+        }
+        int[] colors = {0, val, 0};
+        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        if(!lightDark) {
+            theListView.setDividerHeight(1);
+        }else{
+            theListView.setDividerHeight(3);
+        }
+    }
+
+    @Override
+    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
+        Toast.makeText(this, "You purchased something", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, @Nullable Throwable error) {
+        Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null) {
+            bp.release();
+        }
+        super.onDestroy();
+    }
+
+    public void removeAds(View view) {
+        //TODO replace this test stuff with real stuff
+        bp.purchase(this, "android.test.purchased");
+//        purchases.setVisibility(View.GONE);
+        //TODO verify purchase before updating to true
+        db.updateAdsRemoved(true);
+    }
+
+    public void getReminders(View view) {
+        //TODO replace this test stuff with real stuff
+        bp.purchase(this, "android.test.purchased");
+//        purchases.setVisibility(View.GONE);
+//        //TODO verify purchase before updating to true
+        db.updateRemindersAvailable(true);
+    }
+
+    public void cycleColors(View view) {
+        //TODO replace this test stuff with real stuff
+        bp.purchase(this, "android.test.purchased");
+//        purchases.setVisibility(View.GONE);
+//        //TODO verify purchase before updating to true
+        db.updateCycleColors(true);
+    }
+
+    public void unlockAll(View view) {
+        //TODO replace this test stuff with real stuff
+        bp.purchase(this, "android.test.purchased");
+//        purchases.setVisibility(View.GONE);
+//        //TODO verify purchase before updating to true
+        db.updateAdsRemoved(true);
+        db.updateRemindersAvailable(true);
+        db.updateCycleColors(true);
+    }
+
+//TODO use the following where users make purchases
+    //bp.purchase(MainActivity.this, "android.test.purchased");
+    //TODO fill in information
+    //Without developer payload
+    //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE");
+    //With developer payload
+    //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE", "DEVELOPER PAYLOAD HERE");
+
+    //TODO find out if this is required
+//            Bundle extraParams = new Bundle()
+//            extraParams.putString("accountId", "MY_ACCOUNT_ID");
+//            bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE", null /*or developer payload*/, extraParams);
+//            bp.subscribe(YOUR_ACTIVITY, "YOUR SUBSCRIPTION ID FROM GOOGLE PLAY CONSOLE HERE", null /*or developer payload*/, extraParams);
+
     @Override
     protected void onPause(){
 
@@ -1703,7 +1841,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         mute = mSharedPreferences.getBoolean("muteKey", false);
 
         //getting app-wide data
-        Cursor dbResult = MainActivity.noteDb.getUniversalData();
+        Cursor dbResult = db.getUniversalData();
         while (dbResult.moveToNext()) {
             mute = dbResult.getInt(1) > 0;
             highlight = dbResult.getString(2);
@@ -1715,88 +1853,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         muteSounds(mute);
 
-        if(!lightDark){
-            theListView.setBackgroundColor(Color.parseColor("#333333"));
-            mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
-            mTopToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
-            black.setVisibility(View.GONE);
-            darkYellow.setVisibility(View.GONE);
-            darkBlue.setVisibility(View.GONE);
-            darkOrange.setVisibility(View.GONE);
-            darkPurple.setVisibility(View.GONE);
-            darkRed.setVisibility(View.GONE);
-            darkPink.setVisibility(View.GONE);
-            darkGreen.setVisibility(View.GONE);
-            if(highlight.equals("#FF000000")){
-                highlight = "#FFFFFFFF";
-            }
-            noteDb.updateHighlight(highlight);
-            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            colorPickerTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            removeAdsTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            removeAdsDescription.setTextColor(Color.parseColor("#AAAAAA"));
-            getRemindersTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            getRemindersDescription.setTextColor(Color.parseColor("#AAAAAA"));
-            cycleColorsTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            cycleColorsDescription.setTextColor(Color.parseColor("#AAAAAA"));
-            unlockAllTitle.setTextColor(Color.parseColor("#AAAAAA"));
-            unlockAllDescription.setTextColor(Color.parseColor("#AAAAAA"));
-            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            removeAdsImage.setVisibility(View.VISIBLE);
-            removeAdsImageWhite.setVisibility(View.GONE);
-            getRemindersImage.setVisibility(View.VISIBLE);
-            getRemindersImageWhite.setVisibility(View.GONE);
-            cycleColorsImage.setVisibility(View.VISIBLE);
-            cycleColorsImageWhite.setVisibility(View.GONE);
-            unlockAllImage.setVisibility(View.VISIBLE);
-            unlockAllImageWhite.setVisibility(View.GONE);
-            theListView.setAdapter(theAdapter[0]);
-        }else{
-            theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            mTopToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
-            white.setVisibility(View.GONE);
-            lightYellow.setVisibility(View.GONE);
-            lightBlue.setVisibility(View.GONE);
-            lightOrange.setVisibility(View.GONE);
-            lightPurple.setVisibility(View.GONE);
-            lightRed.setVisibility(View.GONE);
-            lightPink.setVisibility(View.GONE);
-            lightPurple.setVisibility(View.GONE);
-            lightGreen.setVisibility(View.GONE);
-            if(highlight.equals("#FFFFFFFF")){
-                highlight = "#FF000000";
-            }
-            noteDb.updateHighlight(highlight);
-            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
-            colorPickerTitle.setTextColor(Color.parseColor("#000000"));
-            removeAdsTitle.setTextColor(Color.parseColor("#000000"));
-            removeAdsDescription.setTextColor(Color.parseColor("#000000"));
-            getRemindersTitle.setTextColor(Color.parseColor("#000000"));
-            getRemindersDescription.setTextColor(Color.parseColor("#000000"));
-            cycleColorsTitle.setTextColor(Color.parseColor("#000000"));
-            cycleColorsDescription.setTextColor(Color.parseColor("#000000"));
-            unlockAllTitle.setTextColor(Color.parseColor("#000000"));
-            unlockAllDescription.setTextColor(Color.parseColor("#000000"));
-            purchases.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border_white));
-            removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-            getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-            cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-            unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-            removeAdsImage.setVisibility(View.GONE);
-            removeAdsImageWhite.setVisibility(View.VISIBLE);
-            getRemindersImage.setVisibility(View.GONE);
-            getRemindersImageWhite.setVisibility(View.VISIBLE);
-            cycleColorsImage.setVisibility(View.GONE);
-            cycleColorsImageWhite.setVisibility(View.VISIBLE);
-            unlockAllImage.setVisibility(View.GONE);
-            unlockAllImageWhite.setVisibility(View.VISIBLE);
-            theListView.setAdapter(theAdapter[0]);
-        }
+        checkLightDark(lightDark);
 
         for( int i = 0 ; i < taskListSize ; i++ ) {
 
@@ -1833,559 +1890,32 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             if(!alarmOptionsShowing) {
                 datePickerShowing = false;
                 theListView.setAdapter(theAdapter[0]);
-            //change due date to alarm options
+                //change due date to alarm options
             }else{
                 datePickerShowing = false;
                 theListView.setAdapter(theAdapter[0]);
             }
-        //time picker to date picker
+            //time picker to date picker
         }else if(timePickerShowing) {
             datePickerShowing = true;
             timePickerShowing = false;
             theListView.setAdapter(theAdapter[0]);
-        //repeat to alarm options
+            //repeat to alarm options
         }else if(repeatShowing){
             repeatShowing = false;
             theListView.setAdapter(theAdapter[0]);
-        //alarm options to properties
+            //alarm options to properties
         }else if(alarmOptionsShowing){
             alarmOptionsShowing = false;
             theListView.setAdapter(theAdapter[0]);
-        //Properties to home
+            //Properties to home
         }else if (taskPropertiesShowing){
             removeTaskProperties();
-        //Exit app
+            //Exit app
         }else{
             super.onBackPressed();
         }
 
     }
-
-    private void colorPickerShowing() {
-        if(colorPickerShowing) {
-            colorPicker.setVisibility(View.GONE);
-            colorPickerShowing = false;
-        }else{
-            purchases.setVisibility(View.GONE);
-            purchasesShowing = false;
-        }
-            theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-                    //Tasks are not clickable if keyboard is up
-                    if(tasksAreClickable && !completeTask) {
-
-//                    vibrate.vibrate(50);
-
-                        //checking if task has been killed
-                        Boolean killed = false;
-                        Cursor result = MainActivity.noteDb.getData(Integer
-                                .parseInt(sortedIDs.get(position)));
-                        while (result.moveToNext()) {
-                            killed = result.getInt(6) > 0;
-                        }
-
-                        //Selecting a task to view options
-                        if (!taskPropertiesShowing && !killed) {
-
-                            viewProperties(position);
-
-                            //Removes completed task
-                        } else if (!taskPropertiesShowing && killed) {
-
-                            removeTask(position);
-
-                            //Removes task options from view
-                        } else {
-
-                            removeTaskProperties();
-
-                        }
-
-                    }else {
-
-                        completeTask = false;
-
-                    }
-
-                }
-
-            });
-            add.setClickable(true);
-            onCreateOptionsMenu(mTopToolbar.getMenu());
-            theListView.setAdapter(theAdapter[0]);
-    }
-
-    public void complete(View view) {
-
-        if(!mute) {
-            punch.start();
-        }
-
-        LinearLayout parentLayout = (LinearLayout)view.getParent();
-
-        thePosition = theListView.getPositionForView(parentLayout);
-
-        completeTask = true;
-
-        theListView.performItemClick(theListView.getAdapter().getView(
-                thePosition, null, null), thePosition,
-                theListView.getAdapter().getItemId(thePosition));
-
-    }
-
-    public void setHighlightWhite(View view) {
-        noteDb.updateHighlight("#FFFFFFFF");
-        highlight = "#FFFFFFFF";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFFFF"));
-        addIcon.setTextColor(Color.parseColor("#FFFFFFFF"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightBlack(View view) {
-        noteDb.updateHighlight("#FF000000");
-        highlight = "#FF000000";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF000000"));
-        addIcon.setTextColor(Color.parseColor("#FF000000"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF000000"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightLightYellow(View view) {
-        noteDb.updateHighlight("#FFFFFF00");
-        highlight = "#FFFFFF00";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFFF00"));
-        addIcon.setTextColor(Color.parseColor("#FFFFFF00"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFFF00"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightDarkYellow(View view) {
-        noteDb.updateHighlight("#FFFFD700");
-        highlight = "#FFFFD700";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFD700"));
-        addIcon.setTextColor(Color.parseColor("#FFFFD700"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFD700"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightLightBlue(View view) {
-        noteDb.updateHighlight("#FF00FFFF");
-        highlight = "#FF00FFFF";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF00FFFF"));
-        addIcon.setTextColor(Color.parseColor("#FF00FFFF"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF00FFFF"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightDarkBlue(View view) {
-        noteDb.updateHighlight("#FF4169E1");
-        highlight = "#FF4169E1";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF4169E1"));
-        addIcon.setTextColor(Color.parseColor("#FF4169E1"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF4169E1"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightLightOrange(View view) {
-        noteDb.updateHighlight("#FFFFA500");
-        highlight = "#FFFFA500";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFFA500"));
-        addIcon.setTextColor(Color.parseColor("#FFFFA500"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFFA500"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightDarkOrange(View view) {
-        noteDb.updateHighlight("#FFFF8C00");
-        highlight = "#FFFF8C00";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF8C00"));
-        addIcon.setTextColor(Color.parseColor("#FFFF8C00"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF8C00"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightLightPurple(View view) {
-        noteDb.updateHighlight("#FF9370DB");
-        highlight = "#FF9370DB";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF9370DB"));
-        addIcon.setTextColor(Color.parseColor("#FF9370DB"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF9370DB"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightDarkPurple(View view) {
-        noteDb.updateHighlight("#FF8A2BE2");
-        highlight = "#FF8A2BE2";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF8A2BE2"));
-        addIcon.setTextColor(Color.parseColor("#FF8A2BE2"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF8A2BE2"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightDarkRed(View view) {
-        noteDb.updateHighlight("#FFFF0000");
-        highlight = "#FFFF0000";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF0000"));
-        addIcon.setTextColor(Color.parseColor("#FFFF0000"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF0000"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightLightRed(View view) {
-        noteDb.updateHighlight("#FFFF6347");
-        highlight = "#FFFF6347";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF6347"));
-        addIcon.setTextColor(Color.parseColor("#FFFF6347"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF6347"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightLightPink(View view) {
-        noteDb.updateHighlight("#FFFF69B4");
-        highlight = "#FFFF69B4";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF69B4"));
-        addIcon.setTextColor(Color.parseColor("#FFFF69B4"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF69B4"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightDarkPink(View view) {
-        noteDb.updateHighlight("#FFFF1493");
-        highlight = "#FFFF1493";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FFFF1493"));
-        addIcon.setTextColor(Color.parseColor("#FFFF1493"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FFFF1493"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightLightGreen(View view) {
-        noteDb.updateHighlight("#FF00FF00");
-        highlight = "#FF00FF00";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF00FF00"));
-        addIcon.setTextColor(Color.parseColor("#FF00FF00"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF00FF00"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    public void setHighlightDarkGreen(View view) {
-        noteDb.updateHighlight("#FF228B22");
-        highlight = "#FF228B22";
-        mTopToolbar.setTitleTextColor(Color.parseColor("#FF228B22"));
-        addIcon.setTextColor(Color.parseColor("#FF228B22"));
-        taskNameEditText.setBackgroundColor(Color.parseColor("#FF228B22"));
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, 0};
-        theListView.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
-        if(!lightDark) {
-            theListView.setDividerHeight(1);
-        }else{
-            theListView.setDividerHeight(3);
-        }
-        colorPickerShowing();
-    }
-
-    @Override
-    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-        Toast.makeText(this, "You purchased something", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onPurchaseHistoryRestored() {
-
-    }
-
-    @Override
-    public void onBillingError(int errorCode, @Nullable Throwable error) {
-        Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onBillingInitialized() {
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (bp != null) {
-            bp.release();
-        }
-        super.onDestroy();
-    }
-
-    public void removeAds(View view) {
-        //TODO replace this test stuff with real stuff
-        bp.purchase(this, "android.test.purchased");
-//        purchases.setVisibility(View.GONE);
-        //TODO verify purchase before updating to true
-        noteDb.updateAdsRemoved(true);
-    }
-
-    public void getReminders(View view) {
-        //TODO replace this test stuff with real stuff
-        bp.purchase(this, "android.test.purchased");
-//        purchases.setVisibility(View.GONE);
-//        //TODO verify purchase before updating to true
-        noteDb.updateRemindersAvailable(true);
-    }
-
-    public void cycleColors(View view) {
-        //TODO replace this test stuff with real stuff
-        bp.purchase(this, "android.test.purchased");
-//        purchases.setVisibility(View.GONE);
-//        //TODO verify purchase before updating to true
-        noteDb.updateCycleColors(true);
-    }
-
-    public void unlockAll(View view) {
-        //TODO replace this test stuff with real stuff
-        bp.purchase(this, "android.test.purchased");
-//        purchases.setVisibility(View.GONE);
-//        //TODO verify purchase before updating to true
-        noteDb.updateAdsRemoved(true);
-        noteDb.updateRemindersAvailable(true);
-        noteDb.updateCycleColors(true);
-    }
-
-//TODO use the following where users make purchases
-    //bp.purchase(MainActivity.this, "android.test.purchased");
-    //TODO fill in information
-    //Without developer payload
-    //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE");
-    //With developer payload
-    //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE", "DEVELOPER PAYLOAD HERE");
-
-    //TODO find out if this is required
-//            Bundle extraParams = new Bundle()
-//            extraParams.putString("accountId", "MY_ACCOUNT_ID");
-//            bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE", null /*or developer payload*/, extraParams);
-//            bp.subscribe(YOUR_ACTIVITY, "YOUR SUBSCRIPTION ID FROM GOOGLE PLAY CONSOLE HERE", null /*or developer payload*/, extraParams);
 
 }

@@ -59,7 +59,7 @@ public class Note extends MainActivity {
 
         //getting task data
         String dbTask = "";
-        Cursor dbTaskResult = MainActivity.noteDb.getUniversalData();
+        Cursor dbTaskResult = MainActivity.db.getUniversalData();
         while (dbTaskResult.moveToNext()) {
             dbTask = dbTaskResult.getString(4);
         }
@@ -71,7 +71,7 @@ public class Note extends MainActivity {
         noteTextView.setMovementMethod(new ScrollingMovementMethod());
 
         //getting app-wide data
-        Cursor dbResult = MainActivity.noteDb.getUniversalData();
+        Cursor dbResult = MainActivity.db.getUniversalData();
         while (dbResult.moveToNext()) {
             mute = dbResult.getInt(1) > 0;
             lightDark = dbResult.getInt(3) > 0;
@@ -106,7 +106,7 @@ public class Note extends MainActivity {
                 //Keyboard is inactive without this line
                 noteEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
-                Cursor result = noteDb.getData(Integer.parseInt(
+                Cursor result = db.getData(Integer.parseInt(
                         MainActivity.sortedIdsForNote.get(activeTask)));
                 while(result.moveToNext()){
                     checklistExists = (result.getInt(2) == 1);
@@ -114,7 +114,7 @@ public class Note extends MainActivity {
 
                 if(!noteEditText.getText().toString().equals("")) {
                     //new note being added
-                    noteDb.updateData(MainActivity.sortedIdsForNote.get(activeTask),
+                    db.updateData(MainActivity.sortedIdsForNote.get(activeTask),
                             noteEditText.getText().toString(), checklistExists);
                 }
 
@@ -122,7 +122,7 @@ public class Note extends MainActivity {
                 noteEditText.setText("");
 
                 //Getting note from database
-                result = noteDb.getData(Integer.parseInt(MainActivity.sortedIdsForNote.get(activeTask)));
+                result = db.getData(Integer.parseInt(MainActivity.sortedIdsForNote.get(activeTask)));
                 while(result.moveToNext()){
                     theNote = result.getString(1);
                 }
@@ -201,14 +201,14 @@ public class Note extends MainActivity {
 
 //                MainActivity.vibrate.vibrate(50);
 
-                Cursor result = noteDb.getData(Integer.parseInt(
+                Cursor result = db.getData(Integer.parseInt(
                         MainActivity.sortedIdsForNote.get(activeTask)));
                 while(result.moveToNext()){
                     checklistExists = (result.getInt(2) == 1);
                 }
 
                 //setting note in database to nothing
-                noteDb.updateData(MainActivity.sortedIdsForNote
+                db.updateData(MainActivity.sortedIdsForNote
                         .get(activeTask), "", checklistExists);
 
                 noteTextView.setText("");
@@ -264,7 +264,7 @@ public class Note extends MainActivity {
     //Existing notes are recalled when app opened
     private void getSavedData() {
 
-        Cursor result = noteDb.getData(Integer.parseInt(
+        Cursor result = db.getData(Integer.parseInt(
                 MainActivity.sortedIdsForNote.get(activeTask)));
         while(result.moveToNext()){
             theNote = result.getString(1);

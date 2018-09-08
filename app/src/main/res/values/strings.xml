@@ -5,12 +5,12 @@
     <!--<string name="noTasks">Hit the \'ADD\' button and start being productive!</string>-->
     <string name="checklistItem">Add something here</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="getItDone">Get it done!</string>
+    <!--<string name="getItDone">Get it done!</string>-->
     <string name="smashThatTask">Smash that task!</string>
     <string name="beAWinner">Be a winner!</string>
     <string name="onlyWimpsGiveUp">Only wimps give up!</string>
     <string name="dontBeAFailure">Don\'t be a failure!</string>
-    <string name="beVictorious">Be Victorious</string>
+    <string name="beVictorious">Be victorious!</string>
     <string name="taskReinstated">Task reinstated</string>
     <string name="killThisTask">Kill This Task!</string>
     <string name="tomorrow">Tomorrow</string>
@@ -67,6 +67,7 @@
     <string name="ignore">Ignore</string>
     <string name="setDue">Set Due</string>
     <string name="subTasks">Sub-Tasks</string>
+    <string name="getItDone">Get it done!</string>
     <!--TODO get new id. this one is pinched from Russian Roulette 2378583121223638/5662475907-->
 
 </resources>

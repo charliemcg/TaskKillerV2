@@ -71,7 +71,7 @@ public class Checklist extends MainActivity {
 
         //getting task data
         String dbTask = "";
-        Cursor dbTaskResult = MainActivity.noteDb.getUniversalData();
+        Cursor dbTaskResult = MainActivity.db.getUniversalData();
         while (dbTaskResult.moveToNext()) {
             dbTask = dbTaskResult.getString(4);
         }
@@ -91,7 +91,7 @@ public class Checklist extends MainActivity {
         checklistView.setDividerHeight(1);
 
         //getting app-wide data
-        Cursor dbResult = MainActivity.noteDb.getUniversalData();
+        Cursor dbResult = MainActivity.db.getUniversalData();
         while (dbResult.moveToNext()) {
             lightDark = dbResult.getInt(3) > 0;
         }
@@ -158,7 +158,7 @@ public class Checklist extends MainActivity {
                     subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
                             .get(MainActivity.activeTask))).remove(position);
 
-                    Cursor result = MainActivity.noteDb.getData(Integer.parseInt(MainActivity
+                    Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
                             .sortedIdsForNote.get(MainActivity.activeTask)));
                     while(result.moveToNext()){
                         noteExists = (result.getInt(2) == 1);
@@ -167,7 +167,7 @@ public class Checklist extends MainActivity {
                     if(checklistList.get(Integer.parseInt(MainActivity
                             .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
                         //setting checklist in database to false
-                        MainActivity.noteDb.updateData(MainActivity.sortedIdsForNote
+                        MainActivity.db.updateData(MainActivity.sortedIdsForNote
                                 .get(MainActivity.activeTask), "", false);
                     }
 
@@ -242,7 +242,7 @@ public class Checklist extends MainActivity {
                                         .get(activeSubTask))).size(), false);
 
                         //marking task so that it displays checklist icon
-                        noteDb.updateData(MainActivity.sortedIdsForNote.get(activeTask), "", true);
+                        db.updateData(MainActivity.sortedIdsForNote.get(activeTask), "", true);
 
                     }
 

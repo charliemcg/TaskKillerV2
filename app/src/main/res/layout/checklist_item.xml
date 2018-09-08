@@ -39,6 +39,28 @@
         android:visibility="gone"/>
 
     <ImageView
+        android:id="@+id/subtaskCompleteFaded"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_faded"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="complete"
+        android:soundEffectsEnabled="false"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompletedFaded"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_complete_faded"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"/>
+
+    <ImageView
         android:id="@+id/subtaskCompleteWhite"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -58,6 +80,29 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompleteWhiteFaded"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_white_faded"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="complete"
+        android:soundEffectsEnabled="false"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompletedWhiteFaded"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_complete_white_faded"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"/>
+
     <!--<Button-->
         <!--android:id="@+id/tick"-->
         <!--android:background="@color/green"-->

@@ -190,7 +190,7 @@ class MyAdapter extends ArrayAdapter<String> {
         int dbInterval = 0;
         String dbRepeatInterval = "";
         Boolean dbIgnored = false;
-        Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
+        Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(position)));
         while (dbResult.moveToNext()) {
             dbNote = dbResult.getString(1);
@@ -209,7 +209,7 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         //getting alarm data
-        Cursor alarmResult = MainActivity.noteDb.getAlarmData(
+        Cursor alarmResult = MainActivity.db.getAlarmData(
                 Integer.parseInt(MainActivity.sortedIDs.get(position)));
         String alarmHour = "";
         String alarmMinute = "";
@@ -586,7 +586,7 @@ class MyAdapter extends ArrayAdapter<String> {
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + 86400)) {
                 //setting new timestamp to a day from previous
                 int newStamp = Integer.parseInt(dbTimestamp) + 86400;
-                MainActivity.noteDb.updateTimestamp(MainActivity.sortedIDs
+                MainActivity.db.updateTimestamp(MainActivity.sortedIDs
                         .get(position), String.valueOf(newStamp));
 
                 if(!alarmDay.equals("")) {
@@ -617,14 +617,14 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
 
                     //updating due date in database
-                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                    MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                             alarmHour, alarmMinute, alarmAmpm,
                             String.valueOf(newDay), String.valueOf(newMonth),
                             String.valueOf(newYear));
 
                     //cancelling any snooze data
-                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                    MainActivity.db.updateSnoozeData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                             "", "", "", "", "", "");
 
@@ -634,7 +634,7 @@ class MyAdapter extends ArrayAdapter<String> {
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + 604800)) {
                 //setting new timestamp to a week from previous
                 int newStamp = Integer.parseInt(dbTimestamp) + 604800;
-                MainActivity.noteDb.updateTimestamp(MainActivity.sortedIDs
+                MainActivity.db.updateTimestamp(MainActivity.sortedIDs
                         .get(position), String.valueOf(newStamp));
 
                 if(!alarmDay.equals("")) {
@@ -664,14 +664,14 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
 
                     //updating due time in database
-                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                    MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                             alarmHour, alarmMinute, alarmAmpm,
                             String.valueOf(theDay), String.valueOf(theMonth),
                             String.valueOf(theYear));
 
                     //cancelling any snooze data
-                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                    MainActivity.db.updateSnoozeData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                             "", "", "", "", "", "");
 
@@ -723,7 +723,7 @@ class MyAdapter extends ArrayAdapter<String> {
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + interval)) {
                 //setting new timestamp to a month from previous
                 int newStamp = Integer.parseInt(dbTimestamp) + interval;
-                MainActivity.noteDb.updateTimestamp(MainActivity.sortedIDs
+                MainActivity.db.updateTimestamp(MainActivity.sortedIDs
                         .get(position), String.valueOf(newStamp));
 
                 //setting the next alarm because monthly repeats cannot be done automatically
@@ -759,14 +759,14 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
 
                     //updating due date in database
-                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                    MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                             alarmHour, alarmMinute, alarmAmpm,
                             String.valueOf(newDay), String.valueOf(newMonth),
                             String.valueOf(newYear));
 
                     //cancelling any snooze data
-                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                    MainActivity.db.updateSnoozeData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                             "", "", "", "", "", "");
 
@@ -797,7 +797,7 @@ class MyAdapter extends ArrayAdapter<String> {
             Calendar currentDate = new GregorianCalendar();
 
             //Getting time data
-            Cursor result = MainActivity.noteDb.getSnoozeData(Integer.parseInt(
+            Cursor result = MainActivity.db.getSnoozeData(Integer.parseInt(
                     MainActivity.sortedIDs.get(position)));
             String hour = "";
             String minute = "";
@@ -817,7 +817,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //If there is no snoozed alarm then get initial alarm
             if(hour.equals("")){
                 //getting alarm data
-                result = MainActivity.noteDb.getAlarmData(
+                result = MainActivity.db.getAlarmData(
                         Integer.parseInt(MainActivity.sortedIDs.get(position)));
                 while(result.moveToNext()){
                     hour = result.getString(1);
@@ -1010,7 +1010,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     snoozeLayout.setVisibility(View.GONE);
                     overdueClear.setVisibility(View.VISIBLE);
                     overdueLayout.setVisibility(View.VISIBLE);
-                    MainActivity.noteDb.updateSnooze(
+                    MainActivity.db.updateSnooze(
                             MainActivity.sortedIDs.get(position), false);
                     //show snooze icon
                 } else {
@@ -1023,7 +1023,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 //Show the once off overdue options
 //            }else if(markAsOverdue && dbShowOnce){
 //
-//                MainActivity.noteDb.updateOverdue(
+//                MainActivity.db.updateOverdue(
 //                        MainActivity.sortedIDs.get(position), true);
 //
 //                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
@@ -1043,7 +1043,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                }
 
-                MainActivity.noteDb.updateOverdue(String.valueOf(
+                MainActivity.db.updateOverdue(String.valueOf(
                         MainActivity.sortedIDs.get(position)), true);
 
             }
@@ -1133,10 +1133,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.taskPropertiesShowing = false;
 
-                MainActivity.noteDb.updateKilled(String.valueOf(
+                MainActivity.db.updateKilled(String.valueOf(
                         MainActivity.sortedIDs.get(position)), true);
 
-                MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
+                MainActivity.db.updateIgnored(MainActivity.sortedIDs
                         .get(position), false);
 
                 Toast.makeText(taskView.getContext(), R.string.youKilledThisTask,
@@ -1325,17 +1325,17 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 //updating timestamp
                 int adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
-                MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                MainActivity.db.updateTimestamp(String.valueOf(MainActivity
                         .sortedIDs.get(position)), String.valueOf(adjustedStamp));
 
                 //updating due time in database
-                MainActivity.noteDb.updateAlarmData(String.valueOf(
+                MainActivity.db.updateAlarmData(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
                         finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                         String.valueOf(newDay), String.valueOf(newMonth),
                         String.valueOf(newYear));
 
-                MainActivity.noteDb.updateShowOnce(
+                MainActivity.db.updateShowOnce(
                         MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                 //TODO Show this only when necessary
@@ -1371,10 +1371,10 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
-                        MainActivity.noteDb.updateDue(String.valueOf(MainActivity
+                        MainActivity.db.updateDue(String.valueOf(MainActivity
                                 .sortedIDs.get(MainActivity.activeTask)), false);
 
-                        MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                        MainActivity.db.updateRepeat(MainActivity.sortedIDs
                                 .get(position), false);
 
                         MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
@@ -1384,7 +1384,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                        MainActivity.noteDb.updateAlarmData(String.valueOf(MainActivity.activeTask),
+                        MainActivity.db.updateAlarmData(String.valueOf(MainActivity.activeTask),
                                 "", "", "", "", "", "");
 
                         MainActivity.alarmOptionsShowing = false;
@@ -1441,7 +1441,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                MainActivity.noteDb.updateInterval(String.valueOf(MainActivity
+                                MainActivity.db.updateInterval(String.valueOf(MainActivity
                                         .sortedIDs.get(position)), String.valueOf(1));
 
                                 Calendar dateNow = new GregorianCalendar();
@@ -1677,7 +1677,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     }
 
                                     //updating due date in database
-                                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                    MainActivity.db.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                             String.valueOf(newDay),
@@ -1685,7 +1685,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             String.valueOf(newYear));
 
                                     //cancelling any snoozed alarm data
-                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                    MainActivity.db.updateSnoozeData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             "",
                                             "",
@@ -1694,11 +1694,11 @@ class MyAdapter extends ArrayAdapter<String> {
                                             "",
                                             "");
 
-                                    MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                                    MainActivity.db.updateTimestamp(String.valueOf(MainActivity
                                             .sortedIDs.get(position)),
                                             String.valueOf(adjustedStamp));
 
-                                    MainActivity.noteDb.updateOverdue(String.valueOf(
+                                    MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
 
                                     //set background to white
@@ -1786,7 +1786,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     newHour++;
 
                                     //updating snooze due time in database
-                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                    MainActivity.db.updateSnoozeData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             String.valueOf(newHour),
                                             String.valueOf(currentDate.get(Calendar.MINUTE)),
@@ -1867,7 +1867,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     .getTimeInMillis() + interval),
                                             MainActivity.pendIntent);
 
-                                    MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
+                                    MainActivity.db.updateSnooze(MainActivity.sortedIDs
                                             .get(position), true);
 
                                     datePicker.setVisibility(View.VISIBLE);
@@ -1912,7 +1912,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                MainActivity.noteDb.updateInterval(String.valueOf(
+                                MainActivity.db.updateInterval(String.valueOf(
                                         MainActivity.sortedIDs.get(position)), String.valueOf(4));
 
                                 Calendar dateNow = new GregorianCalendar();
@@ -2151,7 +2151,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     }
 
                                     //updating due date in database
-                                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                    MainActivity.db.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                             String.valueOf(newDay),
@@ -2159,7 +2159,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             String.valueOf(newYear));
 
                                     //cancelling any snooze data
-                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                    MainActivity.db.updateSnoozeData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             "",
                                             "",
@@ -2168,11 +2168,11 @@ class MyAdapter extends ArrayAdapter<String> {
                                             "",
                                             "");
 
-                                    MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                                    MainActivity.db.updateTimestamp(String.valueOf(MainActivity
                                                     .sortedIDs.get(position)),
                                             String.valueOf(adjustedStamp));
 
-                                    MainActivity.noteDb.updateOverdue(String.valueOf(
+                                    MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
 
                                     //set background to white
@@ -2262,7 +2262,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                         newHour -= 12;
                                     }
 
-                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                    MainActivity.db.updateSnoozeData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             String.valueOf(newHour),
                                             String.valueOf(currentDate.get(Calendar.MINUTE)),
@@ -2343,7 +2343,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     .getTimeInMillis() + interval),
                                             MainActivity.pendIntent);
 
-                                    MainActivity.noteDb.updateSnooze(MainActivity.sortedIDs
+                                    MainActivity.db.updateSnooze(MainActivity.sortedIDs
                                             .get(position), true);
 
                                     datePicker.setVisibility(View.VISIBLE);
@@ -2387,7 +2387,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(View v) {
 
-                                MainActivity.noteDb.updateInterval(String.valueOf(
+                                MainActivity.db.updateInterval(String.valueOf(
                                         MainActivity.sortedIDs.get(position)), String.valueOf(24));
 
                                 Calendar dateNow = new GregorianCalendar();
@@ -2625,7 +2625,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     }
 
                                     //updating due time in database
-                                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                    MainActivity.db.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                             String.valueOf(newDay),
@@ -2633,7 +2633,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             String.valueOf(newYear));
 
                                     //cancelling any snooze data
-                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                    MainActivity.db.updateSnoozeData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             "",
                                             "",
@@ -2642,11 +2642,11 @@ class MyAdapter extends ArrayAdapter<String> {
                                             "",
                                             "");
 
-                                    MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                                    MainActivity.db.updateTimestamp(String.valueOf(MainActivity
                                                     .sortedIDs.get(position)),
                                             String.valueOf(adjustedStamp));
 
-                                    MainActivity.noteDb.updateOverdue(String.valueOf(
+                                    MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
 
                                     //set background to white
@@ -2718,7 +2718,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     }
 
                                     //updating snooze data
-                                    MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                                    MainActivity.db.updateSnoozeData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                             String.valueOf(currentDate.get(Calendar.HOUR)),
                                             String.valueOf(currentDate.get(Calendar.MINUTE)),
@@ -2798,7 +2798,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     .getTimeInMillis() + interval),
                                             MainActivity.pendIntent);
 
-                                    MainActivity.noteDb.updateSnooze(MainActivity
+                                    MainActivity.db.updateSnooze(MainActivity
                                             .sortedIDs.get(position), true);
 
                                     datePicker.setVisibility(View.VISIBLE);
@@ -2856,10 +2856,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             taskOverdueRow.setVisibility(View.GONE);
 
-                            MainActivity.noteDb.updateOverdue(String.valueOf(
+                            MainActivity.db.updateOverdue(String.valueOf(
                                     MainActivity.sortedIDs.get(position)), false);
 
-                            MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
+                            MainActivity.db.updateIgnored(MainActivity.sortedIDs
                                     .get(position), false);
 
                             //set background white
@@ -2870,7 +2870,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             MainActivity.taskPropertiesShowing = false;
 
-                            MainActivity.noteDb.updateKilled(String.valueOf(
+                            MainActivity.db.updateKilled(String.valueOf(
                                     MainActivity.sortedIDs.get(
                                             MainActivity.activeTask)), true);
 
@@ -2923,7 +2923,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         }else {
 
                             //cancelling any snooze data
-                            MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                            MainActivity.db.updateSnoozeData(String.valueOf(
                                     MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                     "", "", "", "", "", "");
 
@@ -2933,7 +2933,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 //adding one day to timestamp
                                 int adjustedStamp = Integer.parseInt(finalDbTimestamp) + 86400;
-                                MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                                MainActivity.db.updateTimestamp(String.valueOf(MainActivity
                                         .sortedIDs.get(position)), String.valueOf(adjustedStamp));
 
                                 int newDay = Integer.parseInt(finalAlarmDay);
@@ -2974,7 +2974,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     newDay++;
                                 }
 
-                                MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                MainActivity.db.updateAlarmData(String.valueOf(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                         finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                         String.valueOf(newDay), String.valueOf(newMonth),
@@ -2984,7 +2984,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 //adding one week to timestamp
                                 int adjustedStamp = Integer.parseInt(finalDbTimestamp) + 604800;
-                                MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                                MainActivity.db.updateTimestamp(String.valueOf(MainActivity
                                         .sortedIDs.get(position)), String.valueOf(adjustedStamp));
 
                                 int newDay = currentDate.get(Calendar.DAY_OF_MONTH) + 7;
@@ -3023,7 +3023,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     newMonth++;
                                 }
 
-                                MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                MainActivity.db.updateAlarmData(String.valueOf(
                                         MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                         finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                         String.valueOf(newDay), String.valueOf(newMonth),
@@ -3075,7 +3075,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 //adding one month to timestamp
                                 int adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
-                                MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                                MainActivity.db.updateTimestamp(String.valueOf(MainActivity
                                                 .sortedIDs.get(position)),
                                         String.valueOf(adjustedStamp));
 
@@ -3112,7 +3112,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 }
 
                                 //setting new due time in database
-                                MainActivity.noteDb.updateAlarmData(String.valueOf(
+                                MainActivity.db.updateAlarmData(String.valueOf(
                                     MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                     finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                     String.valueOf(newDay),
@@ -3129,7 +3129,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             MainActivity.taskPropertiesShowing = false;
 
-                            MainActivity.noteDb.updateOverdue(
+                            MainActivity.db.updateOverdue(
                                     MainActivity.sortedIDs.get(position), false);
 
                             MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
@@ -3146,17 +3146,17 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         taskOverdueRow.setVisibility(View.GONE);
 
-                        MainActivity.noteDb.updateOverdue(
+                        MainActivity.db.updateOverdue(
                                 MainActivity.sortedIDs.get(position), false);
 
-                        MainActivity.noteDb.updateShowOnce(
+                        MainActivity.db.updateShowOnce(
                                 MainActivity.sortedIDs.get(position), false);
 
-                        MainActivity.noteDb.updateIgnored(String.valueOf(
+                        MainActivity.db.updateIgnored(String.valueOf(
                                 MainActivity.sortedIDs.get(position)), true);
 
                         //cancelling any snooze data
-                        MainActivity.noteDb.updateSnoozeData(String.valueOf(
+                        MainActivity.db.updateSnoozeData(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)),
                                 "",
                                 "",
@@ -3257,10 +3257,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.taskPropertiesShowing = false;
 
-                        MainActivity.noteDb.updateKilled(String.valueOf(
+                        MainActivity.db.updateKilled(String.valueOf(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
 
-                        MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
+                        MainActivity.db.updateIgnored(MainActivity.sortedIDs
                                 .get(position), false);
 
                         Toast.makeText(v.getContext(), R.string.youKilledThisTask,
@@ -3472,17 +3472,17 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         //updating timestamp
                         int adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
-                        MainActivity.noteDb.updateTimestamp(String.valueOf(MainActivity
+                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
                                 .sortedIDs.get(position)), String.valueOf(adjustedStamp));
 
                         //updating due time in database
-                        MainActivity.noteDb.updateAlarmData(String.valueOf(
+                        MainActivity.db.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
                                 finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                 String.valueOf(newDay), String.valueOf(newMonth),
                                 String.valueOf(newYear));
 
-                        MainActivity.noteDb.updateShowOnce(
+                        MainActivity.db.updateShowOnce(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                         //TODO Show this only when necessary
@@ -3511,16 +3511,16 @@ class MyAdapter extends ArrayAdapter<String> {
                     //clear out all data related to alarm
                     if(finalDbIgnored){
 
-                        MainActivity.noteDb.updateDue(String.valueOf(MainActivity
+                        MainActivity.db.updateDue(String.valueOf(MainActivity
                                 .sortedIDs.get(MainActivity.activeTask)), false);
 
-                        MainActivity.noteDb.removeTimestamp(String.valueOf(MainActivity
+                        MainActivity.db.removeTimestamp(String.valueOf(MainActivity
                                 .sortedIDs.get(MainActivity.activeTask)));
 
-                        MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                        MainActivity.db.updateRepeat(MainActivity.sortedIDs
                                 .get(position), false);
 
-                        MainActivity.noteDb.updateIgnored(MainActivity.sortedIDs
+                        MainActivity.db.updateIgnored(MainActivity.sortedIDs
                                 .get(position), false);
 
                         MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
@@ -3530,7 +3530,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                        MainActivity.noteDb.updateAlarmData
+                        MainActivity.db.updateAlarmData
                                 (String.valueOf(MainActivity.sortedIDs.get(position)),
                                         "", "", "",
                                         "", "", "");
@@ -3577,15 +3577,15 @@ class MyAdapter extends ArrayAdapter<String> {
                         } else if (finalDbSnooze) {
 
                             //remove any associated snooze
-                            MainActivity.noteDb.updateSnooze(String.valueOf(MainActivity.sortedIDs
+                            MainActivity.db.updateSnooze(String.valueOf(MainActivity.sortedIDs
                                     .get(position)), false);
 
                             //marks showonce as false
-                            MainActivity.noteDb.updateShowOnce(String.valueOf(MainActivity
+                            MainActivity.db.updateShowOnce(String.valueOf(MainActivity
                                     .sortedIDs.get(position)), false);
 
                             //remove snooze time data
-                            MainActivity.noteDb.updateSnoozeData
+                            MainActivity.db.updateSnoozeData
                                     (String.valueOf(MainActivity.sortedIDs.get(position)),
                                             "", "", "",
                                             "", "", "");
@@ -3598,7 +3598,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                            alarmBtnText.setText(R.string.alarmOptions);//TODO fix this
+                            alarmBtnText.setText(R.string.alarmOptions);
                             MainActivity.taskPropertiesShowing = false;
 //                            MainActivity.activityRootView
 //                                    .setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -3635,12 +3635,12 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                            .sortedIDs.get(MainActivity.activeTask)), false);
 //                                    MainActivity.noteDb.removeTimestamp(String.valueOf(MainActivity
 //                                            .sortedIDs.get(MainActivity.activeTask)));
-                                    MainActivity.noteDb.updateDue(String.valueOf(MainActivity
+                                    MainActivity.db.updateDue(String.valueOf(MainActivity
                                             .sortedIDs.get(position)), false);
-                                    MainActivity.noteDb.removeTimestamp(String.valueOf(MainActivity
+                                    MainActivity.db.removeTimestamp(String.valueOf(MainActivity
                                             .sortedIDs.get(position)));
 
-                                    MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                                    MainActivity.db.updateRepeat(MainActivity.sortedIDs
                                             .get(position), false);
 
                                     MainActivity.pendIntent = PendingIntent.getBroadcast
@@ -3651,7 +3651,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                                    MainActivity.noteDb.updateAlarmData
+                                    MainActivity.db.updateAlarmData
                                             (String.valueOf(MainActivity.sortedIDs.get(position)),
                                                     "", "", "",
                                                     "", "", "");
@@ -3703,7 +3703,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     if (finalDbRepeat) {
 
-                                        MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                                        MainActivity.db.updateRepeat(MainActivity.sortedIDs
                                                 .get(MainActivity.activeTask), false);
 
                                         MainActivity.pendIntent = PendingIntent.getBroadcast(
@@ -3820,7 +3820,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                    MainActivity.vibrate.vibrate(50);
 
-                    MainActivity.noteDb.updateActiveTaskTemp(task);
+                    MainActivity.db.updateActiveTaskTemp(task);
 
                     getContext().startActivity(intent);
 
@@ -3834,7 +3834,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                    MainActivity.vibrate.vibrate(50);
 
-                    MainActivity.noteDb.updateActiveTaskTemp(task);
+                    MainActivity.db.updateActiveTaskTemp(task);
 
                     getContext().startActivity(noteIntent);
 
@@ -3862,7 +3862,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.repeatInterval = AlarmManager.INTERVAL_DAY;
 
-                    MainActivity.noteDb.updateRepeatInterval(String.valueOf(
+                    MainActivity.db.updateRepeatInterval(String.valueOf(
                             MainActivity.sortedIDs.get(position)), "day");
 
                     MainActivity.repeating = true;
@@ -3892,7 +3892,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.repeatInterval = (AlarmManager.INTERVAL_DAY * 7);
 
-                    MainActivity.noteDb.updateRepeatInterval(String.valueOf(
+                    MainActivity.db.updateRepeatInterval(String.valueOf(
                             MainActivity.sortedIDs.get(position)), "week");
 
                     MainActivity.repeating = true;
@@ -3920,7 +3920,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     MainActivity.dateRowShowing = true;
 
-                    MainActivity.noteDb.updateRepeatInterval(String.valueOf(
+                    MainActivity.db.updateRepeatInterval(String.valueOf(
                             MainActivity.sortedIDs.get(position)), "month");
 
                     MainActivity.taskPropertiesShowing = false;
@@ -3984,7 +3984,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //            Calendar currentDate = new GregorianCalendar();
 //
 //            //Getting time data
-//            Cursor result = MainActivity.noteDb.getSnoozeData(Integer.parseInt(
+//            Cursor result = MainActivity.db.getSnoozeData(Integer.parseInt(
 //                    MainActivity.sortedIDs.get(position)));
 //            String hour = "";
 //            String minute = "";
@@ -4379,7 +4379,7 @@ class MyAdapter extends ArrayAdapter<String> {
         Integer dbBroadcast = 0;
         Boolean dbSnooze = false;
         String dbRepeatInterval = "";
-        Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
+        Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(position)));
         while (dbResult.moveToNext()) {
             dbTask = dbResult.getString(4);
@@ -4389,7 +4389,7 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         //getting alarm data
-        Cursor alarmResult = MainActivity.noteDb.getAlarmData(
+        Cursor alarmResult = MainActivity.db.getAlarmData(
                 Integer.parseInt(MainActivity.sortedIDs.get(position)));
         String alarmHour = "";
         String alarmMinute = "";
@@ -4434,7 +4434,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     prevCalendar.getTimeInMillis(),
                     MainActivity.repeatInterval, MainActivity.pendIntent);
 
-            MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+            MainActivity.db.updateRepeat(MainActivity.sortedIDs
                     .get(position), true);
 
             MainActivity.repeatShowing = false;
@@ -4462,7 +4462,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //actions specific to monthly repeating task
             if(dbRepeatInterval.equals("month")){
 
-                MainActivity.noteDb.updateRepeat(MainActivity.sortedIDs
+                MainActivity.db.updateRepeat(MainActivity.sortedIDs
                         .get(position), true);
 
                 //set background to white
@@ -4524,7 +4524,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             timePicker.getHour(), timePicker.getMinute());
 
                     //updating timestamp
-                    MainActivity.noteDb.updateTimestamp(String.valueOf(
+                    MainActivity.db.updateTimestamp(String.valueOf(
                             MainActivity.sortedIDs.get(position)),
                             String.valueOf(futureDate.getTimeInMillis() / 1000));
 
@@ -4532,7 +4532,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
                     //updating due time in database
-                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+                    MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(position)),
                             String.valueOf(calendar.get(calendar.HOUR)),
                             String.valueOf(calendar.get(calendar.MINUTE)),
@@ -4566,10 +4566,10 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),
                             MainActivity.pendIntent);
 
-                    MainActivity.noteDb.updateDue(
+                    MainActivity.db.updateDue(
                             MainActivity.sortedIDs.get(position), true);
 
-                    MainActivity.noteDb.updateShowOnce(
+                    MainActivity.db.updateShowOnce(
                             MainActivity.sortedIDs.get(position), true);
 
                 }
@@ -4622,7 +4622,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //getting timestamp
             String dbTimestamp = "";
-            Cursor dbResult = MainActivity.noteDb.getData(Integer.parseInt(
+            Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                     MainActivity.sortedIDs.get(i)));
             while (dbResult.moveToNext()) {
                 dbTimestamp = dbResult.getString(3);
@@ -4636,7 +4636,7 @@ class MyAdapter extends ArrayAdapter<String> {
         ArrayList<String> whenTaskCreated = new ArrayList<>();
         for(int i = 0; i < MainActivity.taskListSize; i++){
             String created = "";
-            Cursor createdResult = MainActivity.noteDb.getData(Integer.parseInt
+            Cursor createdResult = MainActivity.db.getData(Integer.parseInt
                     (MainActivity.sortedIDs.get(i)));
             while (createdResult.moveToNext()) {
                 created = createdResult.getString(15);
@@ -4663,7 +4663,7 @@ class MyAdapter extends ArrayAdapter<String> {
             String dbTimestamp = "";
             String dbTask = "";
             Boolean dbKilled = false;
-            Cursor dbResult = MainActivity.noteDb.getDataByTimestamp(
+            Cursor dbResult = MainActivity.db.getDataByTimestamp(
                     whenTaskCreated.get(i));
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
@@ -4701,7 +4701,7 @@ class MyAdapter extends ArrayAdapter<String> {
             int dbId = 0;
             String dbTask = "";
             boolean dbKilled = false;
-            Cursor dbResult = MainActivity.noteDb.getDataByDueTime(
+            Cursor dbResult = MainActivity.db.getDataByDueTime(
                     String.valueOf(tempList.get(i)));
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
@@ -4731,7 +4731,7 @@ class MyAdapter extends ArrayAdapter<String> {
             int dbId = 0;
             String dbTask = "";
             boolean dbKilled = false;
-            Cursor dbResult = MainActivity.noteDb.getDataByDueTime(
+            Cursor dbResult = MainActivity.db.getDataByDueTime(
                     String.valueOf(tempList.get(i)));
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
