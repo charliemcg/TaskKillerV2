@@ -4746,6 +4746,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
+        for(int i = 0; i < MainActivity.taskListSize; i++){
+
+            MainActivity.db.updateSortedIndex(String.valueOf(i), Integer.parseInt(tempIdsList.get(i)));
+
+        }
+
         MainActivity.sortedIDs = tempIdsList;
         MainActivity.taskList = tempTaskList;
 

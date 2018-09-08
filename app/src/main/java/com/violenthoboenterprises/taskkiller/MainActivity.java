@@ -164,10 +164,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
-//    Button showDb;
-//    Button showAlarmDb;
-//    Button showSnoozeDb;
-//    Button showUniversalDb;
+    Button showDb;
+    Button showAlarmDb;
+    Button showSnoozeDb;
+    Button showUniversalDb;
 
     //Scrollable list
     static ListView theListView;
@@ -367,6 +367,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 getString(R.string.smashThatTask), getString(R.string.beAWinner),
                 getString(R.string.onlyWimpsGiveUp), getString(R.string.dontBeAFailure),
                 getString(R.string.beVictorious)};
+        taskListSize = 0;
+        showDb = findViewById(R.id.showDb);
+//      showAlarmDb = findViewById(R.id.showAlarmDb);
+        showUniversalDb = findViewById(R.id.showUniversalDb);
 
         db.insertUniversalData(mute);
 
@@ -378,6 +382,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             adsRemoved = dbResult.getInt(5) > 0;
             remindersAvailable = dbResult.getInt(6) > 0;
             cycleColors = dbResult.getInt(7) > 0;
+            taskListSize = dbResult.getInt(8);
         }
 
         //Put data in list
@@ -499,40 +504,41 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         //Used for debugging purposes
-//        showDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = noteDb.getAllData();
-//
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("NOTE: " + res.getString(1) + "\n");
-//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-//                    buffer.append("TASK: " + res.getString(4) + "\n");
-//                    buffer.append("DUE: " + res.getString(5) + "\n");
-//                    buffer.append("KILLED: " + res.getString(6) + "\n");
-//                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
-//                    buffer.append("REPEAT: " + res.getString(8) + "\n");
-//                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
-//                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
-//                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-//                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
-//                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
-//                    buffer.append("IGNORED: " + res.getString(14) + "\n");
-//                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n\n");
-//                }
-//
-//                showMessage("Data", buffer.toString());
-//
-//            }
-//
-//        });
+        showDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllData();
+
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("NOTE: " + res.getString(1) + "\n");
+                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+                    buffer.append("TASK: " + res.getString(4) + "\n");
+                    buffer.append("DUE: " + res.getString(5) + "\n");
+                    buffer.append("KILLED: " + res.getString(6) + "\n");
+                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
+                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
+                    buffer.append("IGNORED: " + res.getString(14) + "\n");
+                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
+                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n\n");
+                }
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
 
         //Used for debugging purposes
 //        showAlarmDb.setOnClickListener(new View.OnClickListener() {
@@ -589,31 +595,36 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //
 //        });
 
-//        //Used for debugging purposes
-//        showUniversalDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = noteDb.getAllUniversalData();
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("MUTE: " + res.getString(1) + "\n");
-//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
-//                    buffer.append("LIGHTDARK: " + res.getString(3) + "\n\n");
-//                }
-//
-//                showMessage("Data", buffer.toString());
-//
-////                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
-////                        Toast.LENGTH_LONG).show();
-//
-//            }
-//
-//        });
+        //Used for debugging purposes
+        showUniversalDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllUniversalData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("MUTE: " + res.getString(1) + "\n");
+                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
+                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
+                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
+                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
+                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
+                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
+                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n\n");
+                }
+
+                showMessage("Data", buffer.toString());
+
+//                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
+//                        Toast.LENGTH_LONG).show();
+
+            }
+
+        });
 
         //Actions to occur when user submits new task
         taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
@@ -1097,13 +1108,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
 
         taskListSize--;
+        db.updateTaskListSize(taskListSize);
 
         //deleting data related to deleted task
         db.deleteData(String.valueOf(sortedIDs.get(position)));
         db.deleteAlarmData(String.valueOf(sortedIDs.get(position)));
         db.deleteSnoozeData(String.valueOf(sortedIDs.get(position)));
 
-        //Cancel notification alars if one is set
+        //Cancel notification alarms if one is set
         alarmManager.cancel(pendIntent.getService(this,
                 Integer.parseInt(sortedIDs.get(position)), alertIntent, 0));
 
@@ -1328,6 +1340,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             tempIdsList.add(tempKilledIdsList.get(i));
         }
 
+        for(int i = 0; i < MainActivity.taskListSize; i++){
+
+            MainActivity.db.updateSortedIndex(String.valueOf(i), Integer.parseInt(tempIdsList.get(i)));
+
+        }
+
         MainActivity.sortedIDs = tempIdsList;
         MainActivity.taskList = tempTaskList;
 
@@ -1349,6 +1367,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 taskList.add(taskName);
 
                 taskListSize++;
+                db.updateTaskListSize(taskListSize);
 
                 //finding unique ID for task
                 int i = 0;
@@ -1358,6 +1377,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         i++;
                     } else {
                         sortedIDs.add(taskListSize - 1, String.valueOf(i));
+                        db.updateSortedIndex(String.valueOf(taskListSize - 1), i);
                         idIsSet = true;
                     }
                 }
@@ -1794,19 +1814,19 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //Tasks are saved in a manner so that they don't vanish when app closed
 
-        mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
+//        mSharedPreferences.edit().putInt("taskListSizeKey", taskListSize).apply();
 
 //        mSharedPreferences.edit().putBoolean("muteKey", mute).apply();
 
-        for (int i = 0; i < taskListSize; i++) {
+//        for (int i = 0; i < taskListSize; i++) {
 
-            mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
-                    taskList.get(i)).apply();
+//            mSharedPreferences.edit().putString("taskNameKey" + String.valueOf(i),
+//                    taskList.get(i)).apply();
 
-            mSharedPreferences.edit().putString("sortedIDsKey" + String.valueOf(i),
-                    sortedIDs.get(i)).apply();
+//            mSharedPreferences.edit().putString("sortedIDsKey" + String.valueOf(i),
+//                    sortedIDs.get(i)).apply();
 
-        }
+//        }
 
         sortedIdsForNote = sortedIDs;
 
@@ -1836,9 +1856,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         sortedIDs.clear();
 
         //Existing tasks are recalled when app opened
-        taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
+//        taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
 
-        mute = mSharedPreferences.getBoolean("muteKey", false);
+//        mute = mSharedPreferences.getBoolean("muteKey", false);
 
         //getting app-wide data
         Cursor dbResult = db.getUniversalData();
@@ -1849,19 +1869,51 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             adsRemoved = dbResult.getInt(5) > 0;
             remindersAvailable = dbResult.getInt(6) > 0;
             cycleColors = dbResult.getInt(7) > 0;
+            taskListSize = dbResult.getInt(8);
         }
+
+        Log.i(TAG, "Size " + taskListSize);
 
         muteSounds(mute);
 
         checkLightDark(lightDark);
 
+        ArrayList<Integer> tempSortedIDs = new ArrayList<>();
+
         for( int i = 0 ; i < taskListSize ; i++ ) {
 
-            taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
+//            Cursor sharedPreferencesResult = db.getData(Integer
+//                    .parseInt(sortedIDs.get(i)));
+//            while (sharedPreferencesResult.moveToNext()) {
+//                taskList.add(sharedPreferencesResult.getString(4));
+//            }
 
-            sortedIDs.add(mSharedPreferences.getString("sortedIDsKey" +
-                    String.valueOf(i), ""));
+//            taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
 
+//            sortedIDs.add(mSharedPreferences.getString("sortedIDsKey" +
+//                    String.valueOf(i), ""));
+
+            Cursor sortedIdsResult = db.getData(i);
+            while (sortedIdsResult.moveToNext()) {
+                tempSortedIDs.add(sortedIdsResult.getInt(16));
+            }
+
+        }
+
+        Collections.sort(tempSortedIDs);
+
+        for(int i = 0; i < taskListSize; i ++){
+
+            sortedIDs.add(String.valueOf(tempSortedIDs.get(i)));
+
+        }
+
+        for(int i = 0; i < taskListSize; i++){
+            Cursor sharedPreferencesResult = db.getData(Integer
+                    .parseInt(sortedIDs.get(i)));
+            while (sharedPreferencesResult.moveToNext()) {
+                taskList.add(sharedPreferencesResult.getString(4));
+            }
         }
 
         alertIntent = new Intent(this, AlertReceiver.class);

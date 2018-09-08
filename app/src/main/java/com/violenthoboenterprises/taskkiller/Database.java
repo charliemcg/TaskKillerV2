@@ -31,6 +31,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL14 = "REPEATINTERVAL";
     public static final String COL15 = "IGNORED";
     public static final String COL16 = "TIMECREATED";
+    public static final String COL17 = "SORTEDINDEX";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -62,6 +63,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL6 = "ADSREMOVED";
     public static final String UCOL7 = "REMINDERSAVAILABLE";
     public static final String UCOL8 = "CYCLECOLORS";
+    public static final String UCOL9 = "TASKLISTSIZE";
 
     String TAG = "Data";
 
@@ -76,14 +78,14 @@ public class Database extends SQLiteOpenHelper {
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
                 "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT," +
-                " IGNORED BOOLEAN, TIMECREATED TEXT)");
+                " IGNORED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN," +
                 " HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT, ADSREMOVED BOOLEAN," +
-                " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN)");
+                " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER)");
     }
 
     @Override
@@ -114,6 +116,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL14, "");
         content.put(COL15, false);
         content.put(COL16, timeCreated);
+        content.put(COL17, 0);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -169,6 +172,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL6, false);
         content.put(UCOL7, false);
         content.put(UCOL8, false);
+        content.put(UCOL9, 0);
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -367,6 +371,14 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean updateSortedIndex(String id, int index){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL17, index);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
 //    public boolean updateSnoozeTimestamp(String id, String stamp){
 //        SQLiteDatabase db = this.getWritableDatabase();
 //        ContentValues content = new ContentValues();
@@ -464,6 +476,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL8, cycle);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateTaskListSize(int size){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL9, size);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }

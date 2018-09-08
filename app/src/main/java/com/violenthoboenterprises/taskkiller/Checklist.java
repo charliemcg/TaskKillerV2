@@ -187,6 +187,7 @@ public class Checklist extends MainActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
 
+                //Rename subtask
                 if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
                         .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
 
@@ -202,6 +203,11 @@ public class Checklist extends MainActivity {
                     activeSubTask = position;
 
                     checklistView.setAdapter(checklistAdapter[0]);
+
+                //Reinstate killed subtask
+                }else{
+
+                    //TODO reinstate subtask
 
                 }
 
