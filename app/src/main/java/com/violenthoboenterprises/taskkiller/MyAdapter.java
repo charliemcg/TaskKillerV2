@@ -177,6 +177,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final LinearLayout tomorrowBtn = taskView.findViewById(R.id.tomorrow);
 
         //getting task data
+        int dbID = 0;
         String dbNote = "";
         Boolean dbChecklist = false;
         String dbTimestamp = "";
@@ -193,6 +194,7 @@ class MyAdapter extends ArrayAdapter<String> {
         Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(position)));
         while (dbResult.moveToNext()) {
+            dbID = dbResult.getInt(0);
             dbNote = dbResult.getString(1);
             dbChecklist = dbResult.getInt(2) > 0;
             dbTimestamp = dbResult.getString(3);
@@ -226,6 +228,7 @@ class MyAdapter extends ArrayAdapter<String> {
             alarmYear = alarmResult.getString(6);
         }
 
+        final int finalDbID = dbID;
         final String finalDbNote = dbNote;
         final Boolean finalDbChecklist = dbChecklist;
         final String finalDbTimestamp = dbTimestamp;
@@ -3820,7 +3823,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                    MainActivity.vibrate.vibrate(50);
 
-                    MainActivity.db.updateActiveTaskTemp(task);
+                    MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
 
                     getContext().startActivity(intent);
 
@@ -3834,7 +3837,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                    MainActivity.vibrate.vibrate(50);
 
-                    MainActivity.db.updateActiveTaskTemp(task);
+                    MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
 
                     getContext().startActivity(noteIntent);
 

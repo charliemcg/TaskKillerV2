@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //    static SharedPreferences mSharedPreferences;
 
     //Save data related to checklist on close
-    static SharedPreferences nSharedPreferences;
+//    static SharedPreferences nSharedPreferences;
 
     //Allow phone to vibrate
     static Vibrator vibrate;
@@ -534,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     buffer.append("IGNORED: " + res.getString(14) + "\n");
                     buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
                     buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
-                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(17) + "\n\n");
+                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
                 }
 
                 showMessage("Data", buffer.toString());
@@ -617,7 +617,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
                     buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
                     buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
-                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n\n");
+                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
+                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n\n");
                 }
 
                 showMessage("Data", buffer.toString());
@@ -1035,114 +1036,115 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //getSavedData
 
         //skip this management of sub tasks if there are no sub tasks
-        try {
-
-            checklistListSize = nSharedPreferences
-                    .getInt("checklistListSizeKey", 0);
-            Cursor dbResult = db.getUniversalData();
-            while (dbResult.moveToNext()) {
-                checklistListSize = dbResult.getInt(9);
-            }
-
-            for (int i = 0; i < checklistListSize; i++) {
-
-                Checklist.checklistSize = nSharedPreferences
-                        .getInt("checklistSizeKey" + String.valueOf(i), 0);
-
-                try {
-
-                    Checklist.checklistList.get(i);
-
-                } catch (IndexOutOfBoundsException e) {
-
-                    Checklist.checklistList.add(new ArrayList<String>());
-
-                }
-
-                try {
-
-                    Checklist.subTasksKilled.get(i);
-
-                } catch (IndexOutOfBoundsException e) {
-
-                    Checklist.subTasksKilled.add(new ArrayList<Boolean>());
-
-                }
-
-                for (int j = 0; j < Checklist.checklistSize; j++) {
-
-                    Checklist.checklistList.get(i).set(j, nSharedPreferences
-                            .getString("checklistItemKey"
-                                    + String.valueOf(i) + String.valueOf(j), ""));
-
-                    Checklist.subTasksKilled.get(i).set(j, nSharedPreferences
-                            .getBoolean("subTasksKilledKey"
-                                    + String.valueOf(i) + String.valueOf(j), false));
-
-                }
-
-            }
-
-            //onPause
-
-            checklistListSize = Checklist.checklistList.size();
-            db.updateChecklistListSize(checklistListSize);
-
-            for (int i = 0; i < checklistListSize; i++) {
-
-                if (i == MainActivity.activeTask) {
-
-                    Checklist.checklistList.remove(activeTask);
-
-                    Checklist.subTasksKilled.remove(activeTask);
-
-                }
-
-            }
-
-            //Getting and saving the size of the task array list//TODO why is this here twice?
-            checklistListSize = Checklist.checklistList.size();
-            db.updateChecklistListSize(checklistListSize);
-
-            nSharedPreferences.edit().putInt("checklistListSizeKey",
-                    Checklist.checklistListSize).apply();
-
-            for (int i = 0; i < checklistListSize; i++) {
-
-                //Getting and saving the size of each array list of sub tasks
-                Checklist.checklistSize = Checklist.checklistList.get(i).size();
-
-                nSharedPreferences.edit().putInt("checklistSizeKey"
-                                + String.valueOf(i),
-                        Checklist.checklistSize).apply();
-
-            }
-
-            //Saving each individual sub task
-            for (int i = 0; i < checklistListSize; i++) {
-
-                Checklist.checklistSize = Checklist.checklistList.get(i).size();
-
-                for (int j = 0; j < Checklist.checklistSize; j++) {
-
-                    nSharedPreferences.edit().putString("checklistItemKey"
-                                    + String.valueOf(i) + String.valueOf(j),
-                            Checklist.checklistList.get(i).get(j)).apply();
-
-                    nSharedPreferences.edit().putBoolean("subTasksKilledKey"
-                                    + String.valueOf(i) + String.valueOf(j),
-                            Checklist.subTasksKilled.get(i).get(j)).apply();
-
-                }
-
-            }
-
-        } catch (NullPointerException e) {
-            //TODO don't leave this blank
-        }
+//        try {
+//
+//            checklistListSize = nSharedPreferences
+//                    .getInt("checklistListSizeKey", 0);
+//            Cursor dbResult = db.getUniversalData();
+//            while (dbResult.moveToNext()) {
+//                checklistListSize = dbResult.getInt(9);
+//            }
+//
+//            for (int i = 0; i < checklistListSize; i++) {
+//
+//                Checklist.checklistSize = nSharedPreferences
+//                        .getInt("checklistSizeKey" + String.valueOf(i), 0);
+//
+//                try {
+//
+//                    Checklist.checklistList.get(i);
+//
+//                } catch (IndexOutOfBoundsException e) {
+//
+//                    Checklist.checklistList.add(new ArrayList<String>());
+//
+//                }
+//
+//                try {
+//
+//                    Checklist.subTasksKilled.get(i);
+//
+//                } catch (IndexOutOfBoundsException e) {
+//
+//                    Checklist.subTasksKilled.add(new ArrayList<Boolean>());
+//
+//                }
+//
+//                for (int j = 0; j < Checklist.checklistSize; j++) {
+//
+//                    Checklist.checklistList.get(i).set(j, nSharedPreferences
+//                            .getString("checklistItemKey"
+//                                    + String.valueOf(i) + String.valueOf(j), ""));
+//
+//                    Checklist.subTasksKilled.get(i).set(j, nSharedPreferences
+//                            .getBoolean("subTasksKilledKey"
+//                                    + String.valueOf(i) + String.valueOf(j), false));
+//
+//                }
+//
+//            }
+//
+//            //onPause
+//
+//            checklistListSize = Checklist.checklistList.size();
+////            db.updateChecklistListSize(checklistListSize);
+//
+//            for (int i = 0; i < checklistListSize; i++) {
+//
+//                if (i == MainActivity.activeTask) {
+//
+//                    Checklist.checklistList.remove(activeTask);
+//
+//                    Checklist.subTasksKilled.remove(activeTask);
+//
+//                }
+//
+//            }
+//
+//            //Getting and saving the size of the task array list//TODO why is this here twice?
+//            checklistListSize = Checklist.checklistList.size();
+////            db.updateChecklistListSize(checklistListSize);
+//
+//            nSharedPreferences.edit().putInt("checklistListSizeKey",
+//                    Checklist.checklistListSize).apply();
+//
+//            for (int i = 0; i < checklistListSize; i++) {
+//
+//                //Getting and saving the size of each array list of sub tasks
+//                Checklist.checklistSize = Checklist.checklistList.get(i).size();
+//
+//                nSharedPreferences.edit().putInt("checklistSizeKey"
+//                                + String.valueOf(i),
+//                        Checklist.checklistSize).apply();
+//
+//            }
+//
+//            //Saving each individual sub task
+//            for (int i = 0; i < checklistListSize; i++) {
+//
+//                Checklist.checklistSize = Checklist.checklistList.get(i).size();
+//
+//                for (int j = 0; j < Checklist.checklistSize; j++) {
+//
+//                    nSharedPreferences.edit().putString("checklistItemKey"
+//                                    + String.valueOf(i) + String.valueOf(j),
+//                            Checklist.checklistList.get(i).get(j)).apply();
+//
+//                    nSharedPreferences.edit().putBoolean("subTasksKilledKey"
+//                                    + String.valueOf(i) + String.valueOf(j),
+//                            Checklist.subTasksKilled.get(i).get(j)).apply();
+//
+//                }
+//
+//            }
+//
+//        } catch (NullPointerException e) {
+//            //TODO don't leave this blank
+//        }
 
         taskListSize--;
         db.updateTaskListSize(taskListSize);
+        db.updateChecklistListSize(taskListSize);
 
         //deleting data related to deleted task
         db.deleteData(String.valueOf(sortedIDs.get(position)));
@@ -1402,6 +1404,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 taskListSize++;
                 db.updateTaskListSize(taskListSize);
+                db.updateChecklistListSize(taskListSize);
 
                 //finding unique ID for task
                 int i = 0;
@@ -1862,7 +1865,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 //        }
 
+        //TODO check if this line is needed
         sortedIdsForNote = sortedIDs;
+
+        Log.i(TAG, String.valueOf(sortedIDs));
 
     }
 
@@ -1905,8 +1911,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             cycleColors = dbResult.getInt(7) > 0;
             taskListSize = dbResult.getInt(8);
         }
-
-        Log.i(TAG, "Size " + taskListSize);
 
         muteSounds(mute);
 
