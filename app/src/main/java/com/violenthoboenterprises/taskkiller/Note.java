@@ -57,12 +57,26 @@ public class Note extends MainActivity {
 
         noteToolbar.setTitleTextColor(Color.parseColor(highlight));
 
+//        //getting task data
+//        String dbTask = "";
+//        Cursor dbTaskResult = MainActivity.db.getUniversalData();
+//        while (dbTaskResult.moveToNext()) {
+//            dbTask = dbTaskResult.getString(4);
+//        }
+//
+//        noteToolbar.setTitle(dbTask);
+
         //getting task data
         String dbTask = "";
         Cursor dbTaskResult = MainActivity.db.getUniversalData();
         while (dbTaskResult.moveToNext()) {
             dbTask = dbTaskResult.getString(4);
         }
+        dbTaskResult = db.getData(Integer.parseInt(dbTask));
+        while (dbTaskResult.moveToNext()) {
+            dbTask = dbTaskResult.getString(4);
+        }
+        dbTaskResult.close();
 
         noteToolbar.setTitle(dbTask);
 
@@ -76,6 +90,7 @@ public class Note extends MainActivity {
             mute = dbResult.getInt(1) > 0;
             lightDark = dbResult.getInt(3) > 0;
         }
+        dbResult.close();
 
         if(mute){
             editBtn.setSoundEffectsEnabled(false);
@@ -111,6 +126,7 @@ public class Note extends MainActivity {
                 while(result.moveToNext()){
                     checklistExists = (result.getInt(2) == 1);
                 }
+                result.close();
 
                 if(!noteEditText.getText().toString().equals("")) {
                     //new note being added
@@ -206,6 +222,7 @@ public class Note extends MainActivity {
                 while(result.moveToNext()){
                     checklistExists = (result.getInt(2) == 1);
                 }
+                result.close();
 
                 //setting note in database to nothing
                 db.updateData(MainActivity.sortedIdsForNote
@@ -269,6 +286,7 @@ public class Note extends MainActivity {
         while(result.moveToNext()){
             theNote = result.getString(1);
         }
+        result.close();
 
 //        mute = mSharedPreferences.getBoolean("muteKey", false);
 
@@ -277,6 +295,7 @@ public class Note extends MainActivity {
             mute = dbResult.getInt(1) > 0;
             lightDark = dbResult.getInt(3) > 0;
         }
+        dbResult.close();
 
         //Don't allow blank notes
         if(!theNote.equals("")){

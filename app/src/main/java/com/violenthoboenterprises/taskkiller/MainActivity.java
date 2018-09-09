@@ -386,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             cycleColors = dbResult.getInt(7) > 0;
             taskListSize = dbResult.getInt(8);
         }
+        dbResult.close();
 
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
@@ -417,6 +418,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     while (result.moveToNext()) {
                         killed = result.getInt(6) > 0;
                     }
+                    result.close();
 
                     //Selecting a task to view options
                     if (!taskPropertiesShowing && !killed) {
@@ -461,6 +463,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 while (result.moveToNext()) {
                     killed = result.getInt(6) > 0;
                 }
+                result.close();
 
                 //Determine if it's possible to edit task
                 if (tasksAreClickable && !killed && !taskPropertiesShowing) {
@@ -536,6 +539,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
                     buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
                 }
+                res.close();
 
                 showMessage("Data", buffer.toString());
 
@@ -620,6 +624,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
                     buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n\n");
                 }
+                res.close();
 
                 showMessage("Data", buffer.toString());
 
@@ -645,6 +650,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     buffer.append("SUBTASKID: " + res.getString(1) + "\n");
                     buffer.append("SUBTASK: " + res.getString(2) + "\n\n");
                 }
+                res.close();
 
                 showMessage("Data", buffer.toString());
 
@@ -1174,6 +1180,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 checklist = result.getInt(2) == 1;
             }
             db.updateData(id, note, checklist);
+            result.close();
         }
 
         //Updates the view
@@ -1291,6 +1298,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             while (dbResult.moveToNext()) {
                 dbTimestamp = dbResult.getString(3);
             }
+            dbResult.close();
 
             tempList.add(Integer.valueOf(dbTimestamp));
 
@@ -1305,6 +1313,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             while (createdResult.moveToNext()) {
                 created = createdResult.getString(15);
             }
+            createdResult.close();
             whenTaskCreated.add(created);
         }
         Collections.sort(whenTaskCreated);
@@ -1333,6 +1342,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 dbTask = dbResult.getString(4);
                 dbKilled = dbResult.getInt(6) > 0;
             }
+            dbResult.close();
 
             //Filtering out killed tasks
             if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
@@ -1362,6 +1372,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 dbId = dbResult.getInt(0);
                 dbTask = dbResult.getString(4);
             }
+            dbResult.close();
 
             if((tempList.get(i) != 0)){
                 tempIdsList.add(String.valueOf(dbId));
@@ -1619,6 +1630,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         while (result.moveToNext()) {
                             killed = result.getInt(6) > 0;
                         }
+                        result.close();
 
                         //Selecting a task to view options
                         if (!taskPropertiesShowing && !killed) {
@@ -1911,6 +1923,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             cycleColors = dbResult.getInt(7) > 0;
             taskListSize = dbResult.getInt(8);
         }
+        dbResult.close();
 
         muteSounds(mute);
 
@@ -1935,6 +1948,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             while (sortedIdsResult.moveToNext()) {
                 tempSortedIDs.add(sortedIdsResult.getInt(16));
             }
+            sortedIdsResult.close();
 
         }
 
@@ -1952,6 +1966,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             while (sharedPreferencesResult.moveToNext()) {
                 taskList.add(sharedPreferencesResult.getString(4));
             }
+            sharedPreferencesResult.close();
         }
 
         alertIntent = new Intent(this, AlertReceiver.class);

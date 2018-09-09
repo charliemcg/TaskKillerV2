@@ -135,6 +135,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                         while(result.moveToNext()){
                             Checklist.noteExists = (result.getInt(2) == 1);
                         }
+                        result.close();
 
                         if(Checklist.checklistList.get(Integer.parseInt(MainActivity
                                 .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
@@ -214,6 +215,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                         while(result.moveToNext()){
                             Checklist.noteExists = (result.getInt(2) == 1);
                         }
+                        result.close();
 
                         if(Checklist.checklistList.get(Integer.parseInt(MainActivity
                                 .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){

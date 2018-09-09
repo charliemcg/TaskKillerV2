@@ -209,6 +209,7 @@ class MyAdapter extends ArrayAdapter<String> {
             dbRepeatInterval = dbResult.getString(13);
             dbIgnored = dbResult.getInt(14) > 0;
         }
+        dbResult.close();
 
         //getting alarm data
         Cursor alarmResult = MainActivity.db.getAlarmData(
@@ -227,6 +228,7 @@ class MyAdapter extends ArrayAdapter<String> {
             alarmMonth = alarmResult.getString(5);
             alarmYear = alarmResult.getString(6);
         }
+        alarmResult.close();
 
         final int finalDbID = dbID;
         final String finalDbNote = dbNote;
@@ -816,6 +818,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 month = result.getString(5);
                 year = result.getString(6);
             }
+            result.close();
 
             //If there is no snoozed alarm then get initial alarm
             if(hour.equals("")){
@@ -4390,6 +4393,7 @@ class MyAdapter extends ArrayAdapter<String> {
             dbSnooze = dbResult.getInt(10) > 0;
             dbRepeatInterval = dbResult.getString(13);
         }
+        dbResult.close();
 
         //getting alarm data
         Cursor alarmResult = MainActivity.db.getAlarmData(
@@ -4408,6 +4412,7 @@ class MyAdapter extends ArrayAdapter<String> {
             alarmMonth = alarmResult.getString(5);
             alarmYear = alarmResult.getString(6);
         }
+        alarmResult.close();
 
         //Show time picker
         if(MainActivity.dateOrTime) {
@@ -4630,6 +4635,7 @@ class MyAdapter extends ArrayAdapter<String> {
             while (dbResult.moveToNext()) {
                 dbTimestamp = dbResult.getString(3);
             }
+            dbResult.close();
 
             tempList.add(Integer.valueOf(dbTimestamp));
 
@@ -4644,6 +4650,7 @@ class MyAdapter extends ArrayAdapter<String> {
             while (createdResult.moveToNext()) {
                 created = createdResult.getString(15);
             }
+            createdResult.close();
             whenTaskCreated.add(created);
         }
         Collections.sort(whenTaskCreated);
@@ -4674,6 +4681,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 dbTask = dbResult.getString(4);
                 dbKilled = dbResult.getInt(6) > 0;
             }
+            dbResult.close();
 
             //Getting tasks with no due time and not killed
             if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
@@ -4711,6 +4719,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 dbTask = dbResult.getString(4);
                 dbKilled = dbResult.getInt(6) > 0;
             }
+            dbResult.close();
 
             if((tempList.get(i) != 0) && !dbKilled){
                 tempIdsList.add(String.valueOf(dbId));
@@ -4741,6 +4750,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 dbTask = dbResult.getString(4);
                 dbKilled = dbResult.getInt(6) > 0;
             }
+            dbResult.close();
 
             if((tempList.get(i) != 0) && dbKilled){
                 tempIdsList.add(String.valueOf(dbId));

@@ -78,6 +78,7 @@ public class Checklist extends MainActivity {
         while (dbTaskResult.moveToNext()) {
             dbTask = dbTaskResult.getString(4);
         }
+        dbTaskResult.close();
         dbTaskResult = db.getData(Integer.parseInt(dbTask));
         while (dbTaskResult.moveToNext()) {
             dbTask = dbTaskResult.getString(4);
@@ -102,6 +103,7 @@ public class Checklist extends MainActivity {
         while (dbResult.moveToNext()) {
             lightDark = dbResult.getInt(3) > 0;
         }
+        dbResult.close();
 
         if(!lightDark){
             checklistView.setBackgroundColor(Color.parseColor("#333333"));
@@ -153,6 +155,7 @@ public class Checklist extends MainActivity {
             while (sortedIdsResult.moveToNext()) {
                 tempSortedIDs.add(sortedIdsResult.getInt(16));
             }
+            sortedIdsResult.close();
 
         }
 
@@ -200,6 +203,7 @@ public class Checklist extends MainActivity {
                     while(result.moveToNext()){
                         noteExists = (result.getInt(2) == 1);
                     }
+                    result.close();
 
                     if(checklistList.get(Integer.parseInt(MainActivity
                             .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
@@ -298,8 +302,35 @@ public class Checklist extends MainActivity {
                         while (dbResult.moveToNext()) {
                             id = dbResult.getString(4);
                         }
+                        dbResult.close();
                         db.updateChecklistSize(id, checklist.size());
-                        db.updateSubtask(id, checklistTaskName);
+                        int subtaskId = 0;
+                        boolean idIsSet = false;
+                        while (!idIsSet) {
+                            Cursor dbIdResult = db.getSubtaskData(Integer.parseInt(id));
+                            Log.i(TAG, "id result: " + String.valueOf(dbIdResult));
+                            while(dbIdResult.moveToNext()){
+                                if(Integer.parseInt(dbIdResult.getString(2)) == subtaskId) {
+                                    Log.i(TAG, dbIdResult.getString(2));
+                                    subtaskId++;
+                                }else{
+                                    idIsSet = true;
+                                }
+                            }
+                            if(subtaskId == 0){
+                                idIsSet = true;
+                            }
+                            dbIdResult.close();
+//                        if (sortedIDs.contains(String.valueOf(i))) {
+//                            i++;
+//                        } else {
+//                            sortedIDs.add(taskListSize - 1, String.valueOf(i));
+//                            db.updateSortedIndex(String.valueOf(taskListSize - 1), i);
+//                            idIsSet = true;
+//                        }
+                        }
+//                        db.updateSubtask(id, checklistTaskName);
+                        db.insertSubtaskData(Integer.parseInt(id), subtaskId, checklistTaskName);
                         checklistView.setAdapter(checklistAdapter[0]);
                     }
 
