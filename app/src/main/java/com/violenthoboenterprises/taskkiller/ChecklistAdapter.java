@@ -112,6 +112,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                     while (dbTaskResult.moveToNext()) {
                         id = dbTaskResult.getString(4);
                     }
+                    dbTaskResult.close();
                     Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id), position);
                     while (dbIdResult.moveToNext()) {
                         isKilled = dbIdResult.getInt(3) > 0;
@@ -253,9 +254,25 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         checklistTextView.setText(item);
 
         try {
+
+            String id = "";
+            Boolean isKilled = false;
+
+            Cursor dbTaskResult = MainActivity.db.getUniversalData();
+            while (dbTaskResult.moveToNext()) {
+                id = dbTaskResult.getString(4);
+            }
+            dbTaskResult.close();
+            Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id), position);
+            while (dbIdResult.moveToNext()) {
+                isKilled = dbIdResult.getInt(3) > 0;
+            }
+            dbIdResult.close();
+
             //sub task is crossed out if it is marked as done
-            if (Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
-                    .get(MainActivity.activeTask))).get(position)) {
+//            if (Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+//                    .get(MainActivity.activeTask))).get(position)) {
+            if(isKilled){
 
                 checklistTextView.setPaintFlags(checklistTextView.getPaintFlags() |
                         Paint.STRIKE_THRU_TEXT_FLAG);
