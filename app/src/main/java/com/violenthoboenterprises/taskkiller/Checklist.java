@@ -307,18 +307,15 @@ public class Checklist extends MainActivity {
                         int subtaskId = 0;
                         boolean idIsSet = false;
                         while (!idIsSet) {
-                            Cursor dbIdResult = db.getSubtaskData(Integer.parseInt(id));
+                            Cursor dbIdResult = db.getSubtask(Integer.parseInt(id));
                             while(dbIdResult.moveToNext()){
                                 if(dbIdResult.getInt(1) == subtaskId) {
                                     subtaskId++;
-                                    Log.i(TAG, "In if");
                                 }else{
                                     idIsSet = true;
-                                    Log.i(TAG, "In else");
                                 }
                             }
                             if(subtaskId == 0){
-                                Log.i(TAG, "Subtask id = 0");
                                 idIsSet = true;
                             }
                             dbIdResult.close();
@@ -330,7 +327,6 @@ public class Checklist extends MainActivity {
 //                            idIsSet = true;
 //                        }
                         }
-                        Log.i(TAG, "I'm in here " + subtaskId);
 //                        db.updateSubtask(id, checklistTaskName);
                         db.insertSubtaskData(Integer.parseInt(id), subtaskId, checklistTaskName);
                         checklistView.setAdapter(checklistAdapter[0]);
@@ -559,6 +555,27 @@ public class Checklist extends MainActivity {
 
         //Keyboard is inactive without this line
         checklistEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+
+        String id = null;
+        int subtaskListSize = 0;
+        Cursor dbResult = db.getUniversalData();
+        while (dbResult.moveToNext()) {
+            id = dbResult.getString(4);
+        }
+        dbResult.close();
+        Cursor result = db.getData(Integer.parseInt(id));
+        while (result.moveToNext()) {
+            subtaskListSize = result.getInt(17);
+        }
+        result.close();
+        for (int i = 0; i < subtaskListSize; i++) {
+            Cursor dbIdResult = db.getSubtaskData(Integer.parseInt(id), i);
+            while (dbIdResult.moveToNext()) {
+                checklist.add(dbIdResult.getString(2));
+            }
+            dbIdResult.close();
+        }
+        checklistView.setAdapter(checklistAdapter[0]);
 
 //        MainActivity.checklistListSize = MainActivity.nSharedPreferences
 //                .getInt("checklistListSizeKey", 0);

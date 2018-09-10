@@ -281,7 +281,14 @@ public class Database extends SQLiteOpenHelper {
         return result;
     }
 
-    public Cursor getSubtaskData(int id){
+    public Cursor getSubtaskData(int id, int subId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + CTABLE + " where " + CCOL1
+                + " == " + id + " AND " + CCOL2 + " == " + subId, null);
+        return result;
+    }
+
+    public Cursor getSubtask(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + CTABLE + " where " + CCOL1
                 + " == " + id, null);
