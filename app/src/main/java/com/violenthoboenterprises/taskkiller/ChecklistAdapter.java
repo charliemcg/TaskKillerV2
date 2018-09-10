@@ -91,7 +91,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
                     Checklist.subTasksClickable = false;
 
-                    //Similar to above but for landscape mode
+                //Similar to above but for landscape mode
                 }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
                         .getResources().getConfiguration().orientation == 2)){
 
@@ -105,17 +105,33 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
                 if (Checklist.subTasksClickable) {
 
+                    boolean isKilled = false;
+                    String id = "";
+
+                    Cursor dbTaskResult = MainActivity.db.getUniversalData();
+                    while (dbTaskResult.moveToNext()) {
+                        id = dbTaskResult.getString(4);
+                    }
+                    Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id), position);
+                    while (dbIdResult.moveToNext()) {
+                        isKilled = dbIdResult.getInt(3) > 0;
+                    }
+                    dbIdResult.close();
+
                     //Marks sub task as complete
-                    if (!Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
-                            .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
+//                    if (!Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
+//                            .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
+                    if (!isKilled){
 
 //                        MainActivity.vibrate.vibrate(50);
 
-                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
-                                .sortedIdsForNote.get(MainActivity.activeTask)))
-                                .set(position, true);
+//                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
+//                                .sortedIdsForNote.get(MainActivity.activeTask)))
+//                                .set(position, true);
 
-                        notifyDataSetChanged();
+//                        notifyDataSetChanged();
+
+                        MainActivity.db.updateSubtaskKilled(id, String.valueOf(position), true);
 
                     //Removes sub task
                     } else {
@@ -143,6 +159,8 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                             MainActivity.db.updateData(MainActivity.sortedIdsForNote
                                     .get(MainActivity.activeTask), "", false);
                         }
+
+
 
                     }
 

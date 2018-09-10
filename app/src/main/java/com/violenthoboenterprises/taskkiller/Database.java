@@ -72,6 +72,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String CCOL1 = "ID";
     public static final String CCOL2 = "SUBTASKID";
     public static final String CCOL3 = "SUBTASK";
+    public static final String CCOL4 = "KILLED";
 
     String TAG = "Data";
 
@@ -96,7 +97,7 @@ public class Database extends SQLiteOpenHelper {
                 " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
                 "CHECKLISTLISTSIZE INTEGER)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
-                " SUBTASK TEXT)");
+                " SUBTASK TEXT, KILLED BOOLEAN)");
     }
 
     @Override
@@ -201,6 +202,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(CCOL1, id);
         content.put(CCOL2, subtaskID);
         content.put(CCOL3, subtask);
+        content.put(CCOL4, false);
         long result = db.insert(CTABLE, null, content);
         if(result == -1){
             return false;
@@ -560,6 +562,14 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean updateSubtaskKilled(String id, String subtask, Boolean killed){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(CCOL4, killed);
+        db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?", new String[] {id, subtask});
+        return true;
+    }
+
     public boolean addChecklist(String id){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
@@ -582,6 +592,11 @@ public class Database extends SQLiteOpenHelper {
     public Integer deleteSnoozeData (String id){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(STABLE, "ID = ?", new String[] {id});
+    }
+
+    public Integer deleteSubtaskData (String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(CTABLE, "ID = ?", new String[] {id});
     }
 
 }

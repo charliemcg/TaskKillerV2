@@ -648,7 +648,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 while(res.moveToNext()){
                     buffer.append("ID: " + res.getString(0) + "\n");
                     buffer.append("SUBTASKID: " + res.getString(1) + "\n");
-                    buffer.append("SUBTASK: " + res.getString(2) + "\n\n");
+                    buffer.append("SUBTASK: " + res.getString(2) + "\n");
+                    buffer.append("SUBTASKKILLED: " + res.getString(3) + "\n");
                 }
                 res.close();
 
