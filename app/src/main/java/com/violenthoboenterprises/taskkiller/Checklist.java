@@ -308,16 +308,17 @@ public class Checklist extends MainActivity {
                         boolean idIsSet = false;
                         while (!idIsSet) {
                             Cursor dbIdResult = db.getSubtaskData(Integer.parseInt(id));
-                            Log.i(TAG, "id result: " + String.valueOf(dbIdResult));
                             while(dbIdResult.moveToNext()){
-                                if(Integer.parseInt(dbIdResult.getString(2)) == subtaskId) {
-                                    Log.i(TAG, dbIdResult.getString(2));
+                                if(dbIdResult.getInt(1) == subtaskId) {
                                     subtaskId++;
+                                    Log.i(TAG, "In if");
                                 }else{
                                     idIsSet = true;
+                                    Log.i(TAG, "In else");
                                 }
                             }
                             if(subtaskId == 0){
+                                Log.i(TAG, "Subtask id = 0");
                                 idIsSet = true;
                             }
                             dbIdResult.close();
@@ -329,6 +330,7 @@ public class Checklist extends MainActivity {
 //                            idIsSet = true;
 //                        }
                         }
+                        Log.i(TAG, "I'm in here " + subtaskId);
 //                        db.updateSubtask(id, checklistTaskName);
                         db.insertSubtaskData(Integer.parseInt(id), subtaskId, checklistTaskName);
                         checklistView.setAdapter(checklistAdapter[0]);

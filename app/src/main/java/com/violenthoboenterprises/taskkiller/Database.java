@@ -95,7 +95,7 @@ public class Database extends SQLiteOpenHelper {
                 " HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT, ADSREMOVED BOOLEAN," +
                 " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
                 "CHECKLISTLISTSIZE INTEGER)");
-        db.execSQL("create table " + CTABLE + " (ID INTEGER PRIMARY KEY, SUBTASKID INTEGER," +
+        db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT)");
     }
 
