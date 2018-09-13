@@ -315,6 +315,14 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean updateChecklistExist(String id, Boolean checklist){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL3, checklist);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
     public boolean updateDue(String id, Boolean due){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
@@ -594,9 +602,9 @@ public class Database extends SQLiteOpenHelper {
         return db.delete(STABLE, "ID = ?", new String[] {id});
     }
 
-    public Integer deleteSubtaskData (String id){
+    public Integer deleteSubtaskData (String id, String subtask){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(CTABLE, "ID = ?", new String[] {id});
+        return db.delete(CTABLE, "ID = ? AND SUBTASKID = ?", new String[] {id, subtask});
     }
 
 }

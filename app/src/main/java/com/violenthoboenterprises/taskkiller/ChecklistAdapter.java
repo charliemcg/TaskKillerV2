@@ -134,32 +134,51 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
                         MainActivity.db.updateSubtaskKilled(id, String.valueOf(position), true);
 
-                    //Removes sub task
+                        if(!MainActivity.mute) {
+                            MainActivity.punch.start();
+                        }
+
+                        notifyDataSetChanged();
+
+                    //Removes sub task//TODO this is useless
                     } else {
 
 //                        MainActivity.vibrate.vibrate(50);
 
-                        Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
-                                .get(MainActivity.activeTask))).remove(position);
+//                        Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+//                                .get(MainActivity.activeTask))).remove(position);
 
-                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
-                                .get(MainActivity.activeTask))).remove(position);
+//                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+//                                .get(MainActivity.activeTask))).remove(position);
+
+//                        notifyDataSetChanged();
+
+                        MainActivity.db.deleteSubtaskData(id, String.valueOf(position));
+
+//                        id = null;
+                        Cursor dbResult = MainActivity.db.getUniversalData();
+                        while (dbResult.moveToNext()) {
+                            id = dbResult.getString(4);
+                        }
+                        dbResult.close();
+                        Checklist.checklistSize--;
+                        MainActivity.db.updateChecklistSize(id, Checklist.checklist.size());
 
                         notifyDataSetChanged();
 
-                        Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
-                                .sortedIdsForNote.get(MainActivity.activeTask)));
-                        while(result.moveToNext()){
-                            Checklist.noteExists = (result.getInt(2) == 1);
-                        }
-                        result.close();
+//                        Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
+//                                .sortedIdsForNote.get(MainActivity.activeTask)));
+//                        while(result.moveToNext()){
+//                            Checklist.noteExists = (result.getInt(2) == 1);
+//                        }
+//                        result.close();
 
-                        if(Checklist.checklistList.get(Integer.parseInt(MainActivity
-                                .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
-                            //setting checklist in database to false
-                            MainActivity.db.updateData(MainActivity.sortedIdsForNote
-                                    .get(MainActivity.activeTask), "", false);
-                        }
+//                        if(Checklist.checklistList.get(Integer.parseInt(MainActivity
+//                                .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
+//                            setting checklist in database to false
+//                            MainActivity.db.updateData(MainActivity.sortedIdsForNote
+//                                    .get(MainActivity.activeTask), "", false);
+//                        }
 
 
 
@@ -168,6 +187,105 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 }
 
             }
+
+        });
+
+        //actions to occur when removing sub task
+        ticked.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Rect screen = new Rect();
+
+                Checklist.checklistRootView.getWindowVisibleDisplayFrame(screen);
+
+                //Screen pixel values are used to determine how much of the screen is visible
+                int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
+                        (screen.bottom - screen.top);
+
+                //Value of more than 800 seems to indicate that the keyboard is showing
+                //in portrait mode
+                if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
+                        .getConfiguration().orientation == 1)) {
+
+                    Checklist.subTasksClickable = false;
+
+                    //Similar to above but for landscape mode
+                }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
+                        .getResources().getConfiguration().orientation == 2)){
+
+                    Checklist.subTasksClickable = false;
+
+                }else{
+
+                    Checklist.subTasksClickable = true;
+
+                }
+
+//                if (Checklist.subTasksClickable) {
+//
+////                    boolean isKilled = false;
+//                    String id = "";
+//
+//                    Cursor dbTaskResult = MainActivity.db.getUniversalData();
+//                    while (dbTaskResult.moveToNext()) {
+//                        id = dbTaskResult.getString(4);
+//                    }
+//                    dbTaskResult.close();
+//
+//                    //Marks sub task as complete
+////                    if (!Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
+////                            .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
+//
+////                        MainActivity.vibrate.vibrate(50);
+//
+////                        Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+////                                .get(MainActivity.activeTask))).remove(position);
+//
+////                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+////                                .get(MainActivity.activeTask))).remove(position);
+//
+////                        notifyDataSetChanged();
+//
+//                        MainActivity.db.deleteSubtaskData(id, String.valueOf(position));
+//
+////                        id = null;
+//                        Cursor dbResult = MainActivity.db.getUniversalData();
+//                        while (dbResult.moveToNext()) {
+//                            id = dbResult.getString(4);
+//                        }
+//                        dbResult.close();
+//                        Checklist.checklistSize--;
+//                        MainActivity.db.updateChecklistSize(id, Checklist.checklist.size());
+//                        Checklist.checklist.remove(id);
+//
+//                        notifyDataSetChanged();
+//
+////                        Cursor result = MainActivity.db.getData(Integer.parseInt(id));
+////                        while(result.moveToNext()){
+////                            Checklist.noteExists = (result.getInt(2) == 1);
+////                        }
+////                        result.close();
+//
+////                        Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
+////                                .sortedIdsForNote.get(MainActivity.activeTask)));
+////                        while(result.moveToNext()){
+////                            Checklist.noteExists = (result.getInt(2) == 1);
+////                        }
+////                        result.close();
+//
+////                        if(Checklist.checklistList.get(Integer.parseInt(MainActivity
+////                                .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
+////                            setting checklist in database to false
+////                            MainActivity.db.updateData(MainActivity.sortedIdsForNote
+////                                    .get(MainActivity.activeTask), "", false);
+////                        }
+//
+//
+//
+//                    }
+
+                }
 
         });
 
@@ -205,45 +323,45 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 if (Checklist.subTasksClickable) {
 
                     //Marks sub task as complete
-                    if (!Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
-                            .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
-
-//                        MainActivity.vibrate.vibrate(50);
-
-                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
-                                .sortedIdsForNote.get(MainActivity.activeTask)))
-                                .set(position, true);
-
-                        notifyDataSetChanged();
-
-                    //Removes sub task
-                    } else {
-
-//                        MainActivity.vibrate.vibrate(50);
-
-                        Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
-                                .get(MainActivity.activeTask))).remove(position);
-
-                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
-                                .get(MainActivity.activeTask))).remove(position);
-
-                        notifyDataSetChanged();
-
-                        Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
-                                .sortedIdsForNote.get(MainActivity.activeTask)));
-                        while(result.moveToNext()){
-                            Checklist.noteExists = (result.getInt(2) == 1);
-                        }
-                        result.close();
-
-                        if(Checklist.checklistList.get(Integer.parseInt(MainActivity
-                                .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
-                            //setting checklist in database to false
-                            MainActivity.db.updateData(MainActivity.sortedIdsForNote
-                                    .get(MainActivity.activeTask), "", false);
-                        }
-
-                    }
+//                    if (!Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
+//                            .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
+//
+////                        MainActivity.vibrate.vibrate(50);
+//
+//                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
+//                                .sortedIdsForNote.get(MainActivity.activeTask)))
+//                                .set(position, true);
+//
+//                        notifyDataSetChanged();
+//
+//                    //Removes sub task
+//                    } else {
+//
+////                        MainActivity.vibrate.vibrate(50);
+//
+//                        Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+//                                .get(MainActivity.activeTask))).remove(position);
+//
+//                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+//                                .get(MainActivity.activeTask))).remove(position);
+//
+//                        notifyDataSetChanged();
+//
+//                        Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
+//                                .sortedIdsForNote.get(MainActivity.activeTask)));
+//                        while(result.moveToNext()){
+//                            Checklist.noteExists = (result.getInt(2) == 1);
+//                        }
+//                        result.close();
+//
+//                        if(Checklist.checklistList.get(Integer.parseInt(MainActivity
+//                                .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
+//                            //setting checklist in database to false
+//                            MainActivity.db.updateData(MainActivity.sortedIdsForNote
+//                                    .get(MainActivity.activeTask), "", false);
+//                        }
+//
+//                    }
 
                 }
 

@@ -36,7 +36,8 @@ public class Checklist extends MainActivity {
     static ArrayList<ArrayList<String>> checklistList;
     static ArrayList<String> checklist;
     static int activeSubTask;
-    static ArrayList<ArrayList<Boolean>> subTasksKilled;
+    static ArrayList<ArrayList<Boolean>> killedSubTasks;
+    static ArrayList<Boolean> subTasksKilled;
     static boolean subTaskBeingEdited;
     static boolean goToChecklistAdapter;
     static View checklistRootView;
@@ -186,36 +187,75 @@ public class Checklist extends MainActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
-                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)){
+                String killedId = null;
+                boolean isKilled = false;
+                Cursor dbResult = db.getUniversalData();
+                while (dbResult.moveToNext()) {
+                    killedId = dbResult.getString(4);
+                }
+                dbResult.close();
+                Cursor dbIdResult = db.getSubtask(Integer.parseInt(killedId));
+                while(dbIdResult.moveToNext()){
+                    isKilled = dbIdResult.getInt(3) > 0;
+                }
 
-                }else if(subTasksClickable && subTasksKilled.get(Integer.parseInt(MainActivity
-                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)){
+                if(/*subTasksClickable && */!isKilled){
 
-                    checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
-                            .get(MainActivity.activeTask))).remove(position);
+                }else if(/*subTasksClickable && */isKilled){
 
-                    subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
-                            .get(MainActivity.activeTask))).remove(position);
+                    checklist.remove(position);
 
-                    Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
-                            .sortedIdsForNote.get(MainActivity.activeTask)));
-                    while(result.moveToNext()){
-                        noteExists = (result.getInt(2) == 1);
+                    subTasksKilled.remove(position);
+
+                    MainActivity.db.deleteSubtaskData(killedId, String.valueOf(position));
+
+                    String checklistId = null;
+                    Cursor dbChecklistResult = db.getUniversalData();
+                    while (dbChecklistResult.moveToNext()) {
+                        checklistId = dbChecklistResult.getString(4);
                     }
-                    result.close();
-
-                    if(checklistList.get(Integer.parseInt(MainActivity
-                            .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
-                        //setting checklist in database to false
-                        MainActivity.db.updateData(MainActivity.sortedIdsForNote
-                                .get(MainActivity.activeTask), "", false);
+                    dbChecklistResult.close();
+                    db.updateChecklistSize(checklistId, checklist.size());
+                    if(checklist.size() == 0) {
+                        db.updateChecklistExist(checklistId, false);
                     }
 
-                    //Updates the view
                     checklistView.setAdapter(checklistAdapter[0]);
 
                 }
+
+//                if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
+//                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)){
+//
+//                    Log.i(TAG, "I'm in here");
+//
+//                }else if(subTasksClickable && subTasksKilled.get(Integer.parseInt(MainActivity
+//                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)){
+//
+//                    checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
+//                            .get(MainActivity.activeTask))).remove(position);
+//
+//                    subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
+//                            .get(MainActivity.activeTask))).remove(position);
+//
+//                    Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
+//                            .sortedIdsForNote.get(MainActivity.activeTask)));
+//                    while(result.moveToNext()){
+//                        noteExists = (result.getInt(2) == 1);
+//                    }
+//                    result.close();
+//
+//                    if(checklistList.get(Integer.parseInt(MainActivity
+//                            .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
+//                        //setting checklist in database to false
+//                        MainActivity.db.updateData(MainActivity.sortedIdsForNote
+//                                .get(MainActivity.activeTask), "", false);
+//                    }
+//
+//                    //Updates the view
+//                    checklistView.setAdapter(checklistAdapter[0]);
+//
+//                }
 
             }
 
@@ -229,28 +269,28 @@ public class Checklist extends MainActivity {
                                            int position, long id) {
 
                 //Rename subtask
-                if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
-                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
-
-                    keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-
-                    goToChecklistAdapter = false;
-
-                    fadeSubTasks = true;
-
-                    //Indicates that a task is being edited
-                    subTaskBeingEdited = true;
-
-                    activeSubTask = position;
-
-                    checklistView.setAdapter(checklistAdapter[0]);
-
-                //Reinstate killed subtask
-                }else{
-
-                    //TODO reinstate subtask
-
-                }
+//                if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
+//                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
+//
+//                    keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+//
+//                    goToChecklistAdapter = false;
+//
+//                    fadeSubTasks = true;
+//
+//                    //Indicates that a task is being edited
+//                    subTaskBeingEdited = true;
+//
+//                    activeSubTask = position;
+//
+//                    checklistView.setAdapter(checklistAdapter[0]);
+//
+//                //Reinstate killed subtask
+//                }else{
+//
+//                    //TODO reinstate subtask
+//
+//                }
 
                 return true;
 
@@ -572,6 +612,7 @@ public class Checklist extends MainActivity {
             Cursor dbIdResult = db.getSubtaskData(Integer.parseInt(id), i);
             while (dbIdResult.moveToNext()) {
                 checklist.add(dbIdResult.getString(2));
+                subTasksKilled.add(dbIdResult.getInt(3) > 0);
             }
             dbIdResult.close();
         }
