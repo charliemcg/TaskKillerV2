@@ -607,4 +607,9 @@ public class Database extends SQLiteOpenHelper {
         return db.delete(CTABLE, "ID = ? AND SUBTASKID = ?", new String[] {id, subtask});
     }
 
+    public Integer deleteAllSubtaskData (String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(CTABLE, "ID = ?", new String[] {id});
+    }
+
 }

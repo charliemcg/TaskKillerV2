@@ -1157,6 +1157,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         db.deleteData(String.valueOf(sortedIDs.get(position)));
         db.deleteAlarmData(String.valueOf(sortedIDs.get(position)));
         db.deleteSnoozeData(String.valueOf(sortedIDs.get(position)));
+        db.deleteAllSubtaskData(String.valueOf(sortedIDs.get(position)));
 
         //Cancel notification alarms if one is set
         alarmManager.cancel(pendIntent.getService(this,

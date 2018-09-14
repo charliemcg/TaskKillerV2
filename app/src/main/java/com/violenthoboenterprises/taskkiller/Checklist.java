@@ -334,6 +334,7 @@ public class Checklist extends MainActivity {
                     }
 
                     checklist.add(checklistTaskName);
+                    subTasksKilled.add(false);
 
                     //TODO these conditionals may be unnecessary
                     if(checklist.size() != 0) {
