@@ -113,7 +113,8 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                         id = dbTaskResult.getString(4);
                     }
                     dbTaskResult.close();
-                    Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id), position);
+
+                    Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id), Checklist.sortedSubtaskIds.get(position)/*position*/);
                     while (dbIdResult.moveToNext()) {
                         isKilled = dbIdResult.getInt(3) > 0;
                     }
@@ -132,7 +133,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
 //                        notifyDataSetChanged();
 
-                        MainActivity.db.updateSubtaskKilled(id, String.valueOf(position), true);
+                        MainActivity.db.updateSubtaskKilled(id, String.valueOf(Checklist.sortedSubtaskIds.get(position)/*position*/), true);
 
                         if(!MainActivity.mute) {
                             MainActivity.punch.start();
@@ -381,7 +382,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 id = dbTaskResult.getString(4);
             }
             dbTaskResult.close();
-            Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id), position);
+            Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id), Checklist.sortedSubtaskIds.get(position));
             while (dbIdResult.moveToNext()) {
                 isKilled = dbIdResult.getInt(3) > 0;
             }
@@ -394,7 +395,6 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
                 checklistTextView.setPaintFlags(checklistTextView.getPaintFlags() |
                         Paint.STRIKE_THRU_TEXT_FLAG);
-
 
                 if(!MainActivity.lightDark){
                     checklistItemView.setBackgroundColor(Color.parseColor("#333333"));
