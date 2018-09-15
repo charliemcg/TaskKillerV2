@@ -1882,8 +1882,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //TODO check if this line is needed
         sortedIdsForNote = sortedIDs;
 
-        Log.i(TAG, String.valueOf(sortedIDs));
-
     }
 
     @Override

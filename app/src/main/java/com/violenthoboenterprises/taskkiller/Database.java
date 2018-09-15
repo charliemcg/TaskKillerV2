@@ -562,11 +562,11 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateSubtask(String id, String subtask){
+    public boolean updateSubtask(String id, String subtaskId, String subtask){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(CCOL3, subtask);
-        db.update(CTABLE, content, "ID = ?", new String[] {id});
+        db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?", new String[] {id, subtaskId});
         return true;
     }
 
