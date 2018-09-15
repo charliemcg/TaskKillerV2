@@ -19,20 +19,18 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Checklist extends MainActivity {
 
-    //TODO get rid of anything to do with active task
     static InputMethodManager keyboard;
     static EditText checklistEditText;
     public ListAdapter[] checklistAdapter;
     static ListView checklistView;
-    public static int checklistSize;
     static ArrayList<String> checklist;
-    static int activeSubTask;
     static ArrayList<Boolean> subTasksKilled;
     static ArrayList<Integer> sortedSubtaskIds;
     static boolean subTaskBeingEdited;
@@ -54,7 +52,6 @@ public class Checklist extends MainActivity {
 
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         checklistEditText = findViewById(R.id.checklistEditText);
-        activeSubTask = MainActivity.activeTask;
         checklistView = findViewById(R.id.theChecklist);
         checklist = new ArrayList<>();
         subTasksKilled = new ArrayList<>();
@@ -94,7 +91,8 @@ public class Checklist extends MainActivity {
             val = 16 * val + d;
         }
         int[] colors = {0, val, val};
-        checklistView.setDivider(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors));
+        checklistView.setDivider(new GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT, colors));
         checklistView.setDividerHeight(1);
 
         //getting app-wide data
@@ -155,21 +153,20 @@ public class Checklist extends MainActivity {
                     killedId = dbResult.getString(4);
                 }
                 dbResult.close();
-                Cursor dbIdResult = db.getSubtaskData(Integer.parseInt(killedId), sortedSubtaskIds.get(position)/*position*/);
+                Cursor dbIdResult = db.getSubtaskData(Integer.parseInt(killedId),
+                        sortedSubtaskIds.get(position));
                 while(dbIdResult.moveToNext()){
                     isKilled = dbIdResult.getInt(3) > 0;
                 }
 
-                //TODO possible redundant condition
-                if(!isKilled){
-
-                }else if(isKilled){
+                if(isKilled){
 
                     checklist.remove(position);
 
                     subTasksKilled.remove(position);
 
-                    MainActivity.db.deleteSubtaskData(killedId, String.valueOf(sortedSubtaskIds.get(position)));
+                    MainActivity.db.deleteSubtaskData(killedId,
+                            String.valueOf(sortedSubtaskIds.get(position)));
 
                     String checklistId = null;
                     Cursor dbChecklistResult = db.getUniversalData();
@@ -200,9 +197,6 @@ public class Checklist extends MainActivity {
                                            int position, long id) {
 
                 //Rename subtask
-//                if(subTasksClickable && !subTasksKilled.get(Integer.parseInt(MainActivity
-//                        .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
-
                 if(subTasksClickable && !subTasksKilled.get(sortedSubtaskIds.get(position))){
 
                     keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
@@ -214,8 +208,6 @@ public class Checklist extends MainActivity {
                     //Indicates that a task is being edited
                     subTaskBeingEdited = true;
 
-                    activeSubTask = position;
-
                     checklistView.setAdapter(checklistAdapter[0]);
 
                     reinstateMe = sortedSubtaskIds.get(position);
@@ -223,7 +215,18 @@ public class Checklist extends MainActivity {
                 //Reinstate killed subtask
                 }else{
 
-                    //TODO reinstate subtask
+                    String checklistId = null;
+                    Cursor dbChecklistResult = db.getUniversalData();
+                    while (dbChecklistResult.moveToNext()) {
+                        checklistId = dbChecklistResult.getString(4);
+                    }
+                    dbChecklistResult.close();
+
+                    //marks task as not killed in database
+                    db.updateSubtaskKilled(checklistId, String.valueOf(sortedSubtaskIds
+                            .get(position)), false);
+
+                    checklistView.setAdapter(checklistAdapter[0]);
 
                 }
 
@@ -253,44 +256,37 @@ public class Checklist extends MainActivity {
                     //Don't allow blank tasks
                     if(!checklistTaskName.equals("")) {
 
-                        //TODO shouldn't use active task
-                        //marking task so that it displays checklist icon
-                        db.updateData(MainActivity.sortedIdsForNote.get(activeTask), "", true);
+                        checklist.add(checklistTaskName);
+                        subTasksKilled.add(false);
 
-                    }
-
-                    checklist.add(checklistTaskName);
-                    subTasksKilled.add(false);
-
-                    //TODO these conditionals may be unnecessary
-//                    if(checklist.size() != 0) {
-                    String id = null;
-                    Cursor dbResult = db.getUniversalData();
-                    while (dbResult.moveToNext()) {
-                        id = dbResult.getString(4);
-                    }
-                    dbResult.close();
-                    db.updateChecklistSize(id, checklist.size());
-                    int subtaskId = 0;
-                    boolean idIsSet = false;
-                    while (!idIsSet) {
-                        Cursor dbIdResult = db.getSubtask(Integer.parseInt(id));
-                        while(dbIdResult.moveToNext()){
-                            if(dbIdResult.getInt(1) == subtaskId) {
-                                subtaskId++;
-                            }else{
+                        String id = null;
+                        Cursor dbResult = db.getUniversalData();
+                        while (dbResult.moveToNext()) {
+                            id = dbResult.getString(4);
+                        }
+                        dbResult.close();
+                        db.updateChecklistSize(id, checklist.size());
+                        int subtaskId = 0;
+                        boolean idIsSet = false;
+                        while (!idIsSet) {
+                            Cursor dbIdResult = db.getSubtask(Integer.parseInt(id));
+                            while (dbIdResult.moveToNext()) {
+                                if (dbIdResult.getInt(1) == subtaskId) {
+                                    subtaskId++;
+                                } else {
+                                    idIsSet = true;
+                                }
+                            }
+                            if (subtaskId == 0) {
                                 idIsSet = true;
                             }
+                            dbIdResult.close();
                         }
-                        if(subtaskId == 0){
-                            idIsSet = true;
-                        }
-                        dbIdResult.close();
-                    }
-                    db.insertSubtaskData(Integer.parseInt(id), subtaskId, checklistTaskName);
-                    sortedSubtaskIds.add(subtaskId);
-                    checklistView.setAdapter(checklistAdapter[0]);
+                        db.insertSubtaskData(Integer.parseInt(id), subtaskId, checklistTaskName);
+                        sortedSubtaskIds.add(subtaskId);
+                        checklistView.setAdapter(checklistAdapter[0]);
 
+                    }
                     return true;
 
                 //Actions to occur when editing sub tasks
@@ -308,75 +304,32 @@ public class Checklist extends MainActivity {
                     //Don't allow blank tasks
                     if(!checklistTaskName.equals("")) {
 
-                        //TODO shouldn't use active task
-                        //marking task so that it displays checklist icon
-                        db.updateData(MainActivity.sortedIdsForNote.get(activeTask), "", true);
+                        checklist.set(reinstateMe, checklistTaskName);
+                        subTasksKilled.set(reinstateMe, true);
 
-                    }
-
-                    checklist.set(reinstateMe, checklistTaskName);
-                    subTasksKilled.set(reinstateMe, true);
-
-                    //TODO these conditionals may be unnecessary
-//                    if(checklist.size() != 0) {
-                    String id = null;
-                    Cursor dbResult = db.getUniversalData();
-                    while (dbResult.moveToNext()) {
-                        id = dbResult.getString(4);
-                    }
-                    dbResult.close();
-//                    db.updateChecklistSize(id, checklist.size());
-//                    int subtaskId = 0;
-//                    boolean idIsSet = false;
-//                    while (!idIsSet) {
-//                        Cursor dbIdResult = db.getSubtask(Integer.parseInt(id));
-//                        while(dbIdResult.moveToNext()){
-//                            if(dbIdResult.getInt(1) == subtaskId) {
-//                                subtaskId++;
-//                            }else{
-//                                idIsSet = true;
-//                            }
-//                        }
-//                        if(subtaskId == 0){
-//                            idIsSet = true;
-//                        }
-//                        dbIdResult.close();
+                        String id = null;
+                        Cursor dbResult = db.getUniversalData();
+                        while (dbResult.moveToNext()) {
+                            id = dbResult.getString(4);
+                        }
+                        dbResult.close();
                         db.updateSubtask(id, String.valueOf(reinstateMe), checklistTaskName);
-//                        sortedSubtaskIds.add(subtaskId);
                         checklistView.setAdapter(checklistAdapter[0]);
-                        //TODO find out why task properties cannot be collapsed after doing this
-//                    }
+
+                    }
 
                     return true;
 
-                    //Getting user data
-//                    String editedSubTaskString = checklistEditText.getText().toString();
-//
-//                    //Don't allow blank sub tasks
-//                    if(!editedSubTaskString.equals("")) {
-//
-//                        //TODO don't use active task
-////                    checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
-////                            .get(MainActivity.activeTask))).set(Integer.parseInt(
-////                            sortedIdsForNote.get(activeSubTask)), editedSubTaskString);
-//                    }
-
                 }
-
-                //TODO redundancy
-                checklistEditText.setText("");
 
                 checklistView.setAdapter(checklistAdapter[0]);
 
                 //Marking editing as complete
                 subTaskBeingEdited = false;
 
-                //TODO redundancy
                 return true;
 
             }
-
-//                return false;
 
         });
 
@@ -539,7 +492,6 @@ public class Checklist extends MainActivity {
 
         Cursor dbIdResult = db.getSubtask(Integer.parseInt(id));
         while (dbIdResult.moveToNext()) {
-            Log.i(TAG, "I'm in here: " + dbIdResult.getString(1));
             sortedSubtaskIds.add(dbIdResult.getInt(1));
             checklist.add(dbIdResult.getString(2));
             subTasksKilled.add(dbIdResult.getInt(3) > 0);

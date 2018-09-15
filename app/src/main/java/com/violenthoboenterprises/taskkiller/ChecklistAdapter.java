@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,10 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         final ImageView tickedFaded = checklistItemView.findViewById(R.id.subtaskCompletedFaded);
         final ImageView tickWhite = checklistItemView.findViewById(R.id.subtaskCompleteWhite);
         final ImageView tickedWhite = checklistItemView.findViewById(R.id.subtaskCompletedWhite);
-        final ImageView tickWhiteFaded = checklistItemView.findViewById(R.id.subtaskCompleteWhiteFaded);
-        final ImageView tickedWhiteFaded = checklistItemView.findViewById(R.id.subtaskCompletedWhiteFaded);
+        final ImageView tickWhiteFaded = checklistItemView
+                .findViewById(R.id.subtaskCompleteWhiteFaded);
+        final ImageView tickedWhiteFaded = checklistItemView
+                .findViewById(R.id.subtaskCompletedWhiteFaded);
         TAG = "ChecklistAdapter";
 
         if(!MainActivity.lightDark){
@@ -73,223 +76,17 @@ class ChecklistAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
 
-                Rect screen = new Rect();
-
-                Checklist.checklistRootView.getWindowVisibleDisplayFrame(screen);
-
-                //Screen pixel values are used to determine how much of the screen is visible
-                int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
-                        (screen.bottom - screen.top);
-
-                //Value of more than 800 seems to indicate that the keyboard is showing
-                //in portrait mode
-                if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
-                        .getConfiguration().orientation == 1)) {
-
-                    Checklist.subTasksClickable = false;
-
-                //Similar to above but for landscape mode
-                }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
-                        .getResources().getConfiguration().orientation == 2)){
-
-                    Checklist.subTasksClickable = false;
-
-                }else{
-
-                    Checklist.subTasksClickable = true;
-
-                }
-
-                if (Checklist.subTasksClickable) {
-
-                    boolean isKilled = false;
-                    String id = "";
-
-                    Cursor dbTaskResult = MainActivity.db.getUniversalData();
-                    while (dbTaskResult.moveToNext()) {
-                        id = dbTaskResult.getString(4);
-                    }
-                    dbTaskResult.close();
-
-                    Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id), Checklist.sortedSubtaskIds.get(position));
-                    while (dbIdResult.moveToNext()) {
-                        isKilled = dbIdResult.getInt(3) > 0;
-                    }
-                    dbIdResult.close();
-
-                    //Marks sub task as complete
-                    if (!isKilled){
-
-                        MainActivity.db.updateSubtaskKilled(id, String.valueOf(Checklist.sortedSubtaskIds.get(position)/*position*/), true);
-
-                        if(!MainActivity.mute) {
-                            MainActivity.punch.start();
-                        }
-
-                        notifyDataSetChanged();
-
-                    //Removes sub task//TODO this is useless
-//                    } else {
-//
-////                        MainActivity.vibrate.vibrate(50);
-//
-////                        Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
-////                                .get(MainActivity.activeTask))).remove(position);
-//
-////                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
-////                                .get(MainActivity.activeTask))).remove(position);
-//
-////                        notifyDataSetChanged();
-//
-//                        MainActivity.db.deleteSubtaskData(id, String.valueOf(position));
-//
-////                        id = null;
-//                        Cursor dbResult = MainActivity.db.getUniversalData();
-//                        while (dbResult.moveToNext()) {
-//                            id = dbResult.getString(4);
-//                        }
-//                        dbResult.close();
-//                        Checklist.checklistSize--;
-//                        MainActivity.db.updateChecklistSize(id, Checklist.checklist.size());
-//
-//                        notifyDataSetChanged();
-
-//                        Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
-//                                .sortedIdsForNote.get(MainActivity.activeTask)));
-//                        while(result.moveToNext()){
-//                            Checklist.noteExists = (result.getInt(2) == 1);
-//                        }
-//                        result.close();
-
-//                        if(Checklist.checklistList.get(Integer.parseInt(MainActivity
-//                                .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
-//                            setting checklist in database to false
-//                            MainActivity.db.updateData(MainActivity.sortedIdsForNote
-//                                    .get(MainActivity.activeTask), "", false);
-//                        }
-
-
-
-                    }
-
-                }
+                markAsDone(position);
 
             }
 
         });
 
-        //actions to occur when removing sub task
-        ticked.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Rect screen = new Rect();
-
-                Checklist.checklistRootView.getWindowVisibleDisplayFrame(screen);
-
-                //Screen pixel values are used to determine how much of the screen is visible
-                int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
-                        (screen.bottom - screen.top);
-
-                //Value of more than 800 seems to indicate that the keyboard is showing
-                //in portrait mode
-                if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
-                        .getConfiguration().orientation == 1)) {
-
-                    Checklist.subTasksClickable = false;
-
-                    //Similar to above but for landscape mode
-                }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
-                        .getResources().getConfiguration().orientation == 2)){
-
-                    Checklist.subTasksClickable = false;
-
-                }else{
-
-                    Checklist.subTasksClickable = true;
-
-                }
-
-            }
-
-        });
-
-        //TODO make a common method accessible by both black and white ticks. Use onClick attribute.
         tickWhite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Rect screen = new Rect();
-
-                Checklist.checklistRootView.getWindowVisibleDisplayFrame(screen);
-
-                //Screen pixel values are used to determine how much of the screen is visible
-                int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
-                        (screen.bottom - screen.top);
-
-                //Value of more than 800 seems to indicate that the keyboard is showing
-                //in portrait mode
-                if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
-                        .getConfiguration().orientation == 1)) {
-
-                    Checklist.subTasksClickable = false;
-
-                    //Similar to above but for landscape mode
-                }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
-                        .getResources().getConfiguration().orientation == 2)){
-
-                    Checklist.subTasksClickable = false;
-
-                }else{
-
-                    Checklist.subTasksClickable = true;
-
-                }
-
-                if (Checklist.subTasksClickable) {
-
-                    //Marks sub task as complete
-//                    if (!Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
-//                            .sortedIdsForNote.get(MainActivity.activeTask))).get(position)) {
-//
-////                        MainActivity.vibrate.vibrate(50);
-//
-//                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity
-//                                .sortedIdsForNote.get(MainActivity.activeTask)))
-//                                .set(position, true);
-//
-//                        notifyDataSetChanged();
-//
-//                    //Removes sub task
-//                    } else {
-//
-////                        MainActivity.vibrate.vibrate(50);
-//
-//                        Checklist.checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
-//                                .get(MainActivity.activeTask))).remove(position);
-//
-//                        Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
-//                                .get(MainActivity.activeTask))).remove(position);
-//
-//                        notifyDataSetChanged();
-//
-//                        Cursor result = MainActivity.db.getData(Integer.parseInt(MainActivity
-//                                .sortedIdsForNote.get(MainActivity.activeTask)));
-//                        while(result.moveToNext()){
-//                            Checklist.noteExists = (result.getInt(2) == 1);
-//                        }
-//                        result.close();
-//
-//                        if(Checklist.checklistList.get(Integer.parseInt(MainActivity
-//                                .sortedIdsForNote.get(MainActivity.activeTask))).size() == 0){
-//                            //setting checklist in database to false
-//                            MainActivity.db.updateData(MainActivity.sortedIdsForNote
-//                                    .get(MainActivity.activeTask), "", false);
-//                        }
-//
-//                    }
-
-                }
+                markAsDone(position);
 
             }
 
@@ -297,64 +94,60 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         checklistTextView.setText(item);
 
-        //TODO get rid of try
-        try {
+        String id = "";
+        Boolean isKilled = false;
 
-            String id = "";
-            Boolean isKilled = false;
+        Cursor dbTaskResult = MainActivity.db.getUniversalData();
+        while (dbTaskResult.moveToNext()) {
+            id = dbTaskResult.getString(4);
+        }
+        dbTaskResult.close();
+        Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id),
+                Checklist.sortedSubtaskIds.get(position));
+        while (dbIdResult.moveToNext()) {
+            isKilled = dbIdResult.getInt(3) > 0;
+        }
+        dbIdResult.close();
 
-            Cursor dbTaskResult = MainActivity.db.getUniversalData();
-            while (dbTaskResult.moveToNext()) {
-                id = dbTaskResult.getString(4);
-            }
-            dbTaskResult.close();
-            Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id), Checklist.sortedSubtaskIds.get(position));
-            while (dbIdResult.moveToNext()) {
-                isKilled = dbIdResult.getInt(3) > 0;
-            }
-            dbIdResult.close();
+        //sub task is crossed out if it is marked as done
+        if(isKilled){
 
-            //sub task is crossed out if it is marked as done
-            if(isKilled){
+            checklistTextView.setPaintFlags(checklistTextView.getPaintFlags() |
+                    Paint.STRIKE_THRU_TEXT_FLAG);
 
-                checklistTextView.setPaintFlags(checklistTextView.getPaintFlags() |
-                        Paint.STRIKE_THRU_TEXT_FLAG);
-
-                if(!MainActivity.lightDark){
-                    checklistItemView.setBackgroundColor(Color.parseColor("#333333"));
-                    if(Checklist.fadeSubTasks){
-                        tickedFaded.setVisibility(View.VISIBLE);
-                        tickFaded.setVisibility(View.GONE);
-                    }else {
-                        ticked.setVisibility(View.VISIBLE);
-                        tick.setVisibility(View.GONE);
-                    }
-                }else{
-                    checklistItemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    if(Checklist.fadeSubTasks){
-                        tickWhiteFaded.setVisibility(View.GONE);
-                        tickedWhiteFaded.setVisibility(View.VISIBLE);
-                    }else {
-                        tickWhite.setVisibility(View.GONE);
-                        tickedWhite.setVisibility(View.VISIBLE);
-                    }
+            if(!MainActivity.lightDark){
+                checklistItemView.setBackgroundColor(Color.parseColor("#333333"));
+                if(Checklist.fadeSubTasks){
+                    tickedFaded.setVisibility(View.VISIBLE);
+                    tickFaded.setVisibility(View.GONE);
+                }else {
+                    ticked.setVisibility(View.VISIBLE);
+                    tick.setVisibility(View.GONE);
                 }
-
+            }else{
+                checklistItemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                if(Checklist.fadeSubTasks){
+                    tickWhiteFaded.setVisibility(View.GONE);
+                    tickedWhiteFaded.setVisibility(View.VISIBLE);
+                }else {
+                    tickWhite.setVisibility(View.GONE);
+                    tickedWhite.setVisibility(View.VISIBLE);
+                }
             }
-        } catch (IndexOutOfBoundsException e){
 
         }
 
-        //TODO this might be useless
-        //greying out unselected sub tasks
-        if (Checklist.subTaskBeingEdited && (position != Checklist.activeSubTask)) {
+        String resultId = "";
 
-//            checklistItemView.setBackgroundColor(Color.parseColor("#888888"));
-
+        Cursor dbResult = MainActivity.db.getUniversalData();
+        while (dbResult.moveToNext()) {
+            resultId = dbResult.getString(4);
         }
+        dbResult.close();
 
         //setting sub task name
-        if (Checklist.subTaskBeingEdited && (position == Checklist.activeSubTask) &&
+        if (Checklist.subTaskBeingEdited && (Integer.parseInt(resultId) ==
+                Checklist.sortedSubtaskIds.get(position)) &&
                 !Checklist.goToChecklistAdapter) {
 
             String oldSubTaskString = checklistTextView.getText().toString();
@@ -368,47 +161,74 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         }
 
-        if (Checklist.fadeSubTasks) {
+        return checklistItemView;
 
-//            if(MainActivity.lightDark) {
-//                checklistTextView.setTextColor(Color.parseColor("#DDDDDD"));
-//                tickWhite.setVisibility(View.GONE);
-//                tickWhiteFaded.setVisibility(View.VISIBLE);
-//                tick.setVisibility(View.GONE);
-//                tickFaded.setVisibility(View.GONE);
-//            }else{
-//                checklistTextView.setTextColor(Color.parseColor("#666666"));
-//                tick.setVisibility(View.GONE);
-//                ticked.setVisibility(View.GONE);
-//                tickWhite.setVisibility(View.GONE);
-//            }
-//            tickFaded.setVisibility(View.VISIBLE);
-//            tickedFaded.setVisibility(View.VISIBLE);
-//
-//            //fade sub tasks when keyboard is up
-////            Checklist.checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
-//
-////            tick.setBackgroundColor(Color.parseColor("#888888"));
-//
-//        } else {
-//
-//            //sub tasks are white when keyboard is down
-//            Checklist.checklistRootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//
-//            if (Checklist.subTasksKilled.get(Integer.parseInt(MainActivity.sortedIdsForNote
-//                    .get(MainActivity.activeTask))).get(position)) {
-//
-////                tick.setBackgroundColor(Color.parseColor("#FF0000"));
-//
-//            } else {
-//
-////                tick.setBackgroundColor(Color.parseColor("#00FF00"));
-//
-//            }
-//
+    }
+
+    private void markAsDone(int position) {
+
+        Rect screen = new Rect();
+
+        Checklist.checklistRootView.getWindowVisibleDisplayFrame(screen);
+
+        //Screen pixel values are used to determine how much of the screen is visible
+        int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
+                (screen.bottom - screen.top);
+
+        //Value of more than 800 seems to indicate that the keyboard is showing
+        //in portrait mode
+        if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
+                .getConfiguration().orientation == 1)) {
+
+            Checklist.subTasksClickable = false;
+
+            //Similar to above but for landscape mode
+        }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
+                .getResources().getConfiguration().orientation == 2)){
+
+            Checklist.subTasksClickable = false;
+
+        }else{
+
+            Checklist.subTasksClickable = true;
+
         }
 
-        return checklistItemView;
+        if (Checklist.subTasksClickable) {
+
+            boolean isKilled = false;
+            String id = "";
+
+            Cursor dbTaskResult = MainActivity.db.getUniversalData();
+            while (dbTaskResult.moveToNext()) {
+                id = dbTaskResult.getString(4);
+            }
+            dbTaskResult.close();
+
+            Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(id),
+                    Checklist.sortedSubtaskIds.get(position));
+            while (dbIdResult.moveToNext()) {
+                isKilled = dbIdResult.getInt(3) > 0;
+            }
+            dbIdResult.close();
+
+            //Marks sub task as complete
+            if (!isKilled){
+
+                MainActivity.db.updateSubtaskKilled(id, String.valueOf(Checklist
+                        .sortedSubtaskIds.get(position)), true);
+                Checklist.subTasksKilled.set(
+                        Checklist.sortedSubtaskIds.get(position), true);
+
+                if(!MainActivity.mute) {
+                    MainActivity.punch.start();
+                }
+
+                notifyDataSetChanged();
+
+            }
+
+        }
 
     }
 
