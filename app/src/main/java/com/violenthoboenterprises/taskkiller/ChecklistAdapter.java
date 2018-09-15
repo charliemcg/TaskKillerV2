@@ -150,7 +150,8 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 Checklist.sortedSubtaskIds.get(position)) &&
                 !Checklist.goToChecklistAdapter) {
 
-            String oldSubTaskString = checklistTextView.getText().toString();
+            String oldSubTaskString = Checklist.checklist
+                    .get(Checklist.sortedSubtaskIds.get(Checklist.renameMe));
 
             checklistTextView.setText("");
 

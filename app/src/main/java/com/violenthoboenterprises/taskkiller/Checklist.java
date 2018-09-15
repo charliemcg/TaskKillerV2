@@ -43,7 +43,7 @@ public class Checklist extends MainActivity {
     static boolean fadeSubTasks;
     static boolean noteExists;
     private Toolbar subTasksToolbar;
-    int reinstateMe;
+    static int renameMe;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -63,7 +63,7 @@ public class Checklist extends MainActivity {
         fadeSubTasks = false;
         noteExists = false;
         inChecklist = true;
-        reinstateMe = 0;
+        renameMe = 0;
 
         checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
         subTasksToolbar.setTitleTextColor(Color.parseColor(highlight));
@@ -208,9 +208,10 @@ public class Checklist extends MainActivity {
                     //Indicates that a task is being edited
                     subTaskBeingEdited = true;
 
+                    //TODO what's the point in this?
                     checklistView.setAdapter(checklistAdapter[0]);
 
-                    reinstateMe = sortedSubtaskIds.get(position);
+                    renameMe = sortedSubtaskIds.get(position);
 
                 //Reinstate killed subtask
                 }else{
@@ -304,8 +305,8 @@ public class Checklist extends MainActivity {
                     //Don't allow blank tasks
                     if(!checklistTaskName.equals("")) {
 
-                        checklist.set(reinstateMe, checklistTaskName);
-                        subTasksKilled.set(reinstateMe, true);
+                        checklist.set(renameMe, checklistTaskName);
+                        subTasksKilled.set(renameMe, true);
 
                         String id = null;
                         Cursor dbResult = db.getUniversalData();
@@ -313,7 +314,7 @@ public class Checklist extends MainActivity {
                             id = dbResult.getString(4);
                         }
                         dbResult.close();
-                        db.updateSubtask(id, String.valueOf(reinstateMe), checklistTaskName);
+                        db.updateSubtask(id, String.valueOf(renameMe), checklistTaskName);
                         checklistView.setAdapter(checklistAdapter[0]);
 
                     }
@@ -389,7 +390,7 @@ public class Checklist extends MainActivity {
 
                     restoreListView = true;
 
-                    //Similar to above but for landscape mode
+                //Similar to above but for landscape mode
                 }else if((heightDiff > 73) && (heightDiff < 800) && (getResources()
                         .getConfiguration().orientation == 2)){
 
