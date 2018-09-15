@@ -208,7 +208,6 @@ public class Checklist extends MainActivity {
                     //Indicates that a task is being edited
                     subTaskBeingEdited = true;
 
-                    //TODO what's the point in this?
                     checklistView.setAdapter(checklistAdapter[0]);
 
                     renameMe = sortedSubtaskIds.get(position);
@@ -458,6 +457,19 @@ public class Checklist extends MainActivity {
     protected void onPause(){
 
         super.onPause();
+
+        String id = null;
+        Cursor dbResult = db.getUniversalData();
+        while (dbResult.moveToNext()) {
+            id = dbResult.getString(4);
+        }
+        dbResult.close();
+
+        if(checklist.size() == 0){
+            db.updateChecklistExist(id,false);
+        }else{
+            db.updateChecklistExist(id,true);
+        }
 
     }
 
