@@ -3208,7 +3208,8 @@ class MyAdapter extends ArrayAdapter<String> {
             //show tasks properties
             }else{
 
-                propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
+                propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), /*android.*/R.anim.enter_from_top/*slide_in_left*/));
+//                overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
                 propertyRow.setVisibility(View.VISIBLE);
 
             }
