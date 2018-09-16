@@ -179,7 +179,7 @@ class MyAdapter extends ArrayAdapter<String> {
         //getting task data
         int dbID = 0;
         String dbNote = "";
-        Boolean dbChecklist = false;
+//        Boolean dbChecklist = false;
         String dbTimestamp = "";
         Boolean dbDue = false;
         Boolean dbKilled = false;
@@ -191,12 +191,15 @@ class MyAdapter extends ArrayAdapter<String> {
         int dbInterval = 0;
         String dbRepeatInterval = "";
         Boolean dbIgnored = false;
+        String dbTimeCreated = "";
+        int dbSortedIndex = 0;
+        int dbChecklistSize = 0;
         Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(position)));
         while (dbResult.moveToNext()) {
             dbID = dbResult.getInt(0);
             dbNote = dbResult.getString(1);
-            dbChecklist = dbResult.getInt(2) > 0;
+//            dbChecklist = dbResult.getInt(2) > 0;
             dbTimestamp = dbResult.getString(3);
             dbDue = dbResult.getInt(5) > 0;
             dbKilled = dbResult.getInt(6) > 0;
@@ -208,6 +211,9 @@ class MyAdapter extends ArrayAdapter<String> {
             dbInterval = dbResult.getInt(12);
             dbRepeatInterval = dbResult.getString(13);
             dbIgnored = dbResult.getInt(14) > 0;
+            dbTimeCreated = dbResult.getString(15);
+            dbSortedIndex = dbResult.getInt(16);
+            dbChecklistSize = dbResult.getInt(17);
         }
         dbResult.close();
 
@@ -232,7 +238,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
         final int finalDbID = dbID;
         final String finalDbNote = dbNote;
-        final Boolean finalDbChecklist = dbChecklist;
+//        final Boolean finalDbChecklist = dbChecklist;
         final String finalDbTimestamp = dbTimestamp;
         final Boolean finalDbDue = dbDue;
         final Boolean finalDbKilled = dbKilled;
@@ -244,6 +250,9 @@ class MyAdapter extends ArrayAdapter<String> {
         final int finalDbInterval = dbInterval;
         final String finalDbRepeatInterval = dbRepeatInterval;
         final Boolean finalDbIgnored = dbIgnored;
+        final String finalDbTimeCreated = dbTimeCreated;
+        final int finalDbSortedIndex = dbSortedIndex;
+        final int finalDbChecklistSize = dbChecklistSize;
 
         final String finalAlarmHour = alarmHour;
         final String finalAlarmMinute = alarmMinute;
@@ -4288,7 +4297,7 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         //Show checklist/note icon if required
-        if(dbChecklist){
+        if(dbChecklistSize != 0){
 //            checklistClear.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
             checklistClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
             checklistClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));

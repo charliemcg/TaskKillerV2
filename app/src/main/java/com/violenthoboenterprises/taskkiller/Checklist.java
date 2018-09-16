@@ -465,11 +465,11 @@ public class Checklist extends MainActivity {
         }
         dbResult.close();
 
-        if(checklist.size() == 0){
-            db.updateChecklistExist(id,false);
-        }else{
-            db.updateChecklistExist(id,true);
-        }
+//        if(checklist.size() == 0){
+//            db.updateChecklistExist(id,false);
+//        }else{
+//            db.updateChecklistExist(id,true);
+//        }
 
     }
 
