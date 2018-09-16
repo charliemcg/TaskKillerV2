@@ -43,11 +43,9 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 .findViewById(R.id.subtaskCompletedWhiteFaded);
         TAG = "ChecklistAdapter";
 
-        //getting app-wide data
         String dbTaskId = "";
         Boolean dbLightDark = false;
 
-        //getting task data
         int dbID = 0;
         String dbNote = "";
 //        Boolean dbChecklist = false;
@@ -67,11 +65,13 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         int dbSortedIndex = 0;
         int dbChecklistSize = 0;
 
+        //getting app-wide data
         Cursor dbResult = MainActivity.db.getUniversalData();
         while (dbResult.moveToNext()) {
             dbTaskId = dbResult.getString(4);
             dbLightDark = dbResult.getInt(3) > 0;
         }
+        //getting subtask data
         dbResult = MainActivity.db.getData(Integer.parseInt(dbTaskId));
         while (dbResult.moveToNext()) {
             dbID = dbResult.getInt(0);
@@ -115,6 +115,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         final int finalDbSortedIndex = dbSortedIndex;
         final int finalDbChecklistSize = dbChecklistSize;
 
+        //setting up UI based on light or dark mode
         if(!MainActivity.lightDark){
             checklistItemView.setBackgroundColor(Color.parseColor("#333333"));
             if(Checklist.fadeSubTasks){
@@ -143,7 +144,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
             }
         }
 
-        //actions to occur when sub task marked as done
+        //registering that subtask should be marked as done
         tick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +155,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         });
 
+        //registering that subtask should be marked as done
         tickWhite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,6 +170,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         Boolean isKilled = false;
 
+        //finding out if the subtask is completed
         Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(dbTaskId),
                 Checklist.sortedSubtaskIds.get(position));
         while (dbIdResult.moveToNext()) {
@@ -241,7 +244,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
             Checklist.subTasksClickable = false;
 
-            //Similar to above but for landscape mode
+        //Similar to above but for landscape mode
         }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
                 .getResources().getConfiguration().orientation == 2)){
 
@@ -257,6 +260,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
             boolean isKilled = false;
 
+            //finding out if subtask has been killed
             Cursor dbIdResult = MainActivity.db.getSubtaskData(Integer.parseInt(finalDbTaskId),
                     Checklist.sortedSubtaskIds.get(position));
             while (dbIdResult.moveToNext()) {

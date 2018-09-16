@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -1369,12 +1370,14 @@ class MyAdapter extends ArrayAdapter<String> {
             //Determine whether to show datepicker
             if(MainActivity.datePickerShowing) {
 
+                dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
                 dateRow.setVisibility(View.VISIBLE);
                 MainActivity.dateOrTime = true;
 
             //Show alarm options
             }else if(MainActivity.alarmOptionsShowing){
 
+                alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
                 alarmOptionsRow.setVisibility(View.VISIBLE);
 
                 propertyRow.setVisibility(View.GONE);
@@ -1430,6 +1433,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         alarmOptionsRow.setVisibility(View.GONE);
 
+                        repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
                         repeatRow.setVisibility(View.VISIBLE);
 
                         MainActivity.alarmOptionsShowing = false;
@@ -1440,6 +1444,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //show the overdue properties
             }else if(dbOverdue && !dbSnooze && !dbIgnored){
 
+                taskOverdueRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
                 taskOverdueRow.setVisibility(View.VISIBLE);
 
                 //Actions to occur if user selects 'snooze'
@@ -1449,6 +1454,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         taskOverdueRow.setVisibility(View.GONE);
 
+                        snoozeRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
                         snoozeRow.setVisibility(View.VISIBLE);
 
                         //Actions to occur if user selects '1 hour'
@@ -3202,6 +3208,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //show tasks properties
             }else{
 
+                propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
                 propertyRow.setVisibility(View.VISIBLE);
 
             }
