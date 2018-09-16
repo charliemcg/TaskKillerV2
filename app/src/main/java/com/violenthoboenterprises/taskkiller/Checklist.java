@@ -49,6 +49,7 @@ public class Checklist extends MainActivity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checklist_layout);
+        overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
         subTasksToolbar = findViewById(R.id.subTasksToolbar);
 
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

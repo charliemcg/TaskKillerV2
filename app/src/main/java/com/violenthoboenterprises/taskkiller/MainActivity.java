@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        mSharedPreferences = getPreferences(MODE_PRIVATE);
+        overridePendingTransition( R.anim.enter_from_right, R.anim.enter_from_right);
 
         topToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(topToolbar);

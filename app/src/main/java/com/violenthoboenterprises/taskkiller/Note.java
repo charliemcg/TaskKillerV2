@@ -40,6 +40,7 @@ public class Note extends MainActivity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_layout);
+        overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
         noteToolbar = findViewById(R.id.noteToolbar);
 
         noteTextView = findViewById(R.id.noteTextView);
