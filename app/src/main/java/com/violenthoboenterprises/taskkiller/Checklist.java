@@ -33,6 +33,7 @@ public class Checklist extends MainActivity {
     static ArrayList<String> checklist;
     static ArrayList<Boolean> subTasksKilled;
     static ArrayList<Integer> sortedSubtaskIds;
+    ArrayList<Integer> tempSortedIDs;
     static boolean subTaskBeingEdited;
     static boolean goToChecklistAdapter;
     static View checklistRootView;
@@ -56,6 +57,7 @@ public class Checklist extends MainActivity {
         checklist = new ArrayList<>();
         subTasksKilled = new ArrayList<>();
         sortedSubtaskIds = new ArrayList<>();
+        tempSortedIDs = new ArrayList<>();
         subTaskBeingEdited = false;
         subTasksClickable = false;
         checklistRootView = findViewById(R.id.checklistRoot);
@@ -65,20 +67,81 @@ public class Checklist extends MainActivity {
         inChecklist = true;
         renameMe = 0;
 
-        checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-        subTasksToolbar.setTitleTextColor(Color.parseColor(highlight));
+        //getting app-wide data
+        String dbTaskId = "";
+        Boolean dbLightDark = false;
 
         //getting task data
+        int dbID = 0;
+        String dbNote = "";
+//        Boolean dbChecklist = false;
+        String dbTimestamp = "";
         String dbTask = "";
-        Cursor dbTaskResult = MainActivity.db.getUniversalData();
-        while (dbTaskResult.moveToNext()) {
-            dbTask = dbTaskResult.getString(4);
+        Boolean dbDue = false;
+        Boolean dbKilled = false;
+        int dbBroadcast = 0;
+        Boolean dbRepeat = false;
+        Boolean dbOverdue = false;
+        Boolean dbSnooze = false;
+        Boolean dbShowOnce = false;
+        int dbInterval = 0;
+        String dbRepeatInterval = "";
+        Boolean dbIgnored = false;
+        String dbTimeCreated = "";
+        int dbSortedIndex = 0;
+        int dbChecklistSize = 0;
+
+        Cursor dbResult = MainActivity.db.getUniversalData();
+        while (dbResult.moveToNext()) {
+            dbTaskId = dbResult.getString(4);
+            dbLightDark = dbResult.getInt(3) > 0;
         }
-        dbTaskResult.close();
-        dbTaskResult = db.getData(Integer.parseInt(dbTask));
-        while (dbTaskResult.moveToNext()) {
-            dbTask = dbTaskResult.getString(4);
+        dbResult = MainActivity.db.getData(Integer.parseInt(dbTaskId));
+        while (dbResult.moveToNext()) {
+            dbID = dbResult.getInt(0);
+            dbNote = dbResult.getString(1);
+//            dbChecklist = dbResult.getInt(2) > 0;
+            dbTimestamp = dbResult.getString(3);
+            dbTask = dbResult.getString(4);
+            dbDue = dbResult.getInt(5) > 0;
+            dbKilled = dbResult.getInt(6) > 0;
+            dbBroadcast = dbResult.getInt(7);
+            dbRepeat = dbResult.getInt(8) > 0;
+            dbOverdue = dbResult.getInt(9) > 0;
+            dbSnooze = dbResult.getInt(10) > 0;
+            dbShowOnce = dbResult.getInt(11) > 0;
+            dbInterval = dbResult.getInt(12);
+            dbRepeatInterval = dbResult.getString(13);
+            dbIgnored = dbResult.getInt(14) > 0;
+            dbTimeCreated = dbResult.getString(15);
+            dbSortedIndex = dbResult.getInt(16);
+            tempSortedIDs.add(dbSortedIndex);
+            dbChecklistSize = dbResult.getInt(17);
         }
+        dbResult.close();
+
+        final String finalDbTaskId = dbTaskId;
+
+        final int finalDbID = dbID;
+        final String finalDbNote = dbNote;
+//        final Boolean finalDbChecklist = dbChecklist;
+        final String finalDbTimestamp = dbTimestamp;
+        final Boolean finalDbDue = dbDue;
+        final Boolean finalDbKilled = dbKilled;
+        final int finalDbBroadcast = dbBroadcast;
+        final Boolean finalDbRepeat = dbRepeat;
+        final Boolean finalDbOverdue = dbOverdue;
+        final Boolean finalDbSnooze = dbSnooze;
+        final Boolean finalDbShowOnce = dbShowOnce;
+        final int finalDbInterval = dbInterval;
+        final String finalDbRepeatInterval = dbRepeatInterval;
+        final Boolean finalDbIgnored = dbIgnored;
+        final String finalDbTimeCreated = dbTimeCreated;
+        final int finalDbSortedIndex = dbSortedIndex;
+        final int finalDbChecklistSize = dbChecklistSize;
+
+        checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+        subTasksToolbar.setTitleTextColor(Color.parseColor(highlight));
 
         subTasksToolbar.setTitle(dbTask);
 
@@ -95,31 +158,12 @@ public class Checklist extends MainActivity {
                 GradientDrawable.Orientation.LEFT_RIGHT, colors));
         checklistView.setDividerHeight(1);
 
-        //getting app-wide data
-        Cursor dbResult = MainActivity.db.getUniversalData();
-        while (dbResult.moveToNext()) {
-            lightDark = dbResult.getInt(3) > 0;
-        }
-        dbResult.close();
-
-        if(!lightDark){
+        if(!dbLightDark){
             checklistView.setBackgroundColor(Color.parseColor("#333333"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#333333"));
         }else{
             checklistView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
-        }
-
-        ArrayList<Integer> tempSortedIDs = new ArrayList<>();
-
-        for( int i = 0 ; i < taskListSize ; i++ ) {
-
-            Cursor sortedIdsResult = db.getData(i);
-            while (sortedIdsResult.moveToNext()) {
-                tempSortedIDs.add(sortedIdsResult.getInt(16));
-            }
-            sortedIdsResult.close();
-
         }
 
         Collections.sort(tempSortedIDs);
@@ -140,44 +184,29 @@ public class Checklist extends MainActivity {
 
         }
 
-        //Make task clickable
         checklistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                String killedId = null;
                 boolean isKilled = false;
-                Cursor dbResult = db.getUniversalData();
-                while (dbResult.moveToNext()) {
-                    killedId = dbResult.getString(4);
+                Cursor dbResult = db.getSubtaskData(finalDbID,
+                        sortedSubtaskIds.get(position));
+                while(dbResult.moveToNext()){
+                    isKilled = dbResult.getInt(3) > 0;
                 }
                 dbResult.close();
-                Cursor dbIdResult = db.getSubtaskData(Integer.parseInt(killedId),
-                        sortedSubtaskIds.get(position));
-                while(dbIdResult.moveToNext()){
-                    isKilled = dbIdResult.getInt(3) > 0;
-                }
 
-                if(isKilled){
+                if(isKilled && subTasksClickable){
 
                     checklist.remove(position);
 
                     subTasksKilled.remove(position);
 
-                    MainActivity.db.deleteSubtaskData(killedId,
+                    MainActivity.db.deleteSubtaskData(String.valueOf(finalDbID),
                             String.valueOf(sortedSubtaskIds.get(position)));
 
-                    String checklistId = null;
-                    Cursor dbChecklistResult = db.getUniversalData();
-                    while (dbChecklistResult.moveToNext()) {
-                        checklistId = dbChecklistResult.getString(4);
-                    }
-                    dbChecklistResult.close();
-                    db.updateChecklistSize(checklistId, checklist.size());
-                    if(checklist.size() == 0) {
-                        db.updateChecklistExist(checklistId, false);
-                    }
+                    db.updateChecklistSize(finalDbTaskId, checklist.size());
 
                     sortedSubtaskIds.remove(position);
 
@@ -196,6 +225,8 @@ public class Checklist extends MainActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
 
+                Log.i(TAG, "killed: " + subTasksKilled.get(sortedSubtaskIds.get(position)));
+
                 //Rename subtask
                 if(subTasksClickable && !subTasksKilled.get(sortedSubtaskIds.get(position))){
 
@@ -213,18 +244,12 @@ public class Checklist extends MainActivity {
                     renameMe = sortedSubtaskIds.get(position);
 
                 //Reinstate killed subtask
-                }else{
-
-                    String checklistId = null;
-                    Cursor dbChecklistResult = db.getUniversalData();
-                    while (dbChecklistResult.moveToNext()) {
-                        checklistId = dbChecklistResult.getString(4);
-                    }
-                    dbChecklistResult.close();
+                }else if(subTasksClickable && subTasksKilled.get(sortedSubtaskIds.get(position))){
 
                     //marks task as not killed in database
-                    db.updateSubtaskKilled(checklistId, String.valueOf(sortedSubtaskIds
-                            .get(position)), false);
+                    db.updateSubtaskKilled(finalDbTaskId, String.valueOf(position), false);
+
+                    subTasksKilled.set(position, false);
 
                     checklistView.setAdapter(checklistAdapter[0]);
 
@@ -259,17 +284,11 @@ public class Checklist extends MainActivity {
                         checklist.add(checklistTaskName);
                         subTasksKilled.add(false);
 
-                        String id = null;
-                        Cursor dbResult = db.getUniversalData();
-                        while (dbResult.moveToNext()) {
-                            id = dbResult.getString(4);
-                        }
-                        dbResult.close();
-                        db.updateChecklistSize(id, checklist.size());
+                        db.updateChecklistSize(String.valueOf(finalDbID), checklist.size());
                         int subtaskId = 0;
                         boolean idIsSet = false;
                         while (!idIsSet) {
-                            Cursor dbIdResult = db.getSubtask(Integer.parseInt(id));
+                            Cursor dbIdResult = db.getSubtask(finalDbID);
                             while (dbIdResult.moveToNext()) {
                                 if (dbIdResult.getInt(1) == subtaskId) {
                                     subtaskId++;
@@ -282,7 +301,7 @@ public class Checklist extends MainActivity {
                             }
                             dbIdResult.close();
                         }
-                        db.insertSubtaskData(Integer.parseInt(id), subtaskId, checklistTaskName);
+                        db.insertSubtaskData(finalDbID, subtaskId, checklistTaskName);
                         sortedSubtaskIds.add(subtaskId);
                         checklistView.setAdapter(checklistAdapter[0]);
 
@@ -307,13 +326,7 @@ public class Checklist extends MainActivity {
                         checklist.set(renameMe, checklistTaskName);
                         subTasksKilled.set(renameMe, true);
 
-                        String id = null;
-                        Cursor dbResult = db.getUniversalData();
-                        while (dbResult.moveToNext()) {
-                            id = dbResult.getString(4);
-                        }
-                        dbResult.close();
-                        db.updateSubtask(id, String.valueOf(renameMe), checklistTaskName);
+                        db.updateSubtask(finalDbTaskId, String.valueOf(renameMe), checklistTaskName);
                         checklistView.setAdapter(checklistAdapter[0]);
 
                     }
@@ -341,7 +354,8 @@ public class Checklist extends MainActivity {
         subTasksClickable = true;
 
         //TODO check out the hard coded pixels will work on all devices
-        checklistRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        checklistRootView.getViewTreeObserver().addOnGlobalLayoutListener
+                (new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
 
@@ -377,14 +391,6 @@ public class Checklist extends MainActivity {
 
                     }
 
-                    //TODO find out what this does
-//                    if (checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
-//                            .get(MainActivity.activeTask))).size() == 0) {
-
-//                        checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
-
-//                    }
-
                     subTasksClickable = false;
 
                     restoreListView = true;
@@ -408,14 +414,6 @@ public class Checklist extends MainActivity {
                         goToChecklistAdapter = false;
 
                     }
-
-                    //TODO find out what this does
-//                    if (checklistList.get(Integer.parseInt(MainActivity.sortedIdsForNote
-//                            .get(MainActivity.activeTask))).size() == 0) {
-//
-//                        checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
-//
-//                    }
 
                     subTasksClickable = false;
 
@@ -458,19 +456,6 @@ public class Checklist extends MainActivity {
 
         super.onPause();
 
-        String id = null;
-        Cursor dbResult = db.getUniversalData();
-        while (dbResult.moveToNext()) {
-            id = dbResult.getString(4);
-        }
-        dbResult.close();
-
-//        if(checklist.size() == 0){
-//            db.updateChecklistExist(id,false);
-//        }else{
-//            db.updateChecklistExist(id,true);
-//        }
-
     }
 
     @Override
@@ -512,7 +497,11 @@ public class Checklist extends MainActivity {
         dbIdResult.close();
         checklistView.setAdapter(checklistAdapter[0]);
 
-        subTasksClickable = false;
+        if(checklist.size() == 0) {
+            subTasksClickable = false;
+        }else{
+            subTasksClickable = true;
+        }
 
     }
 
