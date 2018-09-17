@@ -1372,17 +1372,40 @@ class MyAdapter extends ArrayAdapter<String> {
             //Determine whether to show datepicker
             if(MainActivity.datePickerShowing) {
 
-                dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
-                dateRow.setVisibility(View.VISIBLE);
+                propertyRow.setVisibility(View.VISIBLE);
+                propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
+
+                final Handler handler = new Handler();
+
+                final Runnable r = new Runnable() {
+                    public void run() {
+                        propertyRow.setVisibility(View.GONE);
+                        dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                        dateRow.setVisibility(View.VISIBLE);
+                    }
+                };
+
+                handler.postDelayed(r, 600);
+
+//                dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+//                dateRow.setVisibility(View.VISIBLE);
+
                 MainActivity.dateOrTime = true;
 
             //Show alarm options
             }else if(MainActivity.alarmOptionsShowing){
 
-                alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
-                alarmOptionsRow.setVisibility(View.VISIBLE);
+                //TODO this code block doesn't seem to be used
+                final Handler handler = new Handler();
 
-                propertyRow.setVisibility(View.GONE);
+                final Runnable runnable = new Runnable() {
+                    public void run() {
+                        alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), /*android.R.anim.slide_in_left*/R.anim.enter_from_right));
+                        alarmOptionsRow.setVisibility(View.VISIBLE);
+                    }
+                };
+
+                handler.postDelayed(runnable, 1000);
 
                 MainActivity.alarmOptionsShowing = true;
 
@@ -1433,6 +1456,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
+                        //TODO this code block doesn't seem to get used
                         alarmOptionsRow.setVisibility(View.GONE);
 
                         repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
@@ -1454,10 +1478,25 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
-                        taskOverdueRow.setVisibility(View.GONE);
+//                        taskOverdueRow.setVisibility(View.VISIBLE);
+                        taskOverdueRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
-                        snoozeRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
-                        snoozeRow.setVisibility(View.VISIBLE);
+                        final Handler handler = new Handler();
+
+                        final Runnable r = new Runnable() {
+                            public void run() {
+                                taskOverdueRow.setVisibility(View.GONE);
+                                snoozeRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                snoozeRow.setVisibility(View.VISIBLE);
+                            }
+                        };
+
+                        handler.postDelayed(r, 600);
+
+//                        taskOverdueRow.setVisibility(View.GONE);
+
+//                        snoozeRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
+//                        snoozeRow.setVisibility(View.VISIBLE);
 
                         //Actions to occur if user selects '1 hour'
                         oneHourBtn.setOnClickListener(new View.OnClickListener() {
@@ -3211,18 +3250,19 @@ class MyAdapter extends ArrayAdapter<String> {
             }else{
 
                 //Attempting to make animations run smoothly by running a separate thread
-                final Handler handler = new Handler();
+//                final Handler handler = new Handler();
 
-                final Runnable r = new Runnable() {
-                    public void run() {
+//                final Runnable r = new Runnable() {
+//                    public void run() {
                         //properties drop down from the top
-                        propertyRow.startAnimation(AnimationUtils
-                                .loadAnimation(getContext(), R.anim.enter_from_top));
+//                        propertyRow.startAnimation(AnimationUtils
+//                                .loadAnimation(getContext(), R.anim.enter_from_top));
+                        propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), /*android.R.anim.slide_in_left*/R.anim.enter_from_right));
                         propertyRow.setVisibility(View.VISIBLE);
-                    }
-                };
+//                    }
+//                };
 
-                handler.postDelayed(r, 10);
+//                handler.postDelayed(r, 10);
 
             }
 
@@ -3645,9 +3685,22 @@ class MyAdapter extends ArrayAdapter<String> {
                         //actions to occur when viewing alarm properties
                         } else {
 
-                            alarmOptionsRow.setVisibility(View.VISIBLE);
+//                            alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+//                            alarmOptionsRow.setVisibility(View.VISIBLE);
 
-                            propertyRow.setVisibility(View.GONE);
+                            propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
+
+                            final Handler handler = new Handler();
+
+                            final Runnable r = new Runnable() {
+                                public void run() {
+                                    propertyRow.setVisibility(View.GONE);
+                                    alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                    alarmOptionsRow.setVisibility(View.VISIBLE);
+                                }
+                            };
+
+                            handler.postDelayed(r, 600);
 
                             MainActivity.alarmOptionsShowing = true;
 
@@ -3787,9 +3840,27 @@ class MyAdapter extends ArrayAdapter<String> {
                                     //show repeat row
                                     } else {
 
-                                        alarmOptionsRow.setVisibility(View.GONE);
+//                                        alarmOptionsRow.setVisibility(View.VISIBLE);
+//                                        alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+//                                        alarmOptionsRow.setVisibility(View.GONE);
 
-                                        repeatRow.setVisibility(View.VISIBLE);
+//                                        repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+//                                        repeatRow.setVisibility(View.VISIBLE);
+
+//                                        alarmOptionsRow.setVisibility(View.VISIBLE);
+                                        alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
+
+                                        final Handler handler = new Handler();
+
+                                        final Runnable r = new Runnable() {
+                                            public void run() {
+                                                alarmOptionsRow.setVisibility(View.GONE);
+                                                repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                                repeatRow.setVisibility(View.VISIBLE);
+                                            }
+                                        };
+
+                                        handler.postDelayed(r, 600);
 
                                         MainActivity.repeatShowing = true;
 
@@ -4416,7 +4487,7 @@ class MyAdapter extends ArrayAdapter<String> {
     }
 
     //set notification alarm for selected task
-    private void setAlarm(TableRow dateRow, DatePicker datePicker, TimePicker timePicker, int position){
+    private void setAlarm(TableRow dateRow, final DatePicker datePicker, final TimePicker timePicker, int position){
 
         //getting task data
         String dbTask = "";
@@ -4455,9 +4526,24 @@ class MyAdapter extends ArrayAdapter<String> {
         //Show time picker
         if(MainActivity.dateOrTime) {
 
+//            datePicker.setVisibility(View.VISIBLE);
+            datePicker.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
+
+            final Handler handler = new Handler();
+
+            final Runnable r = new Runnable() {
+                public void run() {
+                    datePicker.setVisibility(View.GONE);
+                    timePicker.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                    timePicker.setVisibility(View.VISIBLE);
+                }
+            };
+
+            handler.postDelayed(r, 600);
+
             dateRow.setVisibility(View.VISIBLE);
-            datePicker.setVisibility(View.GONE);
-            timePicker.setVisibility(View.VISIBLE);
+//            datePicker.setVisibility(View.GONE);
+//            timePicker.setVisibility(View.VISIBLE);
             MainActivity.dateOrTime = false;
             MainActivity.datePickerShowing = false;
             MainActivity.timePickerShowing = true;
