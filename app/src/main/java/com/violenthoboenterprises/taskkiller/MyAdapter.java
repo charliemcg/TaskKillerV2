@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import android.os.Handler;
 
 class MyAdapter extends ArrayAdapter<String> {
 
@@ -54,6 +55,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final String task = getItem(position);
         //Uses unique layout for the new item
         final LayoutInflater theInflater = LayoutInflater.from(getContext());
+        //TODO fade inactive taskviews to invisible instead of setting individual elements to 'gone'
         final View taskView = theInflater.inflate(R.layout.task_layout, parent, false);
         //Where the task text is displayed
         final TextView theTextView = taskView.findViewById(R.id.textView);
@@ -899,7 +901,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.lightRed));
                     }
                     markAsOverdue = true;
-                    //Overdue
+                //Overdue
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth == Integer.valueOf(month)
                         && currentDay > Integer.valueOf(day)) {
@@ -3208,20 +3210,26 @@ class MyAdapter extends ArrayAdapter<String> {
             //show tasks properties
             }else{
 
-                propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), /*android.*/R.anim.enter_from_top/*slide_in_left*/));
-//                overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
-                propertyRow.setVisibility(View.VISIBLE);
+                //Attempting to make animations run smoothly by running a separate thread
+                final Handler handler = new Handler();
+
+                final Runnable r = new Runnable() {
+                    public void run() {
+                        //properties drop down from the top
+                        propertyRow.startAnimation(AnimationUtils
+                                .loadAnimation(getContext(), R.anim.enter_from_top));
+                        propertyRow.setVisibility(View.VISIBLE);
+                    }
+                };
+
+                handler.postDelayed(r, 10);
 
             }
 
             //Making extra row visible removes clickability. Clickability needs to be reinstated.
-            /*taskView.findViewById(R.id.taskName)*/taskNameRow.setOnClickListener(new View.OnClickListener(){
+            taskNameRow.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-
-                    //set background to white
-//                    MainActivity.activityRootView.setBackgroundColor(Color
-//                            .parseColor("#FFFFFF"));
 
                     //Updates the view
                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
@@ -4323,43 +4331,56 @@ class MyAdapter extends ArrayAdapter<String> {
         //greying out unselected tasks
         if (MainActivity.taskPropertiesShowing && (position != MainActivity.activeTask)) {
 
-            //fade out inactive tasks
-//            taskView.setBackgroundColor(Color.parseColor("#888888"));
-            complete.setVisibility(View.INVISIBLE);
-            completed.setVisibility(View.INVISIBLE);
-            completeWhite.setVisibility(View.INVISIBLE);
-            completedWhite.setVisibility(View.INVISIBLE);
-            theTextView.setVisibility(View.INVISIBLE);
-//            due.setVisibility(View.INVISIBLE);
-            dueClear.setVisibility(View.INVISIBLE);
-            dueClearWhite.setVisibility(View.INVISIBLE);
-//            overdue.setVisibility(View.INVISIBLE);
-            overdueClear.setVisibility(View.INVISIBLE);
-            overdueClearWhite.setVisibility(View.INVISIBLE);
-            snoozeClear.setVisibility(View.INVISIBLE);
-            snoozeClearWhite.setVisibility(View.INVISIBLE);
-//            dueGrey.setVisibility(View.INVISIBLE);
-//            repeatDay.setVisibility(View.INVISIBLE);
-            repeatDayClear.setVisibility(View.INVISIBLE);
-            repeatDayClearWhite.setVisibility(View.INVISIBLE);
-//            repeatWeek.setVisibility(View.INVISIBLE);
-            repeatWeekClear.setVisibility(View.INVISIBLE);
-            repeatWeekClearWhite.setVisibility(View.INVISIBLE);
-//            repeatMonth.setVisibility(View.INVISIBLE);
-            repeatMonthClear.setVisibility(View.INVISIBLE);
-            repeatMonthClearWhite.setVisibility(View.INVISIBLE);
-//            repeatGrey.setVisibility(View.INVISIBLE);
-            repeatClear.setVisibility(View.INVISIBLE);
-            repeatClearWhite.setVisibility(View.INVISIBLE);
-//            noteImg.setVisibility(View.INVISIBLE);
-            noteClear.setVisibility(View.INVISIBLE);
-            noteClearWhite.setVisibility(View.INVISIBLE);
-//            noteGrey.setVisibility(View.INVISIBLE);
-//            checklistImg.setVisibility(View.INVISIBLE);
-            checklistClear.setVisibility(View.INVISIBLE);
-            checklistClearWhite.setVisibility(View.INVISIBLE);
-//            checklistGrey.setVisibility(View.INVISIBLE);
-            dueTextView.setVisibility(View.INVISIBLE);
+            //Attempting to make animations run smoothly by running a separate thread
+            final Handler handler = new Handler();
+
+            final Runnable r = new Runnable() {
+                public void run() {
+                    //Fade out inactive taskviews
+                    taskView.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                    taskView.setVisibility(View.INVISIBLE);
+                }
+            };
+
+            handler.postDelayed(r, 10);
+
+//            //fade out inactive tasks
+////            taskView.setBackgroundColor(Color.parseColor("#888888"));
+//            complete.setVisibility(View.INVISIBLE);
+//            completed.setVisibility(View.INVISIBLE);
+//            completeWhite.setVisibility(View.INVISIBLE);
+//            completedWhite.setVisibility(View.INVISIBLE);
+//            theTextView.setVisibility(View.INVISIBLE);
+////            due.setVisibility(View.INVISIBLE);
+//            dueClear.setVisibility(View.INVISIBLE);
+//            dueClearWhite.setVisibility(View.INVISIBLE);
+////            overdue.setVisibility(View.INVISIBLE);
+//            overdueClear.setVisibility(View.INVISIBLE);
+//            overdueClearWhite.setVisibility(View.INVISIBLE);
+//            snoozeClear.setVisibility(View.INVISIBLE);
+//            snoozeClearWhite.setVisibility(View.INVISIBLE);
+////            dueGrey.setVisibility(View.INVISIBLE);
+////            repeatDay.setVisibility(View.INVISIBLE);
+//            repeatDayClear.setVisibility(View.INVISIBLE);
+//            repeatDayClearWhite.setVisibility(View.INVISIBLE);
+////            repeatWeek.setVisibility(View.INVISIBLE);
+//            repeatWeekClear.setVisibility(View.INVISIBLE);
+//            repeatWeekClearWhite.setVisibility(View.INVISIBLE);
+////            repeatMonth.setVisibility(View.INVISIBLE);
+//            repeatMonthClear.setVisibility(View.INVISIBLE);
+//            repeatMonthClearWhite.setVisibility(View.INVISIBLE);
+////            repeatGrey.setVisibility(View.INVISIBLE);
+//            repeatClear.setVisibility(View.INVISIBLE);
+//            repeatClearWhite.setVisibility(View.INVISIBLE);
+////            noteImg.setVisibility(View.INVISIBLE);
+//            noteClear.setVisibility(View.INVISIBLE);
+//            noteClearWhite.setVisibility(View.INVISIBLE);
+////            noteGrey.setVisibility(View.INVISIBLE);
+////            checklistImg.setVisibility(View.INVISIBLE);
+//            checklistClear.setVisibility(View.INVISIBLE);
+//            checklistClearWhite.setVisibility(View.INVISIBLE);
+////            checklistGrey.setVisibility(View.INVISIBLE);
+//            dueTextView.setVisibility(View.INVISIBLE);
 
         }
 
