@@ -1248,8 +1248,28 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.db.updateIgnored(MainActivity.sortedIDs
                         .get(position), false);
 
-                Toast.makeText(taskView.getContext(), R.string.youKilledThisTask,
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(taskView.getContext(), R.string.youKilledThisTask,
+//                        Toast.LENGTH_SHORT).show();
+
+                MainActivity.toast.setText(R.string.youKilledThisTask);
+                final Handler handler = new Handler();
+
+                final Runnable runnable = new Runnable() {
+                    public void run() {
+                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                        MainActivity.toast.setVisibility(View.VISIBLE);
+                        final Handler handler2 = new Handler();
+                        final Runnable runnable2 = new Runnable(){
+                            public void run(){
+                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                MainActivity.toast.setVisibility(View.GONE);
+                            }
+                        };
+                        handler2.postDelayed(runnable2, 1500);
+                    }
+                };
+
+                handler.postDelayed(runnable, 500);
 
                 //need to kill the right alarm. Need to know if
                 // killing initial alarm or a snoozed alarm
@@ -1448,7 +1468,26 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                 //TODO Show this only when necessary
-                Toast.makeText(taskView.getContext(), R.string.youCanCancelRepeat, Toast.LENGTH_LONG).show();
+//                Toast.makeText(taskView.getContext(), R.string.youCanCancelRepeat, Toast.LENGTH_LONG).show();
+                MainActivity.toast.setText(R.string.youCanCancelRepeat);
+                final Handler handler = new Handler();
+
+                final Runnable runnable = new Runnable() {
+                    public void run() {
+                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                        MainActivity.toast.setVisibility(View.VISIBLE);
+                        final Handler handler2 = new Handler();
+                        final Runnable runnable2 = new Runnable(){
+                            public void run(){
+                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                MainActivity.toast.setVisibility(View.GONE);
+                            }
+                        };
+                        handler2.postDelayed(runnable2, 1500);
+                    }
+                };
+
+                handler.postDelayed(runnable, 500);
 
                 propertyRow.setVisibility(View.GONE);
 
@@ -1712,9 +1751,28 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 if(dontSnooze){
 
-                                    Toast.makeText(v.getContext(),
-                                            R.string.taskNotSnoozedBecause,
-                                            Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(v.getContext(),
+//                                            R.string.taskNotSnoozedBecause,
+//                                            Toast.LENGTH_SHORT).show();
+                                    MainActivity.toast.setText(R.string.taskNotSnoozedBecause);
+                                    final Handler handler = new Handler();
+
+                                    final Runnable runnable = new Runnable() {
+                                        public void run() {
+                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                            MainActivity.toast.setVisibility(View.VISIBLE);
+                                            final Handler handler2 = new Handler();
+                                            final Runnable runnable2 = new Runnable(){
+                                                public void run(){
+                                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                                    MainActivity.toast.setVisibility(View.GONE);
+                                                }
+                                            };
+                                            handler2.postDelayed(runnable2, 1500);
+                                        }
+                                    };
+
+                                    handler.postDelayed(runnable, 500);
 
                                     int newDay = Integer.parseInt(finalAlarmDay);
                                     int newMonth = Integer.parseInt(finalAlarmMonth);
@@ -2192,8 +2250,27 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 if(dontSnooze){
 
-                                    Toast.makeText(v.getContext(), R.string.taskNotSnoozedBecause,
-                                            Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(v.getContext(), R.string.taskNotSnoozedBecause,
+//                                            Toast.LENGTH_SHORT).show();
+                                    MainActivity.toast.setText(R.string.taskNotSnoozedBecause);
+                                    final Handler handler = new Handler();
+
+                                    final Runnable runnable = new Runnable() {
+                                        public void run() {
+                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                            MainActivity.toast.setVisibility(View.VISIBLE);
+                                            final Handler handler2 = new Handler();
+                                            final Runnable runnable2 = new Runnable(){
+                                                public void run(){
+                                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                                    MainActivity.toast.setVisibility(View.GONE);
+                                                }
+                                            };
+                                            handler2.postDelayed(runnable2, 1500);
+                                        }
+                                    };
+
+                                    handler.postDelayed(runnable, 500);
 
                                     int newDay = Integer.parseInt(finalAlarmDay);
                                     int newMonth = Integer.parseInt(finalAlarmMonth);
@@ -2668,9 +2745,28 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 if (dontSnooze) {
 
-                                    Toast.makeText(v.getContext(),
-                                            R.string.taskNotSnoozedBecause,
-                                            Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(v.getContext(),
+//                                            R.string.taskNotSnoozedBecause,
+//                                            Toast.LENGTH_SHORT).show();
+                                    MainActivity.toast.setText(R.string.taskNotSnoozedBecause);
+                                    final Handler handler = new Handler();
+
+                                    final Runnable runnable = new Runnable() {
+                                        public void run() {
+                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                            MainActivity.toast.setVisibility(View.VISIBLE);
+                                            final Handler handler2 = new Handler();
+                                            final Runnable runnable2 = new Runnable(){
+                                                public void run(){
+                                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                                    MainActivity.toast.setVisibility(View.GONE);
+                                                }
+                                            };
+                                            handler2.postDelayed(runnable2, 1500);
+                                        }
+                                    };
+
+                                    handler.postDelayed(runnable, 500);
 
                                     int newDay = Integer.parseInt(finalAlarmDay);
                                     int newMonth = Integer.parseInt(finalAlarmMonth);
@@ -3079,8 +3175,27 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.sortedIDs.get(
                                                     MainActivity.activeTask)), true);
 
-                                    Toast.makeText(v.getContext(), R.string.youKilledThisTask,
-                                            Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(v.getContext(), R.string.youKilledThisTask,
+//                                            Toast.LENGTH_SHORT).show();
+                                    MainActivity.toast.setText(R.string.youKilledThisTask);
+                                    final Handler handler = new Handler();
+
+                                    final Runnable runnable = new Runnable() {
+                                        public void run() {
+                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                            MainActivity.toast.setVisibility(View.VISIBLE);
+                                            final Handler handler2 = new Handler();
+                                            final Runnable runnable2 = new Runnable(){
+                                                public void run(){
+                                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                                    MainActivity.toast.setVisibility(View.GONE);
+                                                }
+                                            };
+                                            handler2.postDelayed(runnable2, 1500);
+                                        }
+                                    };
+
+                                    handler.postDelayed(runnable, 500);
 
                                     MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
                                             Integer.parseInt(
@@ -3498,8 +3613,27 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.db.updateIgnored(MainActivity.sortedIDs
                                 .get(position), false);
 
-                        Toast.makeText(v.getContext(), R.string.youKilledThisTask,
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(v.getContext(), R.string.youKilledThisTask,
+//                                Toast.LENGTH_SHORT).show();
+                        MainActivity.toast.setText(R.string.youKilledThisTask);
+                        final Handler handler = new Handler();
+
+                        final Runnable runnable = new Runnable() {
+                            public void run() {
+                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                MainActivity.toast.setVisibility(View.VISIBLE);
+                                final Handler handler2 = new Handler();
+                                final Runnable runnable2 = new Runnable(){
+                                    public void run(){
+                                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                        MainActivity.toast.setVisibility(View.GONE);
+                                    }
+                                };
+                                handler2.postDelayed(runnable2, 1500);
+                            }
+                        };
+
+                        handler.postDelayed(runnable, 500);
 
                         //need to kill the right alarm. Need to know if
                         // killing initial alarm or a snoozed alarm
@@ -3721,7 +3855,26 @@ class MyAdapter extends ArrayAdapter<String> {
                                 MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                         //TODO Show this only when necessary
-                        Toast.makeText(v.getContext(), R.string.youCanCancelRepeat, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(v.getContext(), R.string.youCanCancelRepeat, Toast.LENGTH_LONG).show();
+                        MainActivity.toast.setText(R.string.youCanCancelRepeat);
+                        final Handler handler = new Handler();
+
+                        final Runnable runnable = new Runnable() {
+                            public void run() {
+                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                MainActivity.toast.setVisibility(View.VISIBLE);
+                                final Handler handler2 = new Handler();
+                                final Runnable runnable2 = new Runnable(){
+                                    public void run(){
+                                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                        MainActivity.toast.setVisibility(View.GONE);
+                                    }
+                                };
+                                handler2.postDelayed(runnable2, 1500);
+                            }
+                        };
+
+                        handler.postDelayed(runnable, 500);
 
                         propertyRow.setVisibility(View.GONE);
 
@@ -3798,6 +3951,25 @@ class MyAdapter extends ArrayAdapter<String> {
                         //TODO reword this
 //                    Toast.makeText(v.getContext(), "Upgrade to the Pro version to" +
 //                                    " get this feature", Toast.LENGTH_SHORT).show();
+//                        MainActivity.toast.setText("Upgrade to pro to get this feature");
+//                        final Handler handler = new Handler();
+//
+//                        final Runnable runnable = new Runnable() {
+//                            public void run() {
+//                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+//                                MainActivity.toast.setVisibility(View.VISIBLE);
+//                                final Handler handler2 = new Handler();
+//                                final Runnable runnable2 = new Runnable(){
+//                                    public void run(){
+//                                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+//                                        MainActivity.toast.setVisibility(View.GONE);
+//                                    }
+//                                };
+//                                handler2.postDelayed(runnable2, 1500);
+//                            }
+//                        };
+//
+//                        handler.postDelayed(runnable, 500);
 
                         //actions to occur if alarm not already set
                         if (!finalDbDue) {
@@ -4839,26 +5011,102 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 //Checking that task due date is in the future
                 if (currentDate.get(Calendar.YEAR) > datePicker.getYear()) {
-                    Toast.makeText(getContext(), R.string.cannotSetTask,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), R.string.cannotSetTask,
+//                            Toast.LENGTH_SHORT).show();
+                    MainActivity.toast.setText(R.string.cannotSetTask);
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.toast.setVisibility(View.VISIBLE);
+                            final Handler handler2 = new Handler();
+                            final Runnable runnable2 = new Runnable(){
+                                public void run(){
+                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                    MainActivity.toast.setVisibility(View.GONE);
+                                }
+                            };
+                            handler2.postDelayed(runnable2, 1500);
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 500);
                 } else if (currentDate.get(Calendar.YEAR) == datePicker.getYear()
                         && currentDate.get(Calendar.MONTH) > datePicker.getMonth()) {
-                    Toast.makeText(getContext(), R.string.cannotSetTask,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), R.string.cannotSetTask,
+//                            Toast.LENGTH_SHORT).show();
+                    MainActivity.toast.setText(R.string.cannotSetTask);
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.toast.setVisibility(View.VISIBLE);
+                            final Handler handler2 = new Handler();
+                            final Runnable runnable2 = new Runnable(){
+                                public void run(){
+                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                    MainActivity.toast.setVisibility(View.GONE);
+                                }
+                            };
+                            handler2.postDelayed(runnable2, 1500);
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 500);
                 } else if (currentDate.get(Calendar.YEAR) == datePicker.getYear()
                         && currentDate.get(Calendar.MONTH) == datePicker.getMonth()
                         && currentDate.get(Calendar.DAY_OF_MONTH) >
                         datePicker.getDayOfMonth()) {
-                    Toast.makeText(getContext(), R.string.cannotSetTask,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), R.string.cannotSetTask,
+//                            Toast.LENGTH_SHORT).show();
+                    MainActivity.toast.setText(R.string.cannotSetTask);
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.toast.setVisibility(View.VISIBLE);
+                            final Handler handler2 = new Handler();
+                            final Runnable runnable2 = new Runnable(){
+                                public void run(){
+                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                    MainActivity.toast.setVisibility(View.GONE);
+                                }
+                            };
+                            handler2.postDelayed(runnable2, 1500);
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 500);
                 } else if (currentDate.get(Calendar.YEAR) == datePicker.getYear()
                         && currentDate.get(Calendar.MONTH) == datePicker.getMonth()
                         && currentDate.get(Calendar.DAY_OF_MONTH) ==
                         datePicker.getDayOfMonth()
                         && currentDate.get(Calendar.HOUR_OF_DAY) >
                         timePicker.getHour()) {
-                    Toast.makeText(getContext(), R.string.cannotSetTask,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), R.string.cannotSetTask,
+//                            Toast.LENGTH_SHORT).show();
+                    MainActivity.toast.setText(R.string.cannotSetTask);
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.toast.setVisibility(View.VISIBLE);
+                            final Handler handler2 = new Handler();
+                            final Runnable runnable2 = new Runnable(){
+                                public void run(){
+                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                    MainActivity.toast.setVisibility(View.GONE);
+                                }
+                            };
+                            handler2.postDelayed(runnable2, 1500);
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 500);
                 } else if (currentDate.get(Calendar.YEAR) == datePicker.getYear()
                         && currentDate.get(Calendar.MONTH) == datePicker.getMonth()
                         && currentDate.get(Calendar.DAY_OF_MONTH) ==
@@ -4866,8 +5114,27 @@ class MyAdapter extends ArrayAdapter<String> {
                         && currentDate.get(Calendar.HOUR_OF_DAY) ==
                         timePicker.getHour()
                         && currentDate.get(Calendar.MINUTE) > timePicker.getMinute()) {
-                    Toast.makeText(getContext(), R.string.cannotSetTask,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), R.string.cannotSetTask,
+//                            Toast.LENGTH_SHORT).show();
+                    MainActivity.toast.setText(R.string.cannotSetTask);
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.toast.setVisibility(View.VISIBLE);
+                            final Handler handler2 = new Handler();
+                            final Runnable runnable2 = new Runnable(){
+                                public void run(){
+                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+                                    MainActivity.toast.setVisibility(View.GONE);
+                                }
+                            };
+                            handler2.postDelayed(runnable2, 1500);
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 500);
                 } else {
 
                     Calendar futureDate = new GregorianCalendar(datePicker.getYear(),

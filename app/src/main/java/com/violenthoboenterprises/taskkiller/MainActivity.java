@@ -171,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private ImageView noTasksToShow;
     private ImageView noTasksToShowWhite;
 
+    //Custom toast
+    static TextView toast;
+
     static PendingIntent pendIntent;
 
     //The editable text box that allows for creating and editing task names
@@ -392,6 +395,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         exitChangeDueDate = false;
         exitRepeat = false;
         snoozeRowShowing = false;
+        toast = findViewById(R.id.toast);
 //        showDb = findViewById(R.id.showDb);
 //      showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
@@ -734,8 +738,27 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             i = random.nextInt(6);
                         }
                         lastToast = motivation[i];
-                        Toast.makeText(v.getContext(), motivation[i],
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(v.getContext(), motivation[i],
+//                                Toast.LENGTH_SHORT).show();
+                        toast.setText(motivation[i]);
+                        final Handler handler = new Handler();
+
+                        final Runnable runnable = new Runnable() {
+                            public void run() {
+                                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right));
+                                toast.setVisibility(View.VISIBLE);
+                                final Handler handler2 = new Handler();
+                                final Runnable runnable2 = new Runnable(){
+                                    public void run(){
+                                        toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, android.R.anim.fade_out));
+                                        toast.setVisibility(View.GONE);
+                                    }
+                                };
+                                handler2.postDelayed(runnable2, 1500);
+                            }
+                        };
+
+                        handler.postDelayed(runnable, 500);
                     }
 
                     theListView.setAdapter(theAdapter[0]);
@@ -1317,8 +1340,27 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //reinstates completed task
     public void reinstate(int i) {
 
-        Toast.makeText(MainActivity.this, R.string.taskReinstated,
-                Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, R.string.taskReinstated,
+//                Toast.LENGTH_SHORT).show();
+        toast.setText(R.string.taskReinstated);
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right));
+                toast.setVisibility(View.VISIBLE);
+                final Handler handler2 = new Handler();
+                final Runnable runnable2 = new Runnable(){
+                    public void run(){
+                        toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, android.R.anim.fade_out));
+                        toast.setVisibility(View.GONE);
+                    }
+                };
+                handler2.postDelayed(runnable2, 1500);
+            }
+        };
+
+        handler.postDelayed(runnable, 500);
 
         //marks task as not killed in database
         db.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
@@ -1842,7 +1884,26 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-        Toast.makeText(this, "You purchased something", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "You purchased something", Toast.LENGTH_SHORT).show();
+        toast.setText("You purchased something");
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right));
+                toast.setVisibility(View.VISIBLE);
+                final Handler handler2 = new Handler();
+                final Runnable runnable2 = new Runnable(){
+                    public void run(){
+                        toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, android.R.anim.fade_out));
+                        toast.setVisibility(View.GONE);
+                    }
+                };
+                handler2.postDelayed(runnable2, 1500);
+            }
+        };
+
+        handler.postDelayed(runnable, 500);
     }
 
     @Override
@@ -1852,7 +1913,26 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     @Override
     public void onBillingError(int errorCode, @Nullable Throwable error) {
-        Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+        toast.setText("Something went wrong");
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right));
+                toast.setVisibility(View.VISIBLE);
+                final Handler handler2 = new Handler();
+                final Runnable runnable2 = new Runnable(){
+                    public void run(){
+                        toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, android.R.anim.fade_out));
+                        toast.setVisibility(View.GONE);
+                    }
+                };
+                handler2.postDelayed(runnable2, 1500);
+            }
+        };
+
+        handler.postDelayed(runnable, 500);
     }
 
     @Override
@@ -2050,10 +2130,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //options to properties
         if(colorPickerShowing) {
-            Log.i(TAG, "I'm in here 0");
             colorPickerShowing();
         }else if (purchasesShowing){
-            Log.i(TAG, "I'm in here 1");
             colorPickerShowing();
         }else if(taskOptionsShowing){
             Log.i(TAG, "I'm in here 2");
