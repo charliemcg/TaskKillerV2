@@ -463,6 +463,97 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.reorderList = false;
         }
 
+        //implementing exit animations if required
+        if(MainActivity.exitTaskProperties){
+            if(!dbOverdue){
+                propertyRow.setVisibility(View.VISIBLE);
+                propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+
+                final Handler handler = new Handler();
+
+                final Runnable runnable = new Runnable() {
+                    public void run() {
+                        propertyRow.setVisibility(View.GONE);
+                    }
+                };
+
+                handler.postDelayed(runnable, 400);
+            }else if(MainActivity.snoozeRowShowing) {
+                snoozeRow.setVisibility(View.VISIBLE);
+                snoozeRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+
+                final Handler handler = new Handler();
+
+                final Runnable runnable = new Runnable() {
+                    public void run() {
+                        snoozeRow.setVisibility(View.GONE);
+                        taskOverdueRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                        taskOverdueRow.setVisibility(View.VISIBLE);
+                    }
+                };
+
+                handler.postDelayed(runnable, 400);
+                MainActivity.snoozeRowShowing = false;
+                MainActivity.taskPropertiesShowing = true;
+            }else{
+                taskOverdueRow.setVisibility(View.VISIBLE);
+                taskOverdueRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+
+                final Handler handler = new Handler();
+
+                final Runnable runnable = new Runnable() {
+                    public void run() {
+                        taskOverdueRow.setVisibility(View.GONE);
+                    }
+                };
+
+                handler.postDelayed(runnable, 400);
+            }
+            MainActivity.exitTaskProperties = false;
+        }else if(MainActivity.exitAlarmOptions){
+            alarmOptionsRow.setVisibility(View.VISIBLE);
+            alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+
+            final Handler handler = new Handler();
+
+            final Runnable runnable = new Runnable() {
+                public void run() {
+                    alarmOptionsRow.setVisibility(View.GONE);
+                }
+            };
+
+            handler.postDelayed(runnable, 400);
+        }else if(MainActivity.exitDatePicker){
+            dateRow.setVisibility(View.VISIBLE);
+            dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+
+            final Handler handler = new Handler();
+
+            final Runnable runnable = new Runnable() {
+                public void run() {
+                    dateRow.setVisibility(View.GONE);
+                }
+            };
+
+            handler.postDelayed(runnable, 400);
+        }else if(MainActivity.exitTimePicker){
+
+            dateRow.setVisibility(View.VISIBLE);
+            datePicker.setVisibility(View.GONE);
+            timePicker.setVisibility(View.VISIBLE);
+            timePicker.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+
+            final Handler handler = new Handler();
+
+            final Runnable runnable = new Runnable() {
+                public void run() {
+                    timePicker.setVisibility(View.GONE);
+                }
+            };
+
+            handler.postDelayed(runnable, 400);
+        }
+
         //TODO decide if alarm reinstatement is to be a thing in the first place
 //        if(MainActivity.reinstateAlarm){
 //
@@ -1372,40 +1463,71 @@ class MyAdapter extends ArrayAdapter<String> {
             //Determine whether to show datepicker
             if(MainActivity.datePickerShowing) {
 
-                propertyRow.setVisibility(View.VISIBLE);
-                propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
+                if(!MainActivity.exitTimePicker) {
 
-                final Handler handler = new Handler();
+                    propertyRow.setVisibility(View.VISIBLE);
+                    propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
-                final Runnable r = new Runnable() {
-                    public void run() {
-                        propertyRow.setVisibility(View.GONE);
-                        dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
-                        dateRow.setVisibility(View.VISIBLE);
-                    }
-                };
+                    final Handler handler = new Handler();
 
-                handler.postDelayed(r, 300);
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
 
-//                dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
-//                dateRow.setVisibility(View.VISIBLE);
+                            propertyRow.setVisibility(View.GONE);
+                            dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            dateRow.setVisibility(View.VISIBLE);
 
-                MainActivity.dateOrTime = true;
+                        }
+                    };
 
+                    handler.postDelayed(runnable, 300);
+
+                    MainActivity.dateOrTime = true;
+
+                //run exit animation on timepicker and reinstate the date picker
+                }else{
+
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            datePicker.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            datePicker.setVisibility(View.VISIBLE);
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 400);
+
+                    MainActivity.exitTimePicker = false;
+
+                    MainActivity.dateOrTime = false;
+
+                }
             //Show alarm options
-            }else if(MainActivity.alarmOptionsShowing){
+            }else if(MainActivity.alarmOptionsShowing) {
 
-                //TODO this code block doesn't seem to be used
+                if (!MainActivity.exitRepeat){
+                    dateRow.setVisibility(View.VISIBLE);
+                    dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+                    MainActivity.exitChangeDueDate = false;
+                }else {
+                    repeatRow.setVisibility(View.VISIBLE);
+                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+                    MainActivity.exitRepeat = false;
+                }
+
                 final Handler handler = new Handler();
 
                 final Runnable runnable = new Runnable() {
                     public void run() {
+                        dateRow.setVisibility(View.GONE);
+                        repeatRow.setVisibility(View.GONE);
                         alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
                         alarmOptionsRow.setVisibility(View.VISIBLE);
                     }
                 };
 
-                handler.postDelayed(runnable, 1000);
+                handler.postDelayed(runnable, 400);
 
                 MainActivity.alarmOptionsShowing = true;
 
@@ -1483,7 +1605,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         final Handler handler = new Handler();
 
-                        final Runnable r = new Runnable() {
+                        final Runnable runnable = new Runnable() {
                             public void run() {
                                 taskOverdueRow.setVisibility(View.GONE);
                                 snoozeRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
@@ -1491,7 +1613,9 @@ class MyAdapter extends ArrayAdapter<String> {
                             }
                         };
 
-                        handler.postDelayed(r, 600);
+                        handler.postDelayed(runnable, 600);
+
+                        MainActivity.snoozeRowShowing = true;
 
 //                        taskOverdueRow.setVisibility(View.GONE);
 
@@ -3271,20 +3395,38 @@ class MyAdapter extends ArrayAdapter<String> {
             //show tasks properties
             }else{
 
-                //Attempting to make animations run smoothly by running a separate thread
-//                final Handler handler = new Handler();
+                if(MainActivity.exitAlarmOptions){
 
-//                final Runnable r = new Runnable() {
-//                    public void run() {
-                        //properties drop down from the top
-//                        propertyRow.startAnimation(AnimationUtils
-//                                .loadAnimation(getContext(), R.anim.enter_from_top));
-                        propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), /*android.R.anim.slide_in_left*/R.anim.enter_from_right));
-                        propertyRow.setVisibility(View.VISIBLE);
-//                    }
-//                };
+                    final Handler handler = new Handler();
 
-//                handler.postDelayed(r, 10);
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            propertyRow.setVisibility(View.VISIBLE);
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 400);
+
+                    MainActivity.exitAlarmOptions = false;
+                }else if (MainActivity.exitDatePicker){
+
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            propertyRow.setVisibility(View.VISIBLE);
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 400);
+
+                    MainActivity.exitDatePicker = false;
+                }else{
+                    propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                    propertyRow.setVisibility(View.VISIBLE);
+                }
 
             }
 
@@ -3714,7 +3856,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             final Handler handler = new Handler();
 
-                            final Runnable r = new Runnable() {
+                            final Runnable runnable = new Runnable() {
                                 public void run() {
                                     propertyRow.setVisibility(View.GONE);
                                     alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
@@ -3722,7 +3864,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 }
                             };
 
-                            handler.postDelayed(r, 600);
+                            handler.postDelayed(runnable, 600);
 
                             MainActivity.alarmOptionsShowing = true;
 
@@ -3893,7 +4035,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         final Handler handler = new Handler();
 
-                                        final Runnable r = new Runnable() {
+                                        final Runnable runnable = new Runnable() {
                                             public void run() {
                                                 alarmOptionsRow.setVisibility(View.GONE);
                                                 repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
@@ -3901,7 +4043,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             }
                                         };
 
-                                        handler.postDelayed(r, 600);
+                                        handler.postDelayed(runnable, 600);
 
                                         MainActivity.repeatShowing = true;
 
@@ -4482,7 +4624,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //Attempting to make animations run smoothly by running a separate thread
             final Handler handler = new Handler();
 
-            final Runnable r = new Runnable() {
+            final Runnable runnable = new Runnable() {
                 public void run() {
                     //Fade out inactive taskviews
                     taskView.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
@@ -4490,7 +4632,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
             };
 
-            handler.postDelayed(r, 10);
+            handler.postDelayed(runnable, 10);
 
 //            //fade out inactive tasks
 ////            taskView.setBackgroundColor(Color.parseColor("#888888"));
@@ -4608,7 +4750,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
             final Handler handler = new Handler();
 
-            final Runnable r = new Runnable() {
+            final Runnable runnable = new Runnable() {
                 public void run() {
                     datePicker.setVisibility(View.GONE);
                     timePicker.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
@@ -4616,7 +4758,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
             };
 
-            handler.postDelayed(r, 600);
+            handler.postDelayed(runnable, 600);
 
             dateRow.setVisibility(View.VISIBLE);
 //            datePicker.setVisibility(View.GONE);

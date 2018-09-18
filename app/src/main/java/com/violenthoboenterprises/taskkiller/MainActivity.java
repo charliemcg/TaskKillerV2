@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -108,6 +110,21 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     boolean remindersAvailable;
     //used to indicate that user purchased color cycling
     boolean cycleColors;
+    //used to indicate that the snooze options are showing
+    static boolean snoozeRowShowing;
+
+    //task properties require exit animation
+    static boolean exitTaskProperties;
+    //alarm options require exit animation
+    static boolean exitAlarmOptions;
+    //date picker requires exit animation
+    static boolean exitDatePicker;
+    //time picker requires exit animation
+    static boolean exitTimePicker;
+    //date picker when changing due date requires exit animation
+    static boolean exitChangeDueDate;
+    //repeat row requires exit animation
+    static boolean exitRepeat;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -119,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //Measures to determine if keyboard is up
     private int heightDiff;
     //Size of checklist of checklists
-    static int checklistListSize;
+//    static int checklistListSize;
     //Height of list view as viewable on screen
     static int listViewHeight;
     static int thePosition;
@@ -369,6 +386,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 getString(R.string.onlyWimpsGiveUp), getString(R.string.dontBeAFailure),
                 getString(R.string.beVictorious)};
         taskListSize = 0;
+        exitTaskProperties = false;
+        exitAlarmOptions = false;
+        exitDatePicker = false;
+        exitChangeDueDate = false;
+        exitRepeat = false;
+        snoozeRowShowing = false;
 //        showDb = findViewById(R.id.showDb);
 //      showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
@@ -990,22 +1013,45 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             noTasksLeft();
             return true;
         } else if (id == R.id.highlight) {
-            colorPicker.setVisibility(View.VISIBLE);
             colorPickerShowing = true;
             add.setClickable(false);
             theListView.setOnItemClickListener(null);
             taskPropertiesShowing = false;
             onCreateOptionsMenu(topToolbar.getMenu());
             theListView.setAdapter(theAdapter[0]);
+            colorPicker.startAnimation(AnimationUtils.loadAnimation(this, R.anim.enter_from_right));
+
+            final Handler handler = new Handler();
+
+            final Runnable runnable = new Runnable() {
+                public void run() {
+                    colorPicker.setVisibility(View.VISIBLE);
+                }
+            };
+
+            handler.postDelayed(runnable, 200);
+
             return true;
         } else if (id == R.id.buy) {
-            purchases.setVisibility(View.VISIBLE);
+
             purchasesShowing = true;
             add.setClickable(false);
             theListView.setOnItemClickListener(null);
             taskPropertiesShowing = false;
             onCreateOptionsMenu(topToolbar.getMenu());
             theListView.setAdapter(theAdapter[0]);
+            purchases.startAnimation(AnimationUtils.loadAnimation(this, R.anim.enter_from_right));
+
+            final Handler handler = new Handler();
+
+            final Runnable runnable = new Runnable() {
+                public void run() {
+                    purchases.setVisibility(View.VISIBLE);
+                }
+            };
+
+            handler.postDelayed(runnable, 200);
+
             return true;
         }
 
@@ -1609,10 +1655,30 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private void colorPickerShowing() {
         if(colorPickerShowing) {
-            colorPicker.setVisibility(View.GONE);
+            colorPicker.startAnimation(AnimationUtils.loadAnimation(this, R.anim.exit_out_left));
+
+            final Handler handler = new Handler();
+
+            final Runnable runnable = new Runnable() {
+                public void run() {
+                    colorPicker.setVisibility(View.GONE);
+                }
+            };
+
+            handler.postDelayed(runnable, 200);
             colorPickerShowing = false;
         }else{
-            purchases.setVisibility(View.GONE);
+            purchases.startAnimation(AnimationUtils.loadAnimation(this, R.anim.exit_out_left));
+
+            final Handler handler = new Handler();
+
+            final Runnable runnable = new Runnable() {
+                public void run() {
+                    purchases.setVisibility(View.GONE);
+                }
+            };
+
+            handler.postDelayed(runnable, 200);
             purchasesShowing = false;
         }
             theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -1984,37 +2050,46 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //options to properties
         if(colorPickerShowing) {
+            Log.i(TAG, "I'm in here 0");
             colorPickerShowing();
         }else if (purchasesShowing){
+            Log.i(TAG, "I'm in here 1");
             colorPickerShowing();
         }else if(taskOptionsShowing){
+            Log.i(TAG, "I'm in here 2");
             theListView.setAdapter(theAdapter[0]);
             taskOptionsShowing = false;
         }else if(datePickerShowing) {
             //date picker to properties
             if(!alarmOptionsShowing) {
+                exitDatePicker = true;
                 datePickerShowing = false;
                 theListView.setAdapter(theAdapter[0]);
                 //change due date to alarm options
             }else{
+                exitChangeDueDate = true;
                 datePickerShowing = false;
                 theListView.setAdapter(theAdapter[0]);
             }
             //time picker to date picker
         }else if(timePickerShowing) {
+            exitTimePicker = true;
             datePickerShowing = true;
             timePickerShowing = false;
             theListView.setAdapter(theAdapter[0]);
             //repeat to alarm options
         }else if(repeatShowing){
+            exitRepeat = true;
             repeatShowing = false;
             theListView.setAdapter(theAdapter[0]);
             //alarm options to properties
         }else if(alarmOptionsShowing){
+            exitAlarmOptions  = true;
             alarmOptionsShowing = false;
             theListView.setAdapter(theAdapter[0]);
             //Properties to home
         }else if (taskPropertiesShowing){
+            exitTaskProperties = true;
             removeTaskProperties();
             //Exit app
         }else{
