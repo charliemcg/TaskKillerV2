@@ -531,7 +531,9 @@
         android:layout_height="50dp"
         android:layout_marginTop="470dp"
         android:textColor="@color/dark_gray"
-        android:background="@color/lightGreen"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:visibility="gone"/>
 
 </RelativeLayout>

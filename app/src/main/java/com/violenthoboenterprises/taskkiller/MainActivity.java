@@ -422,6 +422,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         addIcon.setTextColor(Color.parseColor(highlight));
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+        toast.setBackgroundColor(Color.parseColor(highlight));
 
         muteSounds(mute);
 
@@ -1862,6 +1863,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         addIcon.setTextColor(Color.parseColor(s));
         taskNameEditText.setBackgroundColor(Color.parseColor(s));
         setDividers(lightDark);
+        toast.setBackgroundColor(Color.parseColor(highlight));
         colorPickerShowing();
     }
 
@@ -2053,11 +2055,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         taskList.clear();
         sortedIDs.clear();
 
-        //Existing tasks are recalled when app opened
-//        taskListSize = mSharedPreferences.getInt("taskListSizeKey", 0);
-
-//        mute = mSharedPreferences.getBoolean("muteKey", false);
-
         //getting app-wide data
         Cursor dbResult = db.getUniversalData();
         while (dbResult.moveToNext()) {
@@ -2078,17 +2075,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         ArrayList<Integer> tempSortedIDs = new ArrayList<>();
 
         for( int i = 0 ; i < taskListSize ; i++ ) {
-
-//            Cursor sharedPreferencesResult = db.getData(Integer
-//                    .parseInt(sortedIDs.get(i)));
-//            while (sharedPreferencesResult.moveToNext()) {
-//                taskList.add(sharedPreferencesResult.getString(4));
-//            }
-
-//            taskList.add(mSharedPreferences.getString("taskNameKey" + String.valueOf(i), ""));
-
-//            sortedIDs.add(mSharedPreferences.getString("sortedIDsKey" +
-//                    String.valueOf(i), ""));
 
             Cursor sortedIdsResult = db.getData(i);
             while (sortedIdsResult.moveToNext()) {
