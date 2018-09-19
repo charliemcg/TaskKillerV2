@@ -462,6 +462,31 @@ class MyAdapter extends ArrayAdapter<String> {
             note.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.layout_border_white));
         }
 
+        //Animating a killed task moving down through the list view
+        if(MainActivity.killedAnimation) {
+            Log.i(TAG, "Setting task " + position);
+            if(position == (MainActivity.taskList.size() - 1)){
+                MainActivity.theListView.setSelection(MainActivity.killedPosition);
+                if(MainActivity.killedPosition == (MainActivity.taskList.size() - 1)){
+                    Log.i(TAG, "killedAnimation = false;");
+                    MainActivity.killedAnimation = false;
+                }else{
+//                    MainActivity.killedPosition++;
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            reorderList();
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 35);
+                    MainActivity.killedPosition++;
+                    Log.i(TAG, "reorderList()");
+                }
+            }
+        }
+
 //        //Displaying ad if there are five or more tasks
 //        if(position == 4) {
 //            adRow.setVisibility(View.VISIBLE);
@@ -1293,6 +1318,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //task is killed if not repeating
             if(!finalDbRepeat) {
+
+                MainActivity.killedAnimation = true;
+                MainActivity.killedID = Integer.parseInt(MainActivity.sortedIDs.get(position));
+                MainActivity.killedPosition = position;
 
                 notifyDataSetChanged();
 
@@ -5332,8 +5361,6 @@ class MyAdapter extends ArrayAdapter<String> {
     //Reordering tasks by due date
     public void reorderList(){
 
-        Log.i(TAG, "I'm in here MyAdapter");
-
         ArrayList<Integer> tempList = new ArrayList<>();
 
         //Saving timestamps into a temporary array
@@ -5474,6 +5501,27 @@ class MyAdapter extends ArrayAdapter<String> {
 
             MainActivity.db.updateSortedIndex(String.valueOf(i), Integer.parseInt(tempIdsList.get(i)));
 
+        }
+
+        if(MainActivity.killedAnimation) {
+
+            int tempId = 0;
+            String tempTask = "";
+
+            for (int i = 0; i < MainActivity.taskListSize; i++) {
+
+                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.killedID) {
+                    tempId = Integer.parseInt(tempIdsList.get(i));
+                    tempTask = tempTaskList.get(i);
+                    tempIdsList.remove(i);
+                    tempTaskList.remove(i);
+                    break;
+                }
+
+            }
+
+            tempIdsList.add(MainActivity.killedPosition, String.valueOf(tempId));
+            tempTaskList.add(MainActivity.killedPosition, tempTask);
         }
 
         MainActivity.sortedIDs = tempIdsList;

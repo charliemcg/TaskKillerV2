@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     boolean cycleColors;
     //used to indicate that the snooze options are showing
     static boolean snoozeRowShowing;
+    static boolean killedAnimation;
+    static int killedPosition;
+    static int killedID;
 
     //task properties require exit animation
     static boolean exitTaskProperties;
@@ -399,6 +402,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         exitRepeat = false;
         snoozeRowShowing = false;
         toast = findViewById(R.id.toast);
+        killedAnimation = false;
+        killedPosition = 0;
+        killedID = 0;
 //        showDb = findViewById(R.id.showDb);
 //      showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
