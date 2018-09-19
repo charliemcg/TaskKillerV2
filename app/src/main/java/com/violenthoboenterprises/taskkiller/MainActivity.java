@@ -1382,6 +1382,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //TODO make a reorder class that both MainActivity and MyAdapter can access
     public void reorderList() {
 
+        Log.i(TAG, "I'm in here MainActivity");
+
         ArrayList<Integer> tempList = new ArrayList<>();
 
         //Saving timestamps into a temporary array
@@ -2107,6 +2109,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             }
             sharedPreferencesResult.close();
         }
+
+        reorderList();
 
         alertIntent = new Intent(this, AlertReceiver.class);
 

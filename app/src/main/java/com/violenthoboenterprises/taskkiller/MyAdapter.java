@@ -178,6 +178,63 @@ class MyAdapter extends ArrayAdapter<String> {
         final LinearLayout fourHourBtn = taskView.findViewById(R.id.fourHours);
         final LinearLayout tomorrowBtn = taskView.findViewById(R.id.tomorrow);
 
+        //Exit animations for when properties are removed due to user clicking on the list item //TODO complete this and make it less buggy
+//        if((position == MainActivity.activeTask) && !MainActivity.taskPropertiesShowing && MainActivity.timePickerShowing) {
+//            datePicker.setVisibility(View.GONE);
+//            timePicker.setVisibility(View.VISIBLE);
+//            dateRow.setVisibility(View.VISIBLE);
+//            dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+//
+//            final Handler handler = new Handler();
+//
+//            final Runnable runnable = new Runnable() {
+//                public void run() {
+//                    dateRow.setVisibility(View.GONE);
+//                }
+//            };
+//
+//            handler.postDelayed(runnable, 400);
+//        }else if((position == MainActivity.activeTask) && !MainActivity.taskPropertiesShowing && MainActivity.datePickerShowing) {
+//            dateRow.setVisibility(View.VISIBLE);
+//            dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+//
+//            final Handler handler = new Handler();
+//
+//            final Runnable runnable = new Runnable() {
+//                public void run() {
+//                    dateRow.setVisibility(View.GONE);
+//                }
+//            };
+//
+//            handler.postDelayed(runnable, 400);
+//        }else if((position == MainActivity.activeTask) && !MainActivity.taskPropertiesShowing && MainActivity.alarmOptionsShowing) {
+//            alarmOptionsRow.setVisibility(View.VISIBLE);
+//            alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+//
+//            final Handler handler = new Handler();
+//
+//            final Runnable runnable = new Runnable() {
+//                public void run() {
+//                    alarmOptionsRow.setVisibility(View.GONE);
+//                }
+//            };
+//
+//            handler.postDelayed(runnable, 400);
+//        }else if((position == MainActivity.activeTask) && !MainActivity.taskPropertiesShowing) {
+//            propertyRow.setVisibility(View.VISIBLE);
+//            propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
+//
+//            final Handler handler = new Handler();
+//
+//            final Runnable runnable = new Runnable() {
+//                public void run() {
+//                    propertyRow.setVisibility(View.GONE);
+//                }
+//            };
+//
+//            handler.postDelayed(runnable, 400);
+//        }
+
         //getting task data
         int dbID = 0;
         String dbNote = "";
@@ -5274,6 +5331,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
     //Reordering tasks by due date
     public void reorderList(){
+
+        Log.i(TAG, "I'm in here MyAdapter");
 
         ArrayList<Integer> tempList = new ArrayList<>();
 
