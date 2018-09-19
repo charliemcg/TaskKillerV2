@@ -126,7 +126,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/checklist_clear"/>
+                    android:src="@drawable/subtask_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/checklistClearWhite"
@@ -149,7 +149,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/note_clear"/>
+                    android:src="@drawable/note_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/noteClearWhite"
@@ -173,7 +173,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_day_clear"/>
+                    android:src="@drawable/repeat_icon_dark_day"/>
 
                 <ImageView
                     android:id="@+id/repeatDayClearWhite"
@@ -197,7 +197,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_week_clear"/>
+                    android:src="@drawable/repeat_icon_dark_week"/>
 
                 <ImageView
                     android:id="@+id/repeatWeekClearWhite"
@@ -221,7 +221,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_month_clear"/>
+                    android:src="@drawable/repeat_icon_dark_month"/>
 
                 <ImageView
                     android:id="@+id/repeatMonthClearWhite"
@@ -244,7 +244,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_clear"/>
+                    android:src="@drawable/repeat_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/repeatClearWhite"

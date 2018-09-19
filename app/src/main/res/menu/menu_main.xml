@@ -23,14 +23,12 @@
         android:id="@+id/lightDark"
         android:orderInCategory="300"
         android:title="Light/Dark"
-        android:icon="@drawable/light_dark"
         app:showAsAction="collapseActionView"/>
 
     <item
         android:id="@+id/highlight"
         android:orderInCategory="300"
         android:title="Color"
-        android:icon="@drawable/customise"
         app:showAsAction="collapseActionView"/>
 
     <item

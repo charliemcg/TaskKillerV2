@@ -30,7 +30,7 @@
     <string name="colonZero">:0</string>
     <string name="am">am</string>
     <string name="pm">pm</string>
-    <string name="youKilledThisTask">You killed this task!</string>
+    <string name="youKilledThisTask">You killed that task!</string>
     <string name="youCanCancelRepeat">HINT: You can cancel repeat in alarm options.</string>
     <string name="taskNotSnoozedBecause">Task not snoozed because repeat alarm is due.</string>
     <string name="cancelSnooze">Cancel snooze</string>

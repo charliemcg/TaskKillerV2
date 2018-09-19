@@ -232,6 +232,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //Sound played when task marked as complete
     static MediaPlayer punch;
+    //Sound played when toast displays
+    static MediaPlayer sweep;
 
     //The action bar
     private Toolbar topToolbar;
@@ -291,11 +293,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     protected void onCreate(Bundle savedInstanceState) {
         //TODO figure out what to do about older versions
         if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.dark_gray));
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.dark_gray));
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        overridePendingTransition( R.anim.enter_from_right, R.anim.enter_from_right);
+        overridePendingTransition(R.anim.enter_from_right, R.anim.enter_from_right);
 
         topToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(topToolbar);
@@ -340,6 +342,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         reinstateAlarm = false;
         completeTask = false;
         punch = MediaPlayer.create(this, R.raw.punch);
+        sweep = MediaPlayer.create(this, R.raw.sweep);
         mute = false;
         colorPicker = findViewById(R.id.colorPicker);
         white = findViewById(R.id.white);
@@ -384,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         cycleColorsImageWhite = findViewById(R.id.cycleColorsImageWhite);
         unlockAllImage = findViewById(R.id.unlockAllImage);
         unlockAllImageWhite = findViewById(R.id.unlockAllImageWhite);
-        motivation = new String[] {getString(R.string.getItDone),
+        motivation = new String[]{getString(R.string.getItDone),
                 getString(R.string.smashThatTask), getString(R.string.beAWinner),
                 getString(R.string.onlyWimpsGiveUp), getString(R.string.dontBeAFailure),
                 getString(R.string.beVictorious)};
@@ -746,7 +749,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                         final Runnable runnable = new Runnable() {
                             public void run() {
-                                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right));
+                                sweep.start();
+                                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right_fast));
                                 toast.setVisibility(View.VISIBLE);
                                 final Handler handler2 = new Handler();
                                 final Runnable runnable2 = new Runnable(){
@@ -898,18 +902,20 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 } else {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
                 }
-                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark));
-                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise));
-                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro));
+                lightDarkBtn.setTitle("Light Mode");
+//                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark));
+//                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise));
+//                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro));
             } else {
                 if (mute) {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
                 } else {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted_white));
                 }
-                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
-                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
-                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
+                lightDarkBtn.setTitle("Dark Mode");
+//                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
+//                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
+//                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
             }
             return true;
         }else if(colorPickerShowing || purchasesShowing){
@@ -988,10 +994,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 } else {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
                 }
-                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark));
-                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise));
-                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro));
+//                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro));
                 db.updateDarkLight(false);
+                lightDarkBtn.setTitle("Light Mode");
             } else {
                 lightDark = true;
                 black.setVisibility(View.VISIBLE);
@@ -1029,10 +1034,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 } else {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted_white));
                 }
-                lightDarkBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.light_dark_white));
-                customiseBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.customise_white));
-                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
+//                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
                 db.updateDarkLight(true);
+                lightDarkBtn.setTitle("Dark Mode");
             }
             noTasksLeft();
             return true;
@@ -1348,7 +1352,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right));
+                sweep.start();
+                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right_fast));
                 toast.setVisibility(View.VISIBLE);
                 final Handler handler2 = new Handler();
                 final Runnable runnable2 = new Runnable(){
@@ -1892,7 +1897,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right));
+                sweep.start();
+                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right_fast));
                 toast.setVisibility(View.VISIBLE);
                 final Handler handler2 = new Handler();
                 final Runnable runnable2 = new Runnable(){
@@ -1921,7 +1927,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right));
+                sweep.start();
+                toast.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.enter_from_right_fast));
                 toast.setVisibility(View.VISIBLE);
                 final Handler handler2 = new Handler();
                 final Runnable runnable2 = new Runnable(){

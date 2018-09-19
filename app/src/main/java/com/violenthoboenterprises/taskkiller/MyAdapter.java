@@ -55,7 +55,6 @@ class MyAdapter extends ArrayAdapter<String> {
         final String task = getItem(position);
         //Uses unique layout for the new item
         final LayoutInflater theInflater = LayoutInflater.from(getContext());
-        //TODO fade inactive taskviews to invisible instead of setting individual elements to 'gone'
         final View taskView = theInflater.inflate(R.layout.task_layout, parent, false);
         //Where the task text is displayed
         final TextView theTextView = taskView.findViewById(R.id.textView);
@@ -464,7 +463,7 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         //implementing exit animations if required
-        if(MainActivity.exitTaskProperties){
+        if(MainActivity.exitTaskProperties && (position == MainActivity.activeTask)){
             if(!dbOverdue){
                 propertyRow.setVisibility(View.VISIBLE);
                 propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
@@ -510,7 +509,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 handler.postDelayed(runnable, 400);
             }
             MainActivity.exitTaskProperties = false;
-        }else if(MainActivity.exitAlarmOptions){
+        }else if(MainActivity.exitAlarmOptions && (position == MainActivity.activeTask)){
             alarmOptionsRow.setVisibility(View.VISIBLE);
             alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
 
@@ -523,7 +522,7 @@ class MyAdapter extends ArrayAdapter<String> {
             };
 
             handler.postDelayed(runnable, 400);
-        }else if(MainActivity.exitDatePicker){
+        }else if(MainActivity.exitDatePicker && (position == MainActivity.activeTask)){
             dateRow.setVisibility(View.VISIBLE);
             dateRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
 
@@ -536,7 +535,7 @@ class MyAdapter extends ArrayAdapter<String> {
             };
 
             handler.postDelayed(runnable, 400);
-        }else if(MainActivity.exitTimePicker){
+        }else if(MainActivity.exitTimePicker && (position == MainActivity.activeTask)){
 
             dateRow.setVisibility(View.VISIBLE);
             datePicker.setVisibility(View.GONE);
@@ -1047,7 +1046,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             dueTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.lightRed));
                         }
                         markAsOverdue = true;
-                        //Overdue
+                    //Overdue
                     } else if (currentHour == adjustedHour
                             && currentMinute >= Integer.valueOf(minute)) {
                         dueClear.setVisibility(View.GONE);
@@ -1256,7 +1255,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 final Runnable runnable = new Runnable() {
                     public void run() {
-                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                        MainActivity.sweep.start();
+                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                         MainActivity.toast.setVisibility(View.VISIBLE);
                         final Handler handler2 = new Handler();
                         final Runnable runnable2 = new Runnable(){
@@ -1474,7 +1474,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 final Runnable runnable = new Runnable() {
                     public void run() {
-                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                        MainActivity.sweep.start();
+                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                         MainActivity.toast.setVisibility(View.VISIBLE);
                         final Handler handler2 = new Handler();
                         final Runnable runnable2 = new Runnable(){
@@ -1759,7 +1760,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     final Runnable runnable = new Runnable() {
                                         public void run() {
-                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                            MainActivity.sweep.start();
+                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                                             MainActivity.toast.setVisibility(View.VISIBLE);
                                             final Handler handler2 = new Handler();
                                             final Runnable runnable2 = new Runnable(){
@@ -2257,7 +2259,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     final Runnable runnable = new Runnable() {
                                         public void run() {
-                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                            MainActivity.sweep.start();
+                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                                             MainActivity.toast.setVisibility(View.VISIBLE);
                                             final Handler handler2 = new Handler();
                                             final Runnable runnable2 = new Runnable(){
@@ -2753,7 +2756,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     final Runnable runnable = new Runnable() {
                                         public void run() {
-                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                            MainActivity.sweep.start();
+                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                                             MainActivity.toast.setVisibility(View.VISIBLE);
                                             final Handler handler2 = new Handler();
                                             final Runnable runnable2 = new Runnable(){
@@ -3182,7 +3186,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     final Runnable runnable = new Runnable() {
                                         public void run() {
-                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                            MainActivity.sweep.start();
+                                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                                             MainActivity.toast.setVisibility(View.VISIBLE);
                                             final Handler handler2 = new Handler();
                                             final Runnable runnable2 = new Runnable(){
@@ -3510,7 +3515,7 @@ class MyAdapter extends ArrayAdapter<String> {
             //show tasks properties
             }else{
 
-                if(MainActivity.exitAlarmOptions){
+                if(MainActivity.exitAlarmOptions && (position == MainActivity.activeTask)){
 
                     final Handler handler = new Handler();
 
@@ -3620,7 +3625,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         final Runnable runnable = new Runnable() {
                             public void run() {
-                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                MainActivity.sweep.start();
+                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                                 MainActivity.toast.setVisibility(View.VISIBLE);
                                 final Handler handler2 = new Handler();
                                 final Runnable runnable2 = new Runnable(){
@@ -3861,7 +3867,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         final Runnable runnable = new Runnable() {
                             public void run() {
-                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                MainActivity.sweep.start();
+                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                                 MainActivity.toast.setVisibility(View.VISIBLE);
                                 final Handler handler2 = new Handler();
                                 final Runnable runnable2 = new Runnable(){
@@ -5018,7 +5025,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     final Runnable runnable = new Runnable() {
                         public void run() {
-                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.sweep.start();
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                             MainActivity.toast.setVisibility(View.VISIBLE);
                             final Handler handler2 = new Handler();
                             final Runnable runnable2 = new Runnable(){
@@ -5041,7 +5049,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     final Runnable runnable = new Runnable() {
                         public void run() {
-                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.sweep.start();
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                             MainActivity.toast.setVisibility(View.VISIBLE);
                             final Handler handler2 = new Handler();
                             final Runnable runnable2 = new Runnable(){
@@ -5066,7 +5075,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     final Runnable runnable = new Runnable() {
                         public void run() {
-                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.sweep.start();
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                             MainActivity.toast.setVisibility(View.VISIBLE);
                             final Handler handler2 = new Handler();
                             final Runnable runnable2 = new Runnable(){
@@ -5093,7 +5103,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     final Runnable runnable = new Runnable() {
                         public void run() {
-                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.sweep.start();
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                             MainActivity.toast.setVisibility(View.VISIBLE);
                             final Handler handler2 = new Handler();
                             final Runnable runnable2 = new Runnable(){
@@ -5121,7 +5132,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     final Runnable runnable = new Runnable() {
                         public void run() {
-                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                            MainActivity.sweep.start();
+                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right_fast));
                             MainActivity.toast.setVisibility(View.VISIBLE);
                             final Handler handler2 = new Handler();
                             final Runnable runnable2 = new Runnable(){
