@@ -532,7 +532,7 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
-//        //Displaying ad if there are five or more tasks
+        //Displaying ad if there are five or more tasks
 //        if(position == 4) {
 //            adRow.setVisibility(View.VISIBLE);
 //            boolean networkAvailable = false;
@@ -550,7 +550,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //            if (networkAvailable) {
 //                adView.setVisibility(View.VISIBLE);
 //                final AdRequest banRequest = new AdRequest.Builder()
-        //TODO probably need a new ID
+//        //TODO probably need a new ID
 //                        .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
 //                    (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
 //                adView.loadAd(banRequest);

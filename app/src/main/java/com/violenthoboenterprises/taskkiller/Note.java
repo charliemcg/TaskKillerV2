@@ -46,7 +46,7 @@ public class Note extends MainActivity {
         noteTextView = findViewById(R.id.noteTextView);
         noteEditText = findViewById(R.id.noteEditText);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        editBtn = findViewById(R.id.editBtn);
+//        editBtn = findViewById(R.id.editBtn);
         removeBtn = findViewById(R.id.removeBtn);
         addNoteBtn = findViewById(R.id.addNoteBtn);
         submitNoteBtn = findViewById(R.id.submitNoteBtn);
@@ -94,7 +94,7 @@ public class Note extends MainActivity {
         dbResult.close();
 
         if(mute){
-            editBtn.setSoundEffectsEnabled(false);
+//            editBtn.setSoundEffectsEnabled(false);
             removeBtn.setSoundEffectsEnabled(false);
             addNoteBtn.setSoundEffectsEnabled(false);
             submitNoteBtn.setSoundEffectsEnabled(false);
@@ -153,37 +153,37 @@ public class Note extends MainActivity {
                     //show remove button
                     removeBtn.setVisibility(View.VISIBLE);
 
-                    editBtn.setText(R.string.edit);
+//                    editBtn.setText(R.string.edit);
+//                    editBtn.setVisibility(View.GONE);
+
+                    //Hide text box
+                    noteEditText.setVisibility(View.GONE);
+
+                    //Hide submit button
+                    submitNoteBtn.setVisibility(View.GONE);
 
                 }else{
-                    editBtn.setText(R.string.addNote);
+//                    editBtn.setText(R.string.addNote);
                 }
-
-                //Hide text box
-                noteEditText.setVisibility(View.GONE);
-
-                //Hide submit button
-                submitNoteBtn.setVisibility(View.GONE);
 
                 //Hide keyboard
                 keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
                 //Show edit button
-                editBtn.setVisibility(View.VISIBLE);
+//                editBtn.setVisibility(View.VISIBLE);
 
             }
 
         });
 
-        //Actions to occur if user selects 'Edit'
-        editBtn.setOnClickListener(new View.OnClickListener() {
+        //Long click allows editing of text
+        noteTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public boolean onLongClick(View view) {
 //                MainActivity.vibrate.vibrate(50);
 
                 //hide edit button
-                editBtn.setVisibility(View.GONE);
+//                editBtn.setVisibility(View.GONE);
 
                 //hide remove button
                 removeBtn.setVisibility(View.GONE);
@@ -208,8 +208,45 @@ public class Note extends MainActivity {
 
                 noteTextView.setText("");
 
+                return true;
             }
         });
+
+        //Actions to occur if user selects 'Edit'
+//        editBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+////                MainActivity.vibrate.vibrate(50);
+//
+//                //hide edit button
+//                editBtn.setVisibility(View.GONE);
+//
+//                //hide remove button
+//                removeBtn.setVisibility(View.GONE);
+//
+//                //show edit text
+//                noteEditText.setVisibility(View.VISIBLE);
+//
+//                //show submit button
+//                submitNoteBtn.setVisibility(View.VISIBLE);
+//
+//                //Focus on edit text so that keyboard does not cover it up
+//                noteEditText.requestFocus();
+//
+//                //show keyboard
+//                keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//
+//                //set text to existing note
+//                noteEditText.setText(theNote);
+//
+//                //put cursor at end of text
+//                noteEditText.setSelection(noteEditText.getText().length());
+//
+//                noteTextView.setText("");
+//
+//            }
+//        });
 
         //Actions to occur if user selects 'Remove'
         removeBtn.setOnClickListener(new View.OnClickListener() {
@@ -232,13 +269,15 @@ public class Note extends MainActivity {
                 noteTextView.setText("");
 
                 //hide edit button
-                editBtn.setVisibility(View.GONE);
+//                editBtn.setVisibility(View.GONE);
 
                 //hide remove button
                 removeBtn.setVisibility(View.GONE);
 
                 //show add button
-                addNoteBtn.setVisibility(View.VISIBLE);
+//                addNoteBtn.setVisibility(View.VISIBLE);
+                noteEditText.setVisibility(View.VISIBLE);
+                submitNoteBtn.setVisibility(View.VISIBLE);
 
             }
         });
@@ -306,7 +345,7 @@ public class Note extends MainActivity {
                     .LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             noteEditText.setVisibility(View.GONE);
             submitNoteBtn.setVisibility(View.GONE);
-            editBtn.setVisibility(View.VISIBLE);
+//            editBtn.setVisibility(View.GONE);
             removeBtn.setVisibility(View.VISIBLE);
 
         }
