@@ -464,14 +464,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
         //Animating a killed task moving down through the list view
         if(MainActivity.killedAnimation) {
-            Log.i(TAG, "Setting task " + position);
             if(position == (MainActivity.taskList.size() - 1)){
-                MainActivity.theListView.setSelection(MainActivity.killedPosition);
-                if(MainActivity.killedPosition == (MainActivity.taskList.size() - 1)){
-                    Log.i(TAG, "killedAnimation = false;");
+                MainActivity.theListView.setSelection(MainActivity.animatePosition);
+                //TODO make sure to get correct resting position
+                if(MainActivity.animatePosition == (MainActivity.taskList.size() - 1)){
                     MainActivity.killedAnimation = false;
                 }else{
-//                    MainActivity.killedPosition++;
                     final Handler handler = new Handler();
 
                     final Runnable runnable = new Runnable() {
@@ -480,9 +478,56 @@ class MyAdapter extends ArrayAdapter<String> {
                         }
                     };
 
-                    handler.postDelayed(runnable, 35);
-                    MainActivity.killedPosition++;
-                    Log.i(TAG, "reorderList()");
+                    handler.postDelayed(runnable, 50);
+                    MainActivity.animatePosition++;
+                }
+            }
+        }
+
+        //Animating a reinstated task moving up through the list view
+        if(MainActivity.reinstateAnimation) {
+            if(position == (MainActivity.taskList.size() - 1)){
+                MainActivity.theListView.setSelection(MainActivity.animatePosition);
+                //TODO make sure to get correct resting position
+                if(MainActivity.animatePosition == 0){
+                    MainActivity.reinstateAnimation = false;
+                }else{
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            reorderList();
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 50);
+                    MainActivity.animatePosition--;
+                }
+            }
+        }
+
+        //Animating a task with an alarm moving down through the list view
+        if(MainActivity.alarmAnimation) {
+            Log.i(TAG, "Position: " + position);
+            if(position == (MainActivity.taskList.size() - 1)){
+                MainActivity.theListView.setSelection(MainActivity.animatePosition);
+                //TODO make sure to get correct resting position
+                if(MainActivity.animatePosition == (MainActivity.taskList.size() - 1)){
+                    Log.i(TAG, "Animation complete");
+                    MainActivity.alarmAnimation = false;
+                }else{
+                    Log.i(TAG, "Reorder");
+                    final Handler handler = new Handler();
+
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            reorderList();
+                        }
+                    };
+
+                    handler.postDelayed(runnable, 50);
+                    //TODO account for correct direction of movement
+                    MainActivity.animatePosition++;
                 }
             }
         }
@@ -1320,8 +1365,8 @@ class MyAdapter extends ArrayAdapter<String> {
             if(!finalDbRepeat) {
 
                 MainActivity.killedAnimation = true;
-                MainActivity.killedID = Integer.parseInt(MainActivity.sortedIDs.get(position));
-                MainActivity.killedPosition = position;
+                MainActivity.animateID = Integer.parseInt(MainActivity.sortedIDs.get(position));
+                MainActivity.animatePosition = position;
 
                 notifyDataSetChanged();
 
@@ -4971,7 +5016,7 @@ class MyAdapter extends ArrayAdapter<String> {
     }
 
     //set notification alarm for selected task
-    private void setAlarm(TableRow dateRow, final DatePicker datePicker, final TimePicker timePicker, int position){
+    private void setAlarm(TableRow dateRow, final DatePicker datePicker, final TimePicker timePicker, final int position){
 
         //getting task data
         String dbTask = "";
@@ -5337,7 +5382,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.timePickerShowing = false;
 
-                reorderList();
+//                reorderList();
+
+                MainActivity.alarmAnimation = true;
+                MainActivity.animateID = Integer.parseInt(MainActivity.sortedIDs.get(position));
+                MainActivity.animatePosition = position;
+
 //                final Handler handler = new Handler();
 //
 //                final Runnable r = new Runnable() {
@@ -5510,7 +5560,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
             for (int i = 0; i < MainActivity.taskListSize; i++) {
 
-                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.killedID) {
+                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
                     tempId = Integer.parseInt(tempIdsList.get(i));
                     tempTask = tempTaskList.get(i);
                     tempIdsList.remove(i);
@@ -5520,8 +5570,50 @@ class MyAdapter extends ArrayAdapter<String> {
 
             }
 
-            tempIdsList.add(MainActivity.killedPosition, String.valueOf(tempId));
-            tempTaskList.add(MainActivity.killedPosition, tempTask);
+            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
+            tempTaskList.add(MainActivity.animatePosition, tempTask);
+        }
+
+        if(MainActivity.reinstateAnimation) {
+
+            int tempId = 0;
+            String tempTask = "";
+
+            for (int i = 0; i < MainActivity.taskListSize; i++) {
+
+                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
+                    tempId = Integer.parseInt(tempIdsList.get(i));
+                    tempTask = tempTaskList.get(i);
+                    tempIdsList.remove(i);
+                    tempTaskList.remove(i);
+                    break;
+                }
+
+            }
+
+            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
+            tempTaskList.add(MainActivity.animatePosition, tempTask);
+        }
+
+        if(MainActivity.alarmAnimation) {
+
+            int tempId = 0;
+            String tempTask = "";
+
+            for (int i = 0; i < MainActivity.taskListSize; i++) {
+
+                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
+                    tempId = Integer.parseInt(tempIdsList.get(i));
+                    tempTask = tempTaskList.get(i);
+                    tempIdsList.remove(i);
+                    tempTaskList.remove(i);
+                    break;
+                }
+
+            }
+
+            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
+            tempTaskList.add(MainActivity.animatePosition, tempTask);
         }
 
         MainActivity.sortedIDs = tempIdsList;
