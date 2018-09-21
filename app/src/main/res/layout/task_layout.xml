@@ -180,7 +180,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_day_clear_white"
+                    android:src="@drawable/repeat_icon_light_day"
                     android:visibility="gone"/>
 
             </RelativeLayout>
@@ -204,7 +204,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_week_clear_white"
+                    android:src="@drawable/repeat_icon_light_week"
                     android:visibility="gone"/>
 
             </RelativeLayout>
@@ -228,7 +228,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_month_clear_white"
+                    android:src="@drawable/repeat_icon_light_month"
                     android:visibility="gone"/>
 
             </RelativeLayout>
@@ -251,7 +251,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_clear_white"
+                    android:src="@drawable/repeat_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
@@ -275,14 +275,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/due_clear"/>
+                    android:src="@drawable/due_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/dueClearWhite"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/due_clear_white"
+                    android:src="@drawable/due_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
@@ -299,14 +299,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/overdue_clear"/>
+                    android:src="@drawable/overdue_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/overdueClearWhite"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/overdue_clear_white"
+                    android:src="@drawable/overdue_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
@@ -323,14 +323,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/snooze_clear"/>
+                    android:src="@drawable/snooze_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/snoozeClearWhite"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/snooze_clear_white"
+                    android:src="@drawable/snooze_icon_white"
                     android:visibility="gone"/>
 
             </RelativeLayout>
