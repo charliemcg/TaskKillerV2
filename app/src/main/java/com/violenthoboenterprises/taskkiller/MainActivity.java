@@ -384,14 +384,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         getRemindersLayout = findViewById(R.id.getReminders);
         cycleColorsLayout = findViewById(R.id.cycleColors);
         unlockAllLayout = findViewById(R.id.unlockAll);
-        removeAdsImage = findViewById(R.id.removeAdsImage);
-        removeAdsImageWhite = findViewById(R.id.removeAdsImageWhite);
-        getRemindersImage = findViewById(R.id.getRemindersImage);
-        getRemindersImageWhite = findViewById(R.id.getRemindersImageWhite);
-        cycleColorsImage = findViewById(R.id.cycleColorsImage);
-        cycleColorsImageWhite = findViewById(R.id.cycleColorsImageWhite);
-        unlockAllImage = findViewById(R.id.unlockAllImage);
-        unlockAllImageWhite = findViewById(R.id.unlockAllImageWhite);
+//        removeAdsImage = findViewById(R.id.removeAdsImage);
+//        removeAdsImageWhite = findViewById(R.id.removeAdsImageWhite);
+//        getRemindersImage = findViewById(R.id.getRemindersImage);
+//        getRemindersImageWhite = findViewById(R.id.getRemindersImageWhite);
+//        cycleColorsImage = findViewById(R.id.cycleColorsImage);
+//        cycleColorsImageWhite = findViewById(R.id.cycleColorsImageWhite);
+//        unlockAllImage = findViewById(R.id.unlockAllImage);
+//        unlockAllImageWhite = findViewById(R.id.unlockAllImageWhite);
         motivation = new String[]{getString(R.string.getItDone),
                 getString(R.string.smashThatTask), getString(R.string.beAWinner),
                 getString(R.string.onlyWimpsGiveUp), getString(R.string.dontBeAFailure),
@@ -846,14 +846,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
             cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
             unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.color_picker_border));
-            removeAdsImage.setVisibility(View.GONE);
-            removeAdsImageWhite.setVisibility(View.VISIBLE);
-            getRemindersImage.setVisibility(View.GONE);
-            getRemindersImageWhite.setVisibility(View.VISIBLE);
-            cycleColorsImage.setVisibility(View.GONE);
-            cycleColorsImageWhite.setVisibility(View.VISIBLE);
-            unlockAllImage.setVisibility(View.GONE);
-            unlockAllImageWhite.setVisibility(View.VISIBLE);
+//            removeAdsImage.setVisibility(View.GONE);
+//            removeAdsImageWhite.setVisibility(View.VISIBLE);
+//            getRemindersImage.setVisibility(View.GONE);
+//            getRemindersImageWhite.setVisibility(View.VISIBLE);
+//            cycleColorsImage.setVisibility(View.GONE);
+//            cycleColorsImageWhite.setVisibility(View.VISIBLE);
+//            unlockAllImage.setVisibility(View.GONE);
+//            unlockAllImageWhite.setVisibility(View.VISIBLE);
             setDividers(lightDark);
             theListView.setAdapter(theAdapter[0]);
         }else{
@@ -884,14 +884,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
             cycleColorsLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
             unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.purchases_dropshadow));
-            removeAdsImage.setVisibility(View.VISIBLE);
-            removeAdsImageWhite.setVisibility(View.GONE);
-            getRemindersImage.setVisibility(View.VISIBLE);
-            getRemindersImageWhite.setVisibility(View.GONE);
-            cycleColorsImage.setVisibility(View.VISIBLE);
-            cycleColorsImageWhite.setVisibility(View.GONE);
-            unlockAllImage.setVisibility(View.VISIBLE);
-            unlockAllImageWhite.setVisibility(View.GONE);
+//            removeAdsImage.setVisibility(View.VISIBLE);
+//            removeAdsImageWhite.setVisibility(View.GONE);
+//            getRemindersImage.setVisibility(View.VISIBLE);
+//            getRemindersImageWhite.setVisibility(View.GONE);
+//            cycleColorsImage.setVisibility(View.VISIBLE);
+//            cycleColorsImageWhite.setVisibility(View.GONE);
+//            unlockAllImage.setVisibility(View.VISIBLE);
+//            unlockAllImageWhite.setVisibility(View.GONE);
             setDividers(lightDark);
             theListView.setAdapter(theAdapter[0]);
         }

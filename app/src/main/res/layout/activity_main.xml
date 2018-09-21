@@ -252,13 +252,13 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/removeAdsImageWhite"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="10dp"
-                android:src="@drawable/remove_ads_white"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/removeAdsImageWhite"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:src="@drawable/remove_ads"/>-->
 
             <ImageView
                 android:id="@+id/removeAdsImage"
@@ -266,8 +266,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/remove_ads"
-                android:visibility="gone"/>
+                android:src="@drawable/remove_ads"/>
 
         </LinearLayout>
 
@@ -287,16 +286,15 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/get_reminders"
-                android:visibility="gone"/>
+                android:src="@drawable/bell"/>
 
-            <ImageView
-                android:id="@+id/getRemindersImageWhite"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="10dp"
-                android:src="@drawable/get_reminders_white"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/getRemindersImageWhite"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:src="@drawable/bell"/>-->
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -368,16 +366,15 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/cycle_colors_white"
-                android:visibility="gone"/>
+                android:src="@drawable/color_cycle"/>
 
-            <ImageView
-                android:id="@+id/cycleColorsImageWhite"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="10dp"
-                android:src="@drawable/cycle_colors_white"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/cycleColorsImageWhite"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:src="@drawable/cycle_colors_white"/>-->
 
         </LinearLayout>
 
@@ -397,16 +394,15 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/unlock_all"
-                android:visibility="gone"/>
+                android:src="@drawable/unlock_all"/>
 
-            <ImageView
-                android:id="@+id/unlockAllImageWhite"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="10dp"
-                android:src="@drawable/unlock_all_white"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/unlockAllImageWhite"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:src="@drawable/unlock_all_white"/>-->
 
             <LinearLayout
                 android:layout_width="0dp"

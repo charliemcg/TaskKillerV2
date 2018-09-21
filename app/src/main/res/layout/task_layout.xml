@@ -126,14 +126,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/subtask_icon_dark"/>
+                    android:src="@drawable/subtasks_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/checklistClearWhite"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/checklist_clear_white"
+                    android:src="@drawable/subtasks_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
@@ -156,7 +156,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@color/mid_gray"
-                    android:src="@drawable/note_clear_white"
+                    android:src="@drawable/note_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
@@ -256,13 +256,13 @@
 
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/due"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/due"
-                android:visibility="gone"
-                android:layout_weight="1"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/due"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:src="@drawable/due"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_weight="1"/>-->
 
             <RelativeLayout
                 android:id="@+id/dueLayout"

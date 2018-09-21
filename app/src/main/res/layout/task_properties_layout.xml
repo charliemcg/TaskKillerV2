@@ -36,14 +36,16 @@
             <ImageView
                 android:id="@+id/alarmBtnIcon"
                 android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/due" />
+                android:layout_height="30dp"
+                android:src="@drawable/due_icon_dark"
+                android:background="@color/gray"/>
 
             <ImageView
                 android:id="@+id/alarmBtnIconWhite"
                 android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/due_white" />
+                android:layout_height="30dp"
+                android:src="@drawable/due_icon_light"
+                android:background="@color/black"/>
 
         </LinearLayout>
 
@@ -70,14 +72,16 @@
             <ImageView
                 android:id="@+id/subTasksBtnIcon"
                 android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/checklist" />
+                android:layout_height="30dp"
+                android:src="@drawable/subtasks_icon_dark"
+                android:background="@color/gray"/>
 
             <ImageView
                 android:id="@+id/subTasksBtnIconWhite"
                 android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/checklist_white" />
+                android:layout_height="30dp"
+                android:src="@drawable/subtasks_icon_light"
+                android:background="@color/black"/>
 
         </LinearLayout>
 
@@ -104,14 +108,16 @@
             <ImageView
                 android:id="@+id/noteBtnIcon"
                 android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/note" />
+                android:layout_height="30dp"
+                android:src="@drawable/note_icon_dark"
+                android:background="@color/gray"/>
 
             <ImageView
                 android:id="@+id/noteBtnIconWhite"
                 android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/note_white" />
+                android:layout_height="30dp"
+                android:src="@drawable/note_icon_light"
+                android:background="@color/black"/>
 
         </LinearLayout>
 

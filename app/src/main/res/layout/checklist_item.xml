@@ -93,7 +93,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="8dp"
-        android:src="@drawable/tick_complete_white_faded"
+        android:src="@drawable/tick_complete_faded_white"
         android:focusable="true"
         android:visibility="gone"/>
 
