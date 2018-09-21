@@ -24,31 +24,6 @@
         android:scrollbars="vertical"
         android:paddingLeft="10dp"/>
 
-    <!--TODO replace with longclick-->
-    <!--<Button-->
-        <!--android:id="@+id/editBtn"-->
-        <!--android:layout_width="80dp"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:text="@string/edit"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:visibility="gone"-->
-        <!--android:background="@drawable/layout_border"-->
-        <!--android:textColor="@color/gray"/>-->
-
-    <Button
-        android:id="@+id/addNoteBtn"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:text="@string/addNote"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone"
-        android:background="@drawable/layout_border"
-        android:textColor="@color/gray"/>
-
     <Button
         android:id="@+id/removeBtn"
         android:layout_width="80dp"
@@ -58,8 +33,7 @@
         android:textColor="@color/lightRed"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="100dp"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"/>
 
     <LinearLayout
