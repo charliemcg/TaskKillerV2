@@ -641,7 +641,6 @@ class MyAdapter extends ArrayAdapter<String> {
             }
             MainActivity.exitTaskProperties = false;
         }else if(MainActivity.exitAlarmOptions && (position == MainActivity.activeTask)){
-            Log.i(TAG, "One");
             alarmOptionsRow.setVisibility(View.VISIBLE);
             alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
 
@@ -1698,6 +1697,12 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.exitRepeat = false;
                 }
 
+                ViewGroup.LayoutParams params = killAlarmBtn.getLayoutParams();
+                params.width = MainActivity.deviceWidthPortrait / 3;
+                killAlarmBtn.setLayoutParams(params);
+                resetAlarmBtn.setLayoutParams(params);
+                repeatAlarmBtn.setLayoutParams(params);
+
                 final Handler handler = new Handler();
 
                 final Runnable runnable = new Runnable() {
@@ -1705,7 +1710,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         dateRow.setVisibility(View.GONE);
                         repeatRow.setVisibility(View.GONE);
                         alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
-                        Log.i(TAG, "Two");
+
                         alarmOptionsRow.setVisibility(View.VISIBLE);
                     }
                 };
@@ -1775,6 +1780,12 @@ class MyAdapter extends ArrayAdapter<String> {
             //show the overdue properties
             }else if(dbOverdue && !dbSnooze && !dbIgnored){
 
+                ViewGroup.LayoutParams params = snoozeTask.getLayoutParams();
+                params.width = MainActivity.deviceWidthPortrait / 3;
+                snoozeTask.setLayoutParams(params);
+                taskDone.setLayoutParams(params);
+                taskIgnore.setLayoutParams(params);
+
                 taskOverdueRow.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
                 taskOverdueRow.setVisibility(View.VISIBLE);
 
@@ -1785,6 +1796,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                        taskOverdueRow.setVisibility(View.VISIBLE);
                         taskOverdueRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
+
+                        ViewGroup.LayoutParams params = oneHourBtn.getLayoutParams();
+                        params.width = MainActivity.deviceWidthPortrait / 3;
+                        oneHourBtn.setLayoutParams(params);
+                        fourHourBtn.setLayoutParams(params);
+                        tomorrowBtn.setLayoutParams(params);
 
                         final Handler handler = new Handler();
 
@@ -4188,7 +4205,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                 public void run() {
                                     propertyRow.setVisibility(View.GONE);
                                     alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
-                                    Log.i(TAG, "Three");
                                     alarmOptionsRow.setVisibility(View.VISIBLE);
                                 }
                             };
@@ -4361,6 +4377,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                                        alarmOptionsRow.setVisibility(View.VISIBLE);
                                         alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
+
+                                        ViewGroup.LayoutParams params = daily.getLayoutParams();
+                                        params.width = MainActivity.deviceWidthPortrait / 3;
+                                        daily.setLayoutParams(params);
+                                        weekly.setLayoutParams(params);
+                                        monthly.setLayoutParams(params);
 
                                         final Handler handler = new Handler();
 
