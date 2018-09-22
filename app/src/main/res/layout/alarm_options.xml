@@ -15,67 +15,62 @@
 
         <LinearLayout
             android:id="@+id/killAlarmBtn"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
+            <!--android:layout_width="120dp"-->
 
             <TextView
                 android:id="@+id/killAlarmBtnText"
-                android:layout_width="match_parent"
+                android:layout_width="85dp"
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:text="@string/turnOffAlarm"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
-            <!--android:paddingLeft="8dp"-->
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/resetAlarmBtn"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/resetAlarmBtnText"
-                android:layout_width="match_parent"
+                android:layout_width="85dp"
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:text="@string/changeDueDate"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
-            <!--android:paddingLeft="8dp"-->
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/repeatBtn"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/repeatAlarmBtnText"
-                android:layout_width="match_parent"
+                android:layout_width="85dp"
                 android:layout_height="match_parent"
-                android:lines="1"
+                android:lines="2"
                 android:text="@string/setRepeat"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
-            <!--android:paddingLeft="8dp"-->
 
         </LinearLayout>
 

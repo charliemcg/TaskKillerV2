@@ -354,6 +354,7 @@ class MyAdapter extends ArrayAdapter<String> {
             snoozeRow.setBackgroundColor(Color.parseColor("#333333"));
             taskOverdueRow.setBackgroundColor(Color.parseColor("#333333"));
             repeatRow.setBackgroundColor(Color.parseColor("#333333"));
+            dateRow.setBackgroundColor(Color.parseColor("#333333"));
             datePicker.setBackgroundColor(Color.parseColor("#333333"));
             timePicker.setBackgroundColor(Color.parseColor("#333333"));
             theTextView.setTextColor(Color.parseColor("#AAAAAA"));
@@ -411,6 +412,7 @@ class MyAdapter extends ArrayAdapter<String> {
             snoozeRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
             taskOverdueRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
             repeatRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            dateRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
             datePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
             timePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
             theTextView.setTextColor(Color.parseColor("#000000"));
@@ -462,75 +464,77 @@ class MyAdapter extends ArrayAdapter<String> {
             note.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.layout_border_white));
         }
 
+
+        //TODO see if it is possible to make these animations run smooth
         //Animating a killed task moving down through the list view
-        if(MainActivity.killedAnimation) {
-            if(position == (MainActivity.taskList.size() - 1)){
-                MainActivity.theListView.setSelection(MainActivity.animatePosition);
-                //TODO make sure to get correct resting position
-                if(MainActivity.animatePosition == (MainActivity.taskList.size() - 1)){
-                    MainActivity.killedAnimation = false;
-                }else{
-                    final Handler handler = new Handler();
-
-                    final Runnable runnable = new Runnable() {
-                        public void run() {
-                            reorderList();
-                        }
-                    };
-
-                    handler.postDelayed(runnable, 50);
-                    MainActivity.animatePosition++;
-                }
-            }
-        }
-
-        //Animating a reinstated task moving up through the list view
-        if(MainActivity.reinstateAnimation) {
-            if(position == (MainActivity.taskList.size() - 1)){
-                MainActivity.theListView.setSelection(MainActivity.animatePosition);
-                //TODO make sure to get correct resting position
-                if(MainActivity.animatePosition == 0){
-                    MainActivity.reinstateAnimation = false;
-                }else{
-                    final Handler handler = new Handler();
-
-                    final Runnable runnable = new Runnable() {
-                        public void run() {
-                            reorderList();
-                        }
-                    };
-
-                    handler.postDelayed(runnable, 50);
-                    MainActivity.animatePosition--;
-                }
-            }
-        }
-
-        //Animating a task with an alarm moving down through the list view
-        if(MainActivity.alarmAnimation) {
-            Log.i(TAG, "Position: " + position);
-            if(position == (MainActivity.taskList.size() - 1)){
-                MainActivity.theListView.setSelection(MainActivity.animatePosition);
-                //TODO make sure to get correct resting position
-                if(MainActivity.animatePosition == (MainActivity.taskList.size() - 1)){
-                    Log.i(TAG, "Animation complete");
-                    MainActivity.alarmAnimation = false;
-                }else{
-                    Log.i(TAG, "Reorder");
-                    final Handler handler = new Handler();
-
-                    final Runnable runnable = new Runnable() {
-                        public void run() {
-                            reorderList();
-                        }
-                    };
-
-                    handler.postDelayed(runnable, 50);
-                    //TODO account for correct direction of movement
-                    MainActivity.animatePosition++;
-                }
-            }
-        }
+//        if(MainActivity.killedAnimation) {
+//            if(position == (MainActivity.taskList.size() - 1)){
+//                MainActivity.theListView.setSelection(MainActivity.animatePosition);
+//                //TODO make sure to get correct resting position
+//                if(MainActivity.animatePosition == (MainActivity.taskList.size() - 1)){
+//                    MainActivity.killedAnimation = false;
+//                }else{
+//                    final Handler handler = new Handler();
+//
+//                    final Runnable runnable = new Runnable() {
+//                        public void run() {
+//                            reorderList();
+//                        }
+//                    };
+//
+//                    handler.postDelayed(runnable, 50);
+//                    MainActivity.animatePosition++;
+//                }
+//            }
+//        }
+//
+//        //Animating a reinstated task moving up through the list view
+//        if(MainActivity.reinstateAnimation) {
+//            if(position == (MainActivity.taskList.size() - 1)){
+//                MainActivity.theListView.setSelection(MainActivity.animatePosition);
+//                //TODO make sure to get correct resting position
+//                if(MainActivity.animatePosition == 0){
+//                    MainActivity.reinstateAnimation = false;
+//                }else{
+//                    final Handler handler = new Handler();
+//
+//                    final Runnable runnable = new Runnable() {
+//                        public void run() {
+//                            reorderList();
+//                        }
+//                    };
+//
+//                    handler.postDelayed(runnable, 50);
+//                    MainActivity.animatePosition--;
+//                }
+//            }
+//        }
+//
+//        //Animating a task with an alarm moving down through the list view
+//        if(MainActivity.alarmAnimation) {
+//            Log.i(TAG, "Position: " + position);
+//            if(position == (MainActivity.taskList.size() - 1)){
+//                MainActivity.theListView.setSelection(MainActivity.animatePosition);
+//                //TODO make sure to get correct resting position
+//                if(MainActivity.animatePosition == (MainActivity.taskList.size() - 1)){
+//                    Log.i(TAG, "Animation complete");
+//                    MainActivity.alarmAnimation = false;
+//                }else{
+//                    Log.i(TAG, "Reorder");
+//                    final Handler handler = new Handler();
+//
+//                    final Runnable runnable = new Runnable() {
+//                        public void run() {
+//                            reorderList();
+//                        }
+//                    };
+//
+//                    handler.postDelayed(runnable, 50);
+//                    //TODO account for correct direction of movement
+//                    MainActivity.animatePosition++;
+//                }
+//            }
+//        }
 
         //Displaying ad if there are five or more tasks
 //        if(position == 4) {
@@ -1008,6 +1012,12 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
+        if(MainActivity.longClicked) {
+            complete.setVisibility(View.INVISIBLE);
+            completeWhite.setVisibility(View.INVISIBLE);
+            MainActivity.longClicked = false;
+        }
+
         if(MainActivity.colorPickerShowing || MainActivity.purchasesShowing){
             complete.setClickable(false);
             completed.setClickable(false);
@@ -1364,9 +1374,9 @@ class MyAdapter extends ArrayAdapter<String> {
             //task is killed if not repeating
             if(!finalDbRepeat) {
 
-                MainActivity.killedAnimation = true;
-                MainActivity.animateID = Integer.parseInt(MainActivity.sortedIDs.get(position));
-                MainActivity.animatePosition = position;
+//                MainActivity.killedAnimation = true;
+//                MainActivity.animateID = Integer.parseInt(MainActivity.sortedIDs.get(position));
+//                MainActivity.animatePosition = position;
 
                 notifyDataSetChanged();
 
@@ -3711,11 +3721,11 @@ class MyAdapter extends ArrayAdapter<String> {
             theTextView.setText(task);
 
             //"set due date" button becomes "remove due date" button if due date already set
-            if (dbDue && dbSnooze){
+//            if (dbDue && dbSnooze){
 
-                alarmBtnText.setText(R.string.cancelSnooze);
+//                alarmBtnText.setText(R.string.cancelSnooze);
 
-            }else if(dbDue){
+            /*}else */if(dbDue){
 
                 alarmBtnText.setText(R.string.alarmOptions);
 
@@ -3723,7 +3733,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //if alarm is ignored user has option to turn alarm off
             if(dbIgnored){
-                alarmBtnText.setText(R.string.turnOffAlarm);
+//                alarmBtnText.setText(R.string.turnOffAlarm);
             }
 
             //Actions to occur if user selects 'complete'
@@ -4035,57 +4045,57 @@ class MyAdapter extends ArrayAdapter<String> {
                 public void onClick(View v) {
 
                     //clear out all data related to alarm
-                    if(finalDbIgnored){
-
-                        MainActivity.db.updateDue(String.valueOf(MainActivity
-                                .sortedIDs.get(MainActivity.activeTask)), false);
-
-                        MainActivity.db.removeTimestamp(String.valueOf(MainActivity
-                                .sortedIDs.get(MainActivity.activeTask)));
-
-                        MainActivity.db.updateRepeat(MainActivity.sortedIDs
-                                .get(position), false);
-
-                        MainActivity.db.updateIgnored(MainActivity.sortedIDs
-                                .get(position), false);
-
-                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                Integer.parseInt(MainActivity.sortedIDs.get(position)),
-                                MainActivity.alertIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT);
-
-                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-
-                        MainActivity.db.updateAlarmData
-                                (String.valueOf(MainActivity.sortedIDs.get(position)),
-                                        "", "", "",
-                                        "", "", "");
-
-                        MainActivity.alarmOptionsShowing = false;
-
-                        reorderList();
-
-                        MainActivity.taskPropertiesShowing = false;
-
-//                        MainActivity.activityRootView
-//                                .setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-                        MainActivity.add.setVisibility(View.VISIBLE);
-                        MainActivity.addIcon.setVisibility(View.VISIBLE);
-
-//                        MainActivity.vibrate.vibrate(50);
-
-                        alarmBtnText.setText(R.string.setDueDate);
-
-                        MainActivity.params.height = MainActivity.addHeight;
-                        MainActivity.iconParams.height = MainActivity.addIconHeight;
-
-                        v.setLayoutParams(MainActivity.params);
-                        v.setLayoutParams(MainActivity.iconParams);
-
-                        notifyDataSetChanged();
-
-                    }else {
+//                    if(finalDbIgnored){
+//
+//                        MainActivity.db.updateDue(String.valueOf(MainActivity
+//                                .sortedIDs.get(MainActivity.activeTask)), false);
+//
+//                        MainActivity.db.removeTimestamp(String.valueOf(MainActivity
+//                                .sortedIDs.get(MainActivity.activeTask)));
+//
+//                        MainActivity.db.updateRepeat(MainActivity.sortedIDs
+//                                .get(position), false);
+//
+//                        MainActivity.db.updateIgnored(MainActivity.sortedIDs
+//                                .get(position), false);
+//
+//                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+//                                Integer.parseInt(MainActivity.sortedIDs.get(position)),
+//                                MainActivity.alertIntent,
+//                                PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+//
+//                        MainActivity.db.updateAlarmData
+//                                (String.valueOf(MainActivity.sortedIDs.get(position)),
+//                                        "", "", "",
+//                                        "", "", "");
+//
+//                        MainActivity.alarmOptionsShowing = false;
+//
+//                        reorderList();
+//
+//                        MainActivity.taskPropertiesShowing = false;
+//
+////                        MainActivity.activityRootView
+////                                .setBackgroundColor(Color.parseColor("#FFFFFF"));
+//
+//                        MainActivity.add.setVisibility(View.VISIBLE);
+//                        MainActivity.addIcon.setVisibility(View.VISIBLE);
+//
+////                        MainActivity.vibrate.vibrate(50);
+//
+//                        alarmBtnText.setText(R.string.setDueDate);
+//
+//                        MainActivity.params.height = MainActivity.addHeight;
+//                        MainActivity.iconParams.height = MainActivity.addIconHeight;
+//
+//                        v.setLayoutParams(MainActivity.params);
+//                        v.setLayoutParams(MainActivity.iconParams);
+//
+//                        notifyDataSetChanged();
+//
+//                    }else {
                         //TODO reword this
 //                    Toast.makeText(v.getContext(), "Upgrade to the Pro version to" +
 //                                    " get this feature", Toast.LENGTH_SHORT).show();
@@ -4119,42 +4129,42 @@ class MyAdapter extends ArrayAdapter<String> {
                             notifyDataSetChanged();
 
                         //actions to occur when cancelling snooze
-                        } else if (finalDbSnooze) {
-
-                            //remove any associated snooze
-                            MainActivity.db.updateSnooze(String.valueOf(MainActivity.sortedIDs
-                                    .get(position)), false);
-
-                            //marks showonce as false
-                            MainActivity.db.updateShowOnce(String.valueOf(MainActivity
-                                    .sortedIDs.get(position)), false);
-
-                            //remove snooze time data
-                            MainActivity.db.updateSnoozeData
-                                    (String.valueOf(MainActivity.sortedIDs.get(position)),
-                                            "", "", "",
-                                            "", "", "");
-
-                            MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                    Integer.parseInt(
-                                            MainActivity.sortedIDs.get(position) + 1000),
-                                    MainActivity.alertIntent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-                            MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-
-                            alarmBtnText.setText(R.string.alarmOptions);
-                            MainActivity.taskPropertiesShowing = false;
-//                            MainActivity.activityRootView
-//                                    .setBackgroundColor(Color.parseColor("#FFFFFF"));
-
-                            MainActivity.params.height = MainActivity.addHeight;
-                            MainActivity.iconParams.height = MainActivity.addIconHeight;
-
-                            v.setLayoutParams(MainActivity.params);
-                            v.setLayoutParams(MainActivity.iconParams);
-
-                            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//                        } else if (finalDbSnooze) {
+//
+//                            //remove any associated snooze
+//                            MainActivity.db.updateSnooze(String.valueOf(MainActivity.sortedIDs
+//                                    .get(position)), false);
+//
+//                            //marks showonce as false
+//                            MainActivity.db.updateShowOnce(String.valueOf(MainActivity
+//                                    .sortedIDs.get(position)), false);
+//
+//                            //remove snooze time data
+//                            MainActivity.db.updateSnoozeData
+//                                    (String.valueOf(MainActivity.sortedIDs.get(position)),
+//                                            "", "", "",
+//                                            "", "", "");
+//
+//                            MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+//                                    Integer.parseInt(
+//                                            MainActivity.sortedIDs.get(position) + 1000),
+//                                    MainActivity.alertIntent,
+//                                    PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                            MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+//
+//                            alarmBtnText.setText(R.string.alarmOptions);
+//                            MainActivity.taskPropertiesShowing = false;
+////                            MainActivity.activityRootView
+////                                    .setBackgroundColor(Color.parseColor("#FFFFFF"));
+//
+//                            MainActivity.params.height = MainActivity.addHeight;
+//                            MainActivity.iconParams.height = MainActivity.addIconHeight;
+//
+//                            v.setLayoutParams(MainActivity.params);
+//                            v.setLayoutParams(MainActivity.iconParams);
+//
+//                            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                         //actions to occur when viewing alarm properties
                         } else {
@@ -4362,7 +4372,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 }
                             });
 
-                        }
+//                        }
                     }
 
                 }
@@ -5382,11 +5392,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.timePickerShowing = false;
 
-//                reorderList();
+                reorderList();
 
-                MainActivity.alarmAnimation = true;
-                MainActivity.animateID = Integer.parseInt(MainActivity.sortedIDs.get(position));
-                MainActivity.animatePosition = position;
+                  //TODO make animation work
+//                MainActivity.alarmAnimation = true;
+//                MainActivity.animateID = Integer.parseInt(MainActivity.sortedIDs.get(position));
+//                MainActivity.animatePosition = position;
 
 //                final Handler handler = new Handler();
 //

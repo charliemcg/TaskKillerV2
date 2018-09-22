@@ -19,24 +19,23 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/alarmBtnText"
                 android:layout_width="85dp"
                 android:layout_height="match_parent"
-                android:lines="1"
-                android:text="@string/setDue"
-                android:paddingLeft="8dp"
+                android:lines="2"
                 android:gravity="center"
+                android:text="@string/setDue"
                 android:textColor="@color/gray"/>
 
             <ImageView
                 android:id="@+id/alarmBtnIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:src="@drawable/due_icon_dark"
                 android:background="@color/gray"/>
 
@@ -44,6 +43,7 @@
                 android:id="@+id/alarmBtnIconWhite"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:src="@drawable/due_icon_light"
                 android:background="@color/black"/>
 
@@ -55,8 +55,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
@@ -65,7 +64,6 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:text="@string/subTasks"
-                android:paddingLeft="8dp"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
 
@@ -73,6 +71,7 @@
                 android:id="@+id/subTasksBtnIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:src="@drawable/subtasks_icon_dark"
                 android:background="@color/gray"/>
 
@@ -80,6 +79,7 @@
                 android:id="@+id/subTasksBtnIconWhite"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:src="@drawable/subtasks_icon_light"
                 android:background="@color/black"/>
 
@@ -91,8 +91,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
@@ -101,7 +100,6 @@
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:text="@string/addNote"
-                android:paddingLeft="8dp"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
 
@@ -109,6 +107,7 @@
                 android:id="@+id/noteBtnIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:src="@drawable/note_icon_dark"
                 android:background="@color/gray"/>
 
@@ -116,6 +115,7 @@
                 android:id="@+id/noteBtnIconWhite"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:src="@drawable/note_icon_light"
                 android:background="@color/black"/>
 

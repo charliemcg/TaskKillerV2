@@ -13,12 +13,11 @@
         android:orientation="horizontal">
         <LinearLayout
             android:id="@+id/snoozeTask"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
@@ -34,12 +33,11 @@
 
         <LinearLayout
             android:id="@+id/taskDone"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
@@ -55,12 +53,11 @@
 
         <LinearLayout
             android:id="@+id/taskIgnore"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView

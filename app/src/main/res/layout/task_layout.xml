@@ -41,10 +41,9 @@
                 android:layout_width="0dp"
                 android:layout_weight="8"
                 android:id="@+id/textView"
-                android:padding="5dp"
+                android:paddingLeft="10dp"
                 android:textSize="20sp"
-                android:textColor="@color/gray"
-                android:text="zero"/>
+                android:textColor="@color/gray"/>
             <!--android:background="@color/dark_gray"-->
 
             <ImageView
@@ -100,38 +99,38 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="0dp">
         <LinearLayout
             android:id="@+id/statusLayout"
             android:orientation="horizontal"
             android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:background="@color/dark_gray">
+            android:layout_height="wrap_content">
+            <!--android:background="@color/dark_gray">-->
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="30dp"
                 android:id="@+id/dueTextView"
-                android:layout_weight="15"
+                android:layout_weight="25"
                 android:textAlignment="center"
                 android:textColor="@color/gray"/>
 
             <RelativeLayout
                 android:id="@+id/checklistLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/checklistClear"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/subtasks_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/checklistClearWhite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/subtasks_icon_light"
                     android:visibility="gone"/>
@@ -140,21 +139,21 @@
 
             <RelativeLayout
                 android:id="@+id/noteLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/noteClear"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/note_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/noteClearWhite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/note_icon_light"
                     android:visibility="gone"/>
@@ -163,22 +162,22 @@
 
             <RelativeLayout
                 android:id="@+id/repeatDayLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:visibility="gone"
                 android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/repeatDayClear"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_dark_day"/>
 
                 <ImageView
                     android:id="@+id/repeatDayClearWhite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_light_day"
                     android:visibility="gone"/>
@@ -187,22 +186,22 @@
 
             <RelativeLayout
                 android:id="@+id/repeatWeekLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:visibility="gone"
                 android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/repeatWeekClear"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_dark_week"/>
 
                 <ImageView
                     android:id="@+id/repeatWeekClearWhite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_light_week"
                     android:visibility="gone"/>
@@ -211,22 +210,22 @@
 
             <RelativeLayout
                 android:id="@+id/repeatMonthLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:visibility="gone"
                 android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/repeatMonthClear"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_dark_month"/>
 
                 <ImageView
                     android:id="@+id/repeatMonthClearWhite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_light_month"
                     android:visibility="gone"/>
@@ -235,21 +234,21 @@
 
             <RelativeLayout
                 android:id="@+id/repeatLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/repeatClear"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/repeatClearWhite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_light"
                     android:visibility="gone"/>
@@ -266,21 +265,21 @@
 
             <RelativeLayout
                 android:id="@+id/dueLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/dueClear"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/due_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/dueClearWhite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/due_icon_light"
                     android:visibility="gone"/>
@@ -289,22 +288,22 @@
 
             <RelativeLayout
                 android:id="@+id/overdueLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_weight="1"
                 android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/overdueClear"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/overdue_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/overdueClearWhite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/overdue_icon_light"
                     android:visibility="gone"/>
@@ -313,22 +312,22 @@
 
             <RelativeLayout
                 android:id="@+id/snoozeLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_weight="1"
                 android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/snoozeClear"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/snooze_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/snoozeClearWhite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/snooze_icon_white"
                     android:visibility="gone"/>

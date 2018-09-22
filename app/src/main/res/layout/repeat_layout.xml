@@ -15,17 +15,16 @@
 
         <LinearLayout
             android:id="@+id/daily"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/dailyBtnText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
@@ -36,17 +35,16 @@
 
         <LinearLayout
             android:id="@+id/weekly"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/weeklyBtnText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"
@@ -57,17 +55,16 @@
 
         <LinearLayout
             android:id="@+id/monthly"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:gravity="center"
             android:background="@drawable/layout_border">
 
             <TextView
                 android:id="@+id/monthlyBtnText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:gravity="center"

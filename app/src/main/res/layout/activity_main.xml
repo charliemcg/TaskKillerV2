@@ -252,14 +252,6 @@
 
             </LinearLayout>
 
-            <!--<ImageView-->
-                <!--android:id="@+id/removeAdsImageWhite"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:src="@drawable/remove_ads"/>-->
-
             <ImageView
                 android:id="@+id/removeAdsImage"
                 android:layout_width="0dp"
@@ -287,14 +279,6 @@
                 android:layout_weight="1"
                 android:layout_margin="10dp"
                 android:src="@drawable/bell"/>
-
-            <!--<ImageView-->
-                <!--android:id="@+id/getRemindersImageWhite"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:src="@drawable/bell"/>-->
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -368,14 +352,6 @@
                 android:layout_margin="10dp"
                 android:src="@drawable/color_cycle"/>
 
-            <!--<ImageView-->
-                <!--android:id="@+id/cycleColorsImageWhite"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:src="@drawable/cycle_colors_white"/>-->
-
         </LinearLayout>
 
         <LinearLayout
@@ -395,14 +371,6 @@
                 android:layout_weight="1"
                 android:layout_margin="10dp"
                 android:src="@drawable/unlock_all"/>
-
-            <!--<ImageView-->
-                <!--android:id="@+id/unlockAllImageWhite"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:src="@drawable/unlock_all_white"/>-->
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -434,13 +402,13 @@
 
     </LinearLayout>
 
-    <!--<Button-->
-        <!--android:id="@+id/showDb"-->
-        <!--android:layout_marginTop="500dp"-->
-        <!--android:layout_marginLeft="100dp"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:text="DB"/>-->
+    <Button
+        android:id="@+id/showDb"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="100dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="DB"/>
     <!--<Button-->
         <!--android:id="@+id/showAlarmDb"-->
         <!--android:layout_marginTop="50dp"-->
@@ -448,12 +416,12 @@
         <!--android:layout_width="100dp"-->
         <!--android:layout_height="100dp"-->
         <!--android:text="Time"/>-->
-    <!--<Button-->
-        <!--android:id="@+id/showUniversalDb"-->
-        <!--android:layout_marginTop="500dp"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:text="Universal DB"/>-->
+    <Button
+        android:id="@+id/showUniversalDb"
+        android:layout_marginTop="500dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="Universal DB"/>
     <!--<Button-->
         <!--android:id="@+id/showSubtasksDb"-->
         <!--android:layout_marginTop="500dp"-->

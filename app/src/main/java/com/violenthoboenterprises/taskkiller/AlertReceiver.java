@@ -46,8 +46,8 @@ public class AlertReceiver extends BroadcastReceiver {
         //intent to execute when notification is clicked
 //        if(!MainActivity.lightDark) {
             mBuilder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.bell_small).setLargeIcon(BitmapFactory.decodeResource(context
-                            //TODO extract sring resource
+                    .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory.decodeResource(context
+                            //TODO extract string resource
                             .getResources(), R.drawable.bell))./*setContentTitle(msg)*/setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
                     .setContentText(msg/*Text*/);
 //        }else{

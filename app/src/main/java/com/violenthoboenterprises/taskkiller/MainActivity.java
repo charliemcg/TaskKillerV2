@@ -112,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     boolean cycleColors;
     //used to indicate that the snooze options are showing
     static boolean snoozeRowShowing;
+    //used to indicate that a task was long clicked
+    static boolean longClicked;
     static boolean killedAnimation;
     static boolean alarmAnimation;
     static boolean reinstateAnimation;
@@ -189,10 +191,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
-//    Button showDb;
+    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
-//    Button showUniversalDb;
+    Button showUniversalDb;
 //    Button showSubtasksDb;
 
     //Scrollable list
@@ -408,9 +410,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         reinstateAnimation = false;
         animatePosition = 0;
         animateID = 0;
-//        showDb = findViewById(R.id.showDb);
+        longClicked = false;
+        showDb = findViewById(R.id.showDb);
 //      showAlarmDb = findViewById(R.id.showAlarmDb);
-//        showUniversalDb = findViewById(R.id.showUniversalDb);
+        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
         db.insertUniversalData(mute);
@@ -508,6 +511,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 //Determine if it's possible to edit task
                 if (tasksAreClickable && !killed && !taskPropertiesShowing) {
 
+                    longClicked = true;
+
                     rename(i);
 
                 //long click reinstates task that is crossed out
@@ -549,43 +554,43 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         //Used for debugging purposes
-//        showDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllData();
-//
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("NOTE: " + res.getString(1) + "\n");
-//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-//                    buffer.append("TASK: " + res.getString(4) + "\n");
-//                    buffer.append("DUE: " + res.getString(5) + "\n");
-//                    buffer.append("KILLED: " + res.getString(6) + "\n");
-//                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
-//                    buffer.append("REPEAT: " + res.getString(8) + "\n");
-//                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
-//                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
-//                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-//                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
-//                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
-//                    buffer.append("IGNORED: " + res.getString(14) + "\n");
-//                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
-//                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
-//                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//
-//            }
-//
-//        });
+        showDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllData();
+
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("NOTE: " + res.getString(1) + "\n");
+                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+                    buffer.append("TASK: " + res.getString(4) + "\n");
+                    buffer.append("DUE: " + res.getString(5) + "\n");
+                    buffer.append("KILLED: " + res.getString(6) + "\n");
+                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
+                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
+                    buffer.append("IGNORED: " + res.getString(14) + "\n");
+                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
+                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
+                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
 
         //Used for debugging purposes
 //        showAlarmDb.setOnClickListener(new View.OnClickListener() {
@@ -643,37 +648,37 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-//        showUniversalDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllUniversalData();
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("MUTE: " + res.getString(1) + "\n");
-//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
-//                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
-//                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
-//                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
-//                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
-//                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
-//                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
-//                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//
-////                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
-////                        Toast.LENGTH_LONG).show();
-//
-//            }
-//
-//        });
+        showUniversalDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllUniversalData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("MUTE: " + res.getString(1) + "\n");
+                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
+                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
+                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
+                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
+                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
+                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
+                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
+                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+
+//                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
+//                        Toast.LENGTH_LONG).show();
+
+            }
+
+        });
 
         //Used for debugging purposes
 //        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
@@ -1283,6 +1288,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //Marks task as having it's properties showing
         taskPropertiesShowing = true;
 
+        datePickerShowing = false;
+
         alarmOptionsShowing = false;
 
         centerTask = true;
@@ -1382,11 +1389,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         reinstateAlarm = true;
 
-        reinstateAnimation = true;
-        animatePosition = i;
-        animateID = Integer.parseInt(MainActivity.sortedIDs.get(i));
+//        reinstateAnimation = true;
+//        animatePosition = i;
+//        animateID = Integer.parseInt(MainActivity.sortedIDs.get(i));
 
-//        reorderList();
+        reorderList();
 
         theListView.setAdapter(theAdapter[0]);
 
@@ -1394,8 +1401,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //TODO make a reorder class that both MainActivity and MyAdapter can access
     public void reorderList() {
-
-        Log.i(TAG, "I'm in here MainActivity");
 
         ArrayList<Integer> tempList = new ArrayList<>();
 
