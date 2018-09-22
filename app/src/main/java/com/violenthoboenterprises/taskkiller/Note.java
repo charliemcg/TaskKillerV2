@@ -18,6 +18,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +27,12 @@ public class Note extends MainActivity {
     TextView noteTextView;
     EditText noteEditText;
     InputMethodManager keyboard;
-    Button removeBtn;
-    Button submitNoteBtn;
+//    Button removeBtn;
+    ImageView removeBtnDark;
+    ImageView removeBtnLight;
+//    Button submitNoteBtn;
+    ImageView submitNoteBtnDark;
+    ImageView submitNoteBtnLight;
     String TAG;
     String theNote;
     //Indicates that the active task has subtasks
@@ -44,8 +49,10 @@ public class Note extends MainActivity {
         noteTextView = findViewById(R.id.noteTextView);
         noteEditText = findViewById(R.id.noteEditText);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        removeBtn = findViewById(R.id.removeBtn);
-        submitNoteBtn = findViewById(R.id.submitNoteBtn);
+        removeBtnDark = findViewById(R.id.removeBtnDark);
+        removeBtnLight = findViewById(R.id.removeBtnLight);
+        submitNoteBtnDark = findViewById(R.id.submitNoteBtnDark);
+        submitNoteBtnLight = findViewById(R.id.submitNoteBtnLight);
         TAG = "Note";
         theNote = "";
         checklistExists = false;
@@ -79,18 +86,22 @@ public class Note extends MainActivity {
         dbResult.close();
 
         if(mute){
-            removeBtn.setSoundEffectsEnabled(false);
-            submitNoteBtn.setSoundEffectsEnabled(false);
+            removeBtnDark.setSoundEffectsEnabled(false);
+            removeBtnLight.setSoundEffectsEnabled(false);
+            submitNoteBtnDark.setSoundEffectsEnabled(false);
+            submitNoteBtnLight.setSoundEffectsEnabled(false);
         }
 
         if(!lightDark){
             noteRoot.setBackgroundColor(Color.parseColor("#333333"));
+            submitNoteBtnLight.setVisibility(View.GONE);
         }else{
             noteRoot.setBackgroundColor(Color.parseColor("#FFFFFF"));
             noteToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             noteTextView.setTextColor(Color.parseColor("#000000"));
-            removeBtn.setTextColor(Color.parseColor("#FF0000"));
-            removeBtn.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.dark_red_layout_border));
+//            removeBtn.setTextColor(Color.parseColor("#FF0000"));
+//            removeBtn.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.dark_red_layout_border));
+            submitNoteBtnDark.setVisibility(View.GONE);
         }
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
@@ -98,54 +109,22 @@ public class Note extends MainActivity {
         noteEditText.setBackgroundColor(Color.parseColor(highlight));
 
         //Actions to occur when user clicks submit
-        submitNoteBtn.setOnClickListener(new View.OnClickListener() {
+        submitNoteBtnDark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //Keyboard is inactive without this line
-                noteEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+                submit(true);
 
-                Cursor result = db.getData(Integer.parseInt(
-                        MainActivity.sortedIdsForNote.get(activeTask)));
-                while(result.moveToNext()){
-                    checklistExists = (result.getInt(2) == 1);
-                }
-                result.close();
+            }
 
-                if(!noteEditText.getText().toString().equals("")) {
-                    //new note being added
-                    db.updateData(MainActivity.sortedIdsForNote.get(activeTask),
-                            noteEditText.getText().toString(), checklistExists);
-                }
+        });
 
-                //Clear text from text box
-                noteEditText.setText("");
+        //Actions to occur when user clicks submit
+        submitNoteBtnLight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                //Getting note from database
-                result = db.getData(Integer.parseInt(MainActivity.sortedIdsForNote.get(activeTask)));
-                while(result.moveToNext()){
-                    theNote = result.getString(1);
-                }
-
-                //Don't allow blank notes
-                if(!theNote.equals("")){
-
-                    //Set text view to the note content
-                    noteTextView.setText(theNote);
-
-                    //show remove button
-                    removeBtn.setVisibility(View.VISIBLE);
-
-                    //Hide text box
-                    noteEditText.setVisibility(View.GONE);
-
-                    //Hide submit button
-                    submitNoteBtn.setVisibility(View.GONE);
-
-                }
-
-                //Hide keyboard
-                keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                submit(false);
 
             }
 
@@ -159,13 +138,18 @@ public class Note extends MainActivity {
 //                MainActivity.vibrate.vibrate(50);
 
                 //hide remove button
-                removeBtn.setVisibility(View.GONE);
+//                removeBtn.setVisibility(View.GONE);
+                if(lightDark){
+                    removeBtnLight.setVisibility(View.GONE);
+                }else{
+                    removeBtnDark.setVisibility(View.GONE);
+                }
 
                 //show edit text
                 noteEditText.setVisibility(View.VISIBLE);
 
                 //show submit button
-                submitNoteBtn.setVisibility(View.VISIBLE);
+                submitNoteBtnDark.setVisibility(View.VISIBLE);
 
                 //Focus on edit text so that keyboard does not cover it up
                 noteEditText.requestFocus();
@@ -186,34 +170,120 @@ public class Note extends MainActivity {
         });
 
         //Actions to occur if user selects 'Remove'
-        removeBtn.setOnClickListener(new View.OnClickListener() {
+        removeBtnDark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 //                MainActivity.vibrate.vibrate(50);
 
-                Cursor result = db.getData(Integer.parseInt(
-                        MainActivity.sortedIdsForNote.get(activeTask)));
-                while(result.moveToNext()){
-                    checklistExists = (result.getInt(2) == 1);
-                }
-                result.close();
-
-                //setting note in database to nothing
-                db.updateData(MainActivity.sortedIdsForNote
-                        .get(activeTask), "", checklistExists);
-
-                noteTextView.setText("");
-
-                //hide remove button
-                removeBtn.setVisibility(View.GONE);
-
-                //show add button
-                noteEditText.setVisibility(View.VISIBLE);
-                submitNoteBtn.setVisibility(View.VISIBLE);
+                remove(true);
 
             }
         });
+
+        //Actions to occur if user selects 'Remove'
+        removeBtnLight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                MainActivity.vibrate.vibrate(50);
+
+                remove(false);
+
+            }
+        });
+
+    }
+
+    private void remove(boolean dark) {
+
+        Cursor result = db.getData(Integer.parseInt(
+                MainActivity.sortedIdsForNote.get(activeTask)));
+        while(result.moveToNext()){
+            checklistExists = (result.getInt(2) == 1);
+        }
+        result.close();
+
+        //setting note in database to nothing
+        db.updateData(MainActivity.sortedIdsForNote
+                .get(activeTask), "", checklistExists);
+
+        noteTextView.setText("");
+
+        //hide remove button
+//        removeBtn.setVisibility(View.GONE);
+        if(dark){
+            removeBtnDark.setVisibility(View.GONE);
+        }else{
+            removeBtnLight.setVisibility(View.GONE);
+        }
+
+        //show add button
+        noteEditText.setVisibility(View.VISIBLE);
+        if(lightDark) {
+            submitNoteBtnLight.setVisibility(View.VISIBLE);
+        }else{
+            submitNoteBtnDark.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private void submit(boolean dark) {
+
+        //Keyboard is inactive without this line
+        noteEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+
+        Cursor result = db.getData(Integer.parseInt(
+                MainActivity.sortedIdsForNote.get(activeTask)));
+        while(result.moveToNext()){
+            checklistExists = (result.getInt(2) == 1);
+        }
+        result.close();
+
+        if(!noteEditText.getText().toString().equals("")) {
+            //new note being added
+            db.updateData(MainActivity.sortedIdsForNote.get(activeTask),
+                    noteEditText.getText().toString(), checklistExists);
+        }
+
+        //Clear text from text box
+        noteEditText.setText("");
+
+        //Getting note from database
+        result = db.getData(Integer.parseInt(MainActivity.sortedIdsForNote.get(activeTask)));
+        while(result.moveToNext()){
+            theNote = result.getString(1);
+        }
+
+        //Don't allow blank notes
+        if(!theNote.equals("")){
+
+            //Set text view to the note content
+            noteTextView.setText(theNote);
+
+            //show remove button
+//            removeBtn.setVisibility(View.VISIBLE);
+            if(lightDark){
+                removeBtnLight.setVisibility(View.VISIBLE);
+            }else{
+                removeBtnDark.setVisibility(View.VISIBLE);
+            }
+
+            //Hide text box
+            noteEditText.setVisibility(View.GONE);
+
+            if(dark) {
+                //Hide submit button
+                submitNoteBtnDark.setVisibility(View.GONE);
+            }else{
+                submitNoteBtnLight.setVisibility(View.GONE);
+            }
+
+        }
+
+        //Hide keyboard
+        keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
 
     }
 
@@ -261,8 +331,14 @@ public class Note extends MainActivity {
             this.getWindow().setSoftInputMode(WindowManager
                     .LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             noteEditText.setVisibility(View.GONE);
-            submitNoteBtn.setVisibility(View.GONE);
-            removeBtn.setVisibility(View.VISIBLE);
+            submitNoteBtnDark.setVisibility(View.GONE);
+            submitNoteBtnLight.setVisibility(View.GONE);
+//            removeBtn.setVisibility(View.VISIBLE);
+            if(lightDark){
+                removeBtnLight.setVisibility(View.VISIBLE);
+            }else{
+                removeBtnDark.setVisibility(View.VISIBLE);
+            }
 
         }
 

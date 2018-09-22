@@ -24,17 +24,37 @@
         android:scrollbars="vertical"
         android:paddingLeft="10dp"/>
 
-    <Button
-        android:id="@+id/removeBtn"
+    <!--<Button-->
+        <!--android:id="@+id/removeBtn"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:text="@string/remove"-->
+        <!--android:background="@drawable/red_layout_border"-->
+        <!--android:textColor="@color/lightRed"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:visibility="gone"/>-->
+
+    <ImageView
+        android:id="@+id/removeBtnDark"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:text="@string/remove"
-        android:background="@drawable/red_layout_border"
-        android:textColor="@color/lightRed"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone"/>
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:src="@drawable/trash_dark"/>
+
+    <ImageView
+        android:id="@+id/removeBtnLight"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:src="@drawable/trash_light"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,18 +77,46 @@
             android:hint="@string/addYourNote"/>
         <!--android:layout_width="300dp"-->
 
-        <Button
-            android:id="@+id/submitNoteBtn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="40dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginBottom="0dp"
-            android:layout_gravity="center_vertical"
-            android:text="@string/submit"
-            android:background="@drawable/layout_border"
-            android:textColor="@color/gray"/>
+        <!--<Button-->
+            <!--android:id="@+id/submitNoteBtn"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_marginLeft="17dp"-->
+            <!--android:layout_marginBottom="0dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:text="@string/submit"-->
+            <!--android:background="@drawable/layout_border"-->
+            <!--android:textColor="@color/gray"/>-->
         <!--android:layout_width="60dp"-->
+
+        <ImageView
+            android:id="@+id/submitNoteBtnDark"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="17dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_dark"/>
+
+        <ImageView
+            android:id="@+id/submitNoteBtnLight"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="17dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_light"/>
+
+        <!--<ImageView-->
+            <!--android:id="@+id/submitNoteBtn"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_marginLeft="17dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:src="@drawable/submit_dark"/>-->
+
     </LinearLayout>
 
 </RelativeLayout>
