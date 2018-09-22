@@ -27,7 +27,7 @@
                 android:id="@+id/killAlarmBtnText"
                 android:layout_width="85dp"
                 android:layout_height="match_parent"
-                android:lines="1"
+                android:lines="2"
                 android:text="@string/turnOffAlarm"
                 android:gravity="center"
                 android:textColor="@color/gray"/>

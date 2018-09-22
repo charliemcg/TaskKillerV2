@@ -641,6 +641,7 @@ class MyAdapter extends ArrayAdapter<String> {
             }
             MainActivity.exitTaskProperties = false;
         }else if(MainActivity.exitAlarmOptions && (position == MainActivity.activeTask)){
+            Log.i(TAG, "One");
             alarmOptionsRow.setVisibility(View.VISIBLE);
             alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_left));
 
@@ -1704,6 +1705,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         dateRow.setVisibility(View.GONE);
                         repeatRow.setVisibility(View.GONE);
                         alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                        Log.i(TAG, "Two");
                         alarmOptionsRow.setVisibility(View.VISIBLE);
                     }
                 };
@@ -4174,12 +4176,19 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
+                            ViewGroup.LayoutParams params = killAlarmBtn.getLayoutParams();
+                            params.width = MainActivity.deviceWidthPortrait / 3;
+                            killAlarmBtn.setLayoutParams(params);
+                            resetAlarmBtn.setLayoutParams(params);
+                            repeatAlarmBtn.setLayoutParams(params);
+
                             final Handler handler = new Handler();
 
                             final Runnable runnable = new Runnable() {
                                 public void run() {
                                     propertyRow.setVisibility(View.GONE);
                                     alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+                                    Log.i(TAG, "Three");
                                     alarmOptionsRow.setVisibility(View.VISIBLE);
                                 }
                             };
