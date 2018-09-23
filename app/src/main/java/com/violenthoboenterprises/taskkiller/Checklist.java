@@ -22,7 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 
 public class Checklist extends MainActivity {
 
@@ -321,11 +323,16 @@ public class Checklist extends MainActivity {
                             }
                             dbIdResult.close();
                         }
+
+                        Calendar timeNow = new GregorianCalendar();
+
                         //saving subtask in database
-                        db.insertSubtaskData(finalDbID, subtaskId, checklistTaskName);
+                        db.insertSubtaskData(finalDbID, subtaskId, checklistTaskName, String.valueOf(timeNow.getTimeInMillis() / 1000));
                         //adding new ID to sortedIDs
                         sortedSubtaskIds.add(subtaskId);
-                        checklistView.setAdapter(checklistAdapter[0]);
+                        Log.i(TAG, "sortedSubtaskIDs: " + sortedSubtaskIds);
+                        reorderList(finalDbTaskId);
+//                        checklistView.setAdapter(checklistAdapter[0]);
 
                     }
                     return true;
@@ -478,6 +485,245 @@ public class Checklist extends MainActivity {
 
     }
 
+    public void reorderList(String parentID){
+
+        ArrayList<Integer> tempList = new ArrayList<>();
+
+        //Saving timestamps into a temporary array
+        for(int i = 0; i < checklist.size(); i++){
+
+            //getting timestamp
+            String dbTimestamp = "";
+            Cursor dbResult = MainActivity.db.getSubtaskData(Integer.parseInt(parentID), sortedSubtaskIds.get(i));
+            while (dbResult.moveToNext()) {
+                dbTimestamp = dbResult.getString(1);
+            }
+            dbResult.close();
+
+            tempList.add(Integer.valueOf(dbTimestamp));
+
+        }
+
+        Log.i(TAG, "templist: " + String.valueOf(tempList));
+        Log.i(TAG, "checklist: " + String.valueOf(checklist));
+
+        //Ordering list by time task was created
+        ArrayList<String> whenTaskCreated = new ArrayList<>();
+        for(int i = 0; i < checklist.size(); i++){
+            String created = "";
+            Cursor createdResult = MainActivity.db.getSubtaskData(Integer.parseInt
+                    (parentID), sortedSubtaskIds.get(i));
+            while (createdResult.moveToNext()) {
+                created = createdResult.getString(4);
+            }
+            createdResult.close();
+            whenTaskCreated.add(created);
+        }
+        Collections.sort(whenTaskCreated);
+        Collections.reverse(whenTaskCreated);
+
+        Log.i(TAG, "whenTasksCreated: " + String.valueOf(whenTaskCreated));
+
+        ArrayList<String> tempIdsList = new ArrayList<>();
+        ArrayList<String> tempTaskList = new ArrayList<>();
+        ArrayList<String> tempKilledIdsList = new ArrayList<>();
+        ArrayList<String> tempKilledTaskList = new ArrayList<>();
+//        ArrayList<String> tempDueIdsList = new ArrayList<>();
+//        ArrayList<String> tempDueTaskList = new ArrayList<>();
+//        ArrayList<String> tempDueAndKilledIdsList = new ArrayList<>();
+//        ArrayList<String> tempDueAndKilledTaskList = new ArrayList<>();
+
+        //getting tasks
+        for(int i = 0; i < checklist.size(); i++){
+
+            //getting task data
+            int dbId = 0;
+//            String dbTimestamp = "";
+            String dbTask = "";
+//            Boolean dbKilled = false;
+            Cursor dbResult = MainActivity.db.getSubtaskDataByTimestamp(
+                    whenTaskCreated.get(i));
+            while (dbResult.moveToNext()) {
+                dbId = dbResult.getInt(1);
+//                dbTimestamp = dbResult.getString(3);
+                dbTask = dbResult.getString(2);
+//                dbKilled = dbResult.getInt(6) > 0;
+            }
+            dbResult.close();
+
+            tempIdsList.add(String.valueOf(dbId));
+            tempTaskList.add(dbTask);
+
+//            //Getting tasks with no due time and not killed
+//            if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
+//                tempIdsList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//                //Getting tasks with no due time and killed
+//            }else if((Integer.parseInt(dbTimestamp) == 0) && (dbKilled)){
+//                tempKilledIdsList.add(String.valueOf(dbId));
+//                tempKilledTaskList.add(dbTask);
+//                //Getting tasks with due time and not killed
+//            }else if((Integer.parseInt(dbTimestamp) != 0) && (!dbKilled)){
+////                tempDueIdsList.add(String.valueOf(dbId));
+////                tempDueTaskList.add(dbTask);
+//                //Getting tasks with due date and killed
+//            }else{
+////                tempDueAndKilledIdsList.add(String.valueOf(dbId));
+////                tempDueAndKilledTaskList.add(dbTask);
+//            }
+
+        }
+
+        Collections.sort(tempList);
+
+        Log.i(TAG, "tempList: " + String.valueOf(tempList));
+        Log.i(TAG, "tempIdsList: " + String.valueOf(tempIdsList));
+        Log.i(TAG, "tempTaskList: " + String.valueOf(tempTaskList));
+
+//        //Adding due tasks which aren't killed to middle of task list
+//        for(int i = 0; i < MainActivity.taskListSize; i++){
+//
+//            //getting task data
+//            int dbId = 0;
+//            String dbTask = "";
+//            boolean dbKilled = false;
+//            Cursor dbResult = MainActivity.db.getDataByDueTime(
+//                    String.valueOf(tempList.get(i)));
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTask = dbResult.getString(4);
+//                dbKilled = dbResult.getInt(6) > 0;
+//            }
+//            dbResult.close();
+//
+//            if((tempList.get(i) != 0) && !dbKilled){
+//                tempIdsList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//            }
+//
+//        }
+//
+//        //Adding killed tasks to end of task list
+//        for(int i = 0; i < tempKilledIdsList.size(); i++){
+//
+//            tempTaskList.add(tempKilledTaskList.get(i));
+//            tempIdsList.add(tempKilledIdsList.get(i));
+//
+//        }
+//
+//        //Adding killed tasks with due dates to middle of task list
+//        for(int i = 0; i < MainActivity.taskListSize; i++){
+//
+//            //getting task data
+//            int dbId = 0;
+//            String dbTask = "";
+//            boolean dbKilled = false;
+//            Cursor dbResult = MainActivity.db.getDataByDueTime(
+//                    String.valueOf(tempList.get(i)));
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTask = dbResult.getString(4);
+//                dbKilled = dbResult.getInt(6) > 0;
+//            }
+//            dbResult.close();
+//
+//            if((tempList.get(i) != 0) && dbKilled){
+//                tempIdsList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//            }
+//
+//        }
+//
+        for(int i = 0; i < checklist.size(); i++){
+
+            MainActivity.db.updateSubtaskSortedIndex(parentID, String.valueOf(i), Integer.parseInt(tempIdsList.get(i)));
+
+        }
+
+//        if(MainActivity.killedAnimation) {
+//
+//            int tempId = 0;
+//            String tempTask = "";
+//
+//            for (int i = 0; i < MainActivity.taskListSize; i++) {
+//
+//                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
+//                    tempId = Integer.parseInt(tempIdsList.get(i));
+//                    tempTask = tempTaskList.get(i);
+//                    tempIdsList.remove(i);
+//                    tempTaskList.remove(i);
+//                    break;
+//                }
+//
+//            }
+//
+//            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
+//            tempTaskList.add(MainActivity.animatePosition, tempTask);
+//        }
+//
+//        if(MainActivity.reinstateAnimation) {
+//
+//            int tempId = 0;
+//            String tempTask = "";
+//
+//            for (int i = 0; i < MainActivity.taskListSize; i++) {
+//
+//                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
+//                    tempId = Integer.parseInt(tempIdsList.get(i));
+//                    tempTask = tempTaskList.get(i);
+//                    tempIdsList.remove(i);
+//                    tempTaskList.remove(i);
+//                    break;
+//                }
+//
+//            }
+//
+//            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
+//            tempTaskList.add(MainActivity.animatePosition, tempTask);
+//        }
+//
+//        if(MainActivity.alarmAnimation) {
+//
+//            int tempId = 0;
+//            String tempTask = "";
+//
+//            for (int i = 0; i < MainActivity.taskListSize; i++) {
+//
+//                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
+//                    tempId = Integer.parseInt(tempIdsList.get(i));
+//                    tempTask = tempTaskList.get(i);
+//                    tempIdsList.remove(i);
+//                    tempTaskList.remove(i);
+//                    break;
+//                }
+//
+//            }
+//
+//            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
+//            tempTaskList.add(MainActivity.animatePosition, tempTask);
+//        }
+
+        tempSortedIDs.clear();
+        sortedSubtaskIds.clear();
+        for(int i = 0; i < checklist.size(); i++){
+            tempSortedIDs.add(Integer.valueOf(tempIdsList.get(i)));
+            sortedSubtaskIds.add(Integer.valueOf(tempIdsList.get(i)));
+        }
+//        tempSortedIDs = tempIdsList;
+        checklist = tempTaskList;
+
+        Log.i(TAG, "tempSortedIDs: " + tempSortedIDs);
+        Log.i(TAG, "checklist: " + checklist);
+        Log.i(TAG, "sortedSubtaskIds: " + sortedSubtaskIds);
+
+//        //Updating the view with the new order
+//        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+//                this, MainActivity.taskList)};
+        checklistAdapter = new ListAdapter[]{new ChecklistAdapter(this, checklist)};
+        checklistView.setAdapter(checklistAdapter[0]);
+
+    }
+
     @Override
     //Tasks are saved in a manner so that they don't vanish when app closed
     protected void onPause(){
@@ -525,7 +771,8 @@ public class Checklist extends MainActivity {
             subTasksKilled.add(dbIdResult.getInt(3) > 0);
         }
         dbIdResult.close();
-        checklistView.setAdapter(checklistAdapter[0]);
+        reorderList(id);
+//        checklistView.setAdapter(checklistAdapter[0]);
 
         //if subtasks already exist keyboard isn't displayed and therefore tasks must be clickable
         if(checklist.size() == 0) {

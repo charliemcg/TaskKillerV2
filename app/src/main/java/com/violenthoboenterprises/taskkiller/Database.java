@@ -73,6 +73,8 @@ public class Database extends SQLiteOpenHelper {
     public static final String CCOL2 = "SUBTASKID";
     public static final String CCOL3 = "SUBTASK";
     public static final String CCOL4 = "KILLED";
+    public static final String CCOL5 = "TIMECREATED";
+    public static final String CCOL6 = "SORTEDINDEX";
 
     String TAG = "Data";
 
@@ -97,7 +99,7 @@ public class Database extends SQLiteOpenHelper {
                 " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
                 "CHECKLISTLISTSIZE INTEGER)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
-                " SUBTASK TEXT, KILLED BOOLEAN)");
+                " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
 
     @Override
@@ -196,13 +198,15 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertSubtaskData(int id, int subtaskID, String subtask){
+    public boolean insertSubtaskData(int id, int subtaskID, String subtask, String stamp){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(CCOL1, id);
         content.put(CCOL2, subtaskID);
         content.put(CCOL3, subtask);
         content.put(CCOL4, false);
+        content.put(CCOL5, stamp);
+        content.put(CCOL6, 0);
         long result = db.insert(CTABLE, null, content);
         if(result == -1){
             return false;
@@ -227,6 +231,14 @@ public class Database extends SQLiteOpenHelper {
     public Cursor getDataByTimestamp(String stamp){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL16
+                + " == " + stamp, null);
+        return result;
+    }
+
+    public Cursor getSubtaskDataByTimestamp(String stamp){
+        Log.i(TAG, "Stamp: " + stamp);
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + CTABLE + " where " + CCOL5
                 + " == " + stamp, null);
         return result;
     }
@@ -434,6 +446,14 @@ public class Database extends SQLiteOpenHelper {
         ContentValues content = new ContentValues();
         content.put(COL17, index);
         db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateSubtaskSortedIndex(String id, String subtask, int index){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(CCOL6, index);
+        db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?", new String[] {id, subtask});
         return true;
     }
 

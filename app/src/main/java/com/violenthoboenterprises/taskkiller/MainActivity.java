@@ -196,11 +196,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
-//    Button showDb;
+    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
 //    Button showUniversalDb;
-//    Button showSubtasksDb;
+    Button showSubtasksDb;
 
     //Scrollable list
     static ListView theListView;
@@ -422,10 +422,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidthPortrait = displayMetrics.widthPixels;
-//        showDb = findViewById(R.id.showDb);
+        showDb = findViewById(R.id.showDb);
 //      showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
-//        showSubtasksDb = findViewById(R.id.showSubtasksDb);
+        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
         final View child = topToolbar.getChildAt(2);
         if (child instanceof ActionMenuView)
@@ -580,43 +580,43 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         //Used for debugging purposes
-//        showDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllData();
-//
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("NOTE: " + res.getString(1) + "\n");
-//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-//                    buffer.append("TASK: " + res.getString(4) + "\n");
-//                    buffer.append("DUE: " + res.getString(5) + "\n");
-//                    buffer.append("KILLED: " + res.getString(6) + "\n");
-//                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
-//                    buffer.append("REPEAT: " + res.getString(8) + "\n");
-//                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
-//                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
-//                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-//                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
-//                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
-//                    buffer.append("IGNORED: " + res.getString(14) + "\n");
-//                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
-//                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
-//                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//
-//            }
-//
-//        });
+        showDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllData();
+
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("NOTE: " + res.getString(1) + "\n");
+                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+                    buffer.append("TASK: " + res.getString(4) + "\n");
+                    buffer.append("DUE: " + res.getString(5) + "\n");
+                    buffer.append("KILLED: " + res.getString(6) + "\n");
+                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
+                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
+                    buffer.append("IGNORED: " + res.getString(14) + "\n");
+                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
+                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
+                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
 
         //Used for debugging purposes
 //        showAlarmDb.setOnClickListener(new View.OnClickListener() {
@@ -707,31 +707,32 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-//        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllSubtaskData();
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("SUBTASKID: " + res.getString(1) + "\n");
-//                    buffer.append("SUBTASK: " + res.getString(2) + "\n");
-//                    buffer.append("SUBTASKKILLED: " + res.getString(3) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//
-////                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
-////                        Toast.LENGTH_LONG).show();
-//
-//            }
-//
-//        });
+        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllSubtaskData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("SUBTASKID: " + res.getString(1) + "\n");
+                    buffer.append("SUBTASK: " + res.getString(2) + "\n");
+                    buffer.append("SUBTASKKILLED: " + res.getString(3) + "\n");
+                    buffer.append("TIMECREATED: " + res.getString(4) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+
+//                Toast.makeText(v.getContext(), String.valueOf(sortedIDs),
+//                        Toast.LENGTH_LONG).show();
+
+            }
+
+        });
 
         //Actions to occur when user submits new task
         taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
