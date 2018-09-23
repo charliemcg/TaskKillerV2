@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -244,6 +246,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static MediaPlayer punch;
     //Sound played when toast displays
     static MediaPlayer sweep;
+    //Default sound played throughout the app
+    static MediaPlayer blip;
 
     //The action bar
     private Toolbar topToolbar;
@@ -353,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         completeTask = false;
         punch = MediaPlayer.create(this, R.raw.punch);
         sweep = MediaPlayer.create(this, R.raw.sweep);
+        blip = MediaPlayer.create(this, R.raw.blip);
         mute = false;
         colorPicker = findViewById(R.id.colorPicker);
         white = findViewById(R.id.white);
@@ -423,6 +428,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
+        final View child = topToolbar.getChildAt(2);
+        if (child instanceof ActionMenuView)
+        {
+            final ActionMenuView actionMenuView = ((ActionMenuView) child);
+            actionMenuView.getChildAt(actionMenuView.getChildCount() - 1).setSoundEffectsEnabled(false);
+        }
+
         db.insertUniversalData(mute);
 
         //getting app-wide data
@@ -446,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
         toast.setBackgroundColor(Color.parseColor(highlight));
 
-        muteSounds(mute);
+//        muteSounds(mute);
 
         checkLightDark(lightDark);
 
@@ -458,6 +470,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 //Tasks are not clickable if keyboard is up
                 if(tasksAreClickable && !completeTask) {
+
+                    if(!mute) {
+                        blip.start();
+                    }
 
 //                    vibrate.vibrate(50);
 
@@ -539,6 +555,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!mute) {
+                    blip.start();
+                }
 
                 goToMyAdapter = true;
 
@@ -951,12 +971,27 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+
+        if(!mute){
+            blip.start();
+        }
+        return super.onMenuOpened(featureId, menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int id = item.getItemId();
 
         //TODO find out if return statements are necessary
         //noinspection SimplifiableIfStatement
         if (id == R.id.mute) {
+
+            if(mute){
+                blip.start();
+            }
+
             muteBtn = this.topToolbar.getMenu().findItem(R.id.mute);
             if (mute) {
                 mute = false;
@@ -975,9 +1010,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 }
                 db.updateMute(mute);
             }
-            muteSounds(mute);
+//            muteSounds(mute);
             return true;
         } else if (id == R.id.lightDark) {
+
+            if(!mute){
+                blip.start();
+            }
+
             if (lightDark) {
                 lightDark = false;
                 white.setVisibility(View.VISIBLE);
@@ -1062,6 +1102,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             noTasksLeft();
             return true;
         } else if (id == R.id.highlight) {
+
+            if(!mute){
+                blip.start();
+            }
+
             colorPickerShowing = true;
             add.setClickable(false);
             theListView.setOnItemClickListener(null);
@@ -1083,6 +1128,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             return true;
         } else if (id == R.id.buy) {
 
+            if(!mute){
+                blip.start();
+            }
+
             purchasesShowing = true;
             add.setClickable(false);
             theListView.setOnItemClickListener(null);
@@ -1102,20 +1151,24 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             handler.postDelayed(runnable, 200);
 
             return true;
+
+//        } else if (id == R.id.menu2){
+//            Toast.makeText(this, "Clicked: Menu No. 2", Toast.LENGTH_SHORT).show();
+//            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void muteSounds(boolean mute) {
-        if(mute){
-            add.setSoundEffectsEnabled(false);
-            theListView.setSoundEffectsEnabled(false);
-        }else{
-            add.setSoundEffectsEnabled(true);
-            theListView.setSoundEffectsEnabled(true);
-        }
-    }
+//    private void muteSounds(boolean mute) {
+//        if(mute){
+////            add.setSoundEffectsEnabled(false);
+////            theListView.setSoundEffectsEnabled(false);
+//        }else{
+////            add.setSoundEffectsEnabled(true);
+////            theListView.setSoundEffectsEnabled(true);
+//        }
+//    }
 
     ////Shows table results for debugging purposes////
     public void showMessage(String title, String message){
@@ -1889,6 +1942,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void setHighlight(String s) {
+        if(!mute){
+            blip.start();
+        }
         db.updateHighlight(s);
         highlight = s;
         topToolbar.setTitleTextColor(Color.parseColor(s));
@@ -2061,6 +2117,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 //        }
 
+        //TODO find out what's going on here. Mute back button?
+        AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+
         //TODO check if this line is needed
         sortedIdsForNote = sortedIDs;
 
@@ -2080,6 +2140,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+
+        //TODO find out what's going on here. Mute back button?
+        AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true);
 
     }
 
@@ -2102,7 +2166,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         dbResult.close();
 
-        muteSounds(mute);
+//        muteSounds(mute);
 
         checkLightDark(lightDark);
 

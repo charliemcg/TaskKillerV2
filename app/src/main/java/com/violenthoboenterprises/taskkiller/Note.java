@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -27,10 +28,8 @@ public class Note extends MainActivity {
     TextView noteTextView;
     EditText noteEditText;
     InputMethodManager keyboard;
-//    Button removeBtn;
     ImageView removeBtnDark;
     ImageView removeBtnLight;
-//    Button submitNoteBtn;
     ImageView submitNoteBtnDark;
     ImageView submitNoteBtnLight;
     String TAG;
@@ -39,6 +38,7 @@ public class Note extends MainActivity {
     Boolean checklistExists;
     View noteRoot;
     private Toolbar noteToolbar;
+    MediaPlayer trash;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -58,6 +58,7 @@ public class Note extends MainActivity {
         checklistExists = false;
         inNote = true;
         noteRoot = findViewById(R.id.noteRoot);
+        trash = MediaPlayer.create(this, R.raw.trash);
 
         noteToolbar.setTitleTextColor(Color.parseColor(highlight));
 
@@ -99,8 +100,6 @@ public class Note extends MainActivity {
             noteRoot.setBackgroundColor(Color.parseColor("#FFFFFF"));
             noteToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             noteTextView.setTextColor(Color.parseColor("#000000"));
-//            removeBtn.setTextColor(Color.parseColor("#FF0000"));
-//            removeBtn.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.dark_red_layout_border));
             submitNoteBtnDark.setVisibility(View.GONE);
         }
 
@@ -138,7 +137,6 @@ public class Note extends MainActivity {
 //                MainActivity.vibrate.vibrate(50);
 
                 //hide remove button
-//                removeBtn.setVisibility(View.GONE);
                 if(lightDark){
                     removeBtnLight.setVisibility(View.GONE);
                 }else{
@@ -211,11 +209,14 @@ public class Note extends MainActivity {
         noteTextView.setText("");
 
         //hide remove button
-//        removeBtn.setVisibility(View.GONE);
         if(dark){
             removeBtnDark.setVisibility(View.GONE);
         }else{
             removeBtnLight.setVisibility(View.GONE);
+        }
+
+        if(!mute) {
+            trash.start();
         }
 
         //show add button
@@ -262,7 +263,6 @@ public class Note extends MainActivity {
             noteTextView.setText(theNote);
 
             //show remove button
-//            removeBtn.setVisibility(View.VISIBLE);
             if(lightDark){
                 removeBtnLight.setVisibility(View.VISIBLE);
             }else{
@@ -333,7 +333,6 @@ public class Note extends MainActivity {
             noteEditText.setVisibility(View.GONE);
             submitNoteBtnDark.setVisibility(View.GONE);
             submitNoteBtnLight.setVisibility(View.GONE);
-//            removeBtn.setVisibility(View.VISIBLE);
             if(lightDark){
                 removeBtnLight.setVisibility(View.VISIBLE);
             }else{

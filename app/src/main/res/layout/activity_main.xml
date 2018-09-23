@@ -52,7 +52,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/white_button"
-                    android:onClick="setHighlightWhite"/>
+                    android:onClick="setHighlightWhite"
+                    android:soundEffectsEnabled="false"/>
                 <!--android:background="@color/white"-->
 
                 <Button
@@ -62,7 +63,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/black_button"
-                    android:onClick="setHighlightBlack"/>
+                    android:onClick="setHighlightBlack"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/lightYellow"
@@ -71,7 +73,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/lyellow_button"
-                    android:onClick="setHighlightLightYellow"/>
+                    android:onClick="setHighlightLightYellow"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/darkYellow"
@@ -80,7 +83,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/dyellow_button"
-                    android:onClick="setHighlightDarkYellow"/>
+                    android:onClick="setHighlightDarkYellow"
+                    android:soundEffectsEnabled="false"/>
 
             </TableRow>
 
@@ -93,7 +97,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/lblue_button"
-                    android:onClick="setHighlightLightBlue"/>
+                    android:onClick="setHighlightLightBlue"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/darkBlue"
@@ -102,7 +107,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/dblue_button"
-                    android:onClick="setHighlightDarkBlue"/>
+                    android:onClick="setHighlightDarkBlue"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/lightOrange"
@@ -111,7 +117,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/lorange_button"
-                    android:onClick="setHighlightLightOrange"/>
+                    android:onClick="setHighlightLightOrange"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/darkOrange"
@@ -120,7 +127,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/dorange_button"
-                    android:onClick="setHighlightDarkOrange"/>
+                    android:onClick="setHighlightDarkOrange"
+                    android:soundEffectsEnabled="false"/>
 
             </TableRow>
 
@@ -133,7 +141,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/lpurple_button"
-                    android:onClick="setHighlightLightPurple"/>
+                    android:onClick="setHighlightLightPurple"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/darkPurple"
@@ -142,7 +151,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/dpurple_button"
-                    android:onClick="setHighlightDarkPurple"/>
+                    android:onClick="setHighlightDarkPurple"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/lightRed"
@@ -151,7 +161,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/lred_button"
-                    android:onClick="setHighlightLightRed"/>
+                    android:onClick="setHighlightLightRed"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/darkRed"
@@ -160,7 +171,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/dred_button"
-                    android:onClick="setHighlightDarkRed"/>
+                    android:onClick="setHighlightDarkRed"
+                    android:soundEffectsEnabled="false"/>
 
             </TableRow>
 
@@ -173,7 +185,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/lpink_button"
-                    android:onClick="setHighlightLightPink"/>
+                    android:onClick="setHighlightLightPink"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/darkPink"
@@ -182,7 +195,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/dpink_button"
-                    android:onClick="setHighlightDarkPink"/>
+                    android:onClick="setHighlightDarkPink"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/lightGreen"
@@ -191,7 +205,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/lgreen_button"
-                    android:onClick="setHighlightLightGreen"/>
+                    android:onClick="setHighlightLightGreen"
+                    android:soundEffectsEnabled="false"/>
 
                 <Button
                     android:id="@+id/darkGreen"
@@ -200,7 +215,8 @@
                     android:layout_margin="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/dgreen_button"
-                    android:onClick="setHighlightDarkGreen"/>
+                    android:onClick="setHighlightDarkGreen"
+                    android:soundEffectsEnabled="false"/>
 
             </TableRow>
         </TableLayout>
@@ -439,7 +455,8 @@
         android:id="@+id/theListView"
         android:layout_below="@+id/my_toolbar"
         android:background="@color/dark_gray"
-        android:descendantFocusability="blocksDescendants"/>
+        android:descendantFocusability="blocksDescendants"
+        android:soundEffectsEnabled="false"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -477,7 +494,8 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="#00FFFFFF" />
+            android:background="#00FFFFFF"
+            android:soundEffectsEnabled="false"/>
 
         <TextView
             android:layout_width="180dp"

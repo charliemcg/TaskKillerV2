@@ -1724,6 +1724,10 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
+                        if(!MainActivity.mute){
+                            MainActivity.blip.start();
+                        }
+
                         MainActivity.db.updateDue(String.valueOf(MainActivity
                                 .sortedIDs.get(MainActivity.activeTask)), false);
 
@@ -1752,6 +1756,10 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
+                        if(!MainActivity.mute){
+                            MainActivity.blip.start();
+                        }
+
                         MainActivity.datePickerShowing = true;
 
                         MainActivity.dateRowShowing = true;
@@ -1765,6 +1773,10 @@ class MyAdapter extends ArrayAdapter<String> {
                 repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        if(!MainActivity.mute){
+                            MainActivity.blip.start();
+                        }
 
                         //TODO this code block doesn't seem to get used
                         alarmOptionsRow.setVisibility(View.GONE);
@@ -1793,6 +1805,10 @@ class MyAdapter extends ArrayAdapter<String> {
                 snoozeTask.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        if(!MainActivity.mute){
+                            MainActivity.blip.start();
+                        }
 
 //                        taskOverdueRow.setVisibility(View.VISIBLE);
                         taskOverdueRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
@@ -1826,6 +1842,10 @@ class MyAdapter extends ArrayAdapter<String> {
                         oneHourBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(final View v) {
+
+                                if(!MainActivity.mute){
+                                    MainActivity.blip.start();
+                                }
 
                                 snoozeRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
@@ -2322,6 +2342,9 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(final View v) {
 
+                                if(!MainActivity.mute){
+                                    MainActivity.blip.start();
+                                }
 
                                 snoozeRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
@@ -2820,6 +2843,9 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(final View v) {
 
+                                if(!MainActivity.mute){
+                                    MainActivity.blip.start();
+                                }
 
                                 snoozeRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
@@ -3626,6 +3652,10 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
+                        if(!MainActivity.mute){
+                            MainActivity.blip.start();
+                        }
+
                         taskOverdueRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
                         final Handler handler = new Handler();
@@ -4138,6 +4168,10 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                        handler.postDelayed(runnable, 500);
 
+                    if(!MainActivity.mute){
+                        MainActivity.blip.start();
+                    }
+
                         //actions to occur if alarm not already set
                         if (!finalDbDue) {
 
@@ -4224,6 +4258,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                 @Override
                                 public void onClick(final View v) {
 
+                                    if(!MainActivity.mute){
+                                        MainActivity.blip.start();
+                                    }
+
                                     alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
                                     final Handler handler = new Handler();
@@ -4290,6 +4328,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                 @Override
                                 public void onClick(View v) {
 
+                                    if(!MainActivity.mute){
+                                        MainActivity.blip.start();
+                                    }
+
                                     MainActivity.datePickerShowing = true;
 
                                     MainActivity.dateRowShowing = true;
@@ -4303,6 +4345,10 @@ class MyAdapter extends ArrayAdapter<String> {
                             repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+
+                                    if(!MainActivity.mute){
+                                        MainActivity.blip.start();
+                                    }
 
                                     if (finalDbRepeat) {
 
@@ -4452,6 +4498,10 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    if(!MainActivity.mute){
+                        MainActivity.blip.start();
+                    }
+
                     MainActivity.checklistShowing = true;
 
 //                    MainActivity.vibrate.vibrate(50);
@@ -4468,6 +4518,10 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    if(!MainActivity.mute){
+                        MainActivity.blip.start();
+                    }
+
 //                    MainActivity.vibrate.vibrate(50);
 
                     MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
@@ -4482,6 +4536,10 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    if(!MainActivity.mute){
+                        MainActivity.blip.start();
+                    }
+
                     dateButton.setText(R.string.setTime);
 
                     setAlarm(dateRow, datePicker, timePicker, position);
@@ -4493,6 +4551,10 @@ class MyAdapter extends ArrayAdapter<String> {
             daily.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if(!MainActivity.mute){
+                        MainActivity.blip.start();
+                    }
 
                     repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
@@ -4536,6 +4598,10 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    if(!MainActivity.mute){
+                        MainActivity.blip.start();
+                    }
+
                     repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 
                     final Handler handler = new Handler();
@@ -4577,6 +4643,10 @@ class MyAdapter extends ArrayAdapter<String> {
             monthly.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if(!MainActivity.mute){
+                        MainActivity.blip.start();
+                    }
 
                     repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
 

@@ -20,7 +20,8 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="@drawable/layout_border">
+            android:background="@drawable/layout_border"
+            android:soundEffectsEnabled="false">
             <!--android:layout_width="120dp"-->
 
             <TextView
@@ -41,7 +42,8 @@
             android:orientation="horizontal"
             android:layout_weight="1"
             android:gravity="center"
-            android:background="@drawable/layout_border">
+            android:background="@drawable/layout_border"
+            android:soundEffectsEnabled="false">
 
             <TextView
                 android:id="@+id/resetAlarmBtnText"
@@ -61,7 +63,8 @@
             android:orientation="horizontal"
             android:layout_weight="1"
             android:gravity="center"
-            android:background="@drawable/layout_border">
+            android:background="@drawable/layout_border"
+            android:soundEffectsEnabled="false">
 
             <TextView
                 android:id="@+id/repeatAlarmBtnText"
