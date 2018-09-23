@@ -19,6 +19,7 @@
             ads:adUnitId="@string/banner_ad_unit_id"
             android:visibility="gone"/>
             <!--dimensions are 468 x 60-->
+
         <ImageView
             android:id="@+id/banner"
             android:src="@drawable/banner"
@@ -44,7 +45,6 @@
                 android:paddingLeft="10dp"
                 android:textSize="20sp"
                 android:textColor="@color/gray"/>
-            <!--android:background="@color/dark_gray"-->
 
             <ImageView
                 android:id="@+id/complete"
@@ -57,7 +57,6 @@
                 android:focusable="true"
                 android:onClick="complete"
                 android:soundEffectsEnabled="false"/>
-            <!--android:layout_width="50dp"-->
 
             <ImageView
                 android:id="@+id/completed"
@@ -105,7 +104,7 @@
             android:orientation="horizontal"
             android:layout_width="350dp"
             android:layout_height="wrap_content">
-            <!--android:background="@color/dark_gray">-->
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -254,14 +253,6 @@
                     android:visibility="gone"/>
 
             </RelativeLayout>
-
-            <!--<ImageView-->
-                <!--android:id="@+id/due"-->
-                <!--android:layout_width="30dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:src="@drawable/due"-->
-                <!--android:visibility="gone"-->
-                <!--android:layout_weight="1"/>-->
 
             <RelativeLayout
                 android:id="@+id/dueLayout"

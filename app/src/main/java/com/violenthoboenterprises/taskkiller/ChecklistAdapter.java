@@ -48,7 +48,6 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         int dbID = 0;
         String dbNote = "";
-//        Boolean dbChecklist = false;
         String dbTimestamp = "";
         String dbTask = "";
         Boolean dbDue = false;
@@ -76,7 +75,6 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         while (dbResult.moveToNext()) {
             dbID = dbResult.getInt(0);
             dbNote = dbResult.getString(1);
-//            dbChecklist = dbResult.getInt(2) > 0;
             dbTimestamp = dbResult.getString(3);
             dbTask = dbResult.getString(4);
             dbDue = dbResult.getInt(5) > 0;
@@ -99,7 +97,6 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         final int finalDbID = dbID;
         final String finalDbNote = dbNote;
-//        final Boolean finalDbChecklist = dbChecklist;
         final String finalDbTimestamp = dbTimestamp;
         final Boolean finalDbDue = dbDue;
         final Boolean finalDbKilled = dbKilled;

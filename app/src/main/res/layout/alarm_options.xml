@@ -22,7 +22,6 @@
             android:gravity="center"
             android:background="@drawable/layout_border"
             android:soundEffectsEnabled="false">
-            <!--android:layout_width="120dp"-->
 
             <TextView
                 android:id="@+id/killAlarmBtnText"

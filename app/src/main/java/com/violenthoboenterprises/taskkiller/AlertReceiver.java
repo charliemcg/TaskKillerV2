@@ -30,51 +30,43 @@ public class AlertReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         //retrieving task name to set as notification name
-        createNotification(context, String.valueOf(intent.getStringExtra("ToDo")),
-                "", "");
+        createNotification(context, "");
 
     }
 
-    public void createNotification(Context context, String msg, String msgText, String msgAlert){
+    public void createNotification(Context context, String msgAlert){
 
         //defining intent and action to perform
         PendingIntent notificIntent = PendingIntent.getActivity(context, 1,
                 new Intent(context, MainActivity.class), 0);
 
-        NotificationCompat.Builder mBuilder;
+        NotificationCompat.Builder builder;
 
         //intent to execute when notification is clicked
-//        if(!MainActivity.lightDark) {
-            mBuilder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory.decodeResource(context
-                            //TODO extract string resource
-                            .getResources(), R.drawable.bell))./*setContentTitle(msg)*/setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
-                    .setContentText(msg/*Text*/);
-//        }else{
-//            mBuilder = new NotificationCompat.Builder(context)
-//                    .setSmallIcon(R.drawable.small_bell).setLargeIcon(BitmapFactory.decodeResource(context
-//                            .getResources(), R.drawable.bell_white))./*setContentTitle(msg)*/setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
-//                    .setContentText(msg/*Text*/);
-//        }
+        //TODO see if possible to make light and dark version
+        builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory
+                        .decodeResource(context.getResources(), R.drawable.bell))
+                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert);
 
         //Sets background of small icon
-//        mBuilder.setColorized(true).setColor(Color.parseColor("#00FF00"));
+        builder.setColorized(true).setColor(Color.parseColor(MainActivity.highlight));
 
         //use phone's default notification sound
-        mBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND);
+        builder.setDefaults(NotificationCompat.DEFAULT_SOUND);
 
         //ensure app is opened when notification is clicked
-        mBuilder.setContentIntent(notificIntent);
+        builder.setContentIntent(notificIntent);
 
         //cancels the notification when clicked
-        mBuilder.setAutoCancel(true);
+        builder.setAutoCancel(true);
 
         //allows for notifications
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         //post notification
-        notificationManager.notify(1, mBuilder.build());
+        notificationManager.notify(1, builder.build());
 
     }
 

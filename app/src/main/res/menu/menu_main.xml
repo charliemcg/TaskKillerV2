@@ -4,20 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
-    <!--<item-->
-        <!--android:id="@+id/action_favorite"-->
-        <!--android:orderInCategory="300"-->
-        <!--android:title="User"-->
-        <!--android:icon="@drawable/bell"-->
-        <!--app:showAsAction="ifRoom"/>-->
-
     <item
         android:id="@+id/buy"
         android:orderInCategory="300"
         android:title="Buy"
         android:icon="@drawable/pro"
         app:showAsAction="always" />
-        <!--app:showAsAction="always"/>-->
 
     <item
         android:id="@+id/lightDark"
@@ -37,26 +29,5 @@
         android:title="Mute/Unmute"
         android:icon="@drawable/unmuted"
         app:showAsAction="always"/>
-
-
-    <!--<item android:id="@+id/menu2" android:alphabeticShortcut="b"-->
-        <!--android:title="Menu No. 2" android:orderInCategory="2">-->
-        <!--<menu >-->
-            <!--<group android:id="@+id/group2" android:checkableBehavior="single">-->
-                <!--<item-->
-                    <!--android:id="@+id/highlight"-->
-                    <!--android:orderInCategory="300"-->
-                    <!--android:title="Color"-->
-                    <!--app:showAsAction="collapseActionView"/>-->
-
-                <!--<item-->
-                    <!--android:id="@+id/mute"-->
-                    <!--android:orderInCategory="300"-->
-                    <!--android:title="Mute/Unmute"-->
-                    <!--android:icon="@drawable/unmuted"-->
-                    <!--app:showAsAction="always"/>-->
-            <!--</group>-->
-        <!--</menu>-->
-    <!--</item>-->
 
 </menu>

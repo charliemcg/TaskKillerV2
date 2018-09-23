@@ -250,13 +250,6 @@ public class Note extends MainActivity {
 
         noteTextView.setText("");
 
-        //hide remove button
-//        if(dark){
-//            removeBtnDark.setVisibility(View.GONE);
-//        }else{
-//            removeBtnLight.setVisibility(View.GONE);
-//        }
-
         //show add button
         noteEditText.setVisibility(View.VISIBLE);
         if(lightDark) {
@@ -274,38 +267,6 @@ public class Note extends MainActivity {
         };
 
         handler.postDelayed(runnable, 100);
-
-//        Cursor result = db.getData(Integer.parseInt(
-//                MainActivity.sortedIdsForNote.get(activeTask)));
-//        while(result.moveToNext()){
-//            checklistExists = (result.getInt(2) == 1);
-//        }
-//        result.close();
-//
-//        //setting note in database to nothing
-//        db.updateData(MainActivity.sortedIdsForNote
-//                .get(activeTask), "", checklistExists);
-//
-//        noteTextView.setText("");
-//
-//        //hide remove button
-////        if(dark){
-////            removeBtnDark.setVisibility(View.GONE);
-////        }else{
-////            removeBtnLight.setVisibility(View.GONE);
-////        }
-//
-//        if(!mute) {
-//            trash.start();
-//        }
-//
-//        //show add button
-//        noteEditText.setVisibility(View.VISIBLE);
-//        if(lightDark) {
-//            submitNoteBtnLight.setVisibility(View.VISIBLE);
-//        }else{
-//            submitNoteBtnDark.setVisibility(View.VISIBLE);
-//        }
 
     }
 

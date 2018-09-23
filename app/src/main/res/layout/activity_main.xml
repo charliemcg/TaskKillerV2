@@ -55,7 +55,6 @@
                     android:background="@drawable/white_button"
                     android:onClick="setHighlightWhite"
                     android:soundEffectsEnabled="false"/>
-                <!--android:background="@color/white"-->
 
                 <Button
                     android:id="@+id/black"
@@ -450,9 +449,6 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:text="Subtasks DB"/>
-
-    <!--app:theme="@style/ActionBarThemeOverlay"-->
-    <!--app:popupTheme="@style/ActionBarPopupThemeOverlay"-->
 
     <ListView
         android:layout_width="match_parent"
