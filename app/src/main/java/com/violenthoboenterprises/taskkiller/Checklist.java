@@ -209,6 +209,8 @@ public class Checklist extends MainActivity {
                 //removes completed task from view
                 if(isKilled && subTasksClickable){
 
+                    vibrate.vibrate(50);
+
                     if(!mute){
                         blip.start();
                     }
@@ -294,6 +296,8 @@ public class Checklist extends MainActivity {
                     //Don't allow blank tasks
                     if(!checklistTaskName.equals("")) {
 
+                        vibrate.vibrate(50);
+
                         if(!mute) {
                             blip.start();
                         }
@@ -339,6 +343,8 @@ public class Checklist extends MainActivity {
 
                 //Actions to occur when editing sub tasks
                 }else if(actionId == EditorInfo.IME_ACTION_DONE && subTaskBeingEdited){
+
+                    vibrate.vibrate(50);
 
                     if(!mute) {
                         blip.start();

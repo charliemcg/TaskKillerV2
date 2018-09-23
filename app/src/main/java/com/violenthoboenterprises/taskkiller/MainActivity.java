@@ -458,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         blip.start();
                     }
 
-//                    vibrate.vibrate(50);
+                    vibrate.vibrate(50);
 
                     //checking if task has been killed
                     Boolean killed = false;
@@ -545,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 goToMyAdapter = true;
 
-//                vibrate.vibrate(50);
+                vibrate.vibrate(50);
 
                 //Show keyboard
                 keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
@@ -718,7 +718,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 //Actions to take when creating new task
                 if((actionId == EditorInfo.IME_ACTION_DONE) && !taskBeingEdited){
 
-
+                    vibrate.vibrate(50);
 
                     //Text box and keyboard disappear
                     taskNameEditText.setVisibility(View.GONE);
@@ -791,6 +791,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 //Actions to take when editing existing task
                 }else if(actionId == EditorInfo.IME_ACTION_DONE){
+
+                    vibrate.vibrate(50);
 
                     taskNameEditText.setVisibility(View.GONE);
 
@@ -952,6 +954,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+
+        vibrate.vibrate(50);
 
         //TODO find out if return statements are necessary
         //noinspection SimplifiableIfStatement
@@ -1667,7 +1671,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     //Tasks are not clickable if keyboard is up
                     if(tasksAreClickable && !completeTask) {
 
-//                    vibrate.vibrate(50);
+                        vibrate.vibrate(50);
 
                         //checking if task has been killed
                         Boolean killed = false;
@@ -1792,6 +1796,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void setHighlight(String s) {
+
+        vibrate.vibrate(50);
+
         if(!mute){
             blip.start();
         }
@@ -1904,6 +1911,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     public void removeAds(View view) {
 
+        vibrate.vibrate(50);
+
         if(!mute) {
             chime.start();
         }
@@ -1915,6 +1924,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     public void getReminders(View view) {
+
+        vibrate.vibrate(50);
 
         if(!mute){
             chime.start();
@@ -1928,6 +1939,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     public void cycleColors(View view) {
 
+        vibrate.vibrate(50);
+
         if(!mute){
             chime.start();
         }
@@ -1939,6 +1952,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     public void unlockAll(View view) {
+
+        vibrate.vibrate(50);
 
         if(!mute){
             chime.start();

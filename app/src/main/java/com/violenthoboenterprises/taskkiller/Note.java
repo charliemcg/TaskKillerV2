@@ -139,7 +139,7 @@ public class Note extends MainActivity {
             @Override
             public boolean onLongClick(View view) {
 
-//                MainActivity.vibrate.vibrate(50);
+                MainActivity.vibrate.vibrate(50);
 
                 //hide remove button
                 if(lightDark){
@@ -177,8 +177,6 @@ public class Note extends MainActivity {
             @Override
             public void onClick(View v) {
 
-//                MainActivity.vibrate.vibrate(50);
-
                 remove(true);
 
             }
@@ -188,8 +186,6 @@ public class Note extends MainActivity {
         removeBtnLight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                MainActivity.vibrate.vibrate(50);
 
                 remove(false);
 
@@ -299,6 +295,8 @@ public class Note extends MainActivity {
 
         //Don't allow blank notes
         if(!theNote.equals("")){
+
+            vibrate.vibrate(50);
 
             if(!mute) {
                 blip.start();

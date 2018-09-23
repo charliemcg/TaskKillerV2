@@ -30,11 +30,11 @@ public class AlertReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         //retrieving task name to set as notification name
-        createNotification(context, "");
+        createNotification(context, String.valueOf(intent.getStringExtra("ToDo")), "", "");
 
     }
 
-    public void createNotification(Context context, String msgAlert){
+    public void createNotification(Context context, String msg, String msgText, String msgAlert){
 
         //defining intent and action to perform
         PendingIntent notificIntent = PendingIntent.getActivity(context, 1,
@@ -47,7 +47,7 @@ public class AlertReceiver extends BroadcastReceiver {
         builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory
                         .decodeResource(context.getResources(), R.drawable.bell))
-                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert);
+                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert).setContentText(msg/*Text*/);
 
         //Sets background of small icon
         builder.setColorized(true).setColor(Color.parseColor(MainActivity.highlight));

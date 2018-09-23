@@ -226,6 +226,8 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
     private void markAsDone(int position, String finalDbTaskId) {
 
+        MainActivity.vibrate.vibrate(50);
+
         Rect screen = new Rect();
 
         Checklist.checklistRootView.getWindowVisibleDisplayFrame(screen);

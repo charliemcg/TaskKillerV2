@@ -1433,7 +1433,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.add.setVisibility(View.VISIBLE);
                 MainActivity.addIcon.setVisibility(View.VISIBLE);
 
-//                MainActivity.vibrate.vibrate(50);
+                MainActivity.vibrate.vibrate(50);
 
                 MainActivity.params.height = MainActivity.addHeight;
                 MainActivity.iconParams.height = MainActivity.addIconHeight;
@@ -1735,6 +1735,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
+                        MainActivity.vibrate.vibrate(50);
+
                         if(!MainActivity.mute){
                             MainActivity.blip.start();
                         }
@@ -1767,6 +1769,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
+                        MainActivity.vibrate.vibrate(50);
+
                         if(!MainActivity.mute){
                             MainActivity.blip.start();
                         }
@@ -1784,6 +1788,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        MainActivity.vibrate.vibrate(50);
 
                         if(!MainActivity.mute){
                             MainActivity.blip.start();
@@ -1818,6 +1824,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     @Override
                     public void onClick(View v) {
 
+                        MainActivity.vibrate.vibrate(50);
+
                         if(!MainActivity.mute){
                             MainActivity.blip.start();
                         }
@@ -1850,6 +1858,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         oneHourBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(final View v) {
+
+                                MainActivity.vibrate.vibrate(50);
 
                                 if(!MainActivity.mute){
                                     MainActivity.blip.start();
@@ -2352,6 +2362,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         fourHourBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(final View v) {
+
+                                MainActivity.vibrate.vibrate(50);
 
                                 if(!MainActivity.mute){
                                     MainActivity.blip.start();
@@ -2888,6 +2900,8 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void onClick(final View v) {
 
+                                MainActivity.vibrate.vibrate(50);
+
                                 if(!MainActivity.mute){
                                     MainActivity.blip.start();
                                 }
@@ -3379,11 +3393,11 @@ class MyAdapter extends ArrayAdapter<String> {
                         taskOverdueRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
                                 R.anim.exit_out_right));
 
-                        final Handler handler = new Handler();
+//                        final Handler handler = new Handler();
 
-                        final Runnable runnable = new Runnable() {
-                            @Override
-                            public void run() {
+//                        final Runnable runnable = new Runnable() {
+//                            @Override
+//                            public void run() {
 
                                 MainActivity.vibrate.vibrate(100);
 
@@ -3447,7 +3461,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.add.setVisibility(View.VISIBLE);
                                     MainActivity.addIcon.setVisibility(View.VISIBLE);
 
-//                            MainActivity.vibrate.vibrate(50);
+                                    MainActivity.vibrate.vibrate(50);
 
                                     MainActivity.params.height = MainActivity.addHeight;
                                     MainActivity.iconParams.height = MainActivity.addIconHeight;
@@ -3684,8 +3698,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                                 }
-                            }};
-                        handler.postDelayed(runnable, 600);
+//                            }};
+//                        handler.postDelayed(runnable, 600);
                     }
                 });
 
@@ -3693,6 +3707,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 taskIgnore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        MainActivity.vibrate.vibrate(50);
 
                         if(!MainActivity.mute){
                             MainActivity.blip.start();
@@ -3791,6 +3807,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View view) {
 
+                    MainActivity.vibrate.vibrate(50);
+
                     //Updates the view
                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -3881,7 +3899,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.add.setVisibility(View.VISIBLE);
                         MainActivity.addIcon.setVisibility(View.VISIBLE);
 
-//                        MainActivity.vibrate.vibrate(50);
+                        MainActivity.vibrate.vibrate(50);
 
                         MainActivity.params.height = MainActivity.addHeight;
                         MainActivity.iconParams.height = MainActivity.addIconHeight;
@@ -4102,6 +4120,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    MainActivity.vibrate.vibrate(50);
+
                     //clear out all data related to alarm
 //                    if(finalDbIgnored){
 //
@@ -4266,6 +4286,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 @Override
                                 public void onClick(final View v) {
 
+                                    MainActivity.vibrate.vibrate(50);
+
                                     if(!MainActivity.mute){
                                         MainActivity.blip.start();
                                     }
@@ -4314,8 +4336,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.add.setVisibility(View.VISIBLE);
                                             MainActivity.addIcon.setVisibility(View.VISIBLE);
 
-//                                    MainActivity.vibrate.vibrate(50);
-
                                             MainActivity.params.height = MainActivity.addHeight;
                                             MainActivity.iconParams.height =
                                                     MainActivity.addIconHeight;
@@ -4336,6 +4356,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 @Override
                                 public void onClick(View v) {
 
+                                    MainActivity.vibrate.vibrate(50);
+
                                     if(!MainActivity.mute){
                                         MainActivity.blip.start();
                                     }
@@ -4353,6 +4375,8 @@ class MyAdapter extends ArrayAdapter<String> {
                             repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+
+                                    MainActivity.vibrate.vibrate(50);
 
                                     if(!MainActivity.mute){
                                         MainActivity.blip.start();
@@ -4462,13 +4486,15 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    MainActivity.vibrate.vibrate(50);
+
                     if(!MainActivity.mute){
                         MainActivity.blip.start();
                     }
 
                     MainActivity.checklistShowing = true;
 
-//                    MainActivity.vibrate.vibrate(50);
+                    MainActivity.vibrate.vibrate(50);
 
                     MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
 
@@ -4482,11 +4508,13 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    MainActivity.vibrate.vibrate(50);
+
                     if(!MainActivity.mute){
                         MainActivity.blip.start();
                     }
 
-//                    MainActivity.vibrate.vibrate(50);
+                    MainActivity.vibrate.vibrate(50);
 
                     MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
 
@@ -4499,6 +4527,8 @@ class MyAdapter extends ArrayAdapter<String> {
             dateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    MainActivity.vibrate.vibrate(50);
 
                     if(!MainActivity.mute){
                         MainActivity.blip.start();
@@ -4515,6 +4545,8 @@ class MyAdapter extends ArrayAdapter<String> {
             daily.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    MainActivity.vibrate.vibrate(50);
 
                     if(!MainActivity.mute){
                         MainActivity.blip.start();
@@ -4563,6 +4595,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    MainActivity.vibrate.vibrate(50);
+
                     if(!MainActivity.mute){
                         MainActivity.blip.start();
                     }
@@ -4609,6 +4643,8 @@ class MyAdapter extends ArrayAdapter<String> {
             monthly.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    MainActivity.vibrate.vibrate(50);
 
                     if(!MainActivity.mute){
                         MainActivity.blip.start();
