@@ -742,9 +742,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 //Actions to take when creating new task
                 if((actionId == EditorInfo.IME_ACTION_DONE) && !taskBeingEdited){
 
-                    if(!mute) {
-                        blip.start();
-                    }
+
 
                     //Text box and keyboard disappear
                     taskNameEditText.setVisibility(View.GONE);
@@ -816,10 +814,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 //Actions to take when editing existing task
                 }else if(actionId == EditorInfo.IME_ACTION_DONE){
-
-                    if(!mute) {
-                        blip.start();
-                    }
 
                     taskNameEditText.setVisibility(View.GONE);
 
@@ -2145,8 +2139,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        }
 
         //TODO find out what's going on here. Mute back button?
-        AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false);
+//        AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+//        mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 
         //TODO check if this line is needed
         sortedIdsForNote = sortedIDs;
@@ -2169,8 +2163,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
 
         //TODO find out what's going on here. Mute back button?
-        AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+//        AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+//        mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true);
 
     }
 

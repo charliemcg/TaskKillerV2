@@ -209,6 +209,10 @@ public class Checklist extends MainActivity {
                 //removes completed task from view
                 if(isKilled && subTasksClickable){
 
+                    if(!mute){
+                        blip.start();
+                    }
+
                     checklist.remove(position);
 
                     subTasksKilled.remove(position);
