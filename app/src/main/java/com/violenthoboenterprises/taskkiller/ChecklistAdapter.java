@@ -276,7 +276,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 Checklist.subTasksKilled.set(position, true);
 
                 if(!MainActivity.mute) {
-                    MainActivity.punch.start();
+                    MainActivity.blip.start();
                 }
 
                 notifyDataSetChanged();

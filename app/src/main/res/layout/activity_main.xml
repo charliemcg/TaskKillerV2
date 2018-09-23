@@ -16,7 +16,8 @@
         app:subtitle="No Excuses"
         app:subtitleTextColor="@color/gray"
         android:elevation="4dp"
-        app:popupTheme="@style/ThemeOverlay.MyTheme"/>
+        app:popupTheme="@style/ThemeOverlay.MyTheme"
+        android:soundEffectsEnabled="false"/>
 
     <LinearLayout
         android:id="@+id/colorPicker"
@@ -240,7 +241,8 @@
             android:layout_margin="10dp"
             android:orientation="horizontal"
             android:onClick="removeAds"
-            android:background="@drawable/purchases_dropshadow">
+            android:background="@drawable/purchases_dropshadow"
+            android:soundEffectsEnabled="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -286,7 +288,8 @@
             android:layout_margin="10dp"
             android:orientation="horizontal"
             android:onClick="getReminders"
-            android:background="@drawable/purchases_dropshadow">
+            android:background="@drawable/purchases_dropshadow"
+            android:soundEffectsEnabled="false">
 
             <ImageView
                 android:id="@+id/getRemindersImage"
@@ -332,7 +335,8 @@
             android:layout_margin="10dp"
             android:orientation="horizontal"
             android:onClick="cycleColors"
-            android:background="@drawable/purchases_dropshadow">
+            android:background="@drawable/purchases_dropshadow"
+            android:soundEffectsEnabled="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -378,7 +382,8 @@
             android:layout_margin="10dp"
             android:onClick="unlockAll"
             android:orientation="horizontal"
-            android:background="@drawable/purchases_dropshadow">
+            android:background="@drawable/purchases_dropshadow"
+            android:soundEffectsEnabled="false">
 
             <ImageView
                 android:id="@+id/unlockAllImage"

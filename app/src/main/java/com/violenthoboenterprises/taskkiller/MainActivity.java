@@ -248,6 +248,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static MediaPlayer sweep;
     //Default sound played throughout the app
     static MediaPlayer blip;
+    //Sound played when user selects an in-app purchase
+    static MediaPlayer chime;
 
     //The action bar
     private Toolbar topToolbar;
@@ -294,10 +296,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     TextView cycleColorsDescription;
     TextView unlockAllTitle;
     TextView unlockAllDescription;
-    ImageView removeAdsImageWhite;
-    ImageView getRemindersImageWhite;
-    ImageView cycleColorsImageWhite;
-    ImageView unlockAllImageWhite;
     ImageView removeAdsImage;
     ImageView getRemindersImage;
     ImageView cycleColorsImage;
@@ -358,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         punch = MediaPlayer.create(this, R.raw.punch);
         sweep = MediaPlayer.create(this, R.raw.sweep);
         blip = MediaPlayer.create(this, R.raw.blip);
+        chime = MediaPlayer.create(this, R.raw.chime);
         mute = false;
         colorPicker = findViewById(R.id.colorPicker);
         white = findViewById(R.id.white);
@@ -743,6 +742,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 //Actions to take when creating new task
                 if((actionId == EditorInfo.IME_ACTION_DONE) && !taskBeingEdited){
 
+                    if(!mute) {
+                        blip.start();
+                    }
+
                     //Text box and keyboard disappear
                     taskNameEditText.setVisibility(View.GONE);
 
@@ -813,6 +816,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 //Actions to take when editing existing task
                 }else if(actionId == EditorInfo.IME_ACTION_DONE){
+
+                    if(!mute) {
+                        blip.start();
+                    }
 
                     taskNameEditText.setVisibility(View.GONE);
 
@@ -2049,6 +2056,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     public void removeAds(View view) {
+
+        if(!mute) {
+            chime.start();
+        }
+
         //TODO replace this test stuff with real stuff
         bp.purchase(this, "android.test.purchased");
 //        purchases.setVisibility(View.GONE);
@@ -2057,6 +2069,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     public void getReminders(View view) {
+
+        if(!mute){
+            chime.start();
+        }
+
         //TODO replace this test stuff with real stuff
         bp.purchase(this, "android.test.purchased");
 //        purchases.setVisibility(View.GONE);
@@ -2065,6 +2082,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     public void cycleColors(View view) {
+
+        if(!mute){
+            chime.start();
+        }
+
         //TODO replace this test stuff with real stuff
         bp.purchase(this, "android.test.purchased");
 //        purchases.setVisibility(View.GONE);
@@ -2073,6 +2095,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     public void unlockAll(View view) {
+
+        if(!mute){
+            chime.start();
+        }
+
         //TODO replace this test stuff with real stuff
         bp.purchase(this, "android.test.purchased");
 //        purchases.setVisibility(View.GONE);

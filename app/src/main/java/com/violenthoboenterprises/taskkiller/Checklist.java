@@ -290,6 +290,10 @@ public class Checklist extends MainActivity {
                     //Don't allow blank tasks
                     if(!checklistTaskName.equals("")) {
 
+                        if(!mute) {
+                            blip.start();
+                        }
+
                         //adding data to arraylists
                         checklist.add(checklistTaskName);
                         subTasksKilled.add(false);
@@ -324,6 +328,10 @@ public class Checklist extends MainActivity {
 
                 //Actions to occur when editing sub tasks
                 }else if(actionId == EditorInfo.IME_ACTION_DONE && subTaskBeingEdited){
+
+                    if(!mute) {
+                        blip.start();
+                    }
 
                     //Hide keyboard
                     keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);

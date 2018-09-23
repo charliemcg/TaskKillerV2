@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -30,6 +31,8 @@ public class Note extends MainActivity {
     InputMethodManager keyboard;
     ImageView removeBtnDark;
     ImageView removeBtnLight;
+    ImageView removeBtnDarkOpen;
+    ImageView removeBtnLightOpen;
     ImageView submitNoteBtnDark;
     ImageView submitNoteBtnLight;
     String TAG;
@@ -51,6 +54,8 @@ public class Note extends MainActivity {
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         removeBtnDark = findViewById(R.id.removeBtnDark);
         removeBtnLight = findViewById(R.id.removeBtnLight);
+        removeBtnDarkOpen = findViewById(R.id.removeBtnDarkOpen);
+        removeBtnLightOpen = findViewById(R.id.removeBtnLightOpen);
         submitNoteBtnDark = findViewById(R.id.submitNoteBtnDark);
         submitNoteBtnLight = findViewById(R.id.submitNoteBtnLight);
         TAG = "Note";
@@ -193,9 +198,46 @@ public class Note extends MainActivity {
 
     }
 
-    private void remove(boolean dark) {
+    private void remove(final boolean dark) {
 
-        Cursor result = db.getData(Integer.parseInt(
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                if(dark){
+                    removeBtnDark.setVisibility(View.GONE);
+                    removeBtnDarkOpen.setVisibility(View.VISIBLE);
+                }else{
+                    removeBtnLight.setVisibility(View.GONE);
+                    removeBtnLightOpen.setVisibility(View.VISIBLE);
+                }
+
+                vibrate.vibrate(50);
+
+                if(!mute) {
+                    trash.start();
+                }
+
+                final Handler handler2 = new Handler();
+                final Runnable runnable2 = new Runnable(){
+                    public void run(){
+                        if(dark){
+                            removeBtnDarkOpen.setVisibility(View.GONE);
+                            removeBtnDark.setVisibility(View.VISIBLE);
+                        }else{
+                            removeBtnLightOpen.setVisibility(View.GONE);
+                            removeBtnLight.setVisibility(View.VISIBLE);
+                        }
+                        final Handler handler3 = new Handler();
+                        final Runnable runnable3 = new Runnable() {
+                            @Override
+                            public void run() {
+                                if(dark){
+                                    removeBtnDark.setVisibility(View.GONE);
+                                }else{
+                                    removeBtnLight.setVisibility(View.GONE);
+                                }
+                                        Cursor result = db.getData(Integer.parseInt(
                 MainActivity.sortedIdsForNote.get(activeTask)));
         while(result.moveToNext()){
             checklistExists = (result.getInt(2) == 1);
@@ -209,15 +251,11 @@ public class Note extends MainActivity {
         noteTextView.setText("");
 
         //hide remove button
-        if(dark){
-            removeBtnDark.setVisibility(View.GONE);
-        }else{
-            removeBtnLight.setVisibility(View.GONE);
-        }
-
-        if(!mute) {
-            trash.start();
-        }
+//        if(dark){
+//            removeBtnDark.setVisibility(View.GONE);
+//        }else{
+//            removeBtnLight.setVisibility(View.GONE);
+//        }
 
         //show add button
         noteEditText.setVisibility(View.VISIBLE);
@@ -226,6 +264,48 @@ public class Note extends MainActivity {
         }else{
             submitNoteBtnDark.setVisibility(View.VISIBLE);
         }
+                            }
+                        };
+                        handler3.postDelayed(runnable3, 100);
+                    }
+                };
+                handler2.postDelayed(runnable2, 100);
+            }
+        };
+
+        handler.postDelayed(runnable, 100);
+
+//        Cursor result = db.getData(Integer.parseInt(
+//                MainActivity.sortedIdsForNote.get(activeTask)));
+//        while(result.moveToNext()){
+//            checklistExists = (result.getInt(2) == 1);
+//        }
+//        result.close();
+//
+//        //setting note in database to nothing
+//        db.updateData(MainActivity.sortedIdsForNote
+//                .get(activeTask), "", checklistExists);
+//
+//        noteTextView.setText("");
+//
+//        //hide remove button
+////        if(dark){
+////            removeBtnDark.setVisibility(View.GONE);
+////        }else{
+////            removeBtnLight.setVisibility(View.GONE);
+////        }
+//
+//        if(!mute) {
+//            trash.start();
+//        }
+//
+//        //show add button
+//        noteEditText.setVisibility(View.VISIBLE);
+//        if(lightDark) {
+//            submitNoteBtnLight.setVisibility(View.VISIBLE);
+//        }else{
+//            submitNoteBtnDark.setVisibility(View.VISIBLE);
+//        }
 
     }
 
@@ -258,6 +338,10 @@ public class Note extends MainActivity {
 
         //Don't allow blank notes
         if(!theNote.equals("")){
+
+            if(!mute) {
+                blip.start();
+            }
 
             //Set text view to the note content
             noteTextView.setText(theNote);
