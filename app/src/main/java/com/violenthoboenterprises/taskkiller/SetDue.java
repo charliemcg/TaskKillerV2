@@ -35,26 +35,27 @@ import java.util.Calendar;
 public class SetDue extends MainActivity {
 
     String TAG;
-//    private Toolbar dueToolbar;
-    Button dateButton, timeButton, setButton;
+    private Toolbar dueToolbar;
+    Button dateButton, timeButton;
+    View pickerRoot;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.due_picker);
         overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
-//        dueToolbar = findViewById(R.id.dueToolbar);
+        dueToolbar = findViewById(R.id.dueToolbar);
 
         TAG = "SetDue";
 
         dateButton = findViewById(R.id.dateBtn);
         timeButton = findViewById(R.id.timeBtn);
-        setButton = findViewById(R.id.setBtn);
+//        setButton = findViewById(R.id.setBtn);
+        pickerRoot = findViewById(R.id.pickerRoot);
 
         dateButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 DialogFragment dialogfragment = new DatePickerDialogTheme1();
 
@@ -68,7 +69,6 @@ public class SetDue extends MainActivity {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 DialogFragment dialogfragment = new DatePickerDialogTheme2();
 
@@ -78,42 +78,40 @@ public class SetDue extends MainActivity {
 
         });
 
-        setButton.setOnClickListener(new View.OnClickListener() {
+//        setButton.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//
+//                db.updateSetAlarm(true);
+//
+//                Intent intent = new Intent();
+//
+//                intent.setClass(getApplicationContext(), MainActivity.class);
+//
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//
+//                startActivity(intent);
+//
+//            }
+//
+//        });
 
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-//                setAlarm = true;
-
-                db.updateSetAlarm(true);
-
-                Intent intent = new Intent();
-
-                intent.setClass(getApplicationContext(), MainActivity.class);
-
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                startActivity(intent);
-
-            }
-
-        });
-
-//        noteToolbar.setTitleTextColor(Color.parseColor(highlight));
+        dueToolbar.setTitleTextColor(Color.parseColor(highlight));
 
         //getting task data
-//        String dbTask = "";
-//        Cursor dbTaskResult = MainActivity.db.getUniversalData();
-//        while (dbTaskResult.moveToNext()) {
-//            dbTask = dbTaskResult.getString(4);
-//        }
-//        dbTaskResult = db.getData(Integer.parseInt(dbTask));
-//        while (dbTaskResult.moveToNext()) {
-//            dbTask = dbTaskResult.getString(4);
-//        }
-//        dbTaskResult.close();
+        String dbTask = "";
+        Cursor dbTaskResult = MainActivity.db.getUniversalData();
+        while (dbTaskResult.moveToNext()) {
+            dbTask = dbTaskResult.getString(4);
+        }
+        dbTaskResult = db.getData(Integer.parseInt(dbTask));
+        while (dbTaskResult.moveToNext()) {
+            dbTask = dbTaskResult.getString(4);
+        }
+        dbTaskResult.close();
 
-//        dueToolbar.setTitle(dbTask);
+        dueToolbar.setTitle(dbTask);
 
         //getting app-wide data
         Cursor dbResult = MainActivity.db.getUniversalData();
@@ -124,13 +122,15 @@ public class SetDue extends MainActivity {
         dbResult.close();
 
         if(mute){
-
+            //TODO mute sounds and add vibrations
         }
 
         if(!lightDark){
-
+            pickerRoot.setBackgroundColor(Color.parseColor("#333333"));
+            dueToolbar.setBackgroundColor(Color.parseColor("#333333"));
         }else{
-
+            pickerRoot.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            dueToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
     }
@@ -261,9 +261,9 @@ public class SetDue extends MainActivity {
 
     }
 
-//    @Override
-//    //Return to main screen when back pressed
-//    public void onBackPressed() {
+    @Override
+    //Return to main screen when back pressed
+    public void onBackPressed() {
 //
 //        Intent intent = new Intent();
 //
@@ -273,6 +273,17 @@ public class SetDue extends MainActivity {
 //
 //        startActivity(intent);
 //
-//    }
+
+        db.updateSetAlarm(true);
+
+        Intent intent = new Intent();
+
+        intent.setClass(getApplicationContext(), MainActivity.class);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+
+    }
 
 }
