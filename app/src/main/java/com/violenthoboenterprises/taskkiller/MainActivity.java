@@ -2,6 +2,7 @@ package com.violenthoboenterprises.taskkiller;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -117,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static boolean snoozeRowShowing;
     //used to indicate that a task was long clicked
     static boolean longClicked;
+    //Used to indicate that alarm needs to be set
+//    static boolean setAlarm;
     static boolean killedAnimation;
     static boolean alarmAnimation;
     static boolean reinstateAnimation;
@@ -150,6 +153,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static int thePosition;
     //portrait width of device
     static int deviceWidthPortrait;
+    //selected year
+//    static int selectedYear;
+//    //selected month
+//    static int selectedMonth;
+//    //selected day
+//    static int selectedDay;
+//    //selected hour
+//    static int selectedHour;
+//    //selected minute
+//    static int selectedMinute;
 
     //Interval between repeating alarms
     static long repeatInterval;
@@ -407,6 +420,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidthPortrait = displayMetrics.widthPixels;
+//        setAlarm = false;
+//        selectedYear = 0;
+//        selectedMonth = 0;
+//        selectedDay = 0;
+//        selectedMinute = 0;
+//        selectedHour = 0;
 //        showDb = findViewById(R.id.showDb);
 //      showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
@@ -674,7 +693,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
 //                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
 //                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
-//                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n\n");
+//                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
+//                    buffer.append("SETALARM: " + res.getString(10) + "\n");
+//                    buffer.append("YEAR: " + res.getString(11) + "\n");
+//                    buffer.append("MONTH: " + res.getString(12) + "\n");
+//                    buffer.append("DAY: " + res.getString(13) + "\n");
+//                    buffer.append("HOUR: " + res.getString(14) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(15) + "\n\n");
 //                }
 //                res.close();
 //

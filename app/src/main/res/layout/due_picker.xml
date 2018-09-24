@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/dueToolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--style="@style/HeaderBar"-->
+        <!--android:elevation="4dp"/>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical">-->
+
+        <!--&lt;!&ndash;<DatePicker&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/datePicker"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="0dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_weight="1"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:datePickerMode="spinner"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:background="@drawable/red_layout_border"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;style="@style/date_picker_theme"&ndash;&gt;-->
+        <!--<DatePicker-->
+            <!--android:id="@+id/datePicker"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="3"-->
+            <!--android:background="@drawable/red_layout_border"/>-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1">-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TimePicker-->
+                    <!--android:id="@+id/timePicker"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="2"-->
+                    <!--android:timePickerMode="spinner"-->
+                    <!--android:layout_gravity="left"-->
+                    <!--android:background="@drawable/red_layout_border"/>-->
+                <!--&lt;!&ndash;style="@style/time_picker_theme"&ndash;&gt;-->
+
+                <!--<Button-->
+                    <!--android:id="@+id/date"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_margin="16dp"-->
+                    <!--android:text="Set"-->
+                    <!--android:background="@drawable/red_layout_border"/>-->
+
+            <!--</LinearLayout>-->
+
+        <!--</RelativeLayout>-->
+
+    <!--</LinearLayout>-->
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16dp"
+            android:text="date goes here..."/>
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16dp"
+            android:text="time goes here..."/>
+
+        <Button
+            android:id="@+id/dateBtn"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16dp"
+            android:text="Set Date"
+            android:background="@drawable/red_layout_border"/>
+        <Button
+            android:id="@+id/timeBtn"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16dp"
+            android:text="Set Time"
+            android:background="@drawable/red_layout_border"/>
+
+        <Button
+            android:id="@+id/setBtn"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16dp"
+            android:text="Set"
+            android:background="@drawable/red_layout_border"/>
+
+</LinearLayout>

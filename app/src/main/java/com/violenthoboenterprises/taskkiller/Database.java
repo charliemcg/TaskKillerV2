@@ -66,6 +66,12 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL8 = "CYCLECOLORS";
     public static final String UCOL9 = "TASKLISTSIZE";
     public static final String UCOL10 = "CHECKLISTLISTSIZE";
+    public static final String UCOL11 = "SETALARM";
+    public static final String UCOL12 = "YEAR";
+    public static final String UCOL13 = "MONTH";
+    public static final String UCOL14 = "DAY";
+    public static final String UCOL15 = "HOUR";
+    public static final String UCOL16 = "MINUTE";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -97,7 +103,8 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("create table " + UTABLE + " (ID INTEGER PRIMARY KEY, MUTE BOOLEAN," +
                 " HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT, ADSREMOVED BOOLEAN," +
                 " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
-                "CHECKLISTLISTSIZE INTEGER)");
+                "CHECKLISTLISTSIZE INTEGER, SETALARM BOOLEAN, YEAR INTEGER, MONTH INTEGER," +
+                " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -190,6 +197,12 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL8, false);
         content.put(UCOL9, 0);
         content.put(UCOL10, 0);
+        content.put(UCOL11, false);
+        content.put(UCOL12, 0);
+        content.put(UCOL13, 0);
+        content.put(UCOL14, 0);
+        content.put(UCOL15, 0);
+        content.put(UCOL16, 0);
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -580,6 +593,53 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean updateSetAlarm(boolean set){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL11, set);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateYear(int value){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL12, value);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateMonth(int value){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL13, value);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateDay(int value){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL14, value);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateHour(int value){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL15, value);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateMinute(int value){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL16, value);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
     public boolean updateSubtask(String id, String subtaskId, String subtask){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
