@@ -1736,7 +1736,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     public void setHighlightBlack(View view) {
-        setHighlight("#FFFFFFFF");
+        setHighlight("#FF000000");
     }
 
     public void setHighlightLightYellow(View view) {
