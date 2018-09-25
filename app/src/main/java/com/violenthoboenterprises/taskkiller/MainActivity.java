@@ -1114,37 +1114,52 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //            String blah = Integer.toHexString(Integer.parseInt(highlight));
 //            Log.i(TAG, "blah: " + blah);
 
+            String digits = "0123456789ABCDEF";
+            int val = 0;
+            for (int i = 1; i < highlight.length(); i++) {
+                char c = highlight.charAt(i);
+                int d = digits.indexOf(c);
+                val = 16 * val + d;
+            }
+
             ColorPickerDialogBuilder
                     .with(MainActivity.this)
                     .setTitle("Choose color")
-                    .initialColor(/*Integer.parseInt(highlight)*//*-16728064*/-16711936)
-//                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                    .initialColor(val)
+                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                     .density(10)
                     .noSliders()
                     .setOnColorSelectedListener(new OnColorSelectedListener() {
                         @Override
                         public void onColorSelected(int selectedColor) {
 //                            toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
-                            Log.i(TAG, "Color Selected: " + selectedColor);
-//
+                            String tempHighlight = "#" + Integer.toHexString(selectedColor);
+                            topToolbar.setTitleTextColor(Color.parseColor(tempHighlight));
+                            addIcon.setTextColor(Color.parseColor(tempHighlight));
+                            taskNameEditText.setBackgroundColor(Color.parseColor(tempHighlight));
+                            setDividers(lightDark);
                         }
                     })
                     .setPositiveButton("ok", new ColorPickerClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-//                            changeBackgroundColor(selectedColor);
-                            Log.i(TAG, "Changing colors: " + selectedColor);
-                            highlight = String.valueOf(selectedColor);
-                            add.setTextColor(selectedColor);
-                            String blah = "#" + Integer.toHexString(selectedColor);
-                            Log.i(TAG, "Hex: " + blah);
-                            db.updateHighlight(String.valueOf(blah));
+//                            highlight = String.valueOf(selectedColor);
+                            highlight = "#" + Integer.toHexString(selectedColor);
+                            db.updateHighlight(highlight);
+//                            topToolbar.setTitleTextColor(Color.parseColor(highlight));
+//                            addIcon.setTextColor(Color.parseColor(highlight));
+//                            taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+//                            setDividers(lightDark);
                         }
                     })
                     .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //TODO probably do nothing
+                            topToolbar.setTitleTextColor(Color.parseColor(highlight));
+                            addIcon.setTextColor(Color.parseColor(highlight));
+                            taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+                            setDividers(lightDark);
                         }
                     })
                     .build()
@@ -1891,7 +1906,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             val = 16 * val + d;
         }
         int[] colors = {0, val, 0};
-        Log.i(TAG, String.valueOf(val));
         theListView.setDivider(new GradientDrawable
                 (GradientDrawable.Orientation.RIGHT_LEFT, colors));
         if(!lightDark) {
