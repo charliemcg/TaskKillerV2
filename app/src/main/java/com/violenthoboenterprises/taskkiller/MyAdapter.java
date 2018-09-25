@@ -5271,6 +5271,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         PendingIntent.FLAG_UPDATE_CURRENT);
             }
 
+            //TODO find out if this month thing is needed
             //actions specific to monthly repeating task
             if(dbRepeatInterval.equals("month")){
 
@@ -5286,6 +5287,9 @@ class MyAdapter extends ArrayAdapter<String> {
                 Calendar calendar = Calendar.getInstance();
 
                 Calendar currentDate = new GregorianCalendar();
+
+                Log.i(TAG, "year: " + year + " month: " + month + " day: " + day);
+                Log.i(TAG, "year: " + currentDate.get(Calendar.YEAR) + " month: " + currentDate.get(Calendar.MONTH) + " day: " + currentDate.get(Calendar.DAY_OF_MONTH));
 
                 //Checking that task due date is in the future
                 if (currentDate.get(Calendar.YEAR) > year) {

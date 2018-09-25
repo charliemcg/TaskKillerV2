@@ -40,7 +40,11 @@ public class SetDue extends MainActivity {
     String TAG;
     private Toolbar dueToolbar;
     LinearLayout dateButton, timeButton;
-    Button daily, weekly, monthly, cancelRepeat, killAlarm;
+    Button daily;
+    Button weekly;
+    Button monthly;
+    Button cancelRepeat;
+    static Button killAlarm;
     View pickerRoot;
     TextView dateTextView;
     TextView timeTextView;
@@ -115,6 +119,7 @@ public class SetDue extends MainActivity {
                 alarmYear = alarmResult.getString(6);
             }
             alarmResult.close();
+            killAlarm.setVisibility(View.VISIBLE);
             dateTextView.setText(alarmDay + "/" + alarmMonth + "/" + alarmYear);
             timeTextView.setText(alarmHour + ":" + alarmMinute + alarmAmpm);
         }
@@ -348,6 +353,8 @@ public class SetDue extends MainActivity {
                 weekly.setBackgroundColor(Color.parseColor("#AAAAAA"));
                 monthly.setBackgroundColor(Color.parseColor("#AAAAAA"));
 
+                killAlarm.setVisibility(View.GONE);
+
             }
 
         });
@@ -373,6 +380,8 @@ public class SetDue extends MainActivity {
                         AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, this, year, month, day);
             }
 
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
             return datePickerDialog;
         }
 
@@ -389,10 +398,12 @@ public class SetDue extends MainActivity {
             }
 
             db.updateYear(year);
-            db.updateMonth(month + 1);
+            db.updateMonth(month);
             db.updateDay(day);
 
             setDue = true;
+
+            killAlarm.setVisibility(View.VISIBLE);
 
         }
 
@@ -435,6 +446,8 @@ public class SetDue extends MainActivity {
             db.updateMinute(minute);
 
             setDue = true;
+
+            killAlarm.setVisibility(View.VISIBLE);
 
         }
     }
