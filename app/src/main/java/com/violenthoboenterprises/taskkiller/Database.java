@@ -640,6 +640,7 @@ public class Database extends SQLiteOpenHelper {
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }
+
     public boolean updateSubtask(String id, String subtaskId, String subtask){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();

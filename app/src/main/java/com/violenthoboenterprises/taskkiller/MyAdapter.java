@@ -5288,11 +5288,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 Calendar currentDate = new GregorianCalendar();
 
-                Log.i(TAG, "year: " + year + " month: " + month + " day: " + day);
-                Log.i(TAG, "year: " + currentDate.get(Calendar.YEAR) + " month: " + currentDate.get(Calendar.MONTH) + " day: " + currentDate.get(Calendar.DAY_OF_MONTH));
-
                 //Checking that task due date is in the future
-                if (currentDate.get(Calendar.YEAR) > year) {
+                /*if (currentDate.get(Calendar.YEAR) > year) {
                     MainActivity.toast.setText(R.string.cannotSetTask);
                     final Handler handler = new Handler();
 
@@ -5366,7 +5363,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     };
 
                     handler.postDelayed(runnable, 500);
-                } else if (currentDate.get(Calendar.YEAR) == year
+                } else */if (currentDate.get(Calendar.YEAR) == year
                         && currentDate.get(Calendar.MONTH) == month
                         && currentDate.get(Calendar.DAY_OF_MONTH) ==
                         day
