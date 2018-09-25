@@ -4246,6 +4246,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         //actions to occur if alarm not already set
                         if (!finalDbDue) {
 
+                            MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
+
                             getContext().startActivity(dueIntent);
 
 //                            MainActivity.dateRowShowing = true;
@@ -4295,230 +4297,236 @@ class MyAdapter extends ArrayAdapter<String> {
                         //actions to occur when viewing alarm properties
                         } else {
 
-                            propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
-                                    R.anim.exit_out_right));
+                            MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
 
-                            ViewGroup.LayoutParams params = killAlarmBtn.getLayoutParams();
-                            params.width = MainActivity.deviceWidthPortrait / 3;
-                            killAlarmBtn.setLayoutParams(params);
-                            resetAlarmBtn.setLayoutParams(params);
-                            repeatAlarmBtn.setLayoutParams(params);
-
-                            final Handler handler = new Handler();
-
-                            final Runnable runnable = new Runnable() {
-                                public void run() {
-                                    propertyRow.setVisibility(View.GONE);
-                                    alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation
-                                            (getContext(), R.anim.enter_from_right));
-                                    alarmOptionsRow.setVisibility(View.VISIBLE);
-                                }
-                            };
-
-                            handler.postDelayed(runnable, 600);
-
-                            MainActivity.alarmOptionsShowing = true;
-
-                            if (finalDbRepeat) {
-
-                                repeatAlarmBtnText.setText(R.string.cancelRepeat);
-
-                            }
-
-                            //Actions to occur if user selects 'remove alarm'
-                            killAlarmBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(final View v) {
-
-                                    MainActivity.vibrate.vibrate(50);
-
-                                    if(!MainActivity.mute){
-                                        MainActivity.blip.start();
-                                    }
-
-                                    alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation
-                                            (getContext(), R.anim.exit_out_right));
-
-                                    final Handler handler = new Handler();
-
-                                    final Runnable runnable = new Runnable() {
-                                        @Override
-                                        public void run() {
-//                                    MainActivity.noteDb.updateDue(String.valueOf(MainActivity
-//                                            .sortedIDs.get(MainActivity.activeTask)), false);
-//                                    MainActivity.noteDb.removeTimestamp(String.valueOf(MainActivity
-//                                            .sortedIDs.get(MainActivity.activeTask)));
-                                            MainActivity.db.updateDue(String.valueOf(MainActivity
-                                                    .sortedIDs.get(position)), false);
-                                            MainActivity.db.removeTimestamp(String.valueOf
-                                                    (MainActivity.sortedIDs.get(position)));
-
-                                            MainActivity.db.updateRepeat(MainActivity.sortedIDs
-                                                    .get(position), false);
-
-                                            MainActivity.pendIntent = PendingIntent.getBroadcast
-                                                    (getContext(), Integer.parseInt(MainActivity
-                                                                    .sortedIDs.get(position)),
-                                                            MainActivity.alertIntent,
-                                                            PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                            MainActivity.alarmManager.cancel
-                                                    (MainActivity.pendIntent);
-
-                                            MainActivity.db.updateAlarmData
-                                                    (String.valueOf(MainActivity.sortedIDs
-                                                                    .get(position)),
-                                                            "", "", "",
-                                                            "", "", "");
-
-                                            MainActivity.alarmOptionsShowing = false;
-
-                                            reorderList();
-
-                                            MainActivity.taskPropertiesShowing = false;
-
-                                            MainActivity.add.setVisibility(View.VISIBLE);
-                                            MainActivity.addIcon.setVisibility(View.VISIBLE);
-
-                                            MainActivity.params.height = MainActivity.addHeight;
-                                            MainActivity.iconParams.height =
-                                                    MainActivity.addIconHeight;
-
-                                            v.setLayoutParams(MainActivity.params);
-                                            v.setLayoutParams(MainActivity.iconParams);
-
-                                            notifyDataSetChanged();
-
-                                        }};
-                                    handler.postDelayed(runnable, 600);
-
-                                }
-                            });
-
-                            //Actions to occur if user selects 'change due date'
-                            resetAlarmBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    MainActivity.vibrate.vibrate(50);
-
-                                    if(!MainActivity.mute){
-                                        MainActivity.blip.start();
-                                    }
-
-                                    MainActivity.datePickerShowing = true;
-
-                                    MainActivity.dateRowShowing = true;
-
-                                    notifyDataSetChanged();
-
-                                }
-                            });
-
-                            //Actions to occur if user selects 'repeat alarm'
-                            repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    MainActivity.vibrate.vibrate(50);
-
-                                    if(!MainActivity.mute){
-                                        MainActivity.blip.start();
-                                    }
-
-                                    if (finalDbRepeat) {
-
-                                        alarmOptionsRow.startAnimation(
-                                                AnimationUtils.loadAnimation(getContext(),
-                                                        R.anim.exit_out_right));
-
-                                        final Handler handler = new Handler();
-
-                                        final Runnable runnable = new Runnable() {
-                                            @Override
-                                            public void run() {
-
-                                        MainActivity.db.updateRepeat(MainActivity.sortedIDs
-                                                .get(MainActivity.activeTask), false);
-
-                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                                getContext(), Integer.parseInt(MainActivity
-                                                        .sortedIDs.get(position) + 1000),
-                                                MainActivity.alertIntent, PendingIntent
-                                                        .FLAG_UPDATE_CURRENT);
-
-                                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-
-                                        Calendar prevCalendar = new GregorianCalendar();
-                                        String newHour = "";
-                                        if (finalAlarmAmpm.equals("1")) {
-                                            int tempHour = Integer.parseInt(finalAlarmHour) + 12;
-                                            newHour = String.valueOf(tempHour);
-                                        }
-                                        if (!finalAlarmHour.equals("")) {
-                                            prevCalendar.set(Integer.parseInt(finalAlarmYear),
-                                                    Integer.parseInt(finalAlarmMonth),
-                                                    Integer.parseInt(finalAlarmDay),
-                                                    Integer.parseInt(newHour),
-                                                    Integer.parseInt(finalAlarmMinute));
-                                        }
-
-                                        MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                prevCalendar.getTimeInMillis(),
-                                                MainActivity.pendIntent);
-
-                                        alarmOptionsRow.setVisibility(View.GONE);
-
-                                        MainActivity.repeatShowing = false;
-                                        MainActivity.repeating = false;
-                                        MainActivity.alarmOptionsShowing = false;
-                                        MainActivity.taskPropertiesShowing = false;
-
-                                        MainActivity.theListView.setAdapter
-                                                (MainActivity.theAdapter[0]);
-
-                                        //Returns the 'add' button
-                                        MainActivity.params.height = MainActivity.addHeight;
-                                        MainActivity.iconParams.height = MainActivity.addIconHeight;
-
-                                        MainActivity.add.setLayoutParams(MainActivity.params);
-                                        MainActivity.addIcon.setLayoutParams
-                                                (MainActivity.iconParams);
-
-                                            }};
-
-                                        handler.postDelayed(runnable, 600);
-
-                                    //show repeat row
-                                    } else {
-
-                                        alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
-
-                                        ViewGroup.LayoutParams params = daily.getLayoutParams();
-                                        params.width = MainActivity.deviceWidthPortrait / 3;
-                                        daily.setLayoutParams(params);
-                                        weekly.setLayoutParams(params);
-                                        monthly.setLayoutParams(params);
-
-                                        final Handler handler = new Handler();
-
-                                        final Runnable runnable = new Runnable() {
-                                            public void run() {
-                                                alarmOptionsRow.setVisibility(View.GONE);
-                                                repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
-                                                repeatRow.setVisibility(View.VISIBLE);
-                                            }
-                                        };
-
-                                        handler.postDelayed(runnable, 600);
-
-                                        MainActivity.repeatShowing = true;
-
-                                    }
-
-                                }
-                            });
-
+                            getContext().startActivity(dueIntent);
+//
+//                            propertyRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
+//                                    R.anim.exit_out_right));
+//
+//                            ViewGroup.LayoutParams params = killAlarmBtn.getLayoutParams();
+//                            params.width = MainActivity.deviceWidthPortrait / 3;
+//                            killAlarmBtn.setLayoutParams(params);
+//                            resetAlarmBtn.setLayoutParams(params);
+//                            repeatAlarmBtn.setLayoutParams(params);
+//
+//                            final Handler handler = new Handler();
+//
+//                            final Runnable runnable = new Runnable() {
+//                                public void run() {
+//                                    propertyRow.setVisibility(View.GONE);
+//                                    alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation
+//                                            (getContext(), R.anim.enter_from_right));
+//                                    alarmOptionsRow.setVisibility(View.VISIBLE);
+//                                }
+//                            };
+//
+//                            handler.postDelayed(runnable, 600);
+//
+//                            MainActivity.alarmOptionsShowing = true;
+//
+//                            if (finalDbRepeat) {
+//
+//                                repeatAlarmBtnText.setText(R.string.cancelRepeat);
+//
+//                            }
+//
+//                            //Actions to occur if user selects 'remove alarm'
+//                            killAlarmBtn.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(final View v) {
+//
+//                                    MainActivity.vibrate.vibrate(50);
+//
+//                                    if(!MainActivity.mute){
+//                                        MainActivity.blip.start();
+//                                    }
+//
+//                                    alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation
+//                                            (getContext(), R.anim.exit_out_right));
+//
+//                                    final Handler handler = new Handler();
+//
+//                                    final Runnable runnable = new Runnable() {
+//                                        @Override
+//                                        public void run() {
+////                                    MainActivity.noteDb.updateDue(String.valueOf(MainActivity
+////                                            .sortedIDs.get(MainActivity.activeTask)), false);
+////                                    MainActivity.noteDb.removeTimestamp(String.valueOf(MainActivity
+////                                            .sortedIDs.get(MainActivity.activeTask)));
+//                                            MainActivity.db.updateDue(String.valueOf(MainActivity
+//                                                    .sortedIDs.get(position)), false);
+//                                            MainActivity.db.removeTimestamp(String.valueOf
+//                                                    (MainActivity.sortedIDs.get(position)));
+//
+//                                            MainActivity.db.updateRepeat(MainActivity.sortedIDs
+//                                                    .get(position), false);
+//
+//                                            MainActivity.pendIntent = PendingIntent.getBroadcast
+//                                                    (getContext(), Integer.parseInt(MainActivity
+//                                                                    .sortedIDs.get(position)),
+//                                                            MainActivity.alertIntent,
+//                                                            PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                                            MainActivity.alarmManager.cancel
+//                                                    (MainActivity.pendIntent);
+//
+//                                            MainActivity.db.updateAlarmData
+//                                                    (String.valueOf(MainActivity.sortedIDs
+//                                                                    .get(position)),
+//                                                            "", "", "",
+//                                                            "", "", "");
+//
+//                                            MainActivity.alarmOptionsShowing = false;
+//
+//                                            reorderList();
+//
+//                                            MainActivity.taskPropertiesShowing = false;
+//
+//                                            MainActivity.add.setVisibility(View.VISIBLE);
+//                                            MainActivity.addIcon.setVisibility(View.VISIBLE);
+//
+//                                            MainActivity.params.height = MainActivity.addHeight;
+//                                            MainActivity.iconParams.height =
+//                                                    MainActivity.addIconHeight;
+//
+//                                            v.setLayoutParams(MainActivity.params);
+//                                            v.setLayoutParams(MainActivity.iconParams);
+//
+//                                            notifyDataSetChanged();
+//
+//                                        }};
+//                                    handler.postDelayed(runnable, 600);
+//
+//                                }
+//                            });
+//
+//                            //Actions to occur if user selects 'change due date'
+//                            resetAlarmBtn.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//
+//                                    MainActivity.vibrate.vibrate(50);
+//
+//                                    if(!MainActivity.mute){
+//                                        MainActivity.blip.start();
+//                                    }
+//
+//                                    getContext().startActivity(dueIntent);
+//
+////                                    MainActivity.datePickerShowing = true;
+////
+////                                    MainActivity.dateRowShowing = true;
+////
+////                                    notifyDataSetChanged();
+//
+//                                }
+//                            });
+//
+//                            //Actions to occur if user selects 'repeat alarm'
+//                            repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//
+//                                    MainActivity.vibrate.vibrate(50);
+//
+//                                    if(!MainActivity.mute){
+//                                        MainActivity.blip.start();
+//                                    }
+//
+//                                    if (finalDbRepeat) {
+//
+//                                        alarmOptionsRow.startAnimation(
+//                                                AnimationUtils.loadAnimation(getContext(),
+//                                                        R.anim.exit_out_right));
+//
+//                                        final Handler handler = new Handler();
+//
+//                                        final Runnable runnable = new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//
+//                                        MainActivity.db.updateRepeat(MainActivity.sortedIDs
+//                                                .get(MainActivity.activeTask), false);
+//
+//                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                                                getContext(), Integer.parseInt(MainActivity
+//                                                        .sortedIDs.get(position) + 1000),
+//                                                MainActivity.alertIntent, PendingIntent
+//                                                        .FLAG_UPDATE_CURRENT);
+//
+//                                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+//
+//                                        Calendar prevCalendar = new GregorianCalendar();
+//                                        String newHour = "";
+//                                        if (finalAlarmAmpm.equals("1")) {
+//                                            int tempHour = Integer.parseInt(finalAlarmHour) + 12;
+//                                            newHour = String.valueOf(tempHour);
+//                                        }
+//                                        if (!finalAlarmHour.equals("")) {
+//                                            prevCalendar.set(Integer.parseInt(finalAlarmYear),
+//                                                    Integer.parseInt(finalAlarmMonth),
+//                                                    Integer.parseInt(finalAlarmDay),
+//                                                    Integer.parseInt(newHour),
+//                                                    Integer.parseInt(finalAlarmMinute));
+//                                        }
+//
+//                                        MainActivity.alarmManager.set(AlarmManager.RTC,
+//                                                prevCalendar.getTimeInMillis(),
+//                                                MainActivity.pendIntent);
+//
+//                                        alarmOptionsRow.setVisibility(View.GONE);
+//
+//                                        MainActivity.repeatShowing = false;
+//                                        MainActivity.repeating = false;
+//                                        MainActivity.alarmOptionsShowing = false;
+//                                        MainActivity.taskPropertiesShowing = false;
+//
+//                                        MainActivity.theListView.setAdapter
+//                                                (MainActivity.theAdapter[0]);
+//
+//                                        //Returns the 'add' button
+//                                        MainActivity.params.height = MainActivity.addHeight;
+//                                        MainActivity.iconParams.height = MainActivity.addIconHeight;
+//
+//                                        MainActivity.add.setLayoutParams(MainActivity.params);
+//                                        MainActivity.addIcon.setLayoutParams
+//                                                (MainActivity.iconParams);
+//
+//                                            }};
+//
+//                                        handler.postDelayed(runnable, 600);
+//
+//                                    //show repeat row
+//                                    } else {
+//
+//                                        alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.exit_out_right));
+//
+//                                        ViewGroup.LayoutParams params = daily.getLayoutParams();
+//                                        params.width = MainActivity.deviceWidthPortrait / 3;
+//                                        daily.setLayoutParams(params);
+//                                        weekly.setLayoutParams(params);
+//                                        monthly.setLayoutParams(params);
+//
+//                                        final Handler handler = new Handler();
+//
+//                                        final Runnable runnable = new Runnable() {
+//                                            public void run() {
+//                                                alarmOptionsRow.setVisibility(View.GONE);
+//                                                repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.enter_from_right));
+//                                                repeatRow.setVisibility(View.VISIBLE);
+//                                            }
+//                                        };
+//
+//                                        handler.postDelayed(runnable, 600);
+//
+//                                        MainActivity.repeatShowing = true;
+//
+//                                    }
+//
+//                                }
+//                            });
+//
 //                        }
                     }
 
