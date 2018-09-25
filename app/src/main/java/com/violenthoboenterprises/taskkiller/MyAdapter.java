@@ -5222,9 +5222,9 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //        }
 
-
         String dbTask = "";
         Integer dbBroadcast = 0;
+        Boolean dbRepeat = false;
         Boolean dbSnooze = false;
         String dbRepeatInterval = "";
         Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
@@ -5232,6 +5232,7 @@ class MyAdapter extends ArrayAdapter<String> {
         while (dbResult.moveToNext()) {
             dbTask = dbResult.getString(4);
             dbBroadcast = dbResult.getInt(7);
+            dbRepeat = dbResult.getInt(8) > 0;
             dbSnooze = dbResult.getInt(10) > 0;
             dbRepeatInterval = dbResult.getString(13);
         }
@@ -5256,31 +5257,6 @@ class MyAdapter extends ArrayAdapter<String> {
         }
         alarmResult.close();
 
-        if(MainActivity.repeating){
-
-            Calendar prevCalendar = new GregorianCalendar();
-            if(alarmAmpm.equals("1")){
-                int tempHour = Integer.parseInt(alarmHour) + 12;
-                alarmHour = String.valueOf(tempHour);
-            }
-            if(!alarmHour.equals("")) {
-                prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
-                        Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
-                        Integer.parseInt(alarmMinute));
-            }
-
-            MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
-                    prevCalendar.getTimeInMillis(),
-                    MainActivity.repeatInterval, MainActivity.pendIntent);
-
-            MainActivity.db.updateRepeat(MainActivity.sortedIDs
-                    .get(position), true);
-
-            MainActivity.repeatShowing = false;
-            MainActivity.repeating = false;
-
-        //actions to occur when setting a normal alarm
-        }else{
 
             if (!dbSnooze) {
                 MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
@@ -5556,7 +5532,31 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
                 };
                 handler.postDelayed(runnable, 600);
+
+        if(dbRepeat){
+
+            Calendar prevCalendar = new GregorianCalendar();
+            if(alarmAmpm.equals("1")){
+                int tempHour = Integer.parseInt(alarmHour) + 12;
+                alarmHour = String.valueOf(tempHour);
             }
+            if(!alarmHour.equals("")) {
+                prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
+                        Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
+                        Integer.parseInt(alarmMinute));
+            }
+
+            MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
+                    prevCalendar.getTimeInMillis(),
+                    MainActivity.repeatInterval, MainActivity.pendIntent);
+
+            MainActivity.db.updateRepeat(MainActivity.sortedIDs
+                    .get(position), true);
+
+//            MainActivity.repeatShowing = false;
+            MainActivity.repeating = false;
+
+        }
 
         }
 

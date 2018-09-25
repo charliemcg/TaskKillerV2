@@ -46,6 +46,7 @@ public class SetDue extends MainActivity {
     TextView timeTextView;
     String repeat;
     static boolean setDue;
+    String dbTaskId;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -73,7 +74,7 @@ public class SetDue extends MainActivity {
 
         //getting task data
         String dbDueTime = "";
-        String dbTaskId = "";
+        dbTaskId = "";
         String dbTask = "";
         boolean dbRepeat = false;
         Cursor dbTaskResult = MainActivity.db.getUniversalData();
@@ -495,8 +496,25 @@ public class SetDue extends MainActivity {
 //        startActivity(intent);
 //
         if(!repeat.equals("none")) {
-            db.updateRepeatInterval(String.valueOf(
-                    sortedIDs.get(activeTask)), repeat);
+            db.updateRepeatInterval(dbTaskId, repeat);
+            db.updateRepeat(dbTaskId, true);
+
+            if(repeat.equals("day")){
+
+                repeatInterval = AlarmManager.INTERVAL_DAY;
+
+                db.updateRepeatInterval(dbTaskId,"day");
+
+                repeating = true;
+
+                taskPropertiesShowing = false;
+
+            }else if(repeat.equals("week")){
+
+            }else if(repeat.equals("month")){
+
+            }
+
         }
 
         if(setDue) {
