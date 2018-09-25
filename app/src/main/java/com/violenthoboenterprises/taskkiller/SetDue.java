@@ -457,9 +457,58 @@ public class SetDue extends MainActivity {
 
             //Set default values of date picker to current date
             final Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int year;
+            int month;
+            int day;
+
+            Cursor alarmResult = MainActivity.db.getAlarmData
+                    (Integer.parseInt(dbTaskId));
+            String alarmHour = "";
+            String alarmMinute = "";
+            String alarmDay = "";
+            String alarmMonth = "";
+            String alarmYear = "";
+            while(alarmResult.moveToNext()){
+                alarmHour = alarmResult.getString(1);
+                alarmMinute = alarmResult.getString(2);
+                alarmDay = alarmResult.getString(4);
+                alarmMonth = alarmResult.getString(5);
+                alarmYear = alarmResult.getString(6);
+            }
+
+            alarmResult.close();
+
+            //getting universal data
+            Cursor uniResult = MainActivity.db.getUniversalData();
+            Boolean uniSetAlarm = false;
+            int uniYear = 0;
+            int uniMonth = 0;
+            int uniDay = 0;
+            int uniHour = 0;
+            int uniMinute = 0;
+            while(uniResult.moveToNext()){
+                uniSetAlarm = uniResult.getInt(10) > 0;
+                uniYear = uniResult.getInt(11);
+                uniMonth = uniResult.getInt(12);
+                uniDay = uniResult.getInt(13);
+                uniHour = uniResult.getInt(14);
+                uniMinute = uniResult.getInt(15);
+            }
+            uniResult.close();
+
+            if(datePicked){
+                year = uniYear;
+                month = uniMonth;
+                day = uniDay;
+            }else if(!alarmDay.equals("") && !alarmMonth.equals("") && !alarmYear.equals("")){
+                year = Integer.parseInt(alarmYear);
+                month = Integer.parseInt(alarmMonth);
+                day = Integer.parseInt(alarmDay);
+            }else{
+                year = calendar.get(Calendar.YEAR);
+                month = calendar.get(Calendar.MONTH);
+                day = calendar.get(Calendar.DAY_OF_MONTH);
+            }
 
             DatePickerDialog datePickerDialog;
 
@@ -560,9 +609,60 @@ public class SetDue extends MainActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState){
 
             //Setting default time picker values to current time
+//            final Calendar calendar = Calendar.getInstance();
+//            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//            int minute = calendar.get(Calendar.MINUTE);
+
+            //Set default values of date picker to current date
             final Calendar calendar = Calendar.getInstance();
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
+            int hour;
+            int minute;
+
+            Cursor alarmResult = MainActivity.db.getAlarmData
+                    (Integer.parseInt(dbTaskId));
+            String alarmHour = "";
+            String alarmMinute = "";
+            String alarmDay = "";
+            String alarmMonth = "";
+            String alarmYear = "";
+            while(alarmResult.moveToNext()){
+                alarmHour = alarmResult.getString(1);
+                alarmMinute = alarmResult.getString(2);
+                alarmDay = alarmResult.getString(4);
+                alarmMonth = alarmResult.getString(5);
+                alarmYear = alarmResult.getString(6);
+            }
+
+            alarmResult.close();
+
+            //getting universal data
+            Cursor uniResult = MainActivity.db.getUniversalData();
+            Boolean uniSetAlarm = false;
+            int uniYear = 0;
+            int uniMonth = 0;
+            int uniDay = 0;
+            int uniHour = 0;
+            int uniMinute = 0;
+            while(uniResult.moveToNext()){
+                uniSetAlarm = uniResult.getInt(10) > 0;
+                uniYear = uniResult.getInt(11);
+                uniMonth = uniResult.getInt(12);
+                uniDay = uniResult.getInt(13);
+                uniHour = uniResult.getInt(14);
+                uniMinute = uniResult.getInt(15);
+            }
+            uniResult.close();
+
+            if(timePicked){
+                minute = uniMinute;
+                hour = uniHour;
+            }else if(!alarmHour.equals("") && !alarmMinute.equals("")){
+                minute = Integer.parseInt(alarmMinute);
+                hour = Integer.parseInt(alarmHour);
+            }else{
+                minute = calendar.get(Calendar.MINUTE);
+                hour = calendar.get(Calendar.HOUR_OF_DAY);
+            }
 
             TimePickerDialog timePickerDialog;
 

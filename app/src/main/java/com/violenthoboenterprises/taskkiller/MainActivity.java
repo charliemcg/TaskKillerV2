@@ -1,10 +1,12 @@
 package com.violenthoboenterprises.taskkiller;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -48,6 +50,10 @@ import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -207,10 +213,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
-    Button showDb;
-    Button showAlarmDb;
+//    Button showDb;
+//    Button showAlarmDb;
 //    Button showSnoozeDb;
-    Button showUniversalDb;
+//    Button showUniversalDb;
 //    Button showSubtasksDb;
 
     //Scrollable list
@@ -426,9 +432,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        selectedDay = 0;
 //        selectedMinute = 0;
 //        selectedHour = 0;
-        showDb = findViewById(R.id.showDb);
-      showAlarmDb = findViewById(R.id.showAlarmDb);
-        showUniversalDb = findViewById(R.id.showUniversalDb);
+//        showDb = findViewById(R.id.showDb);
+//      showAlarmDb = findViewById(R.id.showAlarmDb);
+//        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
         final View child = topToolbar.getChildAt(2);
@@ -583,69 +589,69 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         //Used for debugging purposes
-        showDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllData();
-
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("NOTE: " + res.getString(1) + "\n");
-                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-                    buffer.append("TASK: " + res.getString(4) + "\n");
-                    buffer.append("DUE: " + res.getString(5) + "\n");
-                    buffer.append("KILLED: " + res.getString(6) + "\n");
-                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
-                    buffer.append("REPEAT: " + res.getString(8) + "\n");
-                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
-                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
-                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
-                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
-                    buffer.append("IGNORED: " + res.getString(14) + "\n");
-                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
-                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
-                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
-                }
-                res.close();
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllData();
+//
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("NOTE: " + res.getString(1) + "\n");
+//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+//                    buffer.append("TASK: " + res.getString(4) + "\n");
+//                    buffer.append("DUE: " + res.getString(5) + "\n");
+//                    buffer.append("KILLED: " + res.getString(6) + "\n");
+//                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+//                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+//                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+//                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+//                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
+//                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+//                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
+//                    buffer.append("IGNORED: " + res.getString(14) + "\n");
+//                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
+//                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
+//                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
+//                }
+//                res.close();
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
         //Used for debugging purposes
-        showAlarmDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllAlarmData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("HOUR: " + res.getString(1) + "\n");
-                    buffer.append("MINUTE: " + res.getString(2) + "\n");
-                    buffer.append("AMPM: " + res.getString(3) + "\n");
-                    buffer.append("DAY: " + res.getString(4) + "\n");
-                    buffer.append("MONTH: " + res.getString(5) + "\n");
-                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
-                }
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showAlarmDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllAlarmData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("HOUR: " + res.getString(1) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(2) + "\n");
+//                    buffer.append("AMPM: " + res.getString(3) + "\n");
+//                    buffer.append("DAY: " + res.getString(4) + "\n");
+//                    buffer.append("MONTH: " + res.getString(5) + "\n");
+//                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
+//                }
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
 //        //Used for debugging purposes
 //        showSnoozeDb.setOnClickListener(new View.OnClickListener() {
@@ -674,40 +680,40 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-        showUniversalDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllUniversalData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("MUTE: " + res.getString(1) + "\n");
-                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
-                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
-                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
-                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
-                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
-                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
-                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
-                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
-                    buffer.append("SETALARM: " + res.getString(10) + "\n");
-                    buffer.append("YEAR: " + res.getString(11) + "\n");
-                    buffer.append("MONTH: " + res.getString(12) + "\n");
-                    buffer.append("DAY: " + res.getString(13) + "\n");
-                    buffer.append("HOUR: " + res.getString(14) + "\n");
-                    buffer.append("MINUTE: " + res.getString(15) + "\n\n");
-                }
-                res.close();
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showUniversalDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllUniversalData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("MUTE: " + res.getString(1) + "\n");
+//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
+//                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
+//                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
+//                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
+//                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
+//                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
+//                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
+//                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
+//                    buffer.append("SETALARM: " + res.getString(10) + "\n");
+//                    buffer.append("YEAR: " + res.getString(11) + "\n");
+//                    buffer.append("MONTH: " + res.getString(12) + "\n");
+//                    buffer.append("DAY: " + res.getString(13) + "\n");
+//                    buffer.append("HOUR: " + res.getString(14) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(15) + "\n\n");
+//                }
+//                res.close();
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
         //Used for debugging purposes
 //        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
@@ -1105,24 +1111,63 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 blip.start();
             }
 
-            colorPickerShowing = true;
-            add.setClickable(false);
-            theListView.setOnItemClickListener(null);
-            taskPropertiesShowing = false;
-            onCreateOptionsMenu(topToolbar.getMenu());
-            theListView.setAdapter(theAdapter[0]);
-            colorPicker.startAnimation(AnimationUtils.loadAnimation
-                    (this, R.anim.enter_from_right));
+//            String blah = Integer.toHexString(Integer.parseInt(highlight));
+//            Log.i(TAG, "blah: " + blah);
 
-            final Handler handler = new Handler();
+            ColorPickerDialogBuilder
+                    .with(MainActivity.this)
+                    .setTitle("Choose color")
+                    .initialColor(/*Integer.parseInt(highlight)*//*-16728064*/-16711936)
+//                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                    .density(10)
+                    .noSliders()
+                    .setOnColorSelectedListener(new OnColorSelectedListener() {
+                        @Override
+                        public void onColorSelected(int selectedColor) {
+//                            toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
+                            Log.i(TAG, "Color Selected: " + selectedColor);
+//
+                        }
+                    })
+                    .setPositiveButton("ok", new ColorPickerClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+//                            changeBackgroundColor(selectedColor);
+                            Log.i(TAG, "Changing colors: " + selectedColor);
+                            highlight = String.valueOf(selectedColor);
+                            add.setTextColor(selectedColor);
+                            String blah = "#" + Integer.toHexString(selectedColor);
+                            Log.i(TAG, "Hex: " + blah);
+                            db.updateHighlight(String.valueOf(blah));
+                        }
+                    })
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //TODO probably do nothing
+                        }
+                    })
+                    .build()
+                    .show();
 
-            final Runnable runnable = new Runnable() {
-                public void run() {
-                    colorPicker.setVisibility(View.VISIBLE);
-                }
-            };
-
-            handler.postDelayed(runnable, 200);
+//            colorPickerShowing = true;
+//            add.setClickable(false);
+//            theListView.setOnItemClickListener(null);
+//            taskPropertiesShowing = false;
+//            onCreateOptionsMenu(topToolbar.getMenu());
+//            theListView.setAdapter(theAdapter[0]);
+//            colorPicker.startAnimation(AnimationUtils.loadAnimation
+//                    (this, R.anim.enter_from_right));
+//
+//            final Handler handler = new Handler();
+//
+//            final Runnable runnable = new Runnable() {
+//                public void run() {
+//                    colorPicker.setVisibility(View.VISIBLE);
+//                }
+//            };
+//
+//            handler.postDelayed(runnable, 200);
 
             return true;
         } else if (id == R.id.buy) {
@@ -1846,6 +1891,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             val = 16 * val + d;
         }
         int[] colors = {0, val, 0};
+        Log.i(TAG, String.valueOf(val));
         theListView.setDivider(new GradientDrawable
                 (GradientDrawable.Orientation.RIGHT_LEFT, colors));
         if(!lightDark) {

@@ -70,9 +70,9 @@ class MyAdapter extends ArrayAdapter<String> {
         //For displaying the date and time pickers
 //        final TableRow dateRow = taskView.findViewById(R.id.dateTime);
         //For displaying the alarm options
-        final TableRow alarmOptionsRow = taskView.findViewById(R.id.alarmOptions);
+//        final TableRow alarmOptionsRow = taskView.findViewById(R.id.alarmOptions);
         //For displaying the repeat options
-        final TableRow repeatRow = taskView.findViewById(R.id.repeat);
+//        final TableRow repeatRow = taskView.findViewById(R.id.repeat);
         //For displaying the ad
         final TableRow adRow = taskView.findViewById(R.id.adRow);
         //For displaying the snooze options
@@ -130,15 +130,15 @@ class MyAdapter extends ArrayAdapter<String> {
         //Sets task to repeat monthly
         final LinearLayout monthly = taskView.findViewById(R.id.monthly);
         //Removes alarm from task
-        final LinearLayout killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
+//        final LinearLayout killAlarmBtn = taskView.findViewById(R.id.killAlarmBtn);
         //Allows user to change the due date of a task
-        final LinearLayout resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
+//        final LinearLayout resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
         //Displays repeat options
-        final LinearLayout repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
+//        final LinearLayout repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
         //The display of status icons
         final LinearLayout statusLayout = taskView.findViewById(R.id.statusLayout);
         //Repeat button text needs to change depending on what state the repeat is in
-        final TextView repeatAlarmBtnText = taskView.findViewById(R.id.repeatAlarmBtnText);
+//        final TextView repeatAlarmBtnText = taskView.findViewById(R.id.repeatAlarmBtnText);
         //Task status icons are transparent. This is so the background colour can be
         // changed giving the illusion that the icon image color has changed.
         // Each icon has it's own relative layout.
@@ -351,9 +351,9 @@ class MyAdapter extends ArrayAdapter<String> {
             daily.setSoundEffectsEnabled(false);
             weekly.setSoundEffectsEnabled(false);
             monthly.setSoundEffectsEnabled(false);
-            killAlarmBtn.setSoundEffectsEnabled(false);
-            resetAlarmBtn.setSoundEffectsEnabled(false);
-            repeatAlarmBtn.setSoundEffectsEnabled(false);
+//            killAlarmBtn.setSoundEffectsEnabled(false);
+//            resetAlarmBtn.setSoundEffectsEnabled(false);
+//            repeatAlarmBtn.setSoundEffectsEnabled(false);
             snoozeTask.setSoundEffectsEnabled(false);
             taskDone.setSoundEffectsEnabled(false);
             taskIgnore.setSoundEffectsEnabled(false);
@@ -372,10 +372,10 @@ class MyAdapter extends ArrayAdapter<String> {
             statusLayout.setBackgroundColor(Color.parseColor("#333333"));
             theTextView.setBackgroundColor(Color.parseColor("#333333"));
 //            dateButton.setBackgroundColor(Color.parseColor("#333333"));
-            alarmOptionsRow.setBackgroundColor(Color.parseColor("#333333"));
+//            alarmOptionsRow.setBackgroundColor(Color.parseColor("#333333"));
             snoozeRow.setBackgroundColor(Color.parseColor("#333333"));
             taskOverdueRow.setBackgroundColor(Color.parseColor("#333333"));
-            repeatRow.setBackgroundColor(Color.parseColor("#333333"));
+//            repeatRow.setBackgroundColor(Color.parseColor("#333333"));
 //            dateRow.setBackgroundColor(Color.parseColor("#333333"));
 //            datePicker.setBackgroundColor(Color.parseColor("#333333"));
 //            timePicker.setBackgroundColor(Color.parseColor("#333333"));
@@ -387,7 +387,7 @@ class MyAdapter extends ArrayAdapter<String> {
             noteBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             killAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             resetAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
-            repeatAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+//            repeatAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             dailyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             weeklyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             monthlyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
@@ -430,10 +430,10 @@ class MyAdapter extends ArrayAdapter<String> {
             statusLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
             theTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 //            dateButton.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            alarmOptionsRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            alarmOptionsRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
             snoozeRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
             taskOverdueRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            repeatRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            repeatRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
 //            dateRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
 //            datePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
 //            timePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -445,7 +445,7 @@ class MyAdapter extends ArrayAdapter<String> {
             noteBtnText.setTextColor(Color.parseColor("#000000"));
             killAlarmBtnText.setTextColor(Color.parseColor("#000000"));
             resetAlarmBtnText.setTextColor(Color.parseColor("#000000"));
-            repeatAlarmBtnText.setTextColor(Color.parseColor("#000000"));
+//            repeatAlarmBtnText.setTextColor(Color.parseColor("#000000"));
             dailyBtnText.setTextColor(Color.parseColor("#000000"));
             weeklyBtnText.setTextColor(Color.parseColor("#000000"));
             monthlyBtnText.setTextColor(Color.parseColor("#000000"));
@@ -666,33 +666,33 @@ class MyAdapter extends ArrayAdapter<String> {
             }
             MainActivity.exitTaskProperties = false;
         }else if(MainActivity.exitAlarmOptions && (position == MainActivity.activeTask)){
-            alarmOptionsRow.setVisibility(View.VISIBLE);
-            alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation
-                    (getContext(), R.anim.exit_out_left));
+//            alarmOptionsRow.setVisibility(View.VISIBLE);
+//            alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation
+//                    (getContext(), R.anim.exit_out_left));
 
-            final Handler handler = new Handler();
-
-            final Runnable runnable = new Runnable() {
-                public void run() {
-                    alarmOptionsRow.setVisibility(View.GONE);
-                }
-            };
-
-            handler.postDelayed(runnable, 400);
+//            final Handler handler = new Handler();
+//
+//            final Runnable runnable = new Runnable() {
+//                public void run() {
+//                    alarmOptionsRow.setVisibility(View.GONE);
+//                }
+//            };
+//
+//            handler.postDelayed(runnable, 400);
         }else if(MainActivity.exitDatePicker && (position == MainActivity.activeTask)){
 //            dateRow.setVisibility(View.VISIBLE);
 //            dateRow.startAnimation(AnimationUtils.loadAnimation
 //                    (getContext(), R.anim.exit_out_left));
 
-            final Handler handler = new Handler();
-
-            final Runnable runnable = new Runnable() {
-                public void run() {
+//            final Handler handler = new Handler();
+//
+//            final Runnable runnable = new Runnable() {
+//                public void run() {
 //                    dateRow.setVisibility(View.GONE);
-                }
-            };
+//                }
+//            };
 
-            handler.postDelayed(runnable, 400);
+//            handler.postDelayed(runnable, 400);
         }else if(MainActivity.exitTimePicker && (position == MainActivity.activeTask)){
 
 //            dateRow.setVisibility(View.VISIBLE);
@@ -701,15 +701,15 @@ class MyAdapter extends ArrayAdapter<String> {
 //            timePicker.startAnimation(AnimationUtils.loadAnimation
 //                    (getContext(), R.anim.exit_out_left));
 
-            final Handler handler = new Handler();
+//            final Handler handler = new Handler();
 
-            final Runnable runnable = new Runnable() {
-                public void run() {
+//            final Runnable runnable = new Runnable() {
+//                public void run() {
 //                    timePicker.setVisibility(View.GONE);
-                }
-            };
-
-            handler.postDelayed(runnable, 400);
+//                }
+//            };
+//
+//            handler.postDelayed(runnable, 400);
         }
 
         //TODO decide if alarm reinstatement is to be a thing in the first place
@@ -1745,110 +1745,110 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            (getContext(), R.anim.exit_out_left));
                     MainActivity.exitChangeDueDate = false;
                 }else {
-                    repeatRow.setVisibility(View.VISIBLE);
-                    repeatRow.startAnimation(AnimationUtils.loadAnimation
-                            (getContext(), R.anim.exit_out_left));
+//                    repeatRow.setVisibility(View.VISIBLE);
+//                    repeatRow.startAnimation(AnimationUtils.loadAnimation
+//                            (getContext(), R.anim.exit_out_left));
                     MainActivity.exitRepeat = false;
                 }
 
-                ViewGroup.LayoutParams params = killAlarmBtn.getLayoutParams();
-                params.width = MainActivity.deviceWidthPortrait / 3;
-                killAlarmBtn.setLayoutParams(params);
-                resetAlarmBtn.setLayoutParams(params);
-                repeatAlarmBtn.setLayoutParams(params);
+//                ViewGroup.LayoutParams params = killAlarmBtn.getLayoutParams();
+//                params.width = MainActivity.deviceWidthPortrait / 3;
+//                killAlarmBtn.setLayoutParams(params);
+//                resetAlarmBtn.setLayoutParams(params);
+//                repeatAlarmBtn.setLayoutParams(params);
+//
+//                final Handler handler = new Handler();
 
-                final Handler handler = new Handler();
-
-                final Runnable runnable = new Runnable() {
-                    public void run() {
+//                final Runnable runnable = new Runnable() {
+//                    public void run() {
 //                        dateRow.setVisibility(View.GONE);
-                        repeatRow.setVisibility(View.GONE);
-                        alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation
-                                (getContext(), R.anim.enter_from_right));
+//                        repeatRow.setVisibility(View.GONE);
+//                        alarmOptionsRow.startAnimation(AnimationUtils.loadAnimation
+//                                (getContext(), R.anim.enter_from_right));
+//
+//                        alarmOptionsRow.setVisibility(View.VISIBLE);
+//                    }
+//                };
 
-                        alarmOptionsRow.setVisibility(View.VISIBLE);
-                    }
-                };
-
-                handler.postDelayed(runnable, 400);
+//                handler.postDelayed(runnable, 400);
 
                 MainActivity.alarmOptionsShowing = true;
 
                 //Actions to occur if user selects 'remove alarm'
-                killAlarmBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        MainActivity.vibrate.vibrate(50);
-
-                        if(!MainActivity.mute){
-                            MainActivity.blip.start();
-                        }
-
-                        MainActivity.db.updateDue(String.valueOf(MainActivity
-                                .sortedIDs.get(MainActivity.activeTask)), false);
-
-                        MainActivity.db.updateRepeat(MainActivity.sortedIDs
-                                .get(position), false);
-
-                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                Integer.parseInt(MainActivity.sortedIDs.get(position)),
-                                MainActivity.alertIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT);
-
-                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-
-                        MainActivity.db.updateAlarmData(String.valueOf(MainActivity.activeTask),
-                                "", "", "", "", "", "");
-
-                        MainActivity.alarmOptionsShowing = false;
-
-                        notifyDataSetChanged();
-
-                    }
-                });
+//                killAlarmBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        MainActivity.vibrate.vibrate(50);
+//
+//                        if(!MainActivity.mute){
+//                            MainActivity.blip.start();
+//                        }
+//
+//                        MainActivity.db.updateDue(String.valueOf(MainActivity
+//                                .sortedIDs.get(MainActivity.activeTask)), false);
+//
+//                        MainActivity.db.updateRepeat(MainActivity.sortedIDs
+//                                .get(position), false);
+//
+//                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+//                                Integer.parseInt(MainActivity.sortedIDs.get(position)),
+//                                MainActivity.alertIntent,
+//                                PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+//
+//                        MainActivity.db.updateAlarmData(String.valueOf(MainActivity.activeTask),
+//                                "", "", "", "", "", "");
+//
+//                        MainActivity.alarmOptionsShowing = false;
+//
+//                        notifyDataSetChanged();
+//
+//                    }
+//                });
 
                 //Actions to occur if user selects 'change due date'
-                resetAlarmBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        MainActivity.vibrate.vibrate(50);
-
-                        if(!MainActivity.mute){
-                            MainActivity.blip.start();
-                        }
-
-                        MainActivity.datePickerShowing = true;
-
-                        MainActivity.dateRowShowing = true;
-
-                        notifyDataSetChanged();
-
-                    }
-                });
+//                resetAlarmBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        MainActivity.vibrate.vibrate(50);
+//
+//                        if(!MainActivity.mute){
+//                            MainActivity.blip.start();
+//                        }
+//
+//                        MainActivity.datePickerShowing = true;
+//
+//                        MainActivity.dateRowShowing = true;
+//
+//                        notifyDataSetChanged();
+//
+//                    }
+//                });
 
                 //Actions to occur if user selects 'repeat alarm'
-                repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        MainActivity.vibrate.vibrate(50);
-
-                        if(!MainActivity.mute){
-                            MainActivity.blip.start();
-                        }
-
-                        alarmOptionsRow.setVisibility(View.GONE);
-
-                        repeatRow.startAnimation(AnimationUtils.loadAnimation
-                                (getContext(), android.R.anim.slide_in_left));
-                        repeatRow.setVisibility(View.VISIBLE);
-
-                        MainActivity.alarmOptionsShowing = false;
-
-                    }
-                });
+//                repeatAlarmBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        MainActivity.vibrate.vibrate(50);
+//
+//                        if(!MainActivity.mute){
+//                            MainActivity.blip.start();
+//                        }
+//
+////                        alarmOptionsRow.setVisibility(View.GONE);
+////
+////                        repeatRow.startAnimation(AnimationUtils.loadAnimation
+////                                (getContext(), android.R.anim.slide_in_left));
+////                        repeatRow.setVisibility(View.VISIBLE);
+//
+//                        MainActivity.alarmOptionsShowing = false;
+//
+//                    }
+//                });
 
             //show the overdue properties
             }else if(dbOverdue && !dbSnooze && !dbIgnored){
@@ -4606,8 +4606,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.blip.start();
                     }
 
-                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
-                            R.anim.exit_out_right));
+//                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
+//                            R.anim.exit_out_right));
 
                     final Handler handler = new Handler();
 
@@ -4619,7 +4619,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.repeatInterval =AlarmManager.INTERVAL_DAY;
 
-                    MainActivity.db.updateRepeatInterval(String.valueOf(
+                        MainActivity.db.updateRepeatInterval(String.valueOf(
                             MainActivity.sortedIDs.get(position)),"day");
 
                         MainActivity.repeating =true;
@@ -4656,8 +4656,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.blip.start();
                     }
 
-                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
-                            R.anim.exit_out_right));
+//                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
+//                            R.anim.exit_out_right));
 
                     final Handler handler = new Handler();
 
@@ -4706,8 +4706,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.blip.start();
                     }
 
-                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
-                            R.anim.exit_out_right));
+//                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
+//                            R.anim.exit_out_right));
 
                     final Handler handler = new Handler();
 
