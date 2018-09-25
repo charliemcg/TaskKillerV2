@@ -76,6 +76,7 @@ public class SetDue extends MainActivity {
         String dbDueTime = "";
         dbTaskId = "";
         String dbTask = "";
+        String dbRepeatInterval = "";
         boolean dbRepeat = false;
         Cursor dbTaskResult = MainActivity.db.getUniversalData();
         while (dbTaskResult.moveToNext()) {
@@ -86,6 +87,7 @@ public class SetDue extends MainActivity {
             dbDueTime = dbTaskResult.getString(3);
             dbTask = dbTaskResult.getString(4);
             dbRepeat = dbTaskResult.getInt(8) > 0;
+            dbRepeatInterval = dbTaskResult.getString(13);
         }
         dbTaskResult.close();
 
@@ -119,6 +121,12 @@ public class SetDue extends MainActivity {
 
         if(!dbRepeat){
             cancelRepeat.setBackgroundColor(Color.parseColor("#0000FF"));
+        }else if(dbRepeatInterval.equals("day")){
+            daily.setBackgroundColor(Color.parseColor("#0000FF"));
+        }else if(dbRepeatInterval.equals("week")){
+            weekly.setBackgroundColor(Color.parseColor("#0000FF"));
+        }else if(dbRepeatInterval.equals("month")){
+            monthly.setBackgroundColor(Color.parseColor("#0000FF"));
         }
 
         //getting app-wide data
@@ -511,7 +519,19 @@ public class SetDue extends MainActivity {
 
             }else if(repeat.equals("week")){
 
+                repeatInterval = (AlarmManager.INTERVAL_DAY * 7);
+
+                db.updateRepeatInterval(dbTaskId, "week");
+
+                repeating = true;
+
+                taskPropertiesShowing = false;
+
             }else if(repeat.equals("month")){
+
+                db.updateRepeatInterval(dbTaskId, "month");
+
+                MainActivity.taskPropertiesShowing = false;
 
             }
 
