@@ -1391,6 +1391,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 if(Integer.valueOf(hour) == 0){
                     hour = getContext().getString(R.string.twelveNumerals);
+                }else if(Integer.valueOf(hour) > 12){
+                    hour = String.valueOf(Integer.parseInt(hour) - 12);
                 }
                 if(Integer.valueOf(minute) < 10){
                     if(Integer.valueOf(ampm) == 0) {
