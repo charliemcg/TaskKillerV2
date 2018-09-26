@@ -40,7 +40,7 @@ import java.util.Calendar;
 public class SetDue extends MainActivity {
 
     static String TAG;
-    private Toolbar dueToolbar;
+    private static Toolbar dueToolbar;
     LinearLayout dateButton, timeButton, darkRepeat, lightRepeat;
     static ImageView time, timeFadedDark, timeFadedLight, calendar, calendarFadedDark, calendarFadedLight;
     ImageView dailyDark, weeklyDark, monthlyDark, cancelRepeatDark,
@@ -318,6 +318,8 @@ public class SetDue extends MainActivity {
 
                 taskPropertiesShowing =false;
 
+                dueToolbar.getMenu().getItem(0).setVisible(true);
+
             }
 
         });
@@ -347,6 +349,8 @@ public class SetDue extends MainActivity {
                 repeating =true;
 
                 taskPropertiesShowing =false;
+
+                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -378,6 +382,8 @@ public class SetDue extends MainActivity {
 
                 taskPropertiesShowing =false;
 
+                dueToolbar.getMenu().getItem(0).setVisible(true);
+
             }
 
         });
@@ -407,6 +413,8 @@ public class SetDue extends MainActivity {
                 repeating =true;
 
                 taskPropertiesShowing =false;
+
+                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -438,6 +446,8 @@ public class SetDue extends MainActivity {
 
                 taskPropertiesShowing =false;
 
+                dueToolbar.getMenu().getItem(0).setVisible(true);
+
             }
 
         });
@@ -468,6 +478,8 @@ public class SetDue extends MainActivity {
 
                 taskPropertiesShowing =false;
 
+                dueToolbar.getMenu().getItem(0).setVisible(true);
+
             }
 
         });
@@ -490,6 +502,10 @@ public class SetDue extends MainActivity {
                 monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
 
                 repeat = "none";
+
+                if(!timePicked && !datePicked) {
+                    dueToolbar.getMenu().getItem(0).setVisible(false);
+                }
 
             }
 
@@ -514,12 +530,15 @@ public class SetDue extends MainActivity {
 
                 repeat = "none";
 
+                if(!timePicked && !datePicked) {
+                    dueToolbar.getMenu().getItem(0).setVisible(false);
+                }
+
             }
 
         });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -527,6 +546,11 @@ public class SetDue extends MainActivity {
             getMenuInflater().inflate(R.menu.menu_alarm, menu);
             killAlarm = menu.findItem(R.id.killAlarmItem);
             this.setTitle(dbTask);
+            if(Integer.parseInt(dbDueTime) == 0){
+                killAlarm.setVisible(false);
+            }else {
+                killAlarm.setVisible(true);
+            }
             return true;
         }else {
             killAlarm.setEnabled(true);
@@ -611,6 +635,8 @@ public class SetDue extends MainActivity {
                 weeklyLight.setBackgroundColor(Color.parseColor("#AAAAAA"));
                 monthlyLight.setBackgroundColor(Color.parseColor("#AAAAAA"));
             }
+
+            killAlarm.setVisible(false);
 
             return true;
         }
@@ -765,6 +791,8 @@ public class SetDue extends MainActivity {
 
             dateTextView.setTextSize(25);
 
+            dueToolbar.getMenu().getItem(0).setVisible(true);
+
         }
 
     }
@@ -885,6 +913,8 @@ public class SetDue extends MainActivity {
             time.setVisibility(View.VISIBLE);
 
             timeTextView.setTextSize(25);
+
+            dueToolbar.getMenu().getItem(0).setVisible(true);
 
         }
     }

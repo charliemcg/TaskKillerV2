@@ -467,12 +467,12 @@ class MyAdapter extends ArrayAdapter<String> {
             adRow.setVisibility(View.VISIBLE);
             boolean networkAvailable = false;
             //TODO uncomment this to actually get ads
-//            ConnectivityManager connectivityManager = (ConnectivityManager)
-//                    getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-//            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-//            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-//                networkAvailable = true;
-//            }
+            ConnectivityManager connectivityManager = (ConnectivityManager)
+                    getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                networkAvailable = true;
+            }
 
             //Initialising banner ad
             final AdView adView = taskView.findViewById(R.id.adView);

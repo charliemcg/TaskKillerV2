@@ -24,15 +24,15 @@
         android:scrollbars="vertical"
         android:paddingLeft="10dp"/>
 
-    <ImageView
-        android:id="@+id/removeBtnDark"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        android:visibility="gone"
-        android:src="@drawable/trash_dark"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/removeBtnDark"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:visibility="gone"-->
+        <!--android:src="@drawable/trash_dark"/>-->
 
     <!--<ImageView-->
         <!--android:id="@+id/removeBtnLight"-->
@@ -44,15 +44,15 @@
         <!--android:visibility="gone"-->
         <!--android:src="@drawable/trash_light"/>-->
 
-    <ImageView
-        android:id="@+id/removeBtnDarkOpen"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        android:visibility="gone"
-        android:src="@drawable/trash_dark_open"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/removeBtnDarkOpen"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:visibility="gone"-->
+        <!--android:src="@drawable/trash_dark_open"/>-->
 
     <!--<ImageView-->
         <!--android:id="@+id/removeBtnLightOpen"-->
