@@ -183,11 +183,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
-    Button showDb;
+//    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
 //    Button showUniversalDb;
-    Button showSubtasksDb;
+//    Button showSubtasksDb;
 
     //Scrollable list
     static ListView theListView;
@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static MediaPlayer blip;
     //Sound played when user selects an in-app purchase
     static MediaPlayer chime;
-    //Sound pplayed when user selects a remove button
+    //Sound played when user selects a remove button
     MediaPlayer trash;
 
     //The action bar
@@ -255,8 +255,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     Button darkOrange;
     Button lightPurple;
     Button darkPurple;
-    Button lightRed;
-    Button darkRed;
+//    Button lightRed;
+//    Button darkRed;
     Button lightPink;
     Button darkPink;
     Button lightGreen;
@@ -386,10 +386,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidthPortrait = displayMetrics.widthPixels;
-        showDb = findViewById(R.id.showDb);
+//        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
-        showSubtasksDb = findViewById(R.id.showSubtasksDb);
+//        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
         final View child = topToolbar.getChildAt(2);
         if (child instanceof ActionMenuView)
@@ -543,43 +543,43 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         //Used for debugging purposes
-        showDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllData();
-
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("NOTE: " + res.getString(1) + "\n");
-                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-                    buffer.append("TASK: " + res.getString(4) + "\n");
-                    buffer.append("DUE: " + res.getString(5) + "\n");
-                    buffer.append("KILLED: " + res.getString(6) + "\n");
-                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
-                    buffer.append("REPEAT: " + res.getString(8) + "\n");
-                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
-                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
-                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
-                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
-                    buffer.append("IGNORED: " + res.getString(14) + "\n");
-                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
-                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
-                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
-                }
-                res.close();
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllData();
+//
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("NOTE: " + res.getString(1) + "\n");
+//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+//                    buffer.append("TASK: " + res.getString(4) + "\n");
+//                    buffer.append("DUE: " + res.getString(5) + "\n");
+//                    buffer.append("KILLED: " + res.getString(6) + "\n");
+//                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+//                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+//                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+//                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+//                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
+//                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+//                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
+//                    buffer.append("IGNORED: " + res.getString(14) + "\n");
+//                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
+//                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
+//                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
+//                }
+//                res.close();
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
         //Used for debugging purposes
 //        showAlarmDb.setOnClickListener(new View.OnClickListener() {
@@ -670,29 +670,29 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllSubtaskData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("SUBTASKID: " + res.getString(1) + "\n");
-                    buffer.append("SUBTASK: " + res.getString(2) + "\n");
-                    buffer.append("SUBTASKKILLED: " + res.getString(3) + "\n");
-                    buffer.append("TIMECREATED: " + res.getString(4) + "\n\n");
-                }
-                res.close();
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllSubtaskData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("SUBTASKID: " + res.getString(1) + "\n");
+//                    buffer.append("SUBTASK: " + res.getString(2) + "\n");
+//                    buffer.append("SUBTASKKILLED: " + res.getString(3) + "\n");
+//                    buffer.append("TIMECREATED: " + res.getString(4) + "\n\n");
+//                }
+//                res.close();
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
         //Actions to occur when user submits new task
         taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
@@ -1758,69 +1758,69 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
-    public void setHighlightWhite(View view) {
-        setHighlight("#FFFFFFFF");
-    }
-
-    public void setHighlightBlack(View view) {
-        setHighlight("#FF000000");
-    }
-
-    public void setHighlightLightYellow(View view) {
-        setHighlight("#FFFFFF00");
-    }
-
-    public void setHighlightDarkYellow(View view) {
-        setHighlight("#FFFFD700");
-    }
-
-    public void setHighlightLightBlue(View view) {
-        setHighlight("#FF00FFFF");
-    }
-
-    public void setHighlightDarkBlue(View view) {
-        setHighlight("#FF4169E1");
-    }
-
-    public void setHighlightLightOrange(View view) {
-        setHighlight("#FFFFA500");
-    }
-
-    public void setHighlightDarkOrange(View view) {
-        setHighlight("#FFFF8C00");
-    }
-
-    public void setHighlightLightPurple(View view) {
-        setHighlight("#FF9370DB");
-    }
-
-    public void setHighlightDarkPurple(View view) {
-        setHighlight("#FF8A2BE2");
-    }
-
-    public void setHighlightDarkRed(View view) {
-        setHighlight("#FFFF0000");
-    }
-
-    public void setHighlightLightRed(View view) {
-        setHighlight("#FFFF6347");
-    }
-
-    public void setHighlightLightPink(View view) {
-        setHighlight("#FFFF69B4");
-    }
-
-    public void setHighlightDarkPink(View view) {
-        setHighlight("#FFFF1493");
-    }
-
-    public void setHighlightLightGreen(View view) {
-        setHighlight("#FF00FF00");
-    }
-
-    public void setHighlightDarkGreen(View view) {
-        setHighlight("#FF228B22");
-    }
+//    public void setHighlightWhite(View view) {
+//        setHighlight("#FFFFFFFF");
+//    }
+//
+//    public void setHighlightBlack(View view) {
+//        setHighlight("#FF000000");
+//    }
+//
+//    public void setHighlightLightYellow(View view) {
+//        setHighlight("#FFFFFF00");
+//    }
+//
+//    public void setHighlightDarkYellow(View view) {
+//        setHighlight("#FFFFD700");
+//    }
+//
+//    public void setHighlightLightBlue(View view) {
+//        setHighlight("#FF00FFFF");
+//    }
+//
+//    public void setHighlightDarkBlue(View view) {
+//        setHighlight("#FF4169E1");
+//    }
+//
+//    public void setHighlightLightOrange(View view) {
+//        setHighlight("#FFFFA500");
+//    }
+//
+//    public void setHighlightDarkOrange(View view) {
+//        setHighlight("#FFFF8C00");
+//    }
+//
+//    public void setHighlightLightPurple(View view) {
+//        setHighlight("#FF9370DB");
+//    }
+//
+//    public void setHighlightDarkPurple(View view) {
+//        setHighlight("#FF8A2BE2");
+//    }
+//
+//    public void setHighlightDarkRed(View view) {
+//        setHighlight("#FFFF0000");
+//    }
+//
+//    public void setHighlightLightRed(View view) {
+//        setHighlight("#FFFF6347");
+//    }
+//
+//    public void setHighlightLightPink(View view) {
+//        setHighlight("#FFFF69B4");
+//    }
+//
+//    public void setHighlightDarkPink(View view) {
+//        setHighlight("#FFFF1493");
+//    }
+//
+//    public void setHighlightLightGreen(View view) {
+//        setHighlight("#FF00FF00");
+//    }
+//
+//    public void setHighlightDarkGreen(View view) {
+//        setHighlight("#FF228B22");
+//    }
 
     private void setHighlight(String s) {
 
@@ -2141,4 +2141,30 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
+    public void showPro(View view) {
+
+        if(!mute){
+            blip.start();
+        }
+
+        purchasesShowing = true;
+        add.setClickable(false);
+        theListView.setOnItemClickListener(null);
+        taskPropertiesShowing = false;
+        onCreateOptionsMenu(topToolbar.getMenu());
+        theListView.setAdapter(theAdapter[0]);
+        purchases.startAnimation(AnimationUtils.loadAnimation
+                (this, R.anim.enter_from_right));
+
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                purchases.setVisibility(View.VISIBLE);
+            }
+        };
+
+        handler.postDelayed(runnable, 200);
+
+    }
 }

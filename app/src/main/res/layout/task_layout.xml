@@ -10,7 +10,10 @@
 
     <TableRow
         android:id="@+id/adRow"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_height="100dp"
+        android:descendantFocusability="blocksDescendants"><!--TODO is this going to block the ad?-->
+
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"
@@ -23,9 +26,10 @@
         <ImageView
             android:id="@+id/banner"
             android:src="@drawable/banner"
-            android:layout_width="234dp"
-            android:layout_height="30dp"
-            android:visibility="gone"/>
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:visibility="gone"
+            android:onClick="showPro"/>
 
     </TableRow>
 

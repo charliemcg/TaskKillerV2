@@ -213,11 +213,6 @@ public class Checklist extends MainActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
 
-                Log.i(TAG, "subTasksClickable: " + subTasksClickable);
-                Log.i(TAG, "subTasksKilled: " + String.valueOf(subTasksKilled));
-                Log.i(TAG, "position: " + position);
-                Log.i(TAG, "sortedSubtaskIds: " + sortedSubtaskIds);
-
                 boolean isKilled = false;
                 Cursor dbResult = db.getSubtaskData(finalDbID,
                         sortedSubtaskIds.get(position));
@@ -227,9 +222,7 @@ public class Checklist extends MainActivity {
                 dbResult.close();
 
                 //Rename subtask
-//                if(subTasksClickable && !subTasksKilled.get(sortedSubtaskIds.get(position))){
-
-                if(subTasksClickable && !/*subTasksKilled.get(position)*/isKilled){
+                if(subTasksClickable && !isKilled){
 
                     keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 
@@ -245,14 +238,11 @@ public class Checklist extends MainActivity {
                     renameMe = sortedSubtaskIds.get(position);
 
                 //Reinstate killed subtask
-//                }else if(subTasksClickable && subTasksKilled.get(sortedSubtaskIds.get(position))){
-                }else if(subTasksClickable && /*subTasksKilled.get(position)*/isKilled){
-
-                    Log.i(TAG, "I'm in here");
+                }else if(subTasksClickable && isKilled){
 
                     //marks task as not killed in database
-//                    db.updateSubtaskKilled(finalDbTaskId, String.valueOf(position), false);
-                    db.updateSubtaskKilled(finalDbTaskId, String.valueOf(sortedSubtaskIds.get(position)), false);
+                    db.updateSubtaskKilled(finalDbTaskId, String.valueOf
+                            (sortedSubtaskIds.get(position)), false);
 
                     subTasksKilled.set(position, false);
 

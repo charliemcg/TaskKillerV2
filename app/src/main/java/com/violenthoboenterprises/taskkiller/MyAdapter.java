@@ -463,31 +463,32 @@ class MyAdapter extends ArrayAdapter<String> {
 //        }
 
         //Displaying ad if there are five or more tasks
-//        if(position == 4) {
-//            adRow.setVisibility(View.VISIBLE);
-//            boolean networkAvailable = false;
+        if(position == 0 && MainActivity.taskList.size() > 4) {
+            adRow.setVisibility(View.VISIBLE);
+            boolean networkAvailable = false;
+            //TODO uncomment this to actually get ads
 //            ConnectivityManager connectivityManager = (ConnectivityManager)
 //                    getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 //            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 //            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
 //                networkAvailable = true;
 //            }
-//
-//            //Initialising banner ad
-//            final AdView adView = taskView.findViewById(R.id.adView);
-//            ImageView banner = taskView.findViewById(R.id.banner);
-//
-//            if (networkAvailable) {
-//                adView.setVisibility(View.VISIBLE);
-//                final AdRequest banRequest = new AdRequest.Builder()
-//        //TODO probably need a new ID
-//                        .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
-//                    (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
-//                adView.loadAd(banRequest);
-//            } else {
-//                banner.setVisibility(View.VISIBLE);
-//            }
-//        }
+
+            //Initialising banner ad
+            final AdView adView = taskView.findViewById(R.id.adView);
+            ImageView banner = taskView.findViewById(R.id.banner);
+
+            if (networkAvailable) {
+                adView.setVisibility(View.VISIBLE);
+                final AdRequest banRequest = new AdRequest.Builder()
+        //TODO probably need a new ID
+                        .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
+                    (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
+                adView.loadAd(banRequest);
+            } else {
+                banner.setVisibility(View.VISIBLE);
+            }
+        }
 
         //TODO make sure hard coded values work on all devices
         //Task cannot be centered unless it's in view. Moving selected task into view

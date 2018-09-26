@@ -195,7 +195,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL4, false);
         content.put(UCOL5, "");
         content.put(UCOL6, false);
-        content.put(UCOL7, false);
+        content.put(UCOL7, true);//TODO change back to false!!!
         content.put(UCOL8, false);
         content.put(UCOL9, 0);
         content.put(UCOL10, 0);
