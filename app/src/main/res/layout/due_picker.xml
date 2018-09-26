@@ -54,12 +54,22 @@
         android:soundEffectsEnabled="false">
 
         <ImageView
-            android:id="@+id/calendarFaded"
+            android:id="@+id/calendarFadedDark"
             android:layout_width="0dp"
             android:layout_height="match_parent"
            android:layout_weight="1"
            android:src="@drawable/calendar_faded"
-           android:padding="10dp"/>
+           android:padding="10dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/calendarFadedLight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/calendar_faded_light"
+            android:padding="10dp"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/calendar"
@@ -92,12 +102,22 @@
         android:soundEffectsEnabled="false">
 
         <ImageView
-            android:id="@+id/timeFaded"
+            android:id="@+id/timeFadedDark"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:src="@drawable/time_faded"
-            android:padding="10dp"/>
+            android:padding="10dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/timeFadedLight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/time_faded_light"
+            android:padding="10dp"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/time"
@@ -127,9 +147,11 @@
         <!--android:orientation="horizontal">-->
 
         <LinearLayout
+            android:id="@+id/darkRepeatLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
         <!--<ImageView-->
             <!--android:layout_width="0dp"-->
@@ -138,33 +160,77 @@
             <!--android:gravity="center"-->
             <!--android:src="@drawable/refresh"/>-->
         <ImageView
-            android:id="@+id/cancelRepeat"
+            android:id="@+id/cancelRepeatDark"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="1"
             android:src="@drawable/no_repeat_dark"
             android:soundEffectsEnabled="false"/>
         <ImageView
-            android:id="@+id/daily"
+            android:id="@+id/dailyDark"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="1"
             android:src="@drawable/repeat_day_dark"
             android:soundEffectsEnabled="false"/>
         <ImageView
-            android:id="@+id/weekly"
+            android:id="@+id/weeklyDark"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="1"
             android:src="@drawable/repeat_week_dark"
             android:soundEffectsEnabled="false"/>
         <ImageView
-            android:id="@+id/monthly"
+            android:id="@+id/monthlyDark"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="1"
             android:src="@drawable/repeat_month_dark"
             android:soundEffectsEnabled="false"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lightRepeatLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <!--<ImageView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:src="@drawable/refresh"/>-->
+            <ImageView
+                android:id="@+id/cancelRepeatLight"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@drawable/no_repeat_light"
+                android:soundEffectsEnabled="false"/>
+            <ImageView
+                android:id="@+id/dailyLight"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@drawable/repeat_day_light"
+                android:soundEffectsEnabled="false"/>
+            <ImageView
+                android:id="@+id/weeklyLight"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@drawable/repeat_week_light"
+                android:soundEffectsEnabled="false"/>
+            <ImageView
+                android:id="@+id/monthlyLight"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@drawable/repeat_month_light"
+                android:soundEffectsEnabled="false"/>
 
         </LinearLayout>
 

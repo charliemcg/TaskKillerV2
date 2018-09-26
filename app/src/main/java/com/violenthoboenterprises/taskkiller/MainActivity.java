@@ -183,11 +183,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
-//    Button showDb;
+    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
 //    Button showUniversalDb;
-//    Button showSubtasksDb;
+    Button showSubtasksDb;
 
     //Scrollable list
     static ListView theListView;
@@ -386,10 +386,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidthPortrait = displayMetrics.widthPixels;
-//        showDb = findViewById(R.id.showDb);
+        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
-//        showSubtasksDb = findViewById(R.id.showSubtasksDb);
+        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
         final View child = topToolbar.getChildAt(2);
         if (child instanceof ActionMenuView)
@@ -543,43 +543,43 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         //Used for debugging purposes
-//        showDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllData();
-//
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("NOTE: " + res.getString(1) + "\n");
-//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-//                    buffer.append("TASK: " + res.getString(4) + "\n");
-//                    buffer.append("DUE: " + res.getString(5) + "\n");
-//                    buffer.append("KILLED: " + res.getString(6) + "\n");
-//                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
-//                    buffer.append("REPEAT: " + res.getString(8) + "\n");
-//                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
-//                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
-//                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-//                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
-//                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
-//                    buffer.append("IGNORED: " + res.getString(14) + "\n");
-//                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
-//                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
-//                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//
-//            }
-//
-//        });
+        showDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllData();
+
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("NOTE: " + res.getString(1) + "\n");
+                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+                    buffer.append("TASK: " + res.getString(4) + "\n");
+                    buffer.append("DUE: " + res.getString(5) + "\n");
+                    buffer.append("KILLED: " + res.getString(6) + "\n");
+                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
+                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
+                    buffer.append("IGNORED: " + res.getString(14) + "\n");
+                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
+                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
+                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
 
         //Used for debugging purposes
 //        showAlarmDb.setOnClickListener(new View.OnClickListener() {
@@ -670,29 +670,29 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-//        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllSubtaskData();
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("SUBTASKID: " + res.getString(1) + "\n");
-//                    buffer.append("SUBTASK: " + res.getString(2) + "\n");
-//                    buffer.append("SUBTASKKILLED: " + res.getString(3) + "\n");
-//                    buffer.append("TIMECREATED: " + res.getString(4) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//
-//            }
-//
-//        });
+        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllSubtaskData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("SUBTASKID: " + res.getString(1) + "\n");
+                    buffer.append("SUBTASK: " + res.getString(2) + "\n");
+                    buffer.append("SUBTASKKILLED: " + res.getString(3) + "\n");
+                    buffer.append("TIMECREATED: " + res.getString(4) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
 
         //Actions to occur when user submits new task
         taskNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
@@ -826,6 +826,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         topToolbar.setTitleTextColor(Color.parseColor(highlight));
         addIcon.setTextColor(Color.parseColor(highlight));
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+        toast.setBackgroundColor(Color.parseColor(highlight));
     }
 
     private void checkLightDark(boolean lightDark) {
@@ -991,36 +992,36 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             if (lightDark) {
                 lightDark = false;
-                white.setVisibility(View.VISIBLE);
-                lightYellow.setVisibility(View.VISIBLE);
-                lightBlue.setVisibility(View.VISIBLE);
-                lightOrange.setVisibility(View.VISIBLE);
-                lightPurple.setVisibility(View.VISIBLE);
-                lightRed.setVisibility(View.VISIBLE);
-                lightPink.setVisibility(View.VISIBLE);
-                lightGreen.setVisibility(View.VISIBLE);
-                if (highlight.equals("#FF000000")) {
-                    highlight = "#FFFFFFFF";
-                } else if (highlight.equals("#FFFF0000")) {
-                    highlight = "#FFFF6347";
-                } else if (highlight.equals("#FF228B22")) {
-                    highlight = "#FF00FF00";
-                } else if (highlight.equals("#FFFFD700")) {
-                    highlight = "#FFFFFF00";
-                } else if (highlight.equals("#FF4169E1")) {
-                    highlight = "#FF00FFFF";
-                } else if (highlight.equals("#FFFF8C00")) {
-                    highlight = "#FFFFA500";
-                } else if (highlight.equals("#FF8A2BE2")) {
-                    highlight = "#FF9370DB";
-                } else if (highlight.equals("#FFFF69B4")) {
-                    highlight = "#FFFF1493";
-                }
-                db.updateHighlight(highlight);
+//                white.setVisibility(View.VISIBLE);
+//                lightYellow.setVisibility(View.VISIBLE);
+//                lightBlue.setVisibility(View.VISIBLE);
+//                lightOrange.setVisibility(View.VISIBLE);
+//                lightPurple.setVisibility(View.VISIBLE);
+//                lightRed.setVisibility(View.VISIBLE);
+//                lightPink.setVisibility(View.VISIBLE);
+//                lightGreen.setVisibility(View.VISIBLE);
+//                if (highlight.equals("#FF000000")) {
+//                    highlight = "#FFFFFFFF";
+//                } else if (highlight.equals("#FFFF0000")) {
+//                    highlight = "#FFFF6347";
+//                } else if (highlight.equals("#FF228B22")) {
+//                    highlight = "#FF00FF00";
+//                } else if (highlight.equals("#FFFFD700")) {
+//                    highlight = "#FFFFFF00";
+//                } else if (highlight.equals("#FF4169E1")) {
+//                    highlight = "#FF00FFFF";
+//                } else if (highlight.equals("#FFFF8C00")) {
+//                    highlight = "#FFFFA500";
+//                } else if (highlight.equals("#FF8A2BE2")) {
+//                    highlight = "#FF9370DB";
+//                } else if (highlight.equals("#FFFF69B4")) {
+//                    highlight = "#FFFF1493";
+//                }
+//                db.updateHighlight(highlight);
                 checkLightDark(lightDark);
-                topToolbar.setTitleTextColor(Color.parseColor(highlight));
-                addIcon.setTextColor(Color.parseColor(highlight));
-                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+//                topToolbar.setTitleTextColor(Color.parseColor(highlight));
+//                addIcon.setTextColor(Color.parseColor(highlight));
+//                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
                 if (mute) {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
                 } else {
@@ -1030,36 +1031,36 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 lightDarkBtn.setTitle("Light Mode");
             } else {
                 lightDark = true;
-                black.setVisibility(View.VISIBLE);
-                darkYellow.setVisibility(View.VISIBLE);
-                darkBlue.setVisibility(View.VISIBLE);
-                darkOrange.setVisibility(View.VISIBLE);
-                darkPurple.setVisibility(View.VISIBLE);
-                darkRed.setVisibility(View.VISIBLE);
-                darkPink.setVisibility(View.VISIBLE);
-                darkGreen.setVisibility(View.VISIBLE);
-                if (highlight.equals("#FFFFFFFF")) {
-                    highlight = "#FF000000";
-                } else if (highlight.equals("#FFFF6347")) {
-                    highlight = "#FFFF0000";
-                } else if (highlight.equals("#FF00FF00")) {
-                    highlight = "#FF228B22";
-                } else if (highlight.equals("#FFFFFF00")) {
-                    highlight = "#FFFFD700";
-                } else if (highlight.equals("#FF00FFFF")) {
-                    highlight = "#FF4169E1";
-                } else if (highlight.equals("#FFFFA500")) {
-                    highlight = "#FFFF8C00";
-                } else if (highlight.equals("#FF9370DB")) {
-                    highlight = "#FF8A2BE2";
-                } else if (highlight.equals("#FFFF1493")) {
-                    highlight = "#FFFF69B4";
-                }
-                db.updateHighlight(highlight);
+//                black.setVisibility(View.VISIBLE);
+//                darkYellow.setVisibility(View.VISIBLE);
+//                darkBlue.setVisibility(View.VISIBLE);
+//                darkOrange.setVisibility(View.VISIBLE);
+//                darkPurple.setVisibility(View.VISIBLE);
+//                darkRed.setVisibility(View.VISIBLE);
+//                darkPink.setVisibility(View.VISIBLE);
+//                darkGreen.setVisibility(View.VISIBLE);
+//                if (highlight.equals("#FFFFFFFF")) {
+//                    highlight = "#FF000000";
+//                } else if (highlight.equals("#FFFF6347")) {
+//                    highlight = "#FFFF0000";
+//                } else if (highlight.equals("#FF00FF00")) {
+//                    highlight = "#FF228B22";
+//                } else if (highlight.equals("#FFFFFF00")) {
+//                    highlight = "#FFFFD700";
+//                } else if (highlight.equals("#FF00FFFF")) {
+//                    highlight = "#FF4169E1";
+//                } else if (highlight.equals("#FFFFA500")) {
+//                    highlight = "#FFFF8C00";
+//                } else if (highlight.equals("#FF9370DB")) {
+//                    highlight = "#FF8A2BE2";
+//                } else if (highlight.equals("#FFFF1493")) {
+//                    highlight = "#FFFF69B4";
+//                }
+//                db.updateHighlight(highlight);
                 checkLightDark(lightDark);
-                topToolbar.setTitleTextColor(Color.parseColor(highlight));
-                addIcon.setTextColor(Color.parseColor(highlight));
-                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+//                topToolbar.setTitleTextColor(Color.parseColor(highlight));
+//                addIcon.setTextColor(Color.parseColor(highlight));
+//                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
                 if (mute) {
                     muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
                 } else {

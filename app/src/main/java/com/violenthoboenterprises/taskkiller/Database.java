@@ -253,7 +253,6 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public Cursor getSubtaskDataByTimestamp(String stamp){
-        Log.i(TAG, "Stamp: " + stamp);
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + CTABLE + " where " + CCOL5
                 + " == " + stamp, null);

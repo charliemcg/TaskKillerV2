@@ -108,11 +108,11 @@ class MyAdapter extends ArrayAdapter<String> {
         //Takes user to note activity
         final LinearLayout note = taskView.findViewById(R.id.note);
         //Sets task to repeat daily
-        final LinearLayout daily = taskView.findViewById(R.id.daily);
+//        final LinearLayout daily = taskView.findViewById(R.id.daily);
         //Sets task to repeat weekly
-        final LinearLayout weekly = taskView.findViewById(R.id.weekly);
+//        final LinearLayout weekly = taskView.findViewById(R.id.weekly);
         //Sets task to repeat monthly
-        final LinearLayout monthly = taskView.findViewById(R.id.monthly);
+//        final LinearLayout monthly = taskView.findViewById(R.id.monthly);
         //The display of status icons
         final LinearLayout statusLayout = taskView.findViewById(R.id.statusLayout);
         //Task status icons are transparent. This is so the background colour can be

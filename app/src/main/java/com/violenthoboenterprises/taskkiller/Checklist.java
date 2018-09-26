@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -113,7 +114,6 @@ public class Checklist extends MainActivity {
 
         //setting highlight color
         checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-        subTasksToolbar.setTitleTextColor(Color.parseColor("#AAAAAA"));
 
         //setting title to task name
         subTasksToolbar.setTitle(dbTask);
@@ -133,9 +133,11 @@ public class Checklist extends MainActivity {
 
         //setting correct background color
         if(!dbLightDark){
+            subTasksToolbar.setTitleTextColor(Color.parseColor("#AAAAAA"));
             checklistView.setBackgroundColor(Color.parseColor("#333333"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#333333"));
         }else{
+            subTasksToolbar.setTitleTextColor(Color.parseColor("#000000"));
             checklistView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
@@ -211,8 +213,23 @@ public class Checklist extends MainActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
 
+                Log.i(TAG, "subTasksClickable: " + subTasksClickable);
+                Log.i(TAG, "subTasksKilled: " + String.valueOf(subTasksKilled));
+                Log.i(TAG, "position: " + position);
+                Log.i(TAG, "sortedSubtaskIds: " + sortedSubtaskIds);
+
+                boolean isKilled = false;
+                Cursor dbResult = db.getSubtaskData(finalDbID,
+                        sortedSubtaskIds.get(position));
+                while(dbResult.moveToNext()){
+                    isKilled = dbResult.getInt(3) > 0;
+                }
+                dbResult.close();
+
                 //Rename subtask
-                if(subTasksClickable && !subTasksKilled.get(sortedSubtaskIds.get(position))){
+//                if(subTasksClickable && !subTasksKilled.get(sortedSubtaskIds.get(position))){
+
+                if(subTasksClickable && !/*subTasksKilled.get(position)*/isKilled){
 
                     keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 
@@ -228,10 +245,14 @@ public class Checklist extends MainActivity {
                     renameMe = sortedSubtaskIds.get(position);
 
                 //Reinstate killed subtask
-                }else if(subTasksClickable && subTasksKilled.get(sortedSubtaskIds.get(position))){
+//                }else if(subTasksClickable && subTasksKilled.get(sortedSubtaskIds.get(position))){
+                }else if(subTasksClickable && /*subTasksKilled.get(position)*/isKilled){
+
+                    Log.i(TAG, "I'm in here");
 
                     //marks task as not killed in database
-                    db.updateSubtaskKilled(finalDbTaskId, String.valueOf(position), false);
+//                    db.updateSubtaskKilled(finalDbTaskId, String.valueOf(position), false);
+                    db.updateSubtaskKilled(finalDbTaskId, String.valueOf(sortedSubtaskIds.get(position)), false);
 
                     subTasksKilled.set(position, false);
 
