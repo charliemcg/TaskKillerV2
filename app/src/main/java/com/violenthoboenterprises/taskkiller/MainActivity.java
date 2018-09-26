@@ -114,8 +114,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static boolean snoozeRowShowing;
     //used to indicate that a task was long clicked
     static boolean longClicked;
-    //used to indicate that highlight color needs to be set automatically
-    boolean autoColor;
     static boolean killedAnimation;
     static boolean alarmAnimation;
     static boolean reinstateAnimation;
@@ -388,7 +386,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidthPortrait = displayMetrics.widthPixels;
-        autoColor = true;//TODO make this false
 //        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
@@ -1110,6 +1107,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             highlight = "#" + Integer.toHexString(selectedColor);
                             db.updateHighlight(highlight);
 
+                            toast.setBackgroundColor(Color.parseColor(highlight));
                             int[] colors = {0, selectedColor, 0};
                             theListView.setDivider(new GradientDrawable
                                     (GradientDrawable.Orientation.RIGHT_LEFT, colors));
@@ -2070,7 +2068,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         dbResult.close();
 
-        if(autoColor) {
+        if(cycleColors) {
             Calendar cal = Calendar.getInstance();
             if((cal.getTimeInMillis() / 1000 / 60 / 60) > (taskLastChanged + 4)) {
                 switchColor();
