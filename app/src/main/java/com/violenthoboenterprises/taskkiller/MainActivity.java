@@ -261,6 +261,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static MediaPlayer blip;
     //Sound played when user selects an in-app purchase
     static MediaPlayer chime;
+    //Sound pplayed when user selects a remove button
+    MediaPlayer trash;
 
     //The action bar
     private Toolbar topToolbar;
@@ -368,6 +370,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         sweep = MediaPlayer.create(this, R.raw.sweep);
         blip = MediaPlayer.create(this, R.raw.blip);
         chime = MediaPlayer.create(this, R.raw.chime);
+        trash = MediaPlayer.create(this, R.raw.trash);
         mute = false;
         colorPicker = findViewById(R.id.colorPicker);
         white = findViewById(R.id.white);

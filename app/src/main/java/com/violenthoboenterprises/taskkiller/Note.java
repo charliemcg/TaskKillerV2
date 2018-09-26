@@ -41,7 +41,6 @@ public class Note extends MainActivity {
     Boolean checklistExists;
     View noteRoot;
     private Toolbar noteToolbar;
-    MediaPlayer trash;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -63,7 +62,6 @@ public class Note extends MainActivity {
         checklistExists = false;
         inNote = true;
         noteRoot = findViewById(R.id.noteRoot);
-        trash = MediaPlayer.create(this, R.raw.trash);
 
         noteToolbar.setTitleTextColor(Color.parseColor(highlight));
 

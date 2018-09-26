@@ -7,75 +7,75 @@
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:background="@color/dark_gray">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:baselineAligned="false">-->
 
-        <LinearLayout
-            android:id="@+id/daily"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/layout_border"
-            android:soundEffectsEnabled="false">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/daily"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/layout_border"-->
+            <!--android:soundEffectsEnabled="false">-->
 
-            <TextView
-                android:id="@+id/dailyBtnText"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:lines="1"
-                android:gravity="center"
-                android:text="@string/daily"
-                android:textColor="@color/gray"/>
+            <!--<TextView-->
+                <!--android:id="@+id/dailyBtnText"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:lines="1"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/daily"-->
+                <!--android:textColor="@color/gray"/>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/weekly"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/layout_border"
-            android:soundEffectsEnabled="false">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/weekly"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/layout_border"-->
+            <!--android:soundEffectsEnabled="false">-->
 
-            <TextView
-                android:id="@+id/weeklyBtnText"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:lines="1"
-                android:gravity="center"
-                android:text="@string/weekly"
-                android:textColor="@color/gray"/>
+            <!--<TextView-->
+                <!--android:id="@+id/weeklyBtnText"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:lines="1"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/weekly"-->
+                <!--android:textColor="@color/gray"/>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/monthly"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/layout_border"
-            android:soundEffectsEnabled="false">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/monthly"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/layout_border"-->
+            <!--android:soundEffectsEnabled="false">-->
 
-            <TextView
-                android:id="@+id/monthlyBtnText"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:lines="1"
-                android:gravity="center"
-                android:text="@string/monthly"
-                android:textColor="@color/gray"/>
+            <!--<TextView-->
+                <!--android:id="@+id/monthlyBtnText"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:lines="1"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/monthly"-->
+                <!--android:textColor="@color/gray"/>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 </TableRow>

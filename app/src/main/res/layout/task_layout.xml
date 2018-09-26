@@ -26,17 +26,20 @@
             android:layout_width="234dp"
             android:layout_height="30dp"
             android:visibility="gone"/>
+
     </TableRow>
 
     <TableRow
         android:layout_height="100dp"
         android:layout_width="match_parent"
         android:id="@+id/taskName">
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:descendantFocusability="blocksDescendants">
+
             <TextView
                 android:layout_height="60dp"
                 android:layout_width="0dp"
@@ -93,12 +96,15 @@
                 android:focusable="true"
                 android:onClick="complete"
                 android:visibility="gone"/>
+
         </LinearLayout>
+
     </TableRow>
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="0dp">
+
         <LinearLayout
             android:id="@+id/statusLayout"
             android:orientation="horizontal"

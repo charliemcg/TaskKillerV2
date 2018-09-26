@@ -457,7 +457,7 @@
         android:layout_below="@+id/my_toolbar"
         android:background="@color/dark_gray"
         android:descendantFocusability="blocksDescendants"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false" />
 
     <ImageView
         android:layout_width="match_parent"

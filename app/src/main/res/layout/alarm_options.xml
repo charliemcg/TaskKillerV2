@@ -7,75 +7,75 @@
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:background="@color/dark_gray">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:baselineAligned="false">-->
 
-        <LinearLayout
-            android:id="@+id/killAlarmBtn"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/layout_border"
-            android:soundEffectsEnabled="false">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/killAlarmBtn"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/layout_border"-->
+            <!--android:soundEffectsEnabled="false">-->
 
-            <TextView
-                android:id="@+id/killAlarmBtnText"
-                android:layout_width="85dp"
-                android:layout_height="match_parent"
-                android:lines="2"
-                android:text="@string/turnOffAlarm"
-                android:gravity="center"
-                android:textColor="@color/gray"/>
+            <!--<TextView-->
+                <!--android:id="@+id/killAlarmBtnText"-->
+                <!--android:layout_width="85dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:lines="2"-->
+                <!--android:text="@string/turnOffAlarm"-->
+                <!--android:gravity="center"-->
+                <!--android:textColor="@color/gray"/>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/resetAlarmBtn"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/layout_border"
-            android:soundEffectsEnabled="false">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/resetAlarmBtn"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/layout_border"-->
+            <!--android:soundEffectsEnabled="false">-->
 
-            <TextView
-                android:id="@+id/resetAlarmBtnText"
-                android:layout_width="85dp"
-                android:layout_height="match_parent"
-                android:lines="1"
-                android:text="@string/changeDueDate"
-                android:gravity="center"
-                android:textColor="@color/gray"/>
+            <!--<TextView-->
+                <!--android:id="@+id/resetAlarmBtnText"-->
+                <!--android:layout_width="85dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:lines="1"-->
+                <!--android:text="@string/changeDueDate"-->
+                <!--android:gravity="center"-->
+                <!--android:textColor="@color/gray"/>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/repeatBtn"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/layout_border"
-            android:soundEffectsEnabled="false">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/repeatBtn"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/layout_border"-->
+            <!--android:soundEffectsEnabled="false">-->
 
-            <TextView
-                android:id="@+id/repeatAlarmBtnText"
-                android:layout_width="85dp"
-                android:layout_height="match_parent"
-                android:lines="2"
-                android:text="@string/setRepeat"
-                android:gravity="center"
-                android:textColor="@color/gray"/>
+            <!--<TextView-->
+                <!--android:id="@+id/repeatAlarmBtnText"-->
+                <!--android:layout_width="85dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:lines="2"-->
+                <!--android:text="@string/setRepeat"-->
+                <!--android:gravity="center"-->
+                <!--android:textColor="@color/gray"/>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 </TableRow>

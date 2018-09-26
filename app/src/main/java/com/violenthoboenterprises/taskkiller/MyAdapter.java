@@ -106,11 +106,11 @@ class MyAdapter extends ArrayAdapter<String> {
         //Icon needs to changed based on light/dark mode
         ImageView noteBtnIcon = taskView.findViewById(R.id.noteBtnIcon);
         ImageView noteBtnIconWhite = taskView.findViewById(R.id.noteBtnIconWhite);
-        final TextView killAlarmBtnText = taskView.findViewById(R.id.killAlarmBtnText);
-        final TextView resetAlarmBtnText = taskView.findViewById(R.id.resetAlarmBtnText);
-        final TextView dailyBtnText = taskView.findViewById(R.id.dailyBtnText);
-        final TextView weeklyBtnText = taskView.findViewById(R.id.weeklyBtnText);
-        final TextView monthlyBtnText = taskView.findViewById(R.id.monthlyBtnText);
+//        final TextView killAlarmBtnText = taskView.findViewById(R.id.killAlarmBtnText);
+//        final TextView resetAlarmBtnText = taskView.findViewById(R.id.resetAlarmBtnText);
+//        final TextView dailyBtnText = taskView.findViewById(R.id.dailyBtnText);
+//        final TextView weeklyBtnText = taskView.findViewById(R.id.weeklyBtnText);
+//        final TextView monthlyBtnText = taskView.findViewById(R.id.monthlyBtnText);
         final TextView oneHourBtnText = taskView.findViewById(R.id.oneHourBtnText);
         final TextView fourHoursBtnText = taskView.findViewById(R.id.fourHoursBtnText);
         final TextView tomorrowBtnText = taskView.findViewById(R.id.tomorrowBtnText);
@@ -385,12 +385,12 @@ class MyAdapter extends ArrayAdapter<String> {
             alarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             subtasksBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             noteBtnText.setTextColor(Color.parseColor("#AAAAAA"));
-            killAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
-            resetAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+//            killAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+//            resetAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
 //            repeatAlarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
-            dailyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
-            weeklyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
-            monthlyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+//            dailyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+//            weeklyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+//            monthlyBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             oneHourBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             fourHoursBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             tomorrowBtnText.setTextColor(Color.parseColor("#AAAAAA"));
@@ -443,12 +443,12 @@ class MyAdapter extends ArrayAdapter<String> {
             alarmBtnText.setTextColor(Color.parseColor("#000000"));
             subtasksBtnText.setTextColor(Color.parseColor("#000000"));
             noteBtnText.setTextColor(Color.parseColor("#000000"));
-            killAlarmBtnText.setTextColor(Color.parseColor("#000000"));
-            resetAlarmBtnText.setTextColor(Color.parseColor("#000000"));
+//            killAlarmBtnText.setTextColor(Color.parseColor("#000000"));
+//            resetAlarmBtnText.setTextColor(Color.parseColor("#000000"));
 //            repeatAlarmBtnText.setTextColor(Color.parseColor("#000000"));
-            dailyBtnText.setTextColor(Color.parseColor("#000000"));
-            weeklyBtnText.setTextColor(Color.parseColor("#000000"));
-            monthlyBtnText.setTextColor(Color.parseColor("#000000"));
+//            dailyBtnText.setTextColor(Color.parseColor("#000000"));
+//            weeklyBtnText.setTextColor(Color.parseColor("#000000"));
+//            monthlyBtnText.setTextColor(Color.parseColor("#000000"));
             oneHourBtnText.setTextColor(Color.parseColor("#000000"));
             fourHoursBtnText.setTextColor(Color.parseColor("#000000"));
             tomorrowBtnText.setTextColor(Color.parseColor("#000000"));
@@ -4596,150 +4596,150 @@ class MyAdapter extends ArrayAdapter<String> {
 //            });
 
             //Actions to occur if user selects to repeat daily
-            daily.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    MainActivity.vibrate.vibrate(50);
-
-                    if(!MainActivity.mute){
-                        MainActivity.blip.start();
-                    }
-
-//                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
-//                            R.anim.exit_out_right));
-
-                    final Handler handler = new Handler();
-
-                    final Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-
-                        MainActivity.dateRowShowing =true;
-
-                        MainActivity.repeatInterval =AlarmManager.INTERVAL_DAY;
-
-                        MainActivity.db.updateRepeatInterval(String.valueOf(
-                            MainActivity.sortedIDs.get(position)),"day");
-
-                        MainActivity.repeating =true;
-
-                        MainActivity.taskPropertiesShowing =false;
-
-                        setAlarm(/*dateRow, datePicker, timePicker, */position, finalUniYear,
-                                finalUniMonth, finalUniDay, finalUniHour, finalUniMinute);
-
-                        //Returns the 'add' button
-                        MainActivity.params.height =MainActivity.addHeight;
-                        MainActivity.iconParams.height =MainActivity.addIconHeight;
-
-                        MainActivity.add.setLayoutParams(MainActivity.params);
-                        MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
-
-                        notifyDataSetChanged();
-
-                    }};
-
-                    handler.postDelayed(runnable, 600);
-
-                }
-            });
-
-            //Actions to occur if user selects to repeat weekly
-            weekly.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    MainActivity.vibrate.vibrate(50);
-
-                    if(!MainActivity.mute){
-                        MainActivity.blip.start();
-                    }
-
-//                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
-//                            R.anim.exit_out_right));
-
-                    final Handler handler = new Handler();
-
-                    final Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-
-                    MainActivity.dateRowShowing = true;
-
-                    MainActivity.repeatInterval = (AlarmManager.INTERVAL_DAY * 7);
-
-                    MainActivity.db.updateRepeatInterval(String.valueOf(
-                            MainActivity.sortedIDs.get(position)), "week");
-
-                    MainActivity.repeating = true;
-
-                    MainActivity.taskPropertiesShowing = false;
-
-                    setAlarm(/*dateRow, datePicker, timePicker, */position, finalUniYear,
-                            finalUniMonth, finalUniDay, finalUniHour, finalUniMinute);
-
-                    //Returns the 'add' button
-                    MainActivity.params.height = MainActivity.addHeight;
-                    MainActivity.iconParams.height = MainActivity.addIconHeight;
-
-                    MainActivity.add.setLayoutParams(MainActivity.params);
-                    MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
-
-                    notifyDataSetChanged();
-
-                        }};
-
-                    handler.postDelayed(runnable, 600);
-
-                }
-            });
-
-            //Actions to occur if user selects to repeat monthly
-            monthly.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    MainActivity.vibrate.vibrate(50);
-
-                    if(!MainActivity.mute){
-                        MainActivity.blip.start();
-                    }
-
-//                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
-//                            R.anim.exit_out_right));
-
-                    final Handler handler = new Handler();
-
-                    final Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-
-                    MainActivity.dateRowShowing = true;
-
-                    MainActivity.db.updateRepeatInterval(String.valueOf(
-                            MainActivity.sortedIDs.get(position)), "month");
-
-                    MainActivity.taskPropertiesShowing = false;
-
-                    setAlarm(/*dateRow, datePicker, timePicker, */position, finalUniYear,
-                            finalUniMonth, finalUniDay, finalUniHour, finalUniMinute);
-
-                    //Returns the 'add' button
-                    MainActivity.params.height = MainActivity.addHeight;
-                    MainActivity.iconParams.height = MainActivity.addIconHeight;
-
-                    MainActivity.add.setLayoutParams(MainActivity.params);
-                    MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
-
-                    notifyDataSetChanged();
-
-                        }};
-
-                    handler.postDelayed(runnable, 600);
-
-                }
-            });
+//            daily.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    MainActivity.vibrate.vibrate(50);
+//
+//                    if(!MainActivity.mute){
+//                        MainActivity.blip.start();
+//                    }
+//
+////                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
+////                            R.anim.exit_out_right));
+//
+//                    final Handler handler = new Handler();
+//
+//                    final Runnable runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                        MainActivity.dateRowShowing =true;
+//
+//                        MainActivity.repeatInterval =AlarmManager.INTERVAL_DAY;
+//
+//                        MainActivity.db.updateRepeatInterval(String.valueOf(
+//                            MainActivity.sortedIDs.get(position)),"day");
+//
+//                        MainActivity.repeating =true;
+//
+//                        MainActivity.taskPropertiesShowing =false;
+//
+//                        setAlarm(/*dateRow, datePicker, timePicker, */position, finalUniYear,
+//                                finalUniMonth, finalUniDay, finalUniHour, finalUniMinute);
+//
+//                        //Returns the 'add' button
+//                        MainActivity.params.height =MainActivity.addHeight;
+//                        MainActivity.iconParams.height =MainActivity.addIconHeight;
+//
+//                        MainActivity.add.setLayoutParams(MainActivity.params);
+//                        MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
+//
+//                        notifyDataSetChanged();
+//
+//                    }};
+//
+//                    handler.postDelayed(runnable, 600);
+//
+//                }
+//            });
+//
+//            //Actions to occur if user selects to repeat weekly
+//            weekly.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    MainActivity.vibrate.vibrate(50);
+//
+//                    if(!MainActivity.mute){
+//                        MainActivity.blip.start();
+//                    }
+//
+////                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
+////                            R.anim.exit_out_right));
+//
+//                    final Handler handler = new Handler();
+//
+//                    final Runnable runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                    MainActivity.dateRowShowing = true;
+//
+//                    MainActivity.repeatInterval = (AlarmManager.INTERVAL_DAY * 7);
+//
+//                    MainActivity.db.updateRepeatInterval(String.valueOf(
+//                            MainActivity.sortedIDs.get(position)), "week");
+//
+//                    MainActivity.repeating = true;
+//
+//                    MainActivity.taskPropertiesShowing = false;
+//
+//                    setAlarm(/*dateRow, datePicker, timePicker, */position, finalUniYear,
+//                            finalUniMonth, finalUniDay, finalUniHour, finalUniMinute);
+//
+//                    //Returns the 'add' button
+//                    MainActivity.params.height = MainActivity.addHeight;
+//                    MainActivity.iconParams.height = MainActivity.addIconHeight;
+//
+//                    MainActivity.add.setLayoutParams(MainActivity.params);
+//                    MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
+//
+//                    notifyDataSetChanged();
+//
+//                        }};
+//
+//                    handler.postDelayed(runnable, 600);
+//
+//                }
+//            });
+//
+//            //Actions to occur if user selects to repeat monthly
+//            monthly.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    MainActivity.vibrate.vibrate(50);
+//
+//                    if(!MainActivity.mute){
+//                        MainActivity.blip.start();
+//                    }
+//
+////                    repeatRow.startAnimation(AnimationUtils.loadAnimation(getContext(),
+////                            R.anim.exit_out_right));
+//
+//                    final Handler handler = new Handler();
+//
+//                    final Runnable runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                    MainActivity.dateRowShowing = true;
+//
+//                    MainActivity.db.updateRepeatInterval(String.valueOf(
+//                            MainActivity.sortedIDs.get(position)), "month");
+//
+//                    MainActivity.taskPropertiesShowing = false;
+//
+//                    setAlarm(/*dateRow, datePicker, timePicker, */position, finalUniYear,
+//                            finalUniMonth, finalUniDay, finalUniHour, finalUniMinute);
+//
+//                    //Returns the 'add' button
+//                    MainActivity.params.height = MainActivity.addHeight;
+//                    MainActivity.iconParams.height = MainActivity.addIconHeight;
+//
+//                    MainActivity.add.setLayoutParams(MainActivity.params);
+//                    MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
+//
+//                    notifyDataSetChanged();
+//
+//                        }};
+//
+//                    handler.postDelayed(runnable, 600);
+//
+//                }
+//            });
 
         }
 

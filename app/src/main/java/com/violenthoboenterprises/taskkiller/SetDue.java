@@ -42,6 +42,10 @@ public class SetDue extends MainActivity {
     static String TAG;
     private Toolbar dueToolbar;
     LinearLayout dateButton, timeButton;
+    static ImageView time;
+    static ImageView timeFaded;
+    static ImageView calendar;
+    static ImageView calendarFaded;
     ImageView daily;
     ImageView weekly;
     ImageView monthly;
@@ -52,6 +56,7 @@ public class SetDue extends MainActivity {
     String repeat;
     static boolean setDue;
     static String dbTaskId;
+    String dbTask;
     static String dbDueTime;
     MenuItem killAlarm;
     static boolean datePicked;
@@ -70,6 +75,10 @@ public class SetDue extends MainActivity {
         datePicked = false;
         timePicked = false;
 
+        time = findViewById(R.id.time);
+        timeFaded = findViewById(R.id.timeFaded);
+        calendar = findViewById(R.id.calendar);
+        calendarFaded = findViewById(R.id.calendarFaded);
         dateButton = findViewById(R.id.dateBtn);
         timeButton = findViewById(R.id.timeBtn);
         pickerRoot = findViewById(R.id.pickerRoot);
@@ -80,7 +89,7 @@ public class SetDue extends MainActivity {
         monthly = findViewById(R.id.monthly);
         cancelRepeat = findViewById(R.id.cancelRepeat);
 
-        dueToolbar.setTitleTextColor(Color.parseColor(highlight));
+        dueToolbar.setTitleTextColor(Color.parseColor("#AAAAAA"));
         cancelRepeat.setBackgroundColor(Color.parseColor("#AAAAAA"));
         daily.setBackgroundColor(Color.parseColor("#AAAAAA"));
         weekly.setBackgroundColor(Color.parseColor("#AAAAAA"));
@@ -89,7 +98,7 @@ public class SetDue extends MainActivity {
         //getting task data
         dbDueTime = "";
         dbTaskId = "";
-        String dbTask = "";
+        dbTask = "";
         String dbRepeatInterval = "";
         boolean dbRepeat = false;
         Cursor dbTaskResult = MainActivity.db.getUniversalData();
@@ -105,12 +114,10 @@ public class SetDue extends MainActivity {
         }
         dbTaskResult.close();
 
-        dueToolbar.setTitle(dbTask);
-
         //Inform user that they can set an alarm
         if(dbDueTime.equals("0")){
-            dateTextView.setText("Click to add due date");
-            timeTextView.setText("Click to add due time");
+            dateTextView.setText("Add due date");
+            timeTextView.setText("Add due time");
         //Showing existing due date and time
         }else{
             //getting alarm data
@@ -181,6 +188,13 @@ public class SetDue extends MainActivity {
             }
 
             timeTextView.setText(adjustedHour + ":" + adjustedMinute + adjustedAmPm);
+
+            calendarFaded.setVisibility(View.GONE);
+            calendar.setVisibility(View.VISIBLE);
+            timeFaded.setVisibility(View.GONE);
+            time.setVisibility(View.VISIBLE);
+            datePicked = true;
+            timePicked = true;
 
         }
 
@@ -382,6 +396,7 @@ public class SetDue extends MainActivity {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_alarm, menu);
             killAlarm = menu.findItem(R.id.killAlarmItem);
+            this.setTitle(dbTask);
             return true;
         }else {
             killAlarm.setEnabled(true);
@@ -394,12 +409,17 @@ public class SetDue extends MainActivity {
 
         int id = item.getItemId();
 
-        vibrate.vibrate(50);
-
         //Resetting alarm to off
         //TODO find out if return statements are necessary
         //noinspection SimplifiableIfStatement
-        if (id == R.id.killAlarmItem) {
+        Log.i(TAG, repeat);
+        if ((id == R.id.killAlarmItem) && (timePicked || datePicked || !repeat.equals("none"))) {
+
+            if(!mute){
+                trash.start();
+            }
+
+            vibrate.vibrate(50);
 
             //getting task data
             dbTaskId = "";
@@ -436,8 +456,13 @@ public class SetDue extends MainActivity {
             datePicked = false;
             timePicked = false;
 
-            dateTextView.setText("Click to add due date");
-            timeTextView.setText("Click to add due time");
+            time.setVisibility(View.GONE);
+            timeFaded.setVisibility(View.VISIBLE);
+            calendar.setVisibility(View.GONE);
+            calendarFaded.setVisibility(View.VISIBLE);
+
+            dateTextView.setText("Add due date");
+            timeTextView.setText("Add due time");
 
             cancelRepeat.setBackgroundColor(Color.parseColor(highlight));
             daily.setBackgroundColor(Color.parseColor("#AAAAAA"));
@@ -598,6 +623,8 @@ public class SetDue extends MainActivity {
 
             setDue = true;
             datePicked = true;
+            calendarFaded.setVisibility(View.GONE);
+            calendar.setVisibility(View.VISIBLE);
 
         }
 
@@ -725,6 +752,8 @@ public class SetDue extends MainActivity {
 
             setDue = true;
             timePicked = true;
+            timeFaded.setVisibility(View.GONE);
+            time.setVisibility(View.VISIBLE);
 
         }
     }
