@@ -102,48 +102,18 @@ public class Checklist extends MainActivity {
         dbResult = MainActivity.db.getData(Integer.parseInt(dbTaskId));
         while (dbResult.moveToNext()) {
             dbID = dbResult.getInt(0);
-            dbNote = dbResult.getString(1);
-            dbTimestamp = dbResult.getString(3);
             dbTask = dbResult.getString(4);
-            dbDue = dbResult.getInt(5) > 0;
-            dbKilled = dbResult.getInt(6) > 0;
-            dbBroadcast = dbResult.getInt(7);
-            dbRepeat = dbResult.getInt(8) > 0;
-            dbOverdue = dbResult.getInt(9) > 0;
-            dbSnooze = dbResult.getInt(10) > 0;
-            dbShowOnce = dbResult.getInt(11) > 0;
-            dbInterval = dbResult.getInt(12);
-            dbRepeatInterval = dbResult.getString(13);
-            dbIgnored = dbResult.getInt(14) > 0;
-            dbTimeCreated = dbResult.getString(15);
             dbSortedIndex = dbResult.getInt(16);
             tempSortedIDs.add(dbSortedIndex);
-            dbChecklistSize = dbResult.getInt(17);
         }
         dbResult.close();
 
         final String finalDbTaskId = dbTaskId;
         final int finalDbID = dbID;
-        final String finalDbNote = dbNote;
-//        final Boolean finalDbChecklist = dbChecklist;
-        final String finalDbTimestamp = dbTimestamp;
-        final Boolean finalDbDue = dbDue;
-        final Boolean finalDbKilled = dbKilled;
-        final int finalDbBroadcast = dbBroadcast;
-        final Boolean finalDbRepeat = dbRepeat;
-        final Boolean finalDbOverdue = dbOverdue;
-        final Boolean finalDbSnooze = dbSnooze;
-        final Boolean finalDbShowOnce = dbShowOnce;
-        final int finalDbInterval = dbInterval;
-        final String finalDbRepeatInterval = dbRepeatInterval;
-        final Boolean finalDbIgnored = dbIgnored;
-        final String finalDbTimeCreated = dbTimeCreated;
-        final int finalDbSortedIndex = dbSortedIndex;
-        final int finalDbChecklistSize = dbChecklistSize;
 
         //setting highlight color
         checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-        subTasksToolbar.setTitleTextColor(Color.parseColor(highlight));
+        subTasksToolbar.setTitleTextColor(Color.parseColor("#AAAAAA"));
 
         //setting title to task name
         subTasksToolbar.setTitle(dbTask);

@@ -44,73 +44,14 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         TAG = "ChecklistAdapter";
 
         String dbTaskId = "";
-        Boolean dbLightDark = false;
-
-        int dbID = 0;
-        String dbNote = "";
-        String dbTimestamp = "";
-        String dbTask = "";
-        Boolean dbDue = false;
-        Boolean dbKilled = false;
-        int dbBroadcast = 0;
-        Boolean dbRepeat = false;
-        Boolean dbOverdue = false;
-        Boolean dbSnooze = false;
-        Boolean dbShowOnce = false;
-        int dbInterval = 0;
-        String dbRepeatInterval = "";
-        Boolean dbIgnored = false;
-        String dbTimeCreated = "";
-        int dbSortedIndex = 0;
-        int dbChecklistSize = 0;
 
         //getting app-wide data
         Cursor dbResult = MainActivity.db.getUniversalData();
         while (dbResult.moveToNext()) {
             dbTaskId = dbResult.getString(4);
-            dbLightDark = dbResult.getInt(3) > 0;
         }
-        //getting subtask data
-        dbResult = MainActivity.db.getData(Integer.parseInt(dbTaskId));
-        while (dbResult.moveToNext()) {
-            dbID = dbResult.getInt(0);
-            dbNote = dbResult.getString(1);
-            dbTimestamp = dbResult.getString(3);
-            dbTask = dbResult.getString(4);
-            dbDue = dbResult.getInt(5) > 0;
-            dbKilled = dbResult.getInt(6) > 0;
-            dbBroadcast = dbResult.getInt(7);
-            dbRepeat = dbResult.getInt(8) > 0;
-            dbOverdue = dbResult.getInt(9) > 0;
-            dbSnooze = dbResult.getInt(10) > 0;
-            dbShowOnce = dbResult.getInt(11) > 0;
-            dbInterval = dbResult.getInt(12);
-            dbRepeatInterval = dbResult.getString(13);
-            dbIgnored = dbResult.getInt(14) > 0;
-            dbTimeCreated = dbResult.getString(15);
-            dbSortedIndex = dbResult.getInt(16);
-            dbChecklistSize = dbResult.getInt(17);
-        }
-        dbResult.close();
 
         final String finalDbTaskId = dbTaskId;
-
-        final int finalDbID = dbID;
-        final String finalDbNote = dbNote;
-        final String finalDbTimestamp = dbTimestamp;
-        final Boolean finalDbDue = dbDue;
-        final Boolean finalDbKilled = dbKilled;
-        final int finalDbBroadcast = dbBroadcast;
-        final Boolean finalDbRepeat = dbRepeat;
-        final Boolean finalDbOverdue = dbOverdue;
-        final Boolean finalDbSnooze = dbSnooze;
-        final Boolean finalDbShowOnce = dbShowOnce;
-        final int finalDbInterval = dbInterval;
-        final String finalDbRepeatInterval = dbRepeatInterval;
-        final Boolean finalDbIgnored = dbIgnored;
-        final String finalDbTimeCreated = dbTimeCreated;
-        final int finalDbSortedIndex = dbSortedIndex;
-        final int finalDbChecklistSize = dbChecklistSize;
 
         //setting up UI based on light or dark mode
         if(!MainActivity.lightDark){

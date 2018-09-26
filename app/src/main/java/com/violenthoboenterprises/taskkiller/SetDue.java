@@ -195,6 +195,8 @@ public class SetDue extends MainActivity {
             time.setVisibility(View.VISIBLE);
             datePicked = true;
             timePicked = true;
+            dateTextView.setTextSize(25);
+            timeTextView.setTextSize(25);
 
         }
 
@@ -208,14 +210,6 @@ public class SetDue extends MainActivity {
         }else if(dbRepeatInterval.equals("month")){
             monthly.setBackgroundColor(Color.parseColor(highlight));
         }
-
-//        //getting app-wide data//TODO aren't these supposed to be global?
-//        Cursor dbResult = MainActivity.db.getUniversalData();
-//        while (dbResult.moveToNext()) {
-//            mute = dbResult.getInt(1) > 0;
-//            lightDark = dbResult.getInt(3) > 0;
-//        }
-//        dbResult.close();
 
         if(!lightDark){
             pickerRoot.setBackgroundColor(Color.parseColor("#333333"));
@@ -287,7 +281,7 @@ public class SetDue extends MainActivity {
                 weekly.setBackgroundColor(Color.parseColor("#AAAAAA"));
                 monthly.setBackgroundColor(Color.parseColor("#AAAAAA"));
 
-                dateRowShowing =true;
+//                dateRowShowing =true;
 
                 repeatInterval = AlarmManager.INTERVAL_DAY;
 
@@ -319,7 +313,7 @@ public class SetDue extends MainActivity {
                 weekly.setBackgroundColor(Color.parseColor(highlight));
                 monthly.setBackgroundColor(Color.parseColor("#AAAAAA"));
 
-                dateRowShowing =true;
+//                dateRowShowing =true;
 
                 repeatInterval = AlarmManager.INTERVAL_DAY;
 
@@ -351,7 +345,7 @@ public class SetDue extends MainActivity {
                 weekly.setBackgroundColor(Color.parseColor("#AAAAAA"));
                 monthly.setBackgroundColor(Color.parseColor(highlight));
 
-                dateRowShowing =true;
+//                dateRowShowing =true;
 
                 repeatInterval = AlarmManager.INTERVAL_DAY;
 
@@ -412,7 +406,6 @@ public class SetDue extends MainActivity {
         //Resetting alarm to off
         //TODO find out if return statements are necessary
         //noinspection SimplifiableIfStatement
-        Log.i(TAG, repeat);
         if ((id == R.id.killAlarmItem) && (timePicked || datePicked || !repeat.equals("none"))) {
 
             if(!mute){
@@ -463,6 +456,8 @@ public class SetDue extends MainActivity {
 
             dateTextView.setText("Add due date");
             timeTextView.setText("Add due time");
+            dateTextView.setTextSize(15);
+            timeTextView.setTextSize(15);
 
             cancelRepeat.setBackgroundColor(Color.parseColor(highlight));
             daily.setBackgroundColor(Color.parseColor("#AAAAAA"));
@@ -488,14 +483,10 @@ public class SetDue extends MainActivity {
 
             Cursor alarmResult = MainActivity.db.getAlarmData
                     (Integer.parseInt(dbTaskId));
-            String alarmHour = "";
-            String alarmMinute = "";
             String alarmDay = "";
             String alarmMonth = "";
             String alarmYear = "";
             while(alarmResult.moveToNext()){
-                alarmHour = alarmResult.getString(1);
-                alarmMinute = alarmResult.getString(2);
                 alarmDay = alarmResult.getString(4);
                 alarmMonth = alarmResult.getString(5);
                 alarmYear = alarmResult.getString(6);
@@ -505,19 +496,13 @@ public class SetDue extends MainActivity {
 
             //getting universal data
             Cursor uniResult = MainActivity.db.getUniversalData();
-            Boolean uniSetAlarm = false;
             int uniYear = 0;
             int uniMonth = 0;
             int uniDay = 0;
-            int uniHour = 0;
-            int uniMinute = 0;
             while(uniResult.moveToNext()){
-                uniSetAlarm = uniResult.getInt(10) > 0;
                 uniYear = uniResult.getInt(11);
                 uniMonth = uniResult.getInt(12);
                 uniDay = uniResult.getInt(13);
-                uniHour = uniResult.getInt(14);
-                uniMinute = uniResult.getInt(15);
             }
             uniResult.close();
 
@@ -626,6 +611,8 @@ public class SetDue extends MainActivity {
             calendarFaded.setVisibility(View.GONE);
             calendar.setVisibility(View.VISIBLE);
 
+            dateTextView.setTextSize(25);
+
         }
 
     }
@@ -649,32 +636,18 @@ public class SetDue extends MainActivity {
                     (Integer.parseInt(dbTaskId));
             String alarmHour = "";
             String alarmMinute = "";
-            String alarmDay = "";
-            String alarmMonth = "";
-            String alarmYear = "";
             while(alarmResult.moveToNext()){
                 alarmHour = alarmResult.getString(1);
                 alarmMinute = alarmResult.getString(2);
-                alarmDay = alarmResult.getString(4);
-                alarmMonth = alarmResult.getString(5);
-                alarmYear = alarmResult.getString(6);
             }
 
             alarmResult.close();
 
             //getting universal data
             Cursor uniResult = MainActivity.db.getUniversalData();
-            Boolean uniSetAlarm = false;
-            int uniYear = 0;
-            int uniMonth = 0;
-            int uniDay = 0;
             int uniHour = 0;
             int uniMinute = 0;
             while(uniResult.moveToNext()){
-                uniSetAlarm = uniResult.getInt(10) > 0;
-                uniYear = uniResult.getInt(11);
-                uniMonth = uniResult.getInt(12);
-                uniDay = uniResult.getInt(13);
                 uniHour = uniResult.getInt(14);
                 uniMinute = uniResult.getInt(15);
             }
@@ -755,6 +728,8 @@ public class SetDue extends MainActivity {
             timeFaded.setVisibility(View.GONE);
             time.setVisibility(View.VISIBLE);
 
+            timeTextView.setTextSize(25);
+
         }
     }
 
@@ -790,43 +765,6 @@ public class SetDue extends MainActivity {
                 repeating = true;
 
                 taskPropertiesShowing = false;
-
-//                Cursor alarmResult = MainActivity.db.getAlarmData
-//                        (Integer.parseInt(dbTaskId));
-//                String alarmHour = "";
-//                String alarmMinute = "";
-//                String alarmDay = "";
-//                String alarmMonth = "";
-//                String alarmYear = "";
-//                while(alarmResult.moveToNext()){
-//                    alarmHour = alarmResult.getString(1);
-//                    alarmMinute = alarmResult.getString(2);
-//                    alarmDay = alarmResult.getString(4);
-//                    alarmMonth = alarmResult.getString(5);
-//                    alarmYear = alarmResult.getString(6);
-//                }
-//
-//                alarmResult.close();
-
-                //TODO break this up into datepicked and timepicked and doe for each day week and month
-//                if(alarmYear.equals("") && alarmMonth.equals("") && alarmDay.equals("") && alarmHour.equals("") && alarmMinute.equals("")){
-//                    Calendar calendar = Calendar.getInstance();
-//                    int minute = calendar.get(Calendar.MINUTE);
-//                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-//                    int month = calendar.get(Calendar.MONTH);
-//                    int year = calendar.get(Calendar.YEAR);
-//                    if(hour != 23) {
-//                        db.updateHour(hour + 1);
-//                    }else{
-//                        db.updateHour(hour);
-//                    }
-//                    db.updateMinute(minute);
-//                    db.updateDay(day);
-//                    db.updateMonth(month);
-//                    db.updateYear(year);
-//                    setDue = true;
-//                }
 
                 //set default date values if user not already selected
                 if(!datePicked){
@@ -871,42 +809,6 @@ public class SetDue extends MainActivity {
 
                 taskPropertiesShowing = false;
 
-//                Cursor alarmResult = MainActivity.db.getAlarmData
-//                        (Integer.parseInt(dbTaskId));
-//                String alarmHour = "";
-//                String alarmMinute = "";
-//                String alarmDay = "";
-//                String alarmMonth = "";
-//                String alarmYear = "";
-//                while(alarmResult.moveToNext()){
-//                    alarmHour = alarmResult.getString(1);
-//                    alarmMinute = alarmResult.getString(2);
-//                    alarmDay = alarmResult.getString(4);
-//                    alarmMonth = alarmResult.getString(5);
-//                    alarmYear = alarmResult.getString(6);
-//                }
-//
-//                alarmResult.close();
-//
-//                if(alarmYear.equals("") && alarmMonth.equals("") && alarmDay.equals("") && alarmHour.equals("") && alarmMinute.equals("")){
-//                    Calendar calendar = Calendar.getInstance();
-//                    int minute = calendar.get(Calendar.MINUTE);
-//                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-//                    int month = calendar.get(Calendar.MONTH);
-//                    int year = calendar.get(Calendar.YEAR);
-//                    if(hour != 23) {
-//                        db.updateHour(hour + 1);
-//                    }else{
-//                        db.updateHour(hour);
-//                    }
-//                    db.updateMinute(minute);
-//                    db.updateDay(day);
-//                    db.updateMonth(month);
-//                    db.updateYear(year);
-//                    setDue = true;
-//                }
-
                 //set default date values if user not already selected
                 if(!datePicked){
                     Calendar calendar = Calendar.getInstance();
@@ -945,42 +847,6 @@ public class SetDue extends MainActivity {
                 db.updateRepeatInterval(dbTaskId, "month");
 
                 MainActivity.taskPropertiesShowing = false;
-
-//                Cursor alarmResult = MainActivity.db.getAlarmData
-//                        (Integer.parseInt(dbTaskId));
-//                String alarmHour = "";
-//                String alarmMinute = "";
-//                String alarmDay = "";
-//                String alarmMonth = "";
-//                String alarmYear = "";
-//                while(alarmResult.moveToNext()){
-//                    alarmHour = alarmResult.getString(1);
-//                    alarmMinute = alarmResult.getString(2);
-//                    alarmDay = alarmResult.getString(4);
-//                    alarmMonth = alarmResult.getString(5);
-//                    alarmYear = alarmResult.getString(6);
-//                }
-//
-//                alarmResult.close();
-//
-//                if(alarmYear.equals("") && alarmMonth.equals("") && alarmDay.equals("") && alarmHour.equals("") && alarmMinute.equals("")){
-//                    Calendar calendar = Calendar.getInstance();
-//                    int minute = calendar.get(Calendar.MINUTE);
-//                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-//                    int month = calendar.get(Calendar.MONTH);
-//                    int year = calendar.get(Calendar.YEAR);
-//                    if(hour != 23) {
-//                        db.updateHour(hour + 1);
-//                    }else{
-//                        db.updateHour(hour);
-//                    }
-//                    db.updateMinute(minute);
-//                    db.updateDay(day);
-//                    db.updateMonth(month);
-//                    db.updateYear(year);
-//                    setDue = true;
-//                }
 
                 //set default date values if user not already selected
                 if(!datePicked){

@@ -76,7 +76,7 @@
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:gravity="center"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:textColor="@color/gray"/>
 
     </LinearLayout>
@@ -114,7 +114,7 @@
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:gravity="center"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:textColor="@color/gray"/>
 
     </LinearLayout>

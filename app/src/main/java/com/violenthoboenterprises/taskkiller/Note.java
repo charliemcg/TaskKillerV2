@@ -63,7 +63,7 @@ public class Note extends MainActivity {
         inNote = true;
         noteRoot = findViewById(R.id.noteRoot);
 
-        noteToolbar.setTitleTextColor(Color.parseColor(highlight));
+        noteToolbar.setTitleTextColor(Color.parseColor("#AAAAAA"));
 
         //getting task data
         String dbTask = "";

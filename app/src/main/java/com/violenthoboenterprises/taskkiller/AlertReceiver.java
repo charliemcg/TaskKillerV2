@@ -73,7 +73,7 @@ public class AlertReceiver extends BroadcastReceiver {
             val = 16 * val + d;
         }
 
-        builder.setLights(/*0xFF00FF00*/val, 500, 500);
+        builder.setLights(val, 500, 500);
 
         //use phone's default notification sound
         builder.setDefaults(NotificationCompat.DEFAULT_SOUND);

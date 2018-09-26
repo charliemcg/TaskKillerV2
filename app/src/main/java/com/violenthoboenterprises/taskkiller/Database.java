@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.Date;
+import java.util.Calendar;
+
 
 public class Database extends SQLiteOpenHelper {
 
@@ -72,6 +73,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL14 = "DAY";
     public static final String UCOL15 = "HOUR";
     public static final String UCOL16 = "MINUTE";
+    public static final String UCOL17 = "COLORLASTCHANGED";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -104,7 +106,7 @@ public class Database extends SQLiteOpenHelper {
                 " HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT, ADSREMOVED BOOLEAN," +
                 " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
                 "CHECKLISTLISTSIZE INTEGER, SETALARM BOOLEAN, YEAR INTEGER, MONTH INTEGER," +
-                " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER)");
+                " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -203,6 +205,8 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL14, 0);
         content.put(UCOL15, 0);
         content.put(UCOL16, 0);
+        Calendar cal = Calendar.getInstance();
+        content.put(UCOL17, (cal.getTimeInMillis() / 1000 / 60 / 60));
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -637,6 +641,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL16, value);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateColorLastChanged(int value){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL17, value);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }

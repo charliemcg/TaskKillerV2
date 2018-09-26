@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //Indicates if a tasks properties are showing
     static boolean taskPropertiesShowing;
-    //Indicates if a task's options are showing
+    //Indicates if a task's options are showing //TODO how is this different from task properties
     static boolean taskOptionsShowing;
     //Indicates if tasks can be clicked on
     static boolean tasksAreClickable;
@@ -86,23 +86,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static boolean dateOrTime;
     //Used to indicate that user is in the note screen
     static boolean inNote;
-    //Used to indicate that user is in the sub-tasks screen
+    //Used to indicate that user is in the sub-tasks screen //TODO how is this different from checklistShowing
     static boolean inChecklist;
-    //Used to indicate that date row is showing
-    static boolean dateRowShowing;
     //Used to indicate that a repeating alarm is being set
     static boolean repeating;
-    //Used to indicate that date picker is showing
-    static boolean datePickerShowing;
-    //Used to indicate that time picker is showing
-    static boolean timePickerShowing;
-    //Used to indicate that alarm options are showing
-    static boolean alarmOptionsShowing;
-    //Used to indicate that repeat options is showing
-    static boolean repeatShowing;
     //Used to indicate that list needs to be reordered
     static boolean reorderList;
-    //Reinstate alarm after reinstating task
+    //Reinstate alarm after reinstating task //TODO if deciding to use this feature
     static boolean reinstateAlarm;
     //Used to determine that task is being set to complete
     static boolean completeTask;
@@ -124,8 +114,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static boolean snoozeRowShowing;
     //used to indicate that a task was long clicked
     static boolean longClicked;
-    //Used to indicate that alarm needs to be set
-//    static boolean setAlarm;
+    //used to indicate that highlight color needs to be set automatically
+    boolean autoColor;
     static boolean killedAnimation;
     static boolean alarmAnimation;
     static boolean reinstateAnimation;
@@ -134,16 +124,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //task properties require exit animation
     static boolean exitTaskProperties;
-    //alarm options require exit animation
-    static boolean exitAlarmOptions;
-    //date picker requires exit animation
-    static boolean exitDatePicker;
-    //time picker requires exit animation
-    static boolean exitTimePicker;
-    //date picker when changing due date requires exit animation
-    static boolean exitChangeDueDate;
-    //repeat row requires exit animation
-    static boolean exitRepeat;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -159,16 +139,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static int thePosition;
     //portrait width of device
     static int deviceWidthPortrait;
-    //selected year
-//    static int selectedYear;
-//    //selected month
-//    static int selectedMonth;
-//    //selected day
-//    static int selectedDay;
-//    //selected hour
-//    static int selectedHour;
-//    //selected minute
-//    static int selectedMinute;
 
     //Interval between repeating alarms
     static long repeatInterval;
@@ -189,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     String[] motivation;
     //Keep track of last phrase used so as to not have the same thing twice in a row
     String lastToast;
+    //Colors for the auto color change feature
+    String[] darkHighlights = {"#ee30ef00", "#eeef0000", "#eeefd700", "#eebf00ef", "#eeef8f00", "#eeef1a7a", "#ee0060ef"};
 
     //Required for setting notification alarms
     static Intent alertIntent;
@@ -309,10 +281,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     TextView cycleColorsDescription;
     TextView unlockAllTitle;
     TextView unlockAllDescription;
-    ImageView removeAdsImage;
-    ImageView getRemindersImage;
-    ImageView cycleColorsImage;
-    ImageView unlockAllImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -355,13 +323,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         inNote = false;
         inChecklist = false;
         taskOptionsShowing = false;
-        dateRowShowing = false;
         repeating = false;
         repeatInterval = 0;
-        datePickerShowing = false;
-        timePickerShowing = false;
-        alarmOptionsShowing = false;
-        repeatShowing = false;
         reorderList = false;
         sortedIDs = new ArrayList<>();
         reinstateAlarm = false;
@@ -372,24 +335,24 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         chime = MediaPlayer.create(this, R.raw.chime);
         trash = MediaPlayer.create(this, R.raw.trash);
         mute = false;
-        colorPicker = findViewById(R.id.colorPicker);
-        white = findViewById(R.id.white);
-        black = findViewById(R.id.black);
-        lightYellow = findViewById(R.id.lightYellow);
-        darkYellow = findViewById(R.id.darkYellow);
-        lightBlue = findViewById(R.id.lightBlue);
-        darkBlue = findViewById(R.id.darkBlue);
-        lightOrange = findViewById(R.id.lightOrange);
-        darkOrange = findViewById(R.id.darkOrange);
-        lightPurple = findViewById(R.id.lightPurple);
-        darkPurple = findViewById(R.id.darkPurple);
-        lightRed = findViewById(R.id.lightRed);
-        darkRed = findViewById(R.id.darkRed);
-        lightPink = findViewById(R.id.lightPink);
-        darkPink = findViewById(R.id.darkPink);
-        darkGreen = findViewById(R.id.darkGreen);
-        lightGreen = findViewById(R.id.lightGreen);
-        colorPickerTitle = findViewById(R.id.colorPickerTitle);
+//        colorPicker = findViewById(R.id.colorPicker);
+//        white = findViewById(R.id.white);
+//        black = findViewById(R.id.black);
+//        lightYellow = findViewById(R.id.lightYellow);
+//        darkYellow = findViewById(R.id.darkYellow);
+//        lightBlue = findViewById(R.id.lightBlue);
+//        darkBlue = findViewById(R.id.darkBlue);
+//        lightOrange = findViewById(R.id.lightOrange);
+//        darkOrange = findViewById(R.id.darkOrange);
+//        lightPurple = findViewById(R.id.lightPurple);
+//        darkPurple = findViewById(R.id.darkPurple);
+//        lightRed = findViewById(R.id.lightRed);
+//        darkRed = findViewById(R.id.darkRed);
+//        lightPink = findViewById(R.id.lightPink);
+//        darkPink = findViewById(R.id.darkPink);
+//        darkGreen = findViewById(R.id.darkGreen);
+//        lightGreen = findViewById(R.id.lightGreen);
+//        colorPickerTitle = findViewById(R.id.colorPickerTitle);
         removeAdsTitle = findViewById(R.id.removeAdsTitle);
         removeAdsDescription = findViewById(R.id.removeAdsDescription);
         getRemindersTitle = findViewById(R.id.getRemindersTitle);
@@ -414,10 +377,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 getString(R.string.beVictorious)};
         taskListSize = 0;
         exitTaskProperties = false;
-        exitAlarmOptions = false;
-        exitDatePicker = false;
-        exitChangeDueDate = false;
-        exitRepeat = false;
         snoozeRowShowing = false;
         toast = findViewById(R.id.toast);
         killedAnimation = false;
@@ -429,14 +388,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidthPortrait = displayMetrics.widthPixels;
-//        setAlarm = false;
-//        selectedYear = 0;
-//        selectedMonth = 0;
-//        selectedDay = 0;
-//        selectedMinute = 0;
-//        selectedHour = 0;
+        autoColor = true;//TODO make this false
 //        showDb = findViewById(R.id.showDb);
-//      showAlarmDb = findViewById(R.id.showAlarmDb);
+//        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
@@ -800,7 +754,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                         final Runnable runnable = new Runnable() {
                             public void run() {
-                                sweep.start();
+                                if(!mute) {
+                                    sweep.start();
+                                }
                                 toast.startAnimation(AnimationUtils.loadAnimation
                                         (MainActivity.this, R.anim.enter_from_right_fast));
                                 toast.setVisibility(View.VISIBLE);
@@ -864,22 +820,33 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
+    private void switchColor() {
+        int i = random.nextInt(6);
+        db.updateHighlight(darkHighlights[i]);
+        Calendar cal = Calendar.getInstance();
+        db.updateColorLastChanged((int) (cal.getTimeInMillis() / 1000 / 60 / 60));
+        highlight = darkHighlights[i];
+        topToolbar.setTitleTextColor(Color.parseColor(highlight));
+        addIcon.setTextColor(Color.parseColor(highlight));
+        taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
+    }
+
     private void checkLightDark(boolean lightDark) {
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
             topToolbar.setBackgroundColor(Color.parseColor("#333333"));
             topToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
-            black.setVisibility(View.GONE);
-            darkYellow.setVisibility(View.GONE);
-            darkBlue.setVisibility(View.GONE);
-            darkOrange.setVisibility(View.GONE);
-            darkPurple.setVisibility(View.GONE);
-            darkRed.setVisibility(View.GONE);
-            darkPink.setVisibility(View.GONE);
-            darkGreen.setVisibility(View.GONE);
-            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable
-                    (this, R.drawable.color_picker_border));
-            colorPickerTitle.setTextColor(Color.parseColor("#AAAAAA"));
+//            black.setVisibility(View.GONE);
+//            darkYellow.setVisibility(View.GONE);
+//            darkBlue.setVisibility(View.GONE);
+//            darkOrange.setVisibility(View.GONE);
+//            darkPurple.setVisibility(View.GONE);
+//            darkRed.setVisibility(View.GONE);
+//            darkPink.setVisibility(View.GONE);
+//            darkGreen.setVisibility(View.GONE);
+//            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable
+//                    (this, R.drawable.color_picker_border));
+//            colorPickerTitle.setTextColor(Color.parseColor("#AAAAAA"));
             removeAdsTitle.setTextColor(Color.parseColor("#AAAAAA"));
             removeAdsDescription.setTextColor(Color.parseColor("#AAAAAA"));
             getRemindersTitle.setTextColor(Color.parseColor("#AAAAAA"));
@@ -904,18 +871,18 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             topToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             topToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
-            white.setVisibility(View.GONE);
-            lightYellow.setVisibility(View.GONE);
-            lightBlue.setVisibility(View.GONE);
-            lightOrange.setVisibility(View.GONE);
-            lightPurple.setVisibility(View.GONE);
-            lightRed.setVisibility(View.GONE);
-            lightPurple.setVisibility(View.GONE);
-            lightPink.setVisibility(View.GONE);
-            lightGreen.setVisibility(View.GONE);
-            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable
-                    (this, R.drawable.color_picker_border_white));
-            colorPickerTitle.setTextColor(Color.parseColor("#000000"));
+//            white.setVisibility(View.GONE);
+//            lightYellow.setVisibility(View.GONE);
+//            lightBlue.setVisibility(View.GONE);
+//            lightOrange.setVisibility(View.GONE);
+//            lightPurple.setVisibility(View.GONE);
+//            lightRed.setVisibility(View.GONE);
+//            lightPurple.setVisibility(View.GONE);
+//            lightPink.setVisibility(View.GONE);
+//            lightGreen.setVisibility(View.GONE);
+//            colorPicker.setBackgroundDrawable(ContextCompat.getDrawable
+//                    (this, R.drawable.color_picker_border_white));
+//            colorPickerTitle.setTextColor(Color.parseColor("#000000"));
             removeAdsTitle.setTextColor(Color.parseColor("#000000"));
             removeAdsDescription.setTextColor(Color.parseColor("#000000"));
             getRemindersTitle.setTextColor(Color.parseColor("#000000"));
@@ -1102,7 +1069,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     muteBtn.setIcon(ContextCompat.getDrawable
                             (this, R.drawable.unmuted_white));
                 }
-//                proBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.pro_white));
                 db.updateDarkLight(true);
                 lightDarkBtn.setTitle("Dark Mode");
             }
@@ -1113,9 +1079,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             if(!mute){
                 blip.start();
             }
-
-//            String blah = Integer.toHexString(Integer.parseInt(highlight));
-//            Log.i(TAG, "blah: " + blah);
 
             String digits = "0123456789ABCDEF";
             int val = 0;
@@ -1135,57 +1098,38 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     .setOnColorSelectedListener(new OnColorSelectedListener() {
                         @Override
                         public void onColorSelected(int selectedColor) {
-//                            toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
                             String tempHighlight = "#" + Integer.toHexString(selectedColor);
                             topToolbar.setTitleTextColor(Color.parseColor(tempHighlight));
                             addIcon.setTextColor(Color.parseColor(tempHighlight));
                             taskNameEditText.setBackgroundColor(Color.parseColor(tempHighlight));
-                            setDividers(lightDark);
                         }
                     })
                     .setPositiveButton("ok", new ColorPickerClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-//                            highlight = String.valueOf(selectedColor);
                             highlight = "#" + Integer.toHexString(selectedColor);
                             db.updateHighlight(highlight);
-//                            topToolbar.setTitleTextColor(Color.parseColor(highlight));
-//                            addIcon.setTextColor(Color.parseColor(highlight));
-//                            taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
-//                            setDividers(lightDark);
+
+                            int[] colors = {0, selectedColor, 0};
+                            theListView.setDivider(new GradientDrawable
+                                    (GradientDrawable.Orientation.RIGHT_LEFT, colors));
+                            if(!lightDark) {
+                                theListView.setDividerHeight(1);
+                            }else{
+                                theListView.setDividerHeight(3);
+                            }
                         }
                     })
                     .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //TODO probably do nothing
                             topToolbar.setTitleTextColor(Color.parseColor(highlight));
                             addIcon.setTextColor(Color.parseColor(highlight));
                             taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
-                            setDividers(lightDark);
                         }
                     })
                     .build()
                     .show();
-
-//            colorPickerShowing = true;
-//            add.setClickable(false);
-//            theListView.setOnItemClickListener(null);
-//            taskPropertiesShowing = false;
-//            onCreateOptionsMenu(topToolbar.getMenu());
-//            theListView.setAdapter(theAdapter[0]);
-//            colorPicker.startAnimation(AnimationUtils.loadAnimation
-//                    (this, R.anim.enter_from_right));
-//
-//            final Handler handler = new Handler();
-//
-//            final Runnable runnable = new Runnable() {
-//                public void run() {
-//                    colorPicker.setVisibility(View.VISIBLE);
-//                }
-//            };
-//
-//            handler.postDelayed(runnable, 200);
 
             return true;
         } else if (id == R.id.buy) {
@@ -1287,10 +1231,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //Marks task as having it's properties showing
         taskPropertiesShowing = true;
 
-        datePickerShowing = false;
-
-        alarmOptionsShowing = false;
-
         centerTask = true;
 
         //Gets position of selected task
@@ -1316,8 +1256,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //Marks properties as not showing
         taskPropertiesShowing = false;
-
-        alarmOptionsShowing = false;
 
         //Returns the 'add' button
         params.height = addHeight;
@@ -1365,7 +1303,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                sweep.start();
+                if(!mute) {
+                    sweep.start();
+                }
                 toast.startAnimation(AnimationUtils.loadAnimation
                         (MainActivity.this, R.anim.enter_from_right_fast));
                 toast.setVisibility(View.VISIBLE);
@@ -1926,7 +1866,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                sweep.start();
+                if(!mute) {
+                    sweep.start();
+                }
                 toast.startAnimation(AnimationUtils.loadAnimation
                         (MainActivity.this, R.anim.enter_from_right_fast));
                 toast.setVisibility(View.VISIBLE);
@@ -1957,7 +1899,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                sweep.start();
+                if(!mute) {
+                    sweep.start();
+                }
                 toast.startAnimation(AnimationUtils.loadAnimation
                         (MainActivity.this, R.anim.enter_from_right_fast));
                 toast.setVisibility(View.VISIBLE);
@@ -2110,6 +2054,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         taskList.clear();
         sortedIDs.clear();
 
+        int taskLastChanged = 0;
+
         //getting app-wide data
         Cursor dbResult = db.getUniversalData();
         while (dbResult.moveToNext()) {
@@ -2120,8 +2066,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             remindersAvailable = dbResult.getInt(6) > 0;
             cycleColors = dbResult.getInt(7) > 0;
             taskListSize = dbResult.getInt(8);
+            taskLastChanged = dbResult.getInt(16);
         }
         dbResult.close();
+
+        if(autoColor) {
+            Calendar cal = Calendar.getInstance();
+            if((cal.getTimeInMillis() / 1000 / 60 / 60) > (taskLastChanged + 4)) {
+                switchColor();
+            }
+        }
 
         checkLightDark(lightDark);
 
@@ -2177,35 +2131,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }else if(taskOptionsShowing){
             theListView.setAdapter(theAdapter[0]);
             taskOptionsShowing = false;
-        }else if(datePickerShowing) {
-            //date picker to properties
-            if(!alarmOptionsShowing) {
-                exitDatePicker = true;
-                datePickerShowing = false;
-                theListView.setAdapter(theAdapter[0]);
-                //change due date to alarm options
-            }else{
-                exitChangeDueDate = true;
-                datePickerShowing = false;
-                theListView.setAdapter(theAdapter[0]);
-            }
-            //time picker to date picker
-        }else if(timePickerShowing) {
-            exitTimePicker = true;
-            datePickerShowing = true;
-            timePickerShowing = false;
-            theListView.setAdapter(theAdapter[0]);
-            //repeat to alarm options
-        }else if(repeatShowing){
-            exitRepeat = true;
-            repeatShowing = false;
-            theListView.setAdapter(theAdapter[0]);
-            //alarm options to properties
-        }else if(alarmOptionsShowing){
-            exitAlarmOptions  = true;
-            alarmOptionsShowing = false;
-            theListView.setAdapter(theAdapter[0]);
-            //Properties to home
+        //Properties to home
         }else if (taskPropertiesShowing){
             exitTaskProperties = true;
             removeTaskProperties();

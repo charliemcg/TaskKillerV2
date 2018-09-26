@@ -165,77 +165,77 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/repeatDayLayout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:visibility="gone"
-                android:layout_weight="1">
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/repeatDayLayout"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_weight="1">-->
 
-                <ImageView
-                    android:id="@+id/repeatDayClear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_icon_dark_day"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/repeatDayClear"-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:background="@color/mid_gray"-->
+                    <!--android:src="@drawable/repeat_icon_dark_day"/>-->
 
-                <ImageView
-                    android:id="@+id/repeatDayClearWhite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_icon_light_day"
-                    android:visibility="gone"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/repeatDayClearWhite"-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:background="@color/mid_gray"-->
+                    <!--android:src="@drawable/repeat_icon_light_day"-->
+                    <!--android:visibility="gone"/>-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
-            <RelativeLayout
-                android:id="@+id/repeatWeekLayout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:visibility="gone"
-                android:layout_weight="1">
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/repeatWeekLayout"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_weight="1">-->
 
-                <ImageView
-                    android:id="@+id/repeatWeekClear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_icon_dark_week"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/repeatWeekClear"-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:background="@color/mid_gray"-->
+                    <!--android:src="@drawable/repeat_icon_dark_week"/>-->
 
-                <ImageView
-                    android:id="@+id/repeatWeekClearWhite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_icon_light_week"
-                    android:visibility="gone"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/repeatWeekClearWhite"-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:background="@color/mid_gray"-->
+                    <!--android:src="@drawable/repeat_icon_light_week"-->
+                    <!--android:visibility="gone"/>-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
-            <RelativeLayout
-                android:id="@+id/repeatMonthLayout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:visibility="gone"
-                android:layout_weight="1">
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/repeatMonthLayout"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_weight="1">-->
 
-                <ImageView
-                    android:id="@+id/repeatMonthClear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_icon_dark_month"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/repeatMonthClear"-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:background="@color/mid_gray"-->
+                    <!--android:src="@drawable/repeat_icon_dark_month"/>-->
 
-                <ImageView
-                    android:id="@+id/repeatMonthClearWhite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@color/mid_gray"
-                    android:src="@drawable/repeat_icon_light_month"
-                    android:visibility="gone"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/repeatMonthClearWhite"-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:background="@color/mid_gray"-->
+                    <!--android:src="@drawable/repeat_icon_light_month"-->
+                    <!--android:visibility="gone"/>-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
             <RelativeLayout
                 android:id="@+id/repeatLayout"
