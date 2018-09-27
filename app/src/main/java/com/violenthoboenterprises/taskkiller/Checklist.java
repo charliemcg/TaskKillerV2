@@ -36,7 +36,7 @@ public class Checklist extends MainActivity {
     static ArrayList<String> checklist;
     static ArrayList<Boolean> subTasksKilled;
     static ArrayList<Integer> sortedSubtaskIds;
-    ArrayList<Integer> tempSortedIDs;
+//    ArrayList<Integer> tempSortedIDs;//TODO
     static boolean subTaskBeingEdited;
     static boolean goToChecklistAdapter;
     private boolean restoreListView;
@@ -61,7 +61,7 @@ public class Checklist extends MainActivity {
         checklist = new ArrayList<>();
         subTasksKilled = new ArrayList<>();
         sortedSubtaskIds = new ArrayList<>();
-        tempSortedIDs = new ArrayList<>();
+//        tempSortedIDs = new ArrayList<>();//TODO
         subTaskBeingEdited = false;
         subTasksClickable = false;
         checklistRootView = findViewById(R.id.checklistRoot);
@@ -105,7 +105,7 @@ public class Checklist extends MainActivity {
             dbID = dbResult.getInt(0);
             dbTask = dbResult.getString(4);
             dbSortedIndex = dbResult.getInt(16);
-            tempSortedIDs.add(dbSortedIndex);
+//            tempSortedIDs.add(dbSortedIndex);//TODO
         }
         dbResult.close();
 
@@ -143,14 +143,14 @@ public class Checklist extends MainActivity {
         }
 
         //sorting temporary IDs
-        Collections.sort(tempSortedIDs);
-
+//        Collections.sort(tempSortedIDs);//TODO
+//
         //populating sortedIds list
-        for(int i = 0; i < taskListSize; i ++){
-
-            sortedIDs.add(String.valueOf(tempSortedIDs.get(i)));
-
-        }
+//        for(int i = 0; i < taskListSize; i ++){
+//
+//            sortedIDs.add(String.valueOf(tempSortedIDs.get(i)));
+//
+//        }
 
         //setting up adapter
         checklistAdapter = new ListAdapter[]{new ChecklistAdapter(this, checklist)};
@@ -235,7 +235,7 @@ public class Checklist extends MainActivity {
 
                     checklistView.setAdapter(checklistAdapter[0]);
 
-                    renameMe = sortedSubtaskIds.get(position);
+                    renameMe = /*sortedSubtaskIds.get(sortedSubtaskIds.get(*/position/*))*/;
 
                 //Reinstate killed subtask
                 }else if(subTasksClickable && isKilled){
@@ -348,7 +348,7 @@ public class Checklist extends MainActivity {
                         subTasksKilled.set(renameMe, true);
 
                         //updating database
-                        db.updateSubtask(finalDbTaskId, String.valueOf(renameMe), checklistTaskName);
+                        db.updateSubtask(finalDbTaskId, String.valueOf(sortedSubtaskIds.get(renameMe)), checklistTaskName);
                         checklistView.setAdapter(checklistAdapter[0]);
 
                     }
@@ -529,7 +529,7 @@ public class Checklist extends MainActivity {
 
         }
 
-        Collections.sort(tempList);
+//        Collections.sort(tempList);//TODO
 
         //Setting the sorted ID in the database
         for(int i = 0; i < checklist.size(); i++){
@@ -539,12 +539,12 @@ public class Checklist extends MainActivity {
 
         }
 
-        tempSortedIDs.clear();
+//        tempSortedIDs.clear();//TODO
         sortedSubtaskIds.clear();
 
         //setting the new sortedIds list
         for(int i = 0; i < checklist.size(); i++){
-            tempSortedIDs.add(Integer.valueOf(tempIdsList.get(i)));
+//            tempSortedIDs.add(Integer.valueOf(tempIdsList.get(i)));//TODO
             sortedSubtaskIds.add(Integer.valueOf(tempIdsList.get(i)));
         }
 
