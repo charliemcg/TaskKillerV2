@@ -23,11 +23,11 @@
         android:title="Color"
         app:showAsAction="collapseActionView"/>
 
-    <item
-        android:id="@+id/mute"
-        android:orderInCategory="300"
-        android:title="Mute/Unmute"
-        android:icon="@drawable/unmuted"
-        app:showAsAction="always"/>
+    <!--<item-->
+        <!--android:id="@+id/mute"-->
+        <!--android:orderInCategory="300"-->
+        <!--android:title="Mute/Unmute"-->
+        <!--android:icon="@drawable/unmuted"-->
+        <!--app:showAsAction="always"/>-->
 
 </menu>

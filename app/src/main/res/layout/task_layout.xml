@@ -75,7 +75,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="complete"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:soundEffectsEnabled="false"/>
 
             <ImageView
                 android:id="@+id/completeWhite"
@@ -99,7 +100,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="complete"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:soundEffectsEnabled="false"/>
 
         </LinearLayout>
 

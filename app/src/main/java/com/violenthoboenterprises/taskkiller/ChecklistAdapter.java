@@ -215,9 +215,9 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                         .sortedSubtaskIds.get(position)), true);
                 Checklist.subTasksKilled.set(position, true);
 
-                if(!MainActivity.mute) {
-                    MainActivity.blip.start();
-                }
+//                if(!MainActivity.mute) {
+//                    MainActivity.blip.start();
+//                }
 
                 notifyDataSetChanged();
 

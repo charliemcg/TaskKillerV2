@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -93,12 +94,12 @@ public class Note extends MainActivity {
         }
         dbResult.close();
 
-        if(mute){
-//            removeBtnDark.setSoundEffectsEnabled(false);
-//            removeBtnLight.setSoundEffectsEnabled(false);
-            submitNoteBtnDark.setSoundEffectsEnabled(false);
-//            submitNoteBtnLight.setSoundEffectsEnabled(false);
-        }
+//        if(mute){
+////            removeBtnDark.setSoundEffectsEnabled(false);
+////            removeBtnLight.setSoundEffectsEnabled(false);
+//            submitNoteBtnDark.setSoundEffectsEnabled(false);
+////            submitNoteBtnLight.setSoundEffectsEnabled(false);
+//        }
 
         if(!lightDark){
             noteRoot.setBackgroundColor(Color.parseColor("#333333"));
@@ -298,9 +299,9 @@ public class Note extends MainActivity {
 
             vibrate.vibrate(50);
 
-            if(!mute) {
-                blip.start();
-            }
+//            if(!mute) {
+//                blip.start();
+//            }
 
             //Set text view to the note content
             noteTextView.setText(theNote);

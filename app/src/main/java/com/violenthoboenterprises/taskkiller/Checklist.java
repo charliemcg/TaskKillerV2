@@ -183,9 +183,9 @@ public class Checklist extends MainActivity {
 
                     vibrate.vibrate(50);
 
-                    if(!mute){
-                        blip.start();
-                    }
+//                    if(!mute){
+//                        blip.start();
+//                    }
 
                     checklist.remove(position);
 
@@ -279,9 +279,9 @@ public class Checklist extends MainActivity {
 
                         vibrate.vibrate(50);
 
-                        if(!mute) {
-                            blip.start();
-                        }
+//                        if(!mute) {
+//                            blip.start();
+//                        }
 
                         //adding data to arraylists
                         checklist.add(checklistTaskName);
@@ -327,9 +327,9 @@ public class Checklist extends MainActivity {
 
                     vibrate.vibrate(50);
 
-                    if(!mute) {
-                        blip.start();
-                    }
+//                    if(!mute) {
+//                        blip.start();
+//                    }
 
                     //Hide keyboard
                     keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);

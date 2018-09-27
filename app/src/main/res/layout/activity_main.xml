@@ -16,8 +16,8 @@
         app:subtitle="No Excuses"
         app:subtitleTextColor="@color/gray"
         android:elevation="4dp"
-        app:popupTheme="@style/ThemeOverlay.MyTheme"
-        android:soundEffectsEnabled="false"/>
+        app:popupTheme="@style/ThemeOverlay.MyTheme"/>
+        <!--android:soundEffectsEnabled="false"/>-->
 
     <!--<LinearLayout-->
         <!--android:id="@+id/colorPicker"-->
@@ -240,8 +240,8 @@
             android:layout_margin="10dp"
             android:orientation="horizontal"
             android:onClick="removeAds"
-            android:background="@drawable/purchases_dropshadow"
-            android:soundEffectsEnabled="false">
+            android:background="@drawable/purchases_dropshadow">
+            <!--android:soundEffectsEnabled="false">-->
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -287,8 +287,8 @@
             android:layout_margin="10dp"
             android:orientation="horizontal"
             android:onClick="getReminders"
-            android:background="@drawable/purchases_dropshadow"
-            android:soundEffectsEnabled="false">
+            android:background="@drawable/purchases_dropshadow">
+            <!--android:soundEffectsEnabled="false">-->
 
             <ImageView
                 android:id="@+id/getRemindersImage"
@@ -334,8 +334,8 @@
             android:layout_margin="10dp"
             android:orientation="horizontal"
             android:onClick="cycleColors"
-            android:background="@drawable/purchases_dropshadow"
-            android:soundEffectsEnabled="false">
+            android:background="@drawable/purchases_dropshadow">
+            <!--android:soundEffectsEnabled="false">-->
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -381,8 +381,8 @@
             android:layout_margin="10dp"
             android:onClick="unlockAll"
             android:orientation="horizontal"
-            android:background="@drawable/purchases_dropshadow"
-            android:soundEffectsEnabled="false">
+            android:background="@drawable/purchases_dropshadow">
+            <!--android:soundEffectsEnabled="false">-->
 
             <ImageView
                 android:id="@+id/unlockAllImage"
@@ -429,19 +429,19 @@
         <!--android:layout_width="100dp"-->
         <!--android:layout_height="100dp"-->
         <!--android:text="DB"/>-->
-    <Button
-        android:id="@+id/showAlarmDb"
-        android:layout_marginTop="500dp"
-        android:layout_marginLeft="100dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="Time"/>
-    <Button
-        android:id="@+id/showUniversalDb"
-        android:layout_marginTop="500dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="Universal DB"/>
+    <!--<Button-->
+        <!--android:id="@+id/showAlarmDb"-->
+        <!--android:layout_marginTop="500dp"-->
+        <!--android:layout_marginLeft="100dp"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:text="Time"/>-->
+    <!--<Button-->
+        <!--android:id="@+id/showUniversalDb"-->
+        <!--android:layout_marginTop="500dp"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:text="Universal DB"/>-->
     <!--<Button-->
         <!--android:id="@+id/showSubtasksDb"-->
         <!--android:layout_marginTop="500dp"-->
@@ -456,8 +456,8 @@
         android:id="@+id/theListView"
         android:layout_below="@+id/my_toolbar"
         android:background="@color/dark_gray"
-        android:descendantFocusability="blocksDescendants"
-        android:soundEffectsEnabled="false" />
+        android:descendantFocusability="blocksDescendants"/>
+        <!--android:soundEffectsEnabled="false" />-->
 
     <ImageView
         android:layout_width="match_parent"
@@ -470,6 +470,18 @@
         android:layout_height="match_parent"
         android:id="@+id/noTasksWhite"
         android:src="@drawable/no_tasks_light"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/noTasksDarkLandscape"
+        android:src="@drawable/no_tasks_dark_landscape"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/noTasksLightLandscape"
+        android:src="@drawable/no_tasks_light_landscape"/>
 
     <EditText
         android:id="@+id/taskNameEditText"
@@ -495,8 +507,8 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="#00FFFFFF"
-            android:soundEffectsEnabled="false"/>
+            android:background="#00FFFFFF"/>
+            <!--android:soundEffectsEnabled="false"/>-->
 
         <TextView
             android:layout_width="180dp"

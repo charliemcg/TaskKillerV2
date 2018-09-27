@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -59,7 +60,11 @@ public class SetDue extends MainActivity {
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.due_picker);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.due_picker_landscape);
+        }else{
+            setContentView(R.layout.due_picker);
+        }
         overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
         dueToolbar = findViewById(R.id.dueToolbar);
         setSupportActionBar(dueToolbar);
@@ -258,9 +263,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -278,9 +283,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -298,9 +303,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -314,9 +319,7 @@ public class SetDue extends MainActivity {
 
                 repeat = "day";
 
-                repeating =true;
-
-                taskPropertiesShowing =false;
+                repeating = true;
 
                 dueToolbar.getMenu().getItem(0).setVisible(true);
 
@@ -330,9 +333,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -348,8 +351,6 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                taskPropertiesShowing =false;
-
                 dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -362,9 +363,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -380,8 +381,6 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                taskPropertiesShowing =false;
-
                 dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -394,9 +393,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -412,8 +411,6 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                taskPropertiesShowing =false;
-
                 dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -426,9 +423,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -444,8 +441,6 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                taskPropertiesShowing =false;
-
                 dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -458,9 +453,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -476,8 +471,6 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                taskPropertiesShowing =false;
-
                 dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -490,9 +483,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -517,9 +510,9 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                if(!mute){
-                    blip.start();
-                }
+//                if(!mute){
+//                    blip.start();
+//                }
 
                 vibrate.vibrate(50);
 
@@ -582,11 +575,11 @@ public class SetDue extends MainActivity {
             }
             dbTaskResult.close();
 
-            if(!mute){
-                blip.start();
-            }
-
             vibrate.vibrate(50);
+
+            repeat = "none";
+
+            repeating = false;
 
             db.updateDue(dbTaskId, false);
 
@@ -752,9 +745,9 @@ public class SetDue extends MainActivity {
 
             vibrate.vibrate(50);
 
-            if(!mute){
-                 blip.start();
-            }
+//            if(!mute){
+//                 blip.start();
+//            }
 
             //Updating the database
             db.updateYear(year);
@@ -859,6 +852,7 @@ public class SetDue extends MainActivity {
             }
 
             return timePickerDialog;
+
         }
 
         public void onTimeSet(TimePicker view, int hour, int minute){
@@ -887,9 +881,9 @@ public class SetDue extends MainActivity {
 
             MainActivity.vibrate.vibrate(50);
 
-            if(!MainActivity.mute){
-                MainActivity.blip.start();
-            }
+//            if(!MainActivity.mute){
+//                MainActivity.blip.start();
+//            }
 
             //Updating database
             db.updateHour(hour);

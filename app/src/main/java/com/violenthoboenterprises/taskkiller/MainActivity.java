@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -169,6 +170,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //Message that shows up when there are no tasks
     private ImageView noTasksToShow;
     private ImageView noTasksToShowWhite;
+    private ImageView noTasksToShowLandscape;
+    private ImageView noTasksToShowWhiteLandscape;
 
     //Custom toast
     static TextView toast;
@@ -184,9 +187,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //Used for debugging purposes. Should not be visible in final version.
 //    Button showDb;
-    Button showAlarmDb;
+//    Button showAlarmDb;
 //    Button showSnoozeDb;
-    Button showUniversalDb;
+//    Button showUniversalDb;
 //    Button showSubtasksDb;
 
     //Scrollable list
@@ -238,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private Toolbar topToolbar;
 
     //Action bar options
-    MenuItem muteBtn;
+//    MenuItem muteBtn;
     MenuItem lightDarkBtn;
     MenuItem customiseBtn;
     MenuItem proBtn;
@@ -299,6 +302,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         taskList = new ArrayList<>();
         noTasksToShow = findViewById(R.id.noTasks);
         noTasksToShowWhite = findViewById(R.id.noTasksWhite);
+        noTasksToShowLandscape = findViewById(R.id.noTasksDarkLandscape);
+        noTasksToShowWhiteLandscape = findViewById(R.id.noTasksLightLandscape);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
         addIcon = findViewById(R.id.addIcon);
@@ -387,17 +392,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidthPortrait = displayMetrics.widthPixels;
 //        showDb = findViewById(R.id.showDb);
-        showAlarmDb = findViewById(R.id.showAlarmDb);
-        showUniversalDb = findViewById(R.id.showUniversalDb);
+//        showAlarmDb = findViewById(R.id.showAlarmDb);
+//        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
-        final View child = topToolbar.getChildAt(2);
-        if (child instanceof ActionMenuView)
-        {
-            final ActionMenuView actionMenuView = ((ActionMenuView) child);
-            actionMenuView.getChildAt(actionMenuView.getChildCount() - 1)
-                    .setSoundEffectsEnabled(false);
-        }
+//        final View child = topToolbar.getChildAt(2);
+//        if (child instanceof ActionMenuView)
+//        {
+//            final ActionMenuView actionMenuView = ((ActionMenuView) child);
+//            actionMenuView.getChildAt(actionMenuView.getChildCount() - 1)
+//                    .setSoundEffectsEnabled(false);
+//        }
 
         db.insertUniversalData(mute);
 
@@ -433,9 +438,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 //Tasks are not clickable if keyboard is up
                 if(tasksAreClickable && !completeTask) {
 
-                    if(!mute) {
-                        blip.start();
-                    }
+//                    if(!mute) {
+//                        blip.start();
+//                    }
 
                     vibrate.vibrate(50);
 
@@ -518,9 +523,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             @Override
             public void onClick(View v) {
 
-                if(!mute) {
-                    blip.start();
-                }
+//                if(!mute) {
+//                    blip.start();
+//                }
 
                 goToMyAdapter = true;
 
@@ -582,30 +587,30 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-        showAlarmDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllAlarmData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("HOUR: " + res.getString(1) + "\n");
-                    buffer.append("MINUTE: " + res.getString(2) + "\n");
-                    buffer.append("AMPM: " + res.getString(3) + "\n");
-                    buffer.append("DAY: " + res.getString(4) + "\n");
-                    buffer.append("MONTH: " + res.getString(5) + "\n");
-                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
-                }
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showAlarmDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllAlarmData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("HOUR: " + res.getString(1) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(2) + "\n");
+//                    buffer.append("AMPM: " + res.getString(3) + "\n");
+//                    buffer.append("DAY: " + res.getString(4) + "\n");
+//                    buffer.append("MONTH: " + res.getString(5) + "\n");
+//                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
+//                }
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
 //        //Used for debugging purposes
 //        showSnoozeDb.setOnClickListener(new View.OnClickListener() {
@@ -634,40 +639,40 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-        showUniversalDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllUniversalData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("MUTE: " + res.getString(1) + "\n");
-                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
-                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
-                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
-                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
-                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
-                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
-                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
-                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
-                    buffer.append("SETALARM: " + res.getString(10) + "\n");
-                    buffer.append("YEAR: " + res.getString(11) + "\n");
-                    buffer.append("MONTH: " + res.getString(12) + "\n");
-                    buffer.append("DAY: " + res.getString(13) + "\n");
-                    buffer.append("HOUR: " + res.getString(14) + "\n");
-                    buffer.append("MINUTE: " + res.getString(15) + "\n\n");
-                }
-                res.close();
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showUniversalDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllUniversalData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("MUTE: " + res.getString(1) + "\n");
+//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
+//                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
+//                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
+//                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
+//                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
+//                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
+//                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
+//                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
+//                    buffer.append("SETALARM: " + res.getString(10) + "\n");
+//                    buffer.append("YEAR: " + res.getString(11) + "\n");
+//                    buffer.append("MONTH: " + res.getString(12) + "\n");
+//                    buffer.append("DAY: " + res.getString(13) + "\n");
+//                    buffer.append("HOUR: " + res.getString(14) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(15) + "\n\n");
+//                }
+//                res.close();
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
         //Used for debugging purposes
 //        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
@@ -702,6 +707,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 //Actions to take when creating new task
                 if((actionId == EditorInfo.IME_ACTION_DONE) && !taskBeingEdited){
+
+                    blip.start();
 
                     vibrate.vibrate(50);
 
@@ -751,9 +758,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                         final Runnable runnable = new Runnable() {
                             public void run() {
-                                if(!mute) {
+//                                if(!mute) {
                                     sweep.start();
-                                }
+//                                }
                                 toast.startAnimation(AnimationUtils.loadAnimation
                                         (MainActivity.this, R.anim.enter_from_right_fast));
                                 toast.setVisibility(View.VISIBLE);
@@ -908,34 +915,34 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     public boolean onCreateOptionsMenu(Menu menu) {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_main, menu);
-            muteBtn = this.topToolbar.getMenu().findItem(R.id.mute);
+//            muteBtn = this.topToolbar.getMenu().findItem(R.id.mute);
             lightDarkBtn = this.topToolbar.getMenu().findItem(R.id.lightDark);
             customiseBtn = this.topToolbar.getMenu().findItem(R.id.highlight);
             proBtn = this.topToolbar.getMenu().findItem(R.id.buy);
             if (!lightDark) {
-                if (mute) {
-                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
-                } else {
-                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
-                }
+//                if (mute) {
+//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+//                } else {
+//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+//                }
                 lightDarkBtn.setTitle("Light Mode");
             } else {
-                if (mute) {
-                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
-                } else {
-                    muteBtn.setIcon(ContextCompat.getDrawable
-                            (this, R.drawable.unmuted_white));
-                }
+//                if (mute) {
+//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
+//                } else {
+//                    muteBtn.setIcon(ContextCompat.getDrawable
+//                            (this, R.drawable.unmuted_white));
+//                }
                 lightDarkBtn.setTitle("Dark Mode");
             }
             return true;
         }else if(colorPickerShowing || purchasesShowing){
             proBtn.setEnabled(false);
-            muteBtn.setEnabled(false);
+//            muteBtn.setEnabled(false);
             return false;
         }else{
             proBtn.setEnabled(true);
-            muteBtn.setEnabled(true);
+//            muteBtn.setEnabled(true);
             return false;
         }
     }
@@ -943,9 +950,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
 
-        if(!mute){
-            blip.start();
-        }
+//        if(!mute){
+//            blip.start();
+//        }
         return super.onMenuOpened(featureId, menu);
     }
 
@@ -958,37 +965,37 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //TODO find out if return statements are necessary
         //noinspection SimplifiableIfStatement
-        if (id == R.id.mute) {
+//        if (id == R.id.mute) {
 
-            if(mute){
-                blip.start();
-            }
+//            if(mute){
+//                blip.start();
+//            }
 
-            muteBtn = this.topToolbar.getMenu().findItem(R.id.mute);
-            if (mute) {
-                mute = false;
-                if (lightDark) {
-                    muteBtn.setIcon(ContextCompat.getDrawable
-                            (this, R.drawable.unmuted_white));
-                } else {
-                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
-                }
-                db.updateMute(mute);
-            } else {
-                mute = true;
-                if (lightDark) {
-                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
-                } else {
-                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
-                }
-                db.updateMute(mute);
-            }
-            return true;
-        } else if (id == R.id.lightDark) {
+//            muteBtn = this.topToolbar.getMenu().findItem(R.id.mute);
+//            if (mute) {
+//                mute = false;
+//                if (lightDark) {
+//                    muteBtn.setIcon(ContextCompat.getDrawable
+//                            (this, R.drawable.unmuted_white));
+//                } else {
+//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+//                }
+//                db.updateMute(mute);
+//            } else {
+//                mute = true;
+//                if (lightDark) {
+//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
+//                } else {
+//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+//                }
+//                db.updateMute(mute);
+//            }
+//            return true;
+        /*} else */if (id == R.id.lightDark) {
 
-            if(!mute){
-                blip.start();
-            }
+//            if(!mute){
+//                blip.start();
+//            }
 
             if (lightDark) {
                 lightDark = false;
@@ -1022,11 +1029,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                topToolbar.setTitleTextColor(Color.parseColor(highlight));
 //                addIcon.setTextColor(Color.parseColor(highlight));
 //                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
-                if (mute) {
-                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
-                } else {
-                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
-                }
+//                if (mute) {
+//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
+//                } else {
+//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
+//                }
                 db.updateDarkLight(false);
                 lightDarkBtn.setTitle("Light Mode");
             } else {
@@ -1061,12 +1068,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                topToolbar.setTitleTextColor(Color.parseColor(highlight));
 //                addIcon.setTextColor(Color.parseColor(highlight));
 //                taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
-                if (mute) {
-                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
-                } else {
-                    muteBtn.setIcon(ContextCompat.getDrawable
-                            (this, R.drawable.unmuted_white));
-                }
+//                if (mute) {
+//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
+//                } else {
+//                    muteBtn.setIcon(ContextCompat.getDrawable
+//                            (this, R.drawable.unmuted_white));
+//                }
                 db.updateDarkLight(true);
                 lightDarkBtn.setTitle("Dark Mode");
             }
@@ -1074,9 +1081,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             return true;
         } else if (id == R.id.highlight) {
 
-            if(!mute){
-                blip.start();
-            }
+//            if(!mute){
+//                blip.start();
+//            }
 
             String digits = "0123456789ABCDEF";
             int val = 0;
@@ -1133,9 +1140,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             return true;
         } else if (id == R.id.buy) {
 
-            if(!mute){
-                blip.start();
-            }
+//            if(!mute){
+//                blip.start();
+//            }
 
             purchasesShowing = true;
             add.setClickable(false);
@@ -1302,9 +1309,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                if(!mute) {
+//                if(!mute) {
                     sweep.start();
-                }
+//                }
                 toast.startAnimation(AnimationUtils.loadAnimation
                         (MainActivity.this, R.anim.enter_from_right_fast));
                 toast.setVisibility(View.VISIBLE);
@@ -1510,21 +1517,37 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             //Inform user to add some tasks
             if(lightDark) {
-                noTasksToShowWhite.setVisibility(View.VISIBLE);
+                noTasksToShow.setVisibility(View.GONE);
+                noTasksToShowLandscape.setVisibility(View.GONE);
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    noTasksToShowWhiteLandscape.setVisibility(View.VISIBLE);
+                    noTasksToShowWhite.setVisibility(View.GONE);
+                }else{
+                    noTasksToShowWhite.setVisibility(View.VISIBLE);
+                    noTasksToShowWhiteLandscape.setVisibility(View.GONE);
+                }
             }else{
                 noTasksToShowWhite.setVisibility(View.GONE);
-                noTasksToShow.setVisibility(View.VISIBLE);
+                noTasksToShowWhiteLandscape.setVisibility(View.GONE);
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    noTasksToShowLandscape.setVisibility(View.VISIBLE);
+                    noTasksToShow.setVisibility(View.GONE);
+                }else{
+                    noTasksToShow.setVisibility(View.VISIBLE);
+                    noTasksToShowLandscape.setVisibility(View.GONE);
+                }
             }
 
         }else{
 
             noTasksToShow.setVisibility(View.GONE);
             noTasksToShowWhite.setVisibility(View.GONE);
+            noTasksToShowLandscape.setVisibility(View.GONE);
+            noTasksToShowWhiteLandscape.setVisibility(View.GONE);
 
         }
 
     }
-
 
     //Actions to occur when keyboard is showing
     void checkKeyboardShowing() {
@@ -1826,9 +1849,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         vibrate.vibrate(50);
 
-        if(!mute){
-            blip.start();
-        }
+//        if(!mute){
+//            blip.start();
+//        }
         db.updateHighlight(s);
         highlight = s;
         topToolbar.setTitleTextColor(Color.parseColor(s));
@@ -1865,9 +1888,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                if(!mute) {
+//                if(!mute) {
                     sweep.start();
-                }
+//                }
                 toast.startAnimation(AnimationUtils.loadAnimation
                         (MainActivity.this, R.anim.enter_from_right_fast));
                 toast.setVisibility(View.VISIBLE);
@@ -1898,9 +1921,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Runnable runnable = new Runnable() {
             public void run() {
-                if(!mute) {
+//                if(!mute) {
                     sweep.start();
-                }
+//                }
                 toast.startAnimation(AnimationUtils.loadAnimation
                         (MainActivity.this, R.anim.enter_from_right_fast));
                 toast.setVisibility(View.VISIBLE);
@@ -2143,9 +2166,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     public void showPro(View view) {
 
-        if(!mute){
-            blip.start();
-        }
+//        if(!mute){
+//            blip.start();
+//        }
 
         purchasesShowing = true;
         add.setClickable(false);
