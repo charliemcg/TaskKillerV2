@@ -235,7 +235,7 @@ public class Checklist extends MainActivity {
 
                     checklistView.setAdapter(checklistAdapter[0]);
 
-                    renameMe = /*sortedSubtaskIds.get(sortedSubtaskIds.get(*/position/*))*/;
+                    renameMe = position;
 
                 //Reinstate killed subtask
                 }else if(subTasksClickable && isKilled){

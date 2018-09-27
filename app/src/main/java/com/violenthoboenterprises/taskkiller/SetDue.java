@@ -680,14 +680,17 @@ public class SetDue extends MainActivity {
             }
             uniResult.close();
 
-            if(datePicked){
+            //If previously picked a date without leaving the activity
+            if(datePicked && (uniYear != 0)){
                 year = uniYear;
                 month = uniMonth;
                 day = uniDay;
+            //If user previously picked a date but then left the activity
             }else if(!alarmDay.equals("") && !alarmMonth.equals("") && !alarmYear.equals("")){
                 year = Integer.parseInt(alarmYear);
                 month = Integer.parseInt(alarmMonth);
                 day = Integer.parseInt(alarmDay);
+            //If no date set
             }else{
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
@@ -833,7 +836,7 @@ public class SetDue extends MainActivity {
             }
             uniResult.close();
 
-            if(timePicked){
+            if(timePicked && (uniHour != 0)){
                 minute = uniMinute;
                 hour = uniHour;
             }else if(!alarmHour.equals("") && !alarmMinute.equals("")){
@@ -901,6 +904,11 @@ public class SetDue extends MainActivity {
                 db.updateDay(day);
                 db.updateMonth(month);
                 db.updateYear(year);
+//                if(adjustedAmPm.equals("am")) {
+//                    db.updateAmPm(0);
+//                }else{
+//                    db.updateAmPm(1);
+//                }
             }
 
             setDue = true;

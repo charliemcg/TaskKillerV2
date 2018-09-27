@@ -937,6 +937,8 @@ class MyAdapter extends ArrayAdapter<String> {
         //Show due icon and due date if required
         if (dbDue) {
 
+            Log.i(TAG, "I'm in here three");
+
             Calendar currentDate = new GregorianCalendar();
 
             //Getting time data
@@ -1258,6 +1260,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 dueTextView.setText(formattedTime);
             }
+
+            Log.i(TAG, "I'm in here four");
 
         }else if(MainActivity.lightDark){
             dueClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
@@ -2061,7 +2065,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.db.updateSnooze(MainActivity.sortedIDs
                                             .get(position), true);
 
-                                    MainActivity.dateOrTime = false;
+//                                    MainActivity.dateOrTime = false;
 
                                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -2589,7 +2593,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.db.updateSnooze(MainActivity.sortedIDs
                                                     .get(position), true);
 
-                                            MainActivity.dateOrTime = false;
+//                                            MainActivity.dateOrTime = false;
 
                                             MainActivity.theListView.setAdapter
                                                     (MainActivity.theAdapter[0]);
@@ -3074,7 +3078,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.db.updateSnooze(MainActivity
                                             .sortedIDs.get(position), true);
 
-                                    MainActivity.dateOrTime = false;
+//                                    MainActivity.dateOrTime = false;
 
                                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -4564,12 +4568,16 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            String.valueOf(calendar.get(calendar.MONTH)),
 //                            String.valueOf(calendar.get(calendar.YEAR)));
 
+                    int adjustedAmPm = 0;
+                    if(hour > 11){
+                        adjustedAmPm = 1;
+                    }
+
                     MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(position)),
                             String.valueOf(hour),
                             String.valueOf(minute),
-                            //TODO get actual ampm
-                            String.valueOf(1),
+                            String.valueOf(adjustedAmPm),
                             String.valueOf(day),
                             String.valueOf(month),
                             String.valueOf(year));
@@ -4607,24 +4615,24 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+                //TODO find out if this delay can be removed
                 final Handler handler = new Handler();
 
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
 ;
-
-                MainActivity.dateOrTime = false;
+//                MainActivity.dateOrTime = false;
 
                 //Marks properties as not showing
                 MainActivity.taskPropertiesShowing = false;
 
                 //Returns the 'add' button
-                MainActivity.params.height = MainActivity.addHeight;
-                MainActivity.iconParams.height = MainActivity.addIconHeight;
-
-                MainActivity.add.setLayoutParams(MainActivity.params);
-                MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
+//                MainActivity.params.height = MainActivity.addHeight;
+//                MainActivity.iconParams.height = MainActivity.addIconHeight;
+//
+//                MainActivity.add.setLayoutParams(MainActivity.params);
+//                MainActivity.addIcon.setLayoutParams(MainActivity.iconParams);
 
 //                MainActivity.dateRowShowing = false;
 
@@ -4652,32 +4660,32 @@ class MyAdapter extends ArrayAdapter<String> {
 //                notifyDataSetChanged();
                     }
                 };
-                handler.postDelayed(runnable, 600);
+                handler.postDelayed(runnable, 1);//TODO app stuffs up if this handler is removed for some reason
 
-        if(dbRepeat){
+            if(dbRepeat){
 
-            Calendar prevCalendar = new GregorianCalendar();
-            if(alarmAmpm.equals("1")){
-                int tempHour = Integer.parseInt(alarmHour) + 12;
-                alarmHour = String.valueOf(tempHour);
-            }
-            if(!alarmHour.equals("")) {
-                prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
-                        Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
-                        Integer.parseInt(alarmMinute));
-            }
+                Calendar prevCalendar = new GregorianCalendar();
+                if(alarmAmpm.equals("1")){
+                    int tempHour = Integer.parseInt(alarmHour) + 12;
+                    alarmHour = String.valueOf(tempHour);
+                }
+                if(!alarmHour.equals("")) {
+                    prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
+                            Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
+                            Integer.parseInt(alarmMinute));
+                }
 
-            MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
-                    prevCalendar.getTimeInMillis(),
-                    MainActivity.repeatInterval, MainActivity.pendIntent);
+                MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
+                        prevCalendar.getTimeInMillis(),
+                        MainActivity.repeatInterval, MainActivity.pendIntent);
 
-            MainActivity.db.updateRepeat(MainActivity.sortedIDs
-                    .get(position), true);
+                MainActivity.db.updateRepeat(MainActivity.sortedIDs
+                        .get(position), true);
 
 //            MainActivity.repeatShowing = false;
-            MainActivity.repeating = false;
+                MainActivity.repeating = false;
 
-        }
+            }
 
         }
 

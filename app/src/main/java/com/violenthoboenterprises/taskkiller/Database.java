@@ -74,6 +74,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL15 = "HOUR";
     public static final String UCOL16 = "MINUTE";
     public static final String UCOL17 = "COLORLASTCHANGED";
+    public static final String UCOL18 = "AMPM";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -106,7 +107,7 @@ public class Database extends SQLiteOpenHelper {
                 " HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT, ADSREMOVED BOOLEAN," +
                 " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
                 "CHECKLISTLISTSIZE INTEGER, SETALARM BOOLEAN, YEAR INTEGER, MONTH INTEGER," +
-                " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER)");
+                " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER, AMPM INTEGER)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -207,6 +208,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL16, 0);
         Calendar cal = Calendar.getInstance();
         content.put(UCOL17, (cal.getTimeInMillis() / 1000 / 60 / 60));
+        content.put(UCOL18, 0);
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -640,6 +642,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL16, value);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateAmPm(int value){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL18, value);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }
