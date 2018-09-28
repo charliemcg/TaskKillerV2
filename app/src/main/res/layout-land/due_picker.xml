@@ -30,8 +30,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:padding="20dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/layout_border">
+                android:layout_margin="10dp">
 
                 <ImageView
                 android:id="@+id/calendarFadedDark"
@@ -73,7 +72,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@drawable/layout_border"
                 android:layout_margin="10dp"
                 android:padding="20dp">
 
@@ -120,47 +118,73 @@
             android:orientation="vertical"
             android:layout_margin="10dp"
             android:layout_weight="4"
-            android:gravity="center_horizontal"
-            android:background="@drawable/layout_border">
+            android:gravity="center_horizontal">
 
             <LinearLayout
                 android:id="@+id/darkRepeatLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp"
                 android:gravity="center_horizontal"
-                android:layout_margin="1dp"
-                android:visibility="gone"
-                android:background="@drawable/layout_border">
+                android:visibility="gone">
 
-                <ImageView
-                    android:id="@+id/cancelRepeatDark"
-                    android:layout_width="67dp"
-                    android:layout_height="67dp"
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_weight="1"
-                    android:src="@drawable/no_repeat_dark"/>
+                    android:gravity="center">
 
-                <ImageView
-                    android:id="@+id/dailyDark"
-                    android:layout_width="67dp"
-                    android:layout_height="67dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/repeat_day_dark"/>
+                    <ImageView
+                        android:id="@+id/cancelRepeatDark"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/no_repeat_dark"/>
 
-                <ImageView
-                    android:id="@+id/weeklyDark"
-                    android:layout_width="67dp"
-                    android:layout_height="67dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/repeat_week_dark"/>
+                </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/monthlyDark"
-                    android:layout_width="67dp"
-                    android:layout_height="67dp"
+
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_weight="1"
-                    android:src="@drawable/repeat_month_dark"/>
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/dailyDark"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/repeat_day_dark"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/weeklyDark"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/repeat_week_dark"/>
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/monthlyDark"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/repeat_month_dark"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -169,38 +193,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp"
                 android:gravity="center_horizontal"
-                android:background="@drawable/layout_border"
                 android:visibility="gone">
 
-                <ImageView
-                    android:id="@+id/cancelRepeatLight"
-                    android:layout_width="67dp"
-                    android:layout_height="67dp"
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_weight="1"
-                    android:src="@drawable/no_repeat_light"/>
+                    android:gravity="center">
 
-                <ImageView
-                    android:id="@+id/dailyLight"
-                    android:layout_width="67dp"
-                    android:layout_height="67dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/repeat_day_light"/>
+                    <ImageView
+                        android:id="@+id/cancelRepeatLight"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/no_repeat_light"/>
 
-                <ImageView
-                    android:id="@+id/weeklyLight"
-                    android:layout_width="67dp"
-                    android:layout_height="67dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/repeat_week_light"/>
+                </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/monthlyLight"
-                    android:layout_width="67dp"
-                    android:layout_height="67dp"
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_weight="1"
-                    android:src="@drawable/repeat_month_light"/>
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/dailyLight"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/repeat_day_light"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/weeklyLight"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/repeat_week_light"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/monthlyLight"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/repeat_month_light"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 

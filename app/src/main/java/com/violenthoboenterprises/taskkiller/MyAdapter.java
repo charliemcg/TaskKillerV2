@@ -1129,7 +1129,8 @@ class MyAdapter extends ArrayAdapter<String> {
                         adjustedHour = Integer.valueOf(hour);
                     }
                     //Overdue
-                    if (currentHour > adjustedHour) {
+                    if (currentHour > Integer.valueOf(hour)) {
+                        Log.i(TAG, "Current: " + currentHour + "Stored: " + adjustedHour);
                         dueClear.setVisibility(View.GONE);
                         dueLayout.setVisibility(View.GONE);
                         overdueClear.setVisibility(View.VISIBLE);
