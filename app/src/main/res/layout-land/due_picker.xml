@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray"
+    android:id="@+id/pickerRoot">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/dueToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderBar"
+        android:elevation="4dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/dateBtn"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="20dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/layout_border">
+
+                <ImageView
+                android:id="@+id/calendarFadedDark"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@drawable/calendar_faded"
+                android:visibility="gone"/>
+
+                <ImageView
+                android:id="@+id/calendarFadedLight"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@drawable/calendar_faded_light"
+                android:visibility="gone"/>
+
+                <ImageView
+                android:id="@+id/calendar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@drawable/calendar"
+                android:visibility="gone"/>
+
+                <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/gray"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/timeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/layout_border"
+                android:layout_margin="10dp"
+                android:padding="20dp">
+
+                <ImageView
+                android:id="@+id/timeFadedDark"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@drawable/time_faded"
+                android:visibility="gone"/>
+
+                <ImageView
+                android:id="@+id/timeFadedLight"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@drawable/time_faded_light"
+                android:visibility="gone"/>
+
+                <ImageView
+                android:id="@+id/time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@drawable/time"
+                android:visibility="gone"/>
+
+                <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/gray"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="4"
+            android:gravity="center_horizontal"
+            android:background="@drawable/layout_border">
+
+            <LinearLayout
+                android:id="@+id/darkRepeatLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:gravity="center_horizontal"
+                android:layout_margin="1dp"
+                android:visibility="gone"
+                android:background="@drawable/layout_border">
+
+                <ImageView
+                    android:id="@+id/cancelRepeatDark"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/no_repeat_dark"/>
+
+                <ImageView
+                    android:id="@+id/dailyDark"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/repeat_day_dark"/>
+
+                <ImageView
+                    android:id="@+id/weeklyDark"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/repeat_week_dark"/>
+
+                <ImageView
+                    android:id="@+id/monthlyDark"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/repeat_month_dark"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lightRepeatLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:gravity="center_horizontal"
+                android:background="@drawable/layout_border"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/cancelRepeatLight"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/no_repeat_light"/>
+
+                <ImageView
+                    android:id="@+id/dailyLight"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/repeat_day_light"/>
+
+                <ImageView
+                    android:id="@+id/weeklyLight"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/repeat_week_light"/>
+
+                <ImageView
+                    android:id="@+id/monthlyLight"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/repeat_month_light"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

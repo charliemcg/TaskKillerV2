@@ -60,11 +60,11 @@ public class SetDue extends MainActivity {
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setContentView(R.layout.due_picker_landscape);
-        }else{
+//        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.due_picker);
-        }
+//        }else{
+//            setContentView(R.layout.due_picker);
+//        }
         overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
         dueToolbar = findViewById(R.id.dueToolbar);
         setSupportActionBar(dueToolbar);

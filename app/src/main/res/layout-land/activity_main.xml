@@ -222,20 +222,226 @@
         <!--</TableLayout>-->
     <!--</LinearLayout>-->
 
+    <!--<LinearLayout-->
+        <!--android:id="@+id/purchases"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical"-->
+        <!--android:background="@drawable/color_picker_border_white"-->
+        <!--android:elevation="4dp"-->
+        <!--android:layout_margin="30dp"-->
+        <!--android:visibility="gone">-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/removeAds"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:onClick="removeAds"-->
+            <!--android:background="@drawable/purchases_dropshadow">-->
+            <!--&lt;!&ndash;android:soundEffectsEnabled="false">&ndash;&gt;-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="2"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/removeAdsTitle"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:text="@string/removeAds"/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/removeAdsDescription"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:text="@string/permanentlyRemoveAds"/>-->
+
+            <!--</LinearLayout>-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/removeAdsImage"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:src="@drawable/remove_ads"/>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/getReminders"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:onClick="getReminders"-->
+            <!--android:background="@drawable/purchases_dropshadow">-->
+            <!--&lt;!&ndash;android:soundEffectsEnabled="false">&ndash;&gt;-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/getRemindersImage"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:src="@drawable/bell"/>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="2"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/getRemindersTitle"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:text="@string/getReminders"/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/getremindersDescription"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:text="@string/setUnlimitedDueDates"/>-->
+
+            <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/cycleColors"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:onClick="cycleColors"-->
+            <!--android:background="@drawable/purchases_dropshadow">-->
+            <!--&lt;!&ndash;android:soundEffectsEnabled="false">&ndash;&gt;-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="2"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/cycleColorsTitle"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:text="@string/cycleColors"/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/cycleColorsDescription"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:text="@string/featureColorSlowly"/>-->
+
+            <!--</LinearLayout>-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/cycleColorsImage"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:src="@drawable/auto_color"/>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/unlockAll"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:onClick="unlockAll"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:background="@drawable/purchases_dropshadow">-->
+            <!--&lt;!&ndash;android:soundEffectsEnabled="false">&ndash;&gt;-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/unlockAllImage"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:src="@drawable/unlock_all"/>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="2"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/unlockAllTitle"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:text="@string/unlockAll"/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/unlockAllDescription"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="3"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:text="@string/ultimateValuePack"/>-->
+
+            <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+
+    <!--</LinearLayout>-->
+
     <LinearLayout
         android:id="@+id/purchases"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@drawable/color_picker_border_white"
         android:elevation="4dp"
+        android:orientation="horizontal"
         android:layout_margin="30dp"
         android:visibility="gone">
 
         <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+        <LinearLayout
             android:id="@+id/removeAds"
-            android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_margin="10dp"
             android:orientation="horizontal"
@@ -279,10 +485,65 @@
 
         </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/cycleColors"
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:onClick="cycleColors"
+                android:background="@drawable/purchases_dropshadow">
+                <!--android:soundEffectsEnabled="false">-->
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/cycleColorsTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:textSize="20sp"
+                        android:text="@string/cycleColors"/>
+
+                    <TextView
+                        android:id="@+id/cycleColorsDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="3"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/featureColorSlowly"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/cycleColorsImage"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/auto_color"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/getReminders"
-            android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_margin="10dp"
             android:orientation="horizontal"
@@ -323,53 +584,6 @@
                     android:text="@string/setUnlimitedDueDates"/>
 
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/cycleColors"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:orientation="horizontal"
-            android:onClick="cycleColors"
-            android:background="@drawable/purchases_dropshadow">
-            <!--android:soundEffectsEnabled="false">-->
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_margin="5dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/cycleColorsTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textSize="20sp"
-                    android:text="@string/cycleColors"/>
-
-                <TextView
-                    android:id="@+id/cycleColorsDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="3"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/featureColorSlowly"/>
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/cycleColorsImage"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="10dp"
-                android:src="@drawable/auto_color"/>
 
         </LinearLayout>
 
@@ -420,223 +634,9 @@
 
         </LinearLayout>
 
+        </LinearLayout>
+
     </LinearLayout>
-
-    <!--<LinearLayout-->
-        <!--android:id="@+id/purchasesLand"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@drawable/color_picker_border_white"-->
-        <!--android:elevation="4dp"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_margin="30dp"-->
-        <!--android:visibility="gone">-->
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:orientation="vertical">-->
-
-        <!--<LinearLayout-->
-            <!--android:id="@+id/removeAdsLand"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_margin="10dp"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:onClick="removeAds"-->
-            <!--android:background="@drawable/purchases_dropshadow">-->
-            <!--&lt;!&ndash;android:soundEffectsEnabled="false">&ndash;&gt;-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="2"-->
-                <!--android:layout_margin="5dp"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/removeAdsTitleLand"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:textSize="20sp"-->
-                    <!--android:text="@string/removeAds"/>-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/removeAdsDescriptionLand"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="3"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:text="@string/permanentlyRemoveAds"/>-->
-
-            <!--</LinearLayout>-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/removeAdsImageLand"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:src="@drawable/remove_ads"/>-->
-
-        <!--</LinearLayout>-->
-
-        <!--<LinearLayout-->
-            <!--android:id="@+id/getRemindersLand"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_margin="10dp"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:onClick="getReminders"-->
-            <!--android:background="@drawable/purchases_dropshadow">-->
-            <!--&lt;!&ndash;android:soundEffectsEnabled="false">&ndash;&gt;-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/getRemindersImageLand"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:src="@drawable/bell"/>-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="2"-->
-                <!--android:layout_margin="5dp"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/getRemindersTitleLand"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:textSize="20sp"-->
-                    <!--android:text="@string/getReminders"/>-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/getremindersDescriptionLand"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="3"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:text="@string/setUnlimitedDueDates"/>-->
-
-            <!--</LinearLayout>-->
-
-        <!--</LinearLayout>-->
-
-        <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<LinearLayout-->
-            <!--android:id="@+id/cycleColorsLand"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_margin="10dp"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:onClick="cycleColors"-->
-            <!--android:background="@drawable/purchases_dropshadow">-->
-            <!--&lt;!&ndash;android:soundEffectsEnabled="false">&ndash;&gt;-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="2"-->
-                <!--android:layout_margin="5dp"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/cycleColorsTitleLand"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:textSize="20sp"-->
-                    <!--android:text="@string/cycleColors"/>-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/cycleColorsDescriptionLand"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="3"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:text="@string/featureColorSlowly"/>-->
-
-            <!--</LinearLayout>-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/cycleColorsImageLand"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:src="@drawable/auto_color"/>-->
-
-        <!--</LinearLayout>-->
-
-        <!--<LinearLayout-->
-            <!--android:id="@+id/unlockAllLand"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_margin="10dp"-->
-            <!--android:onClick="unlockAll"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:background="@drawable/purchases_dropshadow">-->
-            <!--&lt;!&ndash;android:soundEffectsEnabled="false">&ndash;&gt;-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/unlockAllImageLand"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:src="@drawable/unlock_all"/>-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="2"-->
-                <!--android:layout_margin="5dp"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/unlockAllTitleLand"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:textSize="20sp"-->
-                    <!--android:text="@string/unlockAll"/>-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/unlockAllDescriptionLand"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"-->
-                    <!--android:layout_weight="3"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:text="@string/ultimateValuePack"/>-->
-
-            <!--</LinearLayout>-->
-
-        <!--</LinearLayout>-->
-
-        <!--</LinearLayout>-->
-
-    <!--</LinearLayout>-->
 
     <!--<Button-->
         <!--android:id="@+id/showDb"-->
@@ -675,29 +675,29 @@
         android:descendantFocusability="blocksDescendants"/>
         <!--android:soundEffectsEnabled="false" />-->
 
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/noTasks"-->
+        <!--android:src="@drawable/no_tasks_dark"/>-->
+
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/noTasksWhite"-->
+        <!--android:src="@drawable/no_tasks_light"/>-->
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/noTasks"
-        android:src="@drawable/no_tasks_dark"/>
+        android:src="@drawable/no_tasks_dark_landscape"/>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/noTasksWhite"
-        android:src="@drawable/no_tasks_light"/>
-
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/noTasksDarkLandscape"-->
-        <!--android:src="@drawable/no_tasks_dark_landscape"/>-->
-
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/noTasksLightLandscape"-->
-        <!--android:src="@drawable/no_tasks_light_landscape"/>-->
+        android:src="@drawable/no_tasks_light_landscape"/>
 
     <EditText
         android:id="@+id/taskNameEditText"

@@ -41,6 +41,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -170,11 +171,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //Message that shows up when there are no tasks
     private ImageView noTasksToShow;
     private ImageView noTasksToShowWhite;
-    private ImageView noTasksToShowLandscape;
-    private ImageView noTasksToShowWhiteLandscape;
+//    private ImageView noTasksToShowLandscape;
+//    private ImageView noTasksToShowWhiteLandscape;
 
     //Custom toast
     static TextView toast;
+    static RelativeLayout toastView;
 
     static PendingIntent pendIntent;
 
@@ -269,11 +271,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //In-app purchases view and it's elements
     LinearLayout purchases;
+//    LinearLayout purchasesLand;
     LinearLayout removeAdsLayout;
     LinearLayout getRemindersLayout;
     LinearLayout cycleColorsLayout;
     LinearLayout unlockAllLayout;
-    TextView colorPickerTitle;
+//    TextView colorPickerTitle;
     TextView removeAdsTitle;
     TextView removeAdsDescription;
     TextView getRemindersTitle;
@@ -302,8 +305,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         taskList = new ArrayList<>();
         noTasksToShow = findViewById(R.id.noTasks);
         noTasksToShowWhite = findViewById(R.id.noTasksWhite);
-        noTasksToShowLandscape = findViewById(R.id.noTasksDarkLandscape);
-        noTasksToShowWhiteLandscape = findViewById(R.id.noTasksLightLandscape);
+//        noTasksToShowLandscape = findViewById(R.id.noTasksDarkLandscape);
+//        noTasksToShowWhiteLandscape = findViewById(R.id.noTasksLightLandscape);
         taskNameEditText = findViewById(R.id.taskNameEditText);
         add = findViewById(R.id.add);
         addIcon = findViewById(R.id.addIcon);
@@ -367,6 +370,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         bp = new BillingProcessor(this, /*TODO"YOUR LICENSE KEY FROM
         GOOGLE PLAY CONSOLE HERE"*/null, this);
         purchases = findViewById(R.id.purchases);
+//        purchasesLand = findViewById(R.id.purchasesLand);
         adsRemoved = false;
         remindersAvailable = false;
         cycleColors = false;
@@ -382,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         exitTaskProperties = false;
         snoozeRowShowing = false;
         toast = findViewById(R.id.toast);
+        toastView = findViewById(R.id.toastView);
         killedAnimation = false;
         reinstateAnimation = false;
         animatePosition = 0;
@@ -761,15 +766,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                                if(!mute) {
                                     sweep.start();
 //                                }
-                                toast.startAnimation(AnimationUtils.loadAnimation
+                                toastView.startAnimation(AnimationUtils.loadAnimation
                                         (MainActivity.this, R.anim.enter_from_right_fast));
-                                toast.setVisibility(View.VISIBLE);
+                                toastView.setVisibility(View.VISIBLE);
                                 final Handler handler2 = new Handler();
                                 final Runnable runnable2 = new Runnable(){
                                     public void run(){
-                                        toast.startAnimation(AnimationUtils.loadAnimation
+                                        toastView.startAnimation(AnimationUtils.loadAnimation
                                                 (MainActivity.this, android.R.anim.fade_out));
-                                        toast.setVisibility(View.GONE);
+                                        toastView.setVisibility(View.GONE);
                                     }
                                 };
                                 handler2.postDelayed(runnable2, 1500);
@@ -862,6 +867,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             unlockAllDescription.setTextColor(Color.parseColor("#AAAAAA"));
             purchases.setBackgroundDrawable(ContextCompat.getDrawable
                     (this, R.drawable.color_picker_border));
+//            purchasesLand.setBackgroundDrawable(ContextCompat.getDrawable
+//                    (this, R.drawable.color_picker_border));
             removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable
                     (this, R.drawable.color_picker_border));
             getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable
@@ -898,6 +905,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             unlockAllDescription.setTextColor(Color.parseColor("#000000"));
             purchases.setBackgroundDrawable(ContextCompat.getDrawable
                     (this, R.drawable.color_picker_border_white));
+//            purchasesLand.setBackgroundDrawable(ContextCompat.getDrawable
+//                    (this, R.drawable.color_picker_border_white));
             removeAdsLayout.setBackgroundDrawable(ContextCompat.getDrawable
                     (this, R.drawable.purchases_dropshadow));
             getRemindersLayout.setBackgroundDrawable(ContextCompat.getDrawable
@@ -1150,8 +1159,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             taskPropertiesShowing = false;
             onCreateOptionsMenu(topToolbar.getMenu());
             theListView.setAdapter(theAdapter[0]);
-            purchases.startAnimation(AnimationUtils.loadAnimation
-                    (this, R.anim.enter_from_right));
+//            final LinearLayout orientedPurchases;
+//            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+//                orientedPurchases = purchasesLand;
+//            }else{
+//                orientedPurchases = purchases;
+//            }
+            purchases.startAnimation(AnimationUtils.loadAnimation(this, R.anim.enter_from_right));
 
             final Handler handler = new Handler();
 
@@ -1312,15 +1326,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                if(!mute) {
                     sweep.start();
 //                }
-                toast.startAnimation(AnimationUtils.loadAnimation
+                toastView.startAnimation(AnimationUtils.loadAnimation
                         (MainActivity.this, R.anim.enter_from_right_fast));
-                toast.setVisibility(View.VISIBLE);
+                toastView.setVisibility(View.VISIBLE);
                 final Handler handler2 = new Handler();
                 final Runnable runnable2 = new Runnable(){
                     public void run(){
-                        toast.startAnimation(AnimationUtils.loadAnimation
+                        toastView.startAnimation(AnimationUtils.loadAnimation
                                 (MainActivity.this, android.R.anim.fade_out));
-                        toast.setVisibility(View.GONE);
+                        toastView.setVisibility(View.GONE);
                     }
                 };
                 handler2.postDelayed(runnable2, 1500);
@@ -1518,32 +1532,32 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //Inform user to add some tasks
             if(lightDark) {
                 noTasksToShow.setVisibility(View.GONE);
-                noTasksToShowLandscape.setVisibility(View.GONE);
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                    noTasksToShowWhiteLandscape.setVisibility(View.VISIBLE);
-                    noTasksToShowWhite.setVisibility(View.GONE);
-                }else{
+//                noTasksToShowLandscape.setVisibility(View.GONE);
+//                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+//                    noTasksToShowWhiteLandscape.setVisibility(View.VISIBLE);
+//                    noTasksToShowWhite.setVisibility(View.GONE);
+//                }else{
                     noTasksToShowWhite.setVisibility(View.VISIBLE);
-                    noTasksToShowWhiteLandscape.setVisibility(View.GONE);
-                }
+//                    noTasksToShowWhiteLandscape.setVisibility(View.GONE);
+//                }
             }else{
                 noTasksToShowWhite.setVisibility(View.GONE);
-                noTasksToShowWhiteLandscape.setVisibility(View.GONE);
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                    noTasksToShowLandscape.setVisibility(View.VISIBLE);
-                    noTasksToShow.setVisibility(View.GONE);
-                }else{
+//                noTasksToShowWhiteLandscape.setVisibility(View.GONE);
+//                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+//                    noTasksToShowLandscape.setVisibility(View.VISIBLE);
+//                    noTasksToShow.setVisibility(View.GONE);
+//                }else{
                     noTasksToShow.setVisibility(View.VISIBLE);
-                    noTasksToShowLandscape.setVisibility(View.GONE);
-                }
+//                    noTasksToShowLandscape.setVisibility(View.GONE);
+//                }
             }
 
         }else{
 
             noTasksToShow.setVisibility(View.GONE);
             noTasksToShowWhite.setVisibility(View.GONE);
-            noTasksToShowLandscape.setVisibility(View.GONE);
-            noTasksToShowWhiteLandscape.setVisibility(View.GONE);
+//            noTasksToShowLandscape.setVisibility(View.GONE);
+//            noTasksToShowWhiteLandscape.setVisibility(View.GONE);
 
         }
 
@@ -1699,6 +1713,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             handler.postDelayed(runnable, 200);
             colorPickerShowing = false;
         }else{
+//            final LinearLayout orientedPurchases;
+//            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+//                orientedPurchases = purchasesLand;
+//            }else{
+//                orientedPurchases = purchases;
+//            }
             purchases.startAnimation(AnimationUtils.loadAnimation
                     (this, R.anim.exit_out_left));
 
@@ -1891,15 +1911,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                if(!mute) {
                     sweep.start();
 //                }
-                toast.startAnimation(AnimationUtils.loadAnimation
+                toastView.startAnimation(AnimationUtils.loadAnimation
                         (MainActivity.this, R.anim.enter_from_right_fast));
-                toast.setVisibility(View.VISIBLE);
+                toastView.setVisibility(View.VISIBLE);
                 final Handler handler2 = new Handler();
                 final Runnable runnable2 = new Runnable(){
                     public void run(){
-                        toast.startAnimation(AnimationUtils.loadAnimation
+                        toastView.startAnimation(AnimationUtils.loadAnimation
                                 (MainActivity.this, android.R.anim.fade_out));
-                        toast.setVisibility(View.GONE);
+                        toastView.setVisibility(View.GONE);
                     }
                 };
                 handler2.postDelayed(runnable2, 1500);
@@ -1924,15 +1944,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                if(!mute) {
                     sweep.start();
 //                }
-                toast.startAnimation(AnimationUtils.loadAnimation
+                toastView.startAnimation(AnimationUtils.loadAnimation
                         (MainActivity.this, R.anim.enter_from_right_fast));
-                toast.setVisibility(View.VISIBLE);
+                toastView.setVisibility(View.VISIBLE);
                 final Handler handler2 = new Handler();
                 final Runnable runnable2 = new Runnable(){
                     public void run(){
-                        toast.startAnimation(AnimationUtils.loadAnimation
+                        toastView.startAnimation(AnimationUtils.loadAnimation
                                 (MainActivity.this, android.R.anim.fade_out));
-                        toast.setVisibility(View.GONE);
+                        toastView.setVisibility(View.GONE);
                     }
                 };
                 handler2.postDelayed(runnable2, 1500);

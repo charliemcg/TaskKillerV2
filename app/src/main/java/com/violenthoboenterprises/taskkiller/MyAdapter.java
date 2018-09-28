@@ -1390,15 +1390,15 @@ class MyAdapter extends ArrayAdapter<String> {
                         if(!MainActivity.mute) {
                             MainActivity.sweep.start();
                         }
-                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation
+                        MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                 (getContext(), R.anim.enter_from_right_fast));
-                        MainActivity.toast.setVisibility(View.VISIBLE);
+                        MainActivity.toastView.setVisibility(View.VISIBLE);
                         final Handler handler2 = new Handler();
                         final Runnable runnable2 = new Runnable(){
                             public void run(){
-                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation
+                                MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                         (getContext(), android.R.anim.fade_out));
-                                MainActivity.toast.setVisibility(View.GONE);
+                                MainActivity.toastView.setVisibility(View.GONE);
                             }
                         };
                         handler2.postDelayed(runnable2, 1500);
@@ -1612,18 +1612,18 @@ class MyAdapter extends ArrayAdapter<String> {
                         if(!MainActivity.mute) {
                             MainActivity.sweep.start();
                         }
-                        MainActivity.toast.startAnimation(AnimationUtils.loadAnimation
+                        MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                 (getContext(), R.anim.enter_from_right_fast));
-                        MainActivity.toast.setVisibility(View.VISIBLE);
+                        MainActivity.toastView.setVisibility(View.VISIBLE);
                         final Handler handler2 = new Handler();
                         final Runnable runnable2 = new Runnable(){
                             public void run(){
-                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation
+                                MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                         (getContext(), android.R.anim.fade_out));
-                                MainActivity.toast.setVisibility(View.GONE);
+                                MainActivity.toastView.setVisibility(View.GONE);
                             }
                         };
-                        handler2.postDelayed(runnable2, 1500);
+                        handler2.postDelayed(runnable2, 2500);
                     }
                 };
 
@@ -3241,18 +3241,18 @@ class MyAdapter extends ArrayAdapter<String> {
                                             if(!MainActivity.mute) {
                                                 MainActivity.sweep.start();
                                             }
-                                            MainActivity.toast.startAnimation
+                                            MainActivity.toastView.startAnimation
                                                     (AnimationUtils.loadAnimation(getContext(),
                                                             R.anim.enter_from_right_fast));
-                                            MainActivity.toast.setVisibility(View.VISIBLE);
+                                            MainActivity.toastView.setVisibility(View.VISIBLE);
                                             final Handler handler2 = new Handler();
                                             final Runnable runnable2 = new Runnable(){
                                                 public void run(){
-                                                    MainActivity.toast.startAnimation
+                                                    MainActivity.toastView.startAnimation
                                                             (AnimationUtils.loadAnimation
                                                                     (getContext(), android.R.anim
                                                                             .fade_out));
-                                                    MainActivity.toast.setVisibility(View.GONE);
+                                                    MainActivity.toastView.setVisibility(View.GONE);
                                                 }
                                             };
                                             handler2.postDelayed(runnable2, 1500);
@@ -3650,16 +3650,16 @@ class MyAdapter extends ArrayAdapter<String> {
                                 if(!MainActivity.mute) {
                                     MainActivity.sweep.start();
                                 }
-                                MainActivity.toast.startAnimation(AnimationUtils.loadAnimation
+                                MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                         (getContext(), R.anim.enter_from_right_fast));
-                                MainActivity.toast.setVisibility(View.VISIBLE);
+                                MainActivity.toastView.setVisibility(View.VISIBLE);
                                 final Handler handler2 = new Handler();
                                 final Runnable runnable2 = new Runnable(){
                                     public void run(){
-                                        MainActivity.toast.startAnimation(AnimationUtils
+                                        MainActivity.toastView.startAnimation(AnimationUtils
                                                 .loadAnimation(getContext(),
                                                         android.R.anim.fade_out));
-                                        MainActivity.toast.setVisibility(View.GONE);
+                                        MainActivity.toastView.setVisibility(View.GONE);
                                     }
                                 };
                                 handler2.postDelayed(runnable2, 1500);
@@ -3873,16 +3873,16 @@ class MyAdapter extends ArrayAdapter<String> {
                                 if(!MainActivity.mute) {
                                     MainActivity.sweep.start();
                                 }
-                                MainActivity.toast.startAnimation(AnimationUtils
+                                MainActivity.toastView.startAnimation(AnimationUtils
                                         .loadAnimation(getContext(), R.anim.enter_from_right_fast));
-                                MainActivity.toast.setVisibility(View.VISIBLE);
+                                MainActivity.toastView.setVisibility(View.VISIBLE);
                                 final Handler handler2 = new Handler();
                                 final Runnable runnable2 = new Runnable(){
                                     public void run(){
-                                        MainActivity.toast.startAnimation(AnimationUtils
+                                        MainActivity.toastView.startAnimation(AnimationUtils
                                                 .loadAnimation(getContext(),
                                                         android.R.anim.fade_out));
-                                        MainActivity.toast.setVisibility(View.GONE);
+                                        MainActivity.toastView.setVisibility(View.GONE);
                                     }
                                 };
                                 handler2.postDelayed(runnable2, 1500);
@@ -4595,18 +4595,18 @@ class MyAdapter extends ArrayAdapter<String> {
                             if(!MainActivity.mute) {
                                 MainActivity.sweep.start();
                             }
-                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation
+                            MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                     (getContext(), R.anim.enter_from_right_fast));
-                            MainActivity.toast.setVisibility(View.VISIBLE);
+                            MainActivity.toastView.setVisibility(View.VISIBLE);
                             final Handler handler2 = new Handler();
                             final Runnable runnable2 = new Runnable(){
                                 public void run(){
-                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation
+                                    MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                             (getContext(), android.R.anim.fade_out));
-                                    MainActivity.toast.setVisibility(View.GONE);
+                                    MainActivity.toastView.setVisibility(View.GONE);
                                 }
                             };
-                            handler2.postDelayed(runnable2, 1500);
+                            handler2.postDelayed(runnable2, 2500);
                         }
                     };
 
@@ -4626,15 +4626,15 @@ class MyAdapter extends ArrayAdapter<String> {
                             if(!MainActivity.mute) {
                                 MainActivity.sweep.start();
                             }
-                            MainActivity.toast.startAnimation(AnimationUtils.loadAnimation
+                            MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                     (getContext(), R.anim.enter_from_right_fast));
-                            MainActivity.toast.setVisibility(View.VISIBLE);
+                            MainActivity.toastView.setVisibility(View.VISIBLE);
                             final Handler handler2 = new Handler();
                             final Runnable runnable2 = new Runnable(){
                                 public void run(){
-                                    MainActivity.toast.startAnimation(AnimationUtils.loadAnimation
+                                    MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                             (getContext(), android.R.anim.fade_out));
-                                    MainActivity.toast.setVisibility(View.GONE);
+                                    MainActivity.toastView.setVisibility(View.GONE);
                                 }
                             };
                             handler2.postDelayed(runnable2, 1500);

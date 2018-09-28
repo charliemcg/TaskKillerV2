@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/noteRoot"
+    android:background="@color/dark_gray">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/noteToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderBar"
+        android:elevation="4dp"/>
+
+    <TextView
+        android:id="@+id/noteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/noteToolbar"
+        android:textColor="@color/gray"
+        android:textSize="20sp"
+        android:scrollbars="vertical"
+        android:paddingLeft="10dp"/>
+
+    <!--<ImageView-->
+        <!--android:id="@+id/removeBtnDark"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:visibility="gone"-->
+        <!--android:src="@drawable/trash_dark"/>-->
+
+    <!--<ImageView-->
+        <!--android:id="@+id/removeBtnLight"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:visibility="gone"-->
+        <!--android:src="@drawable/trash_light"/>-->
+
+    <!--<ImageView-->
+        <!--android:id="@+id/removeBtnDarkOpen"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:visibility="gone"-->
+        <!--android:src="@drawable/trash_dark_open"/>-->
+
+    <!--<ImageView-->
+        <!--android:id="@+id/removeBtnLightOpen"-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:visibility="gone"-->
+        <!--android:src="@drawable/trash_light_open"/>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/noteEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:maxLines="3"
+            android:maxLength="2000"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences|textMultiLine"
+            android:layout_alignParentBottom="true"
+            android:hint="@string/addYourNote"/>
+
+        <ImageView
+            android:id="@+id/submitNoteBtnDark"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_dark"/>
+
+        <!--<ImageView-->
+            <!--android:id="@+id/submitNoteBtnLight"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="5dp"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:src="@drawable/submit_light"/>-->
+
+    </LinearLayout>
+
+</RelativeLayout>
