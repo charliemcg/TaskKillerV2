@@ -1,68 +1,120 @@
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="64dp"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:background="@color/dark_gray"-->
+    <!--android:id="@+id/notif_root">-->
+
+    <!--<ImageView-->
+        <!--android:id="@+id/notif_icon"-->
+        <!--android:layout_width="64dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:src="@drawable/ic_launcher_og"-->
+        <!--android:layout_gravity="center_vertical"/>-->
+    <!--&lt;!&ndash;android:src="@android:drawable/ic_dialog_info"&ndash;&gt;-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/notif_details"-->
+        <!--android:layout_width="214dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_toRightOf="@+id/notif_icon"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:singleLine="true"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textSize="14sp"-->
+            <!--android:text="@string/killThisTask"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/notif_title"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:lines="2"-->
+            <!--android:textColor="#aaaaaa"-->
+            <!--android:text="Remove me"-->
+            <!--android:gravity="center_vertical"/>-->
+
+    <!--</LinearLayout>-->
+
+    <!--<ImageView-->
+        <!--android:layout_width="128dp"-->
+        <!--android:layout_height="64dp"-->
+        <!--android:src="@drawable/boom"-->
+        <!--android:layout_toRightOf="@+id/notif_icon"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:layout_gravity="bottom"/>-->
+
+    <!--&lt;!&ndash;<Button&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="New Button"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/button"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_alignBottom="@+id/notif_icon"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_alignParentRight="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_alignParentEnd="true" />&ndash;&gt;-->
+
+<!--</LinearLayout>-->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:orientation="horizontal"
-    android:background="@color/dark_gray">
+    android:background="@color/dark_gray"
+    android:id="@+id/notif_root">
 
     <ImageView
         android:id="@+id/notif_icon"
+        android:layout_width="64dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_launcher_og"
+        android:layout_gravity="center_vertical"/>
+    <!--android:src="@android:drawable/ic_dialog_info"-->
+
+    <LinearLayout
+        android:id="@+id/notif_details"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@mipmap/ic_launcher_round"
-        android:padding="10dp"/>
-    <!--android:src="@android:drawable/ic_dialog_info"-->
-
-    <!--<ProgressBar-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/progressBar"-->
-        <!--android:layout_alignBottom="@+id/notif_icon"-->
-        <!--android:layout_toRightOf="@+id/notif_icon"-->
-        <!--android:layout_toEndOf="@+id/notif_icon"-->
-        <!--android:layout_marginLeft="19dp"-->
-        <!--android:layout_marginStart="19dp" />-->
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp">
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:singleLine="true"
             android:textColor="#ffffff"
+            android:textSize="14sp"
             android:text="@string/killThisTask"/>
 
         <TextView
             android:id="@+id/notif_title"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:singleLine="true"
-            android:textColor="#ffffff"
+            android:layout_height="wrap_content"
+            android:lines="2"
+            android:textColor="#aaaaaa"
             android:text="Remove me"
-            android:layout_gravity="center_vertical"/>
+            android:gravity="center_vertical"/>
 
     </LinearLayout>
 
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_width="77dp"
+        android:layout_height="38dp"
+        android:layout_gravity="bottom"
         android:src="@drawable/boom"/>
 
     <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="New Button"-->
-        <!--android:id="@+id/button"-->
-        <!--android:layout_alignBottom="@+id/notif_icon"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true" />-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="New Button"-->
+    <!--android:id="@+id/button"-->
+    <!--android:layout_alignBottom="@+id/notif_icon"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true" />-->
 
 </LinearLayout>

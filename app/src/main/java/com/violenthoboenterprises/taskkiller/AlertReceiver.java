@@ -55,13 +55,21 @@ public class AlertReceiver extends BroadcastReceiver {
 
         //intent to execute when notification is clicked
         //TODO see if possible to make light and dark version
+        //TODO set up a way of showing how many tasks are overdue
         builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory
                         .decodeResource(context.getResources(), R.drawable.mushroom_cloud))
-                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert).setContentText(msg/*Text*/);
+                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
+                .setContentText(msg).setStyle(new NotificationCompat.BigTextStyle());
+
+//        builder = new NotificationCompat.Builder(context)
+//                .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory.decodeResource
+//                        (context.getResources(), R.drawable.bell))
+//                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert).setContentText(msg/*Text*/).setStyle(new NotificationCompat.BigTextStyle()
+//                        .bigText(msg));
 
         //Sets background of small icon
-        builder.setColorized(true).setColor(Color.parseColor("#FF000000"));
+        builder.setColorized(true).setColor(Color.parseColor("#FFFF0000"));
 
         builder.setCustomContentView(remoteViews);
 

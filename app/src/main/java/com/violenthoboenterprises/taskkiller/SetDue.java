@@ -624,9 +624,9 @@ public class SetDue extends MainActivity {
                 monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
             }else{
                 cancelRepeatLight.setBackgroundColor(Color.parseColor(highlight));
-                dailyLight.setBackgroundColor(Color.parseColor("#AAAAAA"));
-                weeklyLight.setBackgroundColor(Color.parseColor("#AAAAAA"));
-                monthlyLight.setBackgroundColor(Color.parseColor("#AAAAAA"));
+                dailyLight.setBackgroundColor(Color.parseColor("#000000"));
+                weeklyLight.setBackgroundColor(Color.parseColor("#000000"));
+                monthlyLight.setBackgroundColor(Color.parseColor("#000000"));
             }
 
             killAlarm.setVisible(false);
