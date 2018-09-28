@@ -866,11 +866,17 @@ public class SetDue extends MainActivity {
 
             if(hour == 0) {
                 adjustedHour = String.valueOf(12);
+                db.updateAmPm(0);
             }else if(hour == 12){
                 adjustedAmPm = "pm";
+                db.updateAmPm(1);
             }else if(hour > 12){
                 adjustedHour = String.valueOf(hour - 12);
                 adjustedAmPm = "pm";
+                db.updateAmPm(1);
+            }else{
+                adjustedHour = String.valueOf(hour);
+                db.updateAmPm(0);
             }
 
             if(minute < 10){
@@ -886,7 +892,7 @@ public class SetDue extends MainActivity {
 //            }
 
             //Updating database
-            db.updateHour(hour);
+            db.updateHour(Integer.parseInt(adjustedHour));
             db.updateMinute(minute);
 
             //set default date values if user not already selected

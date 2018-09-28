@@ -267,6 +267,7 @@ class MyAdapter extends ArrayAdapter<String> {
         int uniDay = 0;
         int uniHour = 0;
         int uniMinute = 0;
+        int uniAmPm = 0;
         while(uniResult.moveToNext()){
             uniSetAlarm = uniResult.getInt(10) > 0;
             uniYear = uniResult.getInt(11);
@@ -274,6 +275,7 @@ class MyAdapter extends ArrayAdapter<String> {
             uniDay = uniResult.getInt(13);
             uniHour = uniResult.getInt(14);
             uniMinute = uniResult.getInt(15);
+            uniAmPm = uniResult.getInt(17);
         }
         uniResult.close();
 
@@ -909,13 +911,14 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         if(uniSetAlarm && (position == MainActivity.activeTask)){
-            setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute);
+            setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute, uniAmPm);
             MainActivity.db.updateSetAlarm(false);
             MainActivity.db.updateYear(0);
             MainActivity.db.updateMonth(0);
             MainActivity.db.updateDay(0);
             MainActivity.db.updateHour(0);
             MainActivity.db.updateMinute(0);
+            MainActivity.db.updateAmPm(0);
         }
 
         if(MainActivity.longClicked) {
@@ -992,6 +995,8 @@ class MyAdapter extends ArrayAdapter<String> {
             Boolean tomorrow = false;
             Boolean markAsOverdue = false;
 //            if(!dbKilled) {
+
+            Log.i(TAG, "current: " + currentHour + " hour: " + hour);
                 //Overdue
                 if (currentYear > Integer.valueOf(year)) {
                     dueClear.setVisibility(View.GONE);
@@ -1124,13 +1129,12 @@ class MyAdapter extends ArrayAdapter<String> {
                     //Saved hours are in 12 hour time. Accounting for am/pm.
                     int adjustedHour;
                     if (Integer.valueOf(ampm) == 1) {
-                        adjustedHour = Integer.valueOf(hour) - 12;
+                        adjustedHour = Integer.valueOf(hour) + 12;
                     } else {
                         adjustedHour = Integer.valueOf(hour);
                     }
                     //Overdue
-                    if (currentHour > Integer.valueOf(hour)) {
-                        Log.i(TAG, "Current: " + currentHour + "Stored: " + adjustedHour);
+                    if (currentHour > adjustedHour) {
                         dueClear.setVisibility(View.GONE);
                         dueLayout.setVisibility(View.GONE);
                         overdueClear.setVisibility(View.VISIBLE);
@@ -2005,7 +2009,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
-                                }else {
+                                } else {
 
                                     MainActivity.pendIntent = PendingIntent.getBroadcast(
                                             getContext(), Integer.parseInt(
@@ -4076,7 +4080,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
     //set notification alarm for selected task
     private void setAlarm(final int position, int year, int month,
-                                                         int day, int hour, int minute){
+                                                         int day, int hour, int minute, int ampm){
 
 //        //getting task data
 //        String dbTask = "";
@@ -4582,12 +4586,18 @@ class MyAdapter extends ArrayAdapter<String> {
                     };
 
                     handler.postDelayed(runnable, 500);
-                } else */if (currentDate.get(Calendar.YEAR) == year
+                } else */
+
+             int adjustedHour = hour;
+             if(ampm == 1){
+                 adjustedHour += 12;
+             }
+            if (currentDate.get(Calendar.YEAR) == year
                         && currentDate.get(Calendar.MONTH) == month
                         && currentDate.get(Calendar.DAY_OF_MONTH) ==
                         day
                         && currentDate.get(Calendar.HOUR_OF_DAY) >
-                        hour) {
+                        adjustedHour) {
                     MainActivity.toast.setText(R.string.cannotSetTask);
                     final Handler handler = new Handler();
 
@@ -4617,7 +4627,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         && currentDate.get(Calendar.DAY_OF_MONTH) ==
                         day
                         && currentDate.get(Calendar.HOUR_OF_DAY) ==
-                        hour
+                        adjustedHour
                         && currentDate.get(Calendar.MINUTE) > minute) {
                     MainActivity.toast.setText(R.string.cannotSetTask);
                     final Handler handler = new Handler();
@@ -4645,9 +4655,14 @@ class MyAdapter extends ArrayAdapter<String> {
                     handler.postDelayed(runnable, 500);
                 } else {
 
+                    int amPmHour = ampm;
+                    if(ampm == 1){
+                        amPmHour += 12;
+                    }
+
                     Calendar futureDate = new GregorianCalendar(year,
                             month, day,
-                            hour, minute);
+                            amPmHour, minute);
 
                     //updating timestamp
                     MainActivity.db.updateTimestamp(String.valueOf(
