@@ -6,22 +6,44 @@
 
     <item
         android:id="@+id/buy"
-        android:orderInCategory="300"
         android:title="Buy"
+        android:orderInCategory="1"
         android:icon="@drawable/pro"
         app:showAsAction="always" />
+    <!--android:orderInCategory="300"-->
 
     <item
         android:id="@+id/lightDark"
-        android:orderInCategory="300"
-        android:title="Light/Dark"
-        app:showAsAction="collapseActionView"/>
+        android:orderInCategory="2"
+        android:title="Dark Mode"
+        app:showAsAction="collapseActionView"
+        android:checkable="true"/>
+    <!--android:orderInCategory="300"-->
 
-    <item
-        android:id="@+id/highlight"
-        android:orderInCategory="300"
-        android:title="Color"
-        app:showAsAction="collapseActionView"/>
+    <!--<item android:visible="true" android:id="@+id/colorMenu"-->
+        <!--android:title="Color Options"-->
+        <!--android:enabled="true"-->
+        <!--android:orderInCategory="3">-->
+        <!--<menu>-->
+        <item
+            android:id="@+id/highlight"
+            android:title="Change Color..."
+            app:showAsAction="collapseActionView"
+            android:orderInCategory="3"/>
+            <item
+                android:id="@+id/autoColor"
+                android:title="Cycle Colors Automatically   "
+                app:showAsAction="collapseActionView"
+                android:orderInCategory="4"
+                android:checkable="true"
+                android:checked="false"/>
+            <!--<item-->
+                <!--android:id="@+id/cycleFrequency"-->
+                <!--android:title="Frequency"-->
+                <!--app:showAsAction="collapseActionView"-->
+                <!--android:enabled="false"/>-->
+        <!--</menu>-->
+    <!--</item>-->
 
     <!--<item-->
         <!--android:id="@+id/mute"-->

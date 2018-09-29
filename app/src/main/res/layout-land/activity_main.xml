@@ -16,6 +16,7 @@
         app:subtitle="No Excuses"
         app:subtitleTextColor="@color/gray"
         android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.DarkTheme"
         app:popupTheme="@style/ThemeOverlay.DarkTheme"
         android:background="@color/dark_gray"
         android:visibility="gone"/>
@@ -28,6 +29,7 @@
         app:subtitle="No Excuses"
         app:subtitleTextColor="@color/dark_gray"
         android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.LightTheme"
         app:popupTheme="@style/ThemeOverlay.LightTheme"
         android:background="@color/white"
         android:visibility="gone"/>

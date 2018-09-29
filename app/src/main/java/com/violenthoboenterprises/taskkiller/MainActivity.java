@@ -111,7 +111,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //used to indicate that user purchased reminders
     boolean remindersAvailable;
     //used to indicate that user purchased color cycling
-    boolean cycleColors;
+    boolean colorCyclingAllowed;
+    //used to indicate whether color cycling should be on or not
+    boolean colorCyclingEnabled;
     //used to indicate that the snooze options are showing
     static boolean snoozeRowShowing;
     //used to indicate that a task was long clicked
@@ -248,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     MenuItem lightDarkBtn;
     MenuItem customiseBtn;
     MenuItem proBtn;
+    MenuItem autoColorBtn;
 
     //The color picker view and it's corresponding buttons
     LinearLayout colorPicker;
@@ -376,7 +379,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        purchasesLand = findViewById(R.id.purchasesLand);
         adsRemoved = false;
         remindersAvailable = false;
-        cycleColors = false;
+        colorCyclingAllowed = false;
+        colorCyclingEnabled = false;
         removeAdsLayout = findViewById(R.id.removeAds);
         getRemindersLayout = findViewById(R.id.getReminders);
         cycleColorsLayout = findViewById(R.id.cycleColors);
@@ -421,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             lightDark = dbResult.getInt(3) > 0;
             adsRemoved = dbResult.getInt(5) > 0;
             remindersAvailable = dbResult.getInt(6) > 0;
-            cycleColors = dbResult.getInt(7) > 0;
+            colorCyclingAllowed = dbResult.getInt(7) > 0;
             taskListSize = dbResult.getInt(8);
         }
         dbResult.close();
@@ -949,7 +953,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 lightDarkBtn = this.toolbarDark.getMenu().findItem(R.id.lightDark);
                 customiseBtn = this.toolbarDark.getMenu().findItem(R.id.highlight);
                 proBtn = this.toolbarDark.getMenu().findItem(R.id.buy);
-                lightDarkBtn.setTitle("Dark Mode: On");
+                autoColorBtn = this.toolbarDark.getMenu().findItem(R.id.autoColor);
+                lightDarkBtn.setChecked(true);
             } else {
 //                if (mute) {
 //                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
@@ -960,7 +965,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 lightDarkBtn = this.toolbarLight.getMenu().findItem(R.id.lightDark);
                 customiseBtn = this.toolbarLight.getMenu().findItem(R.id.highlight);
                 proBtn = this.toolbarLight.getMenu().findItem(R.id.buy);
-                lightDarkBtn.setTitle("Dark Mode: Off");
+                autoColorBtn = this.toolbarLight.getMenu().findItem(R.id.autoColor);
+                lightDarkBtn.setChecked(false);
+            }
+            if(colorCyclingEnabled){
+                autoColorBtn.setChecked(true);
             }
             return true;
         }else if(colorPickerShowing || purchasesShowing){
@@ -1062,7 +1071,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
 //                }
                 db.updateDarkLight(false);
-                lightDarkBtn.setTitle("Dark Mode: On");
+                item.setChecked(false);
             } else {
                 lightDark = true;
 //                black.setVisibility(View.VISIBLE);
@@ -1102,7 +1111,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                            (this, R.drawable.unmuted_white));
 //                }
                 db.updateDarkLight(true);
-                lightDarkBtn.setTitle("Dark Mode: Off");
+                item.setChecked(true);
             }
             noTasksLeft();
             return true;
@@ -1200,6 +1209,45 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             };
 
             handler.postDelayed(runnable, 200);
+
+            return true;
+
+        } else if (id == R.id.autoColor) {
+
+            if(colorCyclingAllowed){
+                if(colorCyclingEnabled){
+                    colorCyclingEnabled = false;
+                    item.setChecked(false);
+                    db.updateCycleEnabled(false);
+                }else{
+                    colorCyclingEnabled = true;
+                    item.setChecked(true);
+                    db.updateCycleEnabled(true);
+                }
+            }else{
+                purchasesShowing = true;
+                add.setClickable(false);
+                theListView.setOnItemClickListener(null);
+                taskPropertiesShowing = false;
+                if(lightDark){
+                    onCreateOptionsMenu(toolbarLight.getMenu());
+                }else {
+                    onCreateOptionsMenu(toolbarDark.getMenu());
+                }
+                theListView.setAdapter(theAdapter[0]);
+
+                purchases.startAnimation(AnimationUtils.loadAnimation(this, R.anim.enter_from_right));
+
+                final Handler handler = new Handler();
+
+                final Runnable runnable = new Runnable() {
+                    public void run() {
+                        purchases.setVisibility(View.VISIBLE);
+                    }
+                };
+
+                handler.postDelayed(runnable, 200);
+            }
 
             return true;
 
@@ -2135,13 +2183,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             lightDark = dbResult.getInt(3) > 0;
             adsRemoved = dbResult.getInt(5) > 0;
             remindersAvailable = dbResult.getInt(6) > 0;
-            cycleColors = dbResult.getInt(7) > 0;
+            colorCyclingAllowed = dbResult.getInt(7) > 0;
             taskListSize = dbResult.getInt(8);
             taskLastChanged = dbResult.getInt(16);
+            colorCyclingEnabled = dbResult.getInt(18) > 0;
         }
         dbResult.close();
 
-        if(cycleColors) {
+        if(colorCyclingAllowed && colorCyclingEnabled) {
             Calendar cal = Calendar.getInstance();
             if((cal.getTimeInMillis() / 1000 / 60 / 60) > (taskLastChanged + 4)) {
                 switchColor();
