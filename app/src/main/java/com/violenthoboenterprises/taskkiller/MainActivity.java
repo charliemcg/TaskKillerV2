@@ -1129,8 +1129,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 val = 16 * val + d;
             }
 
+            int colorPickerTheme;
+            if(lightDark){
+                colorPickerTheme = R.style.ColorPickerThemeLight;
+            }else{
+                colorPickerTheme = R.style.ColorPickerThemeDark;
+            }
+
             ColorPickerDialogBuilder
-                    .with(MainActivity.this)
+//                    .with(MainActivity.this)
+                    .with(MainActivity.this, colorPickerTheme)
                     .setTitle("Choose color")
                     .initialColor(val)
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
