@@ -189,9 +189,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //Used for debugging purposes. Should not be visible in final version.
 //    Button showDb;
-    Button showAlarmDb;
+//    Button showAlarmDb;
 //    Button showSnoozeDb;
-    Button showUniversalDb;
+//    Button showUniversalDb;
 //    Button showSubtasksDb;
 
     //Scrollable list
@@ -240,7 +240,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     MediaPlayer trash;
 
     //The action bar
-    private Toolbar topToolbar;
+    private Toolbar toolbarDark;
+    private Toolbar toolbarLight;
 
     //Action bar options
 //    MenuItem muteBtn;
@@ -296,8 +297,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         setContentView(R.layout.activity_main);
         overridePendingTransition(R.anim.enter_from_right, R.anim.enter_from_right);
 
-        topToolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(topToolbar);
+        toolbarDark = findViewById(R.id.toolbar_dark);
+        toolbarLight = findViewById(R.id.toolbar_light);
+        setSupportActionBar(toolbarDark);
+        setSupportActionBar(toolbarLight);
 
         //Initialising variables
         taskPropertiesShowing = false;
@@ -397,8 +400,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidthPortrait = displayMetrics.widthPixels;
 //        showDb = findViewById(R.id.showDb);
-        showAlarmDb = findViewById(R.id.showAlarmDb);
-        showUniversalDb = findViewById(R.id.showUniversalDb);
+//        showAlarmDb = findViewById(R.id.showAlarmDb);
+//        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
 
 //        final View child = topToolbar.getChildAt(2);
@@ -426,7 +429,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //Put data in list
         theListView.setAdapter(theAdapter[0]);
 
-        topToolbar.setTitleTextColor(Color.parseColor(highlight));
+        toolbarDark.setTitleTextColor(Color.parseColor(highlight));
+        toolbarLight.setTitleTextColor(Color.parseColor(highlight));
 
         addIcon.setTextColor(Color.parseColor(highlight));
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
@@ -592,30 +596,30 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-        showAlarmDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllAlarmData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("HOUR: " + res.getString(1) + "\n");
-                    buffer.append("MINUTE: " + res.getString(2) + "\n");
-                    buffer.append("AMPM: " + res.getString(3) + "\n");
-                    buffer.append("DAY: " + res.getString(4) + "\n");
-                    buffer.append("MONTH: " + res.getString(5) + "\n");
-                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
-                }
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showAlarmDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllAlarmData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("HOUR: " + res.getString(1) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(2) + "\n");
+//                    buffer.append("AMPM: " + res.getString(3) + "\n");
+//                    buffer.append("DAY: " + res.getString(4) + "\n");
+//                    buffer.append("MONTH: " + res.getString(5) + "\n");
+//                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
+//                }
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
 //        //Used for debugging purposes
 //        showSnoozeDb.setOnClickListener(new View.OnClickListener() {
@@ -644,40 +648,40 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-        showUniversalDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllUniversalData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("MUTE: " + res.getString(1) + "\n");
-                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
-                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
-                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
-                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
-                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
-                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
-                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
-                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
-                    buffer.append("SETALARM: " + res.getString(10) + "\n");
-                    buffer.append("YEAR: " + res.getString(11) + "\n");
-                    buffer.append("MONTH: " + res.getString(12) + "\n");
-                    buffer.append("DAY: " + res.getString(13) + "\n");
-                    buffer.append("HOUR: " + res.getString(14) + "\n");
-                    buffer.append("MINUTE: " + res.getString(15) + "\n\n");
-                }
-                res.close();
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showUniversalDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllUniversalData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("MUTE: " + res.getString(1) + "\n");
+//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
+//                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
+//                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
+//                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
+//                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
+//                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
+//                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
+//                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
+//                    buffer.append("SETALARM: " + res.getString(10) + "\n");
+//                    buffer.append("YEAR: " + res.getString(11) + "\n");
+//                    buffer.append("MONTH: " + res.getString(12) + "\n");
+//                    buffer.append("DAY: " + res.getString(13) + "\n");
+//                    buffer.append("HOUR: " + res.getString(14) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(15) + "\n\n");
+//                }
+//                res.close();
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
         //Used for debugging purposes
 //        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
@@ -835,7 +839,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         Calendar cal = Calendar.getInstance();
         db.updateColorLastChanged((int) (cal.getTimeInMillis() / 1000 / 60 / 60));
         highlight = darkHighlights[i];
-        topToolbar.setTitleTextColor(Color.parseColor(highlight));
+        toolbarDark.setTitleTextColor(Color.parseColor(highlight));
+        toolbarLight.setTitleTextColor(Color.parseColor(highlight));
         addIcon.setTextColor(Color.parseColor(highlight));
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
         toast.setBackgroundColor(Color.parseColor(highlight));
@@ -844,8 +849,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void checkLightDark(boolean lightDark) {
         if(!lightDark){
             theListView.setBackgroundColor(Color.parseColor("#333333"));
-            topToolbar.setBackgroundColor(Color.parseColor("#333333"));
-            topToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
+            toolbarLight.setVisibility(View.INVISIBLE);
+            toolbarDark.setVisibility(View.VISIBLE);
+            setSupportActionBar(toolbarDark);
+//            topToolbar.setBackgroundColor(Color.parseColor("#333333"));
+//            topToolbar.getContext().setTheme(R.style.ThemeOverlay_MyOtherTheme);
+//            topToolbar.setPopupTheme(R.style.ThemeOverlay_MyTheme);
+//            topToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
 //            black.setVisibility(View.GONE);
 //            darkYellow.setVisibility(View.GONE);
 //            darkBlue.setVisibility(View.GONE);
@@ -881,8 +891,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             theListView.setAdapter(theAdapter[0]);
         }else{
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            topToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            topToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
+//            topToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            topToolbar.getContext().setTheme(R.style.ThemeOverlay_MyOtherTheme);
+//            topToolbar.setPopupTheme(R.style.ThemeOverlay_MyOtherTheme);
+//            topToolbar.setSubtitleTextColor(Color.parseColor("#000000"));
+            toolbarDark.setVisibility(View.INVISIBLE);
+            toolbarLight.setVisibility(View.VISIBLE);
+            setSupportActionBar(toolbarLight);
 //            white.setVisibility(View.GONE);
 //            lightYellow.setVisibility(View.GONE);
 //            lightBlue.setVisibility(View.GONE);
@@ -925,16 +940,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_main, menu);
 //            muteBtn = this.topToolbar.getMenu().findItem(R.id.mute);
-            lightDarkBtn = this.topToolbar.getMenu().findItem(R.id.lightDark);
-            customiseBtn = this.topToolbar.getMenu().findItem(R.id.highlight);
-            proBtn = this.topToolbar.getMenu().findItem(R.id.buy);
             if (!lightDark) {
 //                if (mute) {
 //                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
 //                } else {
 //                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
 //                }
-                lightDarkBtn.setTitle("Light Mode");
+                lightDarkBtn = this.toolbarDark.getMenu().findItem(R.id.lightDark);
+                customiseBtn = this.toolbarDark.getMenu().findItem(R.id.highlight);
+                proBtn = this.toolbarDark.getMenu().findItem(R.id.buy);
+                lightDarkBtn.setTitle("Dark Mode: On");
             } else {
 //                if (mute) {
 //                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
@@ -942,7 +957,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                    muteBtn.setIcon(ContextCompat.getDrawable
 //                            (this, R.drawable.unmuted_white));
 //                }
-                lightDarkBtn.setTitle("Dark Mode");
+                lightDarkBtn = this.toolbarLight.getMenu().findItem(R.id.lightDark);
+                customiseBtn = this.toolbarLight.getMenu().findItem(R.id.highlight);
+                proBtn = this.toolbarLight.getMenu().findItem(R.id.buy);
+                lightDarkBtn.setTitle("Dark Mode: Off");
             }
             return true;
         }else if(colorPickerShowing || purchasesShowing){
@@ -1044,7 +1062,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
 //                }
                 db.updateDarkLight(false);
-                lightDarkBtn.setTitle("Light Mode");
+                lightDarkBtn.setTitle("Dark Mode: On");
             } else {
                 lightDark = true;
 //                black.setVisibility(View.VISIBLE);
@@ -1084,7 +1102,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                            (this, R.drawable.unmuted_white));
 //                }
                 db.updateDarkLight(true);
-                lightDarkBtn.setTitle("Dark Mode");
+                lightDarkBtn.setTitle("Dark Mode: Off");
             }
             noTasksLeft();
             return true;
@@ -1113,7 +1131,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         @Override
                         public void onColorSelected(int selectedColor) {
                             String tempHighlight = "#" + Integer.toHexString(selectedColor);
-                            topToolbar.setTitleTextColor(Color.parseColor(tempHighlight));
+                            toolbarDark.setTitleTextColor(Color.parseColor(tempHighlight));
+                            toolbarLight.setTitleTextColor(Color.parseColor(tempHighlight));
                             addIcon.setTextColor(Color.parseColor(tempHighlight));
                             taskNameEditText.setBackgroundColor(Color.parseColor(tempHighlight));
                         }
@@ -1138,7 +1157,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            topToolbar.setTitleTextColor(Color.parseColor(highlight));
+                            toolbarDark.setTitleTextColor(Color.parseColor(highlight));
+                            toolbarLight.setTitleTextColor(Color.parseColor(highlight));
                             addIcon.setTextColor(Color.parseColor(highlight));
                             taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
                         }
@@ -1157,7 +1177,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             add.setClickable(false);
             theListView.setOnItemClickListener(null);
             taskPropertiesShowing = false;
-            onCreateOptionsMenu(topToolbar.getMenu());
+            if(lightDark){
+                onCreateOptionsMenu(toolbarLight.getMenu());
+            }else {
+                onCreateOptionsMenu(toolbarDark.getMenu());
+            }
             theListView.setAdapter(theAdapter[0]);
 //            final LinearLayout orientedPurchases;
 //            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
@@ -1779,7 +1803,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             });
             add.setClickable(true);
-            onCreateOptionsMenu(topToolbar.getMenu());
+            if(lightDark) {
+                onCreateOptionsMenu(toolbarLight.getMenu());
+            }else{
+                onCreateOptionsMenu(toolbarDark.getMenu());
+            }
             theListView.setAdapter(theAdapter[0]);
     }
 
@@ -1874,7 +1902,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        }
         db.updateHighlight(s);
         highlight = s;
-        topToolbar.setTitleTextColor(Color.parseColor(s));
+        toolbarDark.setTitleTextColor(Color.parseColor(s));
+        toolbarLight.setTitleTextColor(Color.parseColor(s));
         addIcon.setTextColor(Color.parseColor(s));
         taskNameEditText.setBackgroundColor(Color.parseColor(s));
         setDividers(lightDark);
@@ -2194,7 +2223,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         add.setClickable(false);
         theListView.setOnItemClickListener(null);
         taskPropertiesShowing = false;
-        onCreateOptionsMenu(topToolbar.getMenu());
+        if(lightDark) {
+            onCreateOptionsMenu(toolbarLight.getMenu());
+        }else{
+            onCreateOptionsMenu(toolbarDark.getMenu());
+        }
         theListView.setAdapter(theAdapter[0]);
         purchases.startAnimation(AnimationUtils.loadAnimation
                 (this, R.anim.enter_from_right));

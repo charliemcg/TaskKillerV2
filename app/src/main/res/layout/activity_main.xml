@@ -9,15 +9,28 @@
     android:id="@+id/activityRoot">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
+        android:id="@+id/toolbar_dark"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
         app:subtitle="No Excuses"
         app:subtitleTextColor="@color/gray"
         android:elevation="4dp"
-        app:popupTheme="@style/ThemeOverlay.MyTheme"/>
-        <!--android:soundEffectsEnabled="false"/>-->
+        app:popupTheme="@style/ThemeOverlay.DarkTheme"
+        android:background="@color/dark_gray"
+        android:visibility="gone"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_light"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderBar"
+        app:subtitle="No Excuses"
+        app:subtitleTextColor="@color/dark_gray"
+        android:elevation="4dp"
+        app:popupTheme="@style/ThemeOverlay.LightTheme"
+        android:background="@color/white"
+        android:visibility="gone"/>
 
     <!--<LinearLayout-->
         <!--android:id="@+id/colorPicker"-->
@@ -429,19 +442,19 @@
         <!--android:layout_width="100dp"-->
         <!--android:layout_height="100dp"-->
         <!--android:text="DB"/>-->
-    <Button
-        android:id="@+id/showAlarmDb"
-        android:layout_marginTop="500dp"
-        android:layout_marginLeft="100dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="Time"/>
-    <Button
-        android:id="@+id/showUniversalDb"
-        android:layout_marginTop="500dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="Universal DB"/>
+    <!--<Button-->
+        <!--android:id="@+id/showAlarmDb"-->
+        <!--android:layout_marginTop="500dp"-->
+        <!--android:layout_marginLeft="100dp"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:text="Time"/>-->
+    <!--<Button-->
+        <!--android:id="@+id/showUniversalDb"-->
+        <!--android:layout_marginTop="500dp"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:text="Universal DB"/>-->
     <!--<Button-->
         <!--android:id="@+id/showSubtasksDb"-->
         <!--android:layout_marginTop="500dp"-->
@@ -454,7 +467,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/theListView"
-        android:layout_below="@+id/my_toolbar"
+        android:layout_below="@+id/toolbar_dark"
         android:background="@color/dark_gray"
         android:descendantFocusability="blocksDescendants"/>
         <!--android:soundEffectsEnabled="false" />-->

@@ -116,6 +116,8 @@ public class SetDue extends MainActivity {
         }
         dbTaskResult.close();
 
+        dueToolbar.setSubtitle(dbTask);
+
         //Inform user that they can set an alarm
         if(dbDueTime.equals("0")){
             dateTextView.setText("+Add due date");
@@ -230,7 +232,8 @@ public class SetDue extends MainActivity {
         }
 
         if(!lightDark){
-            dueToolbar.setTitleTextColor(Color.parseColor("#AAAAAA"));
+            dueToolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+            dueToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
             pickerRoot.setBackgroundColor(Color.parseColor("#333333"));
             dueToolbar.setBackgroundColor(Color.parseColor("#333333"));
             dateTextView.setTextColor(Color.parseColor("#AAAAAA"));
@@ -244,6 +247,7 @@ public class SetDue extends MainActivity {
 //            timeFadedLight.setVisibility(View.GONE);
         }else{
             dueToolbar.setTitleTextColor(Color.parseColor("#000000"));
+            dueToolbar.setSubtitleTextColor(Color.parseColor("#666666"));
             pickerRoot.setBackgroundColor(Color.parseColor("#FFFFFF"));
             dueToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             dateTextView.setTextColor(Color.parseColor("#000000"));
@@ -538,7 +542,7 @@ public class SetDue extends MainActivity {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_alarm, menu);
             killAlarm = menu.findItem(R.id.killAlarmItem);
-            this.setTitle(dbTask);
+            this.setTitle("Due Date/Time");
             if(Integer.parseInt(dbDueTime) == 0){
                 killAlarm.setVisible(false);
             }else {

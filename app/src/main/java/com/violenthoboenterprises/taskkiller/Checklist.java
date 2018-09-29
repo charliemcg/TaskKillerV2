@@ -116,7 +116,8 @@ public class Checklist extends MainActivity {
         checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
 
         //setting title to task name
-        subTasksToolbar.setTitle(dbTask);
+        subTasksToolbar.setTitle("Sub-Tasks");
+        subTasksToolbar.setSubtitle(dbTask);
 
         //Set list view dividers
         String digits = "0123456789ABCDEF";
@@ -133,11 +134,13 @@ public class Checklist extends MainActivity {
 
         //setting correct background color
         if(!dbLightDark){
-            subTasksToolbar.setTitleTextColor(Color.parseColor("#AAAAAA"));
+            subTasksToolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+            subTasksToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
             checklistView.setBackgroundColor(Color.parseColor("#333333"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#333333"));
         }else{
             subTasksToolbar.setTitleTextColor(Color.parseColor("#000000"));
+            subTasksToolbar.setSubtitleTextColor(Color.parseColor("#666666"));
             checklistView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }

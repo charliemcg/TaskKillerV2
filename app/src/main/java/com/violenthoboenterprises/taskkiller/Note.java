@@ -82,7 +82,9 @@ public class Note extends MainActivity {
         }
         dbTaskResult.close();
 
-        noteToolbar.setTitle(dbTask);
+        //TODO title should be "note" and subtitle should be task name
+//        noteToolbar.setTitle("Note");
+        noteToolbar.setSubtitle(dbTask);
 
         noteTextView.setMovementMethod(new ScrollingMovementMethod());
 
@@ -104,12 +106,14 @@ public class Note extends MainActivity {
         if(!lightDark){
             noteRoot.setBackgroundColor(Color.parseColor("#333333"));
 //            submitNoteBtnLight.setVisibility(View.GONE);
-            noteToolbar.setTitleTextColor(Color.parseColor("#AAAAAA"));
+            noteToolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+            noteToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
         }else{
             noteRoot.setBackgroundColor(Color.parseColor("#FFFFFF"));
             noteToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             noteTextView.setTextColor(Color.parseColor("#000000"));
             noteToolbar.setTitleTextColor(Color.parseColor("#000000"));
+            noteToolbar.setSubtitleTextColor(Color.parseColor("#666666"));
 //            submitNoteBtnDark.setVisibility(View.GONE);
         }
 
@@ -325,7 +329,7 @@ public class Note extends MainActivity {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_alarm, menu);
             trashNote = menu.findItem(R.id.killAlarmItem);
-            this.setTitle(dbTask);
+            this.setTitle("Note");
             if(noteTextView.getText().toString().equals("")){
                 trashNote.setVisible(false);
             }else {
