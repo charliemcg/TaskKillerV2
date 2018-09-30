@@ -16,6 +16,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -45,15 +46,16 @@ public class Note extends MainActivity {
     //Indicates that the active task has subtasks
     Boolean checklistExists;
     View noteRoot;
-    Toolbar noteToolbar;
+    private Toolbar noteToolbar;
     MenuItem trashNote;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_layout);
-        overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
         noteToolbar = findViewById(R.id.noteToolbar);
-//        setSupportActionBar(noteToolbar);
+        setSupportActionBar(noteToolbar);
+
+//        overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);//TODO does this do anything?
 
         noteTextView = findViewById(R.id.noteTextView);
         noteEditText = findViewById(R.id.noteEditText);
@@ -322,6 +324,8 @@ public class Note extends MainActivity {
 //            MenuItem blah = noteToolbar.getMenu().findItem(R.id.killAlarmItem);
             Log.i(TAG, "trashNote: " + trashNote);
             trashNote.setVisible(true);
+            noteToolbar.setTitleTextColor(Color.parseColor("#FF0000"));
+            this.invalidateOptionsMenu();
 
         }
 
@@ -338,14 +342,28 @@ public class Note extends MainActivity {
 //        return true;
 //    }
 
+//    @Override
+//    public boolean onPrepareOptionsMenu(final Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_note, menu);
+//
+//        return super.onCreateOptionsMenu(menu);
+//    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(!menu.hasVisibleItems()) {
-            getMenuInflater().inflate(R.menu.menu_note, menu);
-            trashNote = noteToolbar.getMenu().findItem(R.id.killNoteItem);
+            getMenuInflater().inflate(R.menu.menu_note, noteToolbar.getMenu());
+            trashNote = this.noteToolbar.getMenu().findItem(R.id.killNoteItem);
 //            trashNote = menu.getItem(0);//TODO should be using the line above instead
+//            trashNote = menu.findItem(R.id.killNoteItem);
+            Log.i(TAG, "menu: " + menu.size());
+            Log.i(TAG, "toolbar menu: " + this.noteToolbar.getMenu().size());
+            if(menu == this.noteToolbar.getMenu()){
+                Log.i(TAG, "Item: " + trashNote);
+            }
+
             if(noteTextView.getText().toString().equals("")){
-//                trashNote.setVisible(true);
+                trashNote.setVisible(true);
             }else {
                 trashNote.setVisible(true);
             }
@@ -387,7 +405,7 @@ public class Note extends MainActivity {
             db.updateData(MainActivity.sortedIdsForNote
                     .get(activeTask), "", checklistExists);
 
-            trashNote.setVisible(false);
+//            trashNote.setVisible(false);
 //
 //            //getting task data
 //            dbTaskId = "";

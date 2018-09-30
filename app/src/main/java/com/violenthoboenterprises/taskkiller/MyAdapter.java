@@ -3984,6 +3984,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 }else{
                         //TODO show in app purchases
                         Log.i(TAG, "Upgrade to pro");
+
                     }
 
                 }

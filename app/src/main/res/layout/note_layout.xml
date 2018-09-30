@@ -14,7 +14,6 @@
         style="@style/HeaderBar"
         android:theme="@style/ThemeOverlay.DarkTheme"
         app:popupTheme="@style/ThemeOverlay.DarkTheme"
-        android:background="@color/dark_gray"
         android:elevation="4dp"/>
 
     <TextView
