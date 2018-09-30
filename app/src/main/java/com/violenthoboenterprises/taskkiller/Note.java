@@ -45,7 +45,7 @@ public class Note extends MainActivity {
     //Indicates that the active task has subtasks
     Boolean checklistExists;
     View noteRoot;
-    private Toolbar noteToolbar;
+    Toolbar noteToolbar;
     MenuItem trashNote;
 
     public void onCreate(Bundle savedInstanceState){
@@ -53,7 +53,7 @@ public class Note extends MainActivity {
         setContentView(R.layout.note_layout);
         overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
         noteToolbar = findViewById(R.id.noteToolbar);
-        setSupportActionBar(noteToolbar);
+//        setSupportActionBar(noteToolbar);
 
         noteTextView = findViewById(R.id.noteTextView);
         noteEditText = findViewById(R.id.noteEditText);
@@ -83,7 +83,8 @@ public class Note extends MainActivity {
         dbTaskResult.close();
 
         //TODO title should be "note" and subtitle should be task name
-//        noteToolbar.setTitle("Note");
+        noteToolbar.setTitle("Note");
+//        getSupportActionBar().setTitle("Note");
         noteToolbar.setSubtitle(dbTask);
 
         noteTextView.setMovementMethod(new ScrollingMovementMethod());
@@ -315,7 +316,12 @@ public class Note extends MainActivity {
 
             submitNoteBtnDark.setVisibility(View.GONE);
 
-            noteToolbar.getMenu().getItem(0).setVisible(true);
+//            noteToolbar.getMenu().getItem(0).setVisible(true);
+//            Log.i(TAG, getSupportActionBar().getTitle().toString());
+//            setSupportActionBar(noteToolbar);
+//            MenuItem blah = noteToolbar.getMenu().findItem(R.id.killAlarmItem);
+            Log.i(TAG, "trashNote: " + trashNote);
+            trashNote.setVisible(true);
 
         }
 
@@ -324,14 +330,22 @@ public class Note extends MainActivity {
 
     }
 
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        trashNote = menu.getItem(0);
+//
+//        trashNote.setVisible(true);
+//        return true;
+//    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(!menu.hasVisibleItems()) {
-            getMenuInflater().inflate(R.menu.menu_alarm, menu);
-            trashNote = menu.findItem(R.id.killAlarmItem);
-            this.setTitle("Note");
+            getMenuInflater().inflate(R.menu.menu_note, menu);
+            trashNote = noteToolbar.getMenu().findItem(R.id.killNoteItem);
+//            trashNote = menu.getItem(0);//TODO should be using the line above instead
             if(noteTextView.getText().toString().equals("")){
-                trashNote.setVisible(false);
+//                trashNote.setVisible(true);
             }else {
                 trashNote.setVisible(true);
             }
@@ -350,7 +364,7 @@ public class Note extends MainActivity {
         //Resetting alarm to off
         //TODO find out if return statements are necessary
         //noinspection SimplifiableIfStatement
-        if (id == R.id.killAlarmItem) {
+        if (id == R.id.killNoteItem) {
 
             if(!mute){
                 trash.start();

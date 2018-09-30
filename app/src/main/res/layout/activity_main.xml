@@ -13,26 +13,26 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
-        app:subtitle="No Excuses"
         app:subtitleTextColor="@color/gray"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.DarkTheme"
         app:popupTheme="@style/ThemeOverlay.DarkTheme"
         android:background="@color/dark_gray"
         android:visibility="gone"/>
+    <!--app:subtitle="No Excuses"-->
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_light"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
-        app:subtitle="No Excuses"
         app:subtitleTextColor="@color/dark_gray"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.LightTheme"
         app:popupTheme="@style/ThemeOverlay.LightTheme"
         android:background="@color/white"
         android:visibility="gone"/>
+    <!--app:subtitle="No Excuses"-->
 
     <!--<LinearLayout-->
         <!--android:id="@+id/colorPicker"-->

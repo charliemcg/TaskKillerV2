@@ -54,7 +54,7 @@ public class SetDue extends MainActivity {
     static String dbTaskId;
     String dbTask;
     static String dbDueTime;
-    MenuItem killAlarm;
+    static MenuItem killAlarm;
     static boolean datePicked;
     static boolean timePicked;
 
@@ -65,6 +65,7 @@ public class SetDue extends MainActivity {
 //        }else{
 //            setContentView(R.layout.due_picker);
 //        }
+        //TODO are these supposed to be the same animation
         overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
         dueToolbar = findViewById(R.id.dueToolbar);
         setSupportActionBar(dueToolbar);
@@ -117,6 +118,7 @@ public class SetDue extends MainActivity {
         dbTaskResult.close();
 
         dueToolbar.setSubtitle(dbTask);
+        dueToolbar.setTitle("Set Date/Time");
 
         //Inform user that they can set an alarm
         if(dbDueTime.equals("0")){
@@ -542,6 +544,8 @@ public class SetDue extends MainActivity {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_alarm, menu);
             killAlarm = menu.findItem(R.id.killAlarmItem);
+//            killAlarm = this.dueToolbar.getMenu().findItem(R.id.killAlarmItem);
+            Log.i(TAG, "icon: " + killAlarm);
             this.setTitle("Due Date/Time");
             if(Integer.parseInt(dbDueTime) == 0){
                 killAlarm.setVisible(false);
@@ -791,7 +795,17 @@ public class SetDue extends MainActivity {
 
             dateTextView.setTextSize(25);
 
-            dueToolbar.getMenu().getItem(0).setVisible(true);
+            //TODO find out why this crashes
+//            dueToolbar.getMenu().getItem(0).setVisible(true);
+//            dueToolbar.getMenu().findItem(R.id.killAlarmItem).setVisible(true);
+//            killAlarm.setVisible(true);
+            Log.i(TAG, "item: " + dueToolbar);
+            Log.i(TAG, "item: " + dueToolbar.getMenu());
+            Log.i(TAG, "item: " + dueToolbar.getMenu().size());
+            Log.i(TAG, "item: " + dueToolbar.getMenu().hasVisibleItems());
+            Log.i(TAG, "item: " + dueToolbar.getMenu().findItem(R.id.killAlarmItem));
+            Log.i(TAG, "item: " + killAlarm);
+            killAlarm.setVisible(true);
 
         }
 
@@ -926,6 +940,7 @@ public class SetDue extends MainActivity {
 
             timeTextView.setTextSize(25);
 
+            //TODO find out why this crashes
             dueToolbar.getMenu().getItem(0).setVisible(true);
 
         }
@@ -1086,6 +1101,8 @@ public class SetDue extends MainActivity {
         //updating the alarm in myAdapter
         if(setDue) {
             db.updateSetAlarm(true);
+//            duesSet++;
+//            db.updateDuesSet(duesSet);
         }
 
         //return to mainActivity

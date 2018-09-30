@@ -37,6 +37,18 @@
                 android:orderInCategory="4"
                 android:checkable="true"
                 android:checked="false"/>
+    <item
+        android:id="@+id/mute"
+        android:title="Sound FX"
+        app:showAsAction="collapseActionView"
+        android:orderInCategory="5"
+        android:checkable="true"/>
+    <item
+        android:id="@+id/motivation"
+        android:title="Motivation"
+        app:showAsAction="collapseActionView"
+        android:orderInCategory="6"
+        android:checkable="true"/>
             <!--<item-->
                 <!--android:id="@+id/cycleFrequency"-->
                 <!--android:title="Frequency"-->

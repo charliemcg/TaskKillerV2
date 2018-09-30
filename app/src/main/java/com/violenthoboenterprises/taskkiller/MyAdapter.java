@@ -464,31 +464,33 @@ class MyAdapter extends ArrayAdapter<String> {
 //            }
 //        }
 
-        //Displaying ad if there are five or more tasks
-        if(position == 0 && MainActivity.taskList.size() > 4) {
-            adRow.setVisibility(View.VISIBLE);
-            boolean networkAvailable = false;
-            //TODO uncomment this to actually get ads
-            ConnectivityManager connectivityManager = (ConnectivityManager)
-                    getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-                networkAvailable = true;
-            }
+        if(!MainActivity.adsRemoved) {
+            //Displaying ad if there are five or more tasks
+            if (position == 0 && MainActivity.taskList.size() > 4) {
+                adRow.setVisibility(View.VISIBLE);
+                boolean networkAvailable = false;
+                //TODO uncomment this to actually get ads
+                ConnectivityManager connectivityManager = (ConnectivityManager)
+                        getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                    networkAvailable = true;
+                }
 
-            //Initialising banner ad
-            final AdView adView = taskView.findViewById(R.id.adView);
-            ImageView banner = taskView.findViewById(R.id.banner);
+                //Initialising banner ad
+                final AdView adView = taskView.findViewById(R.id.adView);
+                ImageView banner = taskView.findViewById(R.id.banner);
 
-            if (networkAvailable) {
-                adView.setVisibility(View.VISIBLE);
-                final AdRequest banRequest = new AdRequest.Builder()
-        //TODO probably need a new ID
-                        .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
+                if (networkAvailable) {
+                    adView.setVisibility(View.VISIBLE);
+                    final AdRequest banRequest = new AdRequest.Builder()
+                            //TODO probably need a new ID
+                            .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
                     (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
-                adView.loadAd(banRequest);
-            } else {
-                banner.setVisibility(View.VISIBLE);
+                    adView.loadAd(banRequest);
+                } else {
+                    banner.setVisibility(View.VISIBLE);
+                }
             }
         }
 
@@ -869,8 +871,10 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.alertIntent, PendingIntent
                                 .FLAG_UPDATE_CURRENT);
 
-                MainActivity.alarmManager.set(AlarmManager.RTC,
-                        newStamp, MainActivity.pendIntent);
+                if(MainActivity.remindersAvailable) {
+                    MainActivity.alarmManager.set(AlarmManager.RTC,
+                            newStamp, MainActivity.pendIntent);
+                }
 
                 if(!alarmDay.equals("")) {
                     int newDay = Integer.parseInt(alarmDay);
@@ -996,7 +1000,6 @@ class MyAdapter extends ArrayAdapter<String> {
             Boolean markAsOverdue = false;
 //            if(!dbKilled) {
 
-            Log.i(TAG, "current: " + currentHour + " hour: " + hour);
                 //Overdue
                 if (currentYear > Integer.valueOf(year)) {
                     dueClear.setVisibility(View.GONE);
@@ -1387,30 +1390,32 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.db.updateIgnored(MainActivity.sortedIDs
                         .get(position), false);
 
-                MainActivity.toast.setText(R.string.youKilledThisTask);
-                final Handler handler = new Handler();
+                if(MainActivity.showMotivation) {
+                    MainActivity.toast.setText(R.string.youKilledThisTask);
+                    final Handler handler = new Handler();
 
-                final Runnable runnable = new Runnable() {
-                    public void run() {
-                        if(!MainActivity.mute) {
-                            MainActivity.sweep.start();
-                        }
-                        MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                (getContext(), R.anim.enter_from_right_fast));
-                        MainActivity.toastView.setVisibility(View.VISIBLE);
-                        final Handler handler2 = new Handler();
-                        final Runnable runnable2 = new Runnable(){
-                            public void run(){
-                                MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                        (getContext(), android.R.anim.fade_out));
-                                MainActivity.toastView.setVisibility(View.GONE);
+                    final Runnable runnable = new Runnable() {
+                        public void run() {
+                            if (!MainActivity.mute) {
+                                MainActivity.sweep.start();
                             }
-                        };
-                        handler2.postDelayed(runnable2, 1500);
-                    }
-                };
+                            MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                    (getContext(), R.anim.enter_from_right_fast));
+                            MainActivity.toastView.setVisibility(View.VISIBLE);
+                            final Handler handler2 = new Handler();
+                            final Runnable runnable2 = new Runnable() {
+                                public void run() {
+                                    MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                            (getContext(), android.R.anim.fade_out));
+                                    MainActivity.toastView.setVisibility(View.GONE);
+                                }
+                            };
+                            handler2.postDelayed(runnable2, 1500);
+                        }
+                    };
 
-                handler.postDelayed(runnable, 500);
+                    handler.postDelayed(runnable, 500);
+                }
 
                 //need to kill the right alarm. Need to know if
                 // killing initial alarm or a snoozed alarm
@@ -1588,8 +1593,10 @@ class MyAdapter extends ArrayAdapter<String> {
                             MainActivity.alertIntent, PendingIntent
                                     .FLAG_UPDATE_CURRENT);
 
-                    MainActivity.alarmManager.set(AlarmManager.RTC,
-                            newStamp, MainActivity.pendIntent);
+                    if(MainActivity.remindersAvailable) {
+                        MainActivity.alarmManager.set(AlarmManager.RTC,
+                                newStamp, MainActivity.pendIntent);
+                    }
 
                 }
 
@@ -1949,8 +1956,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 MainActivity.alertIntent, PendingIntent
                                                         .FLAG_UPDATE_CURRENT);
 
-                                        MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                adjustedStamp, MainActivity.pendIntent);
+                                        if(MainActivity.remindersAvailable) {
+                                            MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                    adjustedStamp, MainActivity.pendIntent);
+                                        }
 
                                         //incrementing month
                                         if (((newMonth == 2)
@@ -2156,9 +2165,11 @@ class MyAdapter extends ArrayAdapter<String> {
                                             getContext(), newBroadcast, MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                    MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
-                                                    .getTimeInMillis() + interval),
-                                            MainActivity.pendIntent);
+                                    if(MainActivity.remindersAvailable) {
+                                        MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
+                                                        .getTimeInMillis() + interval),
+                                                MainActivity.pendIntent);
+                                    }
 
                                     MainActivity.db.updateSnooze(MainActivity.sortedIDs
                                             .get(position), true);
@@ -2462,8 +2473,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                                         MainActivity.alertIntent, PendingIntent
                                                                 .FLAG_UPDATE_CURRENT);
 
-                                                MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                        adjustedStamp, MainActivity.pendIntent);
+                                                if(MainActivity.remindersAvailable) {
+                                                    MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                            adjustedStamp, MainActivity.pendIntent);
+                                                }
 
                                                 //incrementing month
                                                 if (((newMonth == 2) || (newMonth == 4)
@@ -2684,9 +2697,11 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     MainActivity.alertIntent,
                                                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                            MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                    (currentDate.getTimeInMillis() + interval),
-                                                    MainActivity.pendIntent);
+                                            if(MainActivity.remindersAvailable) {
+                                                MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                        (currentDate.getTimeInMillis() + interval),
+                                                        MainActivity.pendIntent);
+                                            }
 
                                             MainActivity.db.updateSnooze(MainActivity.sortedIDs
                                                     .get(position), true);
@@ -2979,8 +2994,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 MainActivity.alertIntent, PendingIntent
                                                         .FLAG_UPDATE_CURRENT);
 
-                                        MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                adjustedStamp, MainActivity.pendIntent);
+                                        if(MainActivity.remindersAvailable) {
+                                            MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                    adjustedStamp, MainActivity.pendIntent);
+                                        }
 
                                         //incrementing month
                                         if (((newMonth == 2) || (newMonth == 4)
@@ -3169,9 +3186,11 @@ class MyAdapter extends ArrayAdapter<String> {
                                             getContext(), newBroadcast, MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                    MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
-                                                    .getTimeInMillis() + interval),
-                                            MainActivity.pendIntent);
+                                    if(MainActivity.remindersAvailable) {
+                                        MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
+                                                        .getTimeInMillis() + interval),
+                                                MainActivity.pendIntent);
+                                    }
 
                                     MainActivity.db.updateSnooze(MainActivity
                                             .sortedIDs.get(position), true);
@@ -3238,33 +3257,35 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.sortedIDs.get(
                                                     MainActivity.activeTask)), true);
 
-                                    MainActivity.toast.setText(R.string.youKilledThisTask);
-                                    final Handler handler = new Handler();
+                                    if (MainActivity.showMotivation) {
+                                        MainActivity.toast.setText(R.string.youKilledThisTask);
+                                        final Handler handler = new Handler();
 
-                                    final Runnable runnable = new Runnable() {
-                                        public void run() {
-                                            if(!MainActivity.mute) {
-                                                MainActivity.sweep.start();
-                                            }
-                                            MainActivity.toastView.startAnimation
-                                                    (AnimationUtils.loadAnimation(getContext(),
-                                                            R.anim.enter_from_right_fast));
-                                            MainActivity.toastView.setVisibility(View.VISIBLE);
-                                            final Handler handler2 = new Handler();
-                                            final Runnable runnable2 = new Runnable(){
-                                                public void run(){
-                                                    MainActivity.toastView.startAnimation
-                                                            (AnimationUtils.loadAnimation
-                                                                    (getContext(), android.R.anim
-                                                                            .fade_out));
-                                                    MainActivity.toastView.setVisibility(View.GONE);
+                                        final Runnable runnable = new Runnable() {
+                                            public void run() {
+                                                if (!MainActivity.mute) {
+                                                    MainActivity.sweep.start();
                                                 }
-                                            };
-                                            handler2.postDelayed(runnable2, 1500);
-                                        }
-                                    };
+                                                MainActivity.toastView.startAnimation
+                                                        (AnimationUtils.loadAnimation(getContext(),
+                                                                R.anim.enter_from_right_fast));
+                                                MainActivity.toastView.setVisibility(View.VISIBLE);
+                                                final Handler handler2 = new Handler();
+                                                final Runnable runnable2 = new Runnable() {
+                                                    public void run() {
+                                                        MainActivity.toastView.startAnimation
+                                                                (AnimationUtils.loadAnimation
+                                                                        (getContext(), android.R.anim
+                                                                                .fade_out));
+                                                        MainActivity.toastView.setVisibility(View.GONE);
+                                                    }
+                                                };
+                                                handler2.postDelayed(runnable2, 1500);
+                                            }
+                                        };
 
-                                    handler.postDelayed(runnable, 500);
+                                         handler.postDelayed(runnable, 500);
+                                    }
 
                                     MainActivity.pendIntent = PendingIntent.getBroadcast
                                             (getContext(), Integer.parseInt(
@@ -3467,8 +3488,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 MainActivity.alertIntent, PendingIntent
                                                         .FLAG_UPDATE_CURRENT);
 
-                                        MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                adjustedStamp, MainActivity.pendIntent);
+                                        if(MainActivity.remindersAvailable) {
+                                            MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                    adjustedStamp, MainActivity.pendIntent);
+                                        }
 
                                         int newDay = Integer.parseInt(finalAlarmDay);
                                         int newMonth = Integer.parseInt(finalAlarmMonth);
@@ -3647,31 +3670,33 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.db.updateIgnored(MainActivity.sortedIDs
                                 .get(position), false);
 
-                        MainActivity.toast.setText(R.string.youKilledThisTask);
-                        final Handler handler = new Handler();
+                        if(MainActivity.showMotivation) {
+                            MainActivity.toast.setText(R.string.youKilledThisTask);
+                            final Handler handler = new Handler();
 
-                        final Runnable runnable = new Runnable() {
-                            public void run() {
-                                if(!MainActivity.mute) {
-                                    MainActivity.sweep.start();
-                                }
-                                MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                        (getContext(), R.anim.enter_from_right_fast));
-                                MainActivity.toastView.setVisibility(View.VISIBLE);
-                                final Handler handler2 = new Handler();
-                                final Runnable runnable2 = new Runnable(){
-                                    public void run(){
-                                        MainActivity.toastView.startAnimation(AnimationUtils
-                                                .loadAnimation(getContext(),
-                                                        android.R.anim.fade_out));
-                                        MainActivity.toastView.setVisibility(View.GONE);
+                            final Runnable runnable = new Runnable() {
+                                public void run() {
+                                    if (!MainActivity.mute) {
+                                        MainActivity.sweep.start();
                                     }
-                                };
-                                handler2.postDelayed(runnable2, 1500);
-                            }
-                        };
+                                    MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                            (getContext(), R.anim.enter_from_right_fast));
+                                    MainActivity.toastView.setVisibility(View.VISIBLE);
+                                    final Handler handler2 = new Handler();
+                                    final Runnable runnable2 = new Runnable() {
+                                        public void run() {
+                                            MainActivity.toastView.startAnimation(AnimationUtils
+                                                    .loadAnimation(getContext(),
+                                                            android.R.anim.fade_out));
+                                            MainActivity.toastView.setVisibility(View.GONE);
+                                        }
+                                    };
+                                    handler2.postDelayed(runnable2, 1500);
+                                }
+                            };
 
-                        handler.postDelayed(runnable, 500);
+                            handler.postDelayed(runnable, 500);
+                        }
 
                         //need to kill the right alarm. Need to know if
                         // killing initial alarm or a snoozed alarm
@@ -3849,8 +3874,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.alertIntent, PendingIntent
                                             .FLAG_UPDATE_CURRENT);
 
-                            MainActivity.alarmManager.set(AlarmManager.RTC,
-                                    newStamp, MainActivity.pendIntent);
+                            if(MainActivity.remindersAvailable) {
+                                MainActivity.alarmManager.set(AlarmManager.RTC,
+                                        newStamp, MainActivity.pendIntent);
+                            }
 
                         }
 
@@ -3913,29 +3940,35 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    Log.i(TAG, "Dates: " + MainActivity.duesSet);
+//                    if(MainActivity.duesSet < 1) {
                     MainActivity.vibrate.vibrate(50);
 
 //                    if(!MainActivity.mute){
 //                        MainActivity.blip.start();
 //                    }
 
-                        //actions to occur if alarm not already set
-                        if (!finalDbDue) {
+                    //actions to occur if alarm not already set
+                    if (!finalDbDue) {
 
-                            MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
+                        MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
 
-                            getContext().startActivity(dueIntent);
+                        getContext().startActivity(dueIntent);
 
                         //actions to occur when viewing alarm properties
-                        } else {
+                    } else {
 
-                            MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
+                        MainActivity.db.updateActiveTaskTemp(String.valueOf(finalDbID));
 
-                            getContext().startActivity(dueIntent);
+                        getContext().startActivity(dueIntent);
 
                     }
+                }/*else{
+                        //TODO inform user to upgrade
+                        Log.i(TAG, "Upgrade to pro");
+                    }*/
 
-                }
+//                }
             });
 
             //Actions to occur if user selects 'Sub-Tasks'
@@ -4505,13 +4538,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
          }else {
 
-            MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+             MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-            Calendar calendar = Calendar.getInstance();
+             Calendar calendar = Calendar.getInstance();
 
-            Calendar currentDate = new GregorianCalendar();
+             Calendar currentDate = new GregorianCalendar();
 
-            //Checking that task due date is in the future
+             //Checking that task due date is in the future
             /*if (currentDate.get(Calendar.YEAR) > year) {
                 MainActivity.toast.setText(R.string.cannotSetTask);
                 final Handler handler = new Handler();
@@ -4589,90 +4622,91 @@ class MyAdapter extends ArrayAdapter<String> {
                 } else */
 
              int adjustedHour = hour;
-             if(ampm == 1){
+             if (ampm == 1) {
                  adjustedHour += 12;
              }
-            if (currentDate.get(Calendar.YEAR) == year
-                        && currentDate.get(Calendar.MONTH) == month
-                        && currentDate.get(Calendar.DAY_OF_MONTH) ==
-                        day
-                        && currentDate.get(Calendar.HOUR_OF_DAY) >
-                        adjustedHour) {
-                    MainActivity.toast.setText(R.string.cannotSetTask);
-                    final Handler handler = new Handler();
+             if (currentDate.get(Calendar.YEAR) == year
+                     && currentDate.get(Calendar.MONTH) == month
+                     && currentDate.get(Calendar.DAY_OF_MONTH) ==
+                     day
+                     && currentDate.get(Calendar.HOUR_OF_DAY) >
+                     adjustedHour) {
+                 MainActivity.toast.setText(R.string.cannotSetTask);
+                 final Handler handler = new Handler();
 
-                    final Runnable runnable = new Runnable() {
-                        public void run() {
-                            if(!MainActivity.mute) {
-                                MainActivity.sweep.start();
-                            }
-                            MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                    (getContext(), R.anim.enter_from_right_fast));
-                            MainActivity.toastView.setVisibility(View.VISIBLE);
-                            final Handler handler2 = new Handler();
-                            final Runnable runnable2 = new Runnable(){
-                                public void run(){
-                                    MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                            (getContext(), android.R.anim.fade_out));
-                                    MainActivity.toastView.setVisibility(View.GONE);
-                                }
-                            };
-                            handler2.postDelayed(runnable2, 2500);
-                        }
-                    };
+                 final Runnable runnable = new Runnable() {
+                     public void run() {
+                         if (!MainActivity.mute) {
+                             MainActivity.sweep.start();
+                         }
+                         MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                 (getContext(), R.anim.enter_from_right_fast));
+                         MainActivity.toastView.setVisibility(View.VISIBLE);
+                         final Handler handler2 = new Handler();
+                         final Runnable runnable2 = new Runnable() {
+                             public void run() {
+                                 MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                         (getContext(), android.R.anim.fade_out));
+                                 MainActivity.toastView.setVisibility(View.GONE);
+                             }
+                         };
+                         handler2.postDelayed(runnable2, 2500);
+                     }
+                 };
 
-                    handler.postDelayed(runnable, 500);
-                } else if (currentDate.get(Calendar.YEAR) == year
-                        && currentDate.get(Calendar.MONTH) == month
-                        && currentDate.get(Calendar.DAY_OF_MONTH) ==
-                        day
-                        && currentDate.get(Calendar.HOUR_OF_DAY) ==
-                        adjustedHour
-                        && currentDate.get(Calendar.MINUTE) > minute) {
-                    MainActivity.toast.setText(R.string.cannotSetTask);
-                    final Handler handler = new Handler();
+                 handler.postDelayed(runnable, 500);
+             } else if (currentDate.get(Calendar.YEAR) == year
+                     && currentDate.get(Calendar.MONTH) == month
+                     && currentDate.get(Calendar.DAY_OF_MONTH) ==
+                     day
+                     && currentDate.get(Calendar.HOUR_OF_DAY) ==
+                     adjustedHour
+                     && currentDate.get(Calendar.MINUTE) > minute) {
+                 MainActivity.toast.setText(R.string.cannotSetTask);
+                 final Handler handler = new Handler();
 
-                    final Runnable runnable = new Runnable() {
-                        public void run() {
-                            if(!MainActivity.mute) {
-                                MainActivity.sweep.start();
-                            }
-                            MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                    (getContext(), R.anim.enter_from_right_fast));
-                            MainActivity.toastView.setVisibility(View.VISIBLE);
-                            final Handler handler2 = new Handler();
-                            final Runnable runnable2 = new Runnable(){
-                                public void run(){
-                                    MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                            (getContext(), android.R.anim.fade_out));
-                                    MainActivity.toastView.setVisibility(View.GONE);
-                                }
-                            };
-                            handler2.postDelayed(runnable2, 1500);
-                        }
-                    };
+                 final Runnable runnable = new Runnable() {
+                     public void run() {
+                         if (!MainActivity.mute) {
+                             MainActivity.sweep.start();
+                         }
+                         MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                 (getContext(), R.anim.enter_from_right_fast));
+                         MainActivity.toastView.setVisibility(View.VISIBLE);
+                         final Handler handler2 = new Handler();
+                         final Runnable runnable2 = new Runnable() {
+                             public void run() {
+                                 MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                         (getContext(), android.R.anim.fade_out));
+                                 MainActivity.toastView.setVisibility(View.GONE);
+                             }
+                         };
+                         handler2.postDelayed(runnable2, 1500);
+                     }
+                 };
 
-                    handler.postDelayed(runnable, 500);
-                } else {
+                 handler.postDelayed(runnable, 500);
+             } else {
 
-                    int amPmHour = ampm;
-                    if(ampm == 1){
-                        amPmHour += 12;
-                    }
+                 int amPmHour = ampm;
+                 if (ampm == 1) {
+                     amPmHour += 12;
+                 }
 
-                    Calendar futureDate = new GregorianCalendar(year,
-                            month, day,
-                            amPmHour, minute);
+                 Calendar futureDate = new GregorianCalendar(year,
+                         month, day,
+                         amPmHour, minute);
 
-                    //updating timestamp
-                    MainActivity.db.updateTimestamp(String.valueOf(
-                            MainActivity.sortedIDs.get(position)),
-                            String.valueOf(futureDate.getTimeInMillis() / 1000));
+                 //updating timestamp
+                     MainActivity.db.updateTimestamp(String.valueOf(
+                             MainActivity.sortedIDs.get(position)),
+                             String.valueOf(futureDate.getTimeInMillis() / 1000));
 
-                    //intention to execute AlertReceiver
-                    MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
-                    //updating due time in database
+                     //intention to execute AlertReceiver
+                     MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
+
+                     //updating due time in database
 //                    MainActivity.db.updateAlarmData(String.valueOf(
 //                            MainActivity.sortedIDs.get(position)),
 //                            String.valueOf(calendar.get(calendar.HOUR)),
@@ -4682,66 +4716,71 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            String.valueOf(calendar.get(calendar.MONTH)),
 //                            String.valueOf(calendar.get(calendar.YEAR)));
 
-                    int adjustedAmPm = 0;
-                    if(hour > 11){
-                        adjustedAmPm = 1;
-                    }
+                     int adjustedAmPm = 0;
+                     if (hour > 11) {
+                         adjustedAmPm = 1;
+                     }
 
-                    MainActivity.db.updateAlarmData(String.valueOf(
-                            MainActivity.sortedIDs.get(position)),
-                            String.valueOf(hour),
-                            String.valueOf(minute),
-                            String.valueOf(adjustedAmPm),
-                            String.valueOf(day),
-                            String.valueOf(month),
-                            String.valueOf(year));
+                     MainActivity.db.updateAlarmData(String.valueOf(
+                             MainActivity.sortedIDs.get(position)),
+                             String.valueOf(hour),
+                             String.valueOf(minute),
+                             String.valueOf(adjustedAmPm),
+                             String.valueOf(day),
+                             String.valueOf(month),
+                             String.valueOf(year));
 
-                    //setting the name of the task for which the notification is being set
-                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
+                     //setting the name of the task for which the notification is being set
+                     MainActivity.alertIntent.putExtra("ToDo", dbTask);
 
-                    MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), dbBroadcast,
-                            MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                     MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), dbBroadcast,
+                             MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    if (!dbSnooze) {
-                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                Integer.parseInt(MainActivity.sortedIDs
-                                        .get(position)), MainActivity.alertIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT);
-                    } else {
-                        MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
-                                Integer.parseInt(
-                                        MainActivity.sortedIDs.get
-                                                (position) + 1000),
-                                MainActivity.alertIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT);
-                    }
+                     if (!dbSnooze) {
+                         MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                 Integer.parseInt(MainActivity.sortedIDs
+                                         .get(position)), MainActivity.alertIntent,
+                                 PendingIntent.FLAG_UPDATE_CURRENT);
+                     } else {
+                         MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(),
+                                 Integer.parseInt(
+                                         MainActivity.sortedIDs.get
+                                                 (position) + 1000),
+                                 MainActivity.alertIntent,
+                                 PendingIntent.FLAG_UPDATE_CURRENT);
+                     }
 
-                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+                     MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
-                    MainActivity.alarmManager.set(AlarmManager.RTC, /*calendar*/futureDate.getTimeInMillis(),
-                            MainActivity.pendIntent);
 
-                    MainActivity.db.updateDue(
-                            MainActivity.sortedIDs.get(position), true);
+                 if(MainActivity.remindersAvailable) {
+                     MainActivity.alarmManager.set(AlarmManager.RTC, /*calendar*/futureDate.getTimeInMillis(),
+                             MainActivity.pendIntent);
+                 }
 
-                    MainActivity.db.updateShowOnce(
-                            MainActivity.sortedIDs.get(position), true);
+                     MainActivity.db.updateDue(
+                             MainActivity.sortedIDs.get(position), true);
 
-                }
+                     MainActivity.db.updateShowOnce(
+                             MainActivity.sortedIDs.get(position), true);
 
-                //TODO find out if this delay can be removed
-                final Handler handler = new Handler();
 
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-;
+
+             }
+
+             //TODO find out if this delay can be removed
+             final Handler handler = new Handler();
+
+             final Runnable runnable = new Runnable() {
+                 @Override
+                 public void run() {
+                     ;
 //                MainActivity.dateOrTime = false;
 
-                //Marks properties as not showing
-                MainActivity.taskPropertiesShowing = false;
+                     //Marks properties as not showing
+                     MainActivity.taskPropertiesShowing = false;
 
-                //Returns the 'add' button
+                     //Returns the 'add' button
 //                MainActivity.params.height = MainActivity.addHeight;
 //                MainActivity.iconParams.height = MainActivity.addIconHeight;
 //
@@ -4750,13 +4789,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                MainActivity.dateRowShowing = false;
 
-                MainActivity.repeating = false;
+                     MainActivity.repeating = false;
 
 //                MainActivity.timePickerShowing = false;
 
-                reorderList();
+                     reorderList();
 
-                  //TODO make animation work
+                     //TODO make animation work
 //                MainActivity.alarmAnimation = true;
 //                MainActivity.animateID = Integer.parseInt(MainActivity.sortedIDs.get(position));
 //                MainActivity.animatePosition = position;
@@ -4772,34 +4811,35 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                handler.postDelayed(r, 6000);
 //                notifyDataSetChanged();
-                    }
-                };
-                handler.postDelayed(runnable, 1);//TODO app stuffs up if this handler is removed for some reason
+                 }
+             };
+             handler.postDelayed(runnable, 1);//TODO app stuffs up if this handler is removed for some reason
 
-            if(dbRepeat){
+             if (dbRepeat) {
 
-                Calendar prevCalendar = new GregorianCalendar();
-                if(alarmAmpm.equals("1")){
-                    int tempHour = Integer.parseInt(alarmHour) + 12;
-                    alarmHour = String.valueOf(tempHour);
-                }
-                if(!alarmHour.equals("")) {
-                    prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
-                            Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
-                            Integer.parseInt(alarmMinute));
-                }
+                 Calendar prevCalendar = new GregorianCalendar();
+                 if (alarmAmpm.equals("1")) {
+                     int tempHour = Integer.parseInt(alarmHour) + 12;
+                     alarmHour = String.valueOf(tempHour);
+                 }
+                 if (!alarmHour.equals("")) {
+                     prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
+                             Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
+                             Integer.parseInt(alarmMinute));
+                 }
+                 if(MainActivity.remindersAvailable) {
+                     MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
+                             prevCalendar.getTimeInMillis(),
+                             MainActivity.repeatInterval, MainActivity.pendIntent);
+                 }
 
-                MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
-                        prevCalendar.getTimeInMillis(),
-                        MainActivity.repeatInterval, MainActivity.pendIntent);
-
-                MainActivity.db.updateRepeat(MainActivity.sortedIDs
-                        .get(position), true);
+                 MainActivity.db.updateRepeat(MainActivity.sortedIDs
+                         .get(position), true);
 
 //            MainActivity.repeatShowing = false;
-                MainActivity.repeating = false;
+                 MainActivity.repeating = false;
 
-            }
+             }
 
         }
 

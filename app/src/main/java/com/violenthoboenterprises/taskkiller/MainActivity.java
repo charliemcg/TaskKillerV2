@@ -107,9 +107,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //used to indicate if purchase options are showing
     static boolean purchasesShowing;
     //used to indicate that user purchased ad removal
-    boolean adsRemoved;
+    static boolean adsRemoved;
     //used to indicate that user purchased reminders
-    boolean remindersAvailable;
+    static boolean remindersAvailable;
     //used to indicate that user purchased color cycling
     boolean colorCyclingAllowed;
     //used to indicate whether color cycling should be on or not
@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //task properties require exit animation
     static boolean exitTaskProperties;
+    //used to determine whether or not to show motivational toasts
+    static boolean showMotivation;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -141,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static int thePosition;
     //portrait width of device
     static int deviceWidthPortrait;
+    //indicates how many due dates are set because free users have a limitation
+    static int duesSet;
 
     //Interval between repeating alarms
     static long repeatInterval;
@@ -246,11 +250,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private Toolbar toolbarLight;
 
     //Action bar options
-//    MenuItem muteBtn;
+    MenuItem muteBtn;
     MenuItem lightDarkBtn;
     MenuItem customiseBtn;
     MenuItem proBtn;
     MenuItem autoColorBtn;
+    MenuItem motivationBtn;
 
     //The color picker view and it's corresponding buttons
     LinearLayout colorPicker;
@@ -407,6 +412,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
+        duesSet = 0;
+        showMotivation = false;
 
 //        final View child = topToolbar.getChildAt(2);
 //        if (child instanceof ActionMenuView)
@@ -759,7 +766,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                     reorderList = true;
 
-                    if(!taskName.equals("")) {
+                    if(!taskName.equals("") && showMotivation) {
                         //showing motivational toast
                         int i = random.nextInt(6);
                         while (motivation[i].equals(lastToast)) {
@@ -954,6 +961,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 customiseBtn = this.toolbarDark.getMenu().findItem(R.id.highlight);
                 proBtn = this.toolbarDark.getMenu().findItem(R.id.buy);
                 autoColorBtn = this.toolbarDark.getMenu().findItem(R.id.autoColor);
+                motivationBtn = this.toolbarDark.getMenu().findItem(R.id.motivation);
                 lightDarkBtn.setChecked(true);
             } else {
 //                if (mute) {
@@ -966,10 +974,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 customiseBtn = this.toolbarLight.getMenu().findItem(R.id.highlight);
                 proBtn = this.toolbarLight.getMenu().findItem(R.id.buy);
                 autoColorBtn = this.toolbarLight.getMenu().findItem(R.id.autoColor);
+                motivationBtn = this.toolbarLight.getMenu().findItem(R.id.motivation);
                 lightDarkBtn.setChecked(false);
+            }
+            if(showMotivation){
+                motivationBtn.setChecked(true);
             }
             if(colorCyclingEnabled){
                 autoColorBtn.setChecked(true);
+            }
+            if(colorCyclingAllowed && adsRemoved && remindersAvailable){
+                proBtn.setVisible(false);
             }
             return true;
         }else if(colorPickerShowing || purchasesShowing){
@@ -1260,6 +1275,22 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             return true;
 
         }
+        else if (id == R.id.motivation) {
+
+                if(showMotivation){
+                    showMotivation = false;
+                    item.setChecked(false);
+                    db.updateMotivation(false);
+                }else{
+                    showMotivation = true;
+                    item.setChecked(true);
+                    db.updateMotivation(true);
+                }
+
+
+            return true;
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -1398,30 +1429,32 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //reinstates completed task
     public void reinstate(int i) {
 
-        toast.setText(R.string.taskReinstated);
-        final Handler handler = new Handler();
+        if(showMotivation) {
+            toast.setText(R.string.taskReinstated);
+            final Handler handler = new Handler();
 
-        final Runnable runnable = new Runnable() {
-            public void run() {
+            final Runnable runnable = new Runnable() {
+                public void run() {
 //                if(!mute) {
                     sweep.start();
 //                }
-                toastView.startAnimation(AnimationUtils.loadAnimation
-                        (MainActivity.this, R.anim.enter_from_right_fast));
-                toastView.setVisibility(View.VISIBLE);
-                final Handler handler2 = new Handler();
-                final Runnable runnable2 = new Runnable(){
-                    public void run(){
-                        toastView.startAnimation(AnimationUtils.loadAnimation
-                                (MainActivity.this, android.R.anim.fade_out));
-                        toastView.setVisibility(View.GONE);
-                    }
-                };
-                handler2.postDelayed(runnable2, 1500);
-            }
-        };
+                    toastView.startAnimation(AnimationUtils.loadAnimation
+                            (MainActivity.this, R.anim.enter_from_right_fast));
+                    toastView.setVisibility(View.VISIBLE);
+                    final Handler handler2 = new Handler();
+                    final Runnable runnable2 = new Runnable() {
+                        public void run() {
+                            toastView.startAnimation(AnimationUtils.loadAnimation
+                                    (MainActivity.this, android.R.anim.fade_out));
+                            toastView.setVisibility(View.GONE);
+                        }
+                    };
+                    handler2.postDelayed(runnable2, 1500);
+                }
+            };
 
-        handler.postDelayed(runnable, 500);
+            handler.postDelayed(runnable, 500);
+        }
 
         //marks task as not killed in database
         db.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
@@ -1988,30 +2021,32 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     @Override
     public void onProductPurchased(@NonNull String productId,
                                    @Nullable TransactionDetails details) {
-        toast.setText("You purchased something");
-        final Handler handler = new Handler();
+        if(showMotivation) {
+            toast.setText("You purchased something");
+            final Handler handler = new Handler();
 
-        final Runnable runnable = new Runnable() {
-            public void run() {
+            final Runnable runnable = new Runnable() {
+                public void run() {
 //                if(!mute) {
                     sweep.start();
 //                }
-                toastView.startAnimation(AnimationUtils.loadAnimation
-                        (MainActivity.this, R.anim.enter_from_right_fast));
-                toastView.setVisibility(View.VISIBLE);
-                final Handler handler2 = new Handler();
-                final Runnable runnable2 = new Runnable(){
-                    public void run(){
-                        toastView.startAnimation(AnimationUtils.loadAnimation
-                                (MainActivity.this, android.R.anim.fade_out));
-                        toastView.setVisibility(View.GONE);
-                    }
-                };
-                handler2.postDelayed(runnable2, 1500);
-            }
-        };
+                    toastView.startAnimation(AnimationUtils.loadAnimation
+                            (MainActivity.this, R.anim.enter_from_right_fast));
+                    toastView.setVisibility(View.VISIBLE);
+                    final Handler handler2 = new Handler();
+                    final Runnable runnable2 = new Runnable() {
+                        public void run() {
+                            toastView.startAnimation(AnimationUtils.loadAnimation
+                                    (MainActivity.this, android.R.anim.fade_out));
+                            toastView.setVisibility(View.GONE);
+                        }
+                    };
+                    handler2.postDelayed(runnable2, 1500);
+                }
+            };
 
-        handler.postDelayed(runnable, 500);
+            handler.postDelayed(runnable, 500);
+        }
     }
 
     @Override
@@ -2021,30 +2056,32 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     @Override
     public void onBillingError(int errorCode, @Nullable Throwable error) {
-        toast.setText("Something went wrong");
-        final Handler handler = new Handler();
+        if(showMotivation) {
+            toast.setText("Something went wrong");
+            final Handler handler = new Handler();
 
-        final Runnable runnable = new Runnable() {
-            public void run() {
+            final Runnable runnable = new Runnable() {
+                public void run() {
 //                if(!mute) {
                     sweep.start();
 //                }
-                toastView.startAnimation(AnimationUtils.loadAnimation
-                        (MainActivity.this, R.anim.enter_from_right_fast));
-                toastView.setVisibility(View.VISIBLE);
-                final Handler handler2 = new Handler();
-                final Runnable runnable2 = new Runnable(){
-                    public void run(){
-                        toastView.startAnimation(AnimationUtils.loadAnimation
-                                (MainActivity.this, android.R.anim.fade_out));
-                        toastView.setVisibility(View.GONE);
-                    }
-                };
-                handler2.postDelayed(runnable2, 1500);
-            }
-        };
+                    toastView.startAnimation(AnimationUtils.loadAnimation
+                            (MainActivity.this, R.anim.enter_from_right_fast));
+                    toastView.setVisibility(View.VISIBLE);
+                    final Handler handler2 = new Handler();
+                    final Runnable runnable2 = new Runnable() {
+                        public void run() {
+                            toastView.startAnimation(AnimationUtils.loadAnimation
+                                    (MainActivity.this, android.R.anim.fade_out));
+                            toastView.setVisibility(View.GONE);
+                        }
+                    };
+                    handler2.postDelayed(runnable2, 1500);
+                }
+            };
 
-        handler.postDelayed(runnable, 500);
+            handler.postDelayed(runnable, 500);
+        }
     }
 
     @Override
@@ -2070,44 +2107,53 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     public void removeAds(View view) {
 
-        vibrate.vibrate(50);
+        if(!adsRemoved) {
+            vibrate.vibrate(50);
 
-        if(!mute) {
-            chime.start();
+            if (!mute) {
+                chime.start();
+            }
+
+            //TODO replace this test stuff with real stuff
+            bp.purchase(this, "android.test.purchased");
+            //TODO verify purchase before updating to true
+            db.updateAdsRemoved(true);
         }
 
-        //TODO replace this test stuff with real stuff
-        bp.purchase(this, "android.test.purchased");
-        //TODO verify purchase before updating to true
-        db.updateAdsRemoved(true);
     }
 
     public void getReminders(View view) {
 
-        vibrate.vibrate(50);
+        if(!remindersAvailable) {
+            vibrate.vibrate(50);
 
-        if(!mute){
-            chime.start();
+            if (!mute) {
+                chime.start();
+            }
+
+            //TODO replace this test stuff with real stuff
+            bp.purchase(this, "android.test.purchased");
+            //TODO verify purchase before updating to true
+            db.updateRemindersAvailable(true);
         }
 
-        //TODO replace this test stuff with real stuff
-        bp.purchase(this, "android.test.purchased");
-        //TODO verify purchase before updating to true
-        db.updateRemindersAvailable(true);
     }
 
     public void cycleColors(View view) {
 
-        vibrate.vibrate(50);
+        if(!colorCyclingAllowed) {
+            vibrate.vibrate(50);
 
-        if(!mute){
-            chime.start();
+            if (!mute) {
+                chime.start();
+            }
+
+            //TODO replace this test stuff with real stuff
+            bp.purchase(this, "android.test.purchased");
+            //TODO verify purchase before updating to true
+            db.updateCycleColors(true);
         }
 
-        //TODO replace this test stuff with real stuff
-        bp.purchase(this, "android.test.purchased");
-        //TODO verify purchase before updating to true
-        db.updateCycleColors(true);
     }
 
     public void unlockAll(View view) {
@@ -2195,6 +2241,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             taskListSize = dbResult.getInt(8);
             taskLastChanged = dbResult.getInt(16);
             colorCyclingEnabled = dbResult.getInt(18) > 0;
+            duesSet = dbResult.getInt(19);
+            showMotivation = dbResult.getInt(20) > 0;
         }
         dbResult.close();
 
