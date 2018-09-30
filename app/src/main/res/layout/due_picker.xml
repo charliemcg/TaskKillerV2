@@ -13,6 +13,11 @@
         style="@style/HeaderBar"
         android:elevation="4dp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightGreen"/>
+
     <LinearLayout
         android:id="@+id/dateBtn"
         android:layout_width="match_parent"
@@ -60,6 +65,11 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightGreen"/>
+
     <LinearLayout
         android:id="@+id/timeBtn"
         android:layout_width="match_parent"
@@ -106,6 +116,11 @@
             android:textColor="@color/gray"/>
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightGreen"/>
 
     <TableLayout
         android:layout_width="match_parent"

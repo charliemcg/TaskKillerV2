@@ -49,6 +49,7 @@
         app:showAsAction="collapseActionView"
         android:orderInCategory="6"
         android:checkable="true"/>
+
             <!--<item-->
                 <!--android:id="@+id/cycleFrequency"-->
                 <!--android:title="Frequency"-->

@@ -117,8 +117,8 @@ public class SetDue extends MainActivity {
         dbTaskResult.close();
 
 //        dueToolbar.setSubtitle(dbTask);
-        getSupportActionBar().setTitle("Set Dat/Time");
-        dueToolbar.setTitle("Set Date/Time");
+//        getSupportActionBar().setTitle("Set Dat/Time");
+//        dueToolbar.setTitle("Set Date/Time");
 
         //Inform user that they can set an alarm
         if(dbDueTime.equals("0")){
@@ -544,6 +544,8 @@ public class SetDue extends MainActivity {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_alarm, dueToolbar.getMenu());
             killAlarm = this.dueToolbar.getMenu().findItem(R.id.killAlarmItem);
+            this.dueToolbar.setTitle("Set Date/Time");
+            this.dueToolbar.setSubtitle(dbTask);
             if(Integer.parseInt(dbDueTime) == 0){
                 killAlarm.setVisible(false);
             }else {

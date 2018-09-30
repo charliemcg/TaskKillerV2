@@ -49,7 +49,6 @@ public class AlertReceiver extends BroadcastReceiver {
             remoteViews.setTextViewText(R.id.notif_title, msg);
         }else{
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification);
-//            remoteViews.setImageViewResource(R.id.notif_icon, R.mipmap.ic_launcher);
             remoteViews.setTextViewText(R.id.notif_title, msg);
         }
 
@@ -58,15 +57,9 @@ public class AlertReceiver extends BroadcastReceiver {
         //TODO set up a way of showing how many tasks are overdue
         builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory
-                        .decodeResource(context.getResources(), R.drawable.mushroom_cloud))
+                        .decodeResource(context.getResources(), R.drawable.ic_launcher_og))
                 .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
                 .setContentText(msg).setStyle(new NotificationCompat.BigTextStyle());
-
-//        builder = new NotificationCompat.Builder(context)
-//                .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory.decodeResource
-//                        (context.getResources(), R.drawable.bell))
-//                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert).setContentText(msg/*Text*/).setStyle(new NotificationCompat.BigTextStyle()
-//                        .bigText(msg));
 
         //Sets background of small icon
         builder.setColorized(true).setColor(Color.parseColor("#FFFF0000"));
