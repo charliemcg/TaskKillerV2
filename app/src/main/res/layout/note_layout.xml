@@ -12,8 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
-        android:theme="@style/ThemeOverlay.DarkTheme"
-        app:popupTheme="@style/ThemeOverlay.DarkTheme"
         android:elevation="4dp"/>
 
     <TextView

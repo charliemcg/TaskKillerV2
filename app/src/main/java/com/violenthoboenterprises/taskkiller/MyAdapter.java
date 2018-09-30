@@ -1001,8 +1001,6 @@ class MyAdapter extends ArrayAdapter<String> {
             Boolean markAsOverdue = false;
 //            if(!dbKilled) {
 
-            Log.i(TAG, year + " " + month + " " + day + " " + hour + " " + minute);
-
                 //Overdue
                 if (currentYear > Integer.valueOf(year)) {
                     dueClear.setVisibility(View.GONE);
@@ -1420,7 +1418,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     handler.postDelayed(runnable, 500);
                 }
 
-                if(!MainActivity.remindersAvailable) {
+                if(!MainActivity.remindersAvailable && !dbTimestamp.equals("0")) {
                     MainActivity.duesSet--;
                     MainActivity.db.updateDuesSet(MainActivity.duesSet);
                 }
@@ -3295,7 +3293,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                          handler.postDelayed(runnable, 500);
                                     }
 
-                                    if(!MainActivity.remindersAvailable) {
+                                    if(!MainActivity.remindersAvailable && !finalDbTimestamp.equals("0")) {
                                         MainActivity.duesSet--;
                                         MainActivity.db.updateDuesSet(MainActivity.duesSet);
                                     }
@@ -3711,7 +3709,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             handler.postDelayed(runnable, 500);
                         }
 
-                        if(!MainActivity.remindersAvailable) {
+                        if(!MainActivity.remindersAvailable && !finalDbTimestamp.equals("0")) {
                             MainActivity.duesSet--;
                             MainActivity.db.updateDuesSet(MainActivity.duesSet);
                         }
@@ -3959,7 +3957,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 public void onClick(View v) {
 
                     Log.i(TAG, "Dates: " + MainActivity.duesSet);
-                    if(MainActivity.duesSet > 2) {
+                    if(MainActivity.duesSet < 3) {
                     MainActivity.vibrate.vibrate(50);
 
 //                    if(!MainActivity.mute){
@@ -3984,6 +3982,22 @@ class MyAdapter extends ArrayAdapter<String> {
                 }else{
                         //TODO show in app purchases
                         Log.i(TAG, "Upgrade to pro");
+                        MainActivity.purchasesShowing = true;
+                        MainActivity.add.setClickable(false);
+                        MainActivity.theListView.setOnItemClickListener(null);
+                        MainActivity.taskPropertiesShowing = false;
+                        MainActivity.purchases.startAnimation(AnimationUtils.loadAnimation
+                                (getContext(), R.anim.enter_from_right));
+
+                        final Handler handler = new Handler();
+
+                        final Runnable runnable = new Runnable() {
+                            public void run() {
+                                MainActivity.purchases.setVisibility(View.VISIBLE);
+                            }
+                        };
+
+                        handler.postDelayed(runnable, 200);
 
                     }
 

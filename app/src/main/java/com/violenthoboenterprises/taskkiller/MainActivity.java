@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     BillingProcessor bp;
 
     //In-app purchases view and it's elements
-    LinearLayout purchases;
+    static LinearLayout purchases;
 //    LinearLayout purchasesLand;
     LinearLayout removeAdsLayout;
     LinearLayout getRemindersLayout;

@@ -9,6 +9,5 @@
         android:title="Cancel Note"
         android:icon="@drawable/trash_dark"
         app:showAsAction="always"/>
-        <!--app:actionViewClass="android.widget.SearchView"/>-->
 
 </menu>

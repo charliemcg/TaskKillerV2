@@ -85,8 +85,8 @@ public class Note extends MainActivity {
         dbTaskResult.close();
 
         //TODO title should be "note" and subtitle should be task name
-        noteToolbar.setTitle("Note");
-//        getSupportActionBar().setTitle("Note");
+//        noteToolbar.setTitle("Note");
+        getSupportActionBar().setTitle("Note");
         noteToolbar.setSubtitle(dbTask);
 
         noteTextView.setMovementMethod(new ScrollingMovementMethod());
@@ -318,14 +318,7 @@ public class Note extends MainActivity {
 
             submitNoteBtnDark.setVisibility(View.GONE);
 
-//            noteToolbar.getMenu().getItem(0).setVisible(true);
-//            Log.i(TAG, getSupportActionBar().getTitle().toString());
-//            setSupportActionBar(noteToolbar);
-//            MenuItem blah = noteToolbar.getMenu().findItem(R.id.killAlarmItem);
-            Log.i(TAG, "trashNote: " + trashNote);
             trashNote.setVisible(true);
-            noteToolbar.setTitleTextColor(Color.parseColor("#FF0000"));
-            this.invalidateOptionsMenu();
 
         }
 
@@ -354,16 +347,8 @@ public class Note extends MainActivity {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_note, noteToolbar.getMenu());
             trashNote = this.noteToolbar.getMenu().findItem(R.id.killNoteItem);
-//            trashNote = menu.getItem(0);//TODO should be using the line above instead
-//            trashNote = menu.findItem(R.id.killNoteItem);
-            Log.i(TAG, "menu: " + menu.size());
-            Log.i(TAG, "toolbar menu: " + this.noteToolbar.getMenu().size());
-            if(menu == this.noteToolbar.getMenu()){
-                Log.i(TAG, "Item: " + trashNote);
-            }
-
             if(noteTextView.getText().toString().equals("")){
-                trashNote.setVisible(true);
+                trashNote.setVisible(false);
             }else {
                 trashNote.setVisible(true);
             }
@@ -405,8 +390,8 @@ public class Note extends MainActivity {
             db.updateData(MainActivity.sortedIdsForNote
                     .get(activeTask), "", checklistExists);
 
-//            trashNote.setVisible(false);
-//
+            trashNote.setVisible(false);
+
 //            //getting task data
 //            dbTaskId = "";
 //            Cursor dbTaskResult = MainActivity.db.getUniversalData();
