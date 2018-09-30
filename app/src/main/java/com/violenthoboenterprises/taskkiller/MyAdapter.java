@@ -949,8 +949,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
+        if(dbID == (MainActivity.sortedIDs.size() - 1)){
+            MainActivity.showDueDates = true;
+        }
+
         //Show due icon and due date if required
-        if (dbDue) {
+        if (dbDue && MainActivity.showDueDates) {
 
             Calendar currentDate = new GregorianCalendar();
 
@@ -1000,6 +1004,9 @@ class MyAdapter extends ArrayAdapter<String> {
             Boolean tomorrow = false;
             Boolean markAsOverdue = false;
 //            if(!dbKilled) {
+
+//            Log.i(TAG, "year: " + year + " month: " + month + " day: " + day);
+//            Log.i(TAG, "id: " + MainActivity.sortedIDs.get(position));
 
                 //Overdue
                 if (currentYear > Integer.valueOf(year)) {
@@ -3980,8 +3987,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     }
                 }else{
-                        //TODO show in app purchases
-                        Log.i(TAG, "Upgrade to pro");
+
                         MainActivity.purchasesShowing = true;
                         MainActivity.add.setClickable(false);
                         MainActivity.theListView.setOnItemClickListener(null);
