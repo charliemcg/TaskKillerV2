@@ -1033,11 +1033,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             if(mute){
                 mute = false;
                 item.setChecked(true);
-                db.updateMute(true);
+                db.updateMute(false);
             }else{
                 mute = true;
                 item.setChecked(false);
-                db.updateMute(false);
+                db.updateMute(true);
             }
 
             return true;
