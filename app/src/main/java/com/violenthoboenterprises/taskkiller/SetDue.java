@@ -1101,9 +1101,11 @@ public class SetDue extends MainActivity {
         //updating the alarm in myAdapter
         if(setDue) {
             db.updateSetAlarm(true);
-//            duesSet++;
-//            db.updateDuesSet(duesSet);
-        }
+            if(!remindersAvailable) {
+                duesSet++;
+                db.updateDuesSet(duesSet);
+            }
+        }//TODO figure out how to reduce duesset when user trashes an alarm
 
         //return to mainActivity
         Intent intent = new Intent();

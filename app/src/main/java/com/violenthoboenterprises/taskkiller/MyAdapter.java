@@ -585,6 +585,7 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         //TODO decide if alarm reinstatement is to be a thing in the first place
+        //TODO Account for dues set
 //        if(MainActivity.reinstateAlarm){
 //
 //            Boolean isDue = false;
@@ -999,6 +1000,8 @@ class MyAdapter extends ArrayAdapter<String> {
             Boolean tomorrow = false;
             Boolean markAsOverdue = false;
 //            if(!dbKilled) {
+
+            Log.i(TAG, year + " " + month + " " + day + " " + hour + " " + minute);
 
                 //Overdue
                 if (currentYear > Integer.valueOf(year)) {
@@ -1415,6 +1418,11 @@ class MyAdapter extends ArrayAdapter<String> {
                     };
 
                     handler.postDelayed(runnable, 500);
+                }
+
+                if(!MainActivity.remindersAvailable) {
+                    MainActivity.duesSet--;
+                    MainActivity.db.updateDuesSet(MainActivity.duesSet);
                 }
 
                 //need to kill the right alarm. Need to know if
@@ -3287,6 +3295,11 @@ class MyAdapter extends ArrayAdapter<String> {
                                          handler.postDelayed(runnable, 500);
                                     }
 
+                                    if(!MainActivity.remindersAvailable) {
+                                        MainActivity.duesSet--;
+                                        MainActivity.db.updateDuesSet(MainActivity.duesSet);
+                                    }
+
                                     MainActivity.pendIntent = PendingIntent.getBroadcast
                                             (getContext(), Integer.parseInt(
                                                     MainActivity.sortedIDs.get(position) + 1000),
@@ -3698,6 +3711,11 @@ class MyAdapter extends ArrayAdapter<String> {
                             handler.postDelayed(runnable, 500);
                         }
 
+                        if(!MainActivity.remindersAvailable) {
+                            MainActivity.duesSet--;
+                            MainActivity.db.updateDuesSet(MainActivity.duesSet);
+                        }
+
                         //need to kill the right alarm. Need to know if
                         // killing initial alarm or a snoozed alarm
                         if (!finalDbSnooze) {
@@ -3941,7 +3959,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 public void onClick(View v) {
 
                     Log.i(TAG, "Dates: " + MainActivity.duesSet);
-//                    if(MainActivity.duesSet < 1) {
+                    if(MainActivity.duesSet > 2) {
                     MainActivity.vibrate.vibrate(50);
 
 //                    if(!MainActivity.mute){
@@ -3963,12 +3981,12 @@ class MyAdapter extends ArrayAdapter<String> {
                         getContext().startActivity(dueIntent);
 
                     }
-                }/*else{
-                        //TODO inform user to upgrade
+                }else{
+                        //TODO show in app purchases
                         Log.i(TAG, "Upgrade to pro");
-                    }*/
+                    }
 
-//                }
+                }
             });
 
             //Actions to occur if user selects 'Sub-Tasks'
