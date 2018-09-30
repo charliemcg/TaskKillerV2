@@ -728,7 +728,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 //Actions to take when creating new task
                 if((actionId == EditorInfo.IME_ACTION_DONE) && !taskBeingEdited){
 
-                    blip.start();
+                    if(!mute) {
+                        blip.start();
+                    }
 
                     vibrate.vibrate(50);
 
@@ -778,9 +780,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                         final Runnable runnable = new Runnable() {
                             public void run() {
-//                                if(!mute) {
+                                if(!mute) {
                                     sweep.start();
-//                                }
+                                }
                                 toastView.startAnimation(AnimationUtils.loadAnimation
                                         (MainActivity.this, R.anim.enter_from_right_fast));
                                 toastView.setVisibility(View.VISIBLE);
@@ -1016,33 +1018,20 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //TODO find out if return statements are necessary
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.mute) {
+        if (id == R.id.mute) {
 
-//            if(mute){
-//                blip.start();
-//            }
+            if(mute){
+                mute = false;
+                item.setChecked(true);
+                db.updateMute(true);
+            }else{
+                mute = true;
+                item.setChecked(false);
+                db.updateMute(false);
+            }
 
-//            muteBtn = this.topToolbar.getMenu().findItem(R.id.mute);
-//            if (mute) {
-//                mute = false;
-//                if (lightDark) {
-//                    muteBtn.setIcon(ContextCompat.getDrawable
-//                            (this, R.drawable.unmuted_white));
-//                } else {
-//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.unmuted));
-//                }
-//                db.updateMute(mute);
-//            } else {
-//                mute = true;
-//                if (lightDark) {
-//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted_white));
-//                } else {
-//                    muteBtn.setIcon(ContextCompat.getDrawable(this, R.drawable.muted));
-//                }
-//                db.updateMute(mute);
-//            }
-//            return true;
-        /*} else */if (id == R.id.lightDark) {
+            return true;
+        } else if (id == R.id.lightDark) {
 
 //            if(!mute){
 //                blip.start();
@@ -1277,16 +1266,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         else if (id == R.id.motivation) {
 
-                if(showMotivation){
-                    showMotivation = false;
-                    item.setChecked(false);
-                    db.updateMotivation(false);
-                }else{
-                    showMotivation = true;
-                    item.setChecked(true);
-                    db.updateMotivation(true);
-                }
-
+            if(showMotivation){
+                showMotivation = false;
+                item.setChecked(false);
+                db.updateMotivation(false);
+            }else{
+                showMotivation = true;
+                item.setChecked(true);
+                db.updateMotivation(true);
+            }
 
             return true;
 
@@ -1435,9 +1423,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             final Runnable runnable = new Runnable() {
                 public void run() {
-//                if(!mute) {
+                if(!mute) {
                     sweep.start();
-//                }
+                }
                     toastView.startAnimation(AnimationUtils.loadAnimation
                             (MainActivity.this, R.anim.enter_from_right_fast));
                     toastView.setVisibility(View.VISIBLE);
@@ -2027,9 +2015,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             final Runnable runnable = new Runnable() {
                 public void run() {
-//                if(!mute) {
+                if(!mute) {
                     sweep.start();
-//                }
+                }
                     toastView.startAnimation(AnimationUtils.loadAnimation
                             (MainActivity.this, R.anim.enter_from_right_fast));
                     toastView.setVisibility(View.VISIBLE);
@@ -2062,9 +2050,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             final Runnable runnable = new Runnable() {
                 public void run() {
-//                if(!mute) {
+                if(!mute) {
                     sweep.start();
-//                }
+                }
                     toastView.startAnimation(AnimationUtils.loadAnimation
                             (MainActivity.this, R.anim.enter_from_right_fast));
                     toastView.setVisibility(View.VISIBLE);
