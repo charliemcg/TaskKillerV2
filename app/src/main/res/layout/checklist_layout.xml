@@ -29,6 +29,7 @@
         android:layout_height="50dp"
         android:maxLines="1"
         android:maxLength="50"
+        android:paddingLeft="5dp"
         android:inputType="textCapSentences"
         android:layout_alignParentBottom="true"
         android:hint="@string/checklistItem"

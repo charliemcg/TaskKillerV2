@@ -8,6 +8,14 @@
         android:id="@+id/killAlarmItem"
         android:title="Cancel Alarm"
         android:icon="@drawable/trash_dark"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/trashAlarmOpen"
+        android:title="Open Trash"
+        android:icon="@drawable/trash_dark_open"
+        app:showAsAction="always"
+        android:visible="false"/>
 
 </menu>

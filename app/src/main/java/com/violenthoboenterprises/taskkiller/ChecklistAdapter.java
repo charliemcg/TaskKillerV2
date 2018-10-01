@@ -63,6 +63,8 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 tick.setVisibility(View.GONE);
                 tickWhite.setVisibility(View.GONE);
             }else {
+                tickFaded.setVisibility(View.GONE);
+                tickWhiteFaded.setVisibility(View.GONE);
                 tick.setVisibility(View.VISIBLE);
                 tickWhite.setVisibility(View.GONE);
             }
@@ -76,9 +78,10 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 tickWhite.setVisibility(View.GONE);
                 tickWhiteFaded.setVisibility(View.VISIBLE);
             }else {
+                tickFaded.setVisibility(View.GONE);
+                tickWhiteFaded.setVisibility(View.GONE);
                 tick.setVisibility(View.GONE);
                 tickWhite.setVisibility(View.VISIBLE);
-
             }
         }
 
@@ -168,6 +171,10 @@ class ChecklistAdapter extends ArrayAdapter<String> {
     private void markAsDone(int position, String finalDbTaskId) {
 
         MainActivity.vibrate.vibrate(50);
+
+        if(!MainActivity.mute){
+            MainActivity.trash.start();
+        }
 
         Rect screen = new Rect();
 

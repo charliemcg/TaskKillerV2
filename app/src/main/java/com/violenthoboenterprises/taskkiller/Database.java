@@ -78,6 +78,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL19 = "CYCLEENABLED";
     public static final String UCOL20 = "DUESSET";
     public static final String UCOL21 = "MOTIVATION";
+    public static final String UCOL22 = "REPEATHINT";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -111,7 +112,7 @@ public class Database extends SQLiteOpenHelper {
                 " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
                 "CHECKLISTLISTSIZE INTEGER, SETALARM BOOLEAN, YEAR INTEGER, MONTH INTEGER," +
                 " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER, AMPM INTEGER," +
-                " CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN)");
+                " CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN, REPEATHINT INTEGER)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -199,9 +200,9 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL3, "#FF00FF00");
         content.put(UCOL4, false);
         content.put(UCOL5, "");
-        content.put(UCOL6, true);//TODO change back to false!!!
-        content.put(UCOL7, true);//TODO change back to false!!!
-        content.put(UCOL8, true);//TODO change back to false!!!
+        content.put(UCOL6, false);//TODO change back to false!!!
+        content.put(UCOL7, false);//TODO change back to false!!!
+        content.put(UCOL8, false);//TODO change back to false!!!
         content.put(UCOL9, 0);
         content.put(UCOL10, 0);
         content.put(UCOL11, false);
@@ -216,6 +217,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL19, 0);
         content.put(UCOL20, 0);
         content.put(UCOL21, true);
+        content.put(UCOL22, 0);
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -689,6 +691,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL21, motivate);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateRepeatHint(int hint){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL22, hint);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }

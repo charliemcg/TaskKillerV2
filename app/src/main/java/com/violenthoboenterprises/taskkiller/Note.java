@@ -38,7 +38,7 @@ public class Note extends MainActivity {
 //    ImageView removeBtnLight;
 //    ImageView removeBtnDarkOpen;
 //    ImageView removeBtnLightOpen;
-    ImageView submitNoteBtnDark;
+    ImageView submitNoteBtnDark, submitNoteOne, submitNoteTwo;
     ImageView submitNoteBtnLight;
     String TAG;
     String theNote;
@@ -47,7 +47,7 @@ public class Note extends MainActivity {
     Boolean checklistExists;
     View noteRoot;
     private Toolbar noteToolbar;
-    MenuItem trashNote;
+    MenuItem trashNote, trashNoteOpen;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -65,6 +65,8 @@ public class Note extends MainActivity {
 //        removeBtnDarkOpen = findViewById(R.id.removeBtnDarkOpen);
 //        removeBtnLightOpen = findViewById(R.id.removeBtnLightOpen);
         submitNoteBtnDark = findViewById(R.id.submitNoteBtnDark);
+        submitNoteOne = findViewById(R.id.submitNoteOne);
+        submitNoteTwo = findViewById(R.id.submitNoteTwo);
 //        submitNoteBtnLight = findViewById(R.id.submitNoteBtnLight);
         TAG = "Note";
         theNote = "";
@@ -304,26 +306,77 @@ public class Note extends MainActivity {
         //Don't allow blank notes
         if(!theNote.equals("")){
 
-            vibrate.vibrate(50);
+            final Handler handler = new Handler();
 
+            final Runnable runnable = new Runnable() {
+                public void run() {
+
+                    submitNoteBtnDark.setVisibility(View.GONE);
+                    submitNoteOne.setVisibility(View.VISIBLE);
+
+                    final Handler handler2 = new Handler();
+
+                    final Runnable runnable2 = new Runnable() {
+                        public void run() {
+
+                            submitNoteOne.setVisibility(View.GONE);
+                            submitNoteTwo.setVisibility(View.VISIBLE);
+
+                            final Handler handler3 = new Handler();
+
+                            final Runnable runnable3 = new Runnable() {
+                                public void run() {
+
+                                    vibrate.vibrate(50);
+
+                                    if(!mute){
+                                        blip.start();
+                                    }
+
+                                    submitNoteTwo.setVisibility(View.GONE);
+
+                                    //Set text view to the note content
+                                    noteTextView.setText(theNote);
+
+                                    //Hide text box
+                                    noteEditText.setVisibility(View.GONE);
+
+                                    submitNoteBtnDark.setVisibility(View.GONE);
+
+                                    trashNote.setVisible(true);
+
+                                    //Hide keyboard
+                                    keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                                }
+                            };
+                            handler3.postDelayed(runnable3, 100);
+                        }
+                    };
+                    handler2.postDelayed(runnable2, 100);
+                }
+            };
+            handler.postDelayed(runnable, 100);
+
+            /////////////////////////////////////////////////////////
 //            if(!mute) {
 //                blip.start();
 //            }
 
-            //Set text view to the note content
-            noteTextView.setText(theNote);
-
-            //Hide text box
-            noteEditText.setVisibility(View.GONE);
-
-            submitNoteBtnDark.setVisibility(View.GONE);
-
-            trashNote.setVisible(true);
+//            //Set text view to the note content
+//            noteTextView.setText(theNote);
+//
+//            //Hide text box
+//            noteEditText.setVisibility(View.GONE);
+//
+//            submitNoteBtnDark.setVisibility(View.GONE);
+//
+//            trashNote.setVisible(true);
 
         }
 
-        //Hide keyboard
-        keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+//        //Hide keyboard
+//        keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
     }
 
@@ -347,6 +400,7 @@ public class Note extends MainActivity {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_note, noteToolbar.getMenu());
             trashNote = this.noteToolbar.getMenu().findItem(R.id.killNoteItem);
+            trashNoteOpen = this.noteToolbar.getMenu().findItem(R.id.trashOpen);
             if(noteTextView.getText().toString().equals("")){
                 trashNote.setVisible(false);
             }else {
@@ -369,29 +423,82 @@ public class Note extends MainActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.killNoteItem) {
 
-            if(!mute){
-                trash.start();
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+
+                trashNote.setVisible(false);
+                trashNoteOpen.setVisible(true);
+
+                vibrate.vibrate(50);
+
+                if(!mute) {
+                    trash.start();
+                }
+
+                final Handler handler2 = new Handler();
+                final Runnable runnable2 = new Runnable(){
+                    public void run(){
+                        trashNote.setVisible(true);
+                        trashNoteOpen.setVisible(false);
+                        final Handler handler3 = new Handler();
+                        final Runnable runnable3 = new Runnable() {
+                            @Override
+                            public void run() {
+                                trashNote.setVisible(false);
+                                Cursor result = db.getData(Integer.parseInt(
+                                        MainActivity.sortedIdsForNote.get(activeTask)));
+                                while(result.moveToNext()){
+                                    checklistExists = (result.getInt(2) == 1);
+                                }
+                                result.close();
+
+                                //setting note in database to nothing
+                                db.updateData(MainActivity.sortedIdsForNote
+                                        .get(activeTask), "", checklistExists);
+
+                                noteTextView.setText("");
+
+                                //show add button
+                                noteEditText.setVisibility(View.VISIBLE);
+                                submitNoteBtnDark.setVisibility(View.VISIBLE);
+                            }
+                        };
+                        handler3.postDelayed(runnable3, 100);
+                    }
+                };
+                handler2.postDelayed(runnable2, 100);
             }
+        };
 
-            vibrate.vibrate(50);
+        handler.postDelayed(runnable, 100);
 
-            noteEditText.setVisibility(View.VISIBLE);
-            submitNoteBtnDark.setVisibility(View.VISIBLE);
-            noteTextView.setText("");
+            /////////////////////////////////////////////////////////////////
+//            if(!mute){
+//                trash.start();
+//            }
+//
+//            vibrate.vibrate(50);
+//
+//            noteEditText.setVisibility(View.VISIBLE);
+//            submitNoteBtnDark.setVisibility(View.VISIBLE);
+//            noteTextView.setText("");
+//
+//            Cursor result = db.getData(Integer.parseInt(
+//                    MainActivity.sortedIdsForNote.get(activeTask)));
+//            while(result.moveToNext()){
+//                checklistExists = (result.getInt(2) == 1);
+//            }
+//            result.close();
+//
+//            //setting note in database to nothing
+//            db.updateData(MainActivity.sortedIdsForNote
+//                    .get(activeTask), "", checklistExists);
+//
+//            trashNote.setVisible(false);
 
-            Cursor result = db.getData(Integer.parseInt(
-                    MainActivity.sortedIdsForNote.get(activeTask)));
-            while(result.moveToNext()){
-                checklistExists = (result.getInt(2) == 1);
-            }
-            result.close();
-
-            //setting note in database to nothing
-            db.updateData(MainActivity.sortedIdsForNote
-                    .get(activeTask), "", checklistExists);
-
-            trashNote.setVisible(false);
-
+            /////////////////////////////////////////////////////////////////
 //            //getting task data
 //            dbTaskId = "";
 //            Cursor dbTaskResult = MainActivity.db.getUniversalData();

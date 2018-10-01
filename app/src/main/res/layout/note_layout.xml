@@ -75,6 +75,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
+            android:paddingLeft="5dp"
             android:maxLines="3"
             android:maxLength="2000"
             android:imeOptions="actionDone"
@@ -90,6 +91,26 @@
             android:padding="5dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/submit_dark"/>
+
+        <ImageView
+            android:id="@+id/submitNoteOne"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_one"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/submitNoteTwo"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_two"
+            android:visibility="gone"/>
 
         <!--<ImageView-->
             <!--android:id="@+id/submitNoteBtnLight"-->

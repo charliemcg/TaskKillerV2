@@ -8,6 +8,14 @@
         android:id="@+id/killNoteItem"
         android:title="Cancel Note"
         android:icon="@drawable/trash_dark"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/trashOpen"
+        android:title="Open Trash"
+        android:icon="@drawable/trash_dark_open"
+        app:showAsAction="always"
+        android:visible="false"/>
 
 </menu>

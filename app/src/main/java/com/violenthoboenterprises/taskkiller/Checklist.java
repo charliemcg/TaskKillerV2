@@ -282,9 +282,9 @@ public class Checklist extends MainActivity {
 
                         vibrate.vibrate(50);
 
-//                        if(!mute) {
-//                            blip.start();
-//                        }
+                        if(!mute) {
+                            blip.start();
+                        }
 
                         //adding data to arraylists
                         checklist.add(checklistTaskName);

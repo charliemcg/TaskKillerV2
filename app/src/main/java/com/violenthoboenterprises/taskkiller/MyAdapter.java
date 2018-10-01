@@ -82,14 +82,16 @@ class MyAdapter extends ArrayAdapter<String> {
         ImageView completed = taskView.findViewById(R.id.completed);
         ImageView completedWhite = taskView.findViewById(R.id.completedWhite);
         //Gives user ability to set alarm on click
-        final RelativeLayout alarm = taskView.findViewById(R.id.alarm);
+        final LinearLayout alarm = taskView.findViewById(R.id.alarm);
         //Icon needs to changed based on light/dark mode
         ImageView alarmBtnIcon = taskView.findViewById(R.id.alarmBtnIcon);
         ImageView alarmBtnIconWhite = taskView.findViewById(R.id.alarmBtnIconWhite);
         //The text on this button needs to change depending on the state of the alarm
-//        final TextView alarmBtnText = taskView.findViewById(R.id.alarmBtnText);
+        final TextView alarmBtnText = taskView.findViewById(R.id.alarmBtnText);
         //Need the following texts for color changing
-//        final TextView subtasksBtnText = taskView.findViewById(R.id.subtasksBtnText);
+        final TextView subtasksBtnText = taskView.findViewById(R.id.subtasksBtnText);
+        //Need the following texts for color changing
+        final TextView noteBtnText = taskView.findViewById(R.id.noteBtnText);
         //Icon needs to changed based on light/dark mode
         ImageView subTasksBtnIcon = taskView.findViewById(R.id.subTasksBtnIcon);
         ImageView subTasksBtnIconWhite = taskView.findViewById(R.id.subTasksBtnIconWhite);
@@ -104,9 +106,9 @@ class MyAdapter extends ArrayAdapter<String> {
         final TextView taskDoneBtnText = taskView.findViewById(R.id.taskDoneBtnText);
         final TextView taskIgnoreBtnText = taskView.findViewById(R.id.taskIgnoreBtnText);
         //Takes user to sub task activity
-        final RelativeLayout subTasks = taskView.findViewById(R.id.subTasks);
+        final LinearLayout subTasks = taskView.findViewById(R.id.subTasks);
         //Takes user to note activity
-        final RelativeLayout note = taskView.findViewById(R.id.note);
+        final LinearLayout note = taskView.findViewById(R.id.note);
         //Sets task to repeat daily
 //        final LinearLayout daily = taskView.findViewById(R.id.daily);
         //Sets task to repeat weekly
@@ -320,9 +322,9 @@ class MyAdapter extends ArrayAdapter<String> {
             taskOverdueRow.setBackgroundColor(Color.parseColor("#333333"));
             theTextView.setTextColor(Color.parseColor("#AAAAAA"));
             dueTextView.setTextColor(Color.parseColor("#AAAAAA"));
-//            alarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
-//            subtasksBtnText.setTextColor(Color.parseColor("#AAAAAA"));
-//            noteBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            alarmBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            subtasksBtnText.setTextColor(Color.parseColor("#AAAAAA"));
+            noteBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             oneHourBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             fourHoursBtnText.setTextColor(Color.parseColor("#AAAAAA"));
             tomorrowBtnText.setTextColor(Color.parseColor("#AAAAAA"));
@@ -359,9 +361,9 @@ class MyAdapter extends ArrayAdapter<String> {
             taskOverdueRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
             theTextView.setTextColor(Color.parseColor("#000000"));
             dueTextView.setTextColor(Color.parseColor("#000000"));
-//            alarmBtnText.setTextColor(Color.parseColor("#000000"));
-//            subtasksBtnText.setTextColor(Color.parseColor("#000000"));
-//            noteBtnText.setTextColor(Color.parseColor("#000000"));
+            alarmBtnText.setTextColor(Color.parseColor("#000000"));
+            subtasksBtnText.setTextColor(Color.parseColor("#000000"));
+            noteBtnText.setTextColor(Color.parseColor("#000000"));
             oneHourBtnText.setTextColor(Color.parseColor("#000000"));
             fourHoursBtnText.setTextColor(Color.parseColor("#000000"));
             tomorrowBtnText.setTextColor(Color.parseColor("#000000"));
@@ -1629,30 +1631,37 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
                 //TODO Show this only when necessary
-                MainActivity.toast.setText(R.string.youCanCancelRepeat);
-                final Handler handler = new Handler();
+                if(MainActivity.repeatHint <= 10) {
+                    if((MainActivity.repeatHint == 1) || (MainActivity.repeatHint == 10)) {
+                        MainActivity.toast.setText(R.string.youCanCancelRepeat);
+                        final Handler handler = new Handler();
 
-                final Runnable runnable = new Runnable() {
-                    public void run() {
-                        if(!MainActivity.mute) {
-                            MainActivity.sweep.start();
-                        }
-                        MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                (getContext(), R.anim.enter_from_right_fast));
-                        MainActivity.toastView.setVisibility(View.VISIBLE);
-                        final Handler handler2 = new Handler();
-                        final Runnable runnable2 = new Runnable(){
-                            public void run(){
+                        final Runnable runnable = new Runnable() {
+                            public void run() {
+                                if (!MainActivity.mute) {
+                                    MainActivity.sweep.start();
+                                }
                                 MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                        (getContext(), android.R.anim.fade_out));
-                                MainActivity.toastView.setVisibility(View.GONE);
+                                        (getContext(), R.anim.enter_from_right_fast));
+                                MainActivity.toastView.setVisibility(View.VISIBLE);
+                                final Handler handler2 = new Handler();
+                                final Runnable runnable2 = new Runnable() {
+                                    public void run() {
+                                        MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                                (getContext(), android.R.anim.fade_out));
+                                        MainActivity.toastView.setVisibility(View.GONE);
+                                    }
+                                };
+                                handler2.postDelayed(runnable2, 2500);
                             }
                         };
-                        handler2.postDelayed(runnable2, 2500);
-                    }
-                };
 
-                handler.postDelayed(runnable, 500);
+                        handler.postDelayed(runnable, 500);
+                    }
+                    MainActivity.repeatHint++;
+                    MainActivity.db.updateRepeatHint(MainActivity.repeatHint);
+                }
+                Log.i(TAG, "Repeat hint: " + MainActivity.repeatHint);
 
                 propertyRow.setVisibility(View.GONE);
 

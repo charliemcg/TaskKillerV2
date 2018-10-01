@@ -41,7 +41,7 @@
     <string name="setTime">Set Time</string>
     <string name="cannotSetTask">Cannot set task to be completed in the past</string>
     <string name="edit">Edit</string>
-    <string name="addNote">Add Note</string>
+    <string name="addNote">Note</string>
     <string name="pickAColor">Pick a color...</string>
     <string name="removeAds">Remove Ads</string>
     <string name="permanentlyRemoveAds">Permanently remove all ads</string>
@@ -68,6 +68,7 @@
     <string name="setDue">Set Due</string>
     <string name="subTasks">Sub-Tasks</string>
     <string name="getItDone">Get it done!</string>
+    <string name="colorCyclingEnabled">When enabled, colors will change several times a day.</string>
     <!--TODO get new id. this one is pinched from Russian Roulette 2378583121223638/5662475907-->
 
 </resources>

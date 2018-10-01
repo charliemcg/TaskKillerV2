@@ -47,14 +47,13 @@ public class SetDue extends MainActivity {
     ImageView dailyDark, weeklyDark, monthlyDark, cancelRepeatDark,
             dailyLight, weeklyLight, monthlyLight, cancelRepeatLight;
     View pickerRoot;
-    TextView dateTextView;
-    TextView timeTextView;
+    TextView dateTextView, timeTextView, divOne, divTwo, divThree;
     String repeat;
     static boolean setDue;
     static String dbTaskId;
     String dbTask;
     static String dbDueTime;
-    static MenuItem killAlarm;
+    static MenuItem killAlarm, trashAlarmOpen;
     static boolean datePicked, timePicked;
 
     public void onCreate(Bundle savedInstanceState){
@@ -96,6 +95,13 @@ public class SetDue extends MainActivity {
         weeklyLight = findViewById(R.id.weeklyLight);
         monthlyLight = findViewById(R.id.monthlyLight);
         cancelRepeatLight = findViewById(R.id.cancelRepeatLight);
+        divOne = findViewById(R.id.divOne);
+        divTwo = findViewById(R.id.divTwo);
+        divThree = findViewById(R.id.divThree);
+
+        divOne.setBackgroundColor(Color.parseColor(highlight));
+        divTwo.setBackgroundColor(Color.parseColor(highlight));
+        divThree.setBackgroundColor(Color.parseColor(highlight));
 
         //getting task data
         dbDueTime = "";
@@ -544,6 +550,7 @@ public class SetDue extends MainActivity {
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_alarm, dueToolbar.getMenu());
             killAlarm = this.dueToolbar.getMenu().findItem(R.id.killAlarmItem);
+            trashAlarmOpen = this.dueToolbar.getMenu().findItem(R.id.trashAlarmOpen);
             this.dueToolbar.setTitle("Set Date/Time");
             this.dueToolbar.setSubtitle(dbTask);
             if(Integer.parseInt(dbDueTime) == 0){
@@ -568,75 +575,113 @@ public class SetDue extends MainActivity {
         //noinspection SimplifiableIfStatement
         if ((id == R.id.killAlarmItem) && (timePicked || datePicked || !repeat.equals("none"))) {
 
-            if(!mute){
-                trash.start();
-            }
+            final Handler handler = new Handler();
 
-            vibrate.vibrate(50);
+            final Runnable runnable = new Runnable() {
+                public void run() {
 
-            //getting task data
-            dbTaskId = "";
-            Cursor dbTaskResult = MainActivity.db.getUniversalData();
-            while (dbTaskResult.moveToNext()) {
-                dbTaskId = dbTaskResult.getString(4);
-            }
-            dbTaskResult.close();
+                    killAlarm.setVisible(false);
+                    trashAlarmOpen.setVisible(true);
 
-            vibrate.vibrate(50);
+//                    vibrate.vibrate(50);
 
-            repeat = "none";
+                    final Handler handler2 = new Handler();
+                    final Runnable runnable2 = new Runnable(){
+                        public void run(){
+                            killAlarm.setVisible(true);
+                            trashAlarmOpen.setVisible(false);
+                            final Handler handler3 = new Handler();
+                            final Runnable runnable3 = new Runnable() {
+                                @Override
+                                public void run() {
+                                    killAlarm.setVisible(false);
 
-            repeating = false;
+                                    //getting task data
+                                    dbTaskId = "";
+                                    Cursor dbTaskResult = MainActivity.db.getUniversalData();
+                                    while (dbTaskResult.moveToNext()) {
+                                        dbTaskId = dbTaskResult.getString(4);
+                                    }
+                                    dbTaskResult.close();
 
-            db.updateDue(dbTaskId, false);
+                                    vibrate.vibrate(50);
 
-            db.updateTimestamp(dbTaskId, "0");
+                                    if(!mute) {
+                                        trash.start();
+                                    }
 
-            db.updateRepeatInterval(dbTaskId, "");
+                                    repeat = "none";
 
-            db.updateRepeat(dbTaskId, false);
+                                    repeating = false;
 
-            pendIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                    Integer.valueOf(dbTaskId),
-                    alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    db.updateDue(dbTaskId, false);
 
-            alarmManager.cancel(MainActivity.pendIntent);
+                                    db.updateTimestamp(dbTaskId, "0");
 
-            db.updateAlarmData(dbTaskId,
-                    "", "", "", "", "", "");
+                                    db.updateRepeatInterval(dbTaskId, "");
 
-            setDue = false;
-            datePicked = false;
-            timePicked = false;
+                                    db.updateRepeat(dbTaskId, false);
 
-            time.setVisibility(View.GONE);
-            calendar.setVisibility(View.GONE);
-            if(lightDark){
-                calendarFadedLight.setVisibility(View.VISIBLE);
-                timeFadedLight.setVisibility(View.VISIBLE);
-            }else{
-                calendarFadedDark.setVisibility(View.VISIBLE);
-                timeFadedDark.setVisibility(View.VISIBLE);
-            }
+                                    pendIntent = PendingIntent.getBroadcast(getApplicationContext(),
+                                            Integer.valueOf(dbTaskId),
+                                            alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            dateTextView.setText("+Add due date");
-            timeTextView.setText("+Add due time");
-            dateTextView.setTextSize(15);
-            timeTextView.setTextSize(15);
+                                    alarmManager.cancel(MainActivity.pendIntent);
 
-            if(!lightDark) {
-                cancelRepeatDark.setBackgroundColor(Color.parseColor(highlight));
-                dailyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
-                weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
-                monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
-            }else{
-                cancelRepeatLight.setBackgroundColor(Color.parseColor(highlight));
-                dailyLight.setBackgroundColor(Color.parseColor("#000000"));
-                weeklyLight.setBackgroundColor(Color.parseColor("#000000"));
-                monthlyLight.setBackgroundColor(Color.parseColor("#000000"));
-            }
+                                    db.updateAlarmData(dbTaskId,
+                                            "", "", "", "", "", "");
 
-            killAlarm.setVisible(false);
+                                    setDue = false;
+                                    datePicked = false;
+                                    timePicked = false;
+
+                                    time.setVisibility(View.GONE);
+                                    calendar.setVisibility(View.GONE);
+                                    if(lightDark){
+                                        calendarFadedLight.setVisibility(View.VISIBLE);
+                                        timeFadedLight.setVisibility(View.VISIBLE);
+                                    }else{
+                                        calendarFadedDark.setVisibility(View.VISIBLE);
+                                        timeFadedDark.setVisibility(View.VISIBLE);
+                                    }
+
+                                    dateTextView.setText("+Add due date");
+                                    timeTextView.setText("+Add due time");
+                                    dateTextView.setTextSize(15);
+                                    timeTextView.setTextSize(15);
+
+                                    if(!lightDark) {
+                                        cancelRepeatDark.setBackgroundColor(Color.parseColor(highlight));
+                                        dailyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
+                                        weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
+                                        monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
+                                    }else{
+                                        cancelRepeatLight.setBackgroundColor(Color.parseColor(highlight));
+                                        dailyLight.setBackgroundColor(Color.parseColor("#000000"));
+                                        weeklyLight.setBackgroundColor(Color.parseColor("#000000"));
+                                        monthlyLight.setBackgroundColor(Color.parseColor("#000000"));
+                                    }
+
+                                }
+                            };
+                            handler3.postDelayed(runnable3, 100);
+                        }
+                    };
+                    handler2.postDelayed(runnable2, 100);
+                }
+            };
+
+            handler.postDelayed(runnable, 100);
+            /////////////////////////////////////////////////////////////////////////
+//            if(!mute){
+//                trash.start();
+//            }
+//
+//            vibrate.vibrate(50);
+
+
+
+//            killAlarm.setVisible(false);
 
             return true;
         }
