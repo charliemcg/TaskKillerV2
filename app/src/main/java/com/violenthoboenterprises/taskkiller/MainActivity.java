@@ -833,7 +833,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                         if(MainActivity.renameHint <= 2) {
                             if(MainActivity.renameHint == 2) {
-                                MainActivity.toast.setText("HINT: long click task to rename.");
+                                MainActivity.toast.setText(R.string.longClickToRename);
                                 final Handler handler = new Handler();
 
                                 final Runnable runnable = new Runnable() {
@@ -1283,7 +1283,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             ColorPickerDialogBuilder
 //                    .with(MainActivity.this)
                     .with(MainActivity.this, colorPickerTheme)
-                    .setTitle("Choose color")
+                    .setTitle(getString(R.string.chooseColor))
                     .initialColor(val)
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                     .density(10)
@@ -1298,7 +1298,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             taskNameEditText.setBackgroundColor(Color.parseColor(tempHighlight));
                         }
                     })
-                    .setPositiveButton("ok", new ColorPickerClickListener() {
+                    .setPositiveButton(getString(R.string.oK), new ColorPickerClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                             highlight = "#" + Integer.toHexString(selectedColor);
@@ -1315,7 +1315,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             }
                         }
                     })
-                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             toolbarDark.setTitleTextColor(Color.parseColor(highlight));
@@ -2214,48 +2214,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private void prompt(final int reviewNumber) {
 
-//        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-//        alert.setTitle("Please Rate Us");
-//        alert.setIcon(R.drawable.ic_launcher_og);
-//        alert.setMessage("Thanks for using the application. If you like YOUR APP NAME please rate us! Your feedback is important for us!");
-//        alert.setPositiveButton("Rate it",new Dialog.OnClickListener(){
-//            public void onClick(DialogInterface dialog, int whichButton){
-//                reviewOne = true;
-//                reviewTwo = true;
-//                reviewThree = true;
-//                reviewFour = true;
-//                db.updateReviewOne(reviewOne);
-//                db.updateReviewTwo(reviewTwo);
-//                db.updateReviewThree(reviewThree);
-//                db.updateReviewFour(reviewFour);
-//                String url = "https://play.google.com/store"/*/apps/details?id=YOUR PACKAGE NAME"*/;
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse(url));
-//                startActivity(i);
-//            }
-//        });
-//        alert.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//                if(reviewNumber == 1) {
-//                    reviewOne = true;
-//                    db.updateReviewOne(reviewOne);
-//                }else if (reviewNumber == 2){
-//                    reviewTwo = true;
-//                    db.updateReviewTwo(reviewTwo);
-//                }else if(reviewNumber == 3){
-//                    reviewThree = true;
-//                    db.updateReviewThree(reviewThree);
-//                }else if(reviewNumber == 4){
-//                    reviewFour = true;
-//                    db.updateReviewFour(reviewFour);
-//                }
-//            }
-//        });
-//        alert.show();
-
-
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -2280,6 +2238,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 db.updateReviewTwo(reviewTwo);
                 db.updateReviewThree(reviewThree);
                 db.updateReviewFour(reviewFour);
+                //TODO find out if this needs to go into strings.xml
                 String url = "https://play.google.com/store"/*/apps/details?id=YOUR PACKAGE NAME"*/;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
@@ -2320,30 +2279,30 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                                    @Nullable TransactionDetails details) {
 
         //TODO make this message specific to each purchase
-            toast.setText("You purchased something");
-            final Handler handler = new Handler();
-
-            final Runnable runnable = new Runnable() {
-                public void run() {
-                if(!mute) {
-                    sweep.start();
-                }
-                    toastView.startAnimation(AnimationUtils.loadAnimation
-                            (MainActivity.this, R.anim.enter_from_right_fast));
-                    toastView.setVisibility(View.VISIBLE);
-                    final Handler handler2 = new Handler();
-                    final Runnable runnable2 = new Runnable() {
-                        public void run() {
-                            toastView.startAnimation(AnimationUtils.loadAnimation
-                                    (MainActivity.this, android.R.anim.fade_out));
-                            toastView.setVisibility(View.GONE);
-                        }
-                    };
-                    handler2.postDelayed(runnable2, 1500);
-                }
-            };
-
-            handler.postDelayed(runnable, 500);
+//            toast.setText("You purchased something");
+//            final Handler handler = new Handler();
+//
+//            final Runnable runnable = new Runnable() {
+//                public void run() {
+//                if(!mute) {
+//                    sweep.start();
+//                }
+//                    toastView.startAnimation(AnimationUtils.loadAnimation
+//                            (MainActivity.this, R.anim.enter_from_right_fast));
+//                    toastView.setVisibility(View.VISIBLE);
+//                    final Handler handler2 = new Handler();
+//                    final Runnable runnable2 = new Runnable() {
+//                        public void run() {
+//                            toastView.startAnimation(AnimationUtils.loadAnimation
+//                                    (MainActivity.this, android.R.anim.fade_out));
+//                            toastView.setVisibility(View.GONE);
+//                        }
+//                    };
+//                    handler2.postDelayed(runnable2, 1500);
+//                }
+//            };
+//
+//            handler.postDelayed(runnable, 500);
 
     }
 
@@ -2355,6 +2314,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     @Override
     public void onBillingError(int errorCode, @Nullable Throwable error) {
         if(showMotivation) {
+            //TODO don't actually show this in the released version
             toast.setText("Something went wrong");
             final Handler handler = new Handler();
 
@@ -2413,6 +2373,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             }
 
             //TODO replace this test stuff with real stuff
+            //TODO see if productID should go in strings.xml
             bp.purchase(this, "android.test.purchased");
             //TODO verify purchase before updating to true
             db.updateAdsRemoved(true);
@@ -2438,6 +2399,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             }
 
             //TODO replace this test stuff with real stuff
+            //            //TODO see if productID should go in strings.xml
             bp.purchase(this, "android.test.purchased");
             //TODO verify purchase before updating to true
             db.updateRemindersAvailable(true);
@@ -2463,6 +2425,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             }
 
             //TODO replace this test stuff with real stuff
+            //            //TODO see if productID should go in strings.xml
             bp.purchase(this, "android.test.purchased");
             //TODO verify purchase before updating to true
             db.updateCycleColors(true);
@@ -2489,6 +2452,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             }
 
             //TODO replace this test stuff with real stuff
+            //            //TODO see if productID should go in strings.xml
             bp.purchase(this, "android.test.purchased");
             //TODO verify purchase before updating to true
             db.updateAdsRemoved(true);
@@ -2516,6 +2480,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //bp.purchase(MainActivity.this, "android.test.purchased");
     //TODO fill in information
     //Without developer payload
+    //TODO see if IDs should go into strings.xml
     //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE");
     //With developer payload
     //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE", "DEVELOPER PAYLOAD HERE");

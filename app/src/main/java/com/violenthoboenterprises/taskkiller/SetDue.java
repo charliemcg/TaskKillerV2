@@ -128,8 +128,8 @@ public class SetDue extends MainActivity {
 
         //Inform user that they can set an alarm
         if(dbDueTime.equals("0")){
-            dateTextView.setText("+Add due date");
-            timeTextView.setText("+Add due time");
+            dateTextView.setText(R.string.addDate);
+            timeTextView.setText(R.string.addTime);
 
             if(lightDark){
                 calendarFadedLight.setVisibility(View.VISIBLE);
@@ -189,17 +189,17 @@ public class SetDue extends MainActivity {
 
             dateTextView.setText(alarmDay + " " + formattedMonth + " " + alarmYear);
 
-            String adjustedAmPm = "am";
+            String adjustedAmPm = getString(R.string.am);
             String adjustedHour = String.valueOf(alarmHour);
             String adjustedMinute = String.valueOf(alarmMinute);
 
             if(Integer.parseInt(alarmHour) == 0) {
                 adjustedHour = String.valueOf(12);
             }else if(Integer.parseInt(alarmHour) == 12){
-                adjustedAmPm = "pm";
+                adjustedAmPm = getString(R.string.pm);
             }else if(Integer.parseInt(alarmHour) > 12){
                 adjustedHour = String.valueOf(Integer.parseInt(alarmHour) - 12);
-                adjustedAmPm = "pm";
+                adjustedAmPm = getString(R.string.pm);
             }
 
             if(Integer.parseInt(alarmMinute) < 10){
@@ -551,7 +551,7 @@ public class SetDue extends MainActivity {
             getMenuInflater().inflate(R.menu.menu_alarm, dueToolbar.getMenu());
             killAlarm = this.dueToolbar.getMenu().findItem(R.id.killAlarmItem);
             trashAlarmOpen = this.dueToolbar.getMenu().findItem(R.id.trashAlarmOpen);
-            this.dueToolbar.setTitle("Set Date/Time");
+            this.dueToolbar.setTitle(R.string.setDateTime);
             this.dueToolbar.setSubtitle(dbTask);
             if(Integer.parseInt(dbDueTime) == 0){
                 killAlarm.setVisible(false);
@@ -645,8 +645,8 @@ public class SetDue extends MainActivity {
                                         timeFadedDark.setVisibility(View.VISIBLE);
                                     }
 
-                                    dateTextView.setText("+Add due date");
-                                    timeTextView.setText("+Add due time");
+                                    dateTextView.setText(R.string.addDate);
+                                    timeTextView.setText(R.string.addTime);
                                     dateTextView.setTextSize(15);
                                     timeTextView.setTextSize(15);
 
@@ -912,7 +912,7 @@ public class SetDue extends MainActivity {
             TextView timeTextView = getActivity().findViewById(R.id.timeTextView);
 
             //Formatting and displaying selected time
-            String adjustedAmPm = "am";
+            String adjustedAmPm = String.valueOf(R.string.am);
             String adjustedHour = String.valueOf(hour);
             String adjustedMinute = String.valueOf(minute);
 
@@ -920,11 +920,11 @@ public class SetDue extends MainActivity {
                 adjustedHour = String.valueOf(12);
                 db.updateAmPm(0);
             }else if(hour == 12){
-                adjustedAmPm = "pm";
+                adjustedAmPm = String.valueOf(R.string.pm);
                 db.updateAmPm(1);
             }else if(hour > 12){
                 adjustedHour = String.valueOf(hour - 12);
-                adjustedAmPm = "pm";
+                adjustedAmPm = String.valueOf(R.string.pm);
                 db.updateAmPm(1);
             }else{
                 adjustedHour = String.valueOf(hour);
@@ -932,7 +932,7 @@ public class SetDue extends MainActivity {
             }
 
             if(minute < 10){
-                adjustedMinute = "0" + String.valueOf(minute);
+                adjustedMinute = String.valueOf(R.string.zero) + String.valueOf(minute);
             }
 
             timeTextView.setText(adjustedHour + ":" + adjustedMinute + adjustedAmPm);

@@ -116,7 +116,7 @@ public class Checklist extends MainActivity {
         checklistEditText.setBackgroundColor(Color.parseColor(MainActivity.highlight));
 
         //setting title to task name
-        subTasksToolbar.setTitle("Sub-Tasks");
+        subTasksToolbar.setTitle(R.string.subTasks);
         subTasksToolbar.setSubtitle(dbTask);
 
         //Set list view dividers

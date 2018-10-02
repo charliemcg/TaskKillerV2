@@ -88,7 +88,7 @@ public class Note extends MainActivity {
 
         //TODO title should be "note" and subtitle should be task name
 //        noteToolbar.setTitle("Note");
-        getSupportActionBar().setTitle("Note");
+        getSupportActionBar().setTitle(R.string.note);
         noteToolbar.setSubtitle(dbTask);
 
         noteTextView.setMovementMethod(new ScrollingMovementMethod());

@@ -63,6 +63,5 @@
     <string name="addTime">+Add due time</string>
     <string name="setDateTime">Set Date/Time</string>
     <string name="zero">0</string>
-    <!--TODO get new id. this one is pinched from Russian Roulette 2378583121223638/5662475907-->
 
 </resources>

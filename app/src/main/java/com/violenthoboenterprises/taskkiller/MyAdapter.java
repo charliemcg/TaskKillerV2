@@ -487,6 +487,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     adView.setVisibility(View.VISIBLE);
                     final AdRequest banRequest = new AdRequest.Builder()
                             //TODO probably need a new ID
+                            //TODO find out if id should go into strings.xml
                             .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
                     (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
                     adView.loadAd(banRequest);
@@ -1404,7 +1405,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 if(MainActivity.reinstateHint <= 2) {
                     if(MainActivity.reinstateHint == 2) {
                         //TODO 'canceled' is the US spelling
-                        MainActivity.toast.setText("HINT: long click to reinstate a cancelled task.");
+                        MainActivity.toast.setText(R.string.longClickToReinstate);
                         final Handler handler = new Handler();
 
                         final Runnable runnable = new Runnable() {

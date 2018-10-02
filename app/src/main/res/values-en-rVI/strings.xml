@@ -36,8 +36,8 @@
     <string name="permanentlyRemoveAds">Permanently remove all ads.</string>
     <string name="getReminders">Get Reminders</string>
     <string name="setUnlimitedDueDates">Set unlimited due dates and get notifications on your phone.</string>
-    <string name="cycleColors">Cycle Colours</string>
-    <string name="featureColorSlowly">The feature colour will slowly changes automatically.</string>
+    <string name="cycleColors">Cycle Colors</string>
+    <string name="featureColorSlowly">The feature color will slowly changes automatically.</string>
     <string name="unlockAll">Unlock All</string>
     <string name="ultimateValuePack">Ultimate value pack. Unlock all in-app purchases.</string>
     <string name="addYourNote">Add your note here…</string>
@@ -52,17 +52,16 @@
     <string name="setDue">Set Due</string>
     <string name="subTasks">Sub-Tasks</string>
     <string name="getItDone">Get it done!</string>
-    <string name="colorCyclingEnabled">When enabled, colours will change several times a day.</string>
+    <string name="colorCyclingEnabled">When enabled, colors will change several times a day.</string>
     <string name="longClickToRename">HINT: Long click task to rename.</string>
-    <string name="chooseColor">Choose colour</string>
+    <string name="chooseColor">Choose color</string>
     <string name="oK">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="longClickToReinstate">HINT: Long click to reinstate a cancelled task.</string>
+    <string name="longClickToReinstate">HINT: Long click to reinstate a canceled task.</string>
     <string name="note">Note</string>
     <string name="addDate">+Add due date</string>
     <string name="addTime">+Add due time</string>
     <string name="setDateTime">Set Date/Time</string>
     <string name="zero">0</string>
-    <!--TODO get new id. this one is pinched from Russian Roulette 2378583121223638/5662475907-->
 
 </resources>
