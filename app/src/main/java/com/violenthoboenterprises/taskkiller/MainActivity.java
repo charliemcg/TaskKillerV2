@@ -132,8 +132,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static boolean showMotivation;
     //don't show due dates until after ids have been reordered
     static boolean showDueDates;
-    //used to determine whether or not to ask for review
-    boolean reviewed;
+    //indicates that user has been prompted to review the app once
+    boolean reviewOne;
+    //indicates that user has been prompted to review the app twice
+    boolean reviewTwo;
+    //indicates that user has been prompted to review the app three times
+    boolean reviewThree;
+    //indicates that user has been prompted to review the app four times
+    boolean reviewFour;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -438,6 +444,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         repeatHint = 0;
         renameHint = 0;
         launchTime = 0;
+        reviewOne = false;
+        reviewTwo = false;
+        reviewThree = false;
+        reviewFour = false;
 
 //        final View child = topToolbar.getChildAt(2);
 //        if (child instanceof ActionMenuView)
@@ -2366,9 +2376,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             renameHint = dbResult.getInt(22);
             reinstateHint = dbResult.getInt(23);
             launchTime = dbResult.getInt(24);
-            reviewed = dbResult.getInt(25) > 0;
+            reviewOne = dbResult.getInt(25) > 0;
+            reviewTwo = dbResult.getInt(26) > 0;
+            reviewThree = dbResult.getInt(27) > 0;
+            reviewFour = dbResult.getInt(28) > 0;
         }
         dbResult.close();
+
+        Log.i(TAG, "One: " + reviewOne + "\nTwo: " + reviewTwo + "\nThree: " + reviewThree + "\nFour: " + reviewFour);
 
         if(colorCyclingAllowed && colorCyclingEnabled) {
             Calendar cal = Calendar.getInstance();
@@ -2417,34 +2432,81 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //Checks to see if there are still tasks left
         noTasksLeft();
 
-        Calendar calendar = Calendar.getInstance();
+        showPrompt(launchTime);
 
-        if(!reviewed && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 72))
-                || (launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 168)
-                || (launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 732)
-                || (launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 1464)){
-                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                alert.setTitle("Please Rate Us");
-                alert.setIcon(R.drawable.ic_launcher_og);
-                alert.setMessage("Thanks for using the application. If you like YOUR APP NAME please rate us! Your feedback is important for us!");
-                alert.setPositiveButton("Rate it",new Dialog.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int whichButton){
-                        reviewed = true;
-                        db.updateReviewed(reviewed);
-                        String url = "https://play.google.com/store"/*/apps/details?id=YOUR PACKAGE NAME"*/;
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-                    }
-                });
-                alert.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                alert.show();
+    }
+
+    private void showPrompt(final int launchTime) {
+
+        final Calendar calendar = Calendar.getInstance();
+
+        //TODO account for each individual launch with booleans
+        if(!reviewOne && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 72))){
+
+            int reviewNumber = 1;
+            prompt(reviewNumber);
+
+        }else if(!reviewTwo && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 168))){
+
+            int reviewNumber = 2;
+            prompt(reviewNumber);
+
+        }else if(!reviewThree && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 732))){
+
+            int reviewNumber = 3;
+            prompt(reviewNumber);
+
+        }else if(!reviewFour && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 1464))){
+
+            int reviewNumber = 4;
+            prompt(reviewNumber);
+
+        }
+    }
+
+    private void prompt(final int reviewNumber) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        alert.setTitle("Please Rate Us");
+        alert.setIcon(R.drawable.ic_launcher_og);
+        alert.setMessage("Thanks for using the application. If you like YOUR APP NAME please rate us! Your feedback is important for us!");
+        alert.setPositiveButton("Rate it",new Dialog.OnClickListener(){
+            public void onClick(DialogInterface dialog, int whichButton){
+                reviewOne = true;
+                reviewTwo = true;
+                reviewThree = true;
+                reviewFour = true;
+                db.updateReviewOne(reviewOne);
+                db.updateReviewTwo(reviewTwo);
+                db.updateReviewThree(reviewThree);
+                db.updateReviewFour(reviewFour);
+                String url = "https://play.google.com/store"/*/apps/details?id=YOUR PACKAGE NAME"*/;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             }
+        });
+        alert.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                if(reviewNumber == 1) {
+                    reviewOne = true;
+                    db.updateReviewOne(reviewOne);
+                    Log.i(TAG, "reviewOne: " + reviewOne);
+                }else if (reviewNumber == 2){
+                    reviewTwo = true;
+                    db.updateReviewTwo(reviewTwo);
+                }else if(reviewNumber == 3){
+                    reviewThree = true;
+                    db.updateReviewThree(reviewThree);
+                }else if(reviewNumber == 4){
+                    reviewFour = true;
+                    db.updateReviewFour(reviewFour);
+                }
+            }
+        });
+        alert.show();
 
     }
 

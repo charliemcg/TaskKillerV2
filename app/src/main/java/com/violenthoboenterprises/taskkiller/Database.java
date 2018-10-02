@@ -82,7 +82,10 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL23 = "RENAMEHINT";
     public static final String UCOL24 = "REINSTATEHINT";
     public static final String UCOL25 = "TIMESTARTED";
-    public static final String UCOL26 = "REVIEWED";
+    public static final String UCOL26 = "REVIEWONE";
+    public static final String UCOL27 = "REVIEWTWO";
+    public static final String UCOL28 = "REVIEWTHREE";
+    public static final String UCOL29 = "REVIEWFOUR";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -117,7 +120,8 @@ public class Database extends SQLiteOpenHelper {
                 "CHECKLISTLISTSIZE INTEGER, SETALARM BOOLEAN, YEAR INTEGER, MONTH INTEGER," +
                 " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER, AMPM INTEGER," +
                 " CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN, REPEATHINT INTEGER," +
-                " RENAMEHINT INTEGER, REINSTATEHINT INTEGER, TIMESTARTED INTEGER, REVIEWED BOOLEAN)");
+                " RENAMEHINT INTEGER, REINSTATEHINT INTEGER, TIMESTARTED INTEGER," +
+                " REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, REVIEWFOUR BOOLEAN)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -227,6 +231,9 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL24, 0);
         content.put(UCOL25, (calendar.getTimeInMillis() /1000 /60 /60));
         content.put(UCOL26, false);
+        content.put(UCOL27, false);
+        content.put(UCOL28, false);
+        content.put(UCOL29, false);
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -728,10 +735,34 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateReviewed(boolean reviewed){
+    public boolean updateReviewOne(boolean review){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
-        content.put(UCOL26, reviewed);
+        content.put(UCOL26, review);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateReviewTwo(boolean review){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL27, review);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateReviewThree(boolean review){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL28, review);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateReviewFour(boolean review){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL29, review);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }
