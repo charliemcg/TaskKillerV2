@@ -37,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -2135,6 +2136,168 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
+    public void showPro(View view) {
+
+//        if(!mute){
+//            blip.start();
+//        }
+
+        purchasesShowing = true;
+        add.setClickable(false);
+        theListView.setOnItemClickListener(null);
+        taskPropertiesShowing = false;
+        if(lightDark) {
+            onCreateOptionsMenu(toolbarLight.getMenu());
+        }else{
+            onCreateOptionsMenu(toolbarDark.getMenu());
+        }
+        theListView.setAdapter(theAdapter[0]);
+        purchases.startAnimation(AnimationUtils.loadAnimation
+                (this, R.anim.enter_from_right));
+
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                purchases.setVisibility(View.VISIBLE);
+            }
+        };
+
+        handler.postDelayed(runnable, 200);
+
+    }
+
+    private void showPrompt(final int launchTime) {
+
+        final Calendar calendar = Calendar.getInstance();
+
+        //TODO account for each individual launch with booleans
+        if(!reviewOne && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 72))){
+
+            int reviewNumber = 1;
+            prompt(reviewNumber);
+
+        }else if(!reviewTwo && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 168))){
+
+            int reviewNumber = 2;
+            prompt(reviewNumber);
+
+        }else if(!reviewThree && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 732))){
+
+            int reviewNumber = 3;
+            prompt(reviewNumber);
+
+        }else if(!reviewFour && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 1464))){
+
+            int reviewNumber = 4;
+            prompt(reviewNumber);
+
+        }
+    }
+
+    private void prompt(final int reviewNumber) {
+
+//        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+//        alert.setTitle("Please Rate Us");
+//        alert.setIcon(R.drawable.ic_launcher_og);
+//        alert.setMessage("Thanks for using the application. If you like YOUR APP NAME please rate us! Your feedback is important for us!");
+//        alert.setPositiveButton("Rate it",new Dialog.OnClickListener(){
+//            public void onClick(DialogInterface dialog, int whichButton){
+//                reviewOne = true;
+//                reviewTwo = true;
+//                reviewThree = true;
+//                reviewFour = true;
+//                db.updateReviewOne(reviewOne);
+//                db.updateReviewTwo(reviewTwo);
+//                db.updateReviewThree(reviewThree);
+//                db.updateReviewFour(reviewFour);
+//                String url = "https://play.google.com/store"/*/apps/details?id=YOUR PACKAGE NAME"*/;
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse(url));
+//                startActivity(i);
+//            }
+//        });
+//        alert.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//                if(reviewNumber == 1) {
+//                    reviewOne = true;
+//                    db.updateReviewOne(reviewOne);
+//                }else if (reviewNumber == 2){
+//                    reviewTwo = true;
+//                    db.updateReviewTwo(reviewTwo);
+//                }else if(reviewNumber == 3){
+//                    reviewThree = true;
+//                    db.updateReviewThree(reviewThree);
+//                }else if(reviewNumber == 4){
+//                    reviewFour = true;
+//                    db.updateReviewFour(reviewFour);
+//                }
+//            }
+//        });
+//        alert.show();
+
+
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        if(lightDark) {
+            dialog.setContentView(R.layout.review_dialog_light);
+        }else{
+            dialog.setContentView(R.layout.review_dialog);
+        }
+
+        Button positive = dialog.findViewById(R.id.positive);
+        Button negative = dialog.findViewById(R.id.negative);
+
+        positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                reviewOne = true;
+                reviewTwo = true;
+                reviewThree = true;
+                reviewFour = true;
+                db.updateReviewOne(reviewOne);
+                db.updateReviewTwo(reviewTwo);
+                db.updateReviewThree(reviewThree);
+                db.updateReviewFour(reviewFour);
+                String url = "https://play.google.com/store"/*/apps/details?id=YOUR PACKAGE NAME"*/;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                dialog.dismiss();
+
+            }
+        });
+
+        negative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                if(reviewNumber == 1) {
+                    reviewOne = true;
+                    db.updateReviewOne(reviewOne);
+                }else if (reviewNumber == 2){
+                    reviewTwo = true;
+                    db.updateReviewTwo(reviewTwo);
+                }else if(reviewNumber == 3){
+                    reviewThree = true;
+                    db.updateReviewThree(reviewThree);
+                }else if(reviewNumber == 4){
+                    reviewFour = true;
+                    db.updateReviewFour(reviewFour);
+                }
+
+            }
+        });
+
+        dialog.show();
+
+    }
+
     @Override
     public void onProductPurchased(@NonNull String productId,
                                    @Nullable TransactionDetails details) {
@@ -2356,11 +2519,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        dateOrTime = false;
         removeTaskProperties();
 
-        try {
+//        try {
             getSavedData();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+//        } catch (URISyntaxException e) {
+//            e.printStackTrace();
+//        }
 
         //TODO find out what's going on here. Mute back button?
 //        AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
@@ -2368,7 +2531,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
-    private void getSavedData() throws URISyntaxException {
+    private void getSavedData() /*throws URISyntaxException */{
 
         //clearing the lists before adding data back into them so as to avoid duplication
         taskList.clear();
@@ -2452,80 +2615,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
-    private void showPrompt(final int launchTime) {
-
-        final Calendar calendar = Calendar.getInstance();
-
-        //TODO account for each individual launch with booleans
-        if(!reviewOne && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 72))){
-
-            int reviewNumber = 1;
-            prompt(reviewNumber);
-
-        }else if(!reviewTwo && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 168))){
-
-            int reviewNumber = 2;
-            prompt(reviewNumber);
-
-        }else if(!reviewThree && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 732))){
-
-            int reviewNumber = 3;
-            prompt(reviewNumber);
-
-        }else if(!reviewFour && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 1464))){
-
-            int reviewNumber = 4;
-            prompt(reviewNumber);
-
-        }
-    }
-
-    private void prompt(final int reviewNumber) {
-
-        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-        alert.setTitle("Please Rate Us");
-        alert.setIcon(R.drawable.ic_launcher_og);
-        alert.setMessage("Thanks for using the application. If you like YOUR APP NAME please rate us! Your feedback is important for us!");
-        alert.setPositiveButton("Rate it",new Dialog.OnClickListener(){
-            public void onClick(DialogInterface dialog, int whichButton){
-                reviewOne = true;
-                reviewTwo = true;
-                reviewThree = true;
-                reviewFour = true;
-                db.updateReviewOne(reviewOne);
-                db.updateReviewTwo(reviewTwo);
-                db.updateReviewThree(reviewThree);
-                db.updateReviewFour(reviewFour);
-                String url = "https://play.google.com/store"/*/apps/details?id=YOUR PACKAGE NAME"*/;
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
-        });
-        alert.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                if(reviewNumber == 1) {
-                    reviewOne = true;
-                    db.updateReviewOne(reviewOne);
-                    Log.i(TAG, "reviewOne: " + reviewOne);
-                }else if (reviewNumber == 2){
-                    reviewTwo = true;
-                    db.updateReviewTwo(reviewTwo);
-                }else if(reviewNumber == 3){
-                    reviewThree = true;
-                    db.updateReviewThree(reviewThree);
-                }else if(reviewNumber == 4){
-                    reviewFour = true;
-                    db.updateReviewFour(reviewFour);
-                }
-            }
-        });
-        alert.show();
-
-    }
-
     @Override
     //Return to previous selection when back is pressed
     public void onBackPressed() {
@@ -2549,34 +2638,4 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
-    public void showPro(View view) {
-
-//        if(!mute){
-//            blip.start();
-//        }
-
-        purchasesShowing = true;
-        add.setClickable(false);
-        theListView.setOnItemClickListener(null);
-        taskPropertiesShowing = false;
-        if(lightDark) {
-            onCreateOptionsMenu(toolbarLight.getMenu());
-        }else{
-            onCreateOptionsMenu(toolbarDark.getMenu());
-        }
-        theListView.setAdapter(theAdapter[0]);
-        purchases.startAnimation(AnimationUtils.loadAnimation
-                (this, R.anim.enter_from_right));
-
-        final Handler handler = new Handler();
-
-        final Runnable runnable = new Runnable() {
-            public void run() {
-                purchases.setVisibility(View.VISIBLE);
-            }
-        };
-
-        handler.postDelayed(runnable, 200);
-
-    }
 }
