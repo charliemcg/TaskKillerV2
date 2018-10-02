@@ -186,7 +186,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //Keep track of last phrase used so as to not have the same thing twice in a row
     String lastToast;
     //Colors for the auto color change feature
-    String[] darkHighlights = {"#ee30ef00", "#eeef0000", "#eeefd700", "#eebf00ef", "#eeef8f00", "#eeef1a7a", "#ee0060ef"};
+    String[] darkHighlights = {"#ee00f3f3", "#ee00b3ff", "#ee00ffb3", "#ee00ff66", "#ee00ff1a",
+            "#eecdff00", "#eeefd700", "#eef79400", "#eef74a00", "#eeaaffff", "#ee34ef7f",
+            "#ef5aef34", "#ef85efa0", "#efbbf0be", "#ee87ef4f", "#efe7ef4f", "#eef6eea4",
+            "#eef5a935", "#eef9dcc2", "#eef8bb8a", "#eef7a4a4", "#eef63636", "#eef6a4bd",
+            "#eef5516a", "#eef5a3d5", "#eef088f5", "#eeb3a3f5", "#ef6ca3f5", "#efa3f5c4",
+            "#ee8af451", "#ef8df487", "#efbbf451"};
+    String[] lightHighlights = {"#ee0019f8", "#ef0067ff", "#ef00a7ef", "#ee55b3ff", "#ef6b79f2",
+            "#ef50a9f2", "#ef7c00f8", "#eecc00ff", "#eeff00e6", "#eeff009a", "#eeef0048",
+            "#eeef0000", "#eeef4800", "#eeef8f00", "#eeff38ec", "#eeef1a7a", "#eeef85d4",
+            "#eeae87f4", "#eeb2a2f4", "#eef4a2d4", "#eef46c6c", "#eef46f35", "#eef38797"};
 
     //Required for setting notification alarms
     static Intent alertIntent;
@@ -946,16 +955,25 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void switchColor() {
-        int i = random.nextInt(6);
-        db.updateHighlight(darkHighlights[i]);
-        Calendar cal = Calendar.getInstance();
-        db.updateColorLastChanged((int) (cal.getTimeInMillis() / 1000 / 60 / 60));
-        highlight = darkHighlights[i];
+        if(!lightDark) {
+            int i = random.nextInt(darkHighlights.length);
+            db.updateHighlight(darkHighlights[i]);
+            Calendar cal = Calendar.getInstance();
+            db.updateColorLastChanged((int) (cal.getTimeInMillis() / 1000 / 60 / 60));
+            highlight = darkHighlights[i];
+        }else{
+            int i = random.nextInt(lightHighlights.length);
+            db.updateHighlight(lightHighlights[i]);
+            Calendar cal = Calendar.getInstance();
+            db.updateColorLastChanged((int) (cal.getTimeInMillis() / 1000 / 60 / 60));
+            highlight = lightHighlights[i];
+        }
         toolbarDark.setTitleTextColor(Color.parseColor(highlight));
         toolbarLight.setTitleTextColor(Color.parseColor(highlight));
         addIcon.setTextColor(Color.parseColor(highlight));
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
         toast.setBackgroundColor(Color.parseColor(highlight));
+
     }
 
     private void checkLightDark(boolean lightDark) {
@@ -2383,11 +2401,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         dbResult.close();
 
-        Log.i(TAG, "One: " + reviewOne + "\nTwo: " + reviewTwo + "\nThree: " + reviewThree + "\nFour: " + reviewFour);
-
         if(colorCyclingAllowed && colorCyclingEnabled) {
             Calendar cal = Calendar.getInstance();
-            if((cal.getTimeInMillis() / 1000 / 60 / 60) > (taskLastChanged + 4)) {
+            if((cal.getTimeInMillis() / 1000 / 60 / 60) >= (taskLastChanged + 4)) {
                 switchColor();
             }
         }
