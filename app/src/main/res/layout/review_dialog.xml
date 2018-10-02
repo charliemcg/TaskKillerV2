@@ -92,7 +92,7 @@
             android:layout_weight="1"
             android:background="@drawable/layout_border"
             android:clickable="true"
-            android:text="Yes!"
+            android:text="OK!"
             android:textColor="@color/gray"
             android:textSize="20sp"/>
 

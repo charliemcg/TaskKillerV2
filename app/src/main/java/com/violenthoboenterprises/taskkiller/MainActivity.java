@@ -329,6 +329,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     TextView divider;
 
+    ImageView removeAdsImg;
+    ImageView removeAdsPurchasedImg;
+    ImageView remindersImg;
+    ImageView remindersPurchasedImg;
+    ImageView autoColorImg;
+    ImageView autoColorPurchasedImg;
+    ImageView unlockAllImg;
+    ImageView unlockAllPurchasedImg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -458,6 +467,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         reviewTwo = false;
         reviewThree = false;
         reviewFour = false;
+        removeAdsImg = findViewById(R.id.removeAdsImage);
+        removeAdsPurchasedImg = findViewById(R.id.removeAdsImagePurchased);
+        remindersImg = findViewById(R.id.getRemindersImage);
+        remindersPurchasedImg = findViewById(R.id.getRemindersImagePurchased);
+        autoColorImg = findViewById(R.id.cycleColorsImage);
+        autoColorPurchasedImg = findViewById(R.id.cycleColorsImagePurchssed);
+        unlockAllImg = findViewById(R.id.unlockAllImage);
+        unlockAllPurchasedImg = findViewById(R.id.unlockAllImagePurchased);
 
 //        final View child = topToolbar.getChildAt(2);
 //        if (child instanceof ActionMenuView)
@@ -2405,6 +2422,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             if(colorCyclingAllowed && remindersAvailable && adsRemoved){
                 proBtn.setVisible(false);
             }
+            removeAdsImg.setVisibility(View.GONE);
+            removeAdsPurchasedImg.setVisibility(View.VISIBLE);
         }
 
     }
@@ -2428,6 +2447,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             if(colorCyclingAllowed && remindersAvailable && adsRemoved){
                 proBtn.setVisible(false);
             }
+            remindersImg.setVisibility(View.GONE);
+            remindersPurchasedImg.setVisibility(View.VISIBLE);
         }
 
     }
@@ -2451,6 +2472,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             if(colorCyclingAllowed && remindersAvailable && adsRemoved){
                 proBtn.setVisible(false);
             }
+            autoColorImg.setVisibility(View.GONE);
+            autoColorPurchasedImg.setVisibility(View.VISIBLE);
         }
 
     }
@@ -2477,7 +2500,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             purchasesShowing = false;
             colorPickerShowing();
             proBtn.setVisible(false);
-
+            unlockAllImg.setVisibility(View.GONE);
+            unlockAllPurchasedImg.setVisibility(View.VISIBLE);
+            autoColorImg.setVisibility(View.GONE);
+            autoColorPurchasedImg.setVisibility(View.VISIBLE);
+            remindersImg.setVisibility(View.GONE);
+            remindersPurchasedImg.setVisibility(View.VISIBLE);
+            removeAdsImg.setVisibility(View.GONE);
+            removeAdsPurchasedImg.setVisibility(View.VISIBLE);
         }
 
     }
@@ -2612,6 +2642,23 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         noTasksLeft();
 
         showPrompt(launchTime);
+
+        if(adsRemoved){
+            removeAdsImg.setVisibility(View.GONE);
+            removeAdsPurchasedImg.setVisibility(View.VISIBLE);
+        }
+        if(remindersAvailable){
+            remindersImg.setVisibility(View.GONE);
+            remindersPurchasedImg.setVisibility(View.VISIBLE);
+        }
+        if(colorCyclingAllowed){
+            autoColorImg.setVisibility(View.GONE);
+            autoColorPurchasedImg.setVisibility(View.VISIBLE);
+        }
+        if(adsRemoved || remindersAvailable || colorCyclingAllowed){
+            unlockAllImg.setVisibility(View.GONE);
+            unlockAllPurchasedImg.setVisibility(View.VISIBLE);
+        }
 
     }
 

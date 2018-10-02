@@ -1403,7 +1403,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 if(MainActivity.reinstateHint <= 2) {
                     if(MainActivity.reinstateHint == 2) {
-                        MainActivity.toast.setText("HINT: long click to reinstate a canceled task.");
+                        //TODO 'canceled' is the US spelling
+                        MainActivity.toast.setText("HINT: long click to reinstate a cancelled task.");
                         final Handler handler = new Handler();
 
                         final Runnable runnable = new Runnable() {
@@ -1453,9 +1454,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             handler.postDelayed(runnable, 500);
                         }
-                        MainActivity.reinstateHint++;
-                        MainActivity.db.updateReinstateHint(MainActivity.reinstateHint);
                     }
+                    MainActivity.reinstateHint++;
+                    MainActivity.db.updateReinstateHint(MainActivity.reinstateHint);
                 }else{
                     if(MainActivity.showMotivation) {
                         MainActivity.toast.setText(R.string.youKilledThisTask);
