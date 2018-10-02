@@ -79,6 +79,10 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL20 = "DUESSET";
     public static final String UCOL21 = "MOTIVATION";
     public static final String UCOL22 = "REPEATHINT";
+    public static final String UCOL23 = "RENAMEHINT";
+    public static final String UCOL24 = "REINSTATEHINT";
+    public static final String UCOL25 = "TIMESTARTED";
+    public static final String UCOL26 = "REVIEWED";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -112,7 +116,8 @@ public class Database extends SQLiteOpenHelper {
                 " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
                 "CHECKLISTLISTSIZE INTEGER, SETALARM BOOLEAN, YEAR INTEGER, MONTH INTEGER," +
                 " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER, AMPM INTEGER," +
-                " CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN, REPEATHINT INTEGER)");
+                " CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN, REPEATHINT INTEGER," +
+                " RENAMEHINT INTEGER, REINSTATEHINT INTEGER, TIMESTARTED INTEGER, REVIEWED BOOLEAN)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -195,6 +200,7 @@ public class Database extends SQLiteOpenHelper {
     public boolean insertUniversalData(boolean mute){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
+        Calendar calendar = Calendar.getInstance();
         content.put(UCOL1, 0);
         content.put(UCOL2, mute);
         content.put(UCOL3, "#FF00FF00");
@@ -211,13 +217,16 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL14, 0);
         content.put(UCOL15, 0);
         content.put(UCOL16, 0);
-        Calendar cal = Calendar.getInstance();
-        content.put(UCOL17, (cal.getTimeInMillis() / 1000 / 60 / 60));
+        content.put(UCOL17, (calendar.getTimeInMillis() /1000 /60 /60));
         content.put(UCOL18, 0);
         content.put(UCOL19, 0);
         content.put(UCOL20, 0);
         content.put(UCOL21, true);
         content.put(UCOL22, 0);
+        content.put(UCOL23, 0);
+        content.put(UCOL24, 0);
+        content.put(UCOL25, (calendar.getTimeInMillis() /1000 /60 /60));
+        content.put(UCOL26, false);
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -699,6 +708,30 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL22, hint);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateRenameHint(int hint){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL23, hint);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateReinstateHint(int hint){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL24, hint);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateReviewed(boolean reviewed){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL26, reviewed);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }

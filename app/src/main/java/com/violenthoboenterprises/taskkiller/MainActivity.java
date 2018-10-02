@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +18,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -130,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static boolean showMotivation;
     //don't show due dates until after ids have been reordered
     static boolean showDueDates;
+    //used to determine whether or not to ask for review
+    boolean reviewed;
 
     //Indicates which task has it's properties showing
     static int activeTask;
@@ -149,6 +153,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static int duesSet;
     //indicates if the repeat hint should be shown
     static int repeatHint;
+    //indicates if the rename hint should be shown
+    static int renameHint;
+    //indicates if the reinstate hint should be shown
+    static int reinstateHint;
+    //timestamp that keeps record of when user downloaded the app. Used for determining when to prompt for a review
+    int launchTime;
 
     //Interval between repeating alarms
     static long repeatInterval;
@@ -248,6 +258,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static MediaPlayer chime;
     //Sound played when user selects a remove button
     static MediaPlayer trash;
+    //Sound played when user is presented with a hint
+    static MediaPlayer hint;
 
     //The action bar
     private Toolbar toolbarDark;
@@ -357,6 +369,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         blip = MediaPlayer.create(this, R.raw.blip);
         chime = MediaPlayer.create(this, R.raw.chime);
         trash = MediaPlayer.create(this, R.raw.trash);
+        hint = MediaPlayer.create(this, R.raw.hint);
         mute = false;
 //        colorPicker = findViewById(R.id.colorPicker);
 //        white = findViewById(R.id.white);
@@ -423,6 +436,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         showDueDates = true;
         divider = findViewById(R.id.divider);
         repeatHint = 0;
+        renameHint = 0;
+        launchTime = 0;
 
 //        final View child = topToolbar.getChildAt(2);
 //        if (child instanceof ActionMenuView)
@@ -610,9 +625,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                res.close();
 //
 //                showMessage("Data", buffer.toString());
-//
-//            }
-//
+//}
 //        });
 
         //Used for debugging purposes
@@ -781,37 +794,99 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                         reorderList = true;
 
-                        if (showMotivation) {
-                            //showing motivational toast
-                            int i = random.nextInt(6);
-                            while (motivation[i].equals(lastToast)) {
-                                i = random.nextInt(6);
-                            }
-                            lastToast = motivation[i];
-                            toast.setText(motivation[i]);
-                            final Handler handler = new Handler();
+                        if(MainActivity.renameHint <= 2) {
+                            if(MainActivity.renameHint == 2) {
+                                MainActivity.toast.setText("HINT: long click task to rename.");
+                                final Handler handler = new Handler();
 
-                            final Runnable runnable = new Runnable() {
-                                public void run() {
-                                    if (!mute) {
-                                        sweep.start();
+                                final Runnable runnable = new Runnable() {
+                                    public void run() {
+                                        hint.start();
+                                        MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                                (MainActivity.this, R.anim.enter_from_right_fast));
+                                        MainActivity.toastView.setVisibility(View.VISIBLE);
+                                        final Handler handler2 = new Handler();
+                                        final Runnable runnable2 = new Runnable() {
+                                            public void run() {
+                                                MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                                        (MainActivity.this, android.R.anim.fade_out));
+                                                MainActivity.toastView.setVisibility(View.GONE);
+                                            }
+                                        };
+                                        handler2.postDelayed(runnable2, 2500);
                                     }
-                                    toastView.startAnimation(AnimationUtils.loadAnimation
-                                            (MainActivity.this, R.anim.enter_from_right_fast));
-                                    toastView.setVisibility(View.VISIBLE);
-                                    final Handler handler2 = new Handler();
-                                    final Runnable runnable2 = new Runnable() {
+                                };
+
+                                handler.postDelayed(runnable, 500);
+                            }else{
+                                if (showMotivation) {
+                                    //showing motivational toast
+                                    int i = random.nextInt(6);
+                                    while (motivation[i].equals(lastToast)) {
+                                        i = random.nextInt(6);
+                                    }
+                                    lastToast = motivation[i];
+                                    toast.setText(motivation[i]);
+                                    final Handler handler = new Handler();
+
+                                    final Runnable runnable = new Runnable() {
                                         public void run() {
+                                            if (!mute) {
+                                                sweep.start();
+                                            }
                                             toastView.startAnimation(AnimationUtils.loadAnimation
-                                                    (MainActivity.this, android.R.anim.fade_out));
-                                            toastView.setVisibility(View.GONE);
+                                                    (MainActivity.this, R.anim.enter_from_right_fast));
+                                            toastView.setVisibility(View.VISIBLE);
+                                            final Handler handler2 = new Handler();
+                                            final Runnable runnable2 = new Runnable() {
+                                                public void run() {
+                                                    toastView.startAnimation(AnimationUtils.loadAnimation
+                                                            (MainActivity.this, android.R.anim.fade_out));
+                                                    toastView.setVisibility(View.GONE);
+                                                }
+                                            };
+                                            handler2.postDelayed(runnable2, 1500);
                                         }
                                     };
-                                    handler2.postDelayed(runnable2, 1500);
-                                }
-                            };
 
-                            handler.postDelayed(runnable, 500);
+                                    handler.postDelayed(runnable, 500);
+                                }
+                            }
+                            MainActivity.renameHint++;
+                            MainActivity.db.updateRenameHint(MainActivity.renameHint);
+                        }else{
+                            if (showMotivation) {
+                                //showing motivational toast
+                                int i = random.nextInt(6);
+                                while (motivation[i].equals(lastToast)) {
+                                    i = random.nextInt(6);
+                                }
+                                lastToast = motivation[i];
+                                toast.setText(motivation[i]);
+                                final Handler handler = new Handler();
+
+                                final Runnable runnable = new Runnable() {
+                                    public void run() {
+                                        if (!mute) {
+                                            sweep.start();
+                                        }
+                                        toastView.startAnimation(AnimationUtils.loadAnimation
+                                                (MainActivity.this, R.anim.enter_from_right_fast));
+                                        toastView.setVisibility(View.VISIBLE);
+                                        final Handler handler2 = new Handler();
+                                        final Runnable runnable2 = new Runnable() {
+                                            public void run() {
+                                                toastView.startAnimation(AnimationUtils.loadAnimation
+                                                        (MainActivity.this, android.R.anim.fade_out));
+                                                toastView.setVisibility(View.GONE);
+                                            }
+                                        };
+                                        handler2.postDelayed(runnable2, 1500);
+                                    }
+                                };
+
+                                handler.postDelayed(runnable, 500);
+                            }
                         }
                     }
 
@@ -2288,6 +2363,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             duesSet = dbResult.getInt(19);
             showMotivation = dbResult.getInt(20) > 0;
             repeatHint = dbResult.getInt(21);
+            renameHint = dbResult.getInt(22);
+            reinstateHint = dbResult.getInt(23);
+            launchTime = dbResult.getInt(24);
+            reviewed = dbResult.getInt(25) > 0;
         }
         dbResult.close();
 
@@ -2337,6 +2416,35 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //Checks to see if there are still tasks left
         noTasksLeft();
+
+        Calendar calendar = Calendar.getInstance();
+
+        if(!reviewed && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 72))
+                || (launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 168)
+                || (launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 732)
+                || (launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 1464)){
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle("Please Rate Us");
+                alert.setIcon(R.drawable.ic_launcher_og);
+                alert.setMessage("Thanks for using the application. If you like YOUR APP NAME please rate us! Your feedback is important for us!");
+                alert.setPositiveButton("Rate it",new Dialog.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int whichButton){
+                        reviewed = true;
+                        db.updateReviewed(reviewed);
+                        String url = "https://play.google.com/store"/*/apps/details?id=YOUR PACKAGE NAME"*/;
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                    }
+                });
+                alert.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
+            }
 
     }
 

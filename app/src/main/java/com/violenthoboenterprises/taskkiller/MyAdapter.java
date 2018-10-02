@@ -1400,31 +1400,90 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.db.updateIgnored(MainActivity.sortedIDs
                         .get(position), false);
 
-                if(MainActivity.showMotivation) {
-                    MainActivity.toast.setText(R.string.youKilledThisTask);
-                    final Handler handler = new Handler();
 
-                    final Runnable runnable = new Runnable() {
-                        public void run() {
-                            if (!MainActivity.mute) {
-                                MainActivity.sweep.start();
+                if(MainActivity.reinstateHint <= 2) {
+                    if(MainActivity.reinstateHint == 2) {
+                        MainActivity.toast.setText("HINT: long click to reinstate a canceled task.");
+                        final Handler handler = new Handler();
+
+                        final Runnable runnable = new Runnable() {
+                            public void run() {
+                                MainActivity.hint.start();
+                                MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                        (getContext(), R.anim.enter_from_right_fast));
+                                MainActivity.toastView.setVisibility(View.VISIBLE);
+                                final Handler handler2 = new Handler();
+                                final Runnable runnable2 = new Runnable() {
+                                    public void run() {
+                                        MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                                (getContext(), android.R.anim.fade_out));
+                                        MainActivity.toastView.setVisibility(View.GONE);
+                                    }
+                                };
+                                handler2.postDelayed(runnable2, 2500);
                             }
-                            MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                    (getContext(), R.anim.enter_from_right_fast));
-                            MainActivity.toastView.setVisibility(View.VISIBLE);
-                            final Handler handler2 = new Handler();
-                            final Runnable runnable2 = new Runnable() {
+                        };
+
+                        handler.postDelayed(runnable, 500);
+                    }else{
+                        if(MainActivity.showMotivation) {
+                            MainActivity.toast.setText(R.string.youKilledThisTask);
+                            final Handler handler = new Handler();
+
+                            final Runnable runnable = new Runnable() {
                                 public void run() {
+                                    if (!MainActivity.mute) {
+                                        MainActivity.sweep.start();
+                                    }
                                     MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                            (getContext(), android.R.anim.fade_out));
-                                    MainActivity.toastView.setVisibility(View.GONE);
+                                            (getContext(), R.anim.enter_from_right_fast));
+                                    MainActivity.toastView.setVisibility(View.VISIBLE);
+                                    final Handler handler2 = new Handler();
+                                    final Runnable runnable2 = new Runnable() {
+                                        public void run() {
+                                            MainActivity.toastView.startAnimation(AnimationUtils
+                                                    .loadAnimation(getContext(),
+                                                            android.R.anim.fade_out));
+                                            MainActivity.toastView.setVisibility(View.GONE);
+                                        }
+                                    };
+                                    handler2.postDelayed(runnable2, 1500);
                                 }
                             };
-                            handler2.postDelayed(runnable2, 1500);
-                        }
-                    };
 
-                    handler.postDelayed(runnable, 500);
+                            handler.postDelayed(runnable, 500);
+                        }
+                        MainActivity.reinstateHint++;
+                        MainActivity.db.updateReinstateHint(MainActivity.reinstateHint);
+                    }
+                }else{
+                    if(MainActivity.showMotivation) {
+                        MainActivity.toast.setText(R.string.youKilledThisTask);
+                        final Handler handler = new Handler();
+
+                        final Runnable runnable = new Runnable() {
+                            public void run() {
+                                if (!MainActivity.mute) {
+                                    MainActivity.sweep.start();
+                                }
+                                MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
+                                        (getContext(), R.anim.enter_from_right_fast));
+                                MainActivity.toastView.setVisibility(View.VISIBLE);
+                                final Handler handler2 = new Handler();
+                                final Runnable runnable2 = new Runnable() {
+                                    public void run() {
+                                        MainActivity.toastView.startAnimation(AnimationUtils
+                                                .loadAnimation(getContext(),
+                                                        android.R.anim.fade_out));
+                                        MainActivity.toastView.setVisibility(View.GONE);
+                                    }
+                                };
+                                handler2.postDelayed(runnable2, 1500);
+                            }
+                        };
+
+                        handler.postDelayed(runnable, 500);
+                    }
                 }
 
                 if(!MainActivity.remindersAvailable && !dbTimestamp.equals("0")) {
@@ -1630,7 +1689,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.db.updateShowOnce(
                         MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
-                //TODO Show this only when necessary
                 if(MainActivity.repeatHint <= 10) {
                     if((MainActivity.repeatHint == 1) || (MainActivity.repeatHint == 10)) {
                         MainActivity.toast.setText(R.string.youCanCancelRepeat);
@@ -1638,9 +1696,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         final Runnable runnable = new Runnable() {
                             public void run() {
-                                if (!MainActivity.mute) {
-                                    MainActivity.sweep.start();
-                                }
+                                MainActivity.hint.start();
                                 MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                         (getContext(), R.anim.enter_from_right_fast));
                                 MainActivity.toastView.setVisibility(View.VISIBLE);
@@ -1661,7 +1717,6 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.repeatHint++;
                     MainActivity.db.updateRepeatHint(MainActivity.repeatHint);
                 }
-                Log.i(TAG, "Repeat hint: " + MainActivity.repeatHint);
 
                 propertyRow.setVisibility(View.GONE);
 
@@ -3721,7 +3776,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                     handler2.postDelayed(runnable2, 1500);
                                 }
                             };
-
                             handler.postDelayed(runnable, 500);
                         }
 
@@ -3972,7 +4026,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                    Log.i(TAG, "Dates: " + MainActivity.duesSet);
                     if(MainActivity.duesSet < 3) {
                     MainActivity.vibrate.vibrate(50);
 
