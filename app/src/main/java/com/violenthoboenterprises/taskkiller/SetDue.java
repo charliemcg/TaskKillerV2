@@ -41,7 +41,7 @@ import java.util.Calendar;
 public class SetDue extends MainActivity {
 
     static String TAG;
-    private static Toolbar dueToolbar;
+    private Toolbar dueToolbar;
     LinearLayout dateButton, timeButton, darkRepeat, lightRepeat;
     static ImageView time, timeFadedDark, timeFadedLight, calendar, calendarFadedDark, calendarFadedLight;
     ImageView dailyDark, weeklyDark, monthlyDark, cancelRepeatDark,
@@ -300,6 +300,8 @@ public class SetDue extends MainActivity {
 //                }
 
                 vibrate.vibrate(50);
+
+                Log.i(TAG, "kill alarm: " + killAlarm);
 
                 DialogFragment dialogfragment = new TimePickerDialogFrag();
 
@@ -975,7 +977,8 @@ public class SetDue extends MainActivity {
             timeTextView.setTextSize(25);
 
             //TODO find out why this crashes
-            dueToolbar.getMenu().getItem(0).setVisible(true);
+//            dueToolbar.getMenu().getItem(0).setVisible(true);
+            killAlarm.setVisible(true);
 
         }
     }

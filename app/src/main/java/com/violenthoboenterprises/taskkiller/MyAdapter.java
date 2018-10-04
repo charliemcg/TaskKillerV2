@@ -4834,10 +4834,36 @@ class MyAdapter extends ArrayAdapter<String> {
                          month, day,
                          amPmHour, minute);
 
+                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                 // detect duplicates and then adjusting the timestamp on the millisecond level
+                 long futureStamp = futureDate.getTimeInMillis() / 1000;
+                 String tempTimestamp = "";
+                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                     Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                             MainActivity.sortedIDs.get(i)));
+                     while (tempResult.moveToNext()) {
+                         tempTimestamp = tempResult.getString(3);
+                     }
+                     tempResult.close();
+                     if(futureStamp == Long.parseLong(tempTimestamp)){
+                         futureStamp++;
+                         i = 0;
+                     }
+
+                 }
+
                  //updating timestamp
-                     MainActivity.db.updateTimestamp(String.valueOf(
-                             MainActivity.sortedIDs.get(position)),
-                             String.valueOf(futureDate.getTimeInMillis() / 1000));
+                 MainActivity.db.updateTimestamp(String.valueOf(
+                         MainActivity.sortedIDs.get(position)),
+                         String.valueOf(futureStamp));
+
+//                 //updating timestamp
+//                     MainActivity.db.updateTimestamp(String.valueOf(
+//                             MainActivity.sortedIDs.get(position)),
+//                             String.valueOf(futureDate.getTimeInMillis() / 1000));
+                 Log.i(TAG, "Getting updated here");
+
+
 
 
                      //intention to execute AlertReceiver
