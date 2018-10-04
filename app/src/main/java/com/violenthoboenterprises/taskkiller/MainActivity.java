@@ -121,11 +121,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static boolean snoozeRowShowing;
     //used to indicate that a task was long clicked
     static boolean longClicked;
-    static boolean killedAnimation;
-    static boolean alarmAnimation;
-    static boolean reinstateAnimation;
-    static int animatePosition;
-    static int animateID;
+//    static boolean killedAnimation;
+//    static boolean alarmAnimation;
+//    static boolean reinstateAnimation;
+//    static int animatePosition;
+//    static int animateID;
 
     //task properties require exit animation
     static boolean exitTaskProperties;
@@ -173,9 +173,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static long repeatInterval;
 
     //Helps to determine if keyboard is up in portrait orientation
-    private double portraitKeyboardMeasure;
+    public double portraitKeyboardMeasure;
     //Helps to determine if keyboard is up in landscape orientation
-    private double landscapeKeyboardMeasure;
+    public double landscapeKeyboardMeasure;
 
     //List of task names
     public static ArrayList<String> taskList;
@@ -446,10 +446,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         snoozeRowShowing = false;
         toast = findViewById(R.id.toast);
         toastView = findViewById(R.id.toastView);
-        killedAnimation = false;
-        reinstateAnimation = false;
-        animatePosition = 0;
-        animateID = 0;
+//        killedAnimation = false;
+//        reinstateAnimation = false;
+//        animatePosition = 0;
+//        animateID = 0;
         longClicked = false;
         //TODO add support for landscape
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -1856,10 +1856,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         heightDiff = activityRootView.getRootView().getHeight() -
                                 (screen.bottom - screen.top);
 
+//                        Log.i(TAG, "Heightdiff: " + heightDiff + "\ndeviceHeight: " + deviceheight + "\nbottom: " + screen.bottom + "\ntop: " + screen.top);
+
                         //Value of more than 800 seems to indicate that the keyboard is showing
                         //in portrait mode
-                        if ((heightDiff > /*800*/portraitKeyboardMeasure) && (getResources()
-                                .getConfiguration().orientation == 1)) {
+//                        if ((heightDiff > /*800*/portraitKeyboardMeasure) && (getResources()
+//                                .getConfiguration().orientation == 1)) {
+                        if(screen.bottom != deviceheight/* && (getResources().getConfiguration().orientation == 1)*/){
 
                             fadeTasks = true;
 
@@ -1874,6 +1877,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             taskNameEditText.setFocusable(true);
 
                             taskNameEditText.requestFocus();
+
+                            //Keyboard is inactive without this line
+                            taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
                             //Textbox is visible and 'add' button is gone
                             // whenever keyboard is showing
@@ -1894,36 +1900,38 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                                 (heightDiff < /*800*/portraitKeyboardMeasure) && (getResources()
                                 .getConfiguration().orientation == 2)){
 
-                            fadeTasks = true;
-
-                            if (goToMyAdapter) {
-
-                                theListView.setAdapter(theAdapter[0]);
-
-                                goToMyAdapter = false;
-
-                            }
-
-                            taskNameEditText.setFocusable(true);
-
-                            taskNameEditText.requestFocus();
-
-                            //Textbox is visible and 'add' button is gone
-                            // whenever keyboard is showing
-                            taskNameEditText.setVisibility(View.VISIBLE);
-
-                            //Keyboard is inactive without this line
-                            taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-
-                            params.height = 0;
-                            iconParams.height = 0;
-
-                            add.setLayoutParams(params);
-                            addIcon.setLayoutParams(iconParams);
-
-                            tasksAreClickable = false;
-
-                            restoreNormalListView = true;
+//                            Log.i(TAG, "In landscape");
+//
+//                            fadeTasks = true;
+//
+//                            if (goToMyAdapter) {
+//
+//                                theListView.setAdapter(theAdapter[0]);
+//
+//                                goToMyAdapter = false;
+//
+//                            }
+//
+//                            taskNameEditText.setFocusable(true);
+//
+//                            taskNameEditText.requestFocus();
+//
+//                            //Textbox is visible and 'add' button is gone
+//                            // whenever keyboard is showing
+//                            taskNameEditText.setVisibility(View.VISIBLE);
+//
+//                            //Keyboard is inactive without this line
+//                            taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+//
+//                            params.height = 0;
+//                            iconParams.height = 0;
+//
+//                            add.setLayoutParams(params);
+//                            addIcon.setLayoutParams(iconParams);
+//
+//                            tasksAreClickable = false;
+//
+//                            restoreNormalListView = true;
 
                         }else if(restoreNormalListView){
 
@@ -2048,19 +2056,23 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     public void complete(View view) {
 
-        if(!mute) {
-            punch.start();
+        if(tasksAreClickable) {
+
+            if (!mute) {
+                punch.start();
+            }
+
+            LinearLayout parentLayout = (LinearLayout) view.getParent();
+
+            thePosition = theListView.getPositionForView(parentLayout);
+
+            completeTask = true;
+
+            theListView.performItemClick(theListView.getAdapter().getView(
+                    thePosition, null, null), thePosition,
+                    theListView.getAdapter().getItemId(thePosition));
+
         }
-
-        LinearLayout parentLayout = (LinearLayout)view.getParent();
-
-        thePosition = theListView.getPositionForView(parentLayout);
-
-        completeTask = true;
-
-        theListView.performItemClick(theListView.getAdapter().getView(
-                thePosition, null, null), thePosition,
-                theListView.getAdapter().getItemId(thePosition));
 
     }
 

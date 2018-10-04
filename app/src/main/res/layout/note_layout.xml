@@ -112,6 +112,16 @@
             android:visibility="gone"/>
 
         <ImageView
+            android:id="@+id/submitNoteOneHalf"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_one_half"
+            android:visibility="gone"/>
+
+        <ImageView
             android:id="@+id/submitNoteTwo"
             android:layout_width="0dp"
             android:layout_height="40dp"
@@ -119,6 +129,16 @@
             android:padding="5dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/submit_two"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/submitNoteTwoHalf"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_two_half"
             android:visibility="gone"/>
 
         <!--<ImageView-->

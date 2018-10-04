@@ -407,7 +407,8 @@ public class Checklist extends MainActivity {
 
                 //Value of more than 800 seems to indicate that the keyboard is showing
                 //in portrait mode
-                if ((heightDiff > 800) && (getResources().getConfiguration().orientation == 1)) {
+//                if ((heightDiff > /*800*/portraitKeyboardMeasure) && (getResources().getConfiguration().orientation == 1)) {
+                if(screen.bottom != deviceheight){
 
                     if (subTaskBeingEdited) {
 
@@ -418,6 +419,8 @@ public class Checklist extends MainActivity {
                     fadeSubTasks = true;
 
                     if (goToChecklistAdapter) {
+
+                        Log.i(TAG, "I'm in here");
 
                         if(checklist.size() != 0) {
                             checklistView.setAdapter(checklistAdapter[0]);
@@ -429,34 +432,37 @@ public class Checklist extends MainActivity {
 
                     subTasksClickable = false;
 
-                    restoreListView = true;
-
-                //Similar to above but for landscape mode
-                }else if((heightDiff > 73) && (heightDiff < 800) && (getResources()
-                        .getConfiguration().orientation == 2)){
-
-                    if (subTaskBeingEdited) {
-
-                        checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
-
-                    }
-
-                    fadeSubTasks = true;
-
-                    if (goToChecklistAdapter) {
-
-                        checklistView.setAdapter(checklistAdapter[0]);
-
-                        goToChecklistAdapter = false;
-
-                    }
-
-                    subTasksClickable = false;
-
                     //Keyboard is inactive without this line
                     checklistEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
-                    goToChecklistAdapter = true;
+                    restoreListView = true;
+
+                //Similar to above but for landscape mode
+                }else if((heightDiff > /*73*/landscapeKeyboardMeasure) && (heightDiff < /*800*/portraitKeyboardMeasure) && (getResources()
+                        .getConfiguration().orientation == 2)){
+
+//                    if (subTaskBeingEdited) {
+//
+//                        checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
+//
+//                    }
+//
+//                    fadeSubTasks = true;
+//
+//                    if (goToChecklistAdapter) {
+//
+//                        checklistView.setAdapter(checklistAdapter[0]);
+//
+//                        goToChecklistAdapter = false;
+//
+//                    }
+//
+//                    subTasksClickable = false;
+//
+//                    //Keyboard is inactive without this line
+//                    checklistEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+//
+//                    goToChecklistAdapter = true;
 
                 }else if(restoreListView){
 
@@ -596,6 +602,8 @@ public class Checklist extends MainActivity {
         sortedSubtaskIds.clear();
         checklist.clear();
         subTasksKilled.clear();
+
+        goToChecklistAdapter = true;
 
         checkIfKeyboardShowing();
 

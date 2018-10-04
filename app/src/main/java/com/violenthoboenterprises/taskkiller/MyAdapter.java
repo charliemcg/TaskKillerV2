@@ -77,30 +77,15 @@ class MyAdapter extends ArrayAdapter<String> {
         final TableRow taskOverdueRow = taskView.findViewById(R.id.taskIsOverdue);
         //Displays the tasks due date
         TextView dueTextView = taskView.findViewById(R.id.dueTextView);
-        //Button used for marking task as complete
-        ImageView complete = taskView.findViewById(R.id.complete);
-        ImageView completeWhite = taskView.findViewById(R.id.completeWhite);
-        //Graphically depicts a task as being complete
-        ImageView completed = taskView.findViewById(R.id.completed);
-        ImageView completedWhite = taskView.findViewById(R.id.completedWhite);
         //Gives user ability to set alarm on click
         final LinearLayout alarm = taskView.findViewById(R.id.alarm);
-        //Icon needs to changed based on light/dark mode
-        ImageView alarmBtnIcon = taskView.findViewById(R.id.alarmBtnIcon);
-        ImageView alarmBtnIconWhite = taskView.findViewById(R.id.alarmBtnIconWhite);
         //The text on this button needs to change depending on the state of the alarm
         final TextView alarmBtnText = taskView.findViewById(R.id.alarmBtnText);
         //Need the following texts for color changing
         final TextView subtasksBtnText = taskView.findViewById(R.id.subtasksBtnText);
         //Need the following texts for color changing
         final TextView noteBtnText = taskView.findViewById(R.id.noteBtnText);
-        //Icon needs to changed based on light/dark mode
-        ImageView subTasksBtnIcon = taskView.findViewById(R.id.subTasksBtnIcon);
-        ImageView subTasksBtnIconWhite = taskView.findViewById(R.id.subTasksBtnIconWhite);
 //        final TextView noteBtnText = taskView.findViewById(R.id.noteBtnText);
-        //Icon needs to changed based on light/dark mode
-        ImageView noteBtnIcon = taskView.findViewById(R.id.noteBtnIcon);
-        ImageView noteBtnIconWhite = taskView.findViewById(R.id.noteBtnIconWhite);
         final TextView oneHourBtnText = taskView.findViewById(R.id.oneHourBtnText);
         final TextView fourHoursBtnText = taskView.findViewById(R.id.fourHoursBtnText);
         final TextView tomorrowBtnText = taskView.findViewById(R.id.tomorrowBtnText);
@@ -122,21 +107,9 @@ class MyAdapter extends ArrayAdapter<String> {
         //Task status icons are transparent. This is so the background colour can be
         // changed giving the illusion that the icon image color has changed.
         // Each icon has it's own relative layout.
-        final ImageView dueClear = taskView.findViewById(R.id.dueClear);
-        final ImageView dueClearWhite = taskView.findViewById(R.id.dueClearWhite);
         RelativeLayout dueLayout = taskView.findViewById(R.id.dueLayout);
-        ImageView overdueClear = taskView.findViewById(R.id.overdueClear);
-        ImageView overdueClearWhite = taskView.findViewById(R.id.overdueClearWhite);
         RelativeLayout overdueLayout = taskView.findViewById(R.id.overdueLayout);
-        final ImageView snoozeClear = taskView.findViewById(R.id.snoozeClear);
-        final ImageView snoozeClearWhite = taskView.findViewById(R.id.snoozeClearWhite);
         RelativeLayout snoozeLayout = taskView.findViewById(R.id.snoozeLayout);
-        ImageView repeatClear = taskView.findViewById(R.id.repeatClear);
-        ImageView repeatClearWhite = taskView.findViewById(R.id.repeatClearWhite);
-        ImageView noteClear = taskView.findViewById(R.id.noteClear);
-        ImageView noteClearWhite = taskView.findViewById(R.id.noteClearWhite);
-        ImageView checklistClear = taskView.findViewById(R.id.checklistClear);
-        ImageView checklistClearWhite = taskView.findViewById(R.id.checklistClearWhite);
         //Displays the snooze options on click
         LinearLayout snoozeTask = taskView.findViewById(R.id.snoozeTask);
         //Marks overdue task as done
@@ -148,6 +121,34 @@ class MyAdapter extends ArrayAdapter<String> {
         final LinearLayout fourHourBtn = taskView.findViewById(R.id.fourHours);
         final LinearLayout tomorrowBtn = taskView.findViewById(R.id.tomorrow);
         LinearLayout buffer = taskView.findViewById(R.id.buffer);
+
+        ImageView repeatClear = taskView.findViewById(R.id.repeatClear);
+        ImageView repeatClearWhite = taskView.findViewById(R.id.repeatClearWhite);
+        ImageView noteClear = taskView.findViewById(R.id.noteClear);
+        ImageView noteClearWhite = taskView.findViewById(R.id.noteClearWhite);
+        ImageView checklistClear = taskView.findViewById(R.id.checklistClear);
+        ImageView checklistClearWhite = taskView.findViewById(R.id.checklistClearWhite);
+        ImageView overdueClear = taskView.findViewById(R.id.overdueClear);
+        ImageView overdueClearWhite = taskView.findViewById(R.id.overdueClearWhite);
+        final ImageView snoozeClear = taskView.findViewById(R.id.snoozeClear);
+        final ImageView snoozeClearWhite = taskView.findViewById(R.id.snoozeClearWhite);
+        final ImageView dueClear = taskView.findViewById(R.id.dueClear);
+        final ImageView dueClearWhite = taskView.findViewById(R.id.dueClearWhite);
+        //Icon needs to changed based on light/dark mode
+        ImageView noteBtnIcon = taskView.findViewById(R.id.noteBtnIcon);
+        ImageView noteBtnIconWhite = taskView.findViewById(R.id.noteBtnIconWhite);
+        //Icon needs to changed based on light/dark mode
+        ImageView subTasksBtnIcon = taskView.findViewById(R.id.subTasksBtnIcon);
+        ImageView subTasksBtnIconWhite = taskView.findViewById(R.id.subTasksBtnIconWhite);
+        //Icon needs to changed based on light/dark mode
+        ImageView alarmBtnIcon = taskView.findViewById(R.id.alarmBtnIcon);
+        ImageView alarmBtnIconWhite = taskView.findViewById(R.id.alarmBtnIconWhite);
+        //Button used for marking task as complete
+        ImageView complete = taskView.findViewById(R.id.complete);
+        ImageView completeWhite = taskView.findViewById(R.id.completeWhite);
+        //Graphically depicts a task as being complete
+        ImageView completed = taskView.findViewById(R.id.completed);
+        ImageView completedWhite = taskView.findViewById(R.id.completedWhite);
 
 //        listParams.height = MainActivity.deviceheight - (editTextParams.height + toolbarParams.height + statusHeight);
 //        checklistView.setLayoutParams(listParams);
@@ -424,7 +425,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //                        }
 //                    };
 //
-//                    handler.postDelayed(runnable, 50);
+//                    handler.postDelayed(runnable, 5);
 //                    MainActivity.animatePosition++;
 //                }
 //            }
@@ -950,6 +951,13 @@ class MyAdapter extends ArrayAdapter<String> {
             buffer.setVisibility(View.VISIBLE);
         }
 
+        if(MainActivity.fadeTasks){
+            //Fade out inactive taskviews
+            taskView.startAnimation(AnimationUtils.loadAnimation
+                    (getContext(), android.R.anim.fade_out));
+            taskView.setVisibility(View.INVISIBLE);
+        }
+
         if(MainActivity.longClicked) {
             complete.setVisibility(View.INVISIBLE);
             completeWhite.setVisibility(View.INVISIBLE);
@@ -1425,7 +1433,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 if(MainActivity.reinstateHint <= 2) {
                     if(MainActivity.reinstateHint == 2) {
-                        //TODO 'canceled' is the US spelling
                         MainActivity.toast.setText(R.string.longClickToReinstate);
                         final Handler handler = new Handler();
 
@@ -3762,6 +3769,10 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
+                    if(!MainActivity.mute){
+                        MainActivity.punch.start();
+                    }
+
                     //task is killed if not repeating
                     if(!finalDbRepeat) {
 
@@ -4211,6 +4222,8 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 
             String oldTaskString = theTextView.getText().toString();
+
+            complete.setVisibility(View.GONE);
 
             theTextView.setVisibility(View.GONE);
 
@@ -5103,68 +5116,68 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
-        if(MainActivity.killedAnimation) {
-
-            int tempId = 0;
-            String tempTask = "";
-
-            for (int i = 0; i < MainActivity.taskListSize; i++) {
-
-                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
-                    tempId = Integer.parseInt(tempIdsList.get(i));
-                    tempTask = tempTaskList.get(i);
-                    tempIdsList.remove(i);
-                    tempTaskList.remove(i);
-                    break;
-                }
-
-            }
-
-            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
-            tempTaskList.add(MainActivity.animatePosition, tempTask);
-        }
-
-        if(MainActivity.reinstateAnimation) {
-
-            int tempId = 0;
-            String tempTask = "";
-
-            for (int i = 0; i < MainActivity.taskListSize; i++) {
-
-                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
-                    tempId = Integer.parseInt(tempIdsList.get(i));
-                    tempTask = tempTaskList.get(i);
-                    tempIdsList.remove(i);
-                    tempTaskList.remove(i);
-                    break;
-                }
-
-            }
-
-            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
-            tempTaskList.add(MainActivity.animatePosition, tempTask);
-        }
-
-        if(MainActivity.alarmAnimation) {
-
-            int tempId = 0;
-            String tempTask = "";
-
-            for (int i = 0; i < MainActivity.taskListSize; i++) {
-
-                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
-                    tempId = Integer.parseInt(tempIdsList.get(i));
-                    tempTask = tempTaskList.get(i);
-                    tempIdsList.remove(i);
-                    tempTaskList.remove(i);
-                    break;
-                }
-
-            }
-
-            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
-            tempTaskList.add(MainActivity.animatePosition, tempTask);
-        }
+//        if(MainActivity.killedAnimation) {
+//
+//            int tempId = 0;
+//            String tempTask = "";
+//
+//            for (int i = 0; i < MainActivity.taskListSize; i++) {
+//
+//                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
+//                    tempId = Integer.parseInt(tempIdsList.get(i));
+//                    tempTask = tempTaskList.get(i);
+//                    tempIdsList.remove(i);
+//                    tempTaskList.remove(i);
+//                    break;
+//                }
+//
+//            }
+//
+//            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
+//            tempTaskList.add(MainActivity.animatePosition, tempTask);
+//        }
+//
+//        if(MainActivity.reinstateAnimation) {
+//
+//            int tempId = 0;
+//            String tempTask = "";
+//
+//            for (int i = 0; i < MainActivity.taskListSize; i++) {
+//
+//                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
+//                    tempId = Integer.parseInt(tempIdsList.get(i));
+//                    tempTask = tempTaskList.get(i);
+//                    tempIdsList.remove(i);
+//                    tempTaskList.remove(i);
+//                    break;
+//                }
+//
+//            }
+//
+//            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
+//            tempTaskList.add(MainActivity.animatePosition, tempTask);
+//        }
+//
+//        if(MainActivity.alarmAnimation) {
+//
+//            int tempId = 0;
+//            String tempTask = "";
+//
+//            for (int i = 0; i < MainActivity.taskListSize; i++) {
+//
+//                if (Integer.parseInt(tempIdsList.get(i)) == MainActivity.animateID) {
+//                    tempId = Integer.parseInt(tempIdsList.get(i));
+//                    tempTask = tempTaskList.get(i);
+//                    tempIdsList.remove(i);
+//                    tempTaskList.remove(i);
+//                    break;
+//                }
+//
+//            }
+//
+//            tempIdsList.add(MainActivity.animatePosition, String.valueOf(tempId));
+//            tempTaskList.add(MainActivity.animatePosition, tempTask);
+//        }
 
         MainActivity.sortedIDs = tempIdsList;
         MainActivity.taskList = tempTaskList;

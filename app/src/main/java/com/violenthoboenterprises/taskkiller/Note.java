@@ -38,7 +38,7 @@ public class Note extends MainActivity {
 //    ImageView removeBtnLight;
 //    ImageView removeBtnDarkOpen;
 //    ImageView removeBtnLightOpen;
-    ImageView submitNoteBtnDark, submitNoteOne, submitNoteTwo;
+    ImageView submitNoteBtnDark, submitNoteOne, submitNoteOneHalf, submitNoteTwoHalf, submitNoteTwo;
     ImageView submitNoteBtnLight;
     String TAG;
     String theNote;
@@ -67,6 +67,8 @@ public class Note extends MainActivity {
         submitNoteBtnDark = findViewById(R.id.submitNoteBtnDark);
         submitNoteOne = findViewById(R.id.submitNoteOne);
         submitNoteTwo = findViewById(R.id.submitNoteTwo);
+        submitNoteOneHalf = findViewById(R.id.submitNoteOneHalf);
+        submitNoteTwoHalf = findViewById(R.id.submitNoteTwoHalf);
 //        submitNoteBtnLight = findViewById(R.id.submitNoteBtnLight);
         TAG = "Note";
         theNote = "";
@@ -121,6 +123,9 @@ public class Note extends MainActivity {
             noteToolbar.setSubtitleTextColor(Color.parseColor("#666666"));
 //            submitNoteBtnDark.setVisibility(View.GONE);
         }
+
+        //keyboard will display the default edit text instead of the custom one without this line
+        noteEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
         keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
@@ -322,43 +327,67 @@ public class Note extends MainActivity {
                         public void run() {
 
                             submitNoteOne.setVisibility(View.GONE);
-                            submitNoteTwo.setVisibility(View.VISIBLE);
+                            submitNoteOneHalf.setVisibility(View.VISIBLE);
 
                             final Handler handler3 = new Handler();
 
                             final Runnable runnable3 = new Runnable() {
                                 public void run() {
 
-                                    vibrate.vibrate(50);
+                                    submitNoteOneHalf.setVisibility(View.GONE);
+                                    submitNoteTwo.setVisibility(View.VISIBLE);
 
-                                    if(!mute){
-                                        blip.start();
-                                    }
+                                    final Handler handler4 = new Handler();
 
-                                    submitNoteTwo.setVisibility(View.GONE);
+                                    final Runnable runnable4 = new Runnable() {
+                                        @Override
+                                        public void run() {
 
-                                    //Set text view to the note content
-                                    noteTextView.setText(theNote);
+                                            submitNoteTwo.setVisibility(View.GONE);
+                                            submitNoteTwoHalf.setVisibility(View.VISIBLE);
 
-                                    //Hide text box
-                                    noteEditText.setVisibility(View.GONE);
+                                            final Handler handler5 = new Handler();
 
-                                    submitNoteBtnDark.setVisibility(View.GONE);
+                                            final Runnable runnable5 = new Runnable() {
+                                                @Override
+                                                public void run() {
 
-                                    trashNote.setVisible(true);
+                                                    vibrate.vibrate(50);
 
-                                    //Hide keyboard
-                                    keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                                                    if (!mute) {
+                                                        blip.start();
+                                                    }
 
+                                                    submitNoteTwoHalf.setVisibility(View.GONE);
+
+                                                    //Set text view to the note content
+                                                    noteTextView.setText(theNote);
+
+                                                    //Hide text box
+                                                    noteEditText.setVisibility(View.GONE);
+
+                                                    submitNoteBtnDark.setVisibility(View.GONE);
+
+                                                    trashNote.setVisible(true);
+
+                                                    //Hide keyboard
+                                                    keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                                                }
+                                            };
+                                            handler5.postDelayed(runnable5, 50);
+                                        }
+                                    };
+                                    handler4.postDelayed(runnable4, 50);
                                 }
                             };
-                            handler3.postDelayed(runnable3, 100);
+                            handler3.postDelayed(runnable3, 50);
                         }
                     };
-                    handler2.postDelayed(runnable2, 100);
+                    handler2.postDelayed(runnable2, 50);
                 }
             };
-            handler.postDelayed(runnable, 100);
+            handler.postDelayed(runnable, 50);
 
             /////////////////////////////////////////////////////////
 //            if(!mute) {
