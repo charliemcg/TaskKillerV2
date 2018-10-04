@@ -162,6 +162,8 @@ public class Note extends MainActivity {
 //                    removeBtnDark.setVisibility(View.GONE);
 //                }
 
+                trashNote.setVisible(false);
+
                 //show edit text
                 noteEditText.setVisibility(View.VISIBLE);
 

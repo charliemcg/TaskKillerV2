@@ -15,14 +15,23 @@
         android:elevation="4dp"/>
 
     <TextView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/noteToolbar"
+        android:background="@color/mid_gray"/>
+
+    <TextView
         android:id="@+id/noteTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/noteToolbar"
+        android:layout_below="@+id/divider"
         android:textColor="@color/gray"
         android:textSize="20sp"
         android:scrollbars="vertical"
-        android:paddingLeft="10dp"/>
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"/>
 
     <!--<ImageView-->
         <!--android:id="@+id/removeBtnDark"-->

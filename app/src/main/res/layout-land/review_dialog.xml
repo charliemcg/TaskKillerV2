@@ -25,7 +25,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:text="Task Killer"
+                android:text="@string/app_name"
                 android:textSize="25sp"
                 android:gravity="center_vertical"
                 android:layout_marginLeft="10dp"
@@ -34,7 +34,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:text="Excuses are for the weak."
+                android:text="@string/excusesAreForTheWeak"
                 android:gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/gray"/>
@@ -48,7 +48,7 @@
         android:layout_height="55dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="Looks like you've been productive."
+        android:text="@string/looksLikeYouveBeen"
         android:textColor="@color/gray"
         android:textSize="25dp"
         android:textAlignment="center"/>
@@ -63,7 +63,7 @@
         android:layout_height="55dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="Why not leave a review?"
+        android:text="@string/whyNoteLeaveAReview"
         android:textColor="@color/gray"
         android:textSize="25dp"
         android:textAlignment="center"/>
@@ -81,7 +81,7 @@
             android:layout_weight="1"
             android:background="@drawable/layout_border"
             android:clickable="true"
-            android:text="Later..."
+            android:text="@string/later"
             android:gravity="center"
             android:textColor="@color/gray"
             android:textSize="15sp"/>
@@ -93,7 +93,7 @@
             android:layout_weight="1"
             android:background="@drawable/layout_border"
             android:clickable="true"
-            android:text="OK!"
+            android:text="@string/oKExclamation"
             android:gravity="center"
             android:textColor="@color/gray"
             android:textSize="20sp"/>

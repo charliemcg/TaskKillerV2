@@ -95,11 +95,11 @@ public class SetDue extends MainActivity {
         weeklyLight = findViewById(R.id.weeklyLight);
         monthlyLight = findViewById(R.id.monthlyLight);
         cancelRepeatLight = findViewById(R.id.cancelRepeatLight);
-        divOne = findViewById(R.id.divOne);
+//        divOne = findViewById(R.id.divOne);
         divTwo = findViewById(R.id.divTwo);
         divThree = findViewById(R.id.divThree);
 
-        divOne.setBackgroundColor(Color.parseColor(highlight));
+//        divOne.setBackgroundColor(Color.parseColor(highlight));
         divTwo.setBackgroundColor(Color.parseColor(highlight));
         divThree.setBackgroundColor(Color.parseColor(highlight));
 

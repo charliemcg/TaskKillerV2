@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
     android:descendantFocusability="beforeDescendants"
     android:background="@color/dark_gray">
 
-    <TableRow
+    <RelativeLayout
         android:id="@+id/adRow"
         android:visibility="gone"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:descendantFocusability="blocksDescendants"><!--TODO is this going to block the ad?-->
 
         <com.google.android.gms.ads.AdView
@@ -31,18 +33,14 @@
             android:visibility="gone"
             android:onClick="showPro"/>
 
-    </TableRow>
-
-    <TableRow
-        android:layout_height="100dp"
-        android:layout_width="match_parent"
-        android:id="@+id/taskName">
+    </RelativeLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:descendantFocusability="blocksDescendants">
+            android:layout_width="match_parent"
+            android:descendantFocusability="blocksDescendants"
+            android:id="@+id/taskName">
 
             <TextView
                 android:layout_height="60dp"
@@ -50,6 +48,7 @@
                 android:layout_weight="8"
                 android:id="@+id/textView"
                 android:paddingLeft="15dp"
+                android:gravity="center_vertical"
                 android:paddingTop="5dp"
                 android:textSize="20sp"
                 android:textColor="@color/gray"/>
@@ -106,31 +105,42 @@
 
         </LinearLayout>
 
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-
         <LinearLayout
             android:id="@+id/statusLayout"
             android:orientation="horizontal"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginBottom="5dp">
+
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:id="@+id/dueTextView"-->
+                <!--android:layout_weight="25"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textColor="@color/gray"/>-->
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
+                android:layout_weight="1"
                 android:id="@+id/dueTextView"
-                android:layout_weight="25"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/gray"/>
+
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/checklistLayout"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:layout_weight="1">-->
 
             <RelativeLayout
                 android:id="@+id/checklistLayout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_weight="1">
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/checklistClear"
@@ -149,11 +159,18 @@
 
             </RelativeLayout>
 
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/noteLayout"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:layout_weight="1">-->
+
             <RelativeLayout
                 android:id="@+id/noteLayout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_weight="1">
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/noteClear"
@@ -173,82 +190,17 @@
             </RelativeLayout>
 
             <!--<RelativeLayout-->
-                <!--android:id="@+id/repeatDayLayout"-->
+                <!--android:id="@+id/repeatLayout"-->
                 <!--android:layout_width="25dp"-->
                 <!--android:layout_height="25dp"-->
-                <!--android:visibility="gone"-->
                 <!--android:layout_weight="1">-->
-
-                <!--<ImageView-->
-                    <!--android:id="@+id/repeatDayClear"-->
-                    <!--android:layout_width="25dp"-->
-                    <!--android:layout_height="25dp"-->
-                    <!--android:background="@color/mid_gray"-->
-                    <!--android:src="@drawable/repeat_icon_dark_day"/>-->
-
-                <!--<ImageView-->
-                    <!--android:id="@+id/repeatDayClearWhite"-->
-                    <!--android:layout_width="25dp"-->
-                    <!--android:layout_height="25dp"-->
-                    <!--android:background="@color/mid_gray"-->
-                    <!--android:src="@drawable/repeat_icon_light_day"-->
-                    <!--android:visibility="gone"/>-->
-
-            <!--</RelativeLayout>-->
-
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/repeatWeekLayout"-->
-                <!--android:layout_width="25dp"-->
-                <!--android:layout_height="25dp"-->
-                <!--android:visibility="gone"-->
-                <!--android:layout_weight="1">-->
-
-                <!--<ImageView-->
-                    <!--android:id="@+id/repeatWeekClear"-->
-                    <!--android:layout_width="25dp"-->
-                    <!--android:layout_height="25dp"-->
-                    <!--android:background="@color/mid_gray"-->
-                    <!--android:src="@drawable/repeat_icon_dark_week"/>-->
-
-                <!--<ImageView-->
-                    <!--android:id="@+id/repeatWeekClearWhite"-->
-                    <!--android:layout_width="25dp"-->
-                    <!--android:layout_height="25dp"-->
-                    <!--android:background="@color/mid_gray"-->
-                    <!--android:src="@drawable/repeat_icon_light_week"-->
-                    <!--android:visibility="gone"/>-->
-
-            <!--</RelativeLayout>-->
-
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/repeatMonthLayout"-->
-                <!--android:layout_width="25dp"-->
-                <!--android:layout_height="25dp"-->
-                <!--android:visibility="gone"-->
-                <!--android:layout_weight="1">-->
-
-                <!--<ImageView-->
-                    <!--android:id="@+id/repeatMonthClear"-->
-                    <!--android:layout_width="25dp"-->
-                    <!--android:layout_height="25dp"-->
-                    <!--android:background="@color/mid_gray"-->
-                    <!--android:src="@drawable/repeat_icon_dark_month"/>-->
-
-                <!--<ImageView-->
-                    <!--android:id="@+id/repeatMonthClearWhite"-->
-                    <!--android:layout_width="25dp"-->
-                    <!--android:layout_height="25dp"-->
-                    <!--android:background="@color/mid_gray"-->
-                    <!--android:src="@drawable/repeat_icon_light_month"-->
-                    <!--android:visibility="gone"/>-->
-
-            <!--</RelativeLayout>-->
 
             <RelativeLayout
                 android:id="@+id/repeatLayout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_weight="1">
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/repeatClear"
@@ -267,18 +219,25 @@
 
             </RelativeLayout>
 
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/dueLayout"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:layout_weight="1">-->
+
             <RelativeLayout
                 android:id="@+id/dueLayout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_weight="1">
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/dueClear"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:background="@color/mid_gray"
-                    android:src="@drawable/due_icon_dark"/>
+                    android:src="@drawable/due_icon_dark"
+                    android:background="@color/mid_gray"/>
 
                 <ImageView
                     android:id="@+id/dueClearWhite"
@@ -290,11 +249,18 @@
 
             </RelativeLayout>
 
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/overdueLayout"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:visibility="gone">-->
+
             <RelativeLayout
                 android:id="@+id/overdueLayout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_weight="1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
                 android:visibility="gone">
 
                 <ImageView
@@ -314,11 +280,18 @@
 
             </RelativeLayout>
 
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/snoozeLayout"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:visibility="gone">-->
+
             <RelativeLayout
                 android:id="@+id/snoozeLayout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_weight="1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
                 android:visibility="gone">
 
                 <ImageView
@@ -339,9 +312,8 @@
             </RelativeLayout>
 
         </LinearLayout>
-    </TableRow>
 
-    <TableRow
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <include
@@ -368,6 +340,15 @@
             layout="@layout/task_overdue_layout"
             android:id="@+id/taskIsOverdue"
             android:visibility="gone"/>
-    </TableRow>
+    </LinearLayout>
 
-</TableLayout>
+    <LinearLayout
+        android:id="@+id/buffer"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+    </LinearLayout>
+
+</LinearLayout>

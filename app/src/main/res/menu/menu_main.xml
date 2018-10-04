@@ -15,7 +15,7 @@
     <item
         android:id="@+id/lightDark"
         android:orderInCategory="2"
-        android:title="Dark Mode"
+        android:title="@string/darkMode"
         app:showAsAction="collapseActionView"
         android:checkable="true"/>
     <!--android:orderInCategory="300"-->
@@ -27,25 +27,25 @@
         <!--<menu>-->
         <item
             android:id="@+id/highlight"
-            android:title="Change Color..."
+            android:title="@string/changeColor"
             app:showAsAction="collapseActionView"
             android:orderInCategory="3"/>
             <item
                 android:id="@+id/autoColor"
-                android:title="Cycle Colors Automatically   "
+                android:title="@string/cycleColorsAuto"
                 app:showAsAction="collapseActionView"
                 android:orderInCategory="4"
                 android:checkable="true"
                 android:checked="false"/>
     <item
         android:id="@+id/mute"
-        android:title="Sound FX"
+        android:title="@string/soundFX"
         app:showAsAction="collapseActionView"
         android:orderInCategory="5"
         android:checkable="true"/>
     <item
         android:id="@+id/motivation"
-        android:title="Motivation"
+        android:title="@string/motivation"
         app:showAsAction="collapseActionView"
         android:orderInCategory="6"
         android:checkable="true"/>

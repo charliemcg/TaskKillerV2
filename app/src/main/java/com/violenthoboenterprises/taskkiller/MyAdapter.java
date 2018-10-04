@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -66,9 +68,9 @@ class MyAdapter extends ArrayAdapter<String> {
         //This row changes content depending on what needs to be displayed
         final TableRow propertyRow = taskView.findViewById(R.id.properties);
         //Part of the task view which displays the task name
-        TableRow taskNameRow = taskView.findViewById(R.id.taskName);
+        LinearLayout taskNameRow = taskView.findViewById(R.id.taskName);
         //For displaying the ad
-        final TableRow adRow = taskView.findViewById(R.id.adRow);
+        final RelativeLayout adRow = taskView.findViewById(R.id.adRow);
         //For displaying the snooze options
         final TableRow snoozeRow = taskView.findViewById(R.id.snoozeRow);
         //For displaying the overdue options
@@ -145,6 +147,16 @@ class MyAdapter extends ArrayAdapter<String> {
         final LinearLayout oneHourBtn = taskView.findViewById(R.id.oneHour);
         final LinearLayout fourHourBtn = taskView.findViewById(R.id.fourHours);
         final LinearLayout tomorrowBtn = taskView.findViewById(R.id.tomorrow);
+        LinearLayout buffer = taskView.findViewById(R.id.buffer);
+
+//        listParams.height = MainActivity.deviceheight - (editTextParams.height + toolbarParams.height + statusHeight);
+//        checklistView.setLayoutParams(listParams);
+
+//        LinearLayout.LayoutParams thisParams = (LinearLayout.LayoutParams) taskView.getLayoutParams();
+//        Log.i(TAG, "Task height: " + thisParams.height);
+        //Setting height of the list view
+//        thisParams.height = 350;
+//        taskView.setLayoutParams(thisParams);
 
         //Exit animations for when properties are removed due to user clicking on the list item //TODO complete this and make it less buggy
 //        if((position == MainActivity.activeTask) && !MainActivity.taskPropertiesShowing && MainActivity.timePickerShowing) {
@@ -532,7 +544,7 @@ class MyAdapter extends ArrayAdapter<String> {
             if(!dbOverdue){
 
                 ViewGroup.LayoutParams params = alarm.getLayoutParams();
-                params.width = MainActivity.deviceWidthPortrait / 3;
+                params.width = MainActivity.deviceWidth / 3;
                 alarm.setLayoutParams(params);
                 subTasks.setLayoutParams(params);
                 note.setLayoutParams(params);
@@ -927,6 +939,15 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateHour(0);
             MainActivity.db.updateMinute(0);
             MainActivity.db.updateAmPm(0);
+        }
+
+        if((((MainActivity.taskList.size() - 1) == position)
+                && (MainActivity.taskList.size() > 2)
+                && (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))
+                || (((MainActivity.taskList.size() - 1) == position)
+                && (MainActivity.taskList.size() > 4)
+                && (getContext().getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE))){
+            buffer.setVisibility(View.VISIBLE);
         }
 
         if(MainActivity.longClicked) {
@@ -1734,7 +1755,7 @@ class MyAdapter extends ArrayAdapter<String> {
             if(dbOverdue && !dbSnooze && !dbIgnored){
 
                 ViewGroup.LayoutParams params = snoozeTask.getLayoutParams();
-                params.width = MainActivity.deviceWidthPortrait / 3;
+                params.width = MainActivity.deviceWidth / 3;
                 snoozeTask.setLayoutParams(params);
                 taskDone.setLayoutParams(params);
                 taskIgnore.setLayoutParams(params);
@@ -1758,7 +1779,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 (getContext(), R.anim.exit_out_right));
 
                         ViewGroup.LayoutParams params = oneHourBtn.getLayoutParams();
-                        params.width = MainActivity.deviceWidthPortrait / 3;
+                        params.width = MainActivity.deviceWidth / 3;
                         oneHourBtn.setLayoutParams(params);
                         fourHourBtn.setLayoutParams(params);
                         tomorrowBtn.setLayoutParams(params);
@@ -3687,7 +3708,7 @@ class MyAdapter extends ArrayAdapter<String> {
             }else{
 
                 ViewGroup.LayoutParams params = alarm.getLayoutParams();
-                params.width = MainActivity.deviceWidthPortrait / 3;
+                params.width = MainActivity.deviceWidth / 3;
                 alarm.setLayoutParams(params);
                 subTasks.setLayoutParams(params);
                 note.setLayoutParams(params);
@@ -4739,9 +4760,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                  final Runnable runnable = new Runnable() {
                      public void run() {
-                         if (!MainActivity.mute) {
-                             MainActivity.sweep.start();
-                         }
+//                         if (!MainActivity.mute) {
+                             MainActivity.hint.start();
+//                         }
                          MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                  (getContext(), R.anim.enter_from_right_fast));
                          MainActivity.toastView.setVisibility(View.VISIBLE);
@@ -4770,9 +4791,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                  final Runnable runnable = new Runnable() {
                      public void run() {
-                         if (!MainActivity.mute) {
-                             MainActivity.sweep.start();
-                         }
+//                         if (!MainActivity.mute) {
+                             MainActivity.hint.start();
+//                         }
                          MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
                                  (getContext(), R.anim.enter_from_right_fast));
                          MainActivity.toastView.setVisibility(View.VISIBLE);

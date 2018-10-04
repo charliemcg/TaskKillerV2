@@ -12,13 +12,16 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +51,10 @@ public class Checklist extends MainActivity {
     static int renameMe;
     private static String TAG;
     private Toolbar subTasksToolbar;
+    RelativeLayout.LayoutParams listParams;
+    RelativeLayout.LayoutParams editTextParams;
+    FrameLayout.LayoutParams rootParams;
+    RelativeLayout.LayoutParams toolbarParams;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -70,6 +77,10 @@ public class Checklist extends MainActivity {
         noteExists = false;
         inChecklist = true;
         renameMe = 0;
+        listParams = (RelativeLayout.LayoutParams) checklistView.getLayoutParams();
+        editTextParams = (RelativeLayout.LayoutParams) checklistEditText.getLayoutParams();
+        rootParams = (FrameLayout.LayoutParams) checklistRootView.getLayoutParams();
+        toolbarParams = (RelativeLayout.LayoutParams) subTasksToolbar.getLayoutParams();
 
         String dbTaskId = "";
         Boolean dbLightDark = false;
@@ -616,6 +627,15 @@ public class Checklist extends MainActivity {
         }else{
             subTasksClickable = true;
         }
+
+        //Setting height of the list view
+        int statusHeight = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusHeight = getResources().getDimensionPixelSize(resourceId);
+        }
+        listParams.height = deviceheight - (editTextParams.height + toolbarParams.height + statusHeight);
+        checklistView.setLayoutParams(listParams);
 
     }
 

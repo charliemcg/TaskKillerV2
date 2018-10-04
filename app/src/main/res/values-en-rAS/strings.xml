@@ -2,7 +2,6 @@
     <string name="app_name">Task Killer</string>
     <string name="taskTitle">What are you going to do?</string>
     <string name="checklistItem">Add a sub-task here…</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="smashThatTask">Smash that task!</string>
     <string name="beAWinner">Be a winner!</string>
     <string name="onlyWimpsGiveUp">Only wimps give up!</string>
@@ -31,15 +30,15 @@
     <string name="youCanCancelRepeat">HINT: You can cancel repeat in alarm options.</string>
     <string name="taskNotSnoozedBecause">Task not snoozed because repeat alarm is due.</string>
     <string name="cancelSnooze">Cancel snooze</string>
-    <string name="cannotSetTask">Cannot set task to be completed in the past.</string>
+    <string name="cannotSetTask">Cannot set task to be due in the past.</string>
     <string name="removeAds">Remove Ads</string>
     <string name="permanentlyRemoveAds">Permanently remove all ads.</string>
     <string name="getReminders">Get Reminders</string>
     <string name="setUnlimitedDueDates">Set unlimited due dates and get notifications on your phone.</string>
     <string name="cycleColors">Cycle Colors</string>
-    <string name="featureColorSlowly">The feature color will slowly changes automatically.</string>
+    <string name="featureColorSlowly">The feature color will change several times a day.</string>
     <string name="unlockAll">Unlock All</string>
-    <string name="ultimateValuePack">Ultimate value pack. Unlock all in-app purchases.</string>
+    <string name="ultimateValuePack">Ultimate value pack. Get all in-app purchases.</string>
     <string name="addYourNote">Add your note here…</string>
     <string name="daily">Daily</string>
     <string name="weekly">Weekly</string>
@@ -63,5 +62,16 @@
     <string name="addTime">+Add due time</string>
     <string name="setDateTime">Set Date/Time</string>
     <string name="zero">0</string>
+    <string name="noExcuses">No Excuses</string>
+    <string name="excusesAreForTheWeak">Excuses are for the weak.</string>
+    <string name="looksLikeYouveBeen">Looks like you\'ve been productive.</string>
+    <string name="whyNoteLeaveAReview">Why not leave a review?</string>
+    <string name="later">Later…</string>
+    <string name="oKExclamation">OK!</string>
+    <string name="darkMode">Dark Mode</string>
+    <string name="changeColor">Change Color…</string>
+    <string name="cycleColorsAuto">Cycle Colors Automatically</string>
+    <string name="soundFX">Sound FX</string>
+    <string name="motivation">Motivation</string>
 
 </resources>

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
-        app:subtitle="No Excuses"
+        app:subtitle="@string/noExcuses"
         app:subtitleTextColor="@color/gray"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.DarkTheme"
@@ -26,14 +26,13 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
-        app:subtitle="No Excuses"
+        app:subtitle="@string/noExcuses"
         app:subtitleTextColor="@color/dark_gray"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.LightTheme"
         app:popupTheme="@style/ThemeOverlay.LightTheme"
         android:background="@color/white"
         android:visibility="gone"/>
-    <!--app:subtitle="No Excuses"-->
 
     <TextView
         android:id="@+id/divider"
@@ -67,6 +66,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:layout_margin="5dp"
+                android:paddingLeft="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -82,7 +82,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="3"
-                    android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
                     android:text="@string/permanentlyRemoveAds"/>
 
@@ -140,6 +139,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:layout_margin="5dp"
+                android:paddingRight="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -148,6 +148,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:textSize="20sp"
+                    android:gravity="right"
                     android:text="@string/getReminders"/>
 
                 <TextView
@@ -156,7 +157,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|right"
                     android:text="@string/setUnlimitedDueDates"/>
 
             </LinearLayout>
@@ -172,13 +173,13 @@
             android:orientation="horizontal"
             android:onClick="cycleColors"
             android:background="@drawable/purchases_dropshadow">
-            <!--android:soundEffectsEnabled="false">-->
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:layout_margin="5dp"
+                android:paddingLeft="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -209,12 +210,12 @@
                 android:src="@drawable/auto_color"/>
 
             <ImageView
-                android:id="@+id/cycleColorsImagePurchssed"
+                android:id="@+id/cycleColorsImagePurchased"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/auto_color_purchsed"
+                android:src="@drawable/auto_color_purchased"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -243,13 +244,15 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/unlock_all_purchased"/>
+                android:src="@drawable/unlock_all_purchased"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:layout_margin="5dp"
+                android:paddingRight="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -258,6 +261,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:textSize="20sp"
+                    android:gravity="right"
                     android:text="@string/unlockAll"/>
 
                 <TextView
@@ -266,7 +270,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|right"
                     android:text="@string/ultimateValuePack"/>
 
             </LinearLayout>
@@ -310,7 +314,6 @@
         android:layout_below="@+id/divider"
         android:background="@color/dark_gray"
         android:descendantFocusability="blocksDescendants"/>
-        <!--android:soundEffectsEnabled="false" />-->
 
     <ImageView
         android:layout_width="match_parent"
@@ -378,10 +381,10 @@
         android:id="@+id/toastView"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="470dp"
         android:background="@color/black"
         android:visibility="gone">
+        <!--android:layout_marginTop="470dp"-->
+        <!--android:layout_marginLeft="15dp"-->
 
         <TextView
             android:id="@+id/toast"
@@ -392,9 +395,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_margin="1dp"/>
-        <!--android:visibility="gone"-->
-        <!--android:layout_marginLeft="15dp"-->
-        <!--android:layout_marginTop="470dp"-->
 
     </RelativeLayout>
 

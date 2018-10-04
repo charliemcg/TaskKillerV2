@@ -13,11 +13,18 @@
         style="@style/HeaderBar"
         android:elevation="4dp"/>
 
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/subTasksToolbar"
+        android:background="@color/mid_gray"/>
+
     <ListView
         android:id="@+id/theChecklist"
         android:layout_width="match_parent"
-        android:layout_height="518dp"
-        android:layout_below="@+id/subTasksToolbar"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
         android:background="@color/dark_gray"
         android:descendantFocusability="blocksDescendants"/>
         <!--android:soundEffectsEnabled="false"/>-->

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
-        app:subtitle="No Excuses"
+        app:subtitle="@string/noExcuses"
         app:subtitleTextColor="@color/gray"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.DarkTheme"
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
-        app:subtitle="No Excuses"
+        app:subtitle="@string/noExcuses"
         app:subtitleTextColor="@color/dark_gray"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.LightTheme"
@@ -66,13 +66,13 @@
             android:orientation="horizontal"
             android:onClick="removeAds"
             android:background="@drawable/purchases_dropshadow">
-            <!--android:soundEffectsEnabled="false">-->
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:layout_margin="5dp"
+                android:paddingLeft="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -102,6 +102,15 @@
                 android:layout_margin="10dp"
                 android:src="@drawable/remove_ads"/>
 
+            <ImageView
+                android:id="@+id/removeAdsImagePurchased"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/remove_ads_purchased"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
             <LinearLayout
@@ -113,13 +122,30 @@
                 android:orientation="horizontal"
                 android:onClick="cycleColors"
                 android:background="@drawable/purchases_dropshadow">
-                <!--android:soundEffectsEnabled="false">-->
+
+                <ImageView
+                    android:id="@+id/cycleColorsImage"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/auto_color"/>
+
+                <ImageView
+                    android:id="@+id/cycleColorsImagePurchased"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/auto_color_purchased"
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:layout_margin="5dp"
+                    android:paddingRight="5dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -127,6 +153,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:gravity="right"
                         android:textSize="20sp"
                         android:text="@string/cycleColors"/>
 
@@ -136,18 +163,10 @@
                         android:layout_height="0dp"
                         android:layout_weight="3"
                         android:layout_marginTop="5dp"
-                        android:gravity="center_vertical"
+                        android:gravity="center_vertical|right"
                         android:text="@string/featureColorSlowly"/>
 
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/cycleColorsImage"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_margin="10dp"
-                    android:src="@drawable/auto_color"/>
 
             </LinearLayout>
 
@@ -170,19 +189,12 @@
             android:background="@drawable/purchases_dropshadow">
             <!--android:soundEffectsEnabled="false">-->
 
-            <ImageView
-                android:id="@+id/getRemindersImage"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="10dp"
-                android:src="@drawable/bell"/>
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:layout_margin="5dp"
+                android:paddingLeft="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -204,6 +216,23 @@
 
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/getRemindersImage"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/bell"/>
+
+            <ImageView
+                android:id="@+id/getRemindersImagePurchased"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/bell_purchased"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -215,7 +244,6 @@
             android:onClick="unlockAll"
             android:orientation="horizontal"
             android:background="@drawable/purchases_dropshadow">
-            <!--android:soundEffectsEnabled="false">-->
 
             <ImageView
                 android:id="@+id/unlockAllImage"
@@ -225,11 +253,21 @@
                 android:layout_margin="10dp"
                 android:src="@drawable/unlock_all"/>
 
+            <ImageView
+                android:id="@+id/unlockAllImagePurchased"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:src="@drawable/unlock_all_purchased"
+                android:visibility="gone"/>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:layout_margin="5dp"
+                android:paddingRight="5dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -238,6 +276,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:textSize="20sp"
+                    android:gravity="right"
                     android:text="@string/unlockAll"/>
 
                 <TextView
@@ -246,7 +285,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|right"
                     android:text="@string/ultimateValuePack"/>
 
             </LinearLayout>
@@ -264,19 +303,19 @@
         <!--android:layout_width="100dp"-->
         <!--android:layout_height="100dp"-->
         <!--android:text="DB"/>-->
-    <Button
-        android:id="@+id/showAlarmDb"
-        android:layout_marginTop="500dp"
-        android:layout_marginLeft="100dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="Time"/>
-    <Button
-        android:id="@+id/showUniversalDb"
-        android:layout_marginTop="500dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="Universal DB"/>
+    <!--<Button-->
+        <!--android:id="@+id/showAlarmDb"-->
+        <!--android:layout_marginTop="500dp"-->
+        <!--android:layout_marginLeft="100dp"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:text="Time"/>-->
+    <!--<Button-->
+        <!--android:id="@+id/showUniversalDb"-->
+        <!--android:layout_marginTop="500dp"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:text="Universal DB"/>-->
     <!--<Button-->
         <!--android:id="@+id/showSubtasksDb"-->
         <!--android:layout_marginTop="500dp"-->
@@ -360,10 +399,10 @@
         android:id="@+id/toastView"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="470dp"
         android:background="@color/black"
         android:visibility="gone">
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginTop="470dp"-->
 
         <TextView
             android:id="@+id/toast"

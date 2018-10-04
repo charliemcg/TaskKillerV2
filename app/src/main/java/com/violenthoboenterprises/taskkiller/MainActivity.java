@@ -155,7 +155,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static int listViewHeight;
     static int thePosition;
     //portrait width of device
-    static int deviceWidthPortrait;
+    static int deviceWidth;
+    //portrait height of device
+    static int deviceheight;
     //indicates how many due dates are set because free users have a limitation
     static int duesSet;
     //indicates if the repeat hint should be shown
@@ -242,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //Parameters of 'add' button
     static RelativeLayout.LayoutParams params;
     static RelativeLayout.LayoutParams iconParams;
+    RelativeLayout.LayoutParams toastParams;
 
     //Allow phone to vibrate
     static Vibrator vibrate;
@@ -278,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static MediaPlayer hint;
 
     //The action bar
-    private Toolbar toolbarDark;
+    static Toolbar toolbarDark;
     private Toolbar toolbarLight;
 
     //Action bar options
@@ -327,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     TextView unlockAllTitle;
     TextView unlockAllDescription;
 
-    TextView divider;
+//    TextView divider;
 
     ImageView removeAdsImg;
     ImageView removeAdsPurchasedImg;
@@ -451,7 +454,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //TODO add support for landscape
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        deviceWidthPortrait = displayMetrics.widthPixels;
+        deviceWidth = displayMetrics.widthPixels;
+        deviceheight = displayMetrics.heightPixels;
 //        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
@@ -459,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         duesSet = 0;
         showMotivation = false;
         showDueDates = true;
-        divider = findViewById(R.id.divider);
+//        divider = findViewById(R.id.divider);
         repeatHint = 0;
         renameHint = 0;
         launchTime = 0;
@@ -472,9 +476,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         remindersImg = findViewById(R.id.getRemindersImage);
         remindersPurchasedImg = findViewById(R.id.getRemindersImagePurchased);
         autoColorImg = findViewById(R.id.cycleColorsImage);
-        autoColorPurchasedImg = findViewById(R.id.cycleColorsImagePurchssed);
+        autoColorPurchasedImg = findViewById(R.id.cycleColorsImagePurchased);
         unlockAllImg = findViewById(R.id.unlockAllImage);
         unlockAllPurchasedImg = findViewById(R.id.unlockAllImagePurchased);
+        toastParams = (RelativeLayout.LayoutParams) toastView.getLayoutParams();
+
+
 
 //        final View child = topToolbar.getChildAt(2);
 //        if (child instanceof ActionMenuView)
@@ -933,6 +940,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 //Actions to take when editing existing task
                 }else if(actionId == EditorInfo.IME_ACTION_DONE){
+
+                    if(!mute) {
+                        blip.start();
+                    }
 
                     vibrate.vibrate(50);
 
@@ -1774,7 +1785,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //Checks if there are any existing tasks
         if (taskListSize == 0){
 
-            divider.setVisibility(View.GONE);
+//            divider.setVisibility(View.GONE);
 
             //Inform user to add some tasks
             if(lightDark) {
@@ -1801,7 +1812,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         }else{
 
-            divider.setVisibility(View.VISIBLE);
+//            divider.setVisibility(View.VISIBLE);
             noTasksToShow.setVisibility(View.GONE);
             noTasksToShowWhite.setVisibility(View.GONE);
 //            noTasksToShowLandscape.setVisibility(View.GONE);
@@ -2624,6 +2635,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             unlockAllImg.setVisibility(View.GONE);
             unlockAllPurchasedImg.setVisibility(View.VISIBLE);
         }
+
+        //Setting the position for the toast
+        toastParams.setMargins(15, (int) (deviceheight / 1.35), 0, 0);
 
     }
 

@@ -97,7 +97,6 @@
             android:layout_height="wrap_content"
             android:lines="2"
             android:textColor="#aaaaaa"
-            android:text="Remove me"
             android:gravity="center_vertical"/>
 
     </LinearLayout>
