@@ -880,9 +880,11 @@ public class SetDue extends MainActivity {
                     (Integer.parseInt(dbTaskId));
             String alarmHour = "";
             String alarmMinute = "";
+            String alarmAmPm = "";
             while(alarmResult.moveToNext()){
                 alarmHour = alarmResult.getString(1);
                 alarmMinute = alarmResult.getString(2);
+                alarmAmPm = alarmResult.getString(3);
             }
 
             alarmResult.close();
@@ -891,18 +893,28 @@ public class SetDue extends MainActivity {
             Cursor uniResult = MainActivity.db.getUniversalData();
             int uniHour = 0;
             int uniMinute = 0;
+            int uniAmPm = 0;
             while(uniResult.moveToNext()){
                 uniHour = uniResult.getInt(14);
                 uniMinute = uniResult.getInt(15);
+                uniAmPm = uniResult.getInt(17);
             }
             uniResult.close();
+
+//            int twentyFourHour = hour;
 
             if(timePicked && (uniHour != 0)){
                 minute = uniMinute;
                 hour = uniHour;
+                if(uniAmPm == 1){
+                    hour += 12;
+                }
             }else if(!alarmHour.equals("") && !alarmMinute.equals("")){
                 minute = Integer.parseInt(alarmMinute);
                 hour = Integer.parseInt(alarmHour);
+                if(alarmAmPm.equals("1")){
+                    hour += 12;
+                }
             }else{
                 minute = calendar.get(Calendar.MINUTE);
                 hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -1163,6 +1175,7 @@ public class SetDue extends MainActivity {
         //updating the alarm in myAdapter
         if(setDue) {
             db.updateSetAlarm(true);
+            db.updateIgnored(dbTaskId, false);
             if(!remindersAvailable && dbDueTime.equals("0")) {
                 duesSet++;
                 db.updateDuesSet(duesSet);

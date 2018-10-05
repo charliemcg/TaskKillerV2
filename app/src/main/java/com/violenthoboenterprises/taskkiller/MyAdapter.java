@@ -5301,6 +5301,8 @@ class MyAdapter extends ArrayAdapter<String> {
             }
             dbResult.close();
 
+            Log.i(TAG, "Timestamp: " + dbTimestamp);
+
             tempList.add(Integer.valueOf(dbTimestamp));
 
         }
