@@ -991,6 +991,22 @@ public class SetDue extends MainActivity {
 //                }else{
 //                    db.updateAmPm(1);
 //                }
+            }else{
+                Cursor alarmResult = MainActivity.db.getAlarmData
+                        (Integer.parseInt(dbTaskId));
+                String alarmDay = "";
+                String alarmMonth = "";
+                String alarmYear = "";
+                while(alarmResult.moveToNext()){
+                    alarmDay = alarmResult.getString(4);
+                    alarmMonth = alarmResult.getString(5);
+                    alarmYear = alarmResult.getString(6);
+                }
+
+                alarmResult.close();
+                db.updateDay(Integer.parseInt(alarmDay));
+                db.updateMonth(Integer.parseInt(alarmMonth));
+                db.updateYear(Integer.parseInt(alarmYear));
             }
 
             setDue = true;
