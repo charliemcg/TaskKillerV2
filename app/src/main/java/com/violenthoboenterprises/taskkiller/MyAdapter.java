@@ -1418,12 +1418,10 @@ class MyAdapter extends ArrayAdapter<String> {
 
             //If task due on same day show the due date
             } else if(!sameDay){
-                //TODO account for MM/DD/YYYY https://en.wikipedia.org/wiki/Date_format_by_country
                 //Formatting date
                 String formattedMonth = "";
                 String formattedDate;
 
-                //TODO account for all these numbers in different languages
                 int intMonth = Integer.valueOf(month) + 1;
                 if(intMonth == 1){
                     formattedMonth = getContext().getString(R.string.jan);
@@ -5057,6 +5055,9 @@ class MyAdapter extends ArrayAdapter<String> {
                      && currentDate.get(Calendar.HOUR_OF_DAY) >
                      adjustedHour) {
                  MainActivity.toast.setText(R.string.cannotSetTask);
+                 MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
+                 MainActivity.db.updateRepeatInterval(MainActivity.sortedIDs.get(position), "");
+                 dbRepeat = false;
                  final Handler handler = new Handler();
 
                  final Runnable runnable = new Runnable() {
@@ -5088,6 +5089,9 @@ class MyAdapter extends ArrayAdapter<String> {
                      adjustedHour
                      && currentDate.get(Calendar.MINUTE) > minute) {
                  MainActivity.toast.setText(R.string.cannotSetTask);
+                 MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
+                 MainActivity.db.updateRepeatInterval(MainActivity.sortedIDs.get(position), "");
+                 dbRepeat = false;
                  final Handler handler = new Handler();
 
                  final Runnable runnable = new Runnable() {
