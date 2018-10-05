@@ -191,7 +191,7 @@ public class SetDue extends MainActivity {
                 formattedMonth = getString(R.string.dec);
             }
 
-            dateTextView.setText(alarmDay + " " + formattedMonth + " " + alarmYear);
+            dateTextView.setText(alarmDay + " " + formattedMonth);
 
             String adjustedAmPm = String.valueOf(alarmAmPm)/*getString(R.string.am)*/;
             String adjustedHour = String.valueOf(alarmHour);
@@ -814,7 +814,7 @@ public class SetDue extends MainActivity {
                 formattedMonth = getString(R.string.dec);
             }
 
-            dateTextView.setText(day + " " + formattedMonth + " " + year);
+            dateTextView.setText(day + " " + formattedMonth);
 
             vibrate.vibrate(50);
 
@@ -850,6 +850,22 @@ public class SetDue extends MainActivity {
                     db.updateAmPm(ampm);
                     db.updateMinute(0);
                 }
+            }else{
+                Cursor alarmResult = MainActivity.db.getAlarmData
+                        (Integer.parseInt(dbTaskId));
+                String alarmMinute = "";
+                String alarmHour = "";
+                String alarmAmPm = "";
+                while(alarmResult.moveToNext()){
+                    alarmHour = alarmResult.getString(1);
+                    alarmMinute = alarmResult.getString(2);
+                    alarmAmPm = alarmResult.getString(3);
+                }
+
+                alarmResult.close();
+                db.updateMinute(Integer.parseInt(alarmMinute));
+                db.updateHour(Integer.parseInt(alarmHour));
+                db.updateAmPm(Integer.parseInt(alarmAmPm));
             }
 
             setDue = true;
