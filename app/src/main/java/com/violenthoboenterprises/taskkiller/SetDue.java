@@ -1068,6 +1068,7 @@ public class SetDue extends MainActivity {
             killAlarm.setVisible(true);
 
         }
+
     }
 
     @Override
@@ -1112,6 +1113,8 @@ public class SetDue extends MainActivity {
                     db.updateDay(day);
                     db.updateMonth(month);
                     db.updateYear(year);
+                }else{
+                    getDateFromDB();
                 }
 
                 //Set default time values if user not selected time values already
@@ -1133,6 +1136,8 @@ public class SetDue extends MainActivity {
                         db.updateAmPm(ampm);
                         db.updateMinute(0);
                     }
+                }else{
+                    getTimeFromDB();
                 }
 
                 setDue = true;
@@ -1158,6 +1163,8 @@ public class SetDue extends MainActivity {
                     db.updateDay(day);
                     db.updateMonth(month);
                     db.updateYear(year);
+                }else{
+                    getDateFromDB();
                 }
 
                 //Set default time values if user not selected time values already
@@ -1179,6 +1186,8 @@ public class SetDue extends MainActivity {
                         db.updateAmPm(ampm);
                         db.updateMinute(0);
                     }
+                }else{
+                    getTimeFromDB();
                 }
 
                 setDue = true;
@@ -1200,6 +1209,8 @@ public class SetDue extends MainActivity {
                     db.updateDay(day);
                     db.updateMonth(month);
                     db.updateYear(year);
+                }else{
+                    getDateFromDB();
                 }
 
                 //Set default time values if user not selected time values already
@@ -1221,6 +1232,8 @@ public class SetDue extends MainActivity {
                         db.updateAmPm(ampm);
                         db.updateMinute(0);
                     }
+                }else{
+                    getTimeFromDB();
                 }
 
                 setDue = true;
@@ -1253,6 +1266,42 @@ public class SetDue extends MainActivity {
 
         startActivity(intent);
 
+    }
+
+    private void getDateFromDB() {
+        Cursor alarmResult = MainActivity.db.getAlarmData
+                (Integer.parseInt(dbTaskId));
+        String alarmDay = "";
+        String alarmMonth = "";
+        String alarmYear = "";
+        while(alarmResult.moveToNext()){
+            alarmDay = alarmResult.getString(4);
+            alarmMonth = alarmResult.getString(5);
+            alarmYear = alarmResult.getString(6);
+        }
+
+        alarmResult.close();
+        db.updateDay(Integer.parseInt(alarmDay));
+        db.updateMonth(Integer.parseInt(alarmMonth));
+        db.updateYear(Integer.parseInt(alarmYear));
+    }
+
+    private void getTimeFromDB() {
+        Cursor alarmResult = MainActivity.db.getAlarmData
+                (Integer.parseInt(dbTaskId));
+        String alarmMinute = "";
+        String alarmHour = "";
+        String alarmAmPm = "";
+        while(alarmResult.moveToNext()){
+            alarmHour = alarmResult.getString(1);
+            alarmMinute = alarmResult.getString(2);
+            alarmAmPm = alarmResult.getString(3);
+        }
+
+        alarmResult.close();
+        db.updateMinute(Integer.parseInt(alarmMinute));
+        db.updateHour(Integer.parseInt(alarmHour));
+        db.updateAmPm(Integer.parseInt(alarmAmPm));
     }
 
 }
