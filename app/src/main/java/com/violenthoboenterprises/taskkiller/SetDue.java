@@ -148,12 +148,14 @@ public class SetDue extends MainActivity {
                     (Integer.parseInt(dbTaskId));
             String alarmHour = "";
             String alarmMinute = "";
+            String alarmAmPm = "";
             String alarmDay = "";
             String alarmMonth = "";
             String alarmYear = "";
             while(alarmResult.moveToNext()){
                 alarmHour = alarmResult.getString(1);
                 alarmMinute = alarmResult.getString(2);
+                alarmAmPm = alarmResult.getString(3);
                 alarmDay = alarmResult.getString(4);
                 alarmMonth = alarmResult.getString(5);
                 alarmYear = alarmResult.getString(6);
@@ -191,21 +193,27 @@ public class SetDue extends MainActivity {
 
             dateTextView.setText(alarmDay + " " + formattedMonth + " " + alarmYear);
 
-            String adjustedAmPm = getString(R.string.am);
+            String adjustedAmPm = String.valueOf(alarmAmPm)/*getString(R.string.am)*/;
             String adjustedHour = String.valueOf(alarmHour);
             String adjustedMinute = String.valueOf(alarmMinute);
 
             if(Integer.parseInt(alarmHour) == 0) {
                 adjustedHour = String.valueOf(12);
             }else if(Integer.parseInt(alarmHour) == 12){
-                adjustedAmPm = getString(R.string.pm);
+//                adjustedAmPm = getString(R.string.pm);
             }else if(Integer.parseInt(alarmHour) > 12){
                 adjustedHour = String.valueOf(Integer.parseInt(alarmHour) - 12);
-                adjustedAmPm = getString(R.string.pm);
+//                adjustedAmPm = getString(R.string.pm);
             }
 
             if(Integer.parseInt(alarmMinute) < 10){
                 adjustedMinute = "0" + alarmMinute;
+            }
+
+            if(adjustedAmPm.equals("0")){
+                adjustedAmPm = "am";
+            }else{
+                adjustedAmPm = "pm";
             }
 
             timeTextView.setText(adjustedHour + ":" + adjustedMinute + adjustedAmPm);
