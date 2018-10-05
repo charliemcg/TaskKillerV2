@@ -602,6 +602,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
         //TODO decide if alarm reinstatement is to be a thing in the first place
         //TODO Account for dues set
+        //TODO Don't forget to verify timestamp uniqueness
 //        if(MainActivity.reinstateAlarm){
 //
 //            Boolean isDue = false;
@@ -739,10 +740,36 @@ class MyAdapter extends ArrayAdapter<String> {
         Calendar nowness = new GregorianCalendar();
         if(dbRepeatInterval.equals("day") && !dbTimestamp.equals("")){
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + 86400)) {
+                ///////////////////////////////////////////////
                 //setting new timestamp to a day from previous
-                int newStamp = Integer.parseInt(dbTimestamp) + 86400;
-                MainActivity.db.updateTimestamp(MainActivity.sortedIDs
-                        .get(position), String.valueOf(newStamp));
+//                int newStamp = Integer.parseInt(dbTimestamp) + 86400;
+//                MainActivity.db.updateTimestamp(MainActivity.sortedIDs
+//                        .get(position), String.valueOf(newStamp));
+                ///////////////////////////////////////////////
+
+                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                // detect duplicates and then adjusting the timestamp on the millisecond level
+                long futureStamp = Integer.parseInt(dbTimestamp) + 86400;
+                String tempTimestamp = "";
+                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(i)));
+                    while (tempResult.moveToNext()) {
+                        tempTimestamp = tempResult.getString(3);
+                    }
+                    tempResult.close();
+                    if(futureStamp == Long.parseLong(tempTimestamp)){
+                        futureStamp++;
+                        i = 0;
+                    }
+
+                }
+
+                //updating timestamp
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(position)),
+                        String.valueOf(futureStamp));
+
 
                 if(!alarmDay.equals("")) {
                     int newDay = Integer.parseInt(alarmDay);
@@ -787,10 +814,35 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }else if(dbRepeatInterval.equals("week") && !dbTimestamp.equals("")){
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + 604800)) {
-                //setting new timestamp to a week from previous
-                int newStamp = Integer.parseInt(dbTimestamp) + 604800;
-                MainActivity.db.updateTimestamp(MainActivity.sortedIDs
-                        .get(position), String.valueOf(newStamp));
+                ////////////////////////////////////////////////////////
+//                //setting new timestamp to a week from previous
+//                int newStamp = Integer.parseInt(dbTimestamp) + 604800;
+//                MainActivity.db.updateTimestamp(MainActivity.sortedIDs
+//                        .get(position), String.valueOf(newStamp));
+                ///////////////////////////////////////////////////////
+
+                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                // detect duplicates and then adjusting the timestamp on the millisecond level
+                long futureStamp = Integer.parseInt(dbTimestamp) + 604800;
+                String tempTimestamp = "";
+                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(i)));
+                    while (tempResult.moveToNext()) {
+                        tempTimestamp = tempResult.getString(3);
+                    }
+                    tempResult.close();
+                    if(futureStamp == Long.parseLong(tempTimestamp)){
+                        futureStamp++;
+                        i = 0;
+                    }
+
+                }
+
+                //updating timestamp
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(position)),
+                        String.valueOf(futureStamp));
 
                 if(!alarmDay.equals("")) {
                     int theDay = Integer.parseInt(alarmDay) + 7;
@@ -876,10 +928,35 @@ class MyAdapter extends ArrayAdapter<String> {
             }
 
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + interval)) {
-                //setting new timestamp to a month from previous
-                int newStamp = Integer.parseInt(dbTimestamp) + interval;
-                MainActivity.db.updateTimestamp(MainActivity.sortedIDs
-                        .get(position), String.valueOf(newStamp));
+                //////////////////////////////////////////////////////
+//                //setting new timestamp to a month from previous
+//                int newStamp = Integer.parseInt(dbTimestamp) + interval;
+//                MainActivity.db.updateTimestamp(MainActivity.sortedIDs
+//                        .get(position), String.valueOf(newStamp));
+                /////////////////////////////////////////////////////
+
+                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                // detect duplicates and then adjusting the timestamp on the millisecond level
+                long futureStamp = Integer.parseInt(dbTimestamp) + interval;
+                String tempTimestamp = "";
+                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(i)));
+                    while (tempResult.moveToNext()) {
+                        tempTimestamp = tempResult.getString(3);
+                    }
+                    tempResult.close();
+                    if(futureStamp == Long.parseLong(tempTimestamp)){
+                        futureStamp++;
+                        i = 0;
+                    }
+
+                }
+
+                //updating timestamp
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(position)),
+                        String.valueOf(futureStamp));
 
                 //setting the next alarm because monthly repeats cannot be done automatically
                 MainActivity.pendIntent = PendingIntent.getBroadcast(
@@ -890,7 +967,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 if(MainActivity.remindersAvailable) {
                     MainActivity.alarmManager.set(AlarmManager.RTC,
-                            newStamp, MainActivity.pendIntent);
+                            futureStamp, MainActivity.pendIntent);
                 }
 
                 if(!alarmDay.equals("")) {
@@ -932,6 +1009,7 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         if(uniSetAlarm && (position == MainActivity.activeTask)){
+            Log.i(TAG, "Problem here: " + uniAmPm);
             setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute, uniAmPm);
             MainActivity.db.updateSetAlarm(false);
             MainActivity.db.updateYear(0);
@@ -1037,8 +1115,7 @@ class MyAdapter extends ArrayAdapter<String> {
             Boolean markAsOverdue = false;
 //            if(!dbKilled) {
 
-//            Log.i(TAG, "year: " + year + " month: " + month + " day: " + day);
-//            Log.i(TAG, "id: " + MainActivity.sortedIDs.get(position));
+            Log.i(TAG, "hour: " + hour + " currentHour: " + currentHour + " ampm: " + ampm);
 
                 //Overdue
                 if (currentYear > Integer.valueOf(year)) {
@@ -1168,6 +1245,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth == Integer.valueOf(month)
                         && currentDay == Integer.valueOf(day)) {
+                    Log.i(TAG, "I'm in here");
                     sameDay = true;
                     //Saved hours are in 12 hour time. Accounting for am/pm.
                     int adjustedHour;
@@ -1704,10 +1782,36 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+                ////////////////////////////////////////////////////////////////
                 //updating timestamp
-                int adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
-                MainActivity.db.updateTimestamp(String.valueOf(MainActivity
-                        .sortedIDs.get(position)), String.valueOf(adjustedStamp));
+//                int adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
+//                MainActivity.db.updateTimestamp(String.valueOf(MainActivity
+//                        .sortedIDs.get(position)), String.valueOf(adjustedStamp));
+                ////////////////////////////////////////////////////////////////
+
+                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                // detect duplicates and then adjusting the timestamp on the millisecond level
+                long futureStamp = Integer.parseInt(finalDbTimestamp) + interval;
+                String tempTimestamp = "";
+                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(i)));
+                    while (tempResult.moveToNext()) {
+                        tempTimestamp = tempResult.getString(3);
+                    }
+                    tempResult.close();
+                    if(futureStamp == Long.parseLong(tempTimestamp)){
+                        futureStamp++;
+                        i = 0;
+                    }
+
+                }
+
+                //updating timestamp
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(position)),
+                        String.valueOf(futureStamp));
+
 
                 //updating due time in database
                 MainActivity.db.updateAlarmData(String.valueOf(
@@ -2107,9 +2211,34 @@ class MyAdapter extends ArrayAdapter<String> {
                                             "",
                                             "");
 
-                                    MainActivity.db.updateTimestamp(String.valueOf(MainActivity
-                                            .sortedIDs.get(position)),
-                                            String.valueOf(adjustedStamp));
+                                    ///////////////////////////////////////////////////////////
+//                                    MainActivity.db.updateTimestamp(String.valueOf(MainActivity
+//                                            .sortedIDs.get(position)),
+//                                            String.valueOf(adjustedStamp));
+                                    ///////////////////////////////////////////////////////////
+
+                                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                                    // detect duplicates and then adjusting the timestamp on the millisecond level
+                                    long futureStamp = adjustedStamp;
+                                    String tempTimestamp = "";
+                                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                                                MainActivity.sortedIDs.get(i)));
+                                        while (tempResult.moveToNext()) {
+                                            tempTimestamp = tempResult.getString(3);
+                                        }
+                                        tempResult.close();
+                                        if(futureStamp == Long.parseLong(tempTimestamp)){
+                                            futureStamp++;
+                                            i = 0;
+                                        }
+
+                                    }
+
+                                    //updating timestamp
+                                    MainActivity.db.updateTimestamp(String.valueOf(
+                                            MainActivity.sortedIDs.get(position)),
+                                            String.valueOf(futureStamp));
 
                                     MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
@@ -2626,9 +2755,34 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     "",
                                                     "");
 
-                                            MainActivity.db.updateTimestamp(String.valueOf
-                                                            (MainActivity.sortedIDs.get(position)),
-                                                    String.valueOf(adjustedStamp));
+                                            /////////////////////////////////////////////////////
+//                                            MainActivity.db.updateTimestamp(String.valueOf
+//                                                            (MainActivity.sortedIDs.get(position)),
+//                                                    String.valueOf(adjustedStamp));
+                                            /////////////////////////////////////////////////////
+
+                                            //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                                            // detect duplicates and then adjusting the timestamp on the millisecond level
+                                            long futureStamp = adjustedStamp;
+                                            String tempTimestamp = "";
+                                            for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                                                Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                                                        MainActivity.sortedIDs.get(i)));
+                                                while (tempResult.moveToNext()) {
+                                                    tempTimestamp = tempResult.getString(3);
+                                                }
+                                                tempResult.close();
+                                                if(futureStamp == Long.parseLong(tempTimestamp)){
+                                                    futureStamp++;
+                                                    i = 0;
+                                                }
+
+                                            }
+
+                                            //updating timestamp
+                                            MainActivity.db.updateTimestamp(String.valueOf(
+                                                    MainActivity.sortedIDs.get(position)),
+                                                    String.valueOf(futureStamp));
 
                                             MainActivity.db.updateOverdue(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
@@ -3145,9 +3299,34 @@ class MyAdapter extends ArrayAdapter<String> {
                                             "",
                                             "");
 
-                                    MainActivity.db.updateTimestamp(String.valueOf(MainActivity
-                                                    .sortedIDs.get(position)),
-                                            String.valueOf(adjustedStamp));
+                                    /////////////////////////////////////////////////////
+//                                    MainActivity.db.updateTimestamp(String.valueOf(MainActivity
+//                                                    .sortedIDs.get(position)),
+//                                            String.valueOf(adjustedStamp));
+                                    ////////////////////////////////////////////////////
+
+                                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                                    // detect duplicates and then adjusting the timestamp on the millisecond level
+                                    long futureStamp = adjustedStamp;
+                                    String tempTimestamp = "";
+                                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                                                MainActivity.sortedIDs.get(i)));
+                                        while (tempResult.moveToNext()) {
+                                            tempTimestamp = tempResult.getString(3);
+                                        }
+                                        tempResult.close();
+                                        if(futureStamp == Long.parseLong(tempTimestamp)){
+                                            futureStamp++;
+                                            i = 0;
+                                        }
+
+                                    }
+
+                                    //updating timestamp
+                                    MainActivity.db.updateTimestamp(String.valueOf(
+                                            MainActivity.sortedIDs.get(position)),
+                                            String.valueOf(futureStamp));
 
                                     MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
@@ -3341,9 +3520,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 MainActivity.vibrate.vibrate(100);
 
-//                                if (!MainActivity.mute) {
+                                if (!MainActivity.mute) {
                                     MainActivity.punch.start();
-//                                }
+                                }
 
                                 //kill task if not repeating
                                 if (!finalDbRepeat) {
@@ -3431,12 +3610,37 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     if (finalDbRepeatInterval.equals("day")) {
 
+                                        /////////////////////////////////////////////////////
                                         //adding one day to timestamp
-                                        int adjustedStamp = Integer.parseInt
-                                                (finalDbTimestamp) + 86400;
-                                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
-                                                .sortedIDs.get(position)), String.valueOf
-                                                (adjustedStamp));
+//                                        int adjustedStamp = Integer.parseInt
+//                                                (finalDbTimestamp) + 86400;
+//                                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
+//                                                .sortedIDs.get(position)), String.valueOf
+//                                                (adjustedStamp));
+                                        /////////////////////////////////////////////////////
+
+                                        //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                                        // detect duplicates and then adjusting the timestamp on the millisecond level
+                                        long futureStamp = Integer.parseInt(finalDbTimestamp) + 86400;
+                                        String tempTimestamp = "";
+                                        for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                                            Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                                                    MainActivity.sortedIDs.get(i)));
+                                            while (tempResult.moveToNext()) {
+                                                tempTimestamp = tempResult.getString(3);
+                                            }
+                                            tempResult.close();
+                                            if(futureStamp == Long.parseLong(tempTimestamp)){
+                                                futureStamp++;
+                                                i = 0;
+                                            }
+
+                                        }
+
+                                        //updating timestamp
+                                        MainActivity.db.updateTimestamp(String.valueOf(
+                                                MainActivity.sortedIDs.get(position)),
+                                                String.valueOf(futureStamp));
 
                                         int newDay = Integer.parseInt(finalAlarmDay);
                                         int newMonth = Integer.parseInt(finalAlarmMonth);
@@ -3485,12 +3689,37 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     } else if (finalDbRepeatInterval.equals("week")) {
 
+                                        ///////////////////////////////////////////////////
                                         //adding one week to timestamp
-                                        int adjustedStamp = Integer.parseInt
-                                                (finalDbTimestamp) + 604800;
-                                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
-                                                .sortedIDs.get(position)), String.valueOf
-                                                (adjustedStamp));
+//                                        int adjustedStamp = Integer.parseInt
+//                                                (finalDbTimestamp) + 604800;
+//                                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
+//                                                .sortedIDs.get(position)), String.valueOf
+//                                                (adjustedStamp));
+                                        //////////////////////////////////////////////////
+
+                                        //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                                        // detect duplicates and then adjusting the timestamp on the millisecond level
+                                        long futureStamp = Integer.parseInt(finalDbTimestamp) + 604800;
+                                        String tempTimestamp = "";
+                                        for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                                            Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                                                    MainActivity.sortedIDs.get(i)));
+                                            while (tempResult.moveToNext()) {
+                                                tempTimestamp = tempResult.getString(3);
+                                            }
+                                            tempResult.close();
+                                            if(futureStamp == Long.parseLong(tempTimestamp)){
+                                                futureStamp++;
+                                                i = 0;
+                                            }
+
+                                        }
+
+                                        //updating timestamp
+                                        MainActivity.db.updateTimestamp(String.valueOf(
+                                                MainActivity.sortedIDs.get(position)),
+                                                String.valueOf(futureStamp));
 
                                         int newDay = currentDate.get(Calendar.DAY_OF_MONTH) + 7;
                                         int newMonth = currentDate.get(Calendar.MONTH);
@@ -3586,12 +3815,37 @@ class MyAdapter extends ArrayAdapter<String> {
                                             interval = 2505600;
                                         }
 
+                                        /////////////////////////////////////////////////////
                                         //adding one month to timestamp
-                                        int adjustedStamp = Integer.parseInt
-                                                (finalDbTimestamp) + interval;
-                                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
-                                                        .sortedIDs.get(position)),
-                                                String.valueOf(adjustedStamp));
+//                                        int adjustedStamp = Integer.parseInt
+//                                                (finalDbTimestamp) + interval;
+//                                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
+//                                                        .sortedIDs.get(position)),
+//                                                String.valueOf(adjustedStamp));
+                                        ////////////////////////////////////////////////////
+
+                                        //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                                        // detect duplicates and then adjusting the timestamp on the millisecond level
+                                        long futureStamp = Integer.parseInt(finalDbTimestamp) + interval;
+                                        String tempTimestamp = "";
+                                        for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                                            Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                                                    MainActivity.sortedIDs.get(i)));
+                                            while (tempResult.moveToNext()) {
+                                                tempTimestamp = tempResult.getString(3);
+                                            }
+                                            tempResult.close();
+                                            if(futureStamp == Long.parseLong(tempTimestamp)){
+                                                futureStamp++;
+                                                i = 0;
+                                            }
+
+                                        }
+
+                                        //updating timestamp
+                                        MainActivity.db.updateTimestamp(String.valueOf(
+                                                MainActivity.sortedIDs.get(position)),
+                                                String.valueOf(futureStamp));
 
                                         //setting next alarm
                                         MainActivity.pendIntent = PendingIntent.getBroadcast(
@@ -3602,7 +3856,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         if(MainActivity.remindersAvailable) {
                                             MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                    adjustedStamp, MainActivity.pendIntent);
+                                                    futureStamp, MainActivity.pendIntent);
                                         }
 
                                         int newDay = Integer.parseInt(finalAlarmDay);
@@ -4001,10 +4255,35 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         }
 
+                        //////////////////////////////////////////////////////
                         //updating timestamp
-                        int adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
-                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
-                                .sortedIDs.get(position)), String.valueOf(adjustedStamp));
+//                        int adjustedStamp = Integer.parseInt(finalDbTimestamp) + interval;
+//                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
+//                                .sortedIDs.get(position)), String.valueOf(adjustedStamp));
+                        //////////////////////////////////////////////////////
+
+                        //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                        // detect duplicates and then adjusting the timestamp on the millisecond level
+                        long futureStamp = Integer.parseInt(finalDbTimestamp) + interval;
+                        String tempTimestamp = "";
+                        for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                            Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                                    MainActivity.sortedIDs.get(i)));
+                            while (tempResult.moveToNext()) {
+                                tempTimestamp = tempResult.getString(3);
+                            }
+                            tempResult.close();
+                            if(futureStamp == Long.parseLong(tempTimestamp)){
+                                futureStamp++;
+                                i = 0;
+                            }
+
+                        }
+
+                        //updating timestamp
+                        MainActivity.db.updateTimestamp(String.valueOf(
+                                MainActivity.sortedIDs.get(position)),
+                                String.valueOf(futureStamp));
 
                         //updating due time in database
                         MainActivity.db.updateAlarmData(String.valueOf(
@@ -4834,6 +5113,8 @@ class MyAdapter extends ArrayAdapter<String> {
                          month, day,
                          amPmHour, minute);
 
+                 Log.i(TAG, "hour: " + hour + " amPmHour: " + amPmHour + " ampm: " + ampm);
+
                  //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                  // detect duplicates and then adjusting the timestamp on the millisecond level
                  long futureStamp = futureDate.getTimeInMillis() / 1000;
@@ -4857,11 +5138,12 @@ class MyAdapter extends ArrayAdapter<String> {
                          MainActivity.sortedIDs.get(position)),
                          String.valueOf(futureStamp));
 
+                 //////////////////////////////////////////////////
 //                 //updating timestamp
 //                     MainActivity.db.updateTimestamp(String.valueOf(
 //                             MainActivity.sortedIDs.get(position)),
 //                             String.valueOf(futureDate.getTimeInMillis() / 1000));
-                 Log.i(TAG, "Getting updated here");
+                 /////////////////////////////////////////////////
 
 
 
@@ -4879,6 +5161,8 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            String.valueOf(calendar.get(calendar.MONTH)),
 //                            String.valueOf(calendar.get(calendar.YEAR)));
 
+                 Log.i(TAG, "Am/Pm: " + ampm);
+
                      int adjustedAmPm = 0;
                      if (hour > 11) {
                          adjustedAmPm = 1;
@@ -4888,7 +5172,7 @@ class MyAdapter extends ArrayAdapter<String> {
                              MainActivity.sortedIDs.get(position)),
                              String.valueOf(hour),
                              String.valueOf(minute),
-                             String.valueOf(adjustedAmPm),
+                             String.valueOf(/*adjustedAmPm*/ampm),
                              String.valueOf(day),
                              String.valueOf(month),
                              String.valueOf(year));

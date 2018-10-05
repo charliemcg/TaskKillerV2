@@ -348,12 +348,14 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
         android:id="@+id/noTasks"
         android:src="@drawable/no_tasks_dark_landscape"/>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
         android:id="@+id/noTasksWhite"
         android:src="@drawable/no_tasks_light_landscape"/>
 

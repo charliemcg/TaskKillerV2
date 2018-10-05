@@ -49,14 +49,14 @@
     <string name="done">Done</string>
     <string name="ignore">Ignore</string>
     <string name="setDue">Set Due</string>
-    <string name="subTasks">Sub-Tasks</string>
+    <string name="subTasks">Subtasks</string>
     <string name="getItDone">Get it done!</string>
     <string name="colorCyclingEnabled">When enabled, colours will change several times a day.</string>
     <string name="longClickToRename">HINT: Long click task to rename.</string>
     <string name="chooseColor">Choose Colour</string>
     <string name="oK">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="longClickToReinstate">HINT: Long click to reinstate a cancelled task.</string>
+    <string name="longClickToReinstate">HINT: Long click to reinstate a completed task.</string>
     <string name="note">Note</string>
     <string name="addDate">+Add due date</string>
     <string name="addTime">+Add due time</string>

@@ -335,7 +335,7 @@ public class SetDue extends MainActivity {
 
                 repeating = true;
 
-                dueToolbar.getMenu().getItem(0).setVisible(true);
+//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -365,7 +365,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                dueToolbar.getMenu().getItem(0).setVisible(true);
+//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -395,7 +395,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                dueToolbar.getMenu().getItem(0).setVisible(true);
+//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -425,7 +425,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                dueToolbar.getMenu().getItem(0).setVisible(true);
+//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -455,7 +455,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                dueToolbar.getMenu().getItem(0).setVisible(true);
+//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -485,7 +485,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
-                dueToolbar.getMenu().getItem(0).setVisible(true);
+//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -511,7 +511,7 @@ public class SetDue extends MainActivity {
                 repeat = "none";
 
                 if(!timePicked && !datePicked) {
-                    dueToolbar.getMenu().getItem(0).setVisible(false);
+//                    dueToolbar.getMenu().getItem(0).setVisible(false);
                 }
 
             }
@@ -538,7 +538,7 @@ public class SetDue extends MainActivity {
                 repeat = "none";
 
                 if(!timePicked && !datePicked) {
-                    dueToolbar.getMenu().getItem(0).setVisible(false);
+//                    dueToolbar.getMenu().getItem(0).setVisible(false);
                 }
 
             }
@@ -841,7 +841,7 @@ public class SetDue extends MainActivity {
 
             dateTextView.setTextSize(25);
 
-            killAlarm.setVisible(true);
+//            killAlarm.setVisible(true);
 
         }
 
@@ -914,19 +914,19 @@ public class SetDue extends MainActivity {
             TextView timeTextView = getActivity().findViewById(R.id.timeTextView);
 
             //Formatting and displaying selected time
-            String adjustedAmPm = String.valueOf(R.string.am);
+            String adjustedAmPm = /*String.valueOf(R.string.am)*/"am";
             String adjustedHour = String.valueOf(hour);
-            String adjustedMinute = String.valueOf(minute);
+            String adjustedMinute/* = String.valueOf(minute)*/;
 
             if(hour == 0) {
                 adjustedHour = String.valueOf(12);
                 db.updateAmPm(0);
             }else if(hour == 12){
-                adjustedAmPm = String.valueOf(R.string.pm);
+                adjustedAmPm = /*String.valueOf(R.string.pm)*/"pm";
                 db.updateAmPm(1);
             }else if(hour > 12){
                 adjustedHour = String.valueOf(hour - 12);
-                adjustedAmPm = String.valueOf(R.string.pm);
+                adjustedAmPm = /*String.valueOf(R.string.pm)*/"pm";
                 db.updateAmPm(1);
             }else{
                 adjustedHour = String.valueOf(hour);
@@ -934,10 +934,12 @@ public class SetDue extends MainActivity {
             }
 
             if(minute < 10){
-                adjustedMinute = String.valueOf(R.string.zero) + String.valueOf(minute);
+                adjustedMinute = ":0" + minute;
+            }else{
+                adjustedMinute = ":" + minute;
             }
 
-            timeTextView.setText(adjustedHour + ":" + adjustedMinute + adjustedAmPm);
+            timeTextView.setText(adjustedHour + /*":" +*/adjustedMinute + adjustedAmPm);
 
             MainActivity.vibrate.vibrate(50);
 
@@ -978,7 +980,7 @@ public class SetDue extends MainActivity {
 
             //TODO find out why this crashes
 //            dueToolbar.getMenu().getItem(0).setVisible(true);
-            killAlarm.setVisible(true);
+//            killAlarm.setVisible(true);
 
         }
     }
