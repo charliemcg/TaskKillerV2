@@ -1009,7 +1009,6 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         if(uniSetAlarm && (position == MainActivity.activeTask)){
-            Log.i(TAG, "Problem here: " + uniAmPm);
             setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute, uniAmPm);
             MainActivity.db.updateSetAlarm(false);
             MainActivity.db.updateYear(0);
@@ -1114,8 +1113,6 @@ class MyAdapter extends ArrayAdapter<String> {
             Boolean tomorrow = false;
             Boolean markAsOverdue = false;
 //            if(!dbKilled) {
-
-            Log.i(TAG, "hour: " + hour + " currentHour: " + currentHour + " ampm: " + ampm);
 
                 //Overdue
                 if (currentYear > Integer.valueOf(year)) {
@@ -1245,7 +1242,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 } else if (currentYear == Integer.valueOf(year)
                         && currentMonth == Integer.valueOf(month)
                         && currentDay == Integer.valueOf(day)) {
-                    Log.i(TAG, "I'm in here");
                     sameDay = true;
                     //Saved hours are in 12 hour time. Accounting for am/pm.
                     int adjustedHour;
@@ -5113,8 +5109,6 @@ class MyAdapter extends ArrayAdapter<String> {
                          month, day,
                          amPmHour, minute);
 
-                 Log.i(TAG, "hour: " + hour + " amPmHour: " + amPmHour + " ampm: " + ampm);
-
                  //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                  // detect duplicates and then adjusting the timestamp on the millisecond level
                  long futureStamp = futureDate.getTimeInMillis() / 1000;
@@ -5160,8 +5154,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            String.valueOf(calendar.get(calendar.DAY_OF_MONTH)),
 //                            String.valueOf(calendar.get(calendar.MONTH)),
 //                            String.valueOf(calendar.get(calendar.YEAR)));
-
-                 Log.i(TAG, "Am/Pm: " + ampm);
 
                      int adjustedAmPm = 0;
                      if (hour > 11) {

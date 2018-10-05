@@ -813,6 +813,7 @@ public class SetDue extends MainActivity {
                 Calendar calendar = Calendar.getInstance();
                 int minute = calendar.get(Calendar.MINUTE);
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int ampm = calendar.get(Calendar.AM_PM);
                 int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                 int currentMonth = calendar.get(Calendar.MONTH);
                 int currentYear = calendar.get(Calendar.YEAR);
@@ -823,9 +824,11 @@ public class SetDue extends MainActivity {
                     }else{
                         db.updateHour(hour);
                     }
+                    db.updateAmPm(ampm);
                     db.updateMinute(minute);
                 }else{
                     db.updateHour(10);
+                    db.updateAmPm(ampm);
                     db.updateMinute(0);
                 }
             }
