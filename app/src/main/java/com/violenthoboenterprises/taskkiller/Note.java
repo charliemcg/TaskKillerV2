@@ -368,7 +368,7 @@ public class Note extends MainActivity {
 
                                                     submitNoteBtnDark.setVisibility(View.GONE);
 
-//                                                    trashNote.setVisible(true);
+                                                    trashNote.setVisible(true);
 
                                                     //Hide keyboard
                                                     keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -651,6 +651,8 @@ public class Note extends MainActivity {
 //            }
 
         }
+
+        onCreateOptionsMenu(noteToolbar.getMenu());
 
     }
 

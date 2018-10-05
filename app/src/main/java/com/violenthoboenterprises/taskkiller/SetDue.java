@@ -122,6 +122,8 @@ public class SetDue extends MainActivity {
         }
         dbTaskResult.close();
 
+        onCreateOptionsMenu(dueToolbar.getMenu());
+
 //        dueToolbar.setSubtitle(dbTask);
 //        getSupportActionBar().setTitle("Set Dat/Time");
 //        dueToolbar.setTitle("Set Date/Time");
@@ -335,6 +337,7 @@ public class SetDue extends MainActivity {
 
                 repeating = true;
 
+                killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -365,6 +368,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
+                killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -395,6 +399,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
+                killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -425,6 +430,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
+                killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -455,6 +461,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
+                killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -485,6 +492,7 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
+                killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
@@ -511,6 +519,7 @@ public class SetDue extends MainActivity {
                 repeat = "none";
 
                 if(!timePicked && !datePicked) {
+                    killAlarm.setVisible(false);
 //                    dueToolbar.getMenu().getItem(0).setVisible(false);
                 }
 
@@ -538,6 +547,7 @@ public class SetDue extends MainActivity {
                 repeat = "none";
 
                 if(!timePicked && !datePicked) {
+                    killAlarm.setVisible(false);
 //                    dueToolbar.getMenu().getItem(0).setVisible(false);
                 }
 
@@ -549,6 +559,7 @@ public class SetDue extends MainActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(TAG, "Finally in onCreateOptionsMenu");
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_alarm, dueToolbar.getMenu());
             killAlarm = this.dueToolbar.getMenu().findItem(R.id.killAlarmItem);
@@ -844,7 +855,7 @@ public class SetDue extends MainActivity {
 
             dateTextView.setTextSize(25);
 
-//            killAlarm.setVisible(true);
+            killAlarm.setVisible(true);
 
         }
 
@@ -983,7 +994,7 @@ public class SetDue extends MainActivity {
 
             //TODO find out why this crashes
 //            dueToolbar.getMenu().getItem(0).setVisible(true);
-//            killAlarm.setVisible(true);
+            killAlarm.setVisible(true);
 
         }
     }
@@ -1037,6 +1048,7 @@ public class SetDue extends MainActivity {
                     Calendar calendar = Calendar.getInstance();
                     int minute = calendar.get(Calendar.MINUTE);
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int ampm = calendar.get(Calendar.AM_PM);
                     if(hour > 10) {
                         if(hour != 23) {
                             db.updateHour(hour + 1);
@@ -1044,8 +1056,10 @@ public class SetDue extends MainActivity {
                             db.updateHour(hour);
                         }
                         db.updateMinute(minute);
+                        db.updateAmPm(ampm);
                     }else{
                         db.updateHour(10);
+                        db.updateAmPm(ampm);
                         db.updateMinute(0);
                     }
                 }
@@ -1080,15 +1094,18 @@ public class SetDue extends MainActivity {
                     Calendar calendar = Calendar.getInstance();
                     int minute = calendar.get(Calendar.MINUTE);
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int ampm = calendar.get(Calendar.AM_PM);
                     if(hour > 10) {
                         if(hour != 23) {
                             db.updateHour(hour + 1);
                         }else{
                             db.updateHour(hour);
                         }
+                        db.updateAmPm(ampm);
                         db.updateMinute(minute);
                     }else{
                         db.updateHour(10);
+                        db.updateAmPm(ampm);
                         db.updateMinute(0);
                     }
                 }
@@ -1119,15 +1136,18 @@ public class SetDue extends MainActivity {
                     Calendar calendar = Calendar.getInstance();
                     int minute = calendar.get(Calendar.MINUTE);
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int ampm = calendar.get(Calendar.AM_PM);
                     if(hour > 10) {
                         if(hour != 23) {
                             db.updateHour(hour + 1);
                         }else{
                             db.updateHour(hour);
                         }
+                        db.updateAmPm(ampm);
                         db.updateMinute(minute);
                     }else{
                         db.updateHour(10);
+                        db.updateAmPm(ampm);
                         db.updateMinute(0);
                     }
                 }
