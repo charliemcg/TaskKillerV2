@@ -234,21 +234,6 @@ public class SetDue extends MainActivity {
 
         }
 
-        //Highlight the repeat type or highlight No Repeat if none exists
-        if(!dbRepeat){
-            cancelRepeatDark.setBackgroundColor(Color.parseColor(highlight));
-            cancelRepeatLight.setBackgroundColor(Color.parseColor(highlight));
-        }else if(dbRepeatInterval.equals("day")){
-            dailyDark.setBackgroundColor(Color.parseColor(highlight));
-            dailyLight.setBackgroundColor(Color.parseColor(highlight));
-        }else if(dbRepeatInterval.equals("week")){
-            weeklyDark.setBackgroundColor(Color.parseColor(highlight));
-            weeklyLight.setBackgroundColor(Color.parseColor(highlight));
-        }else if(dbRepeatInterval.equals("month")){
-            monthlyDark.setBackgroundColor(Color.parseColor(highlight));
-            monthlyLight.setBackgroundColor(Color.parseColor(highlight));
-        }
-
         if(!lightDark){
             dueToolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
             dueToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
@@ -256,7 +241,7 @@ public class SetDue extends MainActivity {
             dueToolbar.setBackgroundColor(Color.parseColor("#333333"));
             dateTextView.setTextColor(Color.parseColor("#AAAAAA"));
             timeTextView.setTextColor(Color.parseColor("#AAAAAA"));
-            cancelRepeatDark.setBackgroundColor(Color.parseColor(highlight));
+            cancelRepeatDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
             dailyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
             weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
             monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
@@ -270,13 +255,28 @@ public class SetDue extends MainActivity {
             dueToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
             dateTextView.setTextColor(Color.parseColor("#000000"));
             timeTextView.setTextColor(Color.parseColor("#000000"));
-            cancelRepeatLight.setBackgroundColor(Color.parseColor(highlight));
+            cancelRepeatLight.setBackgroundColor(Color.parseColor("#000000"));
             dailyLight.setBackgroundColor(Color.parseColor("#000000"));
             weeklyLight.setBackgroundColor(Color.parseColor("#000000"));
             monthlyLight.setBackgroundColor(Color.parseColor("#000000"));
             lightRepeat.setVisibility(View.VISIBLE);
 //            calendarFadedLight.setVisibility(View.GONE);
 //            timeFadedLight.setVisibility(View.GONE);
+        }
+
+        //Highlight the repeat type or highlight No Repeat if none exists
+        if(!dbRepeat){
+            cancelRepeatDark.setBackgroundColor(Color.parseColor(highlight));
+            cancelRepeatLight.setBackgroundColor(Color.parseColor(highlight));
+        }else if(dbRepeatInterval.equals("day")){
+            dailyDark.setBackgroundColor(Color.parseColor(highlight));
+            dailyLight.setBackgroundColor(Color.parseColor(highlight));
+        }else if(dbRepeatInterval.equals("week")){
+            weeklyDark.setBackgroundColor(Color.parseColor(highlight));
+            weeklyLight.setBackgroundColor(Color.parseColor(highlight));
+        }else if(dbRepeatInterval.equals("month")){
+            monthlyDark.setBackgroundColor(Color.parseColor(highlight));
+            monthlyLight.setBackgroundColor(Color.parseColor(highlight));
         }
 
         //Actions to occur when user selects to set/change date
