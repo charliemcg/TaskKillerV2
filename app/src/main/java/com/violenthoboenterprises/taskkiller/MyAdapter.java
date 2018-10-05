@@ -41,6 +41,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+
 import android.os.Handler;
 
 class MyAdapter extends ArrayAdapter<String> {
@@ -1449,7 +1451,18 @@ class MyAdapter extends ArrayAdapter<String> {
                     formattedMonth = getContext().getString(R.string.dec);
                 }
 
-                formattedDate = day + " " + formattedMonth;
+                String lang = String.valueOf(Locale.getDefault());
+                if(lang.equals("en_AS") || lang.equals("en_BM") || lang.equals("en_BZ")
+                        || lang.equals("en_CA") || lang.equals("en_GU")
+                        || lang.equals("en_LR") || lang.equals("en_PH")
+                        || lang.equals("en_PR") || lang.equals("en_UM")
+                        || lang.equals("en_US") || lang.equals("en_VI")) {
+//                    dateTextView.setText(formattedMonth + " " + day);
+                    formattedDate = formattedMonth + " " + day;
+                }else{
+//                    dateTextView.setText(day + " " + formattedMonth);
+                    formattedDate = day + " " + formattedMonth;
+                }
 
                 dueTextView.setText(formattedDate);
 

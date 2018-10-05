@@ -37,6 +37,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class SetDue extends MainActivity {
 
@@ -191,7 +192,16 @@ public class SetDue extends MainActivity {
                 formattedMonth = getString(R.string.dec);
             }
 
-            dateTextView.setText(alarmDay + " " + formattedMonth);
+            String lang = String.valueOf(Locale.getDefault());
+            if(lang.equals("en_AS") || lang.equals("en_BM") || lang.equals("en_BZ")
+                    || lang.equals("en_CA") || lang.equals("en_GU")
+                    || lang.equals("en_LR") || lang.equals("en_PH")
+                    || lang.equals("en_PR") || lang.equals("en_UM")
+                    || lang.equals("en_US") || lang.equals("en_VI")) {
+                dateTextView.setText(formattedMonth + " " + alarmDay);
+            }else{
+                dateTextView.setText(alarmDay + " " + formattedMonth);
+            }
 
             String adjustedAmPm = String.valueOf(alarmAmPm)/*getString(R.string.am)*/;
             String adjustedHour = String.valueOf(alarmHour);
@@ -814,7 +824,16 @@ public class SetDue extends MainActivity {
                 formattedMonth = getString(R.string.dec);
             }
 
-            dateTextView.setText(day + " " + formattedMonth);
+            String lang = String.valueOf(Locale.getDefault());
+            if(lang.equals("en_AS") || lang.equals("en_BM") || lang.equals("en_BZ")
+                    || lang.equals("en_CA") || lang.equals("en_GU")
+                    || lang.equals("en_LR") || lang.equals("en_PH")
+                    || lang.equals("en_PR") || lang.equals("en_UM")
+                    || lang.equals("en_US") || lang.equals("en_VI")) {
+                dateTextView.setText(formattedMonth + " " + day);
+            }else{
+                dateTextView.setText(day + " " + formattedMonth);
+            }
 
             vibrate.vibrate(50);
 
