@@ -321,8 +321,6 @@ public class SetDue extends MainActivity {
 
                 vibrate.vibrate(50);
 
-                Log.i(TAG, "kill alarm: " + killAlarm);
-
                 DialogFragment dialogfragment = new TimePickerDialogFrag();
 
                 dialogfragment.show(getFragmentManager(), "Time");
@@ -577,7 +575,6 @@ public class SetDue extends MainActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i(TAG, "Finally in onCreateOptionsMenu");
         if(!menu.hasVisibleItems()) {
             getMenuInflater().inflate(R.menu.menu_alarm, dueToolbar.getMenu());
             killAlarm = this.dueToolbar.getMenu().findItem(R.id.killAlarmItem);
@@ -880,11 +877,12 @@ public class SetDue extends MainActivity {
                     alarmMinute = alarmResult.getString(2);
                     alarmAmPm = alarmResult.getString(3);
                 }
-
                 alarmResult.close();
-                db.updateMinute(Integer.parseInt(alarmMinute));
-                db.updateHour(Integer.parseInt(alarmHour));
-                db.updateAmPm(Integer.parseInt(alarmAmPm));
+                if(!alarmMinute.equals("")) {
+                    db.updateMinute(Integer.parseInt(alarmMinute));
+                    db.updateHour(Integer.parseInt(alarmHour));
+                    db.updateAmPm(Integer.parseInt(alarmAmPm));
+                }
             }
 
             setDue = true;
@@ -1045,11 +1043,12 @@ public class SetDue extends MainActivity {
                     alarmMonth = alarmResult.getString(5);
                     alarmYear = alarmResult.getString(6);
                 }
-
                 alarmResult.close();
-                db.updateDay(Integer.parseInt(alarmDay));
-                db.updateMonth(Integer.parseInt(alarmMonth));
-                db.updateYear(Integer.parseInt(alarmYear));
+                if(!alarmDay.equals("")) {
+                    db.updateDay(Integer.parseInt(alarmDay));
+                    db.updateMonth(Integer.parseInt(alarmMonth));
+                    db.updateYear(Integer.parseInt(alarmYear));
+                }
             }
 
             setDue = true;
@@ -1063,8 +1062,6 @@ public class SetDue extends MainActivity {
 
             timeTextView.setTextSize(25);
 
-            //TODO find out why this crashes
-//            dueToolbar.getMenu().getItem(0).setVisible(true);
             killAlarm.setVisible(true);
 
         }
@@ -1104,8 +1101,13 @@ public class SetDue extends MainActivity {
 
                 taskPropertiesShowing = false;
 
+                Log.i(TAG, "I'm in here 1");
+
                 //set default date values if user not already selected
                 if(!datePicked){
+
+                    Log.i(TAG, "I'm in here 2");
+
                     Calendar calendar = Calendar.getInstance();
                     int day = calendar.get(Calendar.DAY_OF_MONTH);
                     int month = calendar.get(Calendar.MONTH);
@@ -1114,11 +1116,17 @@ public class SetDue extends MainActivity {
                     db.updateMonth(month);
                     db.updateYear(year);
                 }else{
+
+                    Log.i(TAG, "I'm in here 3");
+
                     getDateFromDB();
                 }
 
                 //Set default time values if user not selected time values already
                 if(!timePicked){
+
+                    Log.i(TAG, "I'm in here 4");
+
                     Calendar calendar = Calendar.getInstance();
                     int minute = calendar.get(Calendar.MINUTE);
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -1137,6 +1145,9 @@ public class SetDue extends MainActivity {
                         db.updateMinute(0);
                     }
                 }else{
+
+                    Log.i(TAG, "I'm in here 5");
+
                     getTimeFromDB();
                 }
 
@@ -1248,6 +1259,7 @@ public class SetDue extends MainActivity {
         if(setDue) {
             db.updateSetAlarm(true);
             db.updateIgnored(dbTaskId, false);
+            db.updateOverdue(dbTaskId, false);
             if(!remindersAvailable && dbDueTime.equals("0")) {
                 duesSet++;
                 db.updateDuesSet(duesSet);
@@ -1279,11 +1291,12 @@ public class SetDue extends MainActivity {
             alarmMonth = alarmResult.getString(5);
             alarmYear = alarmResult.getString(6);
         }
-
         alarmResult.close();
-        db.updateDay(Integer.parseInt(alarmDay));
-        db.updateMonth(Integer.parseInt(alarmMonth));
-        db.updateYear(Integer.parseInt(alarmYear));
+        if(!alarmDay.equals("")) {
+            db.updateDay(Integer.parseInt(alarmDay));
+            db.updateMonth(Integer.parseInt(alarmMonth));
+            db.updateYear(Integer.parseInt(alarmYear));
+        }
     }
 
     private void getTimeFromDB() {
@@ -1297,11 +1310,12 @@ public class SetDue extends MainActivity {
             alarmMinute = alarmResult.getString(2);
             alarmAmPm = alarmResult.getString(3);
         }
-
         alarmResult.close();
-        db.updateMinute(Integer.parseInt(alarmMinute));
-        db.updateHour(Integer.parseInt(alarmHour));
-        db.updateAmPm(Integer.parseInt(alarmAmPm));
+        if(!alarmMinute.equals("")) {
+            db.updateMinute(Integer.parseInt(alarmMinute));
+            db.updateHour(Integer.parseInt(alarmHour));
+            db.updateAmPm(Integer.parseInt(alarmAmPm));
+        }
     }
 
 }

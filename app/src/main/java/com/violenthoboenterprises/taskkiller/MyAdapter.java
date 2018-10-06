@@ -1337,8 +1337,18 @@ class MyAdapter extends ArrayAdapter<String> {
                         markAsOverdue = true;
                     //Not overdue
                     } else {
-                        dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-                        dueClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                        if(!dbKilled) {
+                            dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                            dueClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                        }else{
+                            if(MainActivity.lightDark) {
+                                dueClearWhite.setBackgroundColor(ContextCompat
+                                        .getColor(getContext(), R.color.black));
+                            }else {
+                                dueClear.setBackgroundColor(ContextCompat
+                                        .getColor(getContext(), R.color.gray));
+                            }
+                        }
                     }
                 //Not overdue
                 } else {
@@ -1366,8 +1376,14 @@ class MyAdapter extends ArrayAdapter<String> {
                     } else if (currentDay == (Integer.valueOf(day) - 1)){
                         tomorrow = true;
                     }
-                    dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-                    dueClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                    if(!dbKilled) {
+                        dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                        dueClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                    }else{
+                        dueClear.setBackgroundColor(ContextCompat
+                                .getColor(getContext(), R.color.gray));
+                        dueClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                    }
                 }
 
 //            }
@@ -1384,11 +1400,14 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.db.updateSnooze(
                             MainActivity.sortedIDs.get(position), false);
                     //show snooze icon
-                } else {
+                } else if(!dbKilled){
                     snoozeClear.setVisibility(View.VISIBLE);
                     snoozeLayout.setVisibility(View.VISIBLE);
                     overdueClear.setVisibility(View.GONE);
                     overdueLayout.setVisibility(View.GONE);
+                }else{
+                    dueClear.setVisibility(View.VISIBLE);
+                    dueLayout.setVisibility(View.VISIBLE);
                 }
 
             }else if(markAsOverdue){
@@ -4460,24 +4479,36 @@ class MyAdapter extends ArrayAdapter<String> {
 
         //show repeat icon if required
         if(dbRepeat && !dbKilled){
-
             repeatClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
             repeatClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-
         }else if(MainActivity.lightDark){
             repeatClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
 
         //Show checklist/note icon if required
         if(dbChecklistSize != 0){
-            checklistClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-            checklistClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+            if(!dbKilled) {
+                checklistClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                checklistClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+            }else{
+                checklistClear.setBackgroundColor(ContextCompat
+                        .getColor(getContext(), R.color.gray));
+                checklistClearWhite.setBackgroundColor(ContextCompat
+                        .getColor(getContext(), R.color.black));
+            }
         }else if(MainActivity.lightDark){
             checklistClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
         if(!dbNote.equals("")){
-            noteClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
-            noteClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+            if(!dbKilled) {
+                noteClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+                noteClearWhite.setBackgroundColor(Color.parseColor(MainActivity.highlight));
+            }else{
+                noteClear.setBackgroundColor(ContextCompat
+                        .getColor(getContext(), R.color.gray));
+                noteClearWhite.setBackgroundColor(ContextCompat
+                        .getColor(getContext(), R.color.black));
+            }
         }else if(MainActivity.lightDark){
             noteClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
@@ -5057,6 +5088,7 @@ class MyAdapter extends ArrayAdapter<String> {
                  MainActivity.toast.setText(R.string.cannotSetTask);
                  MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
                  MainActivity.db.updateRepeatInterval(MainActivity.sortedIDs.get(position), "");
+                 MainActivity.db.updateTimestamp(MainActivity.sortedIDs.get(position), "0");
                  dbRepeat = false;
                  final Handler handler = new Handler();
 
@@ -5091,6 +5123,7 @@ class MyAdapter extends ArrayAdapter<String> {
                  MainActivity.toast.setText(R.string.cannotSetTask);
                  MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
                  MainActivity.db.updateRepeatInterval(MainActivity.sortedIDs.get(position), "");
+                 MainActivity.db.updateTimestamp(MainActivity.sortedIDs.get(position), "0");
                  dbRepeat = false;
                  final Handler handler = new Handler();
 
