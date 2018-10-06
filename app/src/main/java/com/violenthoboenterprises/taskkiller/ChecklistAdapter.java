@@ -189,8 +189,6 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
                 (screen.bottom - screen.top);
 
-        //Value of more than 800 seems to indicate that the keyboard is showing
-        //in portrait mode
         if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
                 .getConfiguration().orientation == 1)) {
 
@@ -226,10 +224,6 @@ class ChecklistAdapter extends ArrayAdapter<String> {
                 MainActivity.db.updateSubtaskKilled(finalDbTaskId, String.valueOf(Checklist
                         .sortedSubtaskIds.get(position)), true);
                 Checklist.subTasksKilled.set(position, true);
-
-//                if(!MainActivity.mute) {
-//                    MainActivity.blip.start();
-//                }
 
                 notifyDataSetChanged();
 

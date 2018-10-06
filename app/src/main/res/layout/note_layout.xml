@@ -33,46 +33,6 @@
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"/>
 
-    <!--<ImageView-->
-        <!--android:id="@+id/removeBtnDark"-->
-        <!--android:layout_width="80dp"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_margin="16dp"-->
-        <!--android:visibility="gone"-->
-        <!--android:src="@drawable/trash_dark"/>-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/removeBtnLight"-->
-        <!--android:layout_width="80dp"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_margin="16dp"-->
-        <!--android:visibility="gone"-->
-        <!--android:src="@drawable/trash_light"/>-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/removeBtnDarkOpen"-->
-        <!--android:layout_width="80dp"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_margin="16dp"-->
-        <!--android:visibility="gone"-->
-        <!--android:src="@drawable/trash_dark_open"/>-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/removeBtnLightOpen"-->
-        <!--android:layout_width="80dp"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_margin="16dp"-->
-        <!--android:visibility="gone"-->
-        <!--android:src="@drawable/trash_light_open"/>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -140,15 +100,6 @@
             android:layout_gravity="center_vertical"
             android:src="@drawable/submit_two_half"
             android:visibility="gone"/>
-
-        <!--<ImageView-->
-            <!--android:id="@+id/submitNoteBtnLight"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:padding="5dp"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--android:src="@drawable/submit_light"/>-->
 
     </LinearLayout>
 

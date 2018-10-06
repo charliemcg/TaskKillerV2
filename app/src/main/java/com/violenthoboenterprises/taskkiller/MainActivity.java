@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static boolean fadeTasks;
     //Used when making task centered in list view
     static boolean centerTask;
-    //Used when displaying UI elements for either picking time or date
-//    static boolean dateOrTime;
     //Used to indicate that user is in the note screen
     static boolean inNote;
     //Used to indicate that user is in the sub-tasks screen //TODO how is this different from checklistShowing
@@ -200,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             "#eeef0000", "#eeef4800", "#eeef8f00", "#eeff38ec", "#eeef1a7a", "#eeef85d4",
             "#eeae87f4", "#eeb2a2f4", "#eef4a2d4", "#eef46c6c", "#eef46f35", "#eef38797"};
     //Decimal version of the highlight color
-    String highlightDec;
+    static String highlightDec;
 
     //Required for setting notification alarms
     static Intent alertIntent;
@@ -281,8 +279,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static MediaPlayer hint;
 
     //The action bar
-    static Toolbar toolbarDark;
+    private Toolbar toolbarDark;
     private Toolbar toolbarLight;
+    static RelativeLayout.LayoutParams toolbarParams;
 
     //Action bar options
     MenuItem muteBtn;
@@ -436,6 +435,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         unlockAllImg = findViewById(R.id.unlockAllImage);
         unlockAllPurchasedImg = findViewById(R.id.unlockAllImagePurchased);
         toastParams = (RelativeLayout.LayoutParams) toastView.getLayoutParams();
+        toolbarParams = (RelativeLayout.LayoutParams) toolbarDark.getLayoutParams();
 
         db.insertUniversalData(mute);
 
@@ -1044,12 +1044,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
-//    @Override
-//    public boolean onMenuOpened(int featureId, Menu menu) {
-//
-//        return super.onMenuOpened(featureId, menu);
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -1088,14 +1082,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             noTasksLeft();
             return true;
         } else if (id == R.id.highlight) {
-
-//            String digits = "0123456789ABCDEF";
-//            int val = 0;
-//            for (int i = 1; i < highlight.length(); i++) {
-//                char c = highlight.charAt(i);
-//                int d = digits.indexOf(c);
-//                val = 16 * val + d;
-//            }
 
             int colorPickerTheme;
             if(lightDark){
@@ -1640,13 +1626,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         heightDiff = activityRootView.getRootView().getHeight() -
                                 (screen.bottom - screen.top);
 
-//                        Log.i(TAG, "Heightdiff: " + heightDiff + "\ndeviceHeight: " + deviceheight + "\nbottom: " + screen.bottom + "\ntop: " + screen.top);
-
-                        //Value of more than 800 seems to indicate that the keyboard is showing
-                        //in portrait mode
-//                        if ((heightDiff > /*800*/portraitKeyboardMeasure) && (getResources()
-//                                .getConfiguration().orientation == 1)) {
-                        if(screen.bottom != deviceheight/* && (getResources().getConfiguration().orientation == 1)*/){
+                        if(screen.bottom != deviceheight){
 
                             fadeTasks = true;
 
@@ -1678,44 +1658,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             tasksAreClickable = false;
 
                             restoreNormalListView = true;
-
-                            //Similar to above but for landscape mode
-                        }else if((heightDiff > /*73*/landscapeKeyboardMeasure) &&
-                                (heightDiff < /*800*/portraitKeyboardMeasure) && (getResources()
-                                .getConfiguration().orientation == 2)){
-
-//                            Log.i(TAG, "In landscape");
-//
-//                            fadeTasks = true;
-//
-//                            if (goToMyAdapter) {
-//
-//                                theListView.setAdapter(theAdapter[0]);
-//
-//                                goToMyAdapter = false;
-//
-//                            }
-//
-//                            taskNameEditText.setFocusable(true);
-//
-//                            taskNameEditText.requestFocus();
-//
-//                            //Textbox is visible and 'add' button is gone
-//                            // whenever keyboard is showing
-//                            taskNameEditText.setVisibility(View.VISIBLE);
-//
-//                            //Keyboard is inactive without this line
-//                            taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-//
-//                            params.height = 0;
-//                            iconParams.height = 0;
-//
-//                            add.setLayoutParams(params);
-//                            addIcon.setLayoutParams(iconParams);
-//
-//                            tasksAreClickable = false;
-//
-//                            restoreNormalListView = true;
 
                         }else if(restoreNormalListView){
 
@@ -1802,12 +1744,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                             viewProperties(position);
 
-                            //Removes completed task
+                        //Removes completed task
                         } else if (!taskPropertiesShowing && killed) {
 
                             removeTask(position);
 
-                            //Removes task options from view
+                        //Removes task options from view
                         } else {
 
                             removeTaskProperties();
@@ -1870,14 +1812,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void setDividers(boolean lightDark) {
-//        String digits = "0123456789ABCDEF";
-//        int val = 0;
-//        for (int i = 1; i < highlight.length(); i++) {
-//            char c = highlight.charAt(i);
-//            int d = digits.indexOf(c);
-//            val = 16 * val + d;
-//        }
-        int[] colors = {0, Integer.parseInt(highlightDec)/*val*/, 0};
+        int[] colors = {0, Integer.parseInt(highlightDec), 0};
         theListView.setDivider(new GradientDrawable
                 (GradientDrawable.Orientation.RIGHT_LEFT, colors));
         if(!lightDark) {
@@ -1918,7 +1853,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Calendar calendar = Calendar.getInstance();
 
-        //TODO account for each individual launch with booleans
         if(!reviewOne && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 72))){
 
             int reviewNumber = 1;

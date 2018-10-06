@@ -27,8 +27,6 @@
         android:layout_below="@+id/divider"
         android:background="@color/dark_gray"
         android:descendantFocusability="blocksDescendants"/>
-        <!--android:soundEffectsEnabled="false"/>-->
-    <!--TODO make sure hard coded height works on all devices-->
 
     <EditText
         android:id="@+id/checklistEditText"

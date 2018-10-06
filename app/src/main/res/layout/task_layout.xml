@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
@@ -109,204 +109,158 @@
             android:id="@+id/statusLayout"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:layout_marginBottom="5dp">
-
-            <!--<TextView-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:id="@+id/dueTextView"-->
-                <!--android:layout_weight="25"-->
-                <!--android:textAlignment="center"-->
-                <!--android:textColor="@color/gray"/>-->
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="25dp"
                 android:layout_weight="1"
                 android:id="@+id/dueTextView"
                 android:textAlignment="center"
                 android:gravity="center"
                 android:textColor="@color/gray"/>
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/checklistLayout"-->
-                <!--android:layout_width="25dp"-->
-                <!--android:layout_height="25dp"-->
-                <!--android:layout_weight="1">-->
-
             <RelativeLayout
                 android:id="@+id/checklistLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:gravity="center"
                 android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/checklistClear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/subtasks_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/checklistClearWhite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/subtasks_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/noteLayout"-->
-                <!--android:layout_width="25dp"-->
-                <!--android:layout_height="25dp"-->
-                <!--android:layout_weight="1">-->
-
             <RelativeLayout
                 android:id="@+id/noteLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:gravity="center"
                 android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/noteClear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/note_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/noteClearWhite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/note_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/repeatLayout"-->
-                <!--android:layout_width="25dp"-->
-                <!--android:layout_height="25dp"-->
-                <!--android:layout_weight="1">-->
-
             <RelativeLayout
                 android:id="@+id/repeatLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:gravity="center"
                 android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/repeatClear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/repeatClearWhite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/repeat_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/dueLayout"-->
-                <!--android:layout_width="25dp"-->
-                <!--android:layout_height="25dp"-->
-                <!--android:layout_weight="1">-->
-
             <RelativeLayout
                 android:id="@+id/dueLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:gravity="center"
                 android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/dueClear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/due_icon_dark"
                     android:background="@color/mid_gray"/>
 
                 <ImageView
                     android:id="@+id/dueClearWhite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/due_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/overdueLayout"-->
-                <!--android:layout_width="25dp"-->
-                <!--android:layout_height="25dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:visibility="gone">-->
-
             <RelativeLayout
                 android:id="@+id/overdueLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:gravity="center"
                 android:visibility="gone"
                 android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/overdueClear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/overdue_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/overdueClearWhite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/overdue_icon_light"
                     android:visibility="gone"/>
 
             </RelativeLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/snoozeLayout"-->
-                <!--android:layout_width="25dp"-->
-                <!--android:layout_height="25dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:visibility="gone">-->
-
             <RelativeLayout
                 android:id="@+id/snoozeLayout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:gravity="center"
                 android:visibility="gone"
                 android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/snoozeClear"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/snooze_icon_dark"/>
 
                 <ImageView
                     android:id="@+id/snoozeClearWhite"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@color/mid_gray"
                     android:src="@drawable/snooze_icon_white"
                     android:visibility="gone"/>
@@ -321,18 +275,6 @@
         <include
             layout="@layout/task_properties_layout"
             android:id="@+id/properties"
-            android:visibility="gone"/>
-        <include
-           layout="@layout/date_layout"
-            android:id="@+id/dateTime"
-            android:visibility="gone"/>
-        <include
-            layout="@layout/alarm_options"
-            android:id="@+id/alarmOptions"
-            android:visibility="gone"/>
-        <include
-            layout="@layout/repeat_layout"
-            android:id="@+id/repeat"
             android:visibility="gone"/>
         <include
             layout="@layout/snooze_layout"

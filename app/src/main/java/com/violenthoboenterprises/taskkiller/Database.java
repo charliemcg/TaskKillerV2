@@ -22,7 +22,6 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL5 = "TASK";
     public static final String COL6 = "DUE";
     public static final String COL7 = "KILLED";
-    //TODO probably don't need broadcast. Just need to set alarm to ID instead.
     public static final String COL8 = "BROADCAST";
     public static final String COL9 = "REPEAT";
     public static final String COL10 = "OVERDUE";
@@ -211,9 +210,9 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL3, "#FF00FF00");
         content.put(UCOL4, false);
         content.put(UCOL5, "");
-        content.put(UCOL6, true);//TODO change back to false!!!
-        content.put(UCOL7, true);//TODO change back to false!!!
-        content.put(UCOL8, true);//TODO change back to false!!!
+        content.put(UCOL6, false);//TODO change back to false!!!
+        content.put(UCOL7, false);//TODO change back to false!!!
+        content.put(UCOL8, false);//TODO change back to false!!!
         content.put(UCOL9, 0);
         content.put(UCOL10, 0);
         content.put(UCOL11, false);

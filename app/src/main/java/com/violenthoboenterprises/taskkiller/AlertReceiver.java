@@ -66,15 +66,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
         builder.setCustomContentView(remoteViews);
 
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < MainActivity.highlight.length(); i++) {
-            char c = MainActivity.highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-
-        builder.setLights(val, 500, 500);
+        builder.setLights(/*val*/Integer.parseInt(MainActivity.highlightDec), 500, 500);
 
         //use phone's default notification sound
         builder.setDefaults(NotificationCompat.DEFAULT_SOUND);

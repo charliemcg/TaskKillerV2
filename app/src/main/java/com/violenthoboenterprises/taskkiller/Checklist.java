@@ -39,7 +39,6 @@ public class Checklist extends MainActivity {
     static ArrayList<String> checklist;
     static ArrayList<Boolean> subTasksKilled;
     static ArrayList<Integer> sortedSubtaskIds;
-//    ArrayList<Integer> tempSortedIDs;//TODO
     static boolean subTaskBeingEdited;
     static boolean goToChecklistAdapter;
     private boolean restoreListView;
@@ -68,7 +67,6 @@ public class Checklist extends MainActivity {
         checklist = new ArrayList<>();
         subTasksKilled = new ArrayList<>();
         sortedSubtaskIds = new ArrayList<>();
-//        tempSortedIDs = new ArrayList<>();//TODO
         subTaskBeingEdited = false;
         subTasksClickable = false;
         checklistRootView = findViewById(R.id.checklistRoot);
@@ -86,22 +84,7 @@ public class Checklist extends MainActivity {
         Boolean dbLightDark = false;
 
         int dbID = 0;
-        String dbNote = "";
-        String dbTimestamp = "";
         String dbTask = "";
-        Boolean dbDue = false;
-        Boolean dbKilled = false;
-        int dbBroadcast = 0;
-        Boolean dbRepeat = false;
-        Boolean dbOverdue = false;
-        Boolean dbSnooze = false;
-        Boolean dbShowOnce = false;
-        int dbInterval = 0;
-        String dbRepeatInterval = "";
-        Boolean dbIgnored = false;
-        String dbTimeCreated = "";
-        int dbSortedIndex = 0;
-        int dbChecklistSize = 0;
 
         //getting app-wide data
         Cursor dbResult = MainActivity.db.getUniversalData();
@@ -115,8 +98,6 @@ public class Checklist extends MainActivity {
         while (dbResult.moveToNext()) {
             dbID = dbResult.getInt(0);
             dbTask = dbResult.getString(4);
-            dbSortedIndex = dbResult.getInt(16);
-//            tempSortedIDs.add(dbSortedIndex);//TODO
         }
         dbResult.close();
 
@@ -131,14 +112,15 @@ public class Checklist extends MainActivity {
         subTasksToolbar.setSubtitle(dbTask);
 
         //Set list view dividers
-        String digits = "0123456789ABCDEF";
-        int val = 0;
-        for (int i = 1; i < highlight.length(); i++) {
-            char c = highlight.charAt(i);
-            int d = digits.indexOf(c);
-            val = 16 * val + d;
-        }
-        int[] colors = {0, val, val};
+//        String digits = "0123456789ABCDEF";
+//        int val = 0;
+//        for (int i = 1; i < highlight.length(); i++) {
+//            char c = highlight.charAt(i);
+//            int d = digits.indexOf(c);
+//            val = 16 * val + d;
+//        }
+
+        int[] colors = {0, /*val*/Integer.parseInt(highlightDec), /*val*/Integer.parseInt(highlightDec)};
         checklistView.setDivider(new GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT, colors));
         checklistView.setDividerHeight(1);
@@ -155,16 +137,6 @@ public class Checklist extends MainActivity {
             checklistView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
-
-        //sorting temporary IDs
-//        Collections.sort(tempSortedIDs);//TODO
-//
-        //populating sortedIds list
-//        for(int i = 0; i < taskListSize; i ++){
-//
-//            sortedIDs.add(String.valueOf(tempSortedIDs.get(i)));
-//
-//        }
 
         //setting up adapter
         checklistAdapter = new ListAdapter[]{new ChecklistAdapter(this, checklist)};
@@ -197,10 +169,6 @@ public class Checklist extends MainActivity {
 
                     vibrate.vibrate(50);
 
-//                    if(!mute){
-//                        blip.start();
-//                    }
-
                     checklist.remove(position);
 
                     subTasksKilled.remove(position);
@@ -228,11 +196,9 @@ public class Checklist extends MainActivity {
                                            int position, long id) {
 
                 boolean isKilled = false;
-//                String subtask = "";
                 Cursor dbResult = db.getSubtaskData(finalDbID,
                         sortedSubtaskIds.get(position));
                 while(dbResult.moveToNext()){
-//                    subtask = dbResult.getString(2);
                     isKilled = dbResult.getInt(3) > 0;
                 }
                 dbResult.close();
@@ -241,16 +207,6 @@ public class Checklist extends MainActivity {
                 if(subTasksClickable && !isKilled){
 
                     keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-
-//                    Log.i(TAG, "task: " + checklist.get(position));
-
-//                    checklistEditText.setText(checklist.get(position));
-
-                    //Focus on edit text so that keyboard does not cover it up
-//                    checklistEditText.requestFocus();
-
-                    //put cursor at end of text
-//                    checklistEditText.setSelection(checklistEditText.getText().length());
 
                     goToChecklistAdapter = false;
 
@@ -262,8 +218,6 @@ public class Checklist extends MainActivity {
                     renameMe = position;
 
                     checklistView.setAdapter(checklistAdapter[0]);
-//
-//                    renameMe = position;
 
                 //Reinstate killed subtask
                 }else if(subTasksClickable && isKilled){
@@ -355,10 +309,6 @@ public class Checklist extends MainActivity {
 
                     vibrate.vibrate(50);
 
-//                    if(!mute) {
-//                        blip.start();
-//                    }
-
                     //Hide keyboard
                     keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
 
@@ -419,9 +369,6 @@ public class Checklist extends MainActivity {
                 heightDiff = checklistRootView.getRootView().getHeight() -
                         (screen.bottom - screen.top);
 
-                //Value of more than 800 seems to indicate that the keyboard is showing
-                //in portrait mode
-//                if ((heightDiff > /*800*/portraitKeyboardMeasure) && (getResources().getConfiguration().orientation == 1)) {
                 if(screen.bottom != deviceheight){
 
                     if (subTaskBeingEdited) {
@@ -448,33 +395,6 @@ public class Checklist extends MainActivity {
                     checklistEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
                     restoreListView = true;
-
-                //Similar to above but for landscape mode
-                }else if((heightDiff > /*73*/landscapeKeyboardMeasure) && (heightDiff < /*800*/portraitKeyboardMeasure) && (getResources()
-                        .getConfiguration().orientation == 2)){
-
-//                    if (subTaskBeingEdited) {
-//
-//                        checklistRootView.setBackgroundColor(Color.parseColor("#888888"));
-//
-//                    }
-//
-//                    fadeSubTasks = true;
-//
-//                    if (goToChecklistAdapter) {
-//
-//                        checklistView.setAdapter(checklistAdapter[0]);
-//
-//                        goToChecklistAdapter = false;
-//
-//                    }
-//
-//                    subTasksClickable = false;
-//
-//                    //Keyboard is inactive without this line
-//                    checklistEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-//
-//                    goToChecklistAdapter = true;
 
                 }else if(restoreListView){
 
@@ -561,8 +481,6 @@ public class Checklist extends MainActivity {
 
         }
 
-//        Collections.sort(tempList);//TODO
-
         //Setting the sorted ID in the database
         for(int i = 0; i < checklist.size(); i++){
 
@@ -571,12 +489,10 @@ public class Checklist extends MainActivity {
 
         }
 
-//        tempSortedIDs.clear();//TODO
         sortedSubtaskIds.clear();
 
         //setting the new sortedIds list
         for(int i = 0; i < checklist.size(); i++){
-//            tempSortedIDs.add(Integer.valueOf(tempIdsList.get(i)));//TODO
             sortedSubtaskIds.add(Integer.valueOf(tempIdsList.get(i)));
         }
 

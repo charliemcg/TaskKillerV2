@@ -4032,16 +4032,12 @@ class MyAdapter extends ArrayAdapter<String> {
             //centering the selected item in the view
             MainActivity.listViewHeight = MainActivity.theListView.getMeasuredHeight();
             MainActivity.theListView.smoothScrollToPositionFromTop(position,
-                    (MainActivity.listViewHeight / 2));
+                    (MainActivity.listViewHeight / 2) - (MainActivity.toolbarParams.height * 2));
+
+            notifyDataSetChanged();
 
             //put data in text view
             theTextView.setText(task);
-//
-//            if(dbDue){
-//
-//                alarmBtnText.setText(R.string.alarmOptions);
-//
-//            }
 
             //Actions to occur if user selects 'complete'
             complete.setOnClickListener(new View.OnClickListener() {

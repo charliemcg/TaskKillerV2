@@ -28,7 +28,6 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="complete"/>
-        <!--android:soundEffectsEnabled="false"/>-->
 
     <ImageView
         android:id="@+id/subtaskCompleted"
@@ -48,7 +47,6 @@
         android:src="@drawable/tick_faded"
         android:focusable="true"
         android:visibility="gone" />
-    <!--android:soundEffectsEnabled="false"-->
 
     <ImageView
         android:id="@+id/subtaskCompletedFaded"
@@ -68,7 +66,6 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="complete"/>
-        <!--android:soundEffectsEnabled="false"/>-->
 
     <ImageView
         android:id="@+id/subtaskCompletedWhite"
@@ -88,7 +85,6 @@
         android:src="@drawable/tick_white_faded"
         android:focusable="true"
         android:soundEffectsEnabled="false"/>
-        <!--android:visibility="gone"/>-->
 
     <ImageView
         android:id="@+id/subtaskCompletedWhiteFaded"

@@ -19,7 +19,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:background="@drawable/layout_border">
-            <!--android:soundEffectsEnabled="false">-->
 
             <TextView
                 android:id="@+id/snoozeTaskBtnText"
@@ -40,7 +39,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:background="@drawable/layout_border">
-            <!--android:soundEffectsEnabled="false">-->
 
             <TextView
                 android:id="@+id/taskDoneBtnText"
@@ -61,7 +59,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:background="@drawable/layout_border">
-            <!--android:soundEffectsEnabled="false">-->
 
             <TextView
                 android:id="@+id/taskIgnoreBtnText"
