@@ -1101,12 +1101,8 @@ public class SetDue extends MainActivity {
 
                 taskPropertiesShowing = false;
 
-                Log.i(TAG, "I'm in here 1");
-
                 //set default date values if user not already selected
                 if(!datePicked){
-
-                    Log.i(TAG, "I'm in here 2");
 
                     Calendar calendar = Calendar.getInstance();
                     int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -1117,15 +1113,11 @@ public class SetDue extends MainActivity {
                     db.updateYear(year);
                 }else{
 
-                    Log.i(TAG, "I'm in here 3");
-
                     getDateFromDB();
                 }
 
                 //Set default time values if user not selected time values already
                 if(!timePicked){
-
-                    Log.i(TAG, "I'm in here 4");
 
                     Calendar calendar = Calendar.getInstance();
                     int minute = calendar.get(Calendar.MINUTE);
@@ -1145,8 +1137,6 @@ public class SetDue extends MainActivity {
                         db.updateMinute(0);
                     }
                 }else{
-
-                    Log.i(TAG, "I'm in here 5");
 
                     getTimeFromDB();
                 }
@@ -1253,6 +1243,9 @@ public class SetDue extends MainActivity {
 
             }
 
+        }else{
+            db.updateRepeatInterval(dbTaskId, "");
+            db.updateRepeat(dbTaskId, false);
         }
 
         //updating the alarm in myAdapter
