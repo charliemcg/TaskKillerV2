@@ -971,7 +971,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     (this, R.drawable.color_picker_border));
             unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable
                     (this, R.drawable.color_picker_border));
-//            setDividers(lightDark);
+            setDividers(lightDark);
             theListView.setAdapter(theAdapter[0]);
         }else{
             theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -996,7 +996,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     (this, R.drawable.purchases_dropshadow));
             unlockAllLayout.setBackgroundDrawable(ContextCompat.getDrawable
                     (this, R.drawable.purchases_dropshadow));
-//            setDividers(lightDark);
+            setDividers(lightDark);
             theListView.setAdapter(theAdapter[0]);
         }
     }

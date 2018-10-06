@@ -147,17 +147,22 @@ class ChecklistAdapter extends ArrayAdapter<String> {
 
         }
 
+        if(position == Checklist.renameMe && Checklist.subTaskBeingEdited){
+            checklistTextView.setText("");
+        }
+
         //setting sub task name
         if (Checklist.subTaskBeingEdited && (Integer.parseInt(dbTaskId) ==
                 Checklist.sortedSubtaskIds.get(position)) &&
                 !Checklist.goToChecklistAdapter) {
 
             String oldSubTaskString = Checklist.checklist
-                    .get(Checklist.sortedSubtaskIds.get(Checklist.renameMe));
-
-            checklistTextView.setText("");
+                    .get(/*Checklist.sortedSubtaskIds.get(*/Checklist.renameMe/*)*/);
 
             Checklist.checklistEditText.setText(oldSubTaskString);
+
+            //Focus on edit text so that keyboard does not cover it up
+                    Checklist.checklistEditText.requestFocus();
 
             Checklist.checklistEditText.setSelection(Checklist.checklistEditText
                     .getText().length());

@@ -228,9 +228,11 @@ public class Checklist extends MainActivity {
                                            int position, long id) {
 
                 boolean isKilled = false;
+//                String subtask = "";
                 Cursor dbResult = db.getSubtaskData(finalDbID,
                         sortedSubtaskIds.get(position));
                 while(dbResult.moveToNext()){
+//                    subtask = dbResult.getString(2);
                     isKilled = dbResult.getInt(3) > 0;
                 }
                 dbResult.close();
@@ -240,6 +242,16 @@ public class Checklist extends MainActivity {
 
                     keyboard.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 
+//                    Log.i(TAG, "task: " + checklist.get(position));
+
+//                    checklistEditText.setText(checklist.get(position));
+
+                    //Focus on edit text so that keyboard does not cover it up
+//                    checklistEditText.requestFocus();
+
+                    //put cursor at end of text
+//                    checklistEditText.setSelection(checklistEditText.getText().length());
+
                     goToChecklistAdapter = false;
 
                     fadeSubTasks = true;
@@ -247,9 +259,11 @@ public class Checklist extends MainActivity {
                     //Indicates that a task is being edited
                     subTaskBeingEdited = true;
 
-                    checklistView.setAdapter(checklistAdapter[0]);
-
                     renameMe = position;
+
+                    checklistView.setAdapter(checklistAdapter[0]);
+//
+//                    renameMe = position;
 
                 //Reinstate killed subtask
                 }else if(subTasksClickable && isKilled){
@@ -419,8 +433,6 @@ public class Checklist extends MainActivity {
                     fadeSubTasks = true;
 
                     if (goToChecklistAdapter) {
-
-                        Log.i(TAG, "I'm in here");
 
                         if(checklist.size() != 0) {
                             checklistView.setAdapter(checklistAdapter[0]);
