@@ -261,7 +261,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:gravity="center"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/overdueClear"
@@ -292,7 +293,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:gravity="center"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_marginRight="5dp">
 
                 <ImageView
                     android:id="@+id/snoozeClear"
