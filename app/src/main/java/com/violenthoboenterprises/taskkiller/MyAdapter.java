@@ -5185,9 +5185,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                             String.valueOf(futureDate.getTimeInMillis() / 1000));
                  /////////////////////////////////////////////////
 
-
-
-
                      //intention to execute AlertReceiver
                      MainActivity.alertIntent = new Intent(getContext(), AlertReceiver.class);
 
@@ -5239,6 +5236,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
 
                  if(MainActivity.remindersAvailable) {
+                     Calendar cal = Calendar.getInstance();
+                     Log.i(TAG, "now: " + cal.getTimeInMillis());
+                     Log.i(TAG, "future: " + futureDate.getTimeInMillis());
                      MainActivity.alarmManager.set(AlarmManager.RTC, /*calendar*/futureDate.getTimeInMillis(),
                              MainActivity.pendIntent);
                  }

@@ -127,21 +127,23 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"/>
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:layout_margin="20dp">
+    <!--<TableLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="2"-->
+        <!--android:layout_margin="20dp">-->
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <!--<TableRow-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
         <LinearLayout
             android:id="@+id/darkRepeatLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:visibility="gone">
 
             <RelativeLayout
@@ -154,7 +156,7 @@
                     android:id="@+id/cancelRepeatDark"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:src="@drawable/no_repeat_dark" />
+                    android:src="@drawable/no_repeat_dark"/>
 
             </RelativeLayout>
 
@@ -205,8 +207,10 @@
         <LinearLayout
             android:id="@+id/lightRepeatLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:visibility="gone">
 
             <RelativeLayout
@@ -267,8 +271,8 @@
 
         </LinearLayout>
 
-        </TableRow>
+        <!--</TableRow>-->
 
-    </TableLayout>
+    <!--</TableLayout>-->
 
 </LinearLayout>
