@@ -86,6 +86,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL27 = "REVIEWTWO";
     public static final String UCOL28 = "REVIEWTHREE";
     public static final String UCOL29 = "REVIEWFOUR";
+    public static final String UCOL30 = "HIGHLIGHTDEC";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -121,7 +122,7 @@ public class Database extends SQLiteOpenHelper {
                 " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER, AMPM INTEGER," +
                 " CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN, REPEATHINT INTEGER," +
                 " RENAMEHINT INTEGER, REINSTATEHINT INTEGER, TIMESTARTED INTEGER," +
-                " REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, REVIEWFOUR BOOLEAN)");
+                " REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, REVIEWFOUR BOOLEAN, HIGHLIGHTDEC TEXT)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -234,6 +235,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL27, false);
         content.put(UCOL28, false);
         content.put(UCOL29, false);
+        content.put(UCOL30, "-298516736");
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -763,6 +765,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL29, review);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateHighlightDec(String highlight){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL30, highlight);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }

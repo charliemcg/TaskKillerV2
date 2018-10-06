@@ -199,6 +199,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             "#ef50a9f2", "#ef7c00f8", "#eecc00ff", "#eeff00e6", "#eeff009a", "#eeef0048",
             "#eeef0000", "#eeef4800", "#eeef8f00", "#eeff38ec", "#eeef1a7a", "#eeef85d4",
             "#eeae87f4", "#eeb2a2f4", "#eef4a2d4", "#eef46c6c", "#eef46f35", "#eef38797"};
+    //Decimal version of the highlight color
+    String highlightDec;
 
     //Required for setting notification alarms
     static Intent alertIntent;
@@ -501,6 +503,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             remindersAvailable = dbResult.getInt(6) > 0;
             colorCyclingAllowed = dbResult.getInt(7) > 0;
             taskListSize = dbResult.getInt(8);
+            highlightDec = dbResult.getString(29);
         }
         dbResult.close();
 
@@ -751,7 +754,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     buffer.append("HOUR: " + res.getString(14) + "\n");
                     buffer.append("MINUTE: " + res.getString(15) + "\n");
                     buffer.append("AMPM: " + res.getString(17) + "\n");
-                    buffer.append("DUESSET: " + res.getString(19) + "\n\n");
+                    buffer.append("DUESSET: " + res.getString(19) + "\n");
+                    buffer.append("HIGHLIGHTDEC: " + res.getString(29) + "\n\n");
                 }
                 res.close();
 
@@ -1296,7 +1300,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                    .with(MainActivity.this)
                     .with(MainActivity.this, colorPickerTheme)
                     .setTitle(getString(R.string.chooseColor))
-                    .initialColor(val)
+                    .initialColor(/*val*/Integer.parseInt(highlightDec))
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                     .density(10)
                     .noSliders()
@@ -1314,7 +1318,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         @Override
                         public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                             highlight = "#" + Integer.toHexString(selectedColor);
+                            highlightDec = String.valueOf(selectedColor);
                             db.updateHighlight(highlight);
+                            db.updateHighlightDec(String.valueOf(selectedColor));
 
                             toast.setBackgroundColor(Color.parseColor(highlight));
                             int[] colors = {0, selectedColor, 0};
