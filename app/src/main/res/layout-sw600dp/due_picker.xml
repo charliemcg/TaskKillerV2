@@ -172,7 +172,7 @@
                     android:id="@+id/dailyDark"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/repeat_day_dark"/>
+                    android:src="@drawable/repeat_daily_dark"/>
 
             </RelativeLayout>
 
@@ -186,7 +186,7 @@
                     android:id="@+id/weeklyDark"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/repeat_week_dark"/>
+                    android:src="@drawable/repeat_weekly_dark"/>
 
             </RelativeLayout>
 
@@ -200,7 +200,7 @@
                     android:id="@+id/monthlyDark"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/repeat_month_dark"/>
+                    android:src="@drawable/repeat_monthly_dark"/>
 
             </RelativeLayout>
 
@@ -241,7 +241,7 @@
                     android:id="@+id/dailyLight"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/repeat_day_light"/>
+                    android:src="@drawable/repeat_daily_light"/>
 
             </RelativeLayout>
 
@@ -255,7 +255,7 @@
                     android:id="@+id/weeklyLight"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/repeat_week_light"/>
+                    android:src="@drawable/repeat_weekly_light"/>
 
             </RelativeLayout>
 
@@ -269,7 +269,7 @@
                     android:id="@+id/monthlyLight"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/repeat_month_light"/>
+                    android:src="@drawable/repeat_monthly_light"/>
 
             </RelativeLayout>
 

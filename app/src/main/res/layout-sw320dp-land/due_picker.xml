@@ -160,7 +160,7 @@
                         android:id="@+id/cancelRepeatDark"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
-                        android:src="@drawable/no_repeat_dark"/>
+                        android:src="@drawable/repeat_none_dark"/>
 
                 </RelativeLayout>
 
@@ -227,7 +227,7 @@
                         android:id="@+id/cancelRepeatLight"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
-                        android:src="@drawable/no_repeat_light"/>
+                        android:src="@drawable/repeat_none_light"/>
 
                 </RelativeLayout>
 

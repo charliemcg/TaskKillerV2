@@ -23,6 +23,9 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 public class AlertReceiver extends BroadcastReceiver {
 
     String TAG;
@@ -44,12 +47,17 @@ public class AlertReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder;
         RemoteViews remoteViews;
 
+//        Calendar notifCal = new GregorianCalendar();
+//        int hour = notifCal.get(Calendar.HOUR_OF_DAY);
+//        int minute = notifCal.get(Calendar.MINUTE);
+
         if(MainActivity.lightDark) {
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_light);
             remoteViews.setTextViewText(R.id.notif_title, msg);
         }else{
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification);
             remoteViews.setTextViewText(R.id.notif_title, msg);
+//            remoteViews.setTextViewText(R.id.notific_time, String.valueOf(notifCal.getTime()));
         }
 
         //intent to execute when notification is clicked

@@ -122,7 +122,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final LinearLayout oneHourBtn = taskView.findViewById(R.id.oneHour);
         final LinearLayout fourHourBtn = taskView.findViewById(R.id.fourHours);
         final LinearLayout tomorrowBtn = taskView.findViewById(R.id.tomorrow);
-        LinearLayout buffer = taskView.findViewById(R.id.buffer);
+//        LinearLayout buffer = taskView.findViewById(R.id.buffer);
 
         ImageView repeatClear = taskView.findViewById(R.id.repeatClear);
         ImageView repeatClearWhite = taskView.findViewById(R.id.repeatClearWhite);
@@ -1021,14 +1021,14 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateAmPm(0);
         }
 
-        if((((MainActivity.taskList.size() - 1) == position)
-                && (MainActivity.taskList.size() > 2)
-                && (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))
-                || (((MainActivity.taskList.size() - 1) == position)
-                && (MainActivity.taskList.size() > 4)
-                && (getContext().getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE))){
-            buffer.setVisibility(View.VISIBLE);
-        }
+//        if((((MainActivity.taskList.size() - 1) == position)
+//                && (MainActivity.taskList.size() > 2)
+//                && (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))
+//                || (((MainActivity.taskList.size() - 1) == position)
+//                && (MainActivity.taskList.size() > 4)
+//                && (getContext().getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE))){
+//            buffer.setVisibility(View.VISIBLE);
+//        }
 
         if(MainActivity.fadeTasks){
             //Fade out inactive taskviews
@@ -1469,9 +1469,9 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
 
                 String lang = String.valueOf(Locale.getDefault());
-                if(lang.equals("en_AS") || lang.equals("en_BM") || lang.equals("en_BZ")
+                if(lang.equals("en_AS") || lang.equals("en_BM")
                         || lang.equals("en_CA") || lang.equals("en_GU")
-                        || lang.equals("en_LR") || lang.equals("en_PH")
+                        || lang.equals("en_PH")
                         || lang.equals("en_PR") || lang.equals("en_UM")
                         || lang.equals("en_US") || lang.equals("en_VI")) {
 //                    dateTextView.setText(formattedMonth + " " + day);

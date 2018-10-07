@@ -19,10 +19,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
@@ -43,12 +45,19 @@ public class SetDue extends MainActivity {
 
     static String TAG;
     private Toolbar dueToolbar;
-    LinearLayout dateButton, timeButton, darkRepeat, lightRepeat;
+    LinearLayout dateButton;
+    LinearLayout timeButton;
+    static LinearLayout darkRepeat;
+    LinearLayout lightRepeat;
     static ImageView time, timeFadedDark, timeFadedLight, calendar, calendarFadedDark, calendarFadedLight;
     ImageView dailyDark, weeklyDark, monthlyDark, cancelRepeatDark,
             dailyLight, weeklyLight, monthlyLight, cancelRepeatLight;
     View pickerRoot;
-    TextView dateTextView, timeTextView, divOne, divTwo, divThree;
+    TextView dateTextView;
+    TextView timeTextView;
+    TextView divOne;
+    TextView divTwo;
+    static TextView divThree;
     String repeat;
     static boolean setDue;
     static String dbTaskId;
@@ -198,9 +207,9 @@ public class SetDue extends MainActivity {
             }
 
             String lang = String.valueOf(Locale.getDefault());
-            if(lang.equals("en_AS") || lang.equals("en_BM") || lang.equals("en_BZ")
+            if(lang.equals("en_AS") || lang.equals("en_BM")
                     || lang.equals("en_CA") || lang.equals("en_GU")
-                    || lang.equals("en_LR") || lang.equals("en_PH")
+                    || lang.equals("en_PH")
                     || lang.equals("en_PR") || lang.equals("en_UM")
                     || lang.equals("en_US") || lang.equals("en_VI")) {
                 dateTextView.setText(formattedMonth + " " + alarmDay);
@@ -843,9 +852,9 @@ public class SetDue extends MainActivity {
             }
 
             String lang = String.valueOf(Locale.getDefault());
-            if(lang.equals("en_AS") || lang.equals("en_BM") || lang.equals("en_BZ")
+            if(lang.equals("en_AS") || lang.equals("en_BM")
                     || lang.equals("en_CA") || lang.equals("en_GU")
-                    || lang.equals("en_LR") || lang.equals("en_PH")
+                    || lang.equals("en_PH")
                     || lang.equals("en_PR") || lang.equals("en_UM")
                     || lang.equals("en_US") || lang.equals("en_VI")) {
                 dateTextView.setText(formattedMonth + " " + day);
@@ -992,8 +1001,8 @@ public class SetDue extends MainActivity {
 
             //Initialising time picker based on light or dark
             if(!lightDark) {
-                timePickerDialog = new TimePickerDialog(getActivity(),
-                        AlertDialog.THEME_DEVICE_DEFAULT_DARK, this, hour, minute, false);
+                timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
+                        AlertDialog.THEME_HOLO_DARK, this, hour, minute, false);
             }else{
                 timePickerDialog = new TimePickerDialog(getActivity(),
                         AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, this, hour, minute, false);

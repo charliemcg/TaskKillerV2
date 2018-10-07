@@ -41,6 +41,7 @@ import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,7 +68,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler {
+public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler, AbsListView.OnScrollListener {
 
     //Indicates if a tasks properties are showing
     static boolean taskPropertiesShowing;
@@ -436,6 +437,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         unlockAllPurchasedImg = findViewById(R.id.unlockAllImagePurchased);
         toastParams = (RelativeLayout.LayoutParams) toastView.getLayoutParams();
         toolbarParams = (RelativeLayout.LayoutParams) toolbarDark.getLayoutParams();
+        theListView.setOnScrollListener(this);
 
         db.insertUniversalData(mute);
 
@@ -1223,6 +1225,49 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+        if(absListView.getId() == R.id.theListView) {
+//            Log.i(TAG, "I'm in here");
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, final int first,
+                         final int visible, final int total)
+    {
+
+        switch(absListView.getId())
+        {
+            case R.id.theListView:
+
+                // Make your calculation stuff here. You have all your
+                // needed info from the parameters of this function.
+
+                // Sample calculation to determine if the last
+                // item is fully visible.
+//                final int lastItem = first + visible;
+
+                if(/*lastItem*/(first + visible) == total && visible != total)
+                {
+                    //Removes add button so as to not cover the last item
+                    params.height = 0;
+                    iconParams.height = 0;
+
+                    add.setLayoutParams(params);
+                    addIcon.setLayoutParams(iconParams);
+
+                }else{
+                    //Returns the 'add' button
+                    params.height = addHeight;
+                    iconParams.height = addIconHeight;
+
+                    add.setLayoutParams(params);
+                    addIcon.setLayoutParams(iconParams);
+                }
+        }
     }
 
     ////Shows table results for debugging purposes////
