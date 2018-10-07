@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
+    android:descendantFocusability="beforeDescendants"
+    android:background="@color/dark_gray">
+
+    <RelativeLayout
+        android:id="@+id/adRow"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:descendantFocusability="blocksDescendants"><!--TODO is this going to block the ad?-->
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id"
+            android:visibility="gone"/>
+            <!--dimensions are 468 x 60-->
+
+        <ImageView
+            android:id="@+id/banner"
+            android:src="@drawable/banner"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:visibility="gone"
+            android:onClick="showPro"/>
+
+    </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:descendantFocusability="blocksDescendants"
+            android:id="@+id/taskName">
+
+            <TextView
+                android:layout_height="60dp"
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:id="@+id/textView"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                android:paddingTop="5dp"
+                android:textSize="20sp"
+                android:textColor="@color/gray"/>
+
+            <ImageView
+                android:id="@+id/complete"
+                android:layout_height="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:src="@drawable/tick"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="complete"
+                android:soundEffectsEnabled="false"/>
+
+            <ImageView
+                android:id="@+id/completed"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:src="@drawable/tick_complete"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="complete"
+                android:visibility="gone"
+                android:soundEffectsEnabled="false"/>
+
+            <ImageView
+                android:id="@+id/completeWhite"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:src="@drawable/tick_white"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="complete"
+                android:soundEffectsEnabled="false"/>
+
+            <ImageView
+                android:id="@+id/completedWhite"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:src="@drawable/tick_complete_white"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="complete"
+                android:visibility="gone"
+                android:soundEffectsEnabled="false"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/statusLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:id="@+id/dueTextView"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textColor="@color/gray"/>
+
+            <RelativeLayout
+                android:id="@+id/checklistLayout"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
+
+                <ImageView
+                    android:id="@+id/checklistClear"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/subtasks_icon_dark"/>
+
+                <ImageView
+                    android:id="@+id/checklistClearWhite"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/subtasks_icon_light"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/noteLayout"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
+
+                <ImageView
+                    android:id="@+id/noteClear"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/note_icon_dark"/>
+
+                <ImageView
+                    android:id="@+id/noteClearWhite"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/note_icon_light"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/repeatLayout"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
+
+                <ImageView
+                    android:id="@+id/repeatClear"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/repeat_icon_dark"/>
+
+                <ImageView
+                    android:id="@+id/repeatClearWhite"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/repeat_icon_light"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/dueLayout"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
+
+                <ImageView
+                    android:id="@+id/dueClear"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/due_icon_dark"
+                    android:background="@color/mid_gray"/>
+
+                <ImageView
+                    android:id="@+id/dueClearWhite"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/due_icon_light"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/overdueLayout"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginRight="5dp">
+
+                <ImageView
+                    android:id="@+id/overdueClear"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/overdue_icon_dark"/>
+
+                <ImageView
+                    android:id="@+id/overdueClearWhite"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/overdue_icon_light"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/snoozeLayout"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginRight="5dp">
+
+                <ImageView
+                    android:id="@+id/snoozeClear"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/snooze_icon_dark"/>
+
+                <ImageView
+                    android:id="@+id/snoozeClearWhite"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/mid_gray"
+                    android:src="@drawable/snooze_icon_white"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include
+            layout="@layout/task_properties_layout"
+            android:id="@+id/properties"
+            android:visibility="gone"/>
+        <include
+            layout="@layout/snooze_layout"
+            android:id="@+id/snoozeRow"
+            android:visibility="gone"/>
+        <include
+            layout="@layout/task_overdue_layout"
+            android:id="@+id/taskIsOverdue"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buffer"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+    </LinearLayout>
+
+</LinearLayout>

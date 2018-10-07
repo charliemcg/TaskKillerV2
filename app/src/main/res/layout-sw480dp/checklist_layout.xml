@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/checklistRoot">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/subTasksToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderBar"
+        android:elevation="4dp"/>
+
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/subTasksToolbar"
+        android:background="@color/mid_gray"/>
+
+    <ListView
+        android:id="@+id/theChecklist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
+        android:background="@color/dark_gray"
+        android:descendantFocusability="blocksDescendants"/>
+
+    <EditText
+        android:id="@+id/checklistEditText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:maxLines="1"
+        android:maxLength="50"
+        android:paddingLeft="5dp"
+        android:inputType="textCapSentences"
+        android:layout_alignParentBottom="true"
+        android:hint="@string/checklistItem"
+        android:imeOptions="actionDone"/>
+
+</RelativeLayout>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/noteRoot"
+    android:background="@color/dark_gray">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/noteToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderBar"
+        android:elevation="4dp"/>
+
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/noteToolbar"
+        android:background="@color/mid_gray"/>
+
+    <TextView
+        android:id="@+id/noteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
+        android:textColor="@color/gray"
+        android:textSize="20sp"
+        android:scrollbars="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/noteEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:paddingLeft="5dp"
+            android:maxLines="3"
+            android:maxLength="2000"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences|textMultiLine"
+            android:layout_alignParentBottom="true"
+            android:hint="@string/addYourNote"/>
+
+        <ImageView
+            android:id="@+id/submitNoteBtnDark"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_dark"/>
+
+        <ImageView
+            android:id="@+id/submitNoteOne"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_one"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/submitNoteOneHalf"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_one_half"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/submitNoteTwo"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_two"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/submitNoteTwoHalf"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/submit_two_half"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

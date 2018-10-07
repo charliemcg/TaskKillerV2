@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
+    android:background="@color/dark_gray"
+    android:descendantFocusability="blocksDescendants">
+
+    <TextView
+        android:id="@+id/checklistTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/gray"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <ImageView
+        android:id="@+id/subtaskComplete"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="complete"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompleted"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_complete"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompleteFaded"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_faded"
+        android:focusable="true"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/subtaskCompletedFaded"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_complete_faded"
+        android:focusable="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompleteWhite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_white"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="complete"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompletedWhite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_complete_white"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompleteWhiteFaded"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_white_faded"
+        android:focusable="true"
+        android:soundEffectsEnabled="false"/>
+
+    <ImageView
+        android:id="@+id/subtaskCompletedWhiteFaded"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/tick_complete_faded_white"
+        android:focusable="true"
+        android:visibility="gone"/>
+
+</LinearLayout>

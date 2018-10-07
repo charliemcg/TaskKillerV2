@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context="com.violenthoboenterprises.taskkiller.MainActivity"
+    android:background="@color/dark_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:id="@+id/alarm"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="5dp"
+            android:background="@drawable/layout_border">
+
+            <ImageView
+                android:id="@+id/alarmBtnIcon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:src="@drawable/due_icon_dark_solid"/>
+
+            <ImageView
+                android:id="@+id/alarmBtnIconWhite"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:src="@drawable/due_icon_light_solid"/>
+
+            <TextView
+                android:id="@+id/alarmBtnText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:lines="2"
+                android:gravity="center_vertical"
+                android:text="@string/setDue"
+                android:textSize="9sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/subTasks"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="5dp"
+            android:background="@drawable/layout_border">
+
+            <ImageView
+                android:id="@+id/subTasksBtnIcon"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7.5dp"
+                android:layout_marginBottom="7.5dp"
+                android:layout_gravity="left|center_vertical"
+                android:src="@drawable/subtasks_icon_dark_solid"/>
+
+            <ImageView
+                android:id="@+id/subTasksBtnIconWhite"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7.5dp"
+                android:layout_marginBottom="7.5dp"
+                android:layout_gravity="left|center_vertical"
+                android:src="@drawable/subtasks_icon_light_solid"/>
+
+            <TextView
+                android:id="@+id/subtasksBtnText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:lines="2"
+                android:gravity="center_vertical"
+                android:paddingRight="5dp"
+                android:text="@string/subTasks"
+                android:textSize="9sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/note"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="5dp"
+            android:background="@drawable/layout_border">
+
+            <ImageView
+                android:id="@+id/noteBtnIcon"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:src="@drawable/note_icon_dark_solid"/>
+
+            <ImageView
+                android:id="@+id/noteBtnIconWhite"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:src="@drawable/note_icon_light_solid"/>
+
+            <TextView
+                android:id="@+id/noteBtnText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:lines="2"
+                android:text="@string/note"
+                android:gravity="center_vertical"
+                android:textSize="9sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</TableRow>

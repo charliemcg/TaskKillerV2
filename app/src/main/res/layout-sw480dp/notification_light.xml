@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@color/white"
+    android:id="@+id/notif_root">
+
+    <ImageView
+        android:id="@+id/notif_icon"
+        android:layout_width="64dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_launcher_og"
+        android:layout_gravity="center_vertical"/>
+
+    <LinearLayout
+        android:id="@+id/notif_details"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:text="@string/killThisTask"/>
+
+        <TextView
+            android:id="@+id/notif_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="2"
+            android:textColor="#666666"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray"
+    android:id="@+id/pickerRoot">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/dueToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderBar"
+        android:elevation="4dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/toolbar_dark"
+        android:background="@color/mid_gray"/>
+
+    <LinearLayout
+        android:id="@+id/dateBtn"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:layout_margin="20dp"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/calendarFadedDark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:src="@drawable/calendar_faded"
+            android:padding="15dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/calendarFadedLight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:src="@drawable/calendar_faded_light"
+            android:padding="15dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/calendar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:src="@drawable/calendar"
+            android:padding="15dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/gray"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/divTwo"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
+
+    <LinearLayout
+        android:id="@+id/timeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:layout_margin="20dp"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/timeFadedDark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:src="@drawable/time_faded"
+            android:padding="10dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/timeFadedLight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:src="@drawable/time_faded_light"
+            android:padding="10dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/time"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:src="@drawable/time"
+            android:padding="10dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/gray"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/divThree"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
+
+    <!--<TableLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="2"-->
+        <!--android:layout_margin="20dp">-->
+
+        <!--<TableRow-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+        <LinearLayout
+            android:id="@+id/darkRepeatLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/cancelRepeatDark"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/no_repeat_dark"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/dailyDark"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/repeat_day_dark"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/weeklyDark"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/repeat_week_dark"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/monthlyDark"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/repeat_month_dark"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lightRepeatLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/cancelRepeatLight"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/no_repeat_light"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/dailyLight"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/repeat_day_light"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/weeklyLight"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/repeat_week_light"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/monthlyLight"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/repeat_month_light"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!--</TableRow>-->
+
+    <!--</TableLayout>-->
+
+</LinearLayout>

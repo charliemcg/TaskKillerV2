@@ -1,0 +1,130 @@
+Index: app/src/main/java/com/violenthoboenterprises/taskkiller/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/violenthoboenterprises/taskkiller/MainActivity.java	(revision 2298ae8e756bdd0ac46eec9cbd38c86bfe8769f1)
++++ app/src/main/java/com/violenthoboenterprises/taskkiller/MainActivity.java	(date 1535806546251)
+@@ -102,6 +102,8 @@
+     static boolean completeTask;
+     //Used to determine if sound effects should play or not
+     static boolean mute;
++    //Used to determine what colour scheme to use
++    static boolean lightDark;
+ 
+     //Indicates which task has it's properties showing
+     static int activeTask;
+@@ -270,6 +272,7 @@
+ //        blah = mTopToolbar.getMenu().getItem(R.id.mute);
+ //        blah = mTopToolbar.getMenu().getItem(0);
+ //        muteBtn = mTopToolbar.getMenu().findItem(R.id.mute);
++        lightDark = false;
+ 
+         noteDb.insertUniversalData(mute);
+ 
+@@ -651,7 +654,18 @@
+             muteSounds(mute);
+             return true;
+         }else if (id == R.id.lightDark) {
+-            Toast.makeText(MainActivity.this, "Light/dark clicked", Toast.LENGTH_SHORT).show();
++            if(lightDark){
++                lightDark = false;
++                theListView.setBackgroundColor(Color.parseColor("#333333"));
++                mTopToolbar.setBackgroundColor(Color.parseColor("#333333"));
++                theListView.setAdapter(theAdapter[0]);
++            }else{
++                lightDark = true;
++                theListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
++                mTopToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
++                theListView.setAdapter(theAdapter[0]);
++            }
++            Toast.makeText(MainActivity.this, "Light/dark clicked " + lightDark, Toast.LENGTH_SHORT).show();
+             return true;
+         }else if (id == R.id.highlight) {
+             //Change this to a color picker
+Index: app/src/main/java/com/violenthoboenterprises/taskkiller/MyAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/violenthoboenterprises/taskkiller/MyAdapter.java	(revision 2298ae8e756bdd0ac46eec9cbd38c86bfe8769f1)
++++ app/src/main/java/com/violenthoboenterprises/taskkiller/MyAdapter.java	(date 1535808849004)
+@@ -60,6 +60,8 @@
+         final Intent noteIntent = new Intent(getContext(), Note.class);
+         //This row changes content depending on what needs to be displayed
+         final TableRow propertyRow = taskView.findViewById(R.id.properties);
++        //Part of the task view which displays the task name
++        TableRow taskNameRow = taskView.findViewById(R.id.taskName);
+         //For displaying the date and time pickers
+         final TableRow dateRow = taskView.findViewById(R.id.dateTime);
+         //For displaying the alarm options
+@@ -103,6 +105,8 @@
+         final LinearLayout resetAlarmBtn = taskView.findViewById(R.id.resetAlarmBtn);
+         //Displays repeat options
+         final LinearLayout repeatAlarmBtn = taskView.findViewById(R.id.repeatBtn);
++        //The display of status icons
++        final LinearLayout statusLayout = taskView.findViewById(R.id.statusLayout);
+         //Repeat button text needs to change depending on what state the repeat is in
+         final TextView repeatAlarmBtnText = taskView.findViewById(R.id.repeatAlarmBtnText);
+         //Task status icons are transparent. This is so the background colour can be
+@@ -225,6 +229,36 @@
+             fourHourBtn.setSoundEffectsEnabled(false);
+             tomorrowBtn.setSoundEffectsEnabled(false);
+             taskView.setSoundEffectsEnabled(false);
++            theTextView.setSoundEffectsEnabled(false);
++            taskNameRow.setSoundEffectsEnabled(false);
++        }
++
++        if(!MainActivity.lightDark){
++            taskView.setBackgroundColor(Color.parseColor("#333333"));
++            propertyRow.setBackgroundColor(Color.parseColor("#333333"));
++            dueTextView.setBackgroundColor(Color.parseColor("#333333"));
++            statusLayout.setBackgroundColor(Color.parseColor("#333333"));
++            theTextView.setBackgroundColor(Color.parseColor("#333333"));
++            dateButton.setBackgroundColor(Color.parseColor("#333333"));
++            alarmOptionsRow.setBackgroundColor(Color.parseColor("#333333"));
++            snoozeRow.setBackgroundColor(Color.parseColor("#333333"));
++            taskOverdueRow.setBackgroundColor(Color.parseColor("#333333"));
++            repeatRow.setBackgroundColor(Color.parseColor("#333333"));
++            datePicker.setBackgroundColor(Color.parseColor("#333333"));
++            timePicker.setBackgroundColor(Color.parseColor("#333333"));
++        }else{
++            taskView.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            propertyRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            dueTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            statusLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            theTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            dateButton.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            alarmOptionsRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            snoozeRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            taskOverdueRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            repeatRow.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            datePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
++            timePicker.setBackgroundColor(Color.parseColor("#FFFFFF"));
+         }
+ 
+ //        //Displaying ad if there are five or more tasks
+@@ -2963,7 +2997,7 @@
+             }
+ 
+             //Making extra row visible removes clickability. Clickability needs to be reinstated.
+-            taskView.findViewById(R.id.taskName).setOnClickListener(new View.OnClickListener(){
++            /*taskView.findViewById(R.id.taskName)*/taskNameRow.setOnClickListener(new View.OnClickListener(){
+                 @Override
+                 public void onClick(View view) {
+ 
+Index: app/src/main/res/layout/task_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/task_layout.xml	(revision 2298ae8e756bdd0ac46eec9cbd38c86bfe8769f1)
++++ app/src/main/res/layout/task_layout.xml	(date 1535807229325)
+@@ -74,6 +74,7 @@
+         android:layout_width="match_parent"
+         android:layout_height="50dp">
+         <LinearLayout
++            android:id="@+id/statusLayout"
+             android:orientation="horizontal"
+             android:layout_width="350dp"
+             android:layout_height="50dp"
