@@ -1108,6 +1108,7 @@ class MyAdapter extends ArrayAdapter<String> {
             int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
             int currentHour = currentDate.get(Calendar.HOUR_OF_DAY);
             int currentMinute = currentDate.get(Calendar.MINUTE);
+            int currentAmPm = currentDate.get(Calendar.AM_PM);
 
             //Checking for overdue tasks
             String formattedTime;
@@ -1245,6 +1246,9 @@ class MyAdapter extends ArrayAdapter<String> {
                         && currentMonth == Integer.valueOf(month)
                         && currentDay == Integer.valueOf(day)) {
                     sameDay = true;
+
+                    Log.i(TAG, "currentHour: " + currentHour + " hour: " + hour + " currentAmPm: " + currentAmPm + " ampm: " + ampm);
+
                     //Saved hours are in 12 hour time. Accounting for am/pm.
                     int adjustedHour;
                     if (Integer.valueOf(ampm) == 1) {
@@ -1294,7 +1298,10 @@ class MyAdapter extends ArrayAdapter<String> {
 //                        }
                         markAsOverdue = true;
                     //Overdue
-                    } else if (currentHour == adjustedHour
+                    } else if ((currentHour == adjustedHour ||
+                            (currentHour == 0 && Integer.valueOf(hour) == 12 &&
+                                    Integer.valueOf(ampm) == 0) ||
+                            (currentHour == 12 && Integer.parseInt(hour) == 12))
                             && currentMinute >= Integer.valueOf(minute)) {
                         dueClear.setVisibility(View.GONE);
                         dueLayout.setVisibility(View.GONE);
@@ -1592,11 +1599,13 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.db.updateReinstateHint(MainActivity.reinstateHint);
                 }else{
                     if(MainActivity.showMotivation) {
+                        MainActivity.blockSoundAndAnimate = true;
                         MainActivity.toast.setText(R.string.youKilledThisTask);
                         final Handler handler = new Handler();
 
                         final Runnable runnable = new Runnable() {
                             public void run() {
+                                MainActivity.blockSoundAndAnimate = false;
                                 if (!MainActivity.mute) {
                                     MainActivity.sweep.start();
                                 }

@@ -1001,11 +1001,21 @@ public class SetDue extends MainActivity {
 
             //Initialising time picker based on light or dark
             if(!lightDark) {
-                timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
-                        AlertDialog.THEME_HOLO_DARK, this, hour, minute, false);
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
+                            AlertDialog.THEME_HOLO_DARK, this, hour, minute, false);
+                }else{
+                    timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
+                            AlertDialog.THEME_DEVICE_DEFAULT_DARK, this, hour, minute, false);
+                }
             }else{
-                timePickerDialog = new TimePickerDialog(getActivity(),
-                        AlertDialog.THEME_HOLO_LIGHT, this, hour, minute, false);
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
+                            AlertDialog.THEME_HOLO_LIGHT, this, hour, minute, false);
+                }else {
+                    timePickerDialog = new TimePickerDialog(getActivity(),
+                            AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, this, hour, minute, false);
+                }
             }
 
             return timePickerDialog;

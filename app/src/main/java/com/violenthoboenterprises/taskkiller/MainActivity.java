@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //    static boolean reinstateAnimation;
 //    static int animatePosition;
 //    static int animateID;
+    //used to block excessive sounds and animations if user kills tasks in close succession
+    static boolean blockSoundAndAnimate;
 
     //task properties require exit animation
     static boolean exitTaskProperties;
@@ -438,6 +440,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         toastParams = (RelativeLayout.LayoutParams) toastView.getLayoutParams();
         toolbarParams = (RelativeLayout.LayoutParams) toolbarDark.getLayoutParams();
         theListView.setOnScrollListener(this);
+        blockSoundAndAnimate = false;
 
         db.insertUniversalData(mute);
 
@@ -1821,7 +1824,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     public void complete(View view) {
 
-        if(tasksAreClickable) {
+        if(tasksAreClickable && !MainActivity.blockSoundAndAnimate) {
 
             if (!mute) {
                 punch.start();
