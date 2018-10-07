@@ -40,7 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:descendantFocusability="blocksDescendants"
-            android:id="@+id/taskName">
+            android:id="@+id/taskName"
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_height="80dp"
@@ -48,14 +49,13 @@
                 android:layout_weight="8"
                 android:id="@+id/textView"
                 android:paddingLeft="15dp"
-                android:gravity="center_vertical"
                 android:paddingTop="5dp"
                 android:textSize="25sp"
                 android:textColor="@color/gray"/>
 
             <ImageView
                 android:id="@+id/complete"
-                android:layout_height="65dp"
+                android:layout_height="45dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
@@ -68,7 +68,7 @@
             <ImageView
                 android:id="@+id/completed"
                 android:layout_width="0dp"
-                android:layout_height="65dp"
+                android:layout_height="45dp"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
                 android:src="@drawable/tick_complete"
@@ -81,7 +81,7 @@
             <ImageView
                 android:id="@+id/completeWhite"
                 android:layout_width="0dp"
-                android:layout_height="65dp"
+                android:layout_height="45dp"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
                 android:src="@drawable/tick_white"
@@ -93,7 +93,7 @@
             <ImageView
                 android:id="@+id/completedWhite"
                 android:layout_width="0dp"
-                android:layout_height="65dp"
+                android:layout_height="45dp"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
                 android:src="@drawable/tick_complete_white"

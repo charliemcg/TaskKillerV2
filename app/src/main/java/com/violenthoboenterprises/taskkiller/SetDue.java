@@ -1005,7 +1005,7 @@ public class SetDue extends MainActivity {
                         AlertDialog.THEME_HOLO_DARK, this, hour, minute, false);
             }else{
                 timePickerDialog = new TimePickerDialog(getActivity(),
-                        AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, this, hour, minute, false);
+                        AlertDialog.THEME_HOLO_LIGHT, this, hour, minute, false);
             }
 
             return timePickerDialog;
