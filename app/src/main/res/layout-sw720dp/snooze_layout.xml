@@ -14,7 +14,7 @@
         <LinearLayout
             android:id="@+id/oneHour"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:orientation="horizontal"
             android:layout_weight="1"
             android:gravity="center"
@@ -27,14 +27,15 @@
                 android:lines="1"
                 android:gravity="center"
                 android:text="@string/oneHour"
-                android:textColor="@color/gray"/>
+                android:textColor="@color/gray"
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/fourHours"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:orientation="horizontal"
             android:layout_weight="1"
             android:gravity="center"
@@ -47,14 +48,15 @@
                 android:lines="1"
                 android:gravity="center"
                 android:text="@string/fourHours"
-                android:textColor="@color/gray"/>
+                android:textColor="@color/gray"
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/tomorrow"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:orientation="horizontal"
             android:layout_weight="1"
             android:gravity="center"
@@ -67,7 +69,8 @@
                 android:lines="1"
                 android:gravity="center"
                 android:text="@string/tomorrow"
-                android:textColor="@color/gray"/>
+                android:textColor="@color/gray"
+                android:textSize="20sp"/>
 
         </LinearLayout>
 

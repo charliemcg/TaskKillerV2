@@ -56,6 +56,7 @@ public class SetDue extends MainActivity {
     static String dbDueTime;
     static MenuItem killAlarm, trashAlarmOpen;
     static boolean datePicked, timePicked;
+    static int screenSize;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -99,6 +100,10 @@ public class SetDue extends MainActivity {
 //        divOne = findViewById(R.id.divOne);
         divTwo = findViewById(R.id.divTwo);
         divThree = findViewById(R.id.divThree);
+
+        screenSize = getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+
 
 //        divOne.setBackgroundColor(Color.parseColor(highlight));
         divTwo.setBackgroundColor(Color.parseColor(highlight));
@@ -239,8 +244,16 @@ public class SetDue extends MainActivity {
             }
             datePicked = true;
             timePicked = true;
-            dateTextView.setTextSize(25);
-            timeTextView.setTextSize(25);
+            if(screenSize == 3){
+                dateTextView.setTextSize(65);
+                timeTextView.setTextSize(65);
+            }else if(screenSize == 4){
+                dateTextView.setTextSize(85);
+                timeTextView.setTextSize(85);
+            }else {
+                dateTextView.setTextSize(25);
+                timeTextView.setTextSize(25);
+            }
 
         }
 
@@ -675,8 +688,16 @@ public class SetDue extends MainActivity {
 
                                     dateTextView.setText(R.string.addDate);
                                     timeTextView.setText(R.string.addTime);
-                                    dateTextView.setTextSize(15);
-                                    timeTextView.setTextSize(15);
+                                    if(screenSize == 3){
+                                        dateTextView.setTextSize(25);
+                                        timeTextView.setTextSize(25);
+                                    }else if(screenSize == 4){
+                                        dateTextView.setTextSize(35);
+                                        timeTextView.setTextSize(35);
+                                    }else {
+                                        dateTextView.setTextSize(15);
+                                        timeTextView.setTextSize(15);
+                                    }
 
                                     if(!lightDark) {
                                         cancelRepeatDark.setBackgroundColor(Color.parseColor(highlight));
@@ -894,7 +915,13 @@ public class SetDue extends MainActivity {
             }
             calendar.setVisibility(View.VISIBLE);
 
-            dateTextView.setTextSize(25);
+            if(screenSize == 3){
+                dateTextView.setTextSize(65);
+            }else if(screenSize == 4){
+                dateTextView.setTextSize(85);
+            }else{
+                dateTextView.setTextSize(25);
+            }
 
             killAlarm.setVisible(true);
 
@@ -1060,7 +1087,16 @@ public class SetDue extends MainActivity {
             }
             time.setVisibility(View.VISIBLE);
 
-            timeTextView.setTextSize(25);
+            int screenSize = getResources().getConfiguration().screenLayout &
+                    Configuration.SCREENLAYOUT_SIZE_MASK;
+
+            if(screenSize == 3){
+                timeTextView.setTextSize(65);
+            }else if(screenSize == 4){
+                timeTextView.setTextSize(85);
+            }else {
+                timeTextView.setTextSize(25);
+            }
 
             killAlarm.setVisible(true);
 

@@ -16,7 +16,7 @@
         <LinearLayout
             android:id="@+id/alarm"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="5dp"
@@ -46,14 +46,14 @@
                 android:lines="2"
                 android:gravity="center_vertical"
                 android:text="@string/setDue"
-                android:textSize="14sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/subTasks"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="5dp"
@@ -88,14 +88,14 @@
                 android:gravity="center_vertical"
                 android:paddingRight="5dp"
                 android:text="@string/subTasks"
-                android:textSize="14sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/note"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="5dp"
@@ -125,7 +125,7 @@
                 android:lines="2"
                 android:text="@string/note"
                 android:gravity="center_vertical"
-                android:textSize="14sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
