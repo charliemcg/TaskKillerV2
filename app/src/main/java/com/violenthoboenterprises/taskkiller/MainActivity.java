@@ -1990,31 +1990,59 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     public void onProductPurchased(@NonNull String productId,
                                    @Nullable TransactionDetails details) {
 
-        //TODO make this message specific to each purchase
-//            toast.setText("You purchased something");
-//            final Handler handler = new Handler();
-//
-//            final Runnable runnable = new Runnable() {
-//                public void run() {
-//                if(!mute) {
-//                    sweep.start();
-//                }
-//                    toastView.startAnimation(AnimationUtils.loadAnimation
-//                            (MainActivity.this, R.anim.enter_from_right_fast));
-//                    toastView.setVisibility(View.VISIBLE);
-//                    final Handler handler2 = new Handler();
-//                    final Runnable runnable2 = new Runnable() {
-//                        public void run() {
-//                            toastView.startAnimation(AnimationUtils.loadAnimation
-//                                    (MainActivity.this, android.R.anim.fade_out));
-//                            toastView.setVisibility(View.GONE);
-//                        }
-//                    };
-//                    handler2.postDelayed(runnable2, 1500);
-//                }
-//            };
-//
-//            handler.postDelayed(runnable, 500);
+        //TODO find out what TransactionDetails prints out and enable in app purchase based on productId
+
+        //////////////////////////Remove Ads//////////////////////////////
+//        db.updateAdsRemoved(true);
+//        adsRemoved = true;
+//        purchasesShowing = false;
+//        colorPickerShowing();
+//        if(colorCyclingAllowed && remindersAvailable && adsRemoved){
+//            proBtn.setVisible(false);
+//        }
+//        removeAdsImg.setVisibility(View.GONE);
+//        removeAdsPurchasedImg.setVisibility(View.VISIBLE);
+
+        //////////////////////////Get Reminders//////////////////////////////
+//        db.updateRemindersAvailable(true);
+//        remindersAvailable = true;
+//        purchasesShowing = false;
+//        colorPickerShowing();
+//        if(colorCyclingAllowed && remindersAvailable && adsRemoved){
+//            proBtn.setVisible(false);
+//        }
+//        remindersImg.setVisibility(View.GONE);
+//        remindersPurchasedImg.setVisibility(View.VISIBLE);
+
+        //////////////////////////Cycle Colors//////////////////////////////
+//        db.updateCycleColors(true);
+//        colorCyclingAllowed = true;
+//        purchasesShowing = false;
+//        colorPickerShowing();
+//        if(colorCyclingAllowed && remindersAvailable && adsRemoved){
+//            proBtn.setVisible(false);
+//        }
+//        autoColorImg.setVisibility(View.GONE);
+//        autoColorPurchasedImg.setVisibility(View.VISIBLE);
+
+        //////////////////////////Unlock All//////////////////////////////
+//        db.updateAdsRemoved(true);
+//        db.updateRemindersAvailable(true);
+//        db.updateCycleColors(true);
+//        adsRemoved = true;
+//        remindersAvailable = true;
+//        colorCyclingAllowed = true;
+//        purchasesShowing = false;
+//        colorPickerShowing();
+//        proBtn.setVisible(false);
+//        unlockAllImg.setVisibility(View.GONE);
+//        unlockAllPurchasedImg.setVisibility(View.VISIBLE);
+//        autoColorImg.setVisibility(View.GONE);
+//        autoColorPurchasedImg.setVisibility(View.VISIBLE);
+//        remindersImg.setVisibility(View.GONE);
+//        remindersPurchasedImg.setVisibility(View.VISIBLE);
+//        removeAdsImg.setVisibility(View.GONE);
+//        removeAdsPurchasedImg.setVisibility(View.VISIBLE);
 
     }
 
@@ -2025,33 +2053,32 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     @Override
     public void onBillingError(int errorCode, @Nullable Throwable error) {
-        if(showMotivation) {
-            //TODO don't actually show this in the released version
-            toast.setText("Something went wrong");
-            final Handler handler = new Handler();
 
-            final Runnable runnable = new Runnable() {
-                public void run() {
-                if(!mute) {
-                    sweep.start();
-                }
-                    toastView.startAnimation(AnimationUtils.loadAnimation
-                            (MainActivity.this, R.anim.enter_from_right_fast));
-                    toastView.setVisibility(View.VISIBLE);
-                    final Handler handler2 = new Handler();
-                    final Runnable runnable2 = new Runnable() {
+        toast.setText("Something went wrong");
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+            public void run() {
+            if(!mute) {
+                sweep.start();
+            }
+                toastView.startAnimation(AnimationUtils.loadAnimation
+                        (MainActivity.this, R.anim.enter_from_right_fast));
+                toastView.setVisibility(View.VISIBLE);
+                final Handler handler2 = new Handler();
+                final Runnable runnable2 = new Runnable() {
                         public void run() {
-                            toastView.startAnimation(AnimationUtils.loadAnimation
-                                    (MainActivity.this, android.R.anim.fade_out));
-                            toastView.setVisibility(View.GONE);
-                        }
+                        toastView.startAnimation(AnimationUtils.loadAnimation
+                                (MainActivity.this, android.R.anim.fade_out));
+                        toastView.setVisibility(View.GONE);
+                    }
                     };
-                    handler2.postDelayed(runnable2, 1500);
-                }
-            };
+                handler2.postDelayed(runnable2, 1500);
+            }
+        };
 
-            handler.postDelayed(runnable, 500);
-        }
+        handler.postDelayed(runnable, 500);
+
     }
 
     @Override
@@ -2087,16 +2114,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //TODO replace this test stuff with real stuff
             //TODO see if productID should go in strings.xml
             bp.purchase(this, "android.test.purchased");
-            //TODO verify purchase before updating to true
-            db.updateAdsRemoved(true);
-            adsRemoved = true;
-            purchasesShowing = false;
-            colorPickerShowing();
-            if(colorCyclingAllowed && remindersAvailable && adsRemoved){
-                proBtn.setVisible(false);
-            }
-            removeAdsImg.setVisibility(View.GONE);
-            removeAdsPurchasedImg.setVisibility(View.VISIBLE);
+
         }
 
     }
@@ -2113,16 +2131,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //TODO replace this test stuff with real stuff
             //            //TODO see if productID should go in strings.xml
             bp.purchase(this, "android.test.purchased");
-            //TODO verify purchase before updating to true
-            db.updateRemindersAvailable(true);
-            remindersAvailable = true;
-            purchasesShowing = false;
-            colorPickerShowing();
-            if(colorCyclingAllowed && remindersAvailable && adsRemoved){
-                proBtn.setVisible(false);
-            }
-            remindersImg.setVisibility(View.GONE);
-            remindersPurchasedImg.setVisibility(View.VISIBLE);
+
         }
 
     }
@@ -2139,16 +2148,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //TODO replace this test stuff with real stuff
             //            //TODO see if productID should go in strings.xml
             bp.purchase(this, "android.test.purchased");
-            //TODO verify purchase before updating to true
-            db.updateCycleColors(true);
-            colorCyclingAllowed = true;
-            purchasesShowing = false;
-            colorPickerShowing();
-            if(colorCyclingAllowed && remindersAvailable && adsRemoved){
-                proBtn.setVisible(false);
-            }
-            autoColorImg.setVisibility(View.GONE);
-            autoColorPurchasedImg.setVisibility(View.VISIBLE);
+
         }
 
     }
@@ -2166,24 +2166,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //TODO replace this test stuff with real stuff
             //            //TODO see if productID should go in strings.xml
             bp.purchase(this, "android.test.purchased");
-            //TODO verify purchase before updating to true
-            db.updateAdsRemoved(true);
-            db.updateRemindersAvailable(true);
-            db.updateCycleColors(true);
-            adsRemoved = true;
-            remindersAvailable = true;
-            colorCyclingAllowed = true;
-            purchasesShowing = false;
-            colorPickerShowing();
-            proBtn.setVisible(false);
-            unlockAllImg.setVisibility(View.GONE);
-            unlockAllPurchasedImg.setVisibility(View.VISIBLE);
-            autoColorImg.setVisibility(View.GONE);
-            autoColorPurchasedImg.setVisibility(View.VISIBLE);
-            remindersImg.setVisibility(View.GONE);
-            remindersPurchasedImg.setVisibility(View.VISIBLE);
-            removeAdsImg.setVisibility(View.GONE);
-            removeAdsPurchasedImg.setVisibility(View.VISIBLE);
+
         }
 
     }

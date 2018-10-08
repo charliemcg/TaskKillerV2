@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:text="@string/removeAds"/>
 
                 <TextView
@@ -90,7 +90,8 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
-                    android:text="@string/permanentlyRemoveAds"/>
+                    android:text="@string/permanentlyRemoveAds"
+                    android:textSize="12sp"/>
 
             </LinearLayout>
 
@@ -154,7 +155,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:textSize="20sp"
+                        android:textSize="17sp"
                         android:text="@string/cycleColors"/>
 
                     <TextView
@@ -164,7 +165,8 @@
                         android:layout_weight="3"
                         android:layout_marginTop="5dp"
                         android:gravity="center_vertical|right"
-                        android:text="@string/featureColorSlowly"/>
+                        android:text="@string/featureColorSlowly"
+                        android:textSize="12sp"/>
 
                 </LinearLayout>
 
@@ -201,7 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:text="@string/getReminders"/>
 
                 <TextView
@@ -211,7 +213,8 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
-                    android:text="@string/setUnlimitedDueDates"/>
+                    android:text="@string/setUnlimitedDueDates"
+                    android:textSize="12sp"/>
 
             </LinearLayout>
 
@@ -274,7 +277,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:gravity="right"
                     android:text="@string/unlockAll"/>
 
@@ -285,7 +288,8 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical|right"
-                    android:text="@string/ultimateValuePack"/>
+                    android:text="@string/ultimateValuePack"
+                    android:textSize="12sp"/>
 
             </LinearLayout>
 

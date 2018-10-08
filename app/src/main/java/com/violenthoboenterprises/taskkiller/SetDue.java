@@ -361,6 +361,12 @@ public class SetDue extends MainActivity {
 //                    blip.start();
 //                }
 
+
+                if(!mute && !repeat.equals("day")){
+                    blip.start();
+                }
+
+
                 vibrate.vibrate(50);
 
                 //Show user which button they selected by highlighting it
@@ -391,6 +397,10 @@ public class SetDue extends MainActivity {
 //                if(!mute){
 //                    blip.start();
 //                }
+
+                if(!mute && !repeat.equals("day")){
+                    blip.start();
+                }
 
                 vibrate.vibrate(50);
 
@@ -423,6 +433,10 @@ public class SetDue extends MainActivity {
 //                    blip.start();
 //                }
 
+                if(!mute && !repeat.equals("week")){
+                    blip.start();
+                }
+
                 vibrate.vibrate(50);
 
                 //Show user which button they selected by highlighting it
@@ -453,6 +467,10 @@ public class SetDue extends MainActivity {
 //                if(!mute){
 //                    blip.start();
 //                }
+
+                if(!mute && !repeat.equals("week")){
+                    blip.start();
+                }
 
                 vibrate.vibrate(50);
 
@@ -485,6 +503,10 @@ public class SetDue extends MainActivity {
 //                    blip.start();
 //                }
 
+                if(!mute && !repeat.equals("month")){
+                    blip.start();
+                }
+
                 vibrate.vibrate(50);
 
                 //Show user which button they selected by highlighting it
@@ -515,6 +537,10 @@ public class SetDue extends MainActivity {
 //                if(!mute){
 //                    blip.start();
 //                }
+
+                if(!mute && !repeat.equals("month")){
+                    blip.start();
+                }
 
                 vibrate.vibrate(50);
 
@@ -547,6 +573,10 @@ public class SetDue extends MainActivity {
 //                    blip.start();
 //                }
 
+                if(!mute && !repeat.equals("none")){
+                    blip.start();
+                }
+
                 vibrate.vibrate(50);
 
                 cancelRepeatDark.setBackgroundColor(Color.parseColor(highlight));
@@ -574,6 +604,10 @@ public class SetDue extends MainActivity {
 //                if(!mute){
 //                    blip.start();
 //                }
+
+                if(!mute && !repeat.equals("none")){
+                    blip.start();
+                }
 
                 vibrate.vibrate(50);
 
@@ -819,6 +853,10 @@ public class SetDue extends MainActivity {
 
         public void onDateSet(DatePicker view, int year, int month, int day){
 
+            if(!mute){
+                blip.start();
+            }
+
             TextView dateTextView = getActivity().findViewById(R.id.dateTextView);
 
             //Format and display chosen date
@@ -882,8 +920,9 @@ public class SetDue extends MainActivity {
                 int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                 int currentMonth = calendar.get(Calendar.MONTH);
                 int currentYear = calendar.get(Calendar.YEAR);
+                Log.i(TAG, "hour is: " + hour);
                 if((currentYear == year) && (currentMonth == month) && (currentDay == day)
-                        && (hour > 10)) {
+                        && (hour >= 10)) {
                     if(hour != 23) {
                         db.updateHour(hour + 1);
                     }else{
@@ -1044,6 +1083,10 @@ public class SetDue extends MainActivity {
             String adjustedHour = String.valueOf(hour);
             String adjustedMinute/* = String.valueOf(minute)*/;
 
+            if(!mute){
+                blip.start();
+            }
+
             if(hour == 0) {
                 adjustedHour = String.valueOf(12);
                 db.updateAmPm(0);
@@ -1191,7 +1234,7 @@ public class SetDue extends MainActivity {
                     int minute = calendar.get(Calendar.MINUTE);
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
                     int ampm = calendar.get(Calendar.AM_PM);
-                    if(hour > 10) {
+                    if(hour >= 10) {
                         if(hour != 23) {
                             db.updateHour(hour + 1);
                         }else{
@@ -1242,7 +1285,7 @@ public class SetDue extends MainActivity {
                     int minute = calendar.get(Calendar.MINUTE);
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
                     int ampm = calendar.get(Calendar.AM_PM);
-                    if(hour > 10) {
+                    if(hour >= 10) {
                         if(hour != 23) {
                             db.updateHour(hour + 1);
                         }else{
@@ -1288,7 +1331,7 @@ public class SetDue extends MainActivity {
                     int minute = calendar.get(Calendar.MINUTE);
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
                     int ampm = calendar.get(Calendar.AM_PM);
-                    if(hour > 10) {
+                    if(hour >= 10) {
                         if(hour != 23) {
                             db.updateHour(hour + 1);
                         }else{

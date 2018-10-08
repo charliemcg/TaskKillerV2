@@ -5082,7 +5082,6 @@ class MyAdapter extends ArrayAdapter<String> {
              if (ampm == 1) {
                  adjustedHour += 12;
              }
-             Log.i(TAG, "adjustedHour: " + adjustedHour + " hour: " + currentDate.get(Calendar.HOUR_OF_DAY));
              if (currentDate.get(Calendar.YEAR) == year
                      && currentDate.get(Calendar.MONTH) == month
                      && currentDate.get(Calendar.DAY_OF_MONTH) ==
@@ -5166,6 +5165,8 @@ class MyAdapter extends ArrayAdapter<String> {
                  Calendar futureDate = new GregorianCalendar(year,
                          month, day,
                          amPmHour, minute);
+
+                 Log.i(TAG, "I'm in here");
 
                  //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                  // detect duplicates and then adjusting the timestamp on the millisecond level
