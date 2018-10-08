@@ -2371,6 +2371,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     //setting the name of the task for which the
                                     // notification is being set
                                     MainActivity.alertIntent.putExtra("ToDo", task);
+                                    MainActivity.alertIntent.putExtra("broadId", finalDbBroadcast);
 
                                     int newBroadcast = finalDbBroadcast + 1000;
 
@@ -2925,6 +2926,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             //setting the name of the task for which
                                             // the notification is being set
                                             MainActivity.alertIntent.putExtra("ToDo", task);
+                                            MainActivity.alertIntent.putExtra("broadId", finalDbBroadcast);
 
                                             int newBroadcast = finalDbBroadcast + 1000;
 
@@ -3443,6 +3445,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     //setting the name of the task for which
                                     // the notification is being set
                                     MainActivity.alertIntent.putExtra("ToDo", task);
+                                    MainActivity.alertIntent.putExtra("broadId", finalDbBroadcast);
 
                                     int newBroadcast = finalDbBroadcast + 1000;
 
@@ -5230,6 +5233,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                      //setting the name of the task for which the notification is being set
                      MainActivity.alertIntent.putExtra("ToDo", dbTask);
+                     MainActivity.alertIntent.putExtra("broadId", dbBroadcast);
 
                      MainActivity.pendIntent = PendingIntent.getBroadcast(getContext(), dbBroadcast,
                              MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);

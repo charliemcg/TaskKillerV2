@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
@@ -36,11 +37,12 @@ public class AlertReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         //retrieving task name to set as notification name
-        createNotification(context, String.valueOf(intent.getStringExtra("ToDo")), "", "");
+        createNotification(context, String.valueOf(intent.getStringExtra("ToDo")), "", "",
+                intent.getIntExtra("broadId", 0));
 
     }
 
-    public void createNotification(Context context, String msg, String msgText, String msgAlert){
+    public void createNotification(Context context, String msg, String msgText, String msgAlert, int broadId){
 
         //defining intent and action to perform
         PendingIntent notificIntent = PendingIntent.getActivity(context, 1,
@@ -104,6 +106,17 @@ public class AlertReceiver extends BroadcastReceiver {
 
         //post notification
         notificationManager.notify(1, builder.build());
+
+        //getting task data
+        Boolean dbRepeat = false;
+        Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
+                MainActivity.sortedIDs.get(broadId)));
+        while (dbResult.moveToNext()) {
+            dbRepeat = dbResult.getInt(8) > 0;
+        }
+        dbResult.close();
+
+        Log.i(TAG, "Create next alarm here with id: " + broadId);
 
     }
 
