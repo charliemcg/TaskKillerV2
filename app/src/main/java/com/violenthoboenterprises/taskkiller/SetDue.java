@@ -980,21 +980,34 @@ public class SetDue extends MainActivity {
 
 //            int twentyFourHour = hour;
 
+            int defaultTimePickerHour;
+
             if(timePicked && (uniHour != 0)){
                 minute = uniMinute;
                 hour = uniHour;
                 if(uniAmPm == 1){
                     hour += 12;
+                    defaultTimePickerHour = hour;
+                }else if(uniAmPm == 0 && hour == 12){
+                    defaultTimePickerHour = 0;
+                }else{
+                    defaultTimePickerHour = hour;
                 }
             }else if(!alarmHour.equals("") && !alarmMinute.equals("")){
                 minute = Integer.parseInt(alarmMinute);
                 hour = Integer.parseInt(alarmHour);
                 if(alarmAmPm.equals("1")){
                     hour += 12;
+                    defaultTimePickerHour = hour;
+                }else if (alarmAmPm.equals("0") && hour == 12){
+                    defaultTimePickerHour = 0;
+                }else{
+                    defaultTimePickerHour = hour;
                 }
             }else{
                 minute = calendar.get(Calendar.MINUTE);
                 hour = calendar.get(Calendar.HOUR_OF_DAY);
+                defaultTimePickerHour = hour;
             }
 
             TimePickerDialog timePickerDialog;
@@ -1003,18 +1016,18 @@ public class SetDue extends MainActivity {
             if(!lightDark) {
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
-                            AlertDialog.THEME_HOLO_DARK, this, hour, minute, false);
+                            AlertDialog.THEME_HOLO_DARK, this, defaultTimePickerHour, minute, false);
                 }else{
                     timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
-                            AlertDialog.THEME_DEVICE_DEFAULT_DARK, this, hour, minute, false);
+                            AlertDialog.THEME_DEVICE_DEFAULT_DARK, this, defaultTimePickerHour, minute, false);
                 }
             }else{
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
-                            AlertDialog.THEME_HOLO_LIGHT, this, hour, minute, false);
+                            AlertDialog.THEME_HOLO_LIGHT, this, defaultTimePickerHour, minute, false);
                 }else {
                     timePickerDialog = new TimePickerDialog(getActivity(),
-                            AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, this, hour, minute, false);
+                            AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, this, defaultTimePickerHour, minute, false);
                 }
             }
 

@@ -1247,8 +1247,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         && currentDay == Integer.valueOf(day)) {
                     sameDay = true;
 
-                    Log.i(TAG, "currentHour: " + currentHour + " hour: " + hour + " currentAmPm: " + currentAmPm + " ampm: " + ampm);
-
                     //Saved hours are in 12 hour time. Accounting for am/pm.
                     int adjustedHour;
                     if (Integer.valueOf(ampm) == 1) {
@@ -5084,6 +5082,7 @@ class MyAdapter extends ArrayAdapter<String> {
              if (ampm == 1) {
                  adjustedHour += 12;
              }
+             Log.i(TAG, "adjustedHour: " + adjustedHour + " hour: " + currentDate.get(Calendar.HOUR_OF_DAY));
              if (currentDate.get(Calendar.YEAR) == year
                      && currentDate.get(Calendar.MONTH) == month
                      && currentDate.get(Calendar.DAY_OF_MONTH) ==
@@ -5122,8 +5121,9 @@ class MyAdapter extends ArrayAdapter<String> {
                      && currentDate.get(Calendar.MONTH) == month
                      && currentDate.get(Calendar.DAY_OF_MONTH) ==
                      day
-                     && currentDate.get(Calendar.HOUR_OF_DAY) ==
-                     adjustedHour
+                     && (currentDate.get(Calendar.HOUR_OF_DAY) ==
+                     adjustedHour || (currentDate.get(Calendar.HOUR_OF_DAY) == 0 && adjustedHour == 12)
+                     || (currentDate.get(Calendar.HOUR_OF_DAY) == 12 && adjustedHour == 24))
                      && currentDate.get(Calendar.MINUTE) > minute) {
                  MainActivity.toast.setText(R.string.cannotSetTask);
                  MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
@@ -5155,9 +5155,12 @@ class MyAdapter extends ArrayAdapter<String> {
                  handler.postDelayed(runnable, 500);
              } else {
 
-                 int amPmHour = ampm;
-                 if (ampm == 1) {
+//                 int amPmHour = ampm;
+                 int amPmHour = hour;
+                 if (ampm == 1 && amPmHour != 12) {
                      amPmHour += 12;
+                 }else if(ampm == 0 && amPmHour == 12){
+                     amPmHour = 0;
                  }
 
                  Calendar futureDate = new GregorianCalendar(year,
@@ -5246,8 +5249,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                  if(MainActivity.remindersAvailable) {
                      Calendar cal = Calendar.getInstance();
-                     Log.i(TAG, "now: " + cal.getTimeInMillis());
-                     Log.i(TAG, "future: " + futureDate.getTimeInMillis());
                      MainActivity.alarmManager.set(AlarmManager.RTC, /*calendar*/futureDate.getTimeInMillis(),
                              MainActivity.pendIntent);
                  }
