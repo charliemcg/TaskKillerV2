@@ -1,5 +1,6 @@
 package com.violenthoboenterprises.taskkiller;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -109,14 +110,41 @@ public class AlertReceiver extends BroadcastReceiver {
 
         //getting task data
         Boolean dbRepeat = false;
+        String dbRepeatInterval = "";
         Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(broadId)));
         while (dbResult.moveToNext()) {
             dbRepeat = dbResult.getInt(8) > 0;
+            dbRepeatInterval = dbResult.getString(13);
         }
         dbResult.close();
 
-        Log.i(TAG, "Create next alarm here with id: " + broadId);
+        if(dbRepeat) {
+
+            if(dbRepeatInterval.equals("day")){
+                Log.i(TAG, "Create next alarm here with id: " + broadId);
+
+                //setting the name of the task for which the
+                // notification is being set
+                MainActivity.alertIntent.putExtra("ToDo", msg);
+                MainActivity.alertIntent.putExtra("broadId", broadId);
+
+                //Setting alarm
+                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                        context, broadId, MainActivity.alertIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                Calendar dateNow = Calendar.getInstance();
+                MainActivity.alarmManager.set(AlarmManager.RTC, (dateNow
+                                .getTimeInMillis() + AlarmManager.INTERVAL_DAY),
+                        MainActivity.pendIntent);
+
+            }else if(dbRepeatInterval.equals("week")){
+
+            }else if(dbRepeatInterval.equals("month")){
+
+            }
+        }
 
     }
 
