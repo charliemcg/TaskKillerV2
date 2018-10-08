@@ -1951,7 +1951,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 db.updateReviewThree(reviewThree);
                 db.updateReviewFour(reviewFour);
                 //TODO find out if this needs to go into strings.xml
-                String url = "https://play.google.com/store"/*/apps/details?id=YOUR PACKAGE NAME"*/;
+                String url = "https://play.google.com/store/apps/details?id=com.violenthoboenterprises.taskkiller";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);

@@ -5086,7 +5086,7 @@ class MyAdapter extends ArrayAdapter<String> {
              }else if(hour == 12){
                  adjustedHour = 0;
              }
-             Log.i(TAG, "current: " + currentDate.get(Calendar.HOUR_OF_DAY) +  " adjusted: " + adjustedHour);
+
              if (currentDate.get(Calendar.YEAR) == year
                      && currentDate.get(Calendar.MONTH) == month
                      && currentDate.get(Calendar.DAY_OF_MONTH) ==
@@ -5329,11 +5329,16 @@ class MyAdapter extends ArrayAdapter<String> {
                      alarmHour = String.valueOf(tempHour);
                  }
                  if (!alarmHour.equals("")) {
-                     prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
-                             Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
-                             Integer.parseInt(alarmMinute));
+//                     prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
+//                             Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
+//                             Integer.parseInt(alarmMinute));
+//                     prevCalendar.set(year,
+//                             month, day,
+//                             amPmHour, minute);
                  }
                  if(MainActivity.remindersAvailable) {
+                     //TODO switch back to inexact
+//                     MainActivity.alarmManager.setRepeating(AlarmManager.RTC, prevCalendar.getTimeInMillis(), Long.parseLong(uniInterval), MainActivity.pendIntent);
                      MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
                              prevCalendar.getTimeInMillis(),
                              /*MainActivity.repeatInterval*/Long.parseLong(uniInterval), MainActivity.pendIntent);

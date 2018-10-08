@@ -382,6 +382,8 @@ public class SetDue extends MainActivity {
 
                 repeating = true;
 
+                setDue = true;
+
                 killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
@@ -418,6 +420,8 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
+                setDue = true;
+
                 killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
@@ -452,6 +456,8 @@ public class SetDue extends MainActivity {
                 repeat = "week";
 
                 repeating =true;
+
+                setDue = true;
 
                 killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
@@ -488,6 +494,8 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
+                setDue = true;
+
                 killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
@@ -522,6 +530,8 @@ public class SetDue extends MainActivity {
                 repeat = "month";
 
                 repeating =true;
+
+                setDue = true;
 
                 killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
@@ -558,6 +568,8 @@ public class SetDue extends MainActivity {
 
                 repeating =true;
 
+                setDue = true;
+
                 killAlarm.setVisible(true);
 //                dueToolbar.getMenu().getItem(0).setVisible(true);
 
@@ -587,6 +599,8 @@ public class SetDue extends MainActivity {
                 monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
 
                 repeat = "none";
+
+                setDue = false;
 
                 if(!timePicked && !datePicked) {
                     killAlarm.setVisible(false);
@@ -619,6 +633,8 @@ public class SetDue extends MainActivity {
                 monthlyLight.setBackgroundColor(Color.parseColor("#000000"));
 
                 repeat = "none";
+
+                setDue = false;
 
                 if(!timePicked && !datePicked) {
                     killAlarm.setVisible(false);
@@ -1211,170 +1227,171 @@ public class SetDue extends MainActivity {
     //Return to main screen when back pressed
     public void onBackPressed() {
 
-        //Determine if repeat needs to be set
-        if(!repeat.equals("none")) {
-            db.updateRepeatInterval(dbTaskId, repeat);
-            db.updateRepeat(dbTaskId, true);
-
-            if(repeat.equals("day")){
-
-                repeatInterval = AlarmManager.INTERVAL_DAY;
-
-                db.updateRepeatInterval(dbTaskId,"day");
-
-                repeating = true;
-
-                taskPropertiesShowing = false;
-
-                //set default date values if user not already selected
-                if(!datePicked){
-
-                    Calendar calendar = Calendar.getInstance();
-                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-                    int month = calendar.get(Calendar.MONTH);
-                    int year = calendar.get(Calendar.YEAR);
-                    db.updateDay(day);
-                    db.updateMonth(month);
-                    db.updateYear(year);
-                }else{
-                    getDateFromDB();
-                }
-
-                //Set default time values if user not selected time values already
-                if(!timePicked){
-
-                    Calendar calendar = Calendar.getInstance();
-                    int minute = calendar.get(Calendar.MINUTE);
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                    int ampm = calendar.get(Calendar.AM_PM);
-
-                    if(hour >= 10) {
-                        if(hour != 23) {
-                            db.updateHour(hour + 1);
-                        }else{
-                            db.updateHour(hour);
-                        }
-                        db.updateMinute(minute);
-                        db.updateAmPm(ampm);
-                    }else{
-                        db.updateHour(10);
-                        db.updateAmPm(ampm);
-                        db.updateMinute(0);
-                    }
-                }else{
-
-                    getTimeFromDB();
-                }
-
-                setDue = true;
-                datePicked = true;
-                timePicked = true;
-
-            }else if(repeat.equals("week")){
-
-                repeatInterval = (AlarmManager.INTERVAL_DAY * 7);
-
-                db.updateRepeatInterval(dbTaskId, "week");
-
-                repeating = true;
-
-                taskPropertiesShowing = false;
-
-                //set default date values if user not already selected
-                if(!datePicked){
-                    Calendar calendar = Calendar.getInstance();
-                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-                    int month = calendar.get(Calendar.MONTH);
-                    int year = calendar.get(Calendar.YEAR);
-                    db.updateDay(day);
-                    db.updateMonth(month);
-                    db.updateYear(year);
-                }else{
-                    getDateFromDB();
-                }
-
-                //Set default time values if user not selected time values already
-                if(!timePicked){
-                    Calendar calendar = Calendar.getInstance();
-                    int minute = calendar.get(Calendar.MINUTE);
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                    int ampm = calendar.get(Calendar.AM_PM);
-                    if(hour >= 10) {
-                        if(hour != 23) {
-                            db.updateHour(hour + 1);
-                        }else{
-                            db.updateHour(hour);
-                        }
-                        db.updateAmPm(ampm);
-                        db.updateMinute(minute);
-                    }else{
-                        db.updateHour(10);
-                        db.updateAmPm(ampm);
-                        db.updateMinute(0);
-                    }
-                }else{
-                    getTimeFromDB();
-                }
-
-                setDue = true;
-                datePicked = true;
-                timePicked = true;
-
-            }else if(repeat.equals("month")){
-
-                db.updateRepeatInterval(dbTaskId, "month");
-
-                MainActivity.taskPropertiesShowing = false;
-
-                //set default date values if user not already selected
-                if(!datePicked){
-                    Calendar calendar = Calendar.getInstance();
-                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-                    int month = calendar.get(Calendar.MONTH);
-                    int year = calendar.get(Calendar.YEAR);
-                    db.updateDay(day);
-                    db.updateMonth(month);
-                    db.updateYear(year);
-                }else{
-                    getDateFromDB();
-                }
-
-                //Set default time values if user not selected time values already
-                if(!timePicked){
-                    Calendar calendar = Calendar.getInstance();
-                    int minute = calendar.get(Calendar.MINUTE);
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                    int ampm = calendar.get(Calendar.AM_PM);
-                    if(hour >= 10) {
-                        if(hour != 23) {
-                            db.updateHour(hour + 1);
-                        }else{
-                            db.updateHour(hour);
-                        }
-                        db.updateAmPm(ampm);
-                        db.updateMinute(minute);
-                    }else{
-                        db.updateHour(10);
-                        db.updateAmPm(ampm);
-                        db.updateMinute(0);
-                    }
-                }else{
-                    getTimeFromDB();
-                }
-
-                setDue = true;
-                datePicked = true;
-                timePicked = true;
-
-            }
-
-        }else{
-            db.updateRepeatInterval(dbTaskId, "");
-            db.updateRepeat(dbTaskId, false);
-        }
+        Log.i(TAG, "Set Due: " + setDue);
 
         //updating the alarm in myAdapter
         if(setDue) {
+            //Determine if repeat needs to be set
+            if(!repeat.equals("none")) {
+                db.updateRepeatInterval(dbTaskId, repeat);
+                db.updateRepeat(dbTaskId, true);
+
+                if(repeat.equals("day")){
+
+                    repeatInterval = AlarmManager.INTERVAL_DAY;
+
+                    db.updateRepeatInterval(dbTaskId,"day");
+
+                    repeating = true;
+
+                    taskPropertiesShowing = false;
+
+                    //set default date values if user not already selected
+                    if(!datePicked){
+
+                        Calendar calendar = Calendar.getInstance();
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int month = calendar.get(Calendar.MONTH);
+                        int year = calendar.get(Calendar.YEAR);
+                        db.updateDay(day);
+                        db.updateMonth(month);
+                        db.updateYear(year);
+                    }else{
+                        getDateFromDB();
+                    }
+
+                    //Set default time values if user not selected time values already
+                    if(!timePicked){
+
+                        Calendar calendar = Calendar.getInstance();
+                        int minute = calendar.get(Calendar.MINUTE);
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        int ampm = calendar.get(Calendar.AM_PM);
+
+                        if(hour >= 10) {
+                            if(hour != 23) {
+                                db.updateHour(hour + 1);
+                            }else{
+                                db.updateHour(hour);
+                            }
+                            db.updateMinute(minute);
+                            db.updateAmPm(ampm);
+                        }else{
+                            db.updateHour(10);
+                            db.updateAmPm(ampm);
+                            db.updateMinute(0);
+                        }
+                    }else{
+
+                        getTimeFromDB();
+                    }
+
+                    setDue = true;
+                    datePicked = true;
+                    timePicked = true;
+
+                }else if(repeat.equals("week")){
+
+                    repeatInterval = (AlarmManager.INTERVAL_DAY * 7);
+
+                    db.updateRepeatInterval(dbTaskId, "week");
+
+                    repeating = true;
+
+                    taskPropertiesShowing = false;
+
+                    //set default date values if user not already selected
+                    if(!datePicked){
+                        Calendar calendar = Calendar.getInstance();
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int month = calendar.get(Calendar.MONTH);
+                        int year = calendar.get(Calendar.YEAR);
+                        db.updateDay(day);
+                        db.updateMonth(month);
+                        db.updateYear(year);
+                    }else{
+                        getDateFromDB();
+                    }
+
+                    //Set default time values if user not selected time values already
+                    if(!timePicked){
+                        Calendar calendar = Calendar.getInstance();
+                        int minute = calendar.get(Calendar.MINUTE);
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        int ampm = calendar.get(Calendar.AM_PM);
+                        if(hour >= 10) {
+                            if(hour != 23) {
+                                db.updateHour(hour + 1);
+                            }else{
+                                db.updateHour(hour);
+                            }
+                            db.updateAmPm(ampm);
+                            db.updateMinute(minute);
+                        }else{
+                            db.updateHour(10);
+                            db.updateAmPm(ampm);
+                            db.updateMinute(0);
+                        }
+                    }else{
+                        getTimeFromDB();
+                    }
+
+                    setDue = true;
+                    datePicked = true;
+                    timePicked = true;
+
+                }else if(repeat.equals("month")){
+
+                    db.updateRepeatInterval(dbTaskId, "month");
+
+                    MainActivity.taskPropertiesShowing = false;
+
+                    //set default date values if user not already selected
+                    if(!datePicked){
+                        Calendar calendar = Calendar.getInstance();
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int month = calendar.get(Calendar.MONTH);
+                        int year = calendar.get(Calendar.YEAR);
+                        db.updateDay(day);
+                        db.updateMonth(month);
+                        db.updateYear(year);
+                    }else{
+                        getDateFromDB();
+                    }
+
+                    //Set default time values if user not selected time values already
+                    if(!timePicked){
+                        Calendar calendar = Calendar.getInstance();
+                        int minute = calendar.get(Calendar.MINUTE);
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        int ampm = calendar.get(Calendar.AM_PM);
+                        if(hour >= 10) {
+                            if(hour != 23) {
+                                db.updateHour(hour + 1);
+                            }else{
+                                db.updateHour(hour);
+                            }
+                            db.updateAmPm(ampm);
+                            db.updateMinute(minute);
+                        }else{
+                            db.updateHour(10);
+                            db.updateAmPm(ampm);
+                            db.updateMinute(0);
+                        }
+                    }else{
+                        getTimeFromDB();
+                    }
+
+                    setDue = true;
+                    datePicked = true;
+                    timePicked = true;
+
+                }
+
+            }else{
+                db.updateRepeatInterval(dbTaskId, "");
+                db.updateRepeat(dbTaskId, false);
+            }
             db.updateSetAlarm(true);
             db.updateIgnored(dbTaskId, false);
             db.updateOverdue(dbTaskId, false);
