@@ -86,6 +86,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL28 = "REVIEWTHREE";
     public static final String UCOL29 = "REVIEWFOUR";
     public static final String UCOL30 = "HIGHLIGHTDEC";
+    public static final String UCOL31 = "REPEATINTERVALTEMP";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -121,7 +122,7 @@ public class Database extends SQLiteOpenHelper {
                 " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER, AMPM INTEGER," +
                 " CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN, REPEATHINT INTEGER," +
                 " RENAMEHINT INTEGER, REINSTATEHINT INTEGER, TIMESTARTED INTEGER," +
-                " REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, REVIEWFOUR BOOLEAN, HIGHLIGHTDEC TEXT)");
+                " REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, REVIEWFOUR BOOLEAN, HIGHLIGHTDEC TEXT, REPEATINTERVALTEMP TEXT)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -235,6 +236,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL28, false);
         content.put(UCOL29, false);
         content.put(UCOL30, "-298516736");
+        content.put(UCOL31, "0");
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -772,6 +774,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL30, highlight);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateRepeatIntervalTemp(String interval){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL31, interval);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }

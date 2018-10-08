@@ -285,6 +285,7 @@ class MyAdapter extends ArrayAdapter<String> {
         int uniHour = 0;
         int uniMinute = 0;
         int uniAmPm = 0;
+        String uniInterval = "0";
         while(uniResult.moveToNext()){
             uniSetAlarm = uniResult.getInt(10) > 0;
             uniYear = uniResult.getInt(11);
@@ -293,6 +294,7 @@ class MyAdapter extends ArrayAdapter<String> {
             uniHour = uniResult.getInt(14);
             uniMinute = uniResult.getInt(15);
             uniAmPm = uniResult.getInt(17);
+            uniInterval = uniResult.getString(30);
         }
         uniResult.close();
 
@@ -1011,7 +1013,7 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         if(uniSetAlarm && (position == MainActivity.activeTask)){
-            setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute, uniAmPm);
+            setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute, uniAmPm, uniInterval);
             MainActivity.db.updateSetAlarm(false);
             MainActivity.db.updateYear(0);
             MainActivity.db.updateMonth(0);
@@ -1019,6 +1021,7 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateHour(0);
             MainActivity.db.updateMinute(0);
             MainActivity.db.updateAmPm(0);
+            MainActivity.db.updateRepeatIntervalTemp("0");
         }
 
 //        if((((MainActivity.taskList.size() - 1) == position)
@@ -1246,7 +1249,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         && currentMonth == Integer.valueOf(month)
                         && currentDay == Integer.valueOf(day)) {
                     sameDay = true;
-
                     //Saved hours are in 12 hour time. Accounting for am/pm.
                     int adjustedHour;
                     if (Integer.valueOf(ampm) == 1) {
@@ -4570,7 +4572,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
     //set notification alarm for selected task
     private void setAlarm(final int position, int year, int month,
-                                                         int day, int hour, int minute, int ampm){
+                                                         int day, int hour, int minute, int ampm, String uniInterval){
 
 //        //getting task data
 //        String dbTask = "";
@@ -5081,7 +5083,10 @@ class MyAdapter extends ArrayAdapter<String> {
              int adjustedHour = hour;
              if (ampm == 1) {
                  adjustedHour += 12;
+             }else if(hour == 12){
+                 adjustedHour = 0;
              }
+             Log.i(TAG, "current: " + currentDate.get(Calendar.HOUR_OF_DAY) +  " adjusted: " + adjustedHour);
              if (currentDate.get(Calendar.YEAR) == year
                      && currentDate.get(Calendar.MONTH) == month
                      && currentDate.get(Calendar.DAY_OF_MONTH) ==
@@ -5166,8 +5171,6 @@ class MyAdapter extends ArrayAdapter<String> {
                          month, day,
                          amPmHour, minute);
 
-                 Log.i(TAG, "I'm in here");
-
                  //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                  // detect duplicates and then adjusting the timestamp on the millisecond level
                  long futureStamp = futureDate.getTimeInMillis() / 1000;
@@ -5248,7 +5251,7 @@ class MyAdapter extends ArrayAdapter<String> {
                      MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
 
-                 if(MainActivity.remindersAvailable) {
+                 if(MainActivity.remindersAvailable && !dbRepeat) {
                      Calendar cal = Calendar.getInstance();
                      MainActivity.alarmManager.set(AlarmManager.RTC, /*calendar*/futureDate.getTimeInMillis(),
                              MainActivity.pendIntent);
@@ -5312,8 +5315,15 @@ class MyAdapter extends ArrayAdapter<String> {
              handler.postDelayed(runnable, 1);//TODO app stuffs up if this handler is removed for some reason
 
              if (dbRepeat) {
-
-                 Calendar prevCalendar = new GregorianCalendar();
+                 int amPmHour = hour;
+                 if (ampm == 1 && amPmHour != 12) {
+                     amPmHour += 12;
+                 }else if(ampm == 0 && amPmHour == 12){
+                     amPmHour = 0;
+                 }
+                 Calendar prevCalendar = new GregorianCalendar(year,
+                         month, day,
+                         amPmHour, minute);
                  if (alarmAmpm.equals("1")) {
                      int tempHour = Integer.parseInt(alarmHour) + 12;
                      alarmHour = String.valueOf(tempHour);
@@ -5326,7 +5336,7 @@ class MyAdapter extends ArrayAdapter<String> {
                  if(MainActivity.remindersAvailable) {
                      MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
                              prevCalendar.getTimeInMillis(),
-                             MainActivity.repeatInterval, MainActivity.pendIntent);
+                             /*MainActivity.repeatInterval*/Long.parseLong(uniInterval), MainActivity.pendIntent);
                  }
 
                  MainActivity.db.updateRepeat(MainActivity.sortedIDs

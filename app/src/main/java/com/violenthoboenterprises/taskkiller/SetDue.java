@@ -375,7 +375,8 @@ public class SetDue extends MainActivity {
                 weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
                 monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
 
-                repeatInterval = AlarmManager.INTERVAL_DAY;
+                repeatInterval = AlarmManager.INTERVAL_DAY;//TODO might not need this variable any more
+                db.updateRepeatIntervalTemp(String.valueOf(AlarmManager.INTERVAL_DAY));
 
                 repeat = "day";
 
@@ -411,6 +412,7 @@ public class SetDue extends MainActivity {
                 monthlyLight.setBackgroundColor(Color.parseColor("#000000"));
 
                 repeatInterval = AlarmManager.INTERVAL_DAY;
+                db.updateRepeatIntervalTemp(String.valueOf(AlarmManager.INTERVAL_DAY));
 
                 repeat = "day";
 
@@ -445,7 +447,7 @@ public class SetDue extends MainActivity {
                 weeklyDark.setBackgroundColor(Color.parseColor(highlight));
                 monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
 
-                repeatInterval = AlarmManager.INTERVAL_DAY;
+                repeatInterval = AlarmManager.INTERVAL_DAY * 7;
 
                 repeat = "week";
 
@@ -480,7 +482,7 @@ public class SetDue extends MainActivity {
                 weeklyLight.setBackgroundColor(Color.parseColor(highlight));
                 monthlyLight.setBackgroundColor(Color.parseColor("#000000"));
 
-                repeatInterval = AlarmManager.INTERVAL_DAY;
+                repeatInterval = AlarmManager.INTERVAL_DAY * 7;
 
                 repeat = "week";
 
@@ -515,7 +517,7 @@ public class SetDue extends MainActivity {
                 weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
                 monthlyDark.setBackgroundColor(Color.parseColor(highlight));
 
-                repeatInterval = AlarmManager.INTERVAL_DAY;
+                repeatInterval = AlarmManager.INTERVAL_DAY;//TODO adjust for months
 
                 repeat = "month";
 
@@ -550,7 +552,7 @@ public class SetDue extends MainActivity {
                 weeklyLight.setBackgroundColor(Color.parseColor("#000000"));
                 monthlyLight.setBackgroundColor(Color.parseColor(highlight));
 
-                repeatInterval = AlarmManager.INTERVAL_DAY;
+                repeatInterval = AlarmManager.INTERVAL_DAY;//TODO adjust for months
 
                 repeat = "month";
 
@@ -920,13 +922,22 @@ public class SetDue extends MainActivity {
                 int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                 int currentMonth = calendar.get(Calendar.MONTH);
                 int currentYear = calendar.get(Calendar.YEAR);
-                Log.i(TAG, "hour is: " + hour);
+                /////////////////////////////////////
+
+                ///////////////////////////////////////
                 if((currentYear == year) && (currentMonth == month) && (currentDay == day)
                         && (hour >= 10)) {
-                    if(hour != 23) {
-                        db.updateHour(hour + 1);
+                    if(hour == 23){
+                        db.updateHour(11);
+                    }else if(hour >= 13) {
+                        db.updateHour(hour - 11);
+                    }else if(hour == 12){
+                        db.updateHour(1);
                     }else{
-                        db.updateHour(hour);
+                        db.updateHour(hour + 1);
+                        if (hour == 11) {
+                            ampm = 1;
+                        }
                     }
                     db.updateAmPm(ampm);
                     db.updateMinute(minute);
@@ -935,6 +946,7 @@ public class SetDue extends MainActivity {
                     db.updateAmPm(ampm);
                     db.updateMinute(0);
                 }
+                Log.i(TAG, "hour: " + hour);
             }else{
                 Cursor alarmResult = MainActivity.db.getAlarmData
                         (Integer.parseInt(dbTaskId));
@@ -1120,6 +1132,8 @@ public class SetDue extends MainActivity {
             db.updateHour(Integer.parseInt(adjustedHour));
             db.updateMinute(minute);
 
+            Log.i(TAG, "adjustedHour: " + adjustedHour);
+
             //set default date values if user not already selected
             if(!datePicked){
                 Calendar calendar = Calendar.getInstance();
@@ -1223,7 +1237,6 @@ public class SetDue extends MainActivity {
                     db.updateMonth(month);
                     db.updateYear(year);
                 }else{
-
                     getDateFromDB();
                 }
 
@@ -1234,6 +1247,7 @@ public class SetDue extends MainActivity {
                     int minute = calendar.get(Calendar.MINUTE);
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
                     int ampm = calendar.get(Calendar.AM_PM);
+
                     if(hour >= 10) {
                         if(hour != 23) {
                             db.updateHour(hour + 1);
