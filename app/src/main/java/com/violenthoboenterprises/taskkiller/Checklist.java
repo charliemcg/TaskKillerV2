@@ -120,22 +120,25 @@ public class Checklist extends MainActivity {
 //            val = 16 * val + d;
 //        }
 
-        int[] colors = {0, /*val*/Integer.parseInt(highlightDec), /*val*/Integer.parseInt(highlightDec)};
-        checklistView.setDivider(new GradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT, colors));
-        checklistView.setDividerHeight(1);
-
         //setting correct background color
         if(!dbLightDark){
             subTasksToolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
             subTasksToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
             checklistView.setBackgroundColor(Color.parseColor("#333333"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#333333"));
+            int[] colors = {0, /*val*/Integer.parseInt(highlightDec), /*val*/Integer.parseInt(highlightDec)};
+            checklistView.setDivider(new GradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT, colors));
+            checklistView.setDividerHeight(1);
         }else{
             subTasksToolbar.setTitleTextColor(Color.parseColor("#000000"));
             subTasksToolbar.setSubtitleTextColor(Color.parseColor("#666666"));
             checklistView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            int[] colors = {Color.parseColor("#FFFFFF"), /*val*/Integer.parseInt(highlightDec), /*val*/Integer.parseInt(highlightDec)};
+            checklistView.setDivider(new GradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT, colors));
+            checklistView.setDividerHeight(1);
         }
 
         //setting up adapter

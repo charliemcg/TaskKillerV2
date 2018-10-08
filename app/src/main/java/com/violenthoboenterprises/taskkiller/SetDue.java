@@ -1227,8 +1227,6 @@ public class SetDue extends MainActivity {
     //Return to main screen when back pressed
     public void onBackPressed() {
 
-        Log.i(TAG, "Set Due: " + setDue);
-
         //updating the alarm in myAdapter
         if(setDue) {
             //Determine if repeat needs to be set

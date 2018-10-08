@@ -3632,7 +3632,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     v.setLayoutParams(MainActivity.params);
                                     v.setLayoutParams(MainActivity.iconParams);
 
-                                    //update repeating task to be due at next available date
+                                //update repeating task to be due at next available date
                                 } else {
 
                                     //cancelling any snooze data
@@ -5251,7 +5251,7 @@ class MyAdapter extends ArrayAdapter<String> {
                      MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
 
-                 if(MainActivity.remindersAvailable && !dbRepeat) {
+                 if(MainActivity.remindersAvailable) {
                      Calendar cal = Calendar.getInstance();
                      MainActivity.alarmManager.set(AlarmManager.RTC, /*calendar*/futureDate.getTimeInMillis(),
                              MainActivity.pendIntent);
@@ -5315,34 +5315,34 @@ class MyAdapter extends ArrayAdapter<String> {
              handler.postDelayed(runnable, 1);//TODO app stuffs up if this handler is removed for some reason
 
              if (dbRepeat) {
-                 int amPmHour = hour;
-                 if (ampm == 1 && amPmHour != 12) {
-                     amPmHour += 12;
-                 }else if(ampm == 0 && amPmHour == 12){
-                     amPmHour = 0;
-                 }
-                 Calendar prevCalendar = new GregorianCalendar(year,
-                         month, day,
-                         amPmHour, minute);
-                 if (alarmAmpm.equals("1")) {
-                     int tempHour = Integer.parseInt(alarmHour) + 12;
-                     alarmHour = String.valueOf(tempHour);
-                 }
-                 if (!alarmHour.equals("")) {
-//                     prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
-//                             Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
-//                             Integer.parseInt(alarmMinute));
-//                     prevCalendar.set(year,
-//                             month, day,
-//                             amPmHour, minute);
-                 }
-                 if(MainActivity.remindersAvailable) {
-                     //TODO switch back to inexact
-//                     MainActivity.alarmManager.setRepeating(AlarmManager.RTC, prevCalendar.getTimeInMillis(), Long.parseLong(uniInterval), MainActivity.pendIntent);
-                     MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
-                             prevCalendar.getTimeInMillis(),
-                             /*MainActivity.repeatInterval*/Long.parseLong(uniInterval), MainActivity.pendIntent);
-                 }
+//                 int amPmHour = hour;
+//                 if (ampm == 1 && amPmHour != 12) {
+//                     amPmHour += 12;
+//                 }else if(ampm == 0 && amPmHour == 12){
+//                     amPmHour = 0;
+//                 }
+//                 Calendar prevCalendar = new GregorianCalendar(year,
+//                         month, day,
+//                         amPmHour, minute);
+//                 if (alarmAmpm.equals("1")) {
+//                     int tempHour = Integer.parseInt(alarmHour) + 12;
+//                     alarmHour = String.valueOf(tempHour);
+//                 }
+//                 if (!alarmHour.equals("")) {
+////                     prevCalendar.set(Integer.parseInt(alarmYear), Integer.parseInt(alarmMonth),
+////                             Integer.parseInt(alarmDay), Integer.parseInt(alarmHour),
+////                             Integer.parseInt(alarmMinute));
+////                     prevCalendar.set(year,
+////                             month, day,
+////                             amPmHour, minute);
+//                 }
+//                 if(MainActivity.remindersAvailable) {
+//                     //TODO switch back to inexact
+////                     MainActivity.alarmManager.setRepeating(AlarmManager.RTC, prevCalendar.getTimeInMillis(), Long.parseLong(uniInterval), MainActivity.pendIntent);
+//                     MainActivity.alarmManager.setInexactRepeating(AlarmManager.RTC,
+//                             prevCalendar.getTimeInMillis(),
+//                             /*MainActivity.repeatInterval*/Long.parseLong(uniInterval), MainActivity.pendIntent);
+//                 }
 
                  MainActivity.db.updateRepeat(MainActivity.sortedIDs
                          .get(position), true);

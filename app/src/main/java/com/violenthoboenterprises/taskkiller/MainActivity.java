@@ -1860,12 +1860,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void setDividers(boolean lightDark) {
-        int[] colors = {0, Integer.parseInt(highlightDec), 0};
-        theListView.setDivider(new GradientDrawable
-                (GradientDrawable.Orientation.RIGHT_LEFT, colors));
         if(!lightDark) {
+            int[] colors = {0, Integer.parseInt(highlightDec), 0};
+            theListView.setDivider(new GradientDrawable
+                    (GradientDrawable.Orientation.RIGHT_LEFT, colors));
             theListView.setDividerHeight(1);
         }else{
+            int[] colors = {Color.parseColor("#FFFFFF"), Integer.parseInt(highlightDec), Color.parseColor("#FFFFFF")};
+            theListView.setDivider(new GradientDrawable
+                    (GradientDrawable.Orientation.RIGHT_LEFT, colors));
             theListView.setDividerHeight(3);
         }
     }
