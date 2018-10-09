@@ -1435,6 +1435,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.db.updateOverdue(String.valueOf(
                         MainActivity.sortedIDs.get(position)), true);
+                dbOverdue = true;
 
             }
 
