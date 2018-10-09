@@ -938,9 +938,7 @@ public class SetDue extends MainActivity {
                 int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                 int currentMonth = calendar.get(Calendar.MONTH);
                 int currentYear = calendar.get(Calendar.YEAR);
-                /////////////////////////////////////
 
-                ///////////////////////////////////////
                 if((currentYear == year) && (currentMonth == month) && (currentDay == day)
                         && (hour >= 10)) {
                     if(hour == 23){
@@ -1261,24 +1259,54 @@ public class SetDue extends MainActivity {
                     //Set default time values if user not selected time values already
                     if(!timePicked){
 
+//                        Calendar calendar = Calendar.getInstance();
+//                        int minute = calendar.get(Calendar.MINUTE);
+//                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//                        int ampm = calendar.get(Calendar.AM_PM);
+//
+//                        if(hour >= 10) {
+//                            if(hour != 23) {
+//                                db.updateHour(hour + 1);
+//                            }else{
+//                                db.updateHour(hour);
+//                            }
+//                            db.updateMinute(minute);
+//                            db.updateAmPm(ampm);
+//                        }else{
+//                            db.updateHour(10);
+//                            db.updateAmPm(ampm);
+//                            db.updateMinute(0);
+//                        }
                         Calendar calendar = Calendar.getInstance();
                         int minute = calendar.get(Calendar.MINUTE);
                         int hour = calendar.get(Calendar.HOUR_OF_DAY);
                         int ampm = calendar.get(Calendar.AM_PM);
+                        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                        int currentMonth = calendar.get(Calendar.MONTH);
+                        int currentYear = calendar.get(Calendar.YEAR);
 
-                        if(hour >= 10) {
-                            if(hour != 23) {
-                                db.updateHour(hour + 1);
+//                        if((currentYear == year) && (currentMonth == month) && (currentDay == day)
+//                                && (hour >= 10)) {
+                            if(hour == 23){
+                                db.updateHour(11);
+                            }else if(hour >= 13) {
+                                db.updateHour(hour - 11);
+                            }else if(hour == 12){
+                                db.updateHour(1);
                             }else{
-                                db.updateHour(hour);
+                                db.updateHour(hour + 1);
+                                if (hour == 11) {
+                                    ampm = 1;
+                                }
                             }
+                            db.updateAmPm(ampm);
                             db.updateMinute(minute);
-                            db.updateAmPm(ampm);
-                        }else{
-                            db.updateHour(10);
-                            db.updateAmPm(ampm);
-                            db.updateMinute(0);
-                        }
+//                        }else{
+//                            db.updateHour(10);
+//                            db.updateAmPm(ampm);
+//                            db.updateMinute(0);
+//                        }
+
                     }else{
 
                         getTimeFromDB();

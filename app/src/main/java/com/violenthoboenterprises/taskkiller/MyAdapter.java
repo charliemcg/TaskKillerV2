@@ -1433,7 +1433,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                }
 
-                Log.i(TAG, "Overdue one");
                 MainActivity.db.updateOverdue(String.valueOf(
                         MainActivity.sortedIDs.get(position)), true);
 
@@ -2277,7 +2276,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(futureStamp));
 
-                                    Log.i(TAG, "Overdue two");
                                     MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
 
@@ -2296,7 +2294,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.pendIntent = PendingIntent.getBroadcast(
                                             getContext(), Integer.parseInt(
-                                                    MainActivity.sortedIDs.get(position) + 1000),
+                                                    MainActivity.sortedIDs.get(position)/* + 1000*/),
                                             MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -2378,62 +2376,62 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     int newBroadcast = finalDbBroadcast + 1000;
 
-                                    int interval = 0;
-                                    //getting interval to add to timestamp
-                                    //TODO is this stuff needed? shouldn't it be incremented by one hour regardless of repeat interval?
-                                    if (finalDbRepeatInterval.equals("day")) {
-                                        interval = 86400;
-                                    } else if (finalDbRepeatInterval.equals("week")) {
-                                        interval = 604800;
-                                    } else if (finalDbRepeatInterval.equals("month")) {
-                                        int theYear = Integer.parseInt(finalAlarmYear);
-                                        int theMonth = Integer.parseInt(finalAlarmMonth);
-                                        int theDay = Integer.parseInt(finalAlarmDay);
-                                        //Month January and day is 29 non leap year 2592000
-                                        if ((theMonth == 0) && (theDay == 29)
-                                                && (theYear % 4 != 0)) {
-                                            interval = 2592000;
-                                            //Month January and day is 30 non leap year 2505600
-                                        } else if ((theMonth == 0) && (theDay == 30)
-                                                && (theYear % 4 != 0)) {
-                                            interval = 2505600;
-                                            //Month January and day is 31 non leap year 2419200
-                                        } else if ((theMonth == 0) && (theDay == 31)
-                                                && (theYear % 4 != 0)) {
-                                            interval = 2419200;
-                                            //Month January and day is 30 leap year 2592000
-                                        } else if ((theMonth == 0) && (theDay == 30)
-                                                && (theYear % 4 == 0)) {
-                                            interval = 2592000;
-                                            //Month January and day is 31 leap year 2505600
-                                        } else if ((theMonth == 0) && (theDay == 31)
-                                                && (theYear % 4 == 0)) {
-                                            interval = 2505600;
-                                            //Month March||May||August||October
-                                            // and day is 31 2592000
-                                        } else if (((theMonth == 2) || (theMonth == 4)
-                                                || (theMonth == 7) || (theMonth == 9))
-                                                && (theDay == 31)) {
-                                            interval = 2592000;
-                                            //Month January||March||May||July||August
-                                            // ||October||December 2678400
-                                        } else if ((theMonth == 0) || (theMonth == 2)
-                                                || (theMonth == 4) || (theMonth == 6)
-                                                || (theMonth == 7) || (theMonth == 9)
-                                                || (theMonth == 11)) {
-                                            interval = 2678400;
-                                            //Month April||June||September||November 2592000
-                                        } else if ((theMonth == 3) || (theMonth == 5)
-                                                || (theMonth == 8) || (theMonth == 10)) {
-                                            interval = 2592000;
-                                            //Month February non leap year 2419200
-                                        } else if ((theMonth == 1) && (theYear % 4 != 0)) {
-                                            interval = 2419200;
-                                            //Month February leap year 2505600
-                                        } else if ((theMonth == 1) && (theYear % 4 == 0)) {
-                                            interval = 2505600;
-                                        }
-                                    }
+//                                    int interval = 0;
+//                                    //getting interval to add to timestamp
+//                                    //TODO is this stuff needed? shouldn't it be incremented by one hour regardless of repeat interval?
+//                                    if (finalDbRepeatInterval.equals("day")) {
+//                                        interval = 86400;
+//                                    } else if (finalDbRepeatInterval.equals("week")) {
+//                                        interval = 604800;
+//                                    } else if (finalDbRepeatInterval.equals("month")) {
+//                                        int theYear = Integer.parseInt(finalAlarmYear);
+//                                        int theMonth = Integer.parseInt(finalAlarmMonth);
+//                                        int theDay = Integer.parseInt(finalAlarmDay);
+//                                        //Month January and day is 29 non leap year 2592000
+//                                        if ((theMonth == 0) && (theDay == 29)
+//                                                && (theYear % 4 != 0)) {
+//                                            interval = 2592000;
+//                                            //Month January and day is 30 non leap year 2505600
+//                                        } else if ((theMonth == 0) && (theDay == 30)
+//                                                && (theYear % 4 != 0)) {
+//                                            interval = 2505600;
+//                                            //Month January and day is 31 non leap year 2419200
+//                                        } else if ((theMonth == 0) && (theDay == 31)
+//                                                && (theYear % 4 != 0)) {
+//                                            interval = 2419200;
+//                                            //Month January and day is 30 leap year 2592000
+//                                        } else if ((theMonth == 0) && (theDay == 30)
+//                                                && (theYear % 4 == 0)) {
+//                                            interval = 2592000;
+//                                            //Month January and day is 31 leap year 2505600
+//                                        } else if ((theMonth == 0) && (theDay == 31)
+//                                                && (theYear % 4 == 0)) {
+//                                            interval = 2505600;
+//                                            //Month March||May||August||October
+//                                            // and day is 31 2592000
+//                                        } else if (((theMonth == 2) || (theMonth == 4)
+//                                                || (theMonth == 7) || (theMonth == 9))
+//                                                && (theDay == 31)) {
+//                                            interval = 2592000;
+//                                            //Month January||March||May||July||August
+//                                            // ||October||December 2678400
+//                                        } else if ((theMonth == 0) || (theMonth == 2)
+//                                                || (theMonth == 4) || (theMonth == 6)
+//                                                || (theMonth == 7) || (theMonth == 9)
+//                                                || (theMonth == 11)) {
+//                                            interval = 2678400;
+//                                            //Month April||June||September||November 2592000
+//                                        } else if ((theMonth == 3) || (theMonth == 5)
+//                                                || (theMonth == 8) || (theMonth == 10)) {
+//                                            interval = 2592000;
+//                                            //Month February non leap year 2419200
+//                                        } else if ((theMonth == 1) && (theYear % 4 != 0)) {
+//                                            interval = 2419200;
+//                                            //Month February leap year 2505600
+//                                        } else if ((theMonth == 1) && (theYear % 4 == 0)) {
+//                                            interval = 2505600;
+//                                        }
+//                                    }
 
                                     //Setting alarm
                                     MainActivity.pendIntent = PendingIntent.getBroadcast(
@@ -2441,8 +2439,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
                                     if(MainActivity.remindersAvailable) {
-                                        MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
-                                                        .getTimeInMillis() + interval),
+                                        MainActivity.alarmManager.set(AlarmManager.RTC, (/*currentDate
+                                                        .getTimeInMillis()*/Calendar.getInstance().getTimeInMillis() + /*interval*/AlarmManager.INTERVAL_HOUR),
                                                 MainActivity.pendIntent);
                                     }
 
@@ -2823,7 +2821,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     MainActivity.sortedIDs.get(position)),
                                                     String.valueOf(futureStamp));
 
-                                            Log.i(TAG, "Overdue three");
                                             MainActivity.db.updateOverdue(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
                                                     false);
@@ -2846,7 +2843,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.pendIntent = PendingIntent.getBroadcast(
                                                     getContext(), Integer.parseInt(
                                                             MainActivity.sortedIDs
-                                                                    .get(position) + 1000),
+                                                                    .get(position)/* + 1000*/),
                                                     MainActivity.alertIntent,
                                                     PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -2934,64 +2931,64 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             int newBroadcast = finalDbBroadcast + 1000;
 
-                                            int interval = 0;
-                                            //getting interval to add to timestamp
-                                            //TODO is this stuff needed? shouldn't it be incremented by four hours regardless of repeat interval?
-                                            if (finalDbRepeatInterval.equals("day")) {
-                                                interval = 86400;
-                                            } else if (finalDbRepeatInterval.equals("week")) {
-                                                interval = 604800;
-                                            } else if (finalDbRepeatInterval.equals("month")) {
-                                                int theYear = Integer.parseInt(finalAlarmYear);
-                                                int theMonth = Integer.parseInt(finalAlarmMonth);
-                                                int theDay = Integer.parseInt(finalAlarmDay);
-                                                //Month January and day is 29 non leap year 2592000
-                                                if ((theMonth == 0) && (theDay == 29)
-                                                        && (theYear % 4 != 0)) {
-                                                    interval = 2592000;
-                                                    //Month January and day is 30
-                                                    // non leap year 2505600
-                                                } else if ((theMonth == 0) && (theDay == 30)
-                                                        && (theYear % 4 != 0)) {
-                                                    interval = 2505600;
-                                                    //Month January and day is 31
-                                                    // non leap year 2419200
-                                                } else if ((theMonth == 0) && (theDay == 31)
-                                                        && (theYear % 4 != 0)) {
-                                                    interval = 2419200;
-                                                    //Month January and day is 30 leap year 2592000
-                                                } else if ((theMonth == 0) && (theDay == 30)
-                                                        && (theYear % 4 == 0)) {
-                                                    interval = 2592000;
-                                                    //Month January and day is 31 leap year 2505600
-                                                } else if ((theMonth == 0) && (theDay == 31)
-                                                        && (theYear % 4 == 0)) {
-                                                    interval = 2505600;
-                                                    //Month March||May||August||October
-                                                    // and day is 31 2592000
-                                                } else if (((theMonth == 2) || (theMonth == 4)
-                                                        || (theMonth == 7) || (theMonth == 9))
-                                                        && (theDay == 31)) {
-                                                    interval = 2592000;
-                                                    //Month January||March||May||July||August
-                                                    // ||October||December 2678400
-                                                } else if ((theMonth == 0) || (theMonth == 2)
-                                                        || (theMonth == 4) || (theMonth == 6)
-                                                        || (theMonth == 7) || (theMonth == 9)
-                                                        || (theMonth == 11)) {
-                                                    interval = 2678400;
-                                                    //Month April||June||September||November 2592000
-                                                } else if ((theMonth == 3) || (theMonth == 5)
-                                                        || (theMonth == 8) || (theMonth == 10)) {
-                                                    interval = 2592000;
-                                                    //Month February non leap year 2419200
-                                                } else if ((theMonth == 1) && (theYear % 4 != 0)) {
-                                                    interval = 2419200;
-                                                    //Month February leap year 2505600
-                                                } else if ((theMonth == 1) && (theYear % 4 == 0)) {
-                                                    interval = 2505600;
-                                                }
-                                            }
+//                                            int interval = 0;
+//                                            //getting interval to add to timestamp
+//                                            //TODO is this stuff needed? shouldn't it be incremented by four hours regardless of repeat interval?
+//                                            if (finalDbRepeatInterval.equals("day")) {
+//                                                interval = 86400;
+//                                            } else if (finalDbRepeatInterval.equals("week")) {
+//                                                interval = 604800;
+//                                            } else if (finalDbRepeatInterval.equals("month")) {
+//                                                int theYear = Integer.parseInt(finalAlarmYear);
+//                                                int theMonth = Integer.parseInt(finalAlarmMonth);
+//                                                int theDay = Integer.parseInt(finalAlarmDay);
+//                                                //Month January and day is 29 non leap year 2592000
+//                                                if ((theMonth == 0) && (theDay == 29)
+//                                                        && (theYear % 4 != 0)) {
+//                                                    interval = 2592000;
+//                                                    //Month January and day is 30
+//                                                    // non leap year 2505600
+//                                                } else if ((theMonth == 0) && (theDay == 30)
+//                                                        && (theYear % 4 != 0)) {
+//                                                    interval = 2505600;
+//                                                    //Month January and day is 31
+//                                                    // non leap year 2419200
+//                                                } else if ((theMonth == 0) && (theDay == 31)
+//                                                        && (theYear % 4 != 0)) {
+//                                                    interval = 2419200;
+//                                                    //Month January and day is 30 leap year 2592000
+//                                                } else if ((theMonth == 0) && (theDay == 30)
+//                                                        && (theYear % 4 == 0)) {
+//                                                    interval = 2592000;
+//                                                    //Month January and day is 31 leap year 2505600
+//                                                } else if ((theMonth == 0) && (theDay == 31)
+//                                                        && (theYear % 4 == 0)) {
+//                                                    interval = 2505600;
+//                                                    //Month March||May||August||October
+//                                                    // and day is 31 2592000
+//                                                } else if (((theMonth == 2) || (theMonth == 4)
+//                                                        || (theMonth == 7) || (theMonth == 9))
+//                                                        && (theDay == 31)) {
+//                                                    interval = 2592000;
+//                                                    //Month January||March||May||July||August
+//                                                    // ||October||December 2678400
+//                                                } else if ((theMonth == 0) || (theMonth == 2)
+//                                                        || (theMonth == 4) || (theMonth == 6)
+//                                                        || (theMonth == 7) || (theMonth == 9)
+//                                                        || (theMonth == 11)) {
+//                                                    interval = 2678400;
+//                                                    //Month April||June||September||November 2592000
+//                                                } else if ((theMonth == 3) || (theMonth == 5)
+//                                                        || (theMonth == 8) || (theMonth == 10)) {
+//                                                    interval = 2592000;
+//                                                    //Month February non leap year 2419200
+//                                                } else if ((theMonth == 1) && (theYear % 4 != 0)) {
+//                                                    interval = 2419200;
+//                                                    //Month February leap year 2505600
+//                                                } else if ((theMonth == 1) && (theYear % 4 == 0)) {
+//                                                    interval = 2505600;
+//                                                }
+//                                            }
 
                                             //setting new alarm
                                             MainActivity.pendIntent = PendingIntent.getBroadcast(
@@ -3001,7 +2998,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             if(MainActivity.remindersAvailable) {
                                                 MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                        (currentDate.getTimeInMillis() + interval),
+                                                        (currentDate.getTimeInMillis() + /*interval*/(AlarmManager.INTERVAL_HOUR * 4)),
                                                         MainActivity.pendIntent);
                                             }
 
@@ -3369,7 +3366,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(futureStamp));
 
-                                    Log.i(TAG, "Overdue four");
                                     MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
 
@@ -3388,7 +3384,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.pendIntent = PendingIntent.getBroadcast(
                                             getContext(), Integer.parseInt(
-                                                    MainActivity.sortedIDs.get(position) + 1000),
+                                                    MainActivity.sortedIDs.get(position)/* + 1000*/),
                                             MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -3454,61 +3450,61 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     int newBroadcast = finalDbBroadcast + 1000;
 
-                                    int interval = 0;
-                                    //TODO is this stuff needed? shouldn't it be incremented by one day regardless of repeat interval?
-                                    if(finalDbRepeatInterval.equals("day")){
-                                        interval = 86400;
-                                    }else if(finalDbRepeatInterval.equals("week")){
-                                        interval = 604800;
-                                    }else if(finalDbRepeatInterval.equals("month")) {
-                                        int theYear = Integer.parseInt(finalAlarmYear);
-                                        int theMonth = Integer.parseInt(finalAlarmMonth);
-                                        int theDay = Integer.parseInt(finalAlarmDay);
-                                        //Month January and day is 29 non leap year 2592000
-                                        if ((theMonth == 0) && (theDay == 29)
-                                                && (theYear % 4 != 0)) {
-                                            interval = 2592000;
-                                            //Month January and day is 30 non leap year 2505600
-                                        } else if ((theMonth == 0) && (theDay == 30)
-                                                && (theYear % 4 != 0)) {
-                                            interval = 2505600;
-                                            //Month January and day is 31 non leap year 2419200
-                                        } else if ((theMonth == 0) && (theDay == 31)
-                                                && (theYear % 4 != 0)) {
-                                            interval = 2419200;
-                                            //Month January and day is 30 leap year 2592000
-                                        } else if ((theMonth == 0) && (theDay == 30)
-                                                && (theYear % 4 == 0)) {
-                                            interval = 2592000;
-                                            //Month January and day is 31 leap year 2505600
-                                        } else if ((theMonth == 0) && (theDay == 31)
-                                                && (theYear % 4 == 0)) {
-                                            interval = 2505600;
-                                            //Month March||May||August||October
-                                            // and day is 31 2592000
-                                        } else if (((theMonth == 2) || (theMonth == 4)
-                                                || (theMonth == 7) || (theMonth == 9))
-                                                && (theDay == 31)) {
-                                            interval = 2592000;
-                                            //Month January||March||May||July||August
-                                            // ||October||December 2678400
-                                        } else if ((theMonth == 0) || (theMonth == 2)
-                                                || (theMonth == 4) || (theMonth == 6)
-                                                || (theMonth == 7) || (theMonth == 9)
-                                                || (theMonth == 11)) {
-                                            interval = 2678400;
-                                            //Month April||June||September||November 2592000
-                                        } else if ((theMonth == 3) || (theMonth == 5)
-                                                || (theMonth == 8) || (theMonth == 10)) {
-                                            interval = 2592000;
-                                            //Month February non leap year 2419200
-                                        } else if ((theMonth == 1) && (theYear % 4 != 0)) {
-                                            interval = 2419200;
-                                            //Month February leap year 2505600
-                                        } else if ((theMonth == 1) && (theYear % 4 == 0)) {
-                                            interval = 2505600;
-                                        }
-                                    }
+//                                    int interval = 0;
+//                                    //TODO is this stuff needed? shouldn't it be incremented by one day regardless of repeat interval?
+//                                    if(finalDbRepeatInterval.equals("day")){
+//                                        interval = 86400;
+//                                    }else if(finalDbRepeatInterval.equals("week")){
+//                                        interval = 604800;
+//                                    }else if(finalDbRepeatInterval.equals("month")) {
+//                                        int theYear = Integer.parseInt(finalAlarmYear);
+//                                        int theMonth = Integer.parseInt(finalAlarmMonth);
+//                                        int theDay = Integer.parseInt(finalAlarmDay);
+//                                        //Month January and day is 29 non leap year 2592000
+//                                        if ((theMonth == 0) && (theDay == 29)
+//                                                && (theYear % 4 != 0)) {
+//                                            interval = 2592000;
+//                                            //Month January and day is 30 non leap year 2505600
+//                                        } else if ((theMonth == 0) && (theDay == 30)
+//                                                && (theYear % 4 != 0)) {
+//                                            interval = 2505600;
+//                                            //Month January and day is 31 non leap year 2419200
+//                                        } else if ((theMonth == 0) && (theDay == 31)
+//                                                && (theYear % 4 != 0)) {
+//                                            interval = 2419200;
+//                                            //Month January and day is 30 leap year 2592000
+//                                        } else if ((theMonth == 0) && (theDay == 30)
+//                                                && (theYear % 4 == 0)) {
+//                                            interval = 2592000;
+//                                            //Month January and day is 31 leap year 2505600
+//                                        } else if ((theMonth == 0) && (theDay == 31)
+//                                                && (theYear % 4 == 0)) {
+//                                            interval = 2505600;
+//                                            //Month March||May||August||October
+//                                            // and day is 31 2592000
+//                                        } else if (((theMonth == 2) || (theMonth == 4)
+//                                                || (theMonth == 7) || (theMonth == 9))
+//                                                && (theDay == 31)) {
+//                                            interval = 2592000;
+//                                            //Month January||March||May||July||August
+//                                            // ||October||December 2678400
+//                                        } else if ((theMonth == 0) || (theMonth == 2)
+//                                                || (theMonth == 4) || (theMonth == 6)
+//                                                || (theMonth == 7) || (theMonth == 9)
+//                                                || (theMonth == 11)) {
+//                                            interval = 2678400;
+//                                            //Month April||June||September||November 2592000
+//                                        } else if ((theMonth == 3) || (theMonth == 5)
+//                                                || (theMonth == 8) || (theMonth == 10)) {
+//                                            interval = 2592000;
+//                                            //Month February non leap year 2419200
+//                                        } else if ((theMonth == 1) && (theYear % 4 != 0)) {
+//                                            interval = 2419200;
+//                                            //Month February leap year 2505600
+//                                        } else if ((theMonth == 1) && (theYear % 4 == 0)) {
+//                                            interval = 2505600;
+//                                        }
+//                                    }
 
                                     //setting alarm
                                     MainActivity.pendIntent = PendingIntent.getBroadcast(
@@ -3517,7 +3513,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     if(MainActivity.remindersAvailable) {
                                         MainActivity.alarmManager.set(AlarmManager.RTC, (currentDate
-                                                        .getTimeInMillis() + interval),
+                                                        .getTimeInMillis() + /*interval*/AlarmManager.INTERVAL_DAY),
                                                 MainActivity.pendIntent);
                                     }
 
@@ -3572,7 +3568,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     taskOverdueRow.setVisibility(View.GONE);
 
-                                    Log.i(TAG, "Overdue five");
                                     MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
 
@@ -4013,7 +4008,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.taskPropertiesShowing = false;
 
-                                    Log.i(TAG, "Overdue six");
                                     MainActivity.db.updateOverdue(
                                             MainActivity.sortedIDs.get(position), false);
 
@@ -4044,7 +4038,6 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void run() {
 
-                                Log.i(TAG, "Overdue seven");
                         MainActivity.db.updateOverdue(
                                 MainActivity.sortedIDs.get(position), false);
 
