@@ -1118,6 +1118,7 @@ class MyAdapter extends ArrayAdapter<String> {
             Boolean sameDay = false;
             Boolean tomorrow = false;
             Boolean markAsOverdue = false;
+            MainActivity.db.updateOverdue(MainActivity.sortedIDs.get(position), false);
 //            if(!dbKilled) {
 
                 //Overdue
@@ -1432,6 +1433,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                }
 
+                Log.i(TAG, "Overdue one");
                 MainActivity.db.updateOverdue(String.valueOf(
                         MainActivity.sortedIDs.get(position)), true);
 
@@ -2275,6 +2277,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(futureStamp));
 
+                                    Log.i(TAG, "Overdue two");
                                     MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
 
@@ -2820,6 +2823,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     MainActivity.sortedIDs.get(position)),
                                                     String.valueOf(futureStamp));
 
+                                            Log.i(TAG, "Overdue three");
                                             MainActivity.db.updateOverdue(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
                                                     false);
@@ -3365,6 +3369,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(futureStamp));
 
+                                    Log.i(TAG, "Overdue four");
                                     MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
 
@@ -3567,6 +3572,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     taskOverdueRow.setVisibility(View.GONE);
 
+                                    Log.i(TAG, "Overdue five");
                                     MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
 
@@ -3935,6 +3941,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.taskPropertiesShowing = false;
 
+                                    Log.i(TAG, "Overdue six");
                                     MainActivity.db.updateOverdue(
                                             MainActivity.sortedIDs.get(position), false);
 
@@ -3965,6 +3972,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             @Override
                             public void run() {
 
+                                Log.i(TAG, "Overdue seven");
                         MainActivity.db.updateOverdue(
                                 MainActivity.sortedIDs.get(position), false);
 

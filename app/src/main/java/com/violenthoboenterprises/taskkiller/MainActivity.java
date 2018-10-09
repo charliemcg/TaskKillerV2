@@ -1840,6 +1840,126 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     thePosition, null, null), thePosition,
                     theListView.getAdapter().getItemId(thePosition));
 
+            theListView.setAdapter(theAdapter[0]);
+
+            //getting task data
+            String dbTimestamp = "";
+            String dbTask = "";
+            Boolean dbRepeat = false;
+            Boolean dbOverdue = false;
+            String dbRepeatInterval = "";
+            Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
+                    MainActivity.sortedIDs.get(thePosition)));
+            while (dbResult.moveToNext()) {
+                dbTimestamp = dbResult.getString(3);
+                dbTask = dbResult.getString(4);
+                dbRepeat = dbResult.getInt(8) > 0;
+                dbOverdue = dbResult.getInt(9) > 0;
+                dbRepeatInterval = dbResult.getString(13);
+            }
+            dbResult.close();
+
+            Log.i(TAG, "dbOverdue: " + dbOverdue + " dbRepeat: " + dbRepeat);
+
+            if(!dbOverdue && dbRepeat){
+
+                Log.i(TAG, "I'm in here");
+
+                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                        this, Integer.parseInt(
+                                MainActivity.sortedIDs.get(thePosition)),
+                        MainActivity.alertIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
+                if(dbRepeatInterval.equals("day")){
+
+                    Log.i(TAG, "dbTimestamp: " + dbTimestamp);
+
+                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                    // detect duplicates and then adjusting the timestamp on the millisecond level
+                    long futureStamp = (Long.parseLong(dbTimestamp) - (AlarmManager.INTERVAL_DAY / 1000));
+                    String tempTimestamp = "";
+                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                                MainActivity.sortedIDs.get(i)));
+                        while (tempResult.moveToNext()) {
+                            tempTimestamp = tempResult.getString(3);
+                        }
+                        tempResult.close();
+                        if(futureStamp == Long.parseLong(tempTimestamp)){
+                            futureStamp++;
+                            i = 0;
+                        }
+
+                    }
+
+                    //updating timestamp
+                    MainActivity.db.updateTimestamp(String.valueOf(
+                            MainActivity.sortedIDs.get(thePosition)),
+                            String.valueOf(futureStamp));
+
+                    //setting the name of the task for which the
+                    // notification is being set
+                    MainActivity.alertIntent.putExtra("ToDo", /*dbTask*/"This notification was created in MainActivity");//TODO change this back
+                    MainActivity.alertIntent.putExtra("broadId", thePosition);
+
+                    //Setting alarm
+                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+                            MainActivity.this, thePosition, MainActivity.alertIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+                            MainActivity.pendIntent);
+
+                    Log.i(TAG, "Timestamp: " + Long.parseLong(String.valueOf(futureStamp) + "000"));
+
+                }else if(dbRepeatInterval.equals("week")){
+
+//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+//                    // detect duplicates and then adjusting the timestamp on the millisecond level
+////                long futureStamp = dateNow.getTimeInMillis() + AlarmManager.INTERVAL_DAY;
+//                    long futureStamp = Long.parseLong(dbTimestamp) + ((AlarmManager.INTERVAL_DAY * 7) / 1000);
+//                    String tempTimestamp = "";
+//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
+//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+//                                MainActivity.sortedIDs.get(i)));
+//                        while (tempResult.moveToNext()) {
+//                            tempTimestamp = tempResult.getString(3);
+//                        }
+//                        tempResult.close();
+//                        if(futureStamp == Long.parseLong(tempTimestamp)){
+//                            futureStamp++;
+//                            i = 0;
+//                        }
+//
+//                    }
+//
+//                    //updating timestamp
+//                    MainActivity.db.updateTimestamp(String.valueOf(
+//                            MainActivity.sortedIDs.get(broadId)),
+//                            String.valueOf(futureStamp));
+//
+//                    //setting the name of the task for which the
+//                    // notification is being set
+//                    MainActivity.alertIntent.putExtra("ToDo", msg);
+//                    MainActivity.alertIntent.putExtra("broadId", broadId);
+//
+//                    //Setting alarm
+//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                            context, broadId, MainActivity.alertIntent,
+//                            PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+//                            MainActivity.pendIntent);
+
+                }else if(dbRepeatInterval.equals("month")){
+
+                }
+
+            }
+
         }
 
     }

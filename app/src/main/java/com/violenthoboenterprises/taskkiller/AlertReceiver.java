@@ -162,6 +162,8 @@ public class AlertReceiver extends BroadcastReceiver {
                 MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
                         MainActivity.pendIntent);
 
+                Log.i(TAG, "Timestamp: " + Long.parseLong(String.valueOf(futureStamp) + "000"));
+
             }else if(dbRepeatInterval.equals("week")){
 
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
@@ -200,6 +202,8 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
                         MainActivity.pendIntent);
+
+                MainActivity.db.updateOverdue(String.valueOf(broadId), false);
 
             }else if(dbRepeatInterval.equals("month")){
 
