@@ -33,6 +33,8 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL16 = "TIMECREATED";
     public static final String COL17 = "SORTEDINDEX";
     public static final String COL18 = "CHECKLISTSIZE";
+    public static final String COL19 = "MANUALKILL";
+    public static final String COL20 = "KILLEDEARLY";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -110,7 +112,7 @@ public class Database extends SQLiteOpenHelper {
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
                 "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT," +
-                " IGNORED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER, CHECKLISTSIZE INETGER)");
+                " IGNORED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER, CHECKLISTSIZE INETGER, MANUALKILL BOOLEAN, KILLEDEARLY BOOLEAN)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
@@ -158,6 +160,8 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL16, timeCreated);
         content.put(COL17, 0);
         content.put(COL18, 0);
+        content.put(COL19, 0);
+        content.put(COL20, 0);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -489,6 +493,22 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(COL17, index);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateManualKill(String id, boolean kill){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL19, kill);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateKilledEarly(String id, boolean kill){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL20, kill);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }

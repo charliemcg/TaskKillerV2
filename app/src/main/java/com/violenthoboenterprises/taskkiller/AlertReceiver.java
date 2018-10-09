@@ -106,22 +106,34 @@ public class AlertReceiver extends BroadcastReceiver {
         builder.setAutoCancel(true);
 
         //post notification
-        notificationManager.notify(1, builder.build());
+//        notificationManager.notify(1, builder.build());
 
         //getting task data
         String dbTimestamp = "";
         Boolean dbRepeat = false;
         String dbRepeatInterval = "";
+        Boolean dbManualKill = false;
+        Boolean dbKilledEarly = false;
         Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(broadId)));
         while (dbResult.moveToNext()) {
             dbTimestamp = dbResult.getString(3);
             dbRepeat = dbResult.getInt(8) > 0;
             dbRepeatInterval = dbResult.getString(13);
+            dbManualKill = dbResult.getInt(18) > 0;
+            dbKilledEarly = dbResult.getInt(19) > 0;
         }
         dbResult.close();
 
-        if(dbRepeat) {
+        if(!dbRepeat){
+            notificationManager.notify(1, builder.build());
+        } else {
+
+            if(!dbKilledEarly){
+                notificationManager.notify(1, builder.build());
+            }else{
+                MainActivity.db.updateKilledEarly(String.valueOf(MainActivity.sortedIDs.get(broadId)), false);
+            }
 
             if(dbRepeatInterval.equals("day")){
 
@@ -162,48 +174,51 @@ public class AlertReceiver extends BroadcastReceiver {
                 MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
                         MainActivity.pendIntent);
 
-                Log.i(TAG, "Timestamp: " + Long.parseLong(String.valueOf(futureStamp) + "000"));
+//                Log.i(TAG, "Timestamp: " + Long.parseLong(String.valueOf(futureStamp) + "000"));
 
-            }else if(dbRepeatInterval.equals("week")){
+                //getting alarm data
+                Cursor alarmResult = MainActivity.db.getAlarmData(
+                        Integer.parseInt(MainActivity.sortedIDs.get(broadId)));
+                String alarmHour = "";
+                String alarmMinute = "";
+                String alarmAmpm = "";
+                String alarmDay = "";
+                String alarmMonth = "";
+                String alarmYear = "";
+                while(alarmResult.moveToNext()){
+                    alarmHour = alarmResult.getString(1);
+                    alarmMinute = alarmResult.getString(2);
+                    alarmAmpm = alarmResult.getString(3);
+                    alarmDay = alarmResult.getString(4);
+                    alarmMonth = alarmResult.getString(5);
+                    alarmYear = alarmResult.getString(6);
+                }
+                alarmResult.close();
 
-                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-                // detect duplicates and then adjusting the timestamp on the millisecond level
-//                long futureStamp = dateNow.getTimeInMillis() + AlarmManager.INTERVAL_DAY;
-                long futureStamp = Long.parseLong(dbTimestamp) + ((AlarmManager.INTERVAL_DAY * 7) / 1000);
-                String tempTimestamp = "";
-                for(int i = 0; i < MainActivity.taskList.size(); i++) {
-                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-                            MainActivity.sortedIDs.get(i)));
-                    while (tempResult.moveToNext()) {
-                        tempTimestamp = tempResult.getString(3);
-                    }
-                    tempResult.close();
-                    if(futureStamp == Long.parseLong(tempTimestamp)){
-                        futureStamp++;
-                        i = 0;
-                    }
+//                Log.i(TAG, "Alarm Data\nyear: " + alarmYear + " month: " + alarmMonth + " day: " + alarmDay + " hour: " + alarmHour + " minute: " + alarmMinute + " ampm: " + alarmAmpm);
+
+                Calendar alarmCalendar = Calendar.getInstance();
+                alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp) + "000") - AlarmManager.INTERVAL_DAY);
+
+                Log.i(TAG, "Manual Kill: " + dbManualKill);
+
+                if(!dbManualKill){
+
+                    //updating due date in database
+                    MainActivity.db.updateAlarmData(String.valueOf(
+                            MainActivity.sortedIDs.get(broadId)),
+                            String.valueOf(alarmCalendar.get(Calendar.HOUR)),
+                            String.valueOf(alarmCalendar.get(Calendar.MINUTE)),
+                            String.valueOf(alarmCalendar.get(Calendar.AM_PM)),
+                            String.valueOf(alarmCalendar.get(Calendar.DAY_OF_MONTH)),
+                            String.valueOf(alarmCalendar.get(Calendar.MONTH)),
+                            String.valueOf(alarmCalendar.get(Calendar.YEAR)));
 
                 }
 
-                //updating timestamp
-                MainActivity.db.updateTimestamp(String.valueOf(
-                        MainActivity.sortedIDs.get(broadId)),
-                        String.valueOf(futureStamp));
+                MainActivity.db.updateManualKill(String.valueOf(MainActivity.sortedIDs.get(broadId)), false);
 
-                //setting the name of the task for which the
-                // notification is being set
-                MainActivity.alertIntent.putExtra("ToDo", msg);
-                MainActivity.alertIntent.putExtra("broadId", broadId);
-
-                //Setting alarm
-                MainActivity.pendIntent = PendingIntent.getBroadcast(
-                        context, broadId, MainActivity.alertIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
-                        MainActivity.pendIntent);
-
-                MainActivity.db.updateOverdue(String.valueOf(broadId), false);
+            }else if(dbRepeatInterval.equals("week")){
 
             }else if(dbRepeatInterval.equals("month")){
 

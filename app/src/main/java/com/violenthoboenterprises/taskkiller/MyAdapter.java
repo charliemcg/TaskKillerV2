@@ -1427,7 +1427,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //                    alarmHour = String.valueOf(Integer.parseInt(alarmHour) + dbInterval);
 //
-//                    MainActivity.noteDb.updateAlarmData(String.valueOf(
+//                    MainActivity.db.updateAlarmData(String.valueOf(
 //                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
 //                            alarmHour, alarmMinute, alarmAmpm, alarmDay, alarmMonth, alarmYear);
 //
@@ -3654,18 +3654,18 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     if (finalDbRepeatInterval.equals("day")) {
 
-                                        /////////////////////////////////////////////////////
-                                        //adding one day to timestamp
-//                                        int adjustedStamp = Integer.parseInt
-//                                                (finalDbTimestamp) + 86400;
-//                                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
-//                                                .sortedIDs.get(position)), String.valueOf
-//                                                (adjustedStamp));
-                                        /////////////////////////////////////////////////////
-
+//                                        /////////////////////////////////////////////////////
+//                                        //adding one day to timestamp
+////                                        int adjustedStamp = Integer.parseInt
+////                                                (finalDbTimestamp) + 86400;
+////                                        MainActivity.db.updateTimestamp(String.valueOf(MainActivity
+////                                                .sortedIDs.get(position)), String.valueOf
+////                                                (adjustedStamp));
+//                                        /////////////////////////////////////////////////////
+//
                                         //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                                         // detect duplicates and then adjusting the timestamp on the millisecond level
-                                        long futureStamp = Integer.parseInt(finalDbTimestamp) + 86400;
+                                        long futureStamp = Integer.parseInt(finalDbTimestamp)/*+ 86400(AlarmManager.INTERVAL_DAY / 1000)*/;
                                         String tempTimestamp = "";
                                         for(int i = 0; i < MainActivity.taskList.size(); i++) {
                                             Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
@@ -3730,6 +3730,53 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                                 String.valueOf(newDay), String.valueOf(newMonth),
                                                 String.valueOf(newYear));
+
+                                        MainActivity.db.updateManualKill(String.valueOf(
+                                                MainActivity.sortedIDs.get(position)), true);
+
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                                getContext(), Integer.parseInt(
+                                                        MainActivity.sortedIDs.get(position)),
+                                                MainActivity.alertIntent,
+                                                PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
+//                                        //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+//                                        // detect duplicates and then adjusting the timestamp on the millisecond level
+//                                        long futureStamp = (Long.parseLong(finalDbTimestamp)/* - (AlarmManager.INTERVAL_DAY / 1000)*/);
+//                                        String tempTimestamp = "";
+//                                        for(int i = 0; i < MainActivity.taskList.size(); i++) {
+//                                            Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+//                                                    MainActivity.sortedIDs.get(i)));
+//                                            while (tempResult.moveToNext()) {
+//                                                tempTimestamp = tempResult.getString(3);
+//                                            }
+//                                            tempResult.close();
+//                                            if(futureStamp == Long.parseLong(tempTimestamp)){
+//                                                futureStamp++;
+//                                                i = 0;
+//                                            }
+//
+//                                        }
+//
+//                                        //updating timestamp
+//                                        MainActivity.db.updateTimestamp(String.valueOf(
+//                                                MainActivity.sortedIDs.get(position)),
+//                                                String.valueOf(futureStamp));
+
+                                        //setting the name of the task for which the
+                                        // notification is being set
+                                        MainActivity.alertIntent.putExtra("ToDo", task);
+                                        MainActivity.alertIntent.putExtra("broadId", position);
+
+                                        //Setting alarm
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                                getContext(), position, MainActivity.alertIntent,
+                                                PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+                                                MainActivity.pendIntent);
 
                                     } else if (finalDbRepeatInterval.equals("week")) {
 
