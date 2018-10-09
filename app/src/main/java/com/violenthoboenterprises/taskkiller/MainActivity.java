@@ -190,12 +190,22 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //Keep track of last phrase used so as to not have the same thing twice in a row
     String lastToast;
     //Colors for the auto color change feature
+    String[] darkHighlightsDec = {"-301927437", "#-301943809", "-301924429", "-301924506", "-301924582",
+            "-288489728", "-286271744", "-285764608", "-285783552", "-290783233", "-298520705",
+            "-279253196", "-276435040", "-272895810", "-293081265", "-270012593", "-285806940",
+            "-285890251", "-285614910", "-285688950", "-285760348", "-285854154", "-285825859",
+            "-285912726", "-285891627", "-286226187", "-290216971", "-278092811",
+            "-274467388", "-292883375", "-275909497", "-272894895"};
     String[] darkHighlights = {"#ee00f3f3", "#ee00b3ff", "#ee00ffb3", "#ee00ff66", "#ee00ff1a",
             "#eecdff00", "#eeefd700", "#eef79400", "#eef74a00", "#eeaaffff", "#ee34ef7f",
             "#ef5aef34", "#ef85efa0", "#efbbf0be", "#ee87ef4f", "#efe7ef4f", "#eef6eea4",
             "#eef5a935", "#eef9dcc2", "#eef8bb8a", "#eef7a4a4", "#eef63636", "#eef6a4bd",
             "#eef5516a", "#eef5a3d5", "#eef088f5", "#eeb3a3f5", "#ef6ca3f5", "#efa3f5c4",
             "#ee8af451", "#ef8df487", "#efbbf451"};
+    String[] lightHighlightsDec = {"-301983240", "-285186049", "-285169681", "-296373249", "-278169102",
+            "-279926286", "-277085960", "-288620289", "-285277978", "-285278054", "-286326712",
+            "-286326784", "-286308352", "-286290176", "-285263636", "-286320006", "-286292524",
+            "-290551820", "-290282764", "-285957420", "-285971348", "-285970635", "-286029929"};
     String[] lightHighlights = {"#ee0019f8", "#ef0067ff", "#ef00a7ef", "#ee55b3ff", "#ef6b79f2",
             "#ef50a9f2", "#ef7c00f8", "#eecc00ff", "#eeff00e6", "#eeff009a", "#eeef0048",
             "#eeef0000", "#eeef4800", "#eeef8f00", "#eeff38ec", "#eeef1a7a", "#eeef85d4",
@@ -934,14 +944,18 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         if(!lightDark) {
             int i = random.nextInt(darkHighlights.length);
             db.updateHighlight(darkHighlights[i]);
+            db.updateHighlightDec(darkHighlightsDec[i]);
             Calendar cal = Calendar.getInstance();
             db.updateColorLastChanged((int) (cal.getTimeInMillis() / 1000 / 60 / 60));
+            highlightDec = darkHighlightsDec[i];
             highlight = darkHighlights[i];
         }else{
             int i = random.nextInt(lightHighlights.length);
             db.updateHighlight(lightHighlights[i]);
+            db.updateHighlightDec(lightHighlightsDec[i]);
             Calendar cal = Calendar.getInstance();
             db.updateColorLastChanged((int) (cal.getTimeInMillis() / 1000 / 60 / 60));
+            highlightDec = lightHighlightsDec[i];
             highlight = lightHighlights[i];
         }
         toolbarDark.setTitleTextColor(Color.parseColor(highlight));
@@ -949,7 +963,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         addIcon.setTextColor(Color.parseColor(highlight));
         taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
         toast.setBackgroundColor(Color.parseColor(highlight));
-
+        setDividers(lightDark);
     }
 
     private void checkLightDark(boolean lightDark) {
@@ -1920,8 +1934,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             }else if(dbOverdue && dbRepeat){
 
-                Log.i(TAG, "I'm in else if");
-
                 MainActivity.pendIntent = PendingIntent.getBroadcast(
                         this, Integer.parseInt(
                                 MainActivity.sortedIDs.get(thePosition)),
@@ -1931,8 +1943,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                 if(dbRepeatInterval.equals("day")){
-
-                    Log.i(TAG, "dbTimestamp: " + dbTimestamp);
 
                     //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                     // detect duplicates and then adjusting the timestamp on the millisecond level
@@ -2007,6 +2017,42 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                            String.valueOf(alarmCalendar.get(Calendar.YEAR)));
 
                 }else if(dbRepeatInterval.equals("week")){
+
+                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                    // detect duplicates and then adjusting the timestamp on the millisecond level
+                    long futureStamp = (Long.parseLong(dbTimestamp) - ((AlarmManager.INTERVAL_DAY * 7) / 1000));
+                    String tempTimestamp = "";
+                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                                MainActivity.sortedIDs.get(i)));
+                        while (tempResult.moveToNext()) {
+                            tempTimestamp = tempResult.getString(3);
+                        }
+                        tempResult.close();
+                        if(futureStamp == Long.parseLong(tempTimestamp)){
+                            futureStamp++;
+                            i = 0;
+                        }
+
+                    }
+
+                    //updating timestamp
+                    MainActivity.db.updateTimestamp(String.valueOf(
+                            MainActivity.sortedIDs.get(thePosition)),
+                            String.valueOf(futureStamp));
+
+                    //setting the name of the task for which the
+                    // notification is being set
+                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
+                    MainActivity.alertIntent.putExtra("broadId", thePosition);
+
+                    //Setting alarm
+                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+                            MainActivity.this, thePosition, MainActivity.alertIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+                            MainActivity.pendIntent);
 
                 }else if(dbRepeatInterval.equals("month")){
 

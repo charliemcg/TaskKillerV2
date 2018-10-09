@@ -3791,7 +3791,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                                         // detect duplicates and then adjusting the timestamp on the millisecond level
-                                        long futureStamp = Integer.parseInt(finalDbTimestamp) + 604800;
+                                        long futureStamp = Integer.parseInt(finalDbTimestamp)/* + 604800*/;
                                         String tempTimestamp = "";
                                         for(int i = 0; i < MainActivity.taskList.size(); i++) {
                                             Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
@@ -3854,6 +3854,31 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 finalAlarmMinute, finalAlarmAmpm,
                                                 String.valueOf(newDay), String.valueOf(newMonth),
                                                 String.valueOf(newYear));
+
+                                        MainActivity.db.updateManualKill(String.valueOf(
+                                                MainActivity.sortedIDs.get(position)), true);
+
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                                getContext(), Integer.parseInt(
+                                                        MainActivity.sortedIDs.get(position)),
+                                                MainActivity.alertIntent,
+                                                PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
+                                        //setting the name of the task for which the
+                                        // notification is being set
+                                        MainActivity.alertIntent.putExtra("ToDo", task);
+                                        MainActivity.alertIntent.putExtra("broadId", position);
+
+                                        //Setting alarm
+                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+                                                getContext(), position, MainActivity.alertIntent,
+                                                PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                        MainActivity.alarmManager.set(AlarmManager.RTC,
+                                                Long.parseLong(String.valueOf(futureStamp) + "000"),
+                                                MainActivity.pendIntent);
 
                                     } else if (finalDbRepeatInterval.equals("month")) {
 

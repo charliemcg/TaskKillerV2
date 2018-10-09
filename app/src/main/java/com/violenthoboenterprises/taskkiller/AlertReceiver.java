@@ -200,8 +200,6 @@ public class AlertReceiver extends BroadcastReceiver {
                 Calendar alarmCalendar = Calendar.getInstance();
                 alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp) + "000") - AlarmManager.INTERVAL_DAY);
 
-                Log.i(TAG, "Manual Kill: " + dbManualKill);
-
                 if(!dbManualKill){
 
                     //updating due date in database
@@ -219,6 +217,61 @@ public class AlertReceiver extends BroadcastReceiver {
                 MainActivity.db.updateManualKill(String.valueOf(MainActivity.sortedIDs.get(broadId)), false);
 
             }else if(dbRepeatInterval.equals("week")){
+
+                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                // detect duplicates and then adjusting the timestamp on the millisecond level
+                long futureStamp = Long.parseLong(dbTimestamp) + ((AlarmManager.INTERVAL_DAY * 7) / 1000);
+                String tempTimestamp = "";
+                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(i)));
+                    while (tempResult.moveToNext()) {
+                        tempTimestamp = tempResult.getString(3);
+                    }
+                    tempResult.close();
+                    if(futureStamp == Long.parseLong(tempTimestamp)){
+                        futureStamp++;
+                        i = 0;
+                    }
+
+                }
+
+                //updating timestamp
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(broadId)),
+                        String.valueOf(futureStamp));
+
+                //setting the name of the task for which the
+                // notification is being set
+                MainActivity.alertIntent.putExtra("ToDo", msg);
+                MainActivity.alertIntent.putExtra("broadId", broadId);
+
+                //Setting alarm
+                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                        context, broadId, MainActivity.alertIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+                        MainActivity.pendIntent);
+
+                Calendar alarmCalendar = Calendar.getInstance();
+                alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp) + "000") - (AlarmManager.INTERVAL_DAY * 7));
+
+                if(!dbManualKill){
+
+                    //updating due date in database
+                    MainActivity.db.updateAlarmData(String.valueOf(
+                            MainActivity.sortedIDs.get(broadId)),
+                            String.valueOf(alarmCalendar.get(Calendar.HOUR)),
+                            String.valueOf(alarmCalendar.get(Calendar.MINUTE)),
+                            String.valueOf(alarmCalendar.get(Calendar.AM_PM)),
+                            String.valueOf(alarmCalendar.get(Calendar.DAY_OF_MONTH)),
+                            String.valueOf(alarmCalendar.get(Calendar.MONTH)),
+                            String.valueOf(alarmCalendar.get(Calendar.YEAR)));
+
+                }
+
+                MainActivity.db.updateManualKill(String.valueOf(MainActivity.sortedIDs.get(broadId)), false);
 
             }else if(dbRepeatInterval.equals("month")){
 
