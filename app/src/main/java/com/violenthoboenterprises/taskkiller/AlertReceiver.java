@@ -109,11 +109,13 @@ public class AlertReceiver extends BroadcastReceiver {
         notificationManager.notify(1, builder.build());
 
         //getting task data
+        String dbTimestamp = "";
         Boolean dbRepeat = false;
         String dbRepeatInterval = "";
         Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(broadId)));
         while (dbResult.moveToNext()) {
+            dbTimestamp = dbResult.getString(3);
             dbRepeat = dbResult.getInt(8) > 0;
             dbRepeatInterval = dbResult.getString(13);
         }
@@ -122,7 +124,30 @@ public class AlertReceiver extends BroadcastReceiver {
         if(dbRepeat) {
 
             if(dbRepeatInterval.equals("day")){
-                Log.i(TAG, "Create next alarm here with id: " + broadId);
+
+                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                // detect duplicates and then adjusting the timestamp on the millisecond level
+//                long futureStamp = dateNow.getTimeInMillis() + AlarmManager.INTERVAL_DAY;
+                long futureStamp = Long.parseLong(dbTimestamp) + (AlarmManager.INTERVAL_DAY / 1000);
+                String tempTimestamp = "";
+                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(i)));
+                    while (tempResult.moveToNext()) {
+                        tempTimestamp = tempResult.getString(3);
+                    }
+                    tempResult.close();
+                    if(futureStamp == Long.parseLong(tempTimestamp)){
+                        futureStamp++;
+                        i = 0;
+                    }
+
+                }
+
+                //updating timestamp
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(broadId)),
+                        String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
                 // notification is being set
@@ -134,12 +159,47 @@ public class AlertReceiver extends BroadcastReceiver {
                         context, broadId, MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-                Calendar dateNow = Calendar.getInstance();
-                MainActivity.alarmManager.set(AlarmManager.RTC, (dateNow
-                                .getTimeInMillis() + AlarmManager.INTERVAL_DAY),
+                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
                         MainActivity.pendIntent);
 
             }else if(dbRepeatInterval.equals("week")){
+
+                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                // detect duplicates and then adjusting the timestamp on the millisecond level
+//                long futureStamp = dateNow.getTimeInMillis() + AlarmManager.INTERVAL_DAY;
+                long futureStamp = Long.parseLong(dbTimestamp) + ((AlarmManager.INTERVAL_DAY * 7) / 1000);
+                String tempTimestamp = "";
+                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(i)));
+                    while (tempResult.moveToNext()) {
+                        tempTimestamp = tempResult.getString(3);
+                    }
+                    tempResult.close();
+                    if(futureStamp == Long.parseLong(tempTimestamp)){
+                        futureStamp++;
+                        i = 0;
+                    }
+
+                }
+
+                //updating timestamp
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(broadId)),
+                        String.valueOf(futureStamp));
+
+                //setting the name of the task for which the
+                // notification is being set
+                MainActivity.alertIntent.putExtra("ToDo", msg);
+                MainActivity.alertIntent.putExtra("broadId", broadId);
+
+                //Setting alarm
+                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                        context, broadId, MainActivity.alertIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+                        MainActivity.pendIntent);
 
             }else if(dbRepeatInterval.equals("month")){
 
