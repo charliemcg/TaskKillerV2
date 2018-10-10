@@ -111,6 +111,7 @@ public class AlertReceiver extends BroadcastReceiver {
         //getting task data
         String dbTimestamp = "";
         Boolean dbRepeat = false;
+        Boolean dbSnoozed = false;
         String dbRepeatInterval = "";
         Boolean dbManualKill = false;
         Boolean dbKilledEarly = false;
@@ -119,6 +120,7 @@ public class AlertReceiver extends BroadcastReceiver {
         while (dbResult.moveToNext()) {
             dbTimestamp = dbResult.getString(3);
             dbRepeat = dbResult.getInt(8) > 0;
+            dbSnoozed = dbResult.getInt(10) > 0;
             dbRepeatInterval = dbResult.getString(13);
             dbManualKill = dbResult.getInt(18) > 0;
             dbKilledEarly = dbResult.getInt(19) > 0;
@@ -135,7 +137,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 MainActivity.db.updateKilledEarly(String.valueOf(MainActivity.sortedIDs.get(broadId)), false);
             }
 
-            if(dbRepeatInterval.equals("day")){
+            if(dbRepeatInterval.equals("day") && !dbSnoozed){
 
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                 // detect duplicates and then adjusting the timestamp on the millisecond level
@@ -173,8 +175,6 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
                         MainActivity.pendIntent);
-
-//                Log.i(TAG, "Timestamp: " + Long.parseLong(String.valueOf(futureStamp) + "000"));
 
                 //getting alarm data
                 Cursor alarmResult = MainActivity.db.getAlarmData(
@@ -216,7 +216,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 MainActivity.db.updateManualKill(String.valueOf(MainActivity.sortedIDs.get(broadId)), false);
 
-            }else if(dbRepeatInterval.equals("week")){
+            }else if(dbRepeatInterval.equals("week") && !dbSnoozed){
 
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                 // detect duplicates and then adjusting the timestamp on the millisecond level
@@ -274,6 +274,129 @@ public class AlertReceiver extends BroadcastReceiver {
                 MainActivity.db.updateManualKill(String.valueOf(MainActivity.sortedIDs.get(broadId)), false);
 
             }else if(dbRepeatInterval.equals("month")){
+
+                //getting alarm data
+                Cursor alarmResult = MainActivity.db.getAlarmData(
+                        Integer.parseInt(MainActivity.sortedIDs.get(broadId)));
+                String alarmHour = "";
+                String alarmMinute = "";
+                String alarmAmpm = "";
+                String alarmDay = "";
+                String alarmMonth = "";
+                String alarmYear = "";
+                while(alarmResult.moveToNext()){
+                    alarmHour = alarmResult.getString(1);
+                    alarmMinute = alarmResult.getString(2);
+                    alarmAmpm = alarmResult.getString(3);
+                    alarmDay = alarmResult.getString(4);
+                    alarmMonth = alarmResult.getString(5);
+                    alarmYear = alarmResult.getString(6);
+                }
+                alarmResult.close();
+
+                Calendar currentCal = Calendar.getInstance();
+                int currentYear = currentCal.get(Calendar.YEAR);
+                int currentMonth = currentCal.get(Calendar.MONTH);
+                int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
+
+                //Getting interval in seconds based on specific day and month//TODO double check that alarm data is always previous non snoozed due
+                int interval = 0;
+//                int theYear = Integer.parseInt(alarmYear);
+//                int theMonth = Integer.parseInt(alarmMonth);
+//                int theDay = Integer.parseInt(alarmDay);
+                int theYear = currentYear;
+                int theMonth = currentMonth;
+                int theDay = currentDay;
+                //Month January and day is 29 non leap year 2592000
+                if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
+                    interval = 2592000;
+                    //Month January and day is 30 non leap year 2505600
+                }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
+                    interval = 2505600;
+                    //Month January and day is 31 non leap year 2419200
+                }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
+                    interval = 2419200;
+                    //Month January and day is 30 leap year 2592000
+                }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
+                    interval = 2592000;
+                    //Month January and day is 31 leap year 2505600
+                }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
+                    interval = 2505600;
+                    //Month March||May||August||October and day is 31 2592000
+                }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
+                        || (theMonth == 9)) && (theDay == 31)){
+                    interval = 2592000;
+                    //Month January||March||May||July||August||October||December 2678400
+                }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
+                        || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
+                        || (theMonth == 11)){
+                    interval = 2678400;
+                    //Month April||June||September||November 2592000
+                }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
+                        || (theMonth == 10)){
+                    interval = 2592000;
+                    //Month February non leap year 2419200
+                }else if((theMonth == 1) && (theYear % 4 != 0)){
+                    interval = 2419200;
+                    //Month February leap year 2505600
+                }else if((theMonth == 1) && (theYear % 4 == 0)){
+                    interval = 2505600;
+                }
+
+                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+                // detect duplicates and then adjusting the timestamp on the millisecond level
+                long futureStamp = Long.parseLong(dbTimestamp) + interval;
+                String tempTimestamp = "";
+                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(i)));
+                    while (tempResult.moveToNext()) {
+                        tempTimestamp = tempResult.getString(3);
+                    }
+                    tempResult.close();
+                    if(futureStamp == Long.parseLong(tempTimestamp)){
+                        futureStamp++;
+                        i = 0;
+                    }
+
+                }
+
+                //updating timestamp
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(broadId)),
+                        String.valueOf(futureStamp));
+
+                //setting the name of the task for which the
+                // notification is being set
+                MainActivity.alertIntent.putExtra("ToDo", msg);
+                MainActivity.alertIntent.putExtra("broadId", broadId);
+
+                //Setting alarm
+                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                        context, broadId, MainActivity.alertIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+                        MainActivity.pendIntent);
+
+                Calendar alarmCalendar = Calendar.getInstance();
+                alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp) + "000") - Long.parseLong(String.valueOf(interval) + "000"));
+
+                if(!dbManualKill){
+
+                    //updating due date in database
+                    MainActivity.db.updateAlarmData(String.valueOf(
+                            MainActivity.sortedIDs.get(broadId)),
+                            String.valueOf(alarmCalendar.get(Calendar.HOUR)),
+                            String.valueOf(alarmCalendar.get(Calendar.MINUTE)),
+                            String.valueOf(alarmCalendar.get(Calendar.AM_PM)),
+                            String.valueOf(alarmCalendar.get(Calendar.DAY_OF_MONTH)),
+                            String.valueOf(alarmCalendar.get(Calendar.MONTH)),
+                            String.valueOf(alarmCalendar.get(Calendar.YEAR)));
+
+                }
+
+                MainActivity.db.updateManualKill(String.valueOf(MainActivity.sortedIDs.get(broadId)), false);
 
             }
         }

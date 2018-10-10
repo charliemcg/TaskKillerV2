@@ -888,7 +888,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
             }
-        }else if(dbRepeatInterval.equals("month") && !dbTimestamp.equals("")){
+        }else if(dbRepeatInterval.equals("month") && !dbTimestamp.equals("") && !alarmYear.equals("")){
 
             //Getting interval in seconds based on specific day and month
             int interval = 0;
@@ -1976,14 +1976,16 @@ class MyAdapter extends ArrayAdapter<String> {
                                 // repeat to snooze for an hour
                                 boolean dontSnooze = false;
                                 if(finalDbRepeat){
+                                    Log.i(TAG, "Interval: " + finalDbRepeatInterval + " dateNow: " + dateNow.getTimeInMillis() / 1000 + " timestamp: " + finalDbTimestamp + " timestamp+: " + String.valueOf(Integer.parseInt(finalDbTimestamp) + 82800));
                                     if (finalDbRepeatInterval.equals("day")) {
                                         if((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                .parseInt(finalDbTimestamp) + 82800)){
+                                                .parseInt(finalDbTimestamp) /*+ 82800*/- (AlarmManager.INTERVAL_HOUR / 1000))){
+                                            Log.i(TAG, "Success");
                                             dontSnooze = true;
                                         }
                                     } else if (finalDbRepeatInterval.equals("week")) {
                                         if ((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                .parseInt(finalDbTimestamp) + 601200)) {
+                                                .parseInt(finalDbTimestamp) /*+ 601200*/- (AlarmManager.INTERVAL_HOUR / 1000))) {
                                             dontSnooze = true;
                                         }
                                     } else if (finalDbRepeatInterval.equals("month")) {
@@ -2056,19 +2058,19 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.toast.startAnimation
                                                     (AnimationUtils.loadAnimation(getContext(),
                                                             R.anim.enter_from_right_fast));
-                                            MainActivity.toast.setVisibility(View.VISIBLE);
+                                            MainActivity.toastView.setVisibility(View.VISIBLE);
                                             final Handler handler2 = new Handler();
                                             final Runnable runnable2 = new Runnable(){
                                                 public void run(){
-                                                    MainActivity.toast.startAnimation
+                                                    MainActivity.toastView.startAnimation
                                                             (AnimationUtils.loadAnimation
                                                                     (getContext(),
                                                                             android.R.anim
                                                                                     .fade_out));
-                                                    MainActivity.toast.setVisibility(View.GONE);
+                                                    MainActivity.toastView.setVisibility(View.GONE);
                                                 }
                                             };
-                                            handler2.postDelayed(runnable2, 1500);
+                                            handler2.postDelayed(runnable2, 2500);
                                         }
                                     };
 
@@ -2293,13 +2295,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 } else {
 
-                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                            getContext(), Integer.parseInt(
-                                                    MainActivity.sortedIDs.get(position)/* + 1000*/),
-                                            MainActivity.alertIntent,
-                                            PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+//                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                                            getContext(), Integer.parseInt(
+//                                                    MainActivity.sortedIDs.get(position)/* + 1000*/),
+//                                            MainActivity.alertIntent,
+//                                            PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                                     Calendar currentDate = new GregorianCalendar();
 
@@ -2507,12 +2509,12 @@ class MyAdapter extends ArrayAdapter<String> {
                                         if (finalDbRepeat) {
                                             if (finalDbRepeatInterval.equals("day")) {
                                                 if ((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                        .parseInt(finalDbTimestamp) + 72000)) {
+                                                        .parseInt(finalDbTimestamp) /*+ 72000*/- ((AlarmManager.INTERVAL_HOUR / 1000) * 4))) {
                                                     dontSnooze = true;
                                                 }
                                             } else if (finalDbRepeatInterval.equals("week")) {
                                                 if ((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                        .parseInt(finalDbTimestamp) + 590400)) {
+                                                        .parseInt(finalDbTimestamp) /*+ 590400*/- ((AlarmManager.INTERVAL_HOUR / 1000) * 4))) {
                                                     dontSnooze = true;
                                                 }
                                             } else if (finalDbRepeatInterval.equals("month")) {
@@ -2587,24 +2589,24 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     if(!MainActivity.mute) {
                                                         MainActivity.sweep.start();
                                                     }
-                                                    MainActivity.toast.startAnimation
+                                                    MainActivity.toastView.startAnimation
                                                             (AnimationUtils.loadAnimation
                                                                     (getContext(), R.anim
                                                                             .enter_from_right_fast));
-                                                    MainActivity.toast.setVisibility(View.VISIBLE);
+                                                    MainActivity.toastView.setVisibility(View.VISIBLE);
                                                     final Handler handler2 = new Handler();
                                                     final Runnable runnable2 = new Runnable() {
                                                         public void run() {
-                                                            MainActivity.toast.startAnimation
+                                                            MainActivity.toastView.startAnimation
                                                                     (AnimationUtils.loadAnimation
                                                                             (getContext(),
                                                                                     android.R.anim
                                                                                             .fade_out));
-                                                            MainActivity.toast
+                                                            MainActivity.toastView
                                                                     .setVisibility(View.GONE);
                                                         }
                                                     };
-                                                    handler2.postDelayed(runnable2, 1500);
+                                                    handler2.postDelayed(runnable2, 2500);
                                                 }
                                             };
 
@@ -2841,15 +2843,15 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         } else {
 
-                                            MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                                    getContext(), Integer.parseInt(
-                                                            MainActivity.sortedIDs
-                                                                    .get(position)/* + 1000*/),
-                                                    MainActivity.alertIntent,
-                                                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                            MainActivity.alarmManager.cancel
-                                                    (MainActivity.pendIntent);
+//                                            MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                                                    getContext(), Integer.parseInt(
+//                                                            MainActivity.sortedIDs
+//                                                                    .get(position)/* + 1000*/),
+//                                                    MainActivity.alertIntent,
+//                                                    PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                                            MainActivity.alarmManager.cancel
+//                                                    (MainActivity.pendIntent);
 
                                             Calendar currentDate = new GregorianCalendar();
 
@@ -3067,12 +3069,12 @@ class MyAdapter extends ArrayAdapter<String> {
                                 if(finalDbRepeat) {
                                     if(finalDbRepeatInterval.equals("day")){
                                         if((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                .parseInt(finalDbTimestamp))) {
+                                                .parseInt(finalDbTimestamp) - (AlarmManager.INTERVAL_DAY / 1000))) {
                                             dontSnooze = true;
                                         }
                                     }else if(finalDbRepeatInterval.equals("week")){
                                         if((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                .parseInt(finalDbTimestamp) + 518400)) {
+                                                .parseInt(finalDbTimestamp) /*+ 518400*/- (AlarmManager.INTERVAL_DAY / 1000))) {
                                             dontSnooze = true;
                                         }
                                     }else if(finalDbRepeatInterval.equals("month")){
@@ -3143,21 +3145,21 @@ class MyAdapter extends ArrayAdapter<String> {
                                             if(!MainActivity.mute) {
                                                 MainActivity.sweep.start();
                                             }
-                                            MainActivity.toast.startAnimation
+                                            MainActivity.toastView.startAnimation
                                                     (AnimationUtils.loadAnimation(getContext(),
                                                             R.anim.enter_from_right_fast));
-                                            MainActivity.toast.setVisibility(View.VISIBLE);
+                                            MainActivity.toastView.setVisibility(View.VISIBLE);
                                             final Handler handler2 = new Handler();
                                             final Runnable runnable2 = new Runnable(){
                                                 public void run(){
-                                                    MainActivity.toast.startAnimation
+                                                    MainActivity.toastView.startAnimation
                                                             (AnimationUtils.loadAnimation
                                                                     (getContext(), android.R.anim
                                                                             .fade_out));
-                                                    MainActivity.toast.setVisibility(View.GONE);
+                                                    MainActivity.toastView.setVisibility(View.GONE);
                                                 }
                                             };
-                                            handler2.postDelayed(runnable2, 1500);
+                                            handler2.postDelayed(runnable2, 2500);
                                         }
                                     };
 
@@ -3383,13 +3385,13 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 } else {
 
-                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                            getContext(), Integer.parseInt(
-                                                    MainActivity.sortedIDs.get(position)/* + 1000*/),
-                                            MainActivity.alertIntent,
-                                            PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+//                                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                                            getContext(), Integer.parseInt(
+//                                                    MainActivity.sortedIDs.get(position)/* + 1000*/),
+//                                            MainActivity.alertIntent,
+//                                            PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                                    MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                                     Calendar currentDate = new GregorianCalendar();
 
@@ -5065,14 +5067,14 @@ class MyAdapter extends ArrayAdapter<String> {
 
         //TODO find out if this month thing is needed
         //actions specific to monthly repeating task
-         if(dbRepeatInterval.equals("month")){
-
-            MainActivity.db.updateRepeat(MainActivity.sortedIDs
-                    .get(position), true);
-
-            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-
-         }else {
+//         if(dbRepeatInterval.equals("month")){
+//
+//            MainActivity.db.updateRepeat(MainActivity.sortedIDs
+//                    .get(position), true);
+//
+//            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//
+//         }else {
 
              MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
@@ -5430,7 +5432,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
              }
 
-        }
+//        }
 
     }
 

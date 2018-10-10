@@ -525,7 +525,7 @@ public class SetDue extends MainActivity {
                 weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
                 monthlyDark.setBackgroundColor(Color.parseColor(highlight));
 
-                repeatInterval = AlarmManager.INTERVAL_DAY;//TODO adjust for months
+//                repeatInterval = AlarmManager.INTERVAL_DAY;//TODO adjust for months
 
                 repeat = "month";
 
@@ -562,7 +562,7 @@ public class SetDue extends MainActivity {
                 weeklyLight.setBackgroundColor(Color.parseColor("#000000"));
                 monthlyLight.setBackgroundColor(Color.parseColor(highlight));
 
-                repeatInterval = AlarmManager.INTERVAL_DAY;//TODO adjust for months
+//                repeatInterval = AlarmManager.INTERVAL_DAY;//TODO adjust for months
 
                 repeat = "month";
 
@@ -1146,8 +1146,6 @@ public class SetDue extends MainActivity {
             db.updateHour(Integer.parseInt(adjustedHour));
             db.updateMinute(minute);
 
-            Log.i(TAG, "adjustedHour: " + adjustedHour);
-
             //set default date values if user not already selected
             if(!datePicked){
                 Calendar calendar = Calendar.getInstance();
@@ -1370,7 +1368,9 @@ public class SetDue extends MainActivity {
 
                     db.updateRepeatInterval(dbTaskId, "month");
 
-                    MainActivity.taskPropertiesShowing = false;
+                    repeating = true;
+
+                    taskPropertiesShowing = false;
 
                     //set default date values if user not already selected
                     if(!datePicked){
