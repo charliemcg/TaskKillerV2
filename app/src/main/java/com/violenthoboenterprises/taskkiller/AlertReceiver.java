@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class AlertReceiver extends BroadcastReceiver {
@@ -347,7 +348,10 @@ public class AlertReceiver extends BroadcastReceiver {
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                 // detect duplicates and then adjusting the timestamp on the millisecond level
                 long futureStamp = Long.parseLong(dbTimestamp) + interval;
+//                long futureStamp = Long.parseLong(String.valueOf(dbTimestamp) + "000") + Long.parseLong(String.valueOf(interval) + "000");
+
                 String tempTimestamp = "";
+//                futureStamp = futureStamp / 1000;
                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
                     Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
                             MainActivity.sortedIDs.get(i)));
@@ -361,6 +365,65 @@ public class AlertReceiver extends BroadcastReceiver {
                     }
 
                 }
+
+                futureStamp = Long.parseLong(String.valueOf(futureStamp) + "000");
+                Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+                        MainActivity.sortedIDs.get(broadId)));
+                String originalDay = "";
+                while (origResult.moveToNext()) {
+                    //tempTimestamp = tempResult.getString(3);
+                    originalDay = origResult.getString(20);
+                }
+                origResult.close();
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(futureStamp);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                int month = cal.get(Calendar.MONTH);
+                if(day != Integer.parseInt(originalDay)){
+                    int daysOut = 0;
+                    if(month == 0 && (day == 28 || day == 29 || day == 30)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 2 && (day == 28 || day == 29 || day == 30)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 3 && (day == 28 || day == 29/* || day == 30*/)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 4 && (day == 28 || day == 29 || day == 30)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 5 && (day == 28 || day == 29/* || day == 30*/)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 6 && (day == 28 || day == 29 || day == 30)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 7 && (day == 28 || day == 29 || day == 30)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 8 && (day == 28 || day == 29/* || day == 30*/)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 9 && (day == 28 || day == 29 || day == 30)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 10 && (day == 28 || day == 29/* || day == 30*/)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }else if(month == 11 && (day == 28 || day == 29 || day == 30)){
+                        daysOut = Integer.parseInt(originalDay) - day;
+                        futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                    }
+                    ///////////////////////
+                    cal.setTimeInMillis(futureStamp);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
+                    month = cal.get(Calendar.MONTH);
+                    Log.i(TAG, "Timestamp: " + futureStamp + " Day: " + day + " Month: " + month + " Original: " + originalDay);
+                }
+
+                futureStamp = futureStamp / 1000;
 
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(

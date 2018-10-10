@@ -286,6 +286,7 @@ class MyAdapter extends ArrayAdapter<String> {
         int uniMinute = 0;
         int uniAmPm = 0;
         String uniInterval = "0";
+        String uniOriginalDayTemp = "";
         while(uniResult.moveToNext()){
             uniSetAlarm = uniResult.getInt(10) > 0;
             uniYear = uniResult.getInt(11);
@@ -295,6 +296,7 @@ class MyAdapter extends ArrayAdapter<String> {
             uniMinute = uniResult.getInt(15);
             uniAmPm = uniResult.getInt(17);
             uniInterval = uniResult.getString(30);
+            uniOriginalDayTemp = uniResult.getString(31);
         }
         uniResult.close();
 
@@ -1013,7 +1015,7 @@ class MyAdapter extends ArrayAdapter<String> {
         }
 
         if(uniSetAlarm && (position == MainActivity.activeTask)){
-            setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute, uniAmPm, uniInterval);
+            setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute, uniAmPm, uniInterval, uniOriginalDayTemp);
             MainActivity.db.updateSetAlarm(false);
             MainActivity.db.updateYear(0);
             MainActivity.db.updateMonth(0);
@@ -1022,6 +1024,7 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateMinute(0);
             MainActivity.db.updateAmPm(0);
             MainActivity.db.updateRepeatIntervalTemp("0");
+            MainActivity.db.updateOriginalDayTemp("");
         }
 
 //        if((((MainActivity.taskList.size() - 1) == position)
@@ -4651,7 +4654,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
     //set notification alarm for selected task
     private void setAlarm(final int position, int year, int month,
-                                                         int day, int hour, int minute, int ampm, String uniInterval){
+                                                         int day, int hour, int minute, int ampm, String uniInterval, String originalDayTemp){
 
 //        //getting task data
 //        String dbTask = "";
@@ -5306,6 +5309,9 @@ class MyAdapter extends ArrayAdapter<String> {
                              String.valueOf(day),
                              String.valueOf(month),
                              String.valueOf(year));
+
+                     MainActivity.db.updateOriginalDay(String.valueOf(
+                             MainActivity.sortedIDs.get(position)), originalDayTemp);
 
                      //setting the name of the task for which the notification is being set
                      MainActivity.alertIntent.putExtra("ToDo", dbTask);

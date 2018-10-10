@@ -928,6 +928,7 @@ public class SetDue extends MainActivity {
             db.updateYear(year);
             db.updateMonth(month);
             db.updateDay(day);
+            db.updateOriginalDayTemp(String.valueOf(day));
 
             //Set default time values if user not selected time values already
             if(!timePicked){
@@ -960,7 +961,6 @@ public class SetDue extends MainActivity {
                     db.updateAmPm(ampm);
                     db.updateMinute(0);
                 }
-                Log.i(TAG, "hour: " + hour);
             }else{
                 Cursor alarmResult = MainActivity.db.getAlarmData
                         (Integer.parseInt(dbTaskId));
@@ -1153,6 +1153,7 @@ public class SetDue extends MainActivity {
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
                 db.updateDay(day);
+                db.updateOriginalDayTemp(String.valueOf(day));
                 db.updateMonth(month);
                 db.updateYear(year);
 //                if(adjustedAmPm.equals("am")) {
@@ -1172,8 +1173,15 @@ public class SetDue extends MainActivity {
                     alarmYear = alarmResult.getString(6);
                 }
                 alarmResult.close();
+                Cursor dbTaskResult = db.getData(Integer.parseInt(dbTaskId));
+                String dbOriginalDay = "";
+                while (dbTaskResult.moveToNext()) {
+                    dbOriginalDay = dbTaskResult.getString(20);
+                }
+                dbTaskResult.close();
                 if(!alarmDay.equals("")) {
                     db.updateDay(Integer.parseInt(alarmDay));
+                    db.updateOriginalDayTemp(String.valueOf(dbOriginalDay));
                     db.updateMonth(Integer.parseInt(alarmMonth));
                     db.updateYear(Integer.parseInt(alarmYear));
                 }
@@ -1248,6 +1256,7 @@ public class SetDue extends MainActivity {
                         int month = calendar.get(Calendar.MONTH);
                         int year = calendar.get(Calendar.YEAR);
                         db.updateDay(day);
+                        db.updateOriginalDayTemp(String.valueOf(day));
                         db.updateMonth(month);
                         db.updateYear(year);
                     }else{
@@ -1331,6 +1340,7 @@ public class SetDue extends MainActivity {
                         int month = calendar.get(Calendar.MONTH);
                         int year = calendar.get(Calendar.YEAR);
                         db.updateDay(day);
+                        db.updateOriginalDayTemp(String.valueOf(day));
                         db.updateMonth(month);
                         db.updateYear(year);
                     }else{
@@ -1379,6 +1389,7 @@ public class SetDue extends MainActivity {
                         int month = calendar.get(Calendar.MONTH);
                         int year = calendar.get(Calendar.YEAR);
                         db.updateDay(day);
+                        db.updateOriginalDayTemp(String.valueOf(day));
                         db.updateMonth(month);
                         db.updateYear(year);
                     }else{
@@ -1454,7 +1465,14 @@ public class SetDue extends MainActivity {
         }
         alarmResult.close();
         if(!alarmDay.equals("")) {
+            Cursor dbTaskResult = db.getData(Integer.parseInt(dbTaskId));
+            String dbOriginalDay = "";
+            while (dbTaskResult.moveToNext()) {
+                dbOriginalDay = dbTaskResult.getString(20);
+            }
+            dbTaskResult.close();
             db.updateDay(Integer.parseInt(alarmDay));
+            db.updateOriginalDayTemp(String.valueOf(dbOriginalDay));
             db.updateMonth(Integer.parseInt(alarmMonth));
             db.updateYear(Integer.parseInt(alarmYear));
         }

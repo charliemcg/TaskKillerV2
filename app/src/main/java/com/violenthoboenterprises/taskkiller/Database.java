@@ -35,6 +35,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL18 = "CHECKLISTSIZE";
     public static final String COL19 = "MANUALKILL";
     public static final String COL20 = "KILLEDEARLY";
+    public static final String COL21 = "ORIGINALDAY";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -89,6 +90,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL29 = "REVIEWFOUR";
     public static final String UCOL30 = "HIGHLIGHTDEC";
     public static final String UCOL31 = "REPEATINTERVALTEMP";
+    public static final String UCOL32 = "ORIGINALDAYTEMP";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -112,7 +114,7 @@ public class Database extends SQLiteOpenHelper {
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
                 "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT," +
-                " IGNORED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER, CHECKLISTSIZE INETGER, MANUALKILL BOOLEAN, KILLEDEARLY BOOLEAN)");
+                " IGNORED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER, CHECKLISTSIZE INETGER, MANUALKILL BOOLEAN, KILLEDEARLY BOOLEAN, ORIGINALDAY TEXT)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
@@ -124,7 +126,7 @@ public class Database extends SQLiteOpenHelper {
                 " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER, AMPM INTEGER," +
                 " CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN, REPEATHINT INTEGER," +
                 " RENAMEHINT INTEGER, REINSTATEHINT INTEGER, TIMESTARTED INTEGER," +
-                " REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, REVIEWFOUR BOOLEAN, HIGHLIGHTDEC TEXT, REPEATINTERVALTEMP TEXT)");
+                " REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, REVIEWFOUR BOOLEAN, HIGHLIGHTDEC TEXT, REPEATINTERVALTEMP TEXT, ORIGINALDAYTEMP TEXT)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -162,6 +164,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL18, 0);
         content.put(COL19, 0);
         content.put(COL20, 0);
+        content.put(COL21, "");
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -241,6 +244,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL29, false);
         content.put(UCOL30, "-298516736");
         content.put(UCOL31, "0");
+        content.put(UCOL32, "");
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -529,6 +533,15 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
+    //Used to recalibrate monthly repeating tasks
+    public boolean updateOriginalDay(String id, String day){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL21, day);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
 //    public boolean updateSnoozeTimestamp(String id, String stamp){
 //        SQLiteDatabase db = this.getWritableDatabase();
 //        ContentValues content = new ContentValues();
@@ -802,6 +815,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL31, interval);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateOriginalDayTemp(String day){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL32, day);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }
