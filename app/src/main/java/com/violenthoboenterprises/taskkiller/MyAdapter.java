@@ -1368,23 +1368,28 @@ class MyAdapter extends ArrayAdapter<String> {
                     if (((currentMonth == 0) || (currentMonth == 2)
                             || (currentMonth == 4) || (currentMonth == 6)
                             || (currentMonth == 7) || (currentMonth == 9))
-                            && (currentDay == 31) && (Integer.valueOf(day) == 1)) {
+                            && (currentDay == 31) && (Integer.valueOf(day) == 1)
+                            && (currentMonth == (Integer.valueOf(month) - 1))) {
                         tomorrow = true;
                     } else if (((currentMonth == 1) || (currentMonth == 3)
                             || (currentMonth == 5) || (currentMonth == 8)
                             || (currentMonth == 10)) && (currentDay == 30)
-                            && (Integer.valueOf(day) == 1)) {
+                            && (Integer.valueOf(day) == 1)
+                            && (currentMonth == (Integer.valueOf(month) - 1))) {
                         tomorrow = true;
                     } else if ((currentMonth == 11) && (currentDay == 31)
-                            && (Integer.valueOf(day) == 1)) {
+                            && (Integer.valueOf(day) == 1)
+                            && (currentMonth == (Integer.valueOf(month) - 1))) {
                         tomorrow = true;
                     } else if ((currentMonth == 1) && (currentDay == 28)
-                            && (currentYear % 4 != 0) && (Integer.valueOf(day) == 1)) {
+                            && (currentYear % 4 != 0) && (Integer.valueOf(day) == 1)
+                            && (currentMonth == (Integer.valueOf(month) - 1))) {
                         tomorrow = true;
                     } else if ((currentMonth == 1) && (currentDay == 29)
-                            && (currentYear % 4 == 0) && (Integer.valueOf(day) == 1)) {
+                            && (currentYear % 4 == 0) && (Integer.valueOf(day) == 1)
+                            && (currentMonth == (Integer.valueOf(month) - 1))) {
                         tomorrow = true;
-                    } else if (currentDay == (Integer.valueOf(day) - 1)){
+                    } else if (currentDay == (Integer.valueOf(day) - 1) && currentMonth == Integer.valueOf(month)){
                         tomorrow = true;
                     }
                     if(!dbKilled) {

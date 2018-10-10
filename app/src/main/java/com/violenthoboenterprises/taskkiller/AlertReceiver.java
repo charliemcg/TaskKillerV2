@@ -111,7 +111,7 @@ public class AlertReceiver extends BroadcastReceiver {
         builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory
                         .decodeResource(context.getResources(), R.drawable.ic_launcher_og))
-                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
+                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert).setWhen(0)
                 .setContentText(/*msg*/dbTask).setStyle(new NotificationCompat.BigTextStyle());
 
         //Sets background of small icon
