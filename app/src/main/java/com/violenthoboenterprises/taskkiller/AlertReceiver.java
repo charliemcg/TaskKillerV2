@@ -52,6 +52,26 @@ public class AlertReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder;
         RemoteViews remoteViews;
 
+        //getting task data
+        String dbTimestamp = "";
+        String dbTask = "";
+        Boolean dbRepeat = false;
+        Boolean dbSnoozed = false;
+        String dbRepeatInterval = "";
+        Boolean dbManualKill = false;
+        Boolean dbKilledEarly = false;
+        Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
+                MainActivity.sortedIDs.get(broadId)));
+        while (dbResult.moveToNext()) {
+            dbTimestamp = dbResult.getString(3);
+            dbTask = dbResult.getString(4);
+            dbRepeat = dbResult.getInt(8) > 0;
+            dbSnoozed = dbResult.getInt(10) > 0;
+            dbRepeatInterval = dbResult.getString(13);
+            dbManualKill = dbResult.getInt(18) > 0;
+            dbKilledEarly = dbResult.getInt(19) > 0;
+        }
+        dbResult.close();
 
         //allows for notifications
         NotificationManager notificationManager = (NotificationManager)
@@ -64,10 +84,10 @@ public class AlertReceiver extends BroadcastReceiver {
 
         if(MainActivity.lightDark) {
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_light);
-            remoteViews.setTextViewText(R.id.notif_title, msg);
+            remoteViews.setTextViewText(R.id.notif_title, /*msg*/dbTask);
         }else{
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification);
-            remoteViews.setTextViewText(R.id.notif_title, msg);
+            remoteViews.setTextViewText(R.id.notif_title, /*msg*/dbTask);
         }
 
         final int NOTIFICATION_ID = 1;
@@ -91,7 +111,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory
                         .decodeResource(context.getResources(), R.drawable.ic_launcher_og))
                 .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
-                .setContentText(msg).setStyle(new NotificationCompat.BigTextStyle());
+                .setContentText(/*msg*/dbTask).setStyle(new NotificationCompat.BigTextStyle());
 
         //Sets background of small icon
 //        builder.setColorized(true).setColor(Color.parseColor("#FFFF0000"));
@@ -107,25 +127,6 @@ public class AlertReceiver extends BroadcastReceiver {
 
         //post notification
 //        notificationManager.notify(1, builder.build());
-
-        //getting task data
-        String dbTimestamp = "";
-        Boolean dbRepeat = false;
-        Boolean dbSnoozed = false;
-        String dbRepeatInterval = "";
-        Boolean dbManualKill = false;
-        Boolean dbKilledEarly = false;
-        Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
-                MainActivity.sortedIDs.get(broadId)));
-        while (dbResult.moveToNext()) {
-            dbTimestamp = dbResult.getString(3);
-            dbRepeat = dbResult.getInt(8) > 0;
-            dbSnoozed = dbResult.getInt(10) > 0;
-            dbRepeatInterval = dbResult.getString(13);
-            dbManualKill = dbResult.getInt(18) > 0;
-            dbKilledEarly = dbResult.getInt(19) > 0;
-        }
-        dbResult.close();
 
         if(!dbRepeat){
             notificationManager.notify(1, builder.build());
@@ -165,7 +166,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 //setting the name of the task for which the
                 // notification is being set
-                MainActivity.alertIntent.putExtra("ToDo", msg);
+                MainActivity.alertIntent.putExtra("ToDo", /*msg*/dbTask);
                 MainActivity.alertIntent.putExtra("broadId", broadId);
 
                 //Setting alarm
@@ -243,7 +244,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 //setting the name of the task for which the
                 // notification is being set
-                MainActivity.alertIntent.putExtra("ToDo", msg);
+                MainActivity.alertIntent.putExtra("ToDo", /*msg*/dbTask);
                 MainActivity.alertIntent.putExtra("broadId", broadId);
 
                 //Setting alarm
@@ -368,7 +369,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 //setting the name of the task for which the
                 // notification is being set
-                MainActivity.alertIntent.putExtra("ToDo", msg);
+                MainActivity.alertIntent.putExtra("ToDo", /*msg*/dbTask);
                 MainActivity.alertIntent.putExtra("broadId", broadId);
 
                 //Setting alarm
