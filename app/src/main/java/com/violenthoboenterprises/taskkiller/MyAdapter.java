@@ -776,12 +776,13 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.sortedIDs.get(position)),
                         String.valueOf(futureStamp));
 
+                Log.i(TAG, "I'm in here three");
 
                 if(!alarmDay.equals("")) {
                     int newDay = Integer.parseInt(alarmDay);
                     int newMonth = Integer.parseInt(alarmMonth);
                     int newYear = Integer.parseInt(alarmYear);
-                    //Incrementing day
+                    //Incrementing month
                     if (((newMonth == 0) || (newMonth == 2) || (newMonth == 4) || (newMonth == 6)
                             || (newMonth == 7) || (newMonth == 9)) && (newDay == 31)) {
                         newDay = 1;
@@ -854,7 +855,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     int theDay = Integer.parseInt(alarmDay) + 7;
                     int theMonth = Integer.parseInt(alarmMonth);
                     int theYear = Integer.parseInt(alarmYear);
-                    //Incrementing week
+                    //Incrementing week//TODO this week incrementing looks different to other versions in this class
                     if(((theMonth == 0) || (theMonth == 2)
                             || (theMonth == 4) || (theMonth == 6)
                             || (theMonth == 7) || (theMonth == 9)) && (theDay >= 25)){
@@ -975,6 +976,8 @@ class MyAdapter extends ArrayAdapter<String> {
                     MainActivity.alarmManager.set(AlarmManager.RTC,
                             futureStamp, MainActivity.pendIntent);
                 }
+
+                Log.i(TAG, "I'm in here four");
 
                 if(!alarmDay.equals("")) {
                     int newDay = Integer.parseInt(alarmDay);
@@ -1812,15 +1815,37 @@ class MyAdapter extends ArrayAdapter<String> {
                         interval = 2505600;
                     }
 
+                    Log.i(TAG, "I'm in here one");
+
                     newDay = Integer.parseInt(finalAlarmDay);
                     newMonth = Integer.parseInt(finalAlarmMonth);
                     newYear = Integer.parseInt(finalAlarmYear);
+                    Log.i(TAG, "newMonth: " + newMonth);
+//                    //incrementing month
+//                    if (((newMonth == 2) || (newMonth == 4) || (newMonth == 7)
+//                            || (newMonth == 9)) && (newDay == 31)) {
+//                        newDay = 30;
+//                        newMonth++;
+//                    } else if ((newMonth == 11) && (newDay == 31)) {
+//                        newMonth = 0;
+//                        newYear++;
+//                    } else if (newMonth == 1
+//                            && (newDay > 28) && (newYear % 4 != 0)) {
+//                        newDay = 28;
+//                        newMonth++;
+//                    } else if (newMonth == 1
+//                            && (newDay > 29) && (newYear % 4 == 0)) {
+//                        newDay = 28;
+//                        newMonth++;
+//                    }else{
+//                        newMonth++;
+//                    }
                     //incrementing month
                     if (((newMonth == 2) || (newMonth == 4) || (newMonth == 7)
                             || (newMonth == 9)) && (newDay == 31)) {
                         newDay = 30;
                         newMonth++;
-                    } else if ((newMonth == 11) && (newDay == 31)) {
+                    } else if ((newMonth == 11)/* && (newDay == 31)*/) {
                         newMonth = 0;
                         newYear++;
                     } else if (newMonth == 1
@@ -4696,6 +4721,8 @@ class MyAdapter extends ArrayAdapter<String> {
                             }else if((theMonth == 1) && (theYear % 4 == 0)){
                                 interval = 2505600;
                             }
+
+                            Log.i(TAG, "I'm in here two");
 
                             newDay = Integer.parseInt(finalAlarmDay);
                             newMonth = Integer.parseInt(finalAlarmMonth);
