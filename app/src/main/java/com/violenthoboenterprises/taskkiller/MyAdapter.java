@@ -3940,41 +3940,80 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 MainActivity.sortedIDs.get(position)),
                                                 String.valueOf(futureStamp));
 
-                                        int newDay = currentDate.get(Calendar.DAY_OF_MONTH) + 7;
+//                                        int newDay = currentDate.get(Calendar.DAY_OF_MONTH) + 7;
+//                                        int newMonth = currentDate.get(Calendar.MONTH);
+//                                        int newYear = currentDate.get(Calendar.YEAR);
+//                                        //incrementing week
+//                                        if (((currentDate.get(Calendar.MONTH)) == 0
+//                                                || (currentDate.get(Calendar.MONTH)) == 2
+//                                                || (currentDate.get(Calendar.MONTH)) == 4
+//                                                || (currentDate.get(Calendar.MONTH)) == 6
+//                                                || (currentDate.get(Calendar.MONTH)) == 7
+//                                                || (currentDate.get(Calendar.MONTH)) == 9)
+//                                                && (newDay > 31)) {
+//                                            newDay -= 31;
+//                                            newMonth++;
+//                                        } else if (((currentDate.get(Calendar.MONTH)) == 1
+//                                                || (currentDate.get(Calendar.MONTH)) == 3
+//                                                || (currentDate.get(Calendar.MONTH)) == 5
+//                                                || (currentDate.get(Calendar.MONTH)) == 8
+//                                                || (currentDate.get(Calendar.MONTH)) == 10)
+//                                                && (newDay > 30)) {
+//                                            newDay -= 30;
+//                                            newMonth++;
+//                                        } else if ((currentDate.get(Calendar.MONTH) == 11)
+//                                                && (newDay == 31)) {
+//                                            newDay -= 31;
+//                                            newMonth = 0;
+//                                            newYear++;
+//                                        } else if (currentDate.get(Calendar.MONTH) == 1
+//                                                && (newDay == 28) && (newYear % 4 != 0)) {
+//                                            newDay = 1;
+//                                            newMonth++;
+//                                        } else if (currentDate.get(Calendar.MONTH) == 1
+//                                                && (newDay == 29) && (newYear % 4 == 0)) {
+//                                            newDay = 1;
+//                                            newMonth++;
+//                                        }
+
+                                        Log.i(TAG, "Adjusting weekly repeat: " + finalDbTimestamp);
+                                        //TODO use code above if the following fails
+                                        //////////////////////////////////////////////
+                                        Calendar overdueDate = Calendar.getInstance();
+                                        overdueDate.setTimeInMillis
+                                                (Long.parseLong(finalDbTimestamp + "000")
+                                                        - (AlarmManager.INTERVAL_DAY * 7));
+                                        int newDay = overdueDate.get(Calendar.DAY_OF_MONTH);
+
+                                        Log.i(TAG, "" + newDay);
+
+//                                        int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
                                         int newMonth = currentDate.get(Calendar.MONTH);
                                         int newYear = currentDate.get(Calendar.YEAR);
-                                        //incrementing week
-                                        if (((currentDate.get(Calendar.MONTH)) == 0
-                                                || (currentDate.get(Calendar.MONTH)) == 2
-                                                || (currentDate.get(Calendar.MONTH)) == 4
-                                                || (currentDate.get(Calendar.MONTH)) == 6
-                                                || (currentDate.get(Calendar.MONTH)) == 7
-                                                || (currentDate.get(Calendar.MONTH)) == 9)
-                                                && (newDay > 31)) {
+                                        newDay += 7;
+
+                                        //Incrementing week
+                                        if(((newMonth == 0) || (newMonth == 2)
+                                                || (newMonth == 4) || (newMonth == 6)
+                                                || (newMonth == 7) || (newMonth == 9)) && (newDay > 31)){
                                             newDay -= 31;
                                             newMonth++;
-                                        } else if (((currentDate.get(Calendar.MONTH)) == 1
-                                                || (currentDate.get(Calendar.MONTH)) == 3
-                                                || (currentDate.get(Calendar.MONTH)) == 5
-                                                || (currentDate.get(Calendar.MONTH)) == 8
-                                                || (currentDate.get(Calendar.MONTH)) == 10)
-                                                && (newDay > 30)) {
+                                        }else if(((newMonth == 3) || (newMonth == 5)
+                                                || (newMonth == 8)|| (newMonth == 10)) && (newDay > 30)){
                                             newDay -= 30;
                                             newMonth++;
-                                        } else if ((currentDate.get(Calendar.MONTH) == 11)
-                                                && (newDay == 31)) {
+                                        }else if((newMonth == 11) && (newDay > 31)){
                                             newDay -= 31;
                                             newMonth = 0;
                                             newYear++;
-                                        } else if (currentDate.get(Calendar.MONTH) == 1
-                                                && (newDay == 28) && (newYear % 4 != 0)) {
-                                            newDay = 1;
+                                        }else if((newMonth == 1) && (newDay > 28) && (newYear % 4 != 0)){
+                                            newDay -= 28;
                                             newMonth++;
-                                        } else if (currentDate.get(Calendar.MONTH) == 1
-                                                && (newDay == 29) && (newYear % 4 == 0)) {
-                                            newDay = 1;
+                                        }else if((newMonth == 1) && (newDay > 29) && (newYear % 4 == 0)){
+                                            newDay -= 29;
                                             newMonth++;
                                         }
+                                        //////////////////////////////////////////////
 
                                         MainActivity.db.updateAlarmData(String.valueOf(
                                                 MainActivity.sortedIDs.get(MainActivity
