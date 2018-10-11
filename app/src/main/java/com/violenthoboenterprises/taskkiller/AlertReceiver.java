@@ -347,11 +347,8 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                 // detect duplicates and then adjusting the timestamp on the millisecond level
-                long futureStamp = Long.parseLong(dbTimestamp) + interval;
-//                long futureStamp = Long.parseLong(String.valueOf(dbTimestamp) + "000") + Long.parseLong(String.valueOf(interval) + "000");
-
+                long futureStamp = (Long.parseLong(dbTimestamp) + interval);
                 String tempTimestamp = "";
-//                futureStamp = futureStamp / 1000;
                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
                     Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
                             MainActivity.sortedIDs.get(i)));
@@ -416,11 +413,6 @@ public class AlertReceiver extends BroadcastReceiver {
                         daysOut = Integer.parseInt(originalDay) - day;
                         futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                     }
-                    ///////////////////////
-                    cal.setTimeInMillis(futureStamp);
-                    day = cal.get(Calendar.DAY_OF_MONTH);
-                    month = cal.get(Calendar.MONTH);
-                    Log.i(TAG, "Timestamp: " + futureStamp + " Day: " + day + " Month: " + month + " Original: " + originalDay);
                 }
 
                 futureStamp = futureStamp / 1000;
@@ -439,6 +431,8 @@ public class AlertReceiver extends BroadcastReceiver {
                 MainActivity.pendIntent = PendingIntent.getBroadcast(
                         context, broadId, MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
+
+                Log.i(TAG, "Stamp: " + Long.parseLong(String.valueOf(futureStamp) + "000") + " Current: " + Calendar.getInstance().getTimeInMillis());
 
                 MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
                         MainActivity.pendIntent);

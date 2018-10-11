@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -283,7 +284,15 @@ public class Database extends SQLiteOpenHelper {
         return result;
     }
 
+    public Cursor getSortedData(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL17
+                + " == " + id, null);
+        return result;
+    }
+
     public Cursor getDataByTimestamp(String stamp){
+
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL16
                 + " == " + stamp, null);
@@ -875,6 +884,31 @@ public class Database extends SQLiteOpenHelper {
     public Integer deleteAllSubtaskData (String id){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(CTABLE, "ID = ?", new String[] {id});
+    }
+
+    public int getTotalRows(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor countCursor = db.rawQuery("SELECT COUNT (*) FROM notes_table", null);
+        int count = 0;
+        if(countCursor != null){
+            if(countCursor.getCount() > 0){
+                countCursor.moveToFirst();
+                count = countCursor.getInt(0);
+            }
+            countCursor.close();
+        }
+        return count;
+    }
+
+    public ArrayList<Integer> getIDs(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Integer> theList = new ArrayList<>();
+        Cursor IDCursor = db.rawQuery("SELECT ID FROM notes_table", null);
+        while (IDCursor.moveToNext()) {
+            theList.add(IDCursor.getInt(0));
+        }
+        IDCursor.close();
+        return theList;
     }
 
 }

@@ -13,6 +13,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
@@ -67,6 +69,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Random;
+
+import static android.database.DatabaseUtils.queryNumEntries;
 
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler, AbsListView.OnScrollListener {
 
@@ -146,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //Indicates which task has it's properties showing
     static int activeTask;
     //Saves the size of the task list
-    public static int taskListSize;
+//    public static int taskListSize;
     //Height of the 'add' button
     static int addHeight;
     static int addIconHeight;
@@ -237,10 +241,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
-//    Button showDb;
+    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
-//    Button showUniversalDb;
+    Button showUniversalDb;
 //    Button showSubtasksDb;
 
     //Scrollable list
@@ -411,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 getString(R.string.smashThatTask), getString(R.string.beAWinner),
                 getString(R.string.onlyWimpsGiveUp), getString(R.string.dontBeAFailure),
                 getString(R.string.beVictorious)};
-        taskListSize = 0;
+//        taskListSize = 0;
         exitTaskProperties = false;
         snoozeRowShowing = false;
         toast = findViewById(R.id.toast);
@@ -425,9 +429,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidth = displayMetrics.widthPixels;
         deviceheight = displayMetrics.heightPixels;
-//        showDb = findViewById(R.id.showDb);
+        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
-//        showUniversalDb = findViewById(R.id.showUniversalDb);
+        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
         duesSet = 0;
         showMotivation = false;
@@ -462,7 +466,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             adsRemoved = dbResult.getInt(5) > 0;
             remindersAvailable = dbResult.getInt(6) > 0;
             colorCyclingAllowed = dbResult.getInt(7) > 0;
-            taskListSize = dbResult.getInt(8);
+//            taskListSize = dbResult.getInt(8);
             highlightDec = dbResult.getString(29);
         }
         dbResult.close();
@@ -590,41 +594,41 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         //Used for debugging purposes
-//        showDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllData();
-//
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("NOTE: " + res.getString(1) + "\n");
-//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-//                    buffer.append("TASK: " + res.getString(4) + "\n");
-//                    buffer.append("DUE: " + res.getString(5) + "\n");
-//                    buffer.append("KILLED: " + res.getString(6) + "\n");
-//                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
-//                    buffer.append("REPEAT: " + res.getString(8) + "\n");
-//                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
-//                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
-//                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-//                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
-//                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
-//                    buffer.append("IGNORED: " + res.getString(14) + "\n");
-//                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
-//                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
-//                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//}
-//        });
+        showDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllData();
+
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("NOTE: " + res.getString(1) + "\n");
+                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+                    buffer.append("TASK: " + res.getString(4) + "\n");
+                    buffer.append("DUE: " + res.getString(5) + "\n");
+                    buffer.append("KILLED: " + res.getString(6) + "\n");
+                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
+                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
+                    buffer.append("IGNORED: " + res.getString(14) + "\n");
+                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
+                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
+                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+}
+        });
 
         //Used for debugging purposes
 //        showAlarmDb.setOnClickListener(new View.OnClickListener() {
@@ -679,43 +683,43 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //        });
 
         //Used for debugging purposes
-//        showUniversalDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllUniversalData();
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("MUTE: " + res.getString(1) + "\n");
-//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
-//                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
-//                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
-//                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
-//                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
-//                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
-//                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
-//                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
-//                    buffer.append("SETALARM: " + res.getString(10) + "\n");
-//                    buffer.append("YEAR: " + res.getString(11) + "\n");
-//                    buffer.append("MONTH: " + res.getString(12) + "\n");
-//                    buffer.append("DAY: " + res.getString(13) + "\n");
-//                    buffer.append("HOUR: " + res.getString(14) + "\n");
-//                    buffer.append("MINUTE: " + res.getString(15) + "\n");
-//                    buffer.append("AMPM: " + res.getString(17) + "\n");
-//                    buffer.append("DUESSET: " + res.getString(19) + "\n");
-//                    buffer.append("HIGHLIGHTDEC: " + res.getString(29) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//
-//            }
-//
-//        });
+        showUniversalDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllUniversalData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("MUTE: " + res.getString(1) + "\n");
+                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
+                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
+                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
+                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
+                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
+                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
+                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
+                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
+                    buffer.append("SETALARM: " + res.getString(10) + "\n");
+                    buffer.append("YEAR: " + res.getString(11) + "\n");
+                    buffer.append("MONTH: " + res.getString(12) + "\n");
+                    buffer.append("DAY: " + res.getString(13) + "\n");
+                    buffer.append("HOUR: " + res.getString(14) + "\n");
+                    buffer.append("MINUTE: " + res.getString(15) + "\n");
+                    buffer.append("AMPM: " + res.getString(17) + "\n");
+                    buffer.append("DUESSET: " + res.getString(19) + "\n");
+                    buffer.append("HIGHLIGHTDEC: " + res.getString(29) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
 
         //Used for debugging purposes
 //        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
@@ -781,14 +785,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                         //create records in database
                         db.insertData(Integer.parseInt(sortedIDs
-                                .get(taskListSize - 1)), "", taskName, Integer.parseInt(sortedIDs
-                                .get(taskListSize - 1)), String.valueOf(timeNow
+                                .get(taskList.size()/*Size*/ - 1)), "", taskName, Integer.parseInt(sortedIDs
+                                .get(taskList.size()/*Size*/ - 1)), String.valueOf(timeNow
                                 .getTimeInMillis() / 1000));
                         db.insertAlarmData(Integer.parseInt(sortedIDs
-                                        .get(taskListSize - 1)), "", "",
+                                        .get(taskList.size()/*Size*/ - 1)), "", "",
                                 "", "", "", "");
                         db.insertSnoozeData(Integer.parseInt(sortedIDs
-                                        .get(taskListSize - 1)), "", "",
+                                        .get(taskList.size()/*Size*/ - 1)), "", "",
                                 "", "", "", "");
 
                         showDueDates = false;
@@ -1307,9 +1311,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         MainActivity.checklistShowing = true;
 
-        taskListSize--;
-        db.updateTaskListSize(taskListSize);
-        db.updateChecklistListSize(taskListSize);
+//        taskListSize--;
+        db.updateTaskListSize(taskList.size()/*Size*/);
+        db.updateChecklistListSize(taskList.size()/*Size*/);
 
         //deleting data related to deleted task
         db.deleteData(String.valueOf(sortedIDs.get(position)));
@@ -1329,7 +1333,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         Boolean checklist;
 
         //Getting existing data before going to Database class to change ids.
-        for(int i = (activeTask + 1); i < taskListSize; i++){
+        for(int i = (activeTask + 1); i < taskList.size()/*Size*/; i++){
             result = db.getData(Integer.parseInt(sortedIDs.get(i)));
             id = "";
             note = "";
@@ -1473,11 +1477,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         ArrayList<Integer> tempList = new ArrayList<>();
 
         //Saving timestamps into a temporary array
-        for(int i = 0; i < MainActivity.taskListSize; i++){
+        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
 
             //getting timestamp
             String dbTimestamp = "";
-            Cursor dbResult = db.getData(Integer.parseInt(
+            Cursor dbResult = db.getSortedData(Integer.parseInt(
                     sortedIDs.get(i)));
             while (dbResult.moveToNext()) {
                 dbTimestamp = dbResult.getString(3);
@@ -1488,11 +1492,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         }
 
+        Log.i(TAG, "tempList: " + tempList);
+
         //Ordering list by time task was created
         ArrayList<String> whenTaskCreated = new ArrayList<>();
-        for(int i = 0; i < MainActivity.taskListSize; i++){
+        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
             String created = "";
-            Cursor createdResult = db.getData(Integer.parseInt
+            Cursor createdResult = db.getSortedData(Integer.parseInt
                     (sortedIDs.get(i)));
             while (createdResult.moveToNext()) {
                 created = createdResult.getString(15);
@@ -1500,6 +1506,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             createdResult.close();
             whenTaskCreated.add(created);
         }
+        Log.i(TAG, "whenTaskCreated: " + whenTaskCreated);
         Collections.sort(whenTaskCreated);
         Collections.reverse(whenTaskCreated);
 
@@ -1511,7 +1518,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         ArrayList<String> tempDueTaskList = new ArrayList<>();
 
         //getting tasks which have no due date
-        for(int i = 0; i < MainActivity.taskListSize; i++){
+        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
 
             //getting task data
             int dbId = 0;
@@ -1545,7 +1552,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         Collections.sort(tempList);
 
         //Adding due tasks to middle of task list
-        for(int i = 0; i < MainActivity.taskListSize; i++){
+        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
 
             //getting task data
             int dbId = 0;
@@ -1571,7 +1578,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             tempIdsList.add(tempKilledIdsList.get(i));
         }
 
-        for(int i = 0; i < MainActivity.taskListSize; i++){
+        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
 
             MainActivity.db.updateSortedIndex(String.valueOf(i),
                     Integer.parseInt(tempIdsList.get(i)));
@@ -1598,9 +1605,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 taskList.add(taskName);
 
-                taskListSize++;
-                db.updateTaskListSize(taskListSize);
-                db.updateChecklistListSize(taskListSize);
+//                taskListSize++;
+                db.updateTaskListSize(taskList.size()/*Size*/);
+                db.updateChecklistListSize(taskList.size()/*Size*/);
 
                 //finding unique ID for task
                 int i = 0;
@@ -1609,8 +1616,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     if (sortedIDs.contains(String.valueOf(i))) {
                         i++;
                     } else {
-                        sortedIDs.add(taskListSize - 1, String.valueOf(i));
-                        db.updateSortedIndex(String.valueOf(taskListSize - 1), i);
+                        sortedIDs.add(taskList.size()/*Size*/ - 1, String.valueOf(i));
+                        db.updateSortedIndex(String.valueOf(taskList.size()/*Size*/ - 1), i);
                         idIsSet = true;
                     }
                 }
@@ -1636,7 +1643,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void noTasksLeft() {
 
         //Checks if there are any existing tasks
-        if (taskListSize == 0){
+        if (taskList.size()/*Size*/ == 0){
 
             //Inform user to add some tasks
             if(lightDark) {
@@ -2400,13 +2407,100 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     alarmResult.close();
 
                     //Getting interval in seconds based on specific day and month//TODO double check that alarm data is always previous non snoozed due
+//                    int interval = 0;
+//                    int theYear = Integer.parseInt(alarmYear);
+//                    int theMonth = (Integer.parseInt(alarmMonth) + 1);
+//                    if(theMonth == 12){
+//                        theMonth = 0;
+//                    }
+//                    int theDay = Integer.parseInt(alarmDay);
+//                    //Month January and day is 29 non leap year 2592000
+//                    if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
+//                        interval = 2592000;
+//                        //Month January and day is 30 non leap year 2505600
+//                    }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
+//                        interval = 2505600;
+//                        //Month January and day is 31 non leap year 2419200
+//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
+//                        interval = 2419200;
+//                        //Month January and day is 30 leap year 2592000
+//                    }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
+//                        interval = 2592000;
+//                        //Month January and day is 31 leap year 2505600
+//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
+//                        interval = 2505600;
+//                        //Month March||May||August||October and day is 31 2592000
+//                    }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
+//                            || (theMonth == 9)) && (theDay == 31)){
+//                        interval = 2592000;
+//                        //Month January||March||May||July||August||October||December 2678400
+//                    }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
+//                            || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
+//                            || (theMonth == 11)){
+//                        interval = 2678400;
+//                        //Month April||June||September||November 2592000
+//                    }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
+//                            || (theMonth == 10)){
+//                        interval = 2592000;
+//                        //Month February non leap year 2419200
+//                    }else if((theMonth == 1) && (theYear % 4 != 0)){
+//                        interval = 2419200;
+//                        //Month February leap year 2505600
+//                    }else if((theMonth == 1) && (theYear % 4 == 0)){
+//                        interval = 2505600;
+//                    }
+//
+//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+//                    // detect duplicates and then adjusting the timestamp on the millisecond level
+//                    long futureStamp = (Long.parseLong(dbTimestamp) - interval);
+//                    String tempTimestamp = "";
+//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
+//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+//                                MainActivity.sortedIDs.get(i)));
+//                        while (tempResult.moveToNext()) {
+//                            tempTimestamp = tempResult.getString(3);
+//                        }
+//                        tempResult.close();
+//                        if(futureStamp == Long.parseLong(tempTimestamp)){
+//                            futureStamp++;
+//                            i = 0;
+//                        }
+//
+//                    }
+//
+//                    //updating timestamp
+//                    MainActivity.db.updateTimestamp(String.valueOf(
+//                            MainActivity.sortedIDs.get(thePosition)),
+//                            String.valueOf(futureStamp));
+//
+//                    //setting the name of the task for which the
+//                    // notification is being set
+//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
+//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
+//
+//                    //Setting alarm
+//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                            MainActivity.this, thePosition, MainActivity.alertIntent,
+//                            PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+//                            MainActivity.pendIntent);
+
+                    Calendar currentCal = Calendar.getInstance();
+                    int currentYear = currentCal.get(Calendar.YEAR);
+                    int currentMonth = currentCal.get(Calendar.MONTH);
+                    int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
+
                     int interval = 0;
-                    int theYear = Integer.parseInt(alarmYear);
-                    int theMonth = (Integer.parseInt(alarmMonth) + 1);
-                    if(theMonth == 12){
-                        theMonth = 0;
-                    }
-                    int theDay = Integer.parseInt(alarmDay);
+//                    int theYear = Integer.parseInt(alarmYear);
+//                    int theMonth = (Integer.parseInt(alarmMonth) + 1);
+//                    if(theMonth == 12){
+//                        theMonth = 0;
+//                    }
+//                    int theDay = Integer.parseInt(alarmDay);
+                    int theYear = currentYear;
+                    int theMonth = currentMonth;
+                    int theDay = currentDay;
                     //Month January and day is 29 non leap year 2592000
                     if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
                         interval = 2592000;
@@ -2460,6 +2554,65 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         }
 
                     }
+
+                    futureStamp = Long.parseLong(String.valueOf(futureStamp) + "000");
+                    Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(thePosition)));
+                    String originalDay = "";
+                    while (origResult.moveToNext()) {
+                        //tempTimestamp = tempResult.getString(3);
+                        originalDay = origResult.getString(20);
+                    }
+                    origResult.close();
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(futureStamp);
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+                    int month = cal.get(Calendar.MONTH);
+                    if(day != Integer.parseInt(originalDay)){
+                        int daysOut = 0;
+                        if(month == 0 && (day == 28 || day == 29 || day == 30)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 2 && (day == 28 || day == 29 || day == 30)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 3 && (day == 28 || day == 29/* || day == 30*/)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 4 && (day == 28 || day == 29 || day == 30)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 5 && (day == 28 || day == 29/* || day == 30*/)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 6 && (day == 28 || day == 29 || day == 30)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 7 && (day == 28 || day == 29 || day == 30)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 8 && (day == 28 || day == 29/* || day == 30*/)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 9 && (day == 28 || day == 29 || day == 30)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 10 && (day == 28 || day == 29/* || day == 30*/)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }else if(month == 11 && (day == 28 || day == 29 || day == 30)){
+                            daysOut = Integer.parseInt(originalDay) - day;
+                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+                        }
+                        ///////////////////////
+                        cal.setTimeInMillis(futureStamp);
+                        day = cal.get(Calendar.DAY_OF_MONTH);
+                        month = cal.get(Calendar.MONTH);
+                        Log.i(TAG, "Timestamp: " + futureStamp + " Day: " + day + " Month: " + month + " Original: " + originalDay);
+                    }
+
+                    futureStamp = futureStamp / 1000;
 
                     //updating timestamp
                     MainActivity.db.updateTimestamp(String.valueOf(
@@ -2875,6 +3028,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         int taskLastChanged = 0;
 
+//        SQLiteStatement sizeStatement = db.compileStatement("SELECT SUM(LENGTH(ID)) FROM notes_table");
+//        String countQuery = "SELECT  * FROM notes_table";
+////        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery(countQuery, null);
+//        int count = cursor.getCount();
+//        cursor.close();
+
+        int taskListSize = db.getTotalRows();
+
         //getting app-wide data
         Cursor dbResult = db.getUniversalData();
         while (dbResult.moveToNext()) {
@@ -2884,7 +3046,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             adsRemoved = dbResult.getInt(5) > 0;
             remindersAvailable = dbResult.getInt(6) > 0;
             colorCyclingAllowed = dbResult.getInt(7) > 0;
-            taskListSize = dbResult.getInt(8);
+//            taskListSize = dbResult.getInt(8);
             taskLastChanged = dbResult.getInt(16);
             colorCyclingEnabled = dbResult.getInt(18) > 0;
             duesSet = dbResult.getInt(19);
@@ -2911,15 +3073,38 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         ArrayList<Integer> tempSortedIDs = new ArrayList<>();
 
+        ArrayList<Integer> IDList = db.getIDs();
+
+        Log.i(TAG, "IDsList: " + IDList);
+
         for( int i = 0 ; i < taskListSize ; i++ ) {
 
-            Cursor sortedIdsResult = db.getData(i);
+            Cursor sortedIdsResult = db.getData(IDList.get(i));
             while (sortedIdsResult.moveToNext()) {
                 tempSortedIDs.add(sortedIdsResult.getInt(16));
             }
             sortedIdsResult.close();
 
         }
+
+        Log.i(TAG, "tempSortedIDs: " + tempSortedIDs);
+
+//        Log.i(TAG, "I'm in here: " + taskListSize);
+//
+//        int k = 0;
+//        int j = 0;
+//        while(k < taskListSize){
+//            Log.i(TAG, "I'm in here. j: " + j + " k: " + k);
+//            Cursor sortedIdsResult = db.getData(j);
+//            while (sortedIdsResult.moveToNext()){
+//                tempSortedIDs.add(sortedIdsResult.getInt(16));
+//                k++;
+//            }
+//            j++;
+//            sortedIdsResult.close();
+//        }
+//
+//        Log.i(TAG, "tempSortedIds: " + tempSortedIDs);
 
         Collections.sort(tempSortedIDs);
 
@@ -2929,14 +3114,19 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         }
 
+        Log.i(TAG, "sortedIDs: " + sortedIDs);
+
         for(int i = 0; i < taskListSize; i++){
-            Cursor sharedPreferencesResult = db.getData(Integer
-                    .parseInt(sortedIDs.get(i)));
+//            Cursor sharedPreferencesResult = db.getData(Integer
+//                    .parseInt(sortedIDs.get(i)));
+            Cursor sharedPreferencesResult = db.getSortedData(Integer.parseInt(sortedIDs.get(i)));
             while (sharedPreferencesResult.moveToNext()) {
                 taskList.add(sharedPreferencesResult.getString(4));
             }
             sharedPreferencesResult.close();
         }
+
+        Log.i(TAG, "taskList: " + taskList);
 
         reorderList();
 
