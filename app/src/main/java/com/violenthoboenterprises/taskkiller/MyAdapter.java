@@ -4895,6 +4895,8 @@ class MyAdapter extends ArrayAdapter<String> {
     private void setAlarm(final int position, int year, int month,
                                                          int day, int hour, int minute, int ampm, String uniInterval, String originalDayTemp){
 
+        Log.i(TAG, "day: " + day + " hour: " + hour + " minute: " + minute + " ampm: " + ampm);
+
 //        //getting task data
 //        String dbTask = "";
 //        Integer dbBroadcast = 0;

@@ -956,11 +956,29 @@ public class SetDue extends MainActivity {
                     }
                     db.updateAmPm(ampm);
                     db.updateMinute(minute);
+                }else if(hour >= 10){
+                    if(hour == 23){
+                        db.updateHour(11);
+                    }else if(hour >= 13) {
+                        db.updateHour(hour - 12);
+//                    }else if(hour == 12){
+//                        db.updateHour(12);
+                    }else{
+                        db.updateHour(hour);
+//                        if (hour == 11) {
+//                            ampm = 1;
+//                        }
+                    }
+                    db.updateAmPm(ampm);
+                    db.updateMinute(minute);
                 }else{
                     db.updateHour(10);
                     db.updateAmPm(ampm);
                     db.updateMinute(0);
                 }
+
+                Log.i(TAG, "day: " + day + " hour: " + hour + " minute: " + minute + " ampm: " + ampm);
+
             }else{
                 Cursor alarmResult = MainActivity.db.getAlarmData
                         (Integer.parseInt(dbTaskId));
