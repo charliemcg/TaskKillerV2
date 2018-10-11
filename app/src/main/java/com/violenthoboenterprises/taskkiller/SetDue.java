@@ -724,6 +724,8 @@ public class SetDue extends MainActivity {
 
                                     db.updateRepeat(dbTaskId, false);
 
+                                    db.updateSnooze(dbTaskId, false);
+
                                     pendIntent = PendingIntent.getBroadcast(getApplicationContext(),
                                             Integer.valueOf(dbTaskId),
                                             alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -732,6 +734,8 @@ public class SetDue extends MainActivity {
 
                                     db.updateAlarmData(dbTaskId,
                                             "", "", "", "", "", "");
+
+                                    db.updateSnoozeData(dbTaskId, "", "", "", "", "", "");
 
                                     setDue = false;
                                     datePicked = false;
@@ -1454,6 +1458,8 @@ public class SetDue extends MainActivity {
                 duesSet++;
                 db.updateDuesSet(duesSet);
             }
+            db.updateSnooze(dbTaskId, false);
+            db.updateSnoozeData(dbTaskId, "", "", "", "", "", "");
         }else if(!remindersAvailable && !dbDueTime.equals("0") && !datePicked && !timePicked){
             duesSet--;
             db.updateDuesSet(duesSet);
