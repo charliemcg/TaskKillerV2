@@ -1492,8 +1492,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         }
 
-        Log.i(TAG, "tempList: " + tempList);
-
         //Ordering list by time task was created
         ArrayList<String> whenTaskCreated = new ArrayList<>();
         for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
@@ -1506,7 +1504,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             createdResult.close();
             whenTaskCreated.add(created);
         }
-        Log.i(TAG, "whenTaskCreated: " + whenTaskCreated);
+
         Collections.sort(whenTaskCreated);
         Collections.reverse(whenTaskCreated);
 
@@ -1866,8 +1864,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //getting task data
             String dbTimestamp = "";
             String dbTask = "";
-            Boolean dbRepeat = false;
-            Boolean dbOverdue = false;
+            boolean dbRepeat = false;
+            boolean dbOverdue = false;
+            boolean dbSnooze = false;
             String dbRepeatInterval = "";
             Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                     MainActivity.sortedIDs.get(thePosition)));
@@ -1876,6 +1875,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 dbTask = dbResult.getString(4);
                 dbRepeat = dbResult.getInt(8) > 0;
                 dbOverdue = dbResult.getInt(9) > 0;
+                dbSnooze = dbResult.getInt(10) > 0;
                 dbRepeatInterval = dbResult.getString(13);
             }
             dbResult.close();
@@ -2293,7 +2293,26 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //
 //            }
 
-            if(dbRepeat){
+            Log.i(TAG, "I'm in here");
+
+//            if(dbSnooze){
+
+                db.updateOverdue(String.valueOf(thePosition), false);
+                //cancelling any snooze data
+                MainActivity.db.updateSnoozeData(String.valueOf(
+                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                        "", "", "", "", "", "");
+                db.updateSnooze(String.valueOf(thePosition), false);
+
+            MainActivity.pendIntent = PendingIntent.getBroadcast(
+                    this, Integer.parseInt(
+                            MainActivity.sortedIDs.get(thePosition) + 1000),
+                    MainActivity.alertIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
+            if(dbRepeat && !dbSnooze){
 
                 if(!dbOverdue){
 
@@ -2605,11 +2624,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                         }
-                        ///////////////////////
-                        cal.setTimeInMillis(futureStamp);
-                        day = cal.get(Calendar.DAY_OF_MONTH);
-                        month = cal.get(Calendar.MONTH);
-                        Log.i(TAG, "Timestamp: " + futureStamp + " Day: " + day + " Month: " + month + " Original: " + originalDay);
                     }
 
                     futureStamp = futureStamp / 1000;
@@ -3075,8 +3089,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         ArrayList<Integer> IDList = db.getIDs();
 
-        Log.i(TAG, "IDsList: " + IDList);
-
         for( int i = 0 ; i < taskListSize ; i++ ) {
 
             Cursor sortedIdsResult = db.getData(IDList.get(i));
@@ -3086,8 +3098,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             sortedIdsResult.close();
 
         }
-
-        Log.i(TAG, "tempSortedIDs: " + tempSortedIDs);
 
 //        Log.i(TAG, "I'm in here: " + taskListSize);
 //
@@ -3114,8 +3124,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         }
 
-        Log.i(TAG, "sortedIDs: " + sortedIDs);
-
         for(int i = 0; i < taskListSize; i++){
 //            Cursor sharedPreferencesResult = db.getData(Integer
 //                    .parseInt(sortedIDs.get(i)));
@@ -3125,8 +3133,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             }
             sharedPreferencesResult.close();
         }
-
-        Log.i(TAG, "taskList: " + taskList);
 
         reorderList();
 

@@ -1370,25 +1370,51 @@ public class SetDue extends MainActivity {
                     }
 
                     //Set default time values if user not selected time values already
+//                    if(!timePicked){
+//                        Calendar calendar = Calendar.getInstance();
+//                        int minute = calendar.get(Calendar.MINUTE);
+//                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//                        int ampm = calendar.get(Calendar.AM_PM);
+//                        if(hour >= 10) {
+//                            if(hour != 23) {
+//                                db.updateHour(hour + 1);
+//                            }else{
+//                                db.updateHour(hour);
+//                            }
+//                            db.updateAmPm(ampm);
+//                            db.updateMinute(minute);
+//                        }else{
+//                            db.updateHour(10);
+//                            db.updateAmPm(ampm);
+//                            db.updateMinute(0);
+//                        }
+//                    }else{
+//                        getTimeFromDB();
+//                    }
+
                     if(!timePicked){
+
                         Calendar calendar = Calendar.getInstance();
                         int minute = calendar.get(Calendar.MINUTE);
                         int hour = calendar.get(Calendar.HOUR_OF_DAY);
                         int ampm = calendar.get(Calendar.AM_PM);
-                        if(hour >= 10) {
-                            if(hour != 23) {
-                                db.updateHour(hour + 1);
-                            }else{
-                                db.updateHour(hour);
-                            }
-                            db.updateAmPm(ampm);
-                            db.updateMinute(minute);
+
+                        if(hour == 23){
+                            db.updateHour(11);
+                        }else if(hour >= 13) {
+                            db.updateHour(hour - 11);
+                        }else if(hour == 12){
+                            db.updateHour(1);
                         }else{
-                            db.updateHour(10);
-                            db.updateAmPm(ampm);
-                            db.updateMinute(0);
+                            db.updateHour(hour + 1);
+                            if (hour == 11) {
+                                ampm = 1;
+                            }
                         }
+                        db.updateAmPm(ampm);
+                        db.updateMinute(minute);
                     }else{
+
                         getTimeFromDB();
                     }
 
@@ -1419,25 +1445,51 @@ public class SetDue extends MainActivity {
                     }
 
                     //Set default time values if user not selected time values already
+//                    if(!timePicked){
+//                        Calendar calendar = Calendar.getInstance();
+//                        int minute = calendar.get(Calendar.MINUTE);
+//                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//                        int ampm = calendar.get(Calendar.AM_PM);
+//                        if(hour >= 10) {
+//                            if(hour != 23) {
+//                                db.updateHour(hour + 1);
+//                            }else{
+//                                db.updateHour(hour);
+//                            }
+//                            db.updateAmPm(ampm);
+//                            db.updateMinute(minute);
+//                        }else{
+//                            db.updateHour(10);
+//                            db.updateAmPm(ampm);
+//                            db.updateMinute(0);
+//                        }
+//                    }else{
+//                        getTimeFromDB();
+//                    }
+
                     if(!timePicked){
+
                         Calendar calendar = Calendar.getInstance();
                         int minute = calendar.get(Calendar.MINUTE);
                         int hour = calendar.get(Calendar.HOUR_OF_DAY);
                         int ampm = calendar.get(Calendar.AM_PM);
-                        if(hour >= 10) {
-                            if(hour != 23) {
-                                db.updateHour(hour + 1);
-                            }else{
-                                db.updateHour(hour);
-                            }
-                            db.updateAmPm(ampm);
-                            db.updateMinute(minute);
+
+                        if(hour == 23){
+                            db.updateHour(11);
+                        }else if(hour >= 13) {
+                            db.updateHour(hour - 11);
+                        }else if(hour == 12){
+                            db.updateHour(1);
                         }else{
-                            db.updateHour(10);
-                            db.updateAmPm(ampm);
-                            db.updateMinute(0);
+                            db.updateHour(hour + 1);
+                            if (hour == 11) {
+                                ampm = 1;
+                            }
                         }
+                        db.updateAmPm(ampm);
+                        db.updateMinute(minute);
                     }else{
+
                         getTimeFromDB();
                     }
 

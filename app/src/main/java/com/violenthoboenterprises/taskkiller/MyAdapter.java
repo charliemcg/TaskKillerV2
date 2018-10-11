@@ -1365,32 +1365,34 @@ class MyAdapter extends ArrayAdapter<String> {
                 } else {
                     //Checking if date due tomorrow
                     //Incrementing day
-                    if (((currentMonth == 0) || (currentMonth == 2)
-                            || (currentMonth == 4) || (currentMonth == 6)
-                            || (currentMonth == 7) || (currentMonth == 9))
-                            && (currentDay == 31) && (Integer.valueOf(day) == 1)
-                            && (currentMonth == (Integer.valueOf(month) - 1))) {
-                        tomorrow = true;
-                    } else if (((currentMonth == 1) || (currentMonth == 3)
-                            || (currentMonth == 5) || (currentMonth == 8)
-                            || (currentMonth == 10)) && (currentDay == 30)
-                            && (Integer.valueOf(day) == 1)
-                            && (currentMonth == (Integer.valueOf(month) - 1))) {
-                        tomorrow = true;
-                    } else if ((currentMonth == 11) && (currentDay == 31)
-                            && (Integer.valueOf(day) == 1)
-                            && (currentMonth == (Integer.valueOf(month) - 1))) {
-                        tomorrow = true;
-                    } else if ((currentMonth == 1) && (currentDay == 28)
-                            && (currentYear % 4 != 0) && (Integer.valueOf(day) == 1)
-                            && (currentMonth == (Integer.valueOf(month) - 1))) {
-                        tomorrow = true;
-                    } else if ((currentMonth == 1) && (currentDay == 29)
-                            && (currentYear % 4 == 0) && (Integer.valueOf(day) == 1)
-                            && (currentMonth == (Integer.valueOf(month) - 1))) {
-                        tomorrow = true;
-                    } else if (currentDay == (Integer.valueOf(day) - 1) && currentMonth == Integer.valueOf(month)){
-                        tomorrow = true;
+                    if(currentYear == Integer.parseInt(year)) {
+                        if (((currentMonth == 0) || (currentMonth == 2)
+                                || (currentMonth == 4) || (currentMonth == 6)
+                                || (currentMonth == 7) || (currentMonth == 9))
+                                && (currentDay == 31) && (Integer.valueOf(day) == 1)
+                                && (currentMonth == (Integer.valueOf(month) - 1))) {
+                            tomorrow = true;
+                        } else if (((currentMonth == 1) || (currentMonth == 3)
+                                || (currentMonth == 5) || (currentMonth == 8)
+                                || (currentMonth == 10)) && (currentDay == 30)
+                                && (Integer.valueOf(day) == 1)
+                                && (currentMonth == (Integer.valueOf(month) - 1))) {
+                            tomorrow = true;
+                        } else if ((currentMonth == 11) && (currentDay == 31)
+                                && (Integer.valueOf(day) == 1)
+                                && (currentMonth == (Integer.valueOf(month) - 1))) {
+                            tomorrow = true;
+                        } else if ((currentMonth == 1) && (currentDay == 28)
+                                && (currentYear % 4 != 0) && (Integer.valueOf(day) == 1)
+                                && (currentMonth == (Integer.valueOf(month) - 1))) {
+                            tomorrow = true;
+                        } else if ((currentMonth == 1) && (currentDay == 29)
+                                && (currentYear % 4 == 0) && (Integer.valueOf(day) == 1)
+                                && (currentMonth == (Integer.valueOf(month) - 1))) {
+                            tomorrow = true;
+                        } else if (currentDay == (Integer.valueOf(day) - 1) && currentMonth == Integer.valueOf(month)) {
+                            tomorrow = true;
+                        }
                     }
                     if(!dbKilled) {
                         dueClear.setBackgroundColor(Color.parseColor(MainActivity.highlight));
@@ -1723,27 +1725,49 @@ class MyAdapter extends ArrayAdapter<String> {
                     interval = 604800;
                     newDay += 7;
 
-                    //incrementing week
+                    //Incrementing week
                     if(((newMonth == 0) || (newMonth == 2)
                             || (newMonth == 4) || (newMonth == 6)
-                            || (newMonth == 7) || (newMonth == 9)) && (newDay >= 25)){
+                            || (newMonth == 7) || (newMonth == 9)) && (newDay > 31)){
                         newDay -= 31;
                         newMonth++;
                     }else if(((newMonth == 3) || (newMonth == 5)
-                            || (newMonth == 8)|| (newMonth == 10)) && (newDay >= 24)){
+                            || (newMonth == 8)|| (newMonth == 10)) && (newDay > 30)){
                         newDay -= 30;
                         newMonth++;
-                    }else if((newMonth == 11) && (newDay >= 25)){
+                    }else if((newMonth == 11) && (newDay > 31)){
                         newDay -= 31;
-                        newMonth++;
+                        newMonth = 0;
                         newYear++;
-                    }else if((newMonth == 1) && (newDay >= 22) && (newYear % 4 != 0)){
+                    }else if((newMonth == 1) && (newDay > 28) && (newYear % 4 != 0)){
                         newDay -= 28;
                         newMonth++;
-                    }else if((newMonth == 1) && (newDay >= 22) && (newYear % 4 == 0)){
+                    }else if((newMonth == 1) && (newDay > 29) && (newYear % 4 == 0)){
                         newDay -= 29;
                         newMonth++;
                     }
+
+                    //incrementing week
+//                    if(((newMonth == 0) || (newMonth == 2)
+//                            || (newMonth == 4) || (newMonth == 6)
+//                            || (newMonth == 7) || (newMonth == 9)) && (newDay >= 25)){
+//                        newDay -= 31;
+//                        newMonth++;
+//                    }else if(((newMonth == 3) || (newMonth == 5)
+//                            || (newMonth == 8)|| (newMonth == 10)) && (newDay >= 24)){
+//                        newDay -= 30;
+//                        newMonth++;
+//                    }else if((newMonth == 11) && (newDay >= 25)){
+//                        newDay -= 31;
+//                        newMonth++;
+//                        newYear++;
+//                    }else if((newMonth == 1) && (newDay >= 22) && (newYear % 4 != 0)){
+//                        newDay -= 28;
+//                        newMonth++;
+//                    }else if((newMonth == 1) && (newDay >= 22) && (newYear % 4 == 0)){
+//                        newDay -= 29;
+//                        newMonth++;
+//                    }
 
                 }else if(finalDbRepeatInterval.equals("month")){
 
@@ -2173,30 +2197,52 @@ class MyAdapter extends ArrayAdapter<String> {
                                         adjustedStamp = Integer.parseInt(finalDbTimestamp) + 604800;
                                         newDay += 7;
 
-                                        //incrementing week
-                                        if(((newMonth == 0) || (newMonth == 2) || (newMonth == 4)
-                                                || (newMonth == 6) || (newMonth == 7)
-                                                || (newMonth == 9)) && (newDay >= 25)){
+                                        //Incrementing week
+                                        if(((newMonth == 0) || (newMonth == 2)
+                                                || (newMonth == 4) || (newMonth == 6)
+                                                || (newMonth == 7) || (newMonth == 9)) && (newDay > 31)){
                                             newDay -= 31;
                                             newMonth++;
                                         }else if(((newMonth == 3) || (newMonth == 5)
-                                                || (newMonth == 8)|| (newMonth == 10))
-                                                && (newDay >= 24)){
+                                                || (newMonth == 8)|| (newMonth == 10)) && (newDay > 30)){
                                             newDay -= 30;
                                             newMonth++;
-                                        }else if((newMonth == 11) && (newDay >= 25)){
+                                        }else if((newMonth == 11) && (newDay > 31)){
                                             newDay -= 31;
-                                            newMonth++;
+                                            newMonth = 0;
                                             newYear++;
-                                        }else if((newMonth == 1) && (newDay >= 22)
-                                                && (newYear % 4 != 0)){
+                                        }else if((newMonth == 1) && (newDay > 28) && (newYear % 4 != 0)){
                                             newDay -= 28;
                                             newMonth++;
-                                        }else if((newMonth == 1) && (newDay >= 22)
-                                                && (newYear % 4 == 0)){
+                                        }else if((newMonth == 1) && (newDay > 29) && (newYear % 4 == 0)){
                                             newDay -= 29;
                                             newMonth++;
                                         }
+
+//                                        //incrementing week
+//                                        if(((newMonth == 0) || (newMonth == 2) || (newMonth == 4)
+//                                                || (newMonth == 6) || (newMonth == 7)
+//                                                || (newMonth == 9)) && (newDay >= 25)){
+//                                            newDay -= 31;
+//                                            newMonth++;
+//                                        }else if(((newMonth == 3) || (newMonth == 5)
+//                                                || (newMonth == 8)|| (newMonth == 10))
+//                                                && (newDay >= 24)){
+//                                            newDay -= 30;
+//                                            newMonth++;
+//                                        }else if((newMonth == 11) && (newDay >= 25)){
+//                                            newDay -= 31;
+//                                            newMonth++;
+//                                            newYear++;
+//                                        }else if((newMonth == 1) && (newDay >= 22)
+//                                                && (newYear % 4 != 0)){
+//                                            newDay -= 28;
+//                                            newMonth++;
+//                                        }else if((newMonth == 1) && (newDay >= 22)
+//                                                && (newYear % 4 == 0)){
+//                                            newDay -= 29;
+//                                            newMonth++;
+//                                        }
 
                                     }else if(finalDbRepeatInterval.equals("month")){
 
@@ -3256,31 +3302,53 @@ class MyAdapter extends ArrayAdapter<String> {
                                         adjustedStamp = Integer.parseInt(finalDbTimestamp) + 604800;
                                         newDay += 7;
 
-                                        //incrementing week
+                                        //Incrementing week
                                         if(((newMonth == 0) || (newMonth == 2)
                                                 || (newMonth == 4) || (newMonth == 6)
-                                                || (newMonth == 7) || (newMonth == 9))
-                                                && (newDay >= 25)){
+                                                || (newMonth == 7) || (newMonth == 9)) && (newDay > 31)){
                                             newDay -= 31;
                                             newMonth++;
                                         }else if(((newMonth == 3) || (newMonth == 5)
-                                                || (newMonth == 8)|| (newMonth == 10))
-                                                && (newDay >= 24)){
+                                                || (newMonth == 8)|| (newMonth == 10)) && (newDay > 30)){
                                             newDay -= 30;
                                             newMonth++;
-                                        }else if((newMonth == 11) && (newDay >= 25)){
+                                        }else if((newMonth == 11) && (newDay > 31)){
                                             newDay -= 31;
-                                            newMonth++;
+                                            newMonth = 0;
                                             newYear++;
-                                        }else if((newMonth == 1) && (newDay >= 22)
-                                                && (newYear % 4 != 0)){
+                                        }else if((newMonth == 1) && (newDay > 28) && (newYear % 4 != 0)){
                                             newDay -= 28;
                                             newMonth++;
-                                        }else if((newMonth == 1) && (newDay >= 22)
-                                                && (newYear % 4 == 0)){
+                                        }else if((newMonth == 1) && (newDay > 29) && (newYear % 4 == 0)){
                                             newDay -= 29;
                                             newMonth++;
                                         }
+
+                                        //incrementing week
+//                                        if(((newMonth == 0) || (newMonth == 2)
+//                                                || (newMonth == 4) || (newMonth == 6)
+//                                                || (newMonth == 7) || (newMonth == 9))
+//                                                && (newDay >= 25)){
+//                                            newDay -= 31;
+//                                            newMonth++;
+//                                        }else if(((newMonth == 3) || (newMonth == 5)
+//                                                || (newMonth == 8)|| (newMonth == 10))
+//                                                && (newDay >= 24)){
+//                                            newDay -= 30;
+//                                            newMonth++;
+//                                        }else if((newMonth == 11) && (newDay >= 25)){
+//                                            newDay -= 31;
+//                                            newMonth++;
+//                                            newYear++;
+//                                        }else if((newMonth == 1) && (newDay >= 22)
+//                                                && (newYear % 4 != 0)){
+//                                            newDay -= 28;
+//                                            newMonth++;
+//                                        }else if((newMonth == 1) && (newDay >= 22)
+//                                                && (newYear % 4 == 0)){
+//                                            newDay -= 29;
+//                                            newMonth++;
+//                                        }
 
                                     }else if(finalDbRepeatInterval.equals("month")){
 
@@ -4503,27 +4571,49 @@ class MyAdapter extends ArrayAdapter<String> {
                             interval = 604800;
                             newDay += 7;
 
-                            //incrementing week
+                            //Incrementing week
                             if(((newMonth == 0) || (newMonth == 2)
                                     || (newMonth == 4) || (newMonth == 6)
-                                    || (newMonth == 7) || (newMonth == 9)) && (newDay >= 25)){
+                                    || (newMonth == 7) || (newMonth == 9)) && (newDay > 31)){
                                 newDay -= 31;
                                 newMonth++;
                             }else if(((newMonth == 3) || (newMonth == 5)
-                                    || (newMonth == 8)|| (newMonth == 10)) && (newDay >= 24)){
+                                    || (newMonth == 8)|| (newMonth == 10)) && (newDay > 30)){
                                 newDay -= 30;
                                 newMonth++;
-                            }else if((newMonth == 11) && (newDay >= 25)){
+                            }else if((newMonth == 11) && (newDay > 31)){
                                 newDay -= 31;
-                                newMonth++;
+                                newMonth = 0;
                                 newYear++;
-                            }else if((newMonth == 1) && (newDay >= 22) && (newYear % 4 != 0)){
+                            }else if((newMonth == 1) && (newDay > 28) && (newYear % 4 != 0)){
                                 newDay -= 28;
                                 newMonth++;
-                            }else if((newMonth == 1) && (newDay >= 22) && (newYear % 4 == 0)){
+                            }else if((newMonth == 1) && (newDay > 29) && (newYear % 4 == 0)){
                                 newDay -= 29;
                                 newMonth++;
                             }
+
+                            //incrementing week
+//                            if(((newMonth == 0) || (newMonth == 2)
+//                                    || (newMonth == 4) || (newMonth == 6)
+//                                    || (newMonth == 7) || (newMonth == 9)) && (newDay >= 25)){
+//                                newDay -= 31;
+//                                newMonth++;
+//                            }else if(((newMonth == 3) || (newMonth == 5)
+//                                    || (newMonth == 8)|| (newMonth == 10)) && (newDay >= 24)){
+//                                newDay -= 30;
+//                                newMonth++;
+//                            }else if((newMonth == 11) && (newDay >= 25)){
+//                                newDay -= 31;
+//                                newMonth++;
+//                                newYear++;
+//                            }else if((newMonth == 1) && (newDay >= 22) && (newYear % 4 != 0)){
+//                                newDay -= 28;
+//                                newMonth++;
+//                            }else if((newMonth == 1) && (newDay >= 22) && (newYear % 4 == 0)){
+//                                newDay -= 29;
+//                                newMonth++;
+//                            }
 
                         }else if(finalDbRepeatInterval.equals("month")){
 
@@ -4894,8 +4984,6 @@ class MyAdapter extends ArrayAdapter<String> {
     //set notification alarm for selected task
     private void setAlarm(final int position, int year, int month,
                                                          int day, int hour, int minute, int ampm, String uniInterval, String originalDayTemp){
-
-        Log.i(TAG, "day: " + day + " hour: " + hour + " minute: " + minute + " ampm: " + ampm);
 
 //        //getting task data
 //        String dbTask = "";
