@@ -72,7 +72,8 @@ import java.util.Random;
 
 import static android.database.DatabaseUtils.queryNumEntries;
 
-public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler, AbsListView.OnScrollListener {
+public class MainActivity extends AppCompatActivity implements
+        BillingProcessor.IBillingHandler, AbsListView.OnScrollListener {
 
     //Indicates if a tasks properties are showing
     static boolean taskPropertiesShowing;
@@ -149,8 +150,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //Indicates which task has it's properties showing
     static int activeTask;
-    //Saves the size of the task list
-//    public static int taskListSize;
     //Height of the 'add' button
     static int addHeight;
     static int addIconHeight;
@@ -171,7 +170,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static int renameHint;
     //indicates if the reinstate hint should be shown
     static int reinstateHint;
-    //timestamp that keeps record of when user downloaded the app. Used for determining when to prompt for a review
+    //timestamp that keeps record of when user downloaded the app.
+    // Used for determining when to prompt for a review
     int launchTime;
 
     //Interval between repeating alarms
@@ -194,11 +194,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     //Keep track of last phrase used so as to not have the same thing twice in a row
     String lastToast;
     //Colors for the auto color change feature
-    String[] darkHighlightsDec = {"-301927437", "#-301943809", "-301924429", "-301924506", "-301924582",
-            "-288489728", "-286271744", "-285764608", "-285783552", "-290783233", "-298520705",
-            "-279253196", "-276435040", "-272895810", "-293081265", "-270012593", "-285806940",
-            "-285890251", "-285614910", "-285688950", "-285760348", "-285854154", "-285825859",
-            "-285912726", "-285891627", "-286226187", "-290216971", "-278092811",
+    String[] darkHighlightsDec = {"-301927437", "#-301943809", "-301924429", "-301924506",
+            "-301924582", "-288489728", "-286271744", "-285764608", "-285783552", "-290783233",
+            "-298520705", "-279253196", "-276435040", "-272895810", "-293081265", "-270012593",
+            "-285806940", "-285890251", "-285614910", "-285688950", "-285760348", "-285854154",
+            "-285825859", "-285912726", "-285891627", "-286226187", "-290216971", "-278092811",
             "-274467388", "-292883375", "-275909497", "-272894895"};
     String[] darkHighlights = {"#ee00f3f3", "#ee00b3ff", "#ee00ffb3", "#ee00ff66", "#ee00ff1a",
             "#eecdff00", "#eeefd700", "#eef79400", "#eef74a00", "#eeaaffff", "#ee34ef7f",
@@ -206,10 +206,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             "#eef5a935", "#eef9dcc2", "#eef8bb8a", "#eef7a4a4", "#eef63636", "#eef6a4bd",
             "#eef5516a", "#eef5a3d5", "#eef088f5", "#eeb3a3f5", "#ef6ca3f5", "#efa3f5c4",
             "#ee8af451", "#ef8df487", "#efbbf451"};
-    String[] lightHighlightsDec = {"-301983240", "-285186049", "-285169681", "-296373249", "-278169102",
-            "-279926286", "-277085960", "-288620289", "-285277978", "-285278054", "-286326712",
-            "-286326784", "-286308352", "-286290176", "-285263636", "-286320006", "-286292524",
-            "-290551820", "-290282764", "-285957420", "-285971348", "-285970635", "-286029929"};
+    String[] lightHighlightsDec = {"-301983240", "-285186049", "-285169681", "-296373249",
+            "-278169102", "-279926286", "-277085960", "-288620289", "-285277978", "-285278054",
+            "-286326712", "-286326784", "-286308352", "-286290176", "-285263636", "-286320006",
+            "-286292524", "-290551820", "-290282764", "-285957420", "-285971348", "-285970635",
+            "-286029929"};
     String[] lightHighlights = {"#ee0019f8", "#ef0067ff", "#ef00a7ef", "#ee55b3ff", "#ef6b79f2",
             "#ef50a9f2", "#ef7c00f8", "#eecc00ff", "#eeff00e6", "#eeff009a", "#eeef0048",
             "#eeef0000", "#eeef4800", "#eeef8f00", "#eeff38ec", "#eeef1a7a", "#eeef85d4",
@@ -415,7 +416,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 getString(R.string.smashThatTask), getString(R.string.beAWinner),
                 getString(R.string.onlyWimpsGiveUp), getString(R.string.dontBeAFailure),
                 getString(R.string.beVictorious)};
-//        taskListSize = 0;
         exitTaskProperties = false;
         snoozeRowShowing = false;
         toast = findViewById(R.id.toast);
@@ -466,7 +466,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             adsRemoved = dbResult.getInt(5) > 0;
             remindersAvailable = dbResult.getInt(6) > 0;
             colorCyclingAllowed = dbResult.getInt(7) > 0;
-//            taskListSize = dbResult.getInt(8);
             highlightDec = dbResult.getString(29);
         }
         dbResult.close();
@@ -785,9 +784,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                         //create records in database
                         db.insertData(Integer.parseInt(sortedIDs
-                                .get(taskList.size()/*Size*/ - 1)), "", taskName, Integer.parseInt(sortedIDs
-                                .get(taskList.size()/*Size*/ - 1)), String.valueOf(timeNow
-                                .getTimeInMillis() / 1000));
+                                .get(taskList.size() - 1)), "", taskName,
+                                Integer.parseInt(sortedIDs.get(taskList.size() - 1)),
+                                String.valueOf(timeNow.getTimeInMillis() / 1000));
                         db.insertAlarmData(Integer.parseInt(sortedIDs
                                         .get(taskList.size()/*Size*/ - 1)), "", "",
                                 "", "", "", "");
@@ -807,14 +806,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                                 final Runnable runnable = new Runnable() {
                                     public void run() {
                                         hint.start();
-                                        MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                                (MainActivity.this, R.anim.enter_from_right_fast));
+                                        MainActivity.toastView.startAnimation(AnimationUtils
+                                                .loadAnimation(MainActivity.this,
+                                                        R.anim.enter_from_right_fast));
                                         MainActivity.toastView.setVisibility(View.VISIBLE);
                                         final Handler handler2 = new Handler();
                                         final Runnable runnable2 = new Runnable() {
                                             public void run() {
-                                                MainActivity.toastView.startAnimation(AnimationUtils.loadAnimation
-                                                        (MainActivity.this, android.R.anim.fade_out));
+                                                MainActivity.toastView.startAnimation
+                                                        (AnimationUtils.loadAnimation
+                                                        (MainActivity.this,
+                                                                android.R.anim.fade_out));
                                                 MainActivity.toastView.setVisibility(View.GONE);
                                             }
                                         };
@@ -840,13 +842,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                                                 sweep.start();
                                             }
                                             toastView.startAnimation(AnimationUtils.loadAnimation
-                                                    (MainActivity.this, R.anim.enter_from_right_fast));
+                                                    (MainActivity.this,
+                                                            R.anim.enter_from_right_fast));
                                             toastView.setVisibility(View.VISIBLE);
                                             final Handler handler2 = new Handler();
                                             final Runnable runnable2 = new Runnable() {
                                                 public void run() {
-                                                    toastView.startAnimation(AnimationUtils.loadAnimation
-                                                            (MainActivity.this, android.R.anim.fade_out));
+                                                    toastView.startAnimation(
+                                                            AnimationUtils.loadAnimation
+                                                            (MainActivity.this,
+                                                                    android.R.anim.fade_out));
                                                     toastView.setVisibility(View.GONE);
                                                 }
                                             };
@@ -876,13 +881,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                                             sweep.start();
                                         }
                                         toastView.startAnimation(AnimationUtils.loadAnimation
-                                                (MainActivity.this, R.anim.enter_from_right_fast));
+                                                (MainActivity.this,
+                                                        R.anim.enter_from_right_fast));
                                         toastView.setVisibility(View.VISIBLE);
                                         final Handler handler2 = new Handler();
                                         final Runnable runnable2 = new Runnable() {
                                             public void run() {
-                                                toastView.startAnimation(AnimationUtils.loadAnimation
-                                                        (MainActivity.this, android.R.anim.fade_out));
+                                                toastView.startAnimation
+                                                        (AnimationUtils.loadAnimation
+                                                        (MainActivity.this,
+                                                                android.R.anim.fade_out));
                                                 toastView.setVisibility(View.GONE);
                                             }
                                         };
@@ -1175,7 +1183,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 onCreateOptionsMenu(toolbarDark.getMenu());
             }
             theListView.setAdapter(theAdapter[0]);
-            purchases.startAnimation(AnimationUtils.loadAnimation(this, R.anim.enter_from_right));
+            purchases.startAnimation(AnimationUtils.loadAnimation
+                    (this, R.anim.enter_from_right));
 
             final Handler handler = new Handler();
 
@@ -1213,7 +1222,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 }
                 theListView.setAdapter(theAdapter[0]);
 
-                purchases.startAnimation(AnimationUtils.loadAnimation(this, R.anim.enter_from_right));
+                purchases.startAnimation(AnimationUtils.loadAnimation
+                        (this, R.anim.enter_from_right));
 
                 final Handler handler = new Handler();
 
@@ -1260,18 +1270,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                          final int visible, final int total)
     {
 
+        //TODO refactor this code
         switch(absListView.getId())
         {
             case R.id.theListView:
 
-                // Make your calculation stuff here. You have all your
-                // needed info from the parameters of this function.
-
-                // Sample calculation to determine if the last
-                // item is fully visible.
-//                final int lastItem = first + visible;
-
-                if(/*lastItem*/(first + visible) == total && visible != total)
+                if((first + visible) == total && visible != total)
                 {
                     //Removes add button so as to not cover the last item
                     params.height = 0;
@@ -1291,7 +1295,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
-    ////Shows table results for debugging purposes////
+    //Shows table results for debugging purposes//
     public void showMessage(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
@@ -1299,7 +1303,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         builder.setMessage(message);
         builder.show();
     }
-    //////////////////////////////////////////////////
 
     private void removeTask(int position) {
 
@@ -1311,9 +1314,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         MainActivity.checklistShowing = true;
 
-//        taskListSize--;
-        db.updateTaskListSize(taskList.size()/*Size*/);
-        db.updateChecklistListSize(taskList.size()/*Size*/);
+        db.updateTaskListSize(taskList.size());
+        db.updateChecklistListSize(taskList.size());
 
         //deleting data related to deleted task
         db.deleteData(String.valueOf(sortedIDs.get(position)));
@@ -1321,7 +1323,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         db.deleteSnoozeData(String.valueOf(sortedIDs.get(position)));
         db.deleteAllSubtaskData(String.valueOf(sortedIDs.get(position)));
 
-        Log.i(TAG, "Here one");
         //Cancel notification alarms if one is set
         alarmManager.cancel(pendIntent.getService(this,
                 Integer.parseInt(sortedIDs.get(position)), alertIntent, 0));
@@ -1472,13 +1473,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
-    //TODO make a reorder class that both MainActivity and MyAdapter can access
     public void reorderList() {
 
         ArrayList<Integer> tempList = new ArrayList<>();
 
         //Saving timestamps into a temporary array
-        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
+        for(int i = 0; i < MainActivity.taskList.size(); i++){
 
             //getting timestamp
             String dbTimestamp = "";
@@ -1495,7 +1495,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         //Ordering list by time task was created
         ArrayList<String> whenTaskCreated = new ArrayList<>();
-        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
+        for(int i = 0; i < MainActivity.taskList.size(); i++){
             String created = "";
             Cursor createdResult = db.getSortedData(Integer.parseInt
                     (sortedIDs.get(i)));
@@ -1517,7 +1517,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         ArrayList<String> tempDueTaskList = new ArrayList<>();
 
         //getting tasks which have no due date
-        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
+        for(int i = 0; i < MainActivity.taskList.size(); i++){
 
             //getting task data
             int dbId = 0;
@@ -1551,7 +1551,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         Collections.sort(tempList);
 
         //Adding due tasks to middle of task list
-        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
+        for(int i = 0; i < MainActivity.taskList.size(); i++){
 
             //getting task data
             int dbId = 0;
@@ -1577,7 +1577,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             tempIdsList.add(tempKilledIdsList.get(i));
         }
 
-        for(int i = 0; i < MainActivity.taskList.size()/*Size*/; i++){
+        for(int i = 0; i < MainActivity.taskList.size(); i++){
 
             MainActivity.db.updateSortedIndex(String.valueOf(i),
                     Integer.parseInt(tempIdsList.get(i)));
@@ -1604,9 +1604,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 taskList.add(taskName);
 
-//                taskListSize++;
-                db.updateTaskListSize(taskList.size()/*Size*/);
-                db.updateChecklistListSize(taskList.size()/*Size*/);
+                db.updateTaskListSize(taskList.size());
+                db.updateChecklistListSize(taskList.size());
 
                 //finding unique ID for task
                 int i = 0;
@@ -1615,8 +1614,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     if (sortedIDs.contains(String.valueOf(i))) {
                         i++;
                     } else {
-                        sortedIDs.add(taskList.size()/*Size*/ - 1, String.valueOf(i));
-                        db.updateSortedIndex(String.valueOf(taskList.size()/*Size*/ - 1), i);
+                        sortedIDs.add(taskList.size() - 1, String.valueOf(i));
+                        db.updateSortedIndex(String.valueOf(taskList.size() - 1), i);
                         idIsSet = true;
                     }
                 }
@@ -1642,7 +1641,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void noTasksLeft() {
 
         //Checks if there are any existing tasks
-        if (taskList.size()/*Size*/ == 0){
+        if (taskList.size() == 0){
 
             //Inform user to add some tasks
             if(lightDark) {
@@ -1884,416 +1883,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             db.updateManualKill(String.valueOf(
                     MainActivity.sortedIDs.get(thePosition)), true);
 
-//            if(!dbOverdue && dbRepeat){
-//
-//                db.updateKilledEarly(MainActivity.sortedIDs.get(thePosition),true);
-//
-//                MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                        this, Integer.parseInt(
-//                                MainActivity.sortedIDs.get(thePosition)),
-//                        MainActivity.alertIntent,
-//                        PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-//
-//                if(dbRepeatInterval.equals("day")){
-//
-//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-//                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp) - (AlarmManager.INTERVAL_DAY / 1000));
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-//
-//                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(thePosition)),
-//                            String.valueOf(futureStamp));
-//
-//                    //setting the name of the task for which the
-//                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
-//                            MainActivity.pendIntent);
-//
-//                }else if(dbRepeatInterval.equals("week")){
-//
-//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-//                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp) - ((AlarmManager.INTERVAL_DAY * 7) / 1000));
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-//
-//                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(thePosition)),
-//                            String.valueOf(futureStamp));
-//
-//                    //setting the name of the task for which the
-//                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
-//                            MainActivity.pendIntent);
-//
-//                }else if(dbRepeatInterval.equals("month")){
-//
-//                    //getting alarm data
-//                    Cursor alarmResult = MainActivity.db.getAlarmData(
-//                            Integer.parseInt(MainActivity.sortedIDs.get(thePosition)));
-//                    String alarmHour = "";
-//                    String alarmMinute = "";
-//                    String alarmAmpm = "";
-//                    String alarmDay = "";
-//                    String alarmMonth = "";
-//                    String alarmYear = "";
-//                    while(alarmResult.moveToNext()){
-//                        alarmHour = alarmResult.getString(1);
-//                        alarmMinute = alarmResult.getString(2);
-//                        alarmAmpm = alarmResult.getString(3);
-//                        alarmDay = alarmResult.getString(4);
-//                        alarmMonth = alarmResult.getString(5);
-//                        alarmYear = alarmResult.getString(6);
-//                    }
-//                    alarmResult.close();
-//
-//                    //Getting interval in seconds based on specific day and month//TODO double check that alarm data is always previous non snoozed due
-//                    int interval = 0;
-//                    int theYear = Integer.parseInt(alarmYear);
-//                    int theMonth = Integer.parseInt(alarmMonth);
-//                    int theDay = Integer.parseInt(alarmDay);
-//                    //Month January and day is 29 non leap year 2592000
-//                    if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
-//                        interval = 2592000;
-//                        //Month January and day is 30 non leap year 2505600
-//                    }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
-//                        interval = 2505600;
-//                        //Month January and day is 31 non leap year 2419200
-//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
-//                        interval = 2419200;
-//                        //Month January and day is 30 leap year 2592000
-//                    }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
-//                        interval = 2592000;
-//                        //Month January and day is 31 leap year 2505600
-//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
-//                        interval = 2505600;
-//                        //Month March||May||August||October and day is 31 2592000
-//                    }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
-//                            || (theMonth == 9)) && (theDay == 31)){
-//                        interval = 2592000;
-//                        //Month January||March||May||July||August||October||December 2678400
-//                    }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
-//                            || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
-//                            || (theMonth == 11)){
-//                        interval = 2678400;
-//                        //Month April||June||September||November 2592000
-//                    }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
-//                            || (theMonth == 10)){
-//                        interval = 2592000;
-//                        //Month February non leap year 2419200
-//                    }else if((theMonth == 1) && (theYear % 4 != 0)){
-//                        interval = 2419200;
-//                        //Month February leap year 2505600
-//                    }else if((theMonth == 1) && (theYear % 4 == 0)){
-//                        interval = 2505600;
-//                    }
-//
-//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-//                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp) - interval);
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-//
-//                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(thePosition)),
-//                            String.valueOf(futureStamp));
-//
-//                    //setting the name of the task for which the
-//                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
-//                            MainActivity.pendIntent);
-//
-//                }
-//
-//            }else if(dbOverdue && dbRepeat){
-//
-//                MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                        this, Integer.parseInt(
-//                                MainActivity.sortedIDs.get(thePosition)),
-//                        MainActivity.alertIntent,
-//                        PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-//
-//                if(dbRepeatInterval.equals("day")){
-//
-//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-//                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp) - (AlarmManager.INTERVAL_DAY / 1000));
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-//
-//                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(thePosition)),
-//                            String.valueOf(futureStamp));
-//
-//                    //setting the name of the task for which the
-//                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
-//                            MainActivity.pendIntent);
-//
-////                    //getting alarm data
-////                    Cursor alarmResult = MainActivity.db.getAlarmData(
-////                            Integer.parseInt(MainActivity.sortedIDs.get(thePosition)));
-////                    String alarmHour = "";
-////                    String alarmMinute = "";
-////                    String alarmAmpm = "";
-////                    String alarmDay = "";
-////                    String alarmMonth = "";
-////                    String alarmYear = "";
-////                    while(alarmResult.moveToNext()){
-////                        alarmHour = alarmResult.getString(1);
-////                        alarmMinute = alarmResult.getString(2);
-////                        alarmAmpm = alarmResult.getString(3);
-////                        alarmDay = alarmResult.getString(4);
-////                        alarmMonth = alarmResult.getString(5);
-////                        alarmYear = alarmResult.getString(6);
-////                    }
-////                    alarmResult.close();
-////
-////                    Calendar alarmCalendar = Calendar.getInstance();
-////                    alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp) + "000") - AlarmManager.INTERVAL_DAY);
-////
-////                    //updating due date in database
-////                    MainActivity.db.updateAlarmData(String.valueOf(
-////                            MainActivity.sortedIDs.get(thePosition)),
-////                            String.valueOf(alarmCalendar.get(Calendar.HOUR)),
-////                            String.valueOf(alarmCalendar.get(Calendar.MINUTE)),
-////                            String.valueOf(alarmCalendar.get(Calendar.AM_PM)),
-////                            String.valueOf(alarmCalendar.get(Calendar.DAY_OF_MONTH)),
-////                            String.valueOf(alarmCalendar.get(Calendar.MONTH)),
-////                            String.valueOf(alarmCalendar.get(Calendar.YEAR)));
-//
-//                }else if(dbRepeatInterval.equals("week")){
-//
-//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-//                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp) - ((AlarmManager.INTERVAL_DAY * 7) / 1000));
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-//
-//                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(thePosition)),
-//                            String.valueOf(futureStamp));
-//
-//                    //setting the name of the task for which the
-//                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
-//                            MainActivity.pendIntent);
-//
-//                }else if(dbRepeatInterval.equals("month")){
-//
-//                    //getting alarm data
-//                    Cursor alarmResult = MainActivity.db.getAlarmData(
-//                            Integer.parseInt(MainActivity.sortedIDs.get(thePosition)));
-//                    String alarmHour = "";
-//                    String alarmMinute = "";
-//                    String alarmAmpm = "";
-//                    String alarmDay = "";
-//                    String alarmMonth = "";
-//                    String alarmYear = "";
-//                    while(alarmResult.moveToNext()){
-//                        alarmHour = alarmResult.getString(1);
-//                        alarmMinute = alarmResult.getString(2);
-//                        alarmAmpm = alarmResult.getString(3);
-//                        alarmDay = alarmResult.getString(4);
-//                        alarmMonth = alarmResult.getString(5);
-//                        alarmYear = alarmResult.getString(6);
-//                    }
-//                    alarmResult.close();
-//
-//                    //Getting interval in seconds based on specific day and month//TODO double check that alarm data is always previous non snoozed due
-//                    int interval = 0;
-//                    int theYear = Integer.parseInt(alarmYear);
-//                    int theMonth = Integer.parseInt(alarmMonth);
-//                    int theDay = Integer.parseInt(alarmDay);
-//                    //Month January and day is 29 non leap year 2592000
-//                    if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
-//                        interval = 2592000;
-//                        //Month January and day is 30 non leap year 2505600
-//                    }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
-//                        interval = 2505600;
-//                        //Month January and day is 31 non leap year 2419200
-//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
-//                        interval = 2419200;
-//                        //Month January and day is 30 leap year 2592000
-//                    }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
-//                        interval = 2592000;
-//                        //Month January and day is 31 leap year 2505600
-//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
-//                        interval = 2505600;
-//                        //Month March||May||August||October and day is 31 2592000
-//                    }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
-//                            || (theMonth == 9)) && (theDay == 31)){
-//                        interval = 2592000;
-//                        //Month January||March||May||July||August||October||December 2678400
-//                    }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
-//                            || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
-//                            || (theMonth == 11)){
-//                        interval = 2678400;
-//                        //Month April||June||September||November 2592000
-//                    }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
-//                            || (theMonth == 10)){
-//                        interval = 2592000;
-//                        //Month February non leap year 2419200
-//                    }else if((theMonth == 1) && (theYear % 4 != 0)){
-//                        interval = 2419200;
-//                        //Month February leap year 2505600
-//                    }else if((theMonth == 1) && (theYear % 4 == 0)){
-//                        interval = 2505600;
-//                    }
-//
-//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-//                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp) - interval);
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-//
-//                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(thePosition)),
-//                            String.valueOf(futureStamp));
-//
-//                    //setting the name of the task for which the
-//                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
-//                            MainActivity.pendIntent);
-//
-//                }
-//
-//            }
-
-//            if(dbSnooze){
-
                 db.updateOverdue(String.valueOf(thePosition), false);
                 //cancelling any snooze data
                 MainActivity.db.updateSnoozeData(String.valueOf(
@@ -2307,7 +1896,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     MainActivity.alertIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Log.i(TAG, "Here two");
             MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
             if(dbRepeat && !dbSnooze){
@@ -2324,14 +1912,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-                Log.i(TAG, "Here three");
                 MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                 if(dbRepeatInterval.equals("day")){
 
                     //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                     // detect duplicates and then adjusting the timestamp on the millisecond level
-                    long futureStamp = (Long.parseLong(dbTimestamp) - (AlarmManager.INTERVAL_DAY / 1000));
+                    long futureStamp = (Long.parseLong(dbTimestamp) -
+                            (AlarmManager.INTERVAL_DAY / 1000));
                     String tempTimestamp = "";
                     for(int i = 0; i < MainActivity.taskList.size(); i++) {
                         Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
@@ -2363,7 +1951,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             PendingIntent.FLAG_UPDATE_CURRENT);
 
                     if(MainActivity.remindersAvailable) {
-                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                                        (String.valueOf(futureStamp) + "000"),
                                 MainActivity.pendIntent);
                     }
 
@@ -2371,7 +1960,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                     //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                     // detect duplicates and then adjusting the timestamp on the millisecond level
-                    long futureStamp = (Long.parseLong(dbTimestamp) - ((AlarmManager.INTERVAL_DAY * 7) / 1000));
+                    long futureStamp = (Long.parseLong(dbTimestamp)
+                            - ((AlarmManager.INTERVAL_DAY * 7) / 1000));
                     String tempTimestamp = "";
                     for(int i = 0; i < MainActivity.taskList.size(); i++) {
                         Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
@@ -2403,110 +1993,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             PendingIntent.FLAG_UPDATE_CURRENT);
 
                     if(MainActivity.remindersAvailable) {
-                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                                        (String.valueOf(futureStamp) + "000"),
                                 MainActivity.pendIntent);
                     }
 
                 }else if(dbRepeatInterval.equals("month")){
-
-                    //getting alarm data
-                    Cursor alarmResult = MainActivity.db.getAlarmData(
-                            Integer.parseInt(MainActivity.sortedIDs.get(thePosition)));
-                    String alarmHour = "";
-                    String alarmMinute = "";
-                    String alarmAmpm = "";
-                    String alarmDay = "";
-                    String alarmMonth = "";
-                    String alarmYear = "";
-                    while(alarmResult.moveToNext()){
-                        alarmHour = alarmResult.getString(1);
-                        alarmMinute = alarmResult.getString(2);
-                        alarmAmpm = alarmResult.getString(3);
-                        alarmDay = alarmResult.getString(4);
-                        alarmMonth = alarmResult.getString(5);
-                        alarmYear = alarmResult.getString(6);
-                    }
-                    alarmResult.close();
-
-                    //Getting interval in seconds based on specific day and month//TODO double check that alarm data is always previous non snoozed due
-//                    int interval = 0;
-//                    int theYear = Integer.parseInt(alarmYear);
-//                    int theMonth = (Integer.parseInt(alarmMonth) + 1);
-//                    if(theMonth == 12){
-//                        theMonth = 0;
-//                    }
-//                    int theDay = Integer.parseInt(alarmDay);
-//                    //Month January and day is 29 non leap year 2592000
-//                    if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
-//                        interval = 2592000;
-//                        //Month January and day is 30 non leap year 2505600
-//                    }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
-//                        interval = 2505600;
-//                        //Month January and day is 31 non leap year 2419200
-//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
-//                        interval = 2419200;
-//                        //Month January and day is 30 leap year 2592000
-//                    }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
-//                        interval = 2592000;
-//                        //Month January and day is 31 leap year 2505600
-//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
-//                        interval = 2505600;
-//                        //Month March||May||August||October and day is 31 2592000
-//                    }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
-//                            || (theMonth == 9)) && (theDay == 31)){
-//                        interval = 2592000;
-//                        //Month January||March||May||July||August||October||December 2678400
-//                    }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
-//                            || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
-//                            || (theMonth == 11)){
-//                        interval = 2678400;
-//                        //Month April||June||September||November 2592000
-//                    }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
-//                            || (theMonth == 10)){
-//                        interval = 2592000;
-//                        //Month February non leap year 2419200
-//                    }else if((theMonth == 1) && (theYear % 4 != 0)){
-//                        interval = 2419200;
-//                        //Month February leap year 2505600
-//                    }else if((theMonth == 1) && (theYear % 4 == 0)){
-//                        interval = 2505600;
-//                    }
-//
-//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-//                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp) - interval);
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-//
-//                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(thePosition)),
-//                            String.valueOf(futureStamp));
-//
-//                    //setting the name of the task for which the
-//                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
-//                            MainActivity.pendIntent);
 
                     Calendar currentCal = Calendar.getInstance();
                     int currentYear = currentCal.get(Calendar.YEAR);
@@ -2514,12 +2006,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
 
                     int interval = 0;
-//                    int theYear = Integer.parseInt(alarmYear);
-//                    int theMonth = (Integer.parseInt(alarmMonth) + 1);
-//                    if(theMonth == 12){
-//                        theMonth = 0;
-//                    }
-//                    int theDay = Integer.parseInt(alarmDay);
                     int theYear = currentYear;
                     int theMonth = currentMonth;
                     int theDay = currentDay;
@@ -2582,7 +2068,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             MainActivity.sortedIDs.get(thePosition)));
                     String originalDay = "";
                     while (origResult.moveToNext()) {
-                        //tempTimestamp = tempResult.getString(3);
                         originalDay = origResult.getString(20);
                     }
                     origResult.close();
@@ -2592,20 +2077,20 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     int day = cal.get(Calendar.DAY_OF_MONTH);
                     int month = cal.get(Calendar.MONTH);
                     if(day != Integer.parseInt(originalDay)){
-                        int daysOut = 0;
+                        int daysOut;
                         if(month == 0 && (day == 28 || day == 29 || day == 30)){
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                         }else if(month == 2 && (day == 28 || day == 29 || day == 30)){
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-                        }else if(month == 3 && (day == 28 || day == 29/* || day == 30*/)){
+                        }else if(month == 3 && (day == 28 || day == 29)){
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                         }else if(month == 4 && (day == 28 || day == 29 || day == 30)){
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-                        }else if(month == 5 && (day == 28 || day == 29/* || day == 30*/)){
+                        }else if(month == 5 && (day == 28 || day == 29)){
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                         }else if(month == 6 && (day == 28 || day == 29 || day == 30)){
@@ -2614,13 +2099,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         }else if(month == 7 && (day == 28 || day == 29 || day == 30)){
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-                        }else if(month == 8 && (day == 28 || day == 29/* || day == 30*/)){
+                        }else if(month == 8 && (day == 28 || day == 29)){
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                         }else if(month == 9 && (day == 28 || day == 29 || day == 30)){
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-                        }else if(month == 10 && (day == 28 || day == 29/* || day == 30*/)){
+                        }else if(month == 10 && (day == 28 || day == 29)){
                             daysOut = Integer.parseInt(originalDay) - day;
                             futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                         }else if(month == 11 && (day == 28 || day == 29 || day == 30)){
@@ -2647,7 +2132,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             PendingIntent.FLAG_UPDATE_CURRENT);
 
                     if(MainActivity.remindersAvailable) {
-                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
+                        MainActivity.alarmManager.set(AlarmManager.RTC,
+                                Long.parseLong(String.valueOf(futureStamp) + "000"),
                                 MainActivity.pendIntent);
                     }
 
@@ -2659,20 +2145,20 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     }
 
-    private void setHighlight(String s) {
-
-        vibrate.vibrate(50);
-
-        db.updateHighlight(s);
-        highlight = s;
-        toolbarDark.setTitleTextColor(Color.parseColor(s));
-        toolbarLight.setTitleTextColor(Color.parseColor(s));
-        addIcon.setTextColor(Color.parseColor(s));
-        taskNameEditText.setBackgroundColor(Color.parseColor(s));
-        setDividers(lightDark);
-        toast.setBackgroundColor(Color.parseColor(highlight));
-        colorPickerShowing();
-    }
+//    private void setHighlight(String s) {
+//
+//        vibrate.vibrate(50);
+//
+//        db.updateHighlight(s);
+//        highlight = s;
+//        toolbarDark.setTitleTextColor(Color.parseColor(s));
+//        toolbarLight.setTitleTextColor(Color.parseColor(s));
+//        addIcon.setTextColor(Color.parseColor(s));
+//        taskNameEditText.setBackgroundColor(Color.parseColor(s));
+//        setDividers(lightDark);
+//        toast.setBackgroundColor(Color.parseColor(highlight));
+//        colorPickerShowing();
+//    }
 
     private void setDividers(boolean lightDark) {
         if(!lightDark) {
@@ -2719,22 +2205,26 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         final Calendar calendar = Calendar.getInstance();
 
-        if(!reviewOne && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 72))){
+        if(!reviewOne && ((launchTime <= (calendar.getTimeInMillis()
+                / 1000 / 60 / 60) - 72))){
 
             int reviewNumber = 1;
             prompt(reviewNumber);
 
-        }else if(!reviewTwo && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 168))){
+        }else if(!reviewTwo && ((launchTime <= (calendar.getTimeInMillis()
+                / 1000 / 60 / 60) - 168))){
 
             int reviewNumber = 2;
             prompt(reviewNumber);
 
-        }else if(!reviewThree && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 732))){
+        }else if(!reviewThree && ((launchTime <= (calendar.getTimeInMillis()
+                / 1000 / 60 / 60) - 732))){
 
             int reviewNumber = 3;
             prompt(reviewNumber);
 
-        }else if(!reviewFour && ((launchTime <= (calendar.getTimeInMillis() / 1000 / 60 / 60) - 1464))){
+        }else if(!reviewFour && ((launchTime <= (calendar.getTimeInMillis()
+                / 1000 / 60 / 60) - 1464))){
 
             int reviewNumber = 4;
             prompt(reviewNumber);
@@ -3024,35 +2514,19 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         super.onResume();
 
         taskBeingEdited = false;
-//        dateOrTime = false;
         removeTaskProperties();
 
-//        try {
             getSavedData();
-//        } catch (URISyntaxException e) {
-//            e.printStackTrace();
-//        }
-
-        //TODO find out what's going on here. Mute back button?
-//        AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-//        mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true);
 
     }
 
-    private void getSavedData() /*throws URISyntaxException */{
+    private void getSavedData(){
 
         //clearing the lists before adding data back into them so as to avoid duplication
         taskList.clear();
         sortedIDs.clear();
 
         int taskLastChanged = 0;
-
-//        SQLiteStatement sizeStatement = db.compileStatement("SELECT SUM(LENGTH(ID)) FROM notes_table");
-//        String countQuery = "SELECT  * FROM notes_table";
-////        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.rawQuery(countQuery, null);
-//        int count = cursor.getCount();
-//        cursor.close();
 
         int taskListSize = db.getTotalRows();
 
@@ -3065,7 +2539,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             adsRemoved = dbResult.getInt(5) > 0;
             remindersAvailable = dbResult.getInt(6) > 0;
             colorCyclingAllowed = dbResult.getInt(7) > 0;
-//            taskListSize = dbResult.getInt(8);
             taskLastChanged = dbResult.getInt(16);
             colorCyclingEnabled = dbResult.getInt(18) > 0;
             duesSet = dbResult.getInt(19);
@@ -3104,18 +2577,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         }
 
-//        int k = 0;
-//        int j = 0;
-//        while(k < taskListSize){
-//            Cursor sortedIdsResult = db.getData(j);
-//            while (sortedIdsResult.moveToNext()){
-//                tempSortedIDs.add(sortedIdsResult.getInt(16));
-//                k++;
-//            }
-//            j++;
-//            sortedIdsResult.close();
-//        }
-//
         Collections.sort(tempSortedIDs);
 
         for(int i = 0; i < taskListSize; i ++){
@@ -3125,8 +2586,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
 
         for(int i = 0; i < taskListSize; i++){
-//            Cursor sharedPreferencesResult = db.getData(Integer
-//                    .parseInt(sortedIDs.get(i)));
             Cursor sharedPreferencesResult = db.getSortedData(Integer.parseInt(sortedIDs.get(i)));
             while (sharedPreferencesResult.moveToNext()) {
                 taskList.add(sharedPreferencesResult.getString(4));

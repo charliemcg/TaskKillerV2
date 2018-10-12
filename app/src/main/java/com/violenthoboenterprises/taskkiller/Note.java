@@ -34,12 +34,7 @@ public class Note extends MainActivity {
     TextView noteTextView;
     EditText noteEditText;
     InputMethodManager keyboard;
-//    ImageView removeBtnDark;
-//    ImageView removeBtnLight;
-//    ImageView removeBtnDarkOpen;
-//    ImageView removeBtnLightOpen;
     ImageView submitNoteBtnDark, submitNoteOne, submitNoteOneHalf, submitNoteTwoHalf, submitNoteTwo;
-    ImageView submitNoteBtnLight;
     String TAG;
     String theNote;
     String dbTask;
@@ -55,21 +50,14 @@ public class Note extends MainActivity {
         noteToolbar = findViewById(R.id.noteToolbar);
         setSupportActionBar(noteToolbar);
 
-//        overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);//TODO does this do anything?
-
         noteTextView = findViewById(R.id.noteTextView);
         noteEditText = findViewById(R.id.noteEditText);
         keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        removeBtnDark = findViewById(R.id.removeBtnDark);
-//        removeBtnLight = findViewById(R.id.removeBtnLight);
-//        removeBtnDarkOpen = findViewById(R.id.removeBtnDarkOpen);
-//        removeBtnLightOpen = findViewById(R.id.removeBtnLightOpen);
         submitNoteBtnDark = findViewById(R.id.submitNoteBtnDark);
         submitNoteOne = findViewById(R.id.submitNoteOne);
         submitNoteTwo = findViewById(R.id.submitNoteTwo);
         submitNoteOneHalf = findViewById(R.id.submitNoteOneHalf);
         submitNoteTwoHalf = findViewById(R.id.submitNoteTwoHalf);
-//        submitNoteBtnLight = findViewById(R.id.submitNoteBtnLight);
         TAG = "Note";
         theNote = "";
         checklistExists = false;
@@ -88,8 +76,6 @@ public class Note extends MainActivity {
         }
         dbTaskResult.close();
 
-        //TODO title should be "note" and subtitle should be task name
-//        noteToolbar.setTitle("Note");
         getSupportActionBar().setTitle(R.string.note);
         noteToolbar.setSubtitle(dbTask);
 
@@ -103,16 +89,8 @@ public class Note extends MainActivity {
         }
         dbResult.close();
 
-//        if(mute){
-////            removeBtnDark.setSoundEffectsEnabled(false);
-////            removeBtnLight.setSoundEffectsEnabled(false);
-//            submitNoteBtnDark.setSoundEffectsEnabled(false);
-////            submitNoteBtnLight.setSoundEffectsEnabled(false);
-//        }
-
         if(!lightDark){
             noteRoot.setBackgroundColor(Color.parseColor("#333333"));
-//            submitNoteBtnLight.setVisibility(View.GONE);
             noteToolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
             noteToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
         }else{
@@ -121,7 +99,6 @@ public class Note extends MainActivity {
             noteTextView.setTextColor(Color.parseColor("#000000"));
             noteToolbar.setTitleTextColor(Color.parseColor("#000000"));
             noteToolbar.setSubtitleTextColor(Color.parseColor("#666666"));
-//            submitNoteBtnDark.setVisibility(View.GONE);
         }
 
         //keyboard will display the default edit text instead of the custom one without this line
@@ -142,30 +119,12 @@ public class Note extends MainActivity {
 
         });
 
-        //Actions to occur when user clicks submit
-//        submitNoteBtnLight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                submit(false);
-//
-//            }
-//
-//        });
-
         //Long click allows editing of text
         noteTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
 
                 MainActivity.vibrate.vibrate(50);
-
-                //hide remove button
-//                if(lightDark){
-////                    removeBtnLight.setVisibility(View.GONE);
-//                }else{
-//                    removeBtnDark.setVisibility(View.GONE);
-//                }
 
                 trashNote.setVisible(false);
 
@@ -193,95 +152,7 @@ public class Note extends MainActivity {
             }
         });
 
-        //Actions to occur if user selects 'Remove'
-//        removeBtnDark.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                remove(true);
-//
-//            }
-//        });
-
-        //Actions to occur if user selects 'Remove'
-//        removeBtnLight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                remove(false);
-//
-//            }
-//        });
-
     }
-
-//    private void remove(final boolean dark) {
-//
-//        final Handler handler = new Handler();
-//
-//        final Runnable runnable = new Runnable() {
-//            public void run() {
-////                if(dark){
-////                    removeBtnDark.setVisibility(View.GONE);
-////                    removeBtnDarkOpen.setVisibility(View.VISIBLE);
-////                }else{
-////                    removeBtnLight.setVisibility(View.GONE);
-////                    removeBtnLightOpen.setVisibility(View.VISIBLE);
-////                }
-//
-//                vibrate.vibrate(50);
-//
-//                if(!mute) {
-//                    trash.start();
-//                }
-//
-//                final Handler handler2 = new Handler();
-//                final Runnable runnable2 = new Runnable(){
-//                    public void run(){
-////                        if(dark){
-////                            removeBtnDarkOpen.setVisibility(View.GONE);
-////                            removeBtnDark.setVisibility(View.VISIBLE);
-////                        }else{
-////                            removeBtnLightOpen.setVisibility(View.GONE);
-////                            removeBtnLight.setVisibility(View.VISIBLE);
-////                        }
-//                        final Handler handler3 = new Handler();
-//                        final Runnable runnable3 = new Runnable() {
-//                            @Override
-//                            public void run() {
-////                                if(dark){
-////                                    removeBtnDark.setVisibility(View.GONE);
-////                                }else{
-////                                    removeBtnLight.setVisibility(View.GONE);
-////                                }
-//                                        Cursor result = db.getData(Integer.parseInt(
-//                MainActivity.sortedIdsForNote.get(activeTask)));
-//        while(result.moveToNext()){
-//            checklistExists = (result.getInt(2) == 1);
-//        }
-//        result.close();
-//
-//        //setting note in database to nothing
-//        db.updateData(MainActivity.sortedIdsForNote
-//                .get(activeTask), "", checklistExists);
-//
-//        noteTextView.setText("");
-//
-//        //show add button
-//        noteEditText.setVisibility(View.VISIBLE);
-//            submitNoteBtnDark.setVisibility(View.VISIBLE);
-//                            }
-//                        };
-//                        handler3.postDelayed(runnable3, 100);
-//                    }
-//                };
-//                handler2.postDelayed(runnable2, 100);
-//            }
-//        };
-//
-//        handler.postDelayed(runnable, 100);
-//
-//    }
 
     private void submit(boolean dark) {
 
@@ -389,42 +260,9 @@ public class Note extends MainActivity {
             };
             handler.postDelayed(runnable, 50);
 
-            /////////////////////////////////////////////////////////
-//            if(!mute) {
-//                blip.start();
-//            }
-
-//            //Set text view to the note content
-//            noteTextView.setText(theNote);
-//
-//            //Hide text box
-//            noteEditText.setVisibility(View.GONE);
-//
-//            submitNoteBtnDark.setVisibility(View.GONE);
-//
-//            trashNote.setVisible(true);
-
         }
 
-//        //Hide keyboard
-//        keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
     }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        trashNote = menu.getItem(0);
-//
-//        trashNote.setVisible(true);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu(final Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_note, menu);
-//
-//        return super.onCreateOptionsMenu(menu);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -505,93 +343,6 @@ public class Note extends MainActivity {
 
         handler.postDelayed(runnable, 100);
 
-            /////////////////////////////////////////////////////////////////
-//            if(!mute){
-//                trash.start();
-//            }
-//
-//            vibrate.vibrate(50);
-//
-//            noteEditText.setVisibility(View.VISIBLE);
-//            submitNoteBtnDark.setVisibility(View.VISIBLE);
-//            noteTextView.setText("");
-//
-//            Cursor result = db.getData(Integer.parseInt(
-//                    MainActivity.sortedIdsForNote.get(activeTask)));
-//            while(result.moveToNext()){
-//                checklistExists = (result.getInt(2) == 1);
-//            }
-//            result.close();
-//
-//            //setting note in database to nothing
-//            db.updateData(MainActivity.sortedIdsForNote
-//                    .get(activeTask), "", checklistExists);
-//
-//            trashNote.setVisible(false);
-
-            /////////////////////////////////////////////////////////////////
-//            //getting task data
-//            dbTaskId = "";
-//            Cursor dbTaskResult = MainActivity.db.getUniversalData();
-//            while (dbTaskResult.moveToNext()) {
-//                dbTaskId = dbTaskResult.getString(4);
-//            }
-//            dbTaskResult.close();
-//
-//            if(!mute){
-//                blip.start();
-//            }
-//
-//            vibrate.vibrate(50);
-//
-//            db.updateDue(dbTaskId, false);
-//
-//            db.updateTimestamp(dbTaskId, "0");
-//
-//            db.updateRepeatInterval(dbTaskId, "");
-//
-//            db.updateRepeat(dbTaskId, false);
-//
-//            pendIntent = PendingIntent.getBroadcast(getApplicationContext(),
-//                    Integer.valueOf(dbTaskId),
-//                    alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//            alarmManager.cancel(MainActivity.pendIntent);
-//
-//            db.updateAlarmData(dbTaskId,
-//                    "", "", "", "", "", "");
-//
-//            setDue = false;
-//            datePicked = false;
-//            timePicked = false;
-//
-//            time.setVisibility(View.GONE);
-//            calendar.setVisibility(View.GONE);
-//            if(lightDark){
-//                calendarFadedLight.setVisibility(View.VISIBLE);
-//                timeFadedLight.setVisibility(View.VISIBLE);
-//            }else{
-//                calendarFadedDark.setVisibility(View.VISIBLE);
-//                timeFadedDark.setVisibility(View.VISIBLE);
-//            }
-//
-//            dateTextView.setText("+Add due date");
-//            timeTextView.setText("+Add due time");
-//            dateTextView.setTextSize(15);
-//            timeTextView.setTextSize(15);
-//
-//            if(!lightDark) {
-//                cancelRepeatDark.setBackgroundColor(Color.parseColor(highlight));
-//                dailyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
-//                weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
-//                monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
-//            }else{
-//                cancelRepeatLight.setBackgroundColor(Color.parseColor(highlight));
-//                dailyLight.setBackgroundColor(Color.parseColor("#AAAAAA"));
-//                weeklyLight.setBackgroundColor(Color.parseColor("#AAAAAA"));
-//                monthlyLight.setBackgroundColor(Color.parseColor("#AAAAAA"));
-//            }
-
             return true;
         }
 
@@ -643,12 +394,6 @@ public class Note extends MainActivity {
                     .LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             noteEditText.setVisibility(View.GONE);
             submitNoteBtnDark.setVisibility(View.GONE);
-//            submitNoteBtnLight.setVisibility(View.GONE);
-//            if(lightDark){
-//                removeBtnLight.setVisibility(View.VISIBLE);
-//            }else{
-//                removeBtnDark.setVisibility(View.VISIBLE);
-//            }
 
         }
 

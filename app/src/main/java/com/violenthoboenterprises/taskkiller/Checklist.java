@@ -111,22 +111,13 @@ public class Checklist extends MainActivity {
         subTasksToolbar.setTitle(R.string.subTasks);
         subTasksToolbar.setSubtitle(dbTask);
 
-        //Set list view dividers
-//        String digits = "0123456789ABCDEF";
-//        int val = 0;
-//        for (int i = 1; i < highlight.length(); i++) {
-//            char c = highlight.charAt(i);
-//            int d = digits.indexOf(c);
-//            val = 16 * val + d;
-//        }
-
         //setting correct background color
         if(!dbLightDark){
             subTasksToolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
             subTasksToolbar.setSubtitleTextColor(Color.parseColor("#AAAAAA"));
             checklistView.setBackgroundColor(Color.parseColor("#333333"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#333333"));
-            int[] colors = {0, /*val*/Integer.parseInt(highlightDec), /*val*/Integer.parseInt(highlightDec)};
+            int[] colors = {0, Integer.parseInt(highlightDec), Integer.parseInt(highlightDec)};
             checklistView.setDivider(new GradientDrawable(
                     GradientDrawable.Orientation.LEFT_RIGHT, colors));
             checklistView.setDividerHeight(1);
@@ -135,7 +126,8 @@ public class Checklist extends MainActivity {
             subTasksToolbar.setSubtitleTextColor(Color.parseColor("#666666"));
             checklistView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             subTasksToolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            int[] colors = {Color.parseColor("#FFFFFF"), /*val*/Integer.parseInt(highlightDec), /*val*/Integer.parseInt(highlightDec)};
+            int[] colors = {Color.parseColor("#FFFFFF"), Integer.parseInt(highlightDec),
+                    Integer.parseInt(highlightDec)};
             checklistView.setDivider(new GradientDrawable(
                     GradientDrawable.Orientation.LEFT_RIGHT, colors));
             checklistView.setDividerHeight(1);
@@ -295,7 +287,8 @@ public class Checklist extends MainActivity {
                         Calendar timeNow = new GregorianCalendar();
 
                         //saving subtask in database
-                        db.insertSubtaskData(finalDbID, subtaskId, checklistTaskName, String.valueOf(timeNow.getTimeInMillis() / 1000));
+                        db.insertSubtaskData(finalDbID, subtaskId, checklistTaskName,
+                                String.valueOf(timeNow.getTimeInMillis() / 1000));
 
                         //adding new ID to sortedIDs
                         sortedSubtaskIds.add(subtaskId);
@@ -329,7 +322,8 @@ public class Checklist extends MainActivity {
                         subTasksKilled.set(renameMe, true);
 
                         //updating database
-                        db.updateSubtask(finalDbTaskId, String.valueOf(sortedSubtaskIds.get(renameMe)), checklistTaskName);
+                        db.updateSubtask(finalDbTaskId, String.valueOf
+                                (sortedSubtaskIds.get(renameMe)), checklistTaskName);
                         checklistView.setAdapter(checklistAdapter[0]);
 
                     }
@@ -356,9 +350,8 @@ public class Checklist extends MainActivity {
 
         subTasksClickable = true;
 
-        //TODO check out the hard coded pixels will work on all devices
-        checklistRootView.getViewTreeObserver().addOnGlobalLayoutListener
-                (new ViewTreeObserver.OnGlobalLayoutListener() {
+        checklistRootView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
 
@@ -412,7 +405,9 @@ public class Checklist extends MainActivity {
                     subTaskBeingEdited = false;
 
                     if(checklist.size() != 0) {
+
                         checklistView.setAdapter(checklistAdapter[0]);
+
                     }
 
                     restoreListView = false;
@@ -437,7 +432,8 @@ public class Checklist extends MainActivity {
 
             //getting timestamp
             String dbTimestamp = "";
-            Cursor dbResult = MainActivity.db.getSubtaskData(Integer.parseInt(parentID), sortedSubtaskIds.get(i));
+            Cursor dbResult = MainActivity.db.getSubtaskData(Integer.parseInt(parentID),
+                    sortedSubtaskIds.get(i));
             while (dbResult.moveToNext()) {
                 dbTimestamp = dbResult.getString(1);
             }
@@ -569,11 +565,13 @@ public class Checklist extends MainActivity {
 
         //Setting height of the list view
         int statusHeight = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId = getResources().getIdentifier("status_bar_height",
+                "dimen", "android");
         if (resourceId > 0) {
             statusHeight = getResources().getDimensionPixelSize(resourceId);
         }
-        listParams.height = deviceheight - (editTextParams.height + toolbarParams.height + statusHeight);
+        listParams.height = deviceheight - (editTextParams.height +
+                toolbarParams.height + statusHeight);
         checklistView.setLayoutParams(listParams);
 
     }

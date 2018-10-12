@@ -115,7 +115,8 @@ public class Database extends SQLiteOpenHelper {
                 "NOTE TEXT, CHECKLIST BOOLEAN, TIMESTAMP TEXT, TASK TEXT, DUE BOOLEAN," +
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
                 "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT," +
-                " IGNORED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER, CHECKLISTSIZE INETGER, MANUALKILL BOOLEAN, KILLEDEARLY BOOLEAN, ORIGINALDAY TEXT)");
+                " IGNORED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER, CHECKLISTSIZE INETGER, " +
+                "MANUALKILL BOOLEAN, KILLEDEARLY BOOLEAN, ORIGINALDAY TEXT)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
@@ -124,11 +125,13 @@ public class Database extends SQLiteOpenHelper {
                 " HIGHLIGHT TEXT, DARKLIGHT BOOLEAN, ACTIVETASKNAME TEXT, ADSREMOVED BOOLEAN," +
                 " REMINDERSAVAILABLE BOOLEAN, CYCLECOLORS BOOLEAN, TASKLISTSIZE INTEGER, " +
                 "CHECKLISTLISTSIZE INTEGER, SETALARM BOOLEAN, YEAR INTEGER, MONTH INTEGER," +
-                " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER, AMPM INTEGER," +
-                " CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN, REPEATHINT INTEGER," +
-                " RENAMEHINT INTEGER, REINSTATEHINT INTEGER, TIMESTARTED INTEGER," +
-                " REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, REVIEWFOUR BOOLEAN, HIGHLIGHTDEC TEXT, REPEATINTERVALTEMP TEXT, ORIGINALDAYTEMP TEXT)");
-        db.execSQL("create table " + CTABLE + " (ID INTEGER/* PRIMARY KEY*/, SUBTASKID INTEGER," +
+                " DAY INTEGER, HOUR INTEGER, MINUTE INTEGER, COLORLASTCHANGED INTEGER, " +
+                "AMPM INTEGER, CYCLEENABLED BOOLEAN, DUESSET INTEGER, MOTIVATION BOOLEAN, " +
+                "REPEATHINT INTEGER, RENAMEHINT INTEGER, REINSTATEHINT INTEGER, " +
+                "TIMESTARTED INTEGER, REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, " +
+                "REVIEWFOUR BOOLEAN, HIGHLIGHTDEC TEXT, REPEATINTERVALTEMP TEXT, " +
+                "ORIGINALDAYTEMP TEXT)");
+        db.execSQL("create table " + CTABLE + " (ID INTEGER, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
 
@@ -174,7 +177,8 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertAlarmData(int id, String hour, String minute, String ampm, String day, String month, String year){
+    public boolean insertAlarmData(int id, String hour, String minute, String ampm, String day,
+                                   String month, String year){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(ACOL1, id);
@@ -192,7 +196,8 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertSnoozeData(int id, String hour, String minute, String ampm, String day, String month, String year){
+    public boolean insertSnoozeData(int id, String hour, String minute, String ampm,
+                                    String day, String month, String year){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(SCOL1, id);
@@ -388,13 +393,13 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateChecklistExist(String id, Boolean checklist){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content = new ContentValues();
-        content.put(COL3, checklist);
-        db.update(TABLE, content, "ID = ?", new String[] {id});
-        return true;
-    }
+//    public boolean updateChecklistExist(String id, Boolean checklist){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues content = new ContentValues();
+//        content.put(COL3, checklist);
+//        db.update(TABLE, content, "ID = ?", new String[] {id});
+//        return true;
+//    }
 
     public boolean updateDue(String id, Boolean due){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -412,13 +417,13 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean removeTimestamp(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content = new ContentValues();
-        content.put(COL4, 0);
-        db.update(TABLE, content, "ID = ?", new String[] {id});
-        return true;
-    }
+//    public boolean removeTimestamp(String id){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues content = new ContentValues();
+//        content.put(COL4, 0);
+//        db.update(TABLE, content, "ID = ?", new String[] {id});
+//        return true;
+//    }
 
     public boolean updateKilled(String id, Boolean killed){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -457,7 +462,6 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(COL4, timestamp);
-//        content.put(COL10, true);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
@@ -530,7 +534,8 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(CCOL6, index);
-        db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?", new String[] {id, subtask});
+        db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?",
+                new String[] {id, subtask});
         return true;
     }
 
@@ -559,7 +564,8 @@ public class Database extends SQLiteOpenHelper {
 //        return true;
 //    }
 
-    public boolean updateAlarmData(String id, String hour, String minute, String ampm, String day, String month, String year){
+    public boolean updateAlarmData(String id, String hour, String minute, String ampm,
+                                   String day, String month, String year){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(ACOL1, id);
@@ -573,7 +579,8 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateSnoozeData(String id, String hour, String minute, String ampm, String day, String month, String year){
+    public boolean updateSnoozeData(String id, String hour, String minute, String ampm,
+                                    String day, String month, String year){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content= new ContentValues();
         content.put(SCOL1, id);
@@ -587,14 +594,14 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateAfterDelete(String id, String note){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content= new ContentValues();
-        content.put(COL1, id);
-        content.put(COL2, note);
-        db.update(TABLE, content, "NOTE = ?", new String[] {note});
-        return true;
-    }
+//    public boolean updateAfterDelete(String id, String note){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues content= new ContentValues();
+//        content.put(COL1, id);
+//        content.put(COL2, note);
+//        db.update(TABLE, content, "NOTE = ?", new String[] {note});
+//        return true;
+//    }
 
     public boolean updateMute(Boolean mute){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -840,7 +847,8 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(CCOL3, subtask);
-        db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?", new String[] {id, subtaskId});
+        db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?",
+                new String[] {id, subtaskId});
         return true;
     }
 
@@ -848,7 +856,8 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(CCOL4, killed);
-        db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?", new String[] {id, subtask});
+        db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?",
+                new String[] {id, subtask});
         return true;
     }
 

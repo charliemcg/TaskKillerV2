@@ -55,7 +55,6 @@ public class SetDue extends MainActivity {
     View pickerRoot;
     TextView dateTextView;
     TextView timeTextView;
-    TextView divOne;
     TextView divTwo;
     static TextView divThree;
     String repeat;
@@ -69,11 +68,8 @@ public class SetDue extends MainActivity {
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-//        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.due_picker);
-//        }else{
-//            setContentView(R.layout.due_picker);
-//        }
+
         //TODO are these supposed to be the same animation
         overridePendingTransition( R.anim.enter_from_left, R.anim.enter_from_left);
         dueToolbar = findViewById(R.id.dueToolbar);
@@ -106,15 +102,12 @@ public class SetDue extends MainActivity {
         weeklyLight = findViewById(R.id.weeklyLight);
         monthlyLight = findViewById(R.id.monthlyLight);
         cancelRepeatLight = findViewById(R.id.cancelRepeatLight);
-//        divOne = findViewById(R.id.divOne);
         divTwo = findViewById(R.id.divTwo);
         divThree = findViewById(R.id.divThree);
 
         screenSize = getResources().getConfiguration().screenLayout &
                 Configuration.SCREENLAYOUT_SIZE_MASK;
 
-
-//        divOne.setBackgroundColor(Color.parseColor(highlight));
         divTwo.setBackgroundColor(Color.parseColor(highlight));
         divThree.setBackgroundColor(Color.parseColor(highlight));
 
@@ -139,10 +132,6 @@ public class SetDue extends MainActivity {
 
         onCreateOptionsMenu(dueToolbar.getMenu());
 
-//        dueToolbar.setSubtitle(dbTask);
-//        getSupportActionBar().setTitle("Set Dat/Time");
-//        dueToolbar.setTitle("Set Date/Time");
-
         //Inform user that they can set an alarm
         if(dbDueTime.equals("0")){
             dateTextView.setText(R.string.addDate);
@@ -166,14 +155,12 @@ public class SetDue extends MainActivity {
             String alarmAmPm = "";
             String alarmDay = "";
             String alarmMonth = "";
-            String alarmYear = "";
             while(alarmResult.moveToNext()){
                 alarmHour = alarmResult.getString(1);
                 alarmMinute = alarmResult.getString(2);
                 alarmAmPm = alarmResult.getString(3);
                 alarmDay = alarmResult.getString(4);
                 alarmMonth = alarmResult.getString(5);
-                alarmYear = alarmResult.getString(6);
             }
             alarmResult.close();
 
@@ -224,10 +211,8 @@ public class SetDue extends MainActivity {
             if(Integer.parseInt(alarmHour) == 0) {
                 adjustedHour = String.valueOf(12);
             }else if(Integer.parseInt(alarmHour) == 12){
-//                adjustedAmPm = getString(R.string.pm);
             }else if(Integer.parseInt(alarmHour) > 12){
                 adjustedHour = String.valueOf(Integer.parseInt(alarmHour) - 12);
-//                adjustedAmPm = getString(R.string.pm);
             }
 
             if(Integer.parseInt(alarmMinute) < 10){
@@ -278,8 +263,6 @@ public class SetDue extends MainActivity {
             weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
             monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
             darkRepeat.setVisibility(View.VISIBLE);
-//            calendarFadedLight.setVisibility(View.GONE);
-//            timeFadedLight.setVisibility(View.GONE);
         }else{
             dueToolbar.setTitleTextColor(Color.parseColor("#000000"));
             dueToolbar.setSubtitleTextColor(Color.parseColor("#666666"));
@@ -292,8 +275,6 @@ public class SetDue extends MainActivity {
             weeklyLight.setBackgroundColor(Color.parseColor("#000000"));
             monthlyLight.setBackgroundColor(Color.parseColor("#000000"));
             lightRepeat.setVisibility(View.VISIBLE);
-//            calendarFadedLight.setVisibility(View.GONE);
-//            timeFadedLight.setVisibility(View.GONE);
         }
 
         //Highlight the repeat type or highlight No Repeat if none exists
@@ -317,10 +298,6 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-//                if(!mute){
-//                    blip.start();
-//                }
-
                 vibrate.vibrate(50);
 
                 DialogFragment dialogfragment = new DatePickerDialogFrag();
@@ -337,10 +314,6 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-//                if(!mute){
-//                    blip.start();
-//                }
-
                 vibrate.vibrate(50);
 
                 DialogFragment dialogfragment = new TimePickerDialogFrag();
@@ -356,11 +329,6 @@ public class SetDue extends MainActivity {
 
             @Override
             public void onClick(View v) {
-
-//                if(!mute){
-//                    blip.start();
-//                }
-
 
                 if(!mute && !repeat.equals("day")){
                     blip.start();
@@ -385,7 +353,6 @@ public class SetDue extends MainActivity {
                 setDue = true;
 
                 killAlarm.setVisible(true);
-//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -396,10 +363,6 @@ public class SetDue extends MainActivity {
 
             @Override
             public void onClick(View v) {
-
-//                if(!mute){
-//                    blip.start();
-//                }
 
                 if(!mute && !repeat.equals("day")){
                     blip.start();
@@ -423,7 +386,6 @@ public class SetDue extends MainActivity {
                 setDue = true;
 
                 killAlarm.setVisible(true);
-//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -434,10 +396,6 @@ public class SetDue extends MainActivity {
 
             @Override
             public void onClick(View v) {
-
-//                if(!mute){
-//                    blip.start();
-//                }
 
                 if(!mute && !repeat.equals("week")){
                     blip.start();
@@ -460,7 +418,6 @@ public class SetDue extends MainActivity {
                 setDue = true;
 
                 killAlarm.setVisible(true);
-//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -471,10 +428,6 @@ public class SetDue extends MainActivity {
 
             @Override
             public void onClick(View v) {
-
-//                if(!mute){
-//                    blip.start();
-//                }
 
                 if(!mute && !repeat.equals("week")){
                     blip.start();
@@ -509,10 +462,6 @@ public class SetDue extends MainActivity {
             @Override
             public void onClick(View v) {
 
-//                if(!mute){
-//                    blip.start();
-//                }
-
                 if(!mute && !repeat.equals("month")){
                     blip.start();
                 }
@@ -525,8 +474,6 @@ public class SetDue extends MainActivity {
                 weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
                 monthlyDark.setBackgroundColor(Color.parseColor(highlight));
 
-//                repeatInterval = AlarmManager.INTERVAL_DAY;//TODO adjust for months
-
                 repeat = "month";
 
                 repeating =true;
@@ -534,7 +481,6 @@ public class SetDue extends MainActivity {
                 setDue = true;
 
                 killAlarm.setVisible(true);
-//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -545,10 +491,6 @@ public class SetDue extends MainActivity {
 
             @Override
             public void onClick(View v) {
-
-//                if(!mute){
-//                    blip.start();
-//                }
 
                 if(!mute && !repeat.equals("month")){
                     blip.start();
@@ -562,8 +504,6 @@ public class SetDue extends MainActivity {
                 weeklyLight.setBackgroundColor(Color.parseColor("#000000"));
                 monthlyLight.setBackgroundColor(Color.parseColor(highlight));
 
-//                repeatInterval = AlarmManager.INTERVAL_DAY;//TODO adjust for months
-
                 repeat = "month";
 
                 repeating =true;
@@ -571,7 +511,6 @@ public class SetDue extends MainActivity {
                 setDue = true;
 
                 killAlarm.setVisible(true);
-//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -582,10 +521,6 @@ public class SetDue extends MainActivity {
 
             @Override
             public void onClick(View v) {
-
-//                if(!mute){
-//                    blip.start();
-//                }
 
                 if(!mute && !repeat.equals("none")){
                     blip.start();
@@ -604,7 +539,6 @@ public class SetDue extends MainActivity {
 
                 if(!timePicked && !datePicked) {
                     killAlarm.setVisible(false);
-//                    dueToolbar.getMenu().getItem(0).setVisible(false);
                 }
 
             }
@@ -616,10 +550,6 @@ public class SetDue extends MainActivity {
 
             @Override
             public void onClick(View v) {
-
-//                if(!mute){
-//                    blip.start();
-//                }
 
                 if(!mute && !repeat.equals("none")){
                     blip.start();
@@ -638,7 +568,6 @@ public class SetDue extends MainActivity {
 
                 if(!timePicked && !datePicked) {
                     killAlarm.setVisible(false);
-//                    dueToolbar.getMenu().getItem(0).setVisible(false);
                 }
 
             }
@@ -684,8 +613,6 @@ public class SetDue extends MainActivity {
 
                     killAlarm.setVisible(false);
                     trashAlarmOpen.setVisible(true);
-
-//                    vibrate.vibrate(50);
 
                     final Handler handler2 = new Handler();
                     final Runnable runnable2 = new Runnable(){
@@ -793,16 +720,6 @@ public class SetDue extends MainActivity {
             };
 
             handler.postDelayed(runnable, 100);
-            /////////////////////////////////////////////////////////////////////////
-//            if(!mute){
-//                trash.start();
-//            }
-//
-//            vibrate.vibrate(50);
-
-
-
-//            killAlarm.setVisible(false);
 
             return true;
         }
@@ -931,10 +848,6 @@ public class SetDue extends MainActivity {
 
             vibrate.vibrate(50);
 
-//            if(!mute){
-//                 blip.start();
-//            }
-
             //Updating the database
             db.updateYear(year);
             db.updateMonth(month);
@@ -972,13 +885,8 @@ public class SetDue extends MainActivity {
                         db.updateHour(11);
                     }else if(hour >= 13) {
                         db.updateHour(hour - 12);
-//                    }else if(hour == 12){
-//                        db.updateHour(12);
                     }else{
                         db.updateHour(hour);
-//                        if (hour == 11) {
-//                            ampm = 1;
-//                        }
                     }
                     db.updateAmPm(ampm);
                     db.updateMinute(minute);
@@ -987,8 +895,6 @@ public class SetDue extends MainActivity {
                     db.updateAmPm(ampm);
                     db.updateMinute(0);
                 }
-
-                Log.i(TAG, "day: " + day + " hour: " + hour + " minute: " + minute + " ampm: " + ampm);
 
             }else{
                 Cursor alarmResult = MainActivity.db.getAlarmData
@@ -1037,11 +943,6 @@ public class SetDue extends MainActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
 
-            //Setting default time picker values to current time
-//            final Calendar calendar = Calendar.getInstance();
-//            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//            int minute = calendar.get(Calendar.MINUTE);
-
             //Set default values of date picker to current date
             final Calendar calendar = Calendar.getInstance();
             int hour;
@@ -1071,8 +972,6 @@ public class SetDue extends MainActivity {
                 uniAmPm = uniResult.getInt(17);
             }
             uniResult.close();
-
-//            int twentyFourHour = hour;
 
             int defaultTimePickerHour;
 
@@ -1109,15 +1008,15 @@ public class SetDue extends MainActivity {
             //Initialising time picker based on light or dark
             if(!lightDark) {
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
+                    timePickerDialog = new TimePickerDialog(this.getActivity(),
                             AlertDialog.THEME_HOLO_DARK, this, defaultTimePickerHour, minute, false);
                 }else{
-                    timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
+                    timePickerDialog = new TimePickerDialog(this.getActivity(),
                             AlertDialog.THEME_DEVICE_DEFAULT_DARK, this, defaultTimePickerHour, minute, false);
                 }
             }else{
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    timePickerDialog = new TimePickerDialog(/*getActivity()*/this.getActivity(),
+                    timePickerDialog = new TimePickerDialog(this.getActivity(),
                             AlertDialog.THEME_HOLO_LIGHT, this, defaultTimePickerHour, minute, false);
                 }else {
                     timePickerDialog = new TimePickerDialog(getActivity(),
@@ -1134,7 +1033,7 @@ public class SetDue extends MainActivity {
             TextView timeTextView = getActivity().findViewById(R.id.timeTextView);
 
             //Formatting and displaying selected time
-            String adjustedAmPm = /*String.valueOf(R.string.am)*/"am";
+            String adjustedAmPm = /*String.valueOf(R.string.am)*/"am";//TODO check to see if string references work
             String adjustedHour = String.valueOf(hour);
             String adjustedMinute/* = String.valueOf(minute)*/;
 
@@ -1167,10 +1066,6 @@ public class SetDue extends MainActivity {
 
             MainActivity.vibrate.vibrate(50);
 
-//            if(!MainActivity.mute){
-//                MainActivity.blip.start();
-//            }
-
             //Updating database
             db.updateHour(Integer.parseInt(adjustedHour));
             db.updateMinute(minute);
@@ -1185,11 +1080,7 @@ public class SetDue extends MainActivity {
                 db.updateOriginalDayTemp(String.valueOf(day));
                 db.updateMonth(month);
                 db.updateYear(year);
-//                if(adjustedAmPm.equals("am")) {
-//                    db.updateAmPm(0);
-//                }else{
-//                    db.updateAmPm(1);
-//                }
+
             }else{
                 Cursor alarmResult = MainActivity.db.getAlarmData
                         (Integer.parseInt(dbTaskId));
@@ -1295,34 +1186,11 @@ public class SetDue extends MainActivity {
                     //Set default time values if user not selected time values already
                     if(!timePicked){
 
-//                        Calendar calendar = Calendar.getInstance();
-//                        int minute = calendar.get(Calendar.MINUTE);
-//                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//                        int ampm = calendar.get(Calendar.AM_PM);
-//
-//                        if(hour >= 10) {
-//                            if(hour != 23) {
-//                                db.updateHour(hour + 1);
-//                            }else{
-//                                db.updateHour(hour);
-//                            }
-//                            db.updateMinute(minute);
-//                            db.updateAmPm(ampm);
-//                        }else{
-//                            db.updateHour(10);
-//                            db.updateAmPm(ampm);
-//                            db.updateMinute(0);
-//                        }
                         Calendar calendar = Calendar.getInstance();
                         int minute = calendar.get(Calendar.MINUTE);
                         int hour = calendar.get(Calendar.HOUR_OF_DAY);
                         int ampm = calendar.get(Calendar.AM_PM);
-                        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-                        int currentMonth = calendar.get(Calendar.MONTH);
-                        int currentYear = calendar.get(Calendar.YEAR);
 
-//                        if((currentYear == year) && (currentMonth == month) && (currentDay == day)
-//                                && (hour >= 10)) {
                             if(hour == 23){
                                 db.updateHour(11);
                             }else if(hour >= 13) {
@@ -1337,11 +1205,6 @@ public class SetDue extends MainActivity {
                             }
                             db.updateAmPm(ampm);
                             db.updateMinute(minute);
-//                        }else{
-//                            db.updateHour(10);
-//                            db.updateAmPm(ampm);
-//                            db.updateMinute(0);
-//                        }
 
                     }else{
 
@@ -1375,29 +1238,6 @@ public class SetDue extends MainActivity {
                     }else{
                         getDateFromDB();
                     }
-
-                    //Set default time values if user not selected time values already
-//                    if(!timePicked){
-//                        Calendar calendar = Calendar.getInstance();
-//                        int minute = calendar.get(Calendar.MINUTE);
-//                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//                        int ampm = calendar.get(Calendar.AM_PM);
-//                        if(hour >= 10) {
-//                            if(hour != 23) {
-//                                db.updateHour(hour + 1);
-//                            }else{
-//                                db.updateHour(hour);
-//                            }
-//                            db.updateAmPm(ampm);
-//                            db.updateMinute(minute);
-//                        }else{
-//                            db.updateHour(10);
-//                            db.updateAmPm(ampm);
-//                            db.updateMinute(0);
-//                        }
-//                    }else{
-//                        getTimeFromDB();
-//                    }
 
                     if(!timePicked){
 
@@ -1450,29 +1290,6 @@ public class SetDue extends MainActivity {
                     }else{
                         getDateFromDB();
                     }
-
-                    //Set default time values if user not selected time values already
-//                    if(!timePicked){
-//                        Calendar calendar = Calendar.getInstance();
-//                        int minute = calendar.get(Calendar.MINUTE);
-//                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//                        int ampm = calendar.get(Calendar.AM_PM);
-//                        if(hour >= 10) {
-//                            if(hour != 23) {
-//                                db.updateHour(hour + 1);
-//                            }else{
-//                                db.updateHour(hour);
-//                            }
-//                            db.updateAmPm(ampm);
-//                            db.updateMinute(minute);
-//                        }else{
-//                            db.updateHour(10);
-//                            db.updateAmPm(ampm);
-//                            db.updateMinute(0);
-//                        }
-//                    }else{
-//                        getTimeFromDB();
-//                    }
 
                     if(!timePicked){
 
