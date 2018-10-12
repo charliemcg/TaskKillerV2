@@ -2819,7 +2819,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     interval = 2491200;
                                                 }
                                                 if ((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                        .parseInt(finalDbTimestamp) - (AlarmManager.INTERVAL_HOUR / 1000)/* + interval*/)) {
+                                                        .parseInt(finalDbTimestamp) - ((AlarmManager.INTERVAL_HOUR / 1000) * 4)/* + interval*/)) {
                                                     dontSnooze = true;
                                                 }
                                             }
@@ -3348,12 +3348,12 @@ class MyAdapter extends ArrayAdapter<String> {
                                 if(finalDbRepeat) {
                                     if(finalDbRepeatInterval.equals("day")){
                                         if((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                .parseInt(finalDbTimestamp) - (AlarmManager.INTERVAL_DAY / 1000))) {
+                                                .parseInt(finalDbTimestamp) - ((AlarmManager.INTERVAL_DAY / 1000) * 24))) {
                                             dontSnooze = true;
                                         }
                                     }else if(finalDbRepeatInterval.equals("week")){
                                         if((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                .parseInt(finalDbTimestamp) /*+ 518400*/- (AlarmManager.INTERVAL_DAY / 1000))) {
+                                                .parseInt(finalDbTimestamp) /*+ 518400*/- ((AlarmManager.INTERVAL_DAY / 1000) * 24))) {
                                             dontSnooze = true;
                                         }
                                     }else if(finalDbRepeatInterval.equals("month")){
@@ -3407,7 +3407,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             interval = 2419200;
                                         }
                                         if ((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                .parseInt(finalDbTimestamp) - (AlarmManager.INTERVAL_HOUR / 1000)/* + interval*/)) {
+                                                .parseInt(finalDbTimestamp) - ((AlarmManager.INTERVAL_HOUR / 1000) * 24)/* + interval*/)) {
                                             dontSnooze = true;
                                         }
 
