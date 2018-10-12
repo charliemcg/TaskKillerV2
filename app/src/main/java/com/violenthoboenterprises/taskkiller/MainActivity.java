@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     //Used for debugging purposes. Should not be visible in final version.
     Button showDb;
-//    Button showAlarmDb;
+    Button showAlarmDb;
 //    Button showSnoozeDb;
 //    Button showUniversalDb;
 //    Button showSubtasksDb;
@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         deviceWidth = displayMetrics.widthPixels;
         deviceheight = displayMetrics.heightPixels;
         showDb = findViewById(R.id.showDb);
-//        showAlarmDb = findViewById(R.id.showAlarmDb);
+        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
         duesSet = 0;
@@ -631,30 +631,30 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         //Used for debugging purposes
-//        showAlarmDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllAlarmData();
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("HOUR: " + res.getString(1) + "\n");
-//                    buffer.append("MINUTE: " + res.getString(2) + "\n");
-//                    buffer.append("AMPM: " + res.getString(3) + "\n");
-//                    buffer.append("DAY: " + res.getString(4) + "\n");
-//                    buffer.append("MONTH: " + res.getString(5) + "\n");
-//                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
-//                }
-//
-//                showMessage("Data", buffer.toString());
-//
-//            }
-//
-//        });
+        showAlarmDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllAlarmData();
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("HOUR: " + res.getString(1) + "\n");
+                    buffer.append("MINUTE: " + res.getString(2) + "\n");
+                    buffer.append("AMPM: " + res.getString(3) + "\n");
+                    buffer.append("DAY: " + res.getString(4) + "\n");
+                    buffer.append("MONTH: " + res.getString(5) + "\n");
+                    buffer.append("YEAR: " + res.getString(6) + "\n\n");
+                }
+
+                showMessage("Data", buffer.toString());
+
+            }
+
+        });
 
 //        //Used for debugging purposes
 //        showSnoozeDb.setOnClickListener(new View.OnClickListener() {
@@ -2292,8 +2292,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //                }
 //
 //            }
-
-            Log.i(TAG, "I'm in here");
 
 //            if(dbSnooze){
 

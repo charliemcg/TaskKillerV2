@@ -141,6 +141,8 @@ public class AlertReceiver extends BroadcastReceiver {
 
             if(dbRepeatInterval.equals("day") && !dbSnoozed){
 
+                Log.i(TAG, "timestamp: " + dbTimestamp);
+
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                 // detect duplicates and then adjusting the timestamp on the millisecond level
 //                long futureStamp = dateNow.getTimeInMillis() + AlarmManager.INTERVAL_DAY;
@@ -417,6 +419,8 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 futureStamp = futureStamp / 1000;
 
+                String oldStamp = dbTimestamp + "000";
+
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(broadId)),
@@ -432,16 +436,47 @@ public class AlertReceiver extends BroadcastReceiver {
                         context, broadId, MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-                Log.i(TAG, "Stamp: " + Long.parseLong(String.valueOf(futureStamp) + "000") + " Current: " + Calendar.getInstance().getTimeInMillis());
+//                Log.i(TAG, "Stamp: " + Long.parseLong(String.valueOf(futureStamp) + "000") + " Current: " + Calendar.getInstance().getTimeInMillis());
 
                 MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
                         MainActivity.pendIntent);
 
                 Calendar alarmCalendar = Calendar.getInstance();
-                alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp) + "000") - Long.parseLong(String.valueOf(interval) + "000"));
+//                alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp) + "000") - Long.parseLong(String.valueOf(interval) + "000"));
+                alarmCalendar.setTimeInMillis(Long.parseLong(oldStamp));
 
                 if(!dbManualKill){
 
+                    Log.i(TAG, "month: " + alarmCalendar.get(Calendar.MONTH) + " day: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
+//                    int newDay = Integer.parseInt(alarmDay);
+//                    int newMonth = Integer.parseInt(alarmMonth);
+//                    int newYear = Integer.parseInt(alarmYear);
+//                    newDay = Integer.parseInt(originalDay);
+//                    //incrementing month
+//                    if (newMonth == 2 || newMonth == 4 || newMonth == 7
+//                            || newMonth == 9 && newDay == 31) {
+//                        newDay = 30;
+////                        newMonth++;
+//                    } else if (newMonth == 11/* && (newDay == 31)*/) {
+//                        newMonth = 0;
+////                        newYear++;
+//                    } else if (newMonth == 0
+//                            && newDay > 28 && newYear % 4 != 0) {
+//                        newDay = 28;
+////                        newMonth++;
+//                    } else if (newMonth == 0
+//                            && newDay > 29 && newYear % 4 == 0) {
+//                        newDay = 29;
+////                        newMonth++;
+//                    }else{
+////                        newMonth++;
+//                    }
+//                    //updating due date in database
+//                    MainActivity.db.updateAlarmData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            alarmHour, alarmMinute, alarmAmpm,
+//                            String.valueOf(newDay), String.valueOf(newMonth),
+//                            String.valueOf(newYear));
                     //updating due date in database
                     MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(broadId)),
@@ -451,6 +486,8 @@ public class AlertReceiver extends BroadcastReceiver {
                             String.valueOf(alarmCalendar.get(Calendar.DAY_OF_MONTH)),
                             String.valueOf(alarmCalendar.get(Calendar.MONTH)),
                             String.valueOf(alarmCalendar.get(Calendar.YEAR)));
+
+                    Log.i(TAG, "month: " + alarmCalendar.get(Calendar.MONTH) + " day: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
 
                 }
 

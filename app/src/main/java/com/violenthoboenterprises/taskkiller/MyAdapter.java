@@ -776,8 +776,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.sortedIDs.get(position)),
                         String.valueOf(futureStamp));
 
-                Log.i(TAG, "I'm in here three");
-
                 if(!alarmDay.equals("")) {
                     int newDay = Integer.parseInt(alarmDay);
                     int newMonth = Integer.parseInt(alarmMonth);
@@ -805,6 +803,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         newDay++;
                     }
 
+                    Log.i(TAG, "Updating alarm data one");
                     //updating due date in database
                     MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -877,6 +876,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         theMonth++;
                     }
 
+                    Log.i(TAG, "Updating alarm data two");
                     //updating due time in database
                     MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -966,18 +966,16 @@ class MyAdapter extends ArrayAdapter<String> {
                         String.valueOf(futureStamp));
 
                 //setting the next alarm because monthly repeats cannot be done automatically
-                MainActivity.pendIntent = PendingIntent.getBroadcast(
-                        getContext(), Integer.parseInt(MainActivity
-                                .sortedIDs.get(position)),
-                        MainActivity.alertIntent, PendingIntent
-                                .FLAG_UPDATE_CURRENT);
+//                MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                        getContext(), Integer.parseInt(MainActivity
+//                                .sortedIDs.get(position)),
+//                        MainActivity.alertIntent, PendingIntent
+//                                .FLAG_UPDATE_CURRENT);
 
-                if(MainActivity.remindersAvailable) {
-                    MainActivity.alarmManager.set(AlarmManager.RTC,
-                            futureStamp, MainActivity.pendIntent);
-                }
-
-                Log.i(TAG, "I'm in here four");
+//                if(MainActivity.remindersAvailable) {
+//                    MainActivity.alarmManager.set(AlarmManager.RTC,
+//                            futureStamp, MainActivity.pendIntent);
+//                }
 
                 if(!alarmDay.equals("")) {
                     int newDay = Integer.parseInt(alarmDay);
@@ -1001,6 +999,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //                        newMonth++;
 //                    }
 
+//                    Log.i(TAG, "I'm in he re one");
                     Cursor origResult = MainActivity.db.getData(Integer.parseInt(
                             MainActivity.sortedIDs.get(position)));
                     String originalDay = "";
@@ -1031,6 +1030,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         newMonth++;
                     }
 
+                    Log.i(TAG, "Updating alarm data three");
                     //updating due date in database
                     MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -1691,6 +1691,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 }
 
+                Log.i(TAG, "Cancelling alarm one");
                 MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                 MainActivity.add.setVisibility(View.VISIBLE);
@@ -1868,6 +1869,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //                        newMonth++;
 //                    }
 
+                    Log.i(TAG, "I'm in her e two");
                     Cursor origResult = MainActivity.db.getData(Integer.parseInt(
                             MainActivity.sortedIDs.get(position)));
                     String originalDay = "";
@@ -1879,8 +1881,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     newDay = Integer.parseInt(originalDay);
                     //incrementing month
-                    if (newMonth == 2 || newMonth == 4 || newMonth == 7
-                            || newMonth == 9 && newDay == 31) {
+                    if ((newMonth == 2 || newMonth == 4 || newMonth == 7
+                            || newMonth == 9) && newDay == 31) {
                         newDay = 30;
                         newMonth++;
                     } else if (newMonth == 11/* && (newDay == 31)*/) {
@@ -1908,12 +1910,12 @@ class MyAdapter extends ArrayAdapter<String> {
 //                    }
 //                    origResult.close();
 
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTimeInMillis(Long.parseLong(dbTimestamp + "000") + Long.parseLong(String.valueOf(interval) + "000"));
-                    int day = cal.get(Calendar.DAY_OF_MONTH);
-                    int month = cal.get(Calendar.MONTH);
-//                    Log.i(TAG, "month: " + month + " newMonth: " + newMonth + " day: " + day + " newDay: " + newDay + " originalDay: " + originalDay);
-                    if(day != Integer.parseInt(originalDay)){
+//                    Calendar cal = Calendar.getInstance();
+//                    cal.setTimeInMillis(Long.parseLong(dbTimestamp + "000") + Long.parseLong(String.valueOf(interval) + "000"));
+//                    int day = cal.get(Calendar.DAY_OF_MONTH);
+//                    int month = cal.get(Calendar.MONTH);
+////                    Log.i(TAG, "month: " + month + " newMonth: " + newMonth + " day: " + day + " newDay: " + newDay + " originalDay: " + originalDay);
+//                    if(day != Integer.parseInt(originalDay)){
 //                        int daysOut = 0;
 //                        if(newMonth == 2){
 //                            Log.i(TAG, "I'm in here");
@@ -1955,22 +1957,22 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            daysOut = Integer.parseInt(originalDay) - day;
 //                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
 //                        }
-                    }
+//                    }
                     ///////////////////////////////////////////
 
                     int newStamp = Integer.parseInt(finalDbTimestamp) + interval;
 
                     //setting alarm
-                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-                            getContext(), Integer.parseInt(MainActivity
-                                    .sortedIDs.get(position)),
-                            MainActivity.alertIntent, PendingIntent
-                                    .FLAG_UPDATE_CURRENT);
-
-                    if(MainActivity.remindersAvailable) {
-                        MainActivity.alarmManager.set(AlarmManager.RTC,
-                                newStamp, MainActivity.pendIntent);
-                    }
+//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                            getContext(), Integer.parseInt(MainActivity
+//                                    .sortedIDs.get(position)),
+//                            MainActivity.alertIntent, PendingIntent
+//                                    .FLAG_UPDATE_CURRENT);
+//
+//                    if(MainActivity.remindersAvailable) {
+//                        MainActivity.alarmManager.set(AlarmManager.RTC,
+//                                newStamp, MainActivity.pendIntent);
+//                    }
 
                 }
 
@@ -1999,17 +2001,31 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+//                Log.i(TAG, "Timestamp: " + futureStamp);
+
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
                         String.valueOf(futureStamp));
 
+                Log.i(TAG, "futureStamp: " + futureStamp);
+
+                Log.i(TAG, "Updating alarm data four");
                 //updating due time in database
                 MainActivity.db.updateAlarmData(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
                         finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                         String.valueOf(newDay), String.valueOf(newMonth),
                         String.valueOf(newYear));
+
+                Log.i(TAG, "I'm in here two");
+//                Log.i(TAG, "month: " + newMonth + " day: " + newDay);
+
+                MainActivity.db.updateManualKill(String.valueOf(
+                        MainActivity.sortedIDs.get(position)), true);
+
+                MainActivity.db.updateKilledEarly(String.valueOf(
+                        MainActivity.sortedIDs.get(position)), true);
 
                 MainActivity.db.updateShowOnce(
                         MainActivity.sortedIDs.get(MainActivity.activeTask), true);
@@ -2130,11 +2146,9 @@ class MyAdapter extends ArrayAdapter<String> {
                                 // repeat to snooze for an hour
                                 boolean dontSnooze = false;
                                 if(finalDbRepeat){
-                                    Log.i(TAG, "Interval: " + finalDbRepeatInterval + " dateNow: " + dateNow.getTimeInMillis() / 1000 + " timestamp: " + finalDbTimestamp + " timestamp+: " + String.valueOf(Integer.parseInt(finalDbTimestamp) + 82800));
                                     if (finalDbRepeatInterval.equals("day")) {
                                         if((dateNow.getTimeInMillis() / 1000) >= (Integer
                                                 .parseInt(finalDbTimestamp) /*+ 82800*/- (AlarmManager.INTERVAL_HOUR / 1000))){
-                                            Log.i(TAG, "Success");
                                             dontSnooze = true;
                                         }
                                     } else if (finalDbRepeatInterval.equals("week")) {
@@ -2454,6 +2468,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     }
 
+                                    Log.i(TAG, "Updating alarm data five");
                                     //updating due date in database
                                     MainActivity.db.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -2991,6 +3006,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             }
 
+                                            Log.i(TAG, "Updating alarm data six");
                                             //updating due date in database
                                             MainActivity.db.updateAlarmData(String.valueOf(
                                                     MainActivity.sortedIDs.get(MainActivity
@@ -3560,6 +3576,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     }
 
+                                    Log.i(TAG, "Updating alarm data seven");
                                     //updating due time in database
                                     MainActivity.db.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -3864,6 +3881,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
+                                    Log.i(TAG, "Cancelling alarm two");
                                     MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                                     MainActivity.add.setVisibility(View.VISIBLE);
@@ -3974,6 +3992,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             newDay++;
                                         }
 
+                                        Log.i(TAG, "Updating alarm data eight");
                                         MainActivity.db.updateAlarmData(String.valueOf(
                                                 MainActivity.sortedIDs.get
                                                         (MainActivity.activeTask)),
@@ -4098,7 +4117,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                            newMonth++;
 //                                        }
 
-                                        Log.i(TAG, "Adjusting weekly repeat: " + finalDbTimestamp);
                                         //TODO use code above if the following fails
                                         //////////////////////////////////////////////
                                         Calendar overdueDate = Calendar.getInstance();
@@ -4106,8 +4124,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 (Long.parseLong(finalDbTimestamp + "000")
                                                         - (AlarmManager.INTERVAL_DAY * 7));
                                         int newDay = overdueDate.get(Calendar.DAY_OF_MONTH);
-
-                                        Log.i(TAG, "" + newDay);
 
 //                                        int newDay = currentDate.get(Calendar.DAY_OF_MONTH);
                                         int newMonth = currentDate.get(Calendar.MONTH);
@@ -4137,6 +4153,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                         }
                                         //////////////////////////////////////////////
 
+                                        Log.i(TAG, "Updating alarm data nine");
                                         MainActivity.db.updateAlarmData(String.valueOf(
                                                 MainActivity.sortedIDs.get(MainActivity
                                                         .activeTask)), finalAlarmHour,
@@ -4371,6 +4388,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                         }
 
                                         futureStamp = Long.parseLong(String.valueOf(futureStamp) + "000");
+
+                                        Log.i(TAG, "I'm in here three");
                                         Cursor origResult = MainActivity.db.getData(Integer.parseInt(
                                                 MainActivity.sortedIDs.get(position)));
                                         String originalDay = "";
@@ -4452,6 +4471,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             newMonth++;
                                         }
 
+                                        Log.i(TAG, "Updating alarm data ten");
                                         //setting new due time in database
                                         MainActivity.db.updateAlarmData(String.valueOf(
                                                 MainActivity.sortedIDs.get
@@ -4665,6 +4685,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         }
 
+                        Log.i(TAG, "Cancelling alarm three");
                         MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                         MainActivity.add.setVisibility(View.VISIBLE);
@@ -4819,8 +4840,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                 interval = 2505600;
                             }
 
-                            Log.i(TAG, "I'm in here two");
-
                             newDay = Integer.parseInt(finalAlarmDay);
                             newMonth = Integer.parseInt(finalAlarmMonth);
                             newYear = Integer.parseInt(finalAlarmYear);
@@ -4844,6 +4863,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                newMonth++;
 //                            }
 
+                            Log.i(TAG, "I'm in here four");
                             Cursor origResult = MainActivity.db.getData(Integer.parseInt(
                                     MainActivity.sortedIDs.get(position)));
                             String originalDay = "";
@@ -4855,8 +4875,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                             newDay = Integer.parseInt(originalDay);
                             //incrementing month
-                            if (newMonth == 2 || newMonth == 4 || newMonth == 7
-                                    || newMonth == 9 && newDay == 31) {
+                            if ((newMonth == 2 || newMonth == 4 || newMonth == 7
+                                    || newMonth == 9) && newDay == 31) {
                                 newDay = 30;
                                 newMonth++;
                             } else if (newMonth == 11/* && (newDay == 31)*/) {
@@ -4874,21 +4894,32 @@ class MyAdapter extends ArrayAdapter<String> {
                                 newMonth++;
                             }
 
+                            Log.i(TAG, "timestamp: " + finalDbTimestamp);
+
                             int newStamp = Integer.parseInt(finalDbTimestamp) + interval;
 
-                            //setting alarm
-                            MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                    getContext(), Integer.parseInt(MainActivity
-                                            .sortedIDs.get(position)),
-                                    MainActivity.alertIntent, PendingIntent
-                                            .FLAG_UPDATE_CURRENT);
+//                            Calendar newCalendar = Calendar.getInstance();
+//                            newCalendar.setTimeInMillis(Long.parseLong(String.valueOf(newStamp) + "000"));
+//                            Log.i(TAG, "month: " + newCalendar.get(Calendar.MONTH) + " day: " + newCalendar.get(Calendar.DAY_OF_MONTH));
 
-                            if(MainActivity.remindersAvailable) {
-                                MainActivity.alarmManager.set(AlarmManager.RTC,
-                                        newStamp, MainActivity.pendIntent);
-                            }
+                            MainActivity.db.updateManualKill(String.valueOf(
+                                    MainActivity.sortedIDs.get(position)),true);
+
+                            //setting alarm
+//                            MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                                    getContext(), Integer.parseInt(MainActivity
+//                                            .sortedIDs.get(position)),
+//                                    MainActivity.alertIntent, PendingIntent
+//                                            .FLAG_UPDATE_CURRENT);
+//
+//                            if(MainActivity.remindersAvailable) {
+//                                MainActivity.alarmManager.set(AlarmManager.RTC,
+//                                        Long.parseLong(String.valueOf(newStamp) + "000"), MainActivity.pendIntent);
+//                            }
 
                         }
+
+                        Log.i(TAG, "I'm in here one");
 
                         //////////////////////////////////////////////////////
                         //updating timestamp
@@ -4915,17 +4946,28 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         }
 
-                        //updating timestamp
-                        MainActivity.db.updateTimestamp(String.valueOf(
-                                MainActivity.sortedIDs.get(position)),
-                                String.valueOf(futureStamp));
+//                        Log.i(TAG, "Timestamp: " + futureStamp);
 
+                        //updating timestamp
+//                        MainActivity.db.updateTimestamp(String.valueOf(
+//                                MainActivity.sortedIDs.get(position)),
+//                                String.valueOf(futureStamp));
+
+                        Log.i(TAG, "futureStamp: " + futureStamp);
+
+                        Log.i(TAG, "Updating alarm data eleven");
                         //updating due time in database
                         MainActivity.db.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
                                 finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                 String.valueOf(newDay), String.valueOf(newMonth),
                                 String.valueOf(newYear));
+
+                        MainActivity.db.updateManualKill(String.valueOf(
+                                MainActivity.sortedIDs.get(position)), true);
+
+                        MainActivity.db.updateKilledEarly(String.valueOf(
+                                MainActivity.sortedIDs.get(position)), true);
 
                         MainActivity.db.updateShowOnce(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask), true);
@@ -5601,6 +5643,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //         }else {
 
+        Log.i(TAG, "Cancelling alarm four");
              MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
              Calendar calendar = Calendar.getInstance();
@@ -5823,6 +5866,7 @@ class MyAdapter extends ArrayAdapter<String> {
                          adjustedAmPm = 1;
                      }
 
+                 Log.i(TAG, "Updating alarm data twice");
                      MainActivity.db.updateAlarmData(String.valueOf(
                              MainActivity.sortedIDs.get(position)),
                              String.valueOf(hour),
@@ -5856,6 +5900,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                  PendingIntent.FLAG_UPDATE_CURRENT);
                      }
 
+                 Log.i(TAG, "Cancelling alarm five");
                      MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
 
