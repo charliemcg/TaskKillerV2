@@ -5041,32 +5041,36 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.db.updateShowOnce(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask), true);
 
-                        //TODO Show this only when necessary
-                        MainActivity.toast.setText(R.string.youCanCancelRepeat);
-                        final Handler handler = new Handler();
+                        if(MainActivity.repeatHint <= 10) {
+                            if((MainActivity.repeatHint == 1) || (MainActivity.repeatHint == 10)) {
+                                MainActivity.toast.setText(R.string.youCanCancelRepeat);
+                                final Handler handler = new Handler();
 
-                        final Runnable runnable = new Runnable() {
-                            public void run() {
-                                if(!MainActivity.mute) {
-                                    MainActivity.sweep.start();
-                                }
-                                MainActivity.toastView.startAnimation(AnimationUtils
-                                        .loadAnimation(getContext(), R.anim.enter_from_right_fast));
-                                MainActivity.toastView.setVisibility(View.VISIBLE);
-                                final Handler handler2 = new Handler();
-                                final Runnable runnable2 = new Runnable(){
-                                    public void run(){
+                                final Runnable runnable = new Runnable() {
+                                    public void run() {
+                                        if(!MainActivity.mute) {
+                                            MainActivity.sweep.start();
+                                        }
                                         MainActivity.toastView.startAnimation(AnimationUtils
-                                                .loadAnimation(getContext(),
-                                                        android.R.anim.fade_out));
-                                        MainActivity.toastView.setVisibility(View.GONE);
+                                                .loadAnimation(getContext(), R.anim.enter_from_right_fast));
+                                        MainActivity.toastView.setVisibility(View.VISIBLE);
+                                        final Handler handler2 = new Handler();
+                                        final Runnable runnable2 = new Runnable(){
+                                            public void run(){
+                                                MainActivity.toastView.startAnimation(AnimationUtils
+                                                        .loadAnimation(getContext(),
+                                                                android.R.anim.fade_out));
+                                                MainActivity.toastView.setVisibility(View.GONE);
+                                            }
+                                        };
+                                        handler2.postDelayed(runnable2, 2500);
                                     }
                                 };
-                                handler2.postDelayed(runnable2, 1500);
+                                handler.postDelayed(runnable, 500);
                             }
-                        };
-
-                        handler.postDelayed(runnable, 500);
+                            MainActivity.repeatHint++;
+                            MainActivity.db.updateRepeatHint(MainActivity.repeatHint);
+                        }
 
                         propertyRow.setVisibility(View.GONE);
 
