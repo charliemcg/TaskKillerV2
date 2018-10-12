@@ -984,20 +984,50 @@ class MyAdapter extends ArrayAdapter<String> {
                     int newMonth = Integer.parseInt(alarmMonth);
                     int newYear = Integer.parseInt(alarmYear);
                     //incrementing month
-                    if (((newMonth == 2) || (newMonth == 4) || (newMonth == 7)
-                            || (newMonth == 9)) && (newDay == 31)) {
+//                    if (((newMonth == 2) || (newMonth == 4) || (newMonth == 7)
+//                            || (newMonth == 9)) && (newDay == 31)) {
+//                        newDay = 30;
+//                        newMonth++;
+//                    } else if ((newMonth == 11) && (newDay == 31)) {
+//                        newMonth = 0;
+//                        newYear++;
+//                    } else if ((newMonth == 1) && (newDay > 28) && (newYear % 4 != 0)) {
+//                        newDay = 28;
+//                        newMonth++;
+//                    } else if ((newMonth == 1) && (newDay > 29) && (newYear % 4 == 0)) {
+//                        newDay = 28;
+//                        newMonth++;
+//                    } else {
+//                        newMonth++;
+//                    }
+
+                    Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(position)));
+                    String originalDay = "";
+                    while (origResult.moveToNext()) {
+                        //tempTimestamp = tempResult.getString(3);
+                        originalDay = origResult.getString(20);
+                    }
+                    origResult.close();
+
+                    newDay = Integer.parseInt(originalDay);
+                    //incrementing month
+                    if (newMonth == 2 || newMonth == 4 || newMonth == 7
+                            || newMonth == 9 && newDay == 31) {
                         newDay = 30;
                         newMonth++;
-                    } else if ((newMonth == 11) && (newDay == 31)) {
+                    } else if (newMonth == 11/* && (newDay == 31)*/) {
                         newMonth = 0;
                         newYear++;
-                    } else if ((newMonth == 1) && (newDay > 28) && (newYear % 4 != 0)) {
+                    } else if (newMonth == 0
+                            && newDay > 28 && newYear % 4 != 0) {
                         newDay = 28;
                         newMonth++;
-                    } else if ((newMonth == 1) && (newDay > 29) && (newYear % 4 == 0)) {
-                        newDay = 28;
+                    } else if (newMonth == 0
+                            && newDay > 29 && newYear % 4 == 0) {
+                        newDay = 29;
                         newMonth++;
-                    } else {
+                    }else{
                         newMonth++;
                     }
 
@@ -1815,12 +1845,9 @@ class MyAdapter extends ArrayAdapter<String> {
                         interval = 2505600;
                     }
 
-                    Log.i(TAG, "I'm in here one");
-
                     newDay = Integer.parseInt(finalAlarmDay);
                     newMonth = Integer.parseInt(finalAlarmMonth);
                     newYear = Integer.parseInt(finalAlarmYear);
-                    Log.i(TAG, "newMonth: " + newMonth);
 //                    //incrementing month
 //                    if (((newMonth == 2) || (newMonth == 4) || (newMonth == 7)
 //                            || (newMonth == 9)) && (newDay == 31)) {
@@ -1840,25 +1867,96 @@ class MyAdapter extends ArrayAdapter<String> {
 //                    }else{
 //                        newMonth++;
 //                    }
+
+                    Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+                            MainActivity.sortedIDs.get(position)));
+                    String originalDay = "";
+                    while (origResult.moveToNext()) {
+                        //tempTimestamp = tempResult.getString(3);
+                        originalDay = origResult.getString(20);
+                    }
+                    origResult.close();
+
+                    newDay = Integer.parseInt(originalDay);
                     //incrementing month
-                    if (((newMonth == 2) || (newMonth == 4) || (newMonth == 7)
-                            || (newMonth == 9)) && (newDay == 31)) {
+                    if (newMonth == 2 || newMonth == 4 || newMonth == 7
+                            || newMonth == 9 && newDay == 31) {
                         newDay = 30;
                         newMonth++;
-                    } else if ((newMonth == 11)/* && (newDay == 31)*/) {
+                    } else if (newMonth == 11/* && (newDay == 31)*/) {
                         newMonth = 0;
                         newYear++;
-                    } else if (newMonth == 1
-                            && (newDay > 28) && (newYear % 4 != 0)) {
+                    } else if (newMonth == 0
+                            && newDay > 28 && newYear % 4 != 0) {
                         newDay = 28;
                         newMonth++;
-                    } else if (newMonth == 1
-                            && (newDay > 29) && (newYear % 4 == 0)) {
-                        newDay = 28;
+                    } else if (newMonth == 0
+                            && newDay > 29 && newYear % 4 == 0) {
+                        newDay = 29;
                         newMonth++;
                     }else{
                         newMonth++;
                     }
+
+                    ///////////////////////////////////////////
+//                    Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+//                            MainActivity.sortedIDs.get(position)));
+//                    String originalDay = "";
+//                    while (origResult.moveToNext()) {
+//                        //tempTimestamp = tempResult.getString(3);
+//                        originalDay = origResult.getString(20);
+//                    }
+//                    origResult.close();
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(Long.parseLong(dbTimestamp + "000") + Long.parseLong(String.valueOf(interval) + "000"));
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+                    int month = cal.get(Calendar.MONTH);
+//                    Log.i(TAG, "month: " + month + " newMonth: " + newMonth + " day: " + day + " newDay: " + newDay + " originalDay: " + originalDay);
+                    if(day != Integer.parseInt(originalDay)){
+//                        int daysOut = 0;
+//                        if(newMonth == 2){
+//                            Log.i(TAG, "I'm in here");
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            Log.i(TAG, "Days out: " + daysOut);
+//
+//                        }
+//                        if(month == 0 && (day == 28 || day == 29 || day == 30)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 2 && (day == 28 || day == 29 || day == 30)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 3 && (day == 28 || day == 29/* || day == 30*/)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 4 && (day == 28 || day == 29 || day == 30)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 5 && (day == 28 || day == 29/* || day == 30*/)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 6 && (day == 28 || day == 29 || day == 30)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 7 && (day == 28 || day == 29 || day == 30)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 8 && (day == 28 || day == 29/* || day == 30*/)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 9 && (day == 28 || day == 29 || day == 30)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 10 && (day == 28 || day == 29/* || day == 30*/)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }else if(month == 11 && (day == 28 || day == 29 || day == 30)){
+//                            daysOut = Integer.parseInt(originalDay) - day;
+//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
+//                        }
+                    }
+                    ///////////////////////////////////////////
 
                     int newStamp = Integer.parseInt(finalDbTimestamp) + interval;
 
@@ -1905,7 +2003,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
                         String.valueOf(futureStamp));
-
 
                 //updating due time in database
                 MainActivity.db.updateAlarmData(String.valueOf(
@@ -4727,21 +4824,51 @@ class MyAdapter extends ArrayAdapter<String> {
                             newDay = Integer.parseInt(finalAlarmDay);
                             newMonth = Integer.parseInt(finalAlarmMonth);
                             newYear = Integer.parseInt(finalAlarmYear);
+//                            //incrementing month
+//                            if (((newMonth == 2) || (newMonth == 4) || (newMonth == 7)
+//                                    || (newMonth == 9)) && (newDay == 31)) {
+//                                newDay = 30;
+//                                newMonth++;
+//                            } else if ((newMonth == 11) && (newDay == 31)) {
+//                                newMonth = 0;
+//                                newYear++;
+//                            } else if (newMonth == 1
+//                                    && (newDay > 28) && (newYear % 4 != 0)) {
+//                                newDay = 28;
+//                                newMonth++;
+//                            } else if (newMonth == 1
+//                                    && (newDay > 29) && (newYear % 4 == 0)) {
+//                                newDay = 28;
+//                                newMonth++;
+//                            }else{
+//                                newMonth++;
+//                            }
+
+                            Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+                                    MainActivity.sortedIDs.get(position)));
+                            String originalDay = "";
+                            while (origResult.moveToNext()) {
+                                //tempTimestamp = tempResult.getString(3);
+                                originalDay = origResult.getString(20);
+                            }
+                            origResult.close();
+
+                            newDay = Integer.parseInt(originalDay);
                             //incrementing month
-                            if (((newMonth == 2) || (newMonth == 4) || (newMonth == 7)
-                                    || (newMonth == 9)) && (newDay == 31)) {
+                            if (newMonth == 2 || newMonth == 4 || newMonth == 7
+                                    || newMonth == 9 && newDay == 31) {
                                 newDay = 30;
                                 newMonth++;
-                            } else if ((newMonth == 11) && (newDay == 31)) {
+                            } else if (newMonth == 11/* && (newDay == 31)*/) {
                                 newMonth = 0;
                                 newYear++;
-                            } else if (newMonth == 1
-                                    && (newDay > 28) && (newYear % 4 != 0)) {
+                            } else if (newMonth == 0
+                                    && newDay > 28 && newYear % 4 != 0) {
                                 newDay = 28;
                                 newMonth++;
-                            } else if (newMonth == 1
-                                    && (newDay > 29) && (newYear % 4 == 0)) {
-                                newDay = 28;
+                            } else if (newMonth == 0
+                                    && newDay > 29 && newYear % 4 == 0) {
+                                newDay = 29;
                                 newMonth++;
                             }else{
                                 newMonth++;
