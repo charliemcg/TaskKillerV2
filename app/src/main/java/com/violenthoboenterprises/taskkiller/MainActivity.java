@@ -1456,6 +1456,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             handler.postDelayed(runnable, 500);
         }
 
+        Log.i(TAG, "Update killed one");
         //marks task as not killed in database
         db.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
 
@@ -2314,6 +2315,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
                 if(!dbOverdue){
 
+                    Log.i(TAG, "Update killed two");
                     db.updateKilledEarly(MainActivity.sortedIDs.get(thePosition),true);
 
                 }

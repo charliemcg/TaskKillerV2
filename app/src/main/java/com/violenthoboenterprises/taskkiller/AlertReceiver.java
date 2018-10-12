@@ -133,6 +133,8 @@ public class AlertReceiver extends BroadcastReceiver {
             notificationManager.notify(1, builder.build());
         } else {
 
+            Log.i(TAG, "Killed early? " + dbKilledEarly);
+
             if(!dbKilledEarly){
                 notificationManager.notify(1, builder.build());
             }else{

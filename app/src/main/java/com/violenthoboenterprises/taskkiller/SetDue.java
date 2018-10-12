@@ -724,7 +724,13 @@ public class SetDue extends MainActivity {
 
                                     db.updateRepeat(dbTaskId, false);
 
+                                    db.updateOverdue(dbTaskId, false);
+
                                     db.updateSnooze(dbTaskId, false);
+
+                                    db.updateKilledEarly(dbTaskId, false);
+
+                                    db.updateManualKill(dbTaskId, false);
 
                                     pendIntent = PendingIntent.getBroadcast(getApplicationContext(),
                                             Integer.valueOf(dbTaskId),

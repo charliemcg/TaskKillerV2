@@ -305,6 +305,7 @@ class MyAdapter extends ArrayAdapter<String> {
         final Boolean finalDbDue = dbDue;
         final int finalDbBroadcast = dbBroadcast;
         final Boolean finalDbRepeat = dbRepeat;
+        final boolean finalDbOverdue = dbOverdue;
         final Boolean finalDbSnooze = dbSnooze;
         final String finalDbRepeatInterval = dbRepeatInterval;
 
@@ -803,7 +804,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         newDay++;
                     }
 
-                    Log.i(TAG, "Updating alarm data one");
                     //updating due date in database
                     MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -876,7 +876,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         theMonth++;
                     }
 
-                    Log.i(TAG, "Updating alarm data two");
                     //updating due time in database
                     MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -1030,7 +1029,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         newMonth++;
                     }
 
-                    Log.i(TAG, "Updating alarm data three");
                     //updating due date in database
                     MainActivity.db.updateAlarmData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -1580,8 +1578,11 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.taskPropertiesShowing = false;
 
-                MainActivity.db.updateKilled(String.valueOf(
-                        MainActivity.sortedIDs.get(position)), true);
+                Log.i(TAG, "Update killed one");
+                if(!dbOverdue) {
+                    MainActivity.db.updateKilled(String.valueOf(
+                            MainActivity.sortedIDs.get(position)), true);
+                }
 
                 MainActivity.db.updateIgnored(MainActivity.sortedIDs
                         .get(position), false);
@@ -1691,7 +1692,6 @@ class MyAdapter extends ArrayAdapter<String> {
                             MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 }
 
-                Log.i(TAG, "Cancelling alarm one");
                 MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                 MainActivity.add.setVisibility(View.VISIBLE);
@@ -1869,7 +1869,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                        newMonth++;
 //                    }
 
-                    Log.i(TAG, "I'm in her e two");
                     Cursor origResult = MainActivity.db.getData(Integer.parseInt(
                             MainActivity.sortedIDs.get(position)));
                     String originalDay = "";
@@ -2008,9 +2007,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.sortedIDs.get(position)),
                         String.valueOf(futureStamp));
 
-                Log.i(TAG, "futureStamp: " + futureStamp);
-
-                Log.i(TAG, "Updating alarm data four");
                 //updating due time in database
                 MainActivity.db.updateAlarmData(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -2018,14 +2014,15 @@ class MyAdapter extends ArrayAdapter<String> {
                         String.valueOf(newDay), String.valueOf(newMonth),
                         String.valueOf(newYear));
 
-                Log.i(TAG, "I'm in here two");
 //                Log.i(TAG, "month: " + newMonth + " day: " + newDay);
 
                 MainActivity.db.updateManualKill(String.valueOf(
                         MainActivity.sortedIDs.get(position)), true);
 
-                MainActivity.db.updateKilledEarly(String.valueOf(
-                        MainActivity.sortedIDs.get(position)), true);
+                if(!dbOverdue) {
+                    MainActivity.db.updateKilledEarly(String.valueOf(
+                            MainActivity.sortedIDs.get(position)), true);
+                }
 
                 MainActivity.db.updateShowOnce(
                         MainActivity.sortedIDs.get(MainActivity.activeTask), true);
@@ -2468,7 +2465,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     }
 
-                                    Log.i(TAG, "Updating alarm data five");
                                     //updating due date in database
                                     MainActivity.db.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -3006,7 +3002,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             }
 
-                                            Log.i(TAG, "Updating alarm data six");
                                             //updating due date in database
                                             MainActivity.db.updateAlarmData(String.valueOf(
                                                     MainActivity.sortedIDs.get(MainActivity
@@ -3576,7 +3571,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     }
 
-                                    Log.i(TAG, "Updating alarm data seven");
                                     //updating due time in database
                                     MainActivity.db.updateAlarmData(String.valueOf(
                                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
@@ -3836,9 +3830,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.taskPropertiesShowing = false;
 
-                                    MainActivity.db.updateKilled(String.valueOf(
-                                            MainActivity.sortedIDs.get(
-                                                    MainActivity.activeTask)), true);
+                                    Log.i(TAG, "Update killed three");
+                                    if(!finalDbOverdue) {
+                                        MainActivity.db.updateKilled(String.valueOf(
+                                                MainActivity.sortedIDs.get(
+                                                        MainActivity.activeTask)), true);
+                                    }
 
                                     if (MainActivity.showMotivation) {
                                         MainActivity.toast.setText(R.string.youKilledThisTask);
@@ -3881,7 +3878,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                    Log.i(TAG, "Cancelling alarm two");
                                     MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                                     MainActivity.add.setVisibility(View.VISIBLE);
@@ -3992,7 +3988,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                             newDay++;
                                         }
 
-                                        Log.i(TAG, "Updating alarm data eight");
                                         MainActivity.db.updateAlarmData(String.valueOf(
                                                 MainActivity.sortedIDs.get
                                                         (MainActivity.activeTask)),
@@ -4153,7 +4148,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                         }
                                         //////////////////////////////////////////////
 
-                                        Log.i(TAG, "Updating alarm data nine");
                                         MainActivity.db.updateAlarmData(String.valueOf(
                                                 MainActivity.sortedIDs.get(MainActivity
                                                         .activeTask)), finalAlarmHour,
@@ -4389,7 +4383,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         futureStamp = Long.parseLong(String.valueOf(futureStamp) + "000");
 
-                                        Log.i(TAG, "I'm in here three");
                                         Cursor origResult = MainActivity.db.getData(Integer.parseInt(
                                                 MainActivity.sortedIDs.get(position)));
                                         String originalDay = "";
@@ -4471,7 +4464,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                             newMonth++;
                                         }
 
-                                        Log.i(TAG, "Updating alarm data ten");
                                         //setting new due time in database
                                         MainActivity.db.updateAlarmData(String.valueOf(
                                                 MainActivity.sortedIDs.get
@@ -4635,8 +4627,11 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.taskPropertiesShowing = false;
 
-                        MainActivity.db.updateKilled(String.valueOf(
-                                MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+                        Log.i(TAG, "Update killed four");
+                        if(!finalDbOverdue) {
+                            MainActivity.db.updateKilled(String.valueOf(
+                                    MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
+                        }
 
                         MainActivity.db.updateIgnored(MainActivity.sortedIDs
                                 .get(position), false);
@@ -4685,7 +4680,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         }
 
-                        Log.i(TAG, "Cancelling alarm three");
                         MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                         MainActivity.add.setVisibility(View.VISIBLE);
@@ -4863,7 +4857,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                newMonth++;
 //                            }
 
-                            Log.i(TAG, "I'm in here four");
                             Cursor origResult = MainActivity.db.getData(Integer.parseInt(
                                     MainActivity.sortedIDs.get(position)));
                             String originalDay = "";
@@ -4894,8 +4887,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                 newMonth++;
                             }
 
-                            Log.i(TAG, "timestamp: " + finalDbTimestamp);
-
                             int newStamp = Integer.parseInt(finalDbTimestamp) + interval;
 
 //                            Calendar newCalendar = Calendar.getInstance();
@@ -4918,8 +4909,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                            }
 
                         }
-
-                        Log.i(TAG, "I'm in here one");
 
                         //////////////////////////////////////////////////////
                         //updating timestamp
@@ -4953,9 +4942,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                MainActivity.sortedIDs.get(position)),
 //                                String.valueOf(futureStamp));
 
-                        Log.i(TAG, "futureStamp: " + futureStamp);
-
-                        Log.i(TAG, "Updating alarm data eleven");
                         //updating due time in database
                         MainActivity.db.updateAlarmData(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
@@ -4966,8 +4952,11 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.db.updateManualKill(String.valueOf(
                                 MainActivity.sortedIDs.get(position)), true);
 
-                        MainActivity.db.updateKilledEarly(String.valueOf(
-                                MainActivity.sortedIDs.get(position)), true);
+                        Log.i(TAG, "Update killed five");
+                        if(!finalDbOverdue) {
+                            MainActivity.db.updateKilledEarly(String.valueOf(
+                                    MainActivity.sortedIDs.get(position)), true);
+                        }
 
                         MainActivity.db.updateShowOnce(
                                 MainActivity.sortedIDs.get(MainActivity.activeTask), true);
@@ -5643,7 +5632,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //         }else {
 
-        Log.i(TAG, "Cancelling alarm four");
              MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
              Calendar calendar = Calendar.getInstance();
@@ -5866,7 +5854,6 @@ class MyAdapter extends ArrayAdapter<String> {
                          adjustedAmPm = 1;
                      }
 
-                 Log.i(TAG, "Updating alarm data twice");
                      MainActivity.db.updateAlarmData(String.valueOf(
                              MainActivity.sortedIDs.get(position)),
                              String.valueOf(hour),
@@ -5900,7 +5887,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                  PendingIntent.FLAG_UPDATE_CURRENT);
                      }
 
-                 Log.i(TAG, "Cancelling alarm five");
                      MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
 
