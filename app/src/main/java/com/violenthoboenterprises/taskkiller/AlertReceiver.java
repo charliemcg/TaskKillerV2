@@ -133,7 +133,7 @@ public class AlertReceiver extends BroadcastReceiver {
             notificationManager.notify(1, builder.build());
         } else {
 
-            Log.i(TAG, "Killed early? " + dbKilledEarly);
+            Log.i(TAG, "Killed early: " + dbKilledEarly);
 
             if(!dbKilledEarly){
                 notificationManager.notify(1, builder.build());
@@ -142,8 +142,6 @@ public class AlertReceiver extends BroadcastReceiver {
             }
 
             if(dbRepeatInterval.equals("day") && !dbSnoozed){
-
-                Log.i(TAG, "timestamp: " + dbTimestamp);
 
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                 // detect duplicates and then adjusting the timestamp on the millisecond level
@@ -201,10 +199,10 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
                 alarmResult.close();
 
-//                Log.i(TAG, "Alarm Data\nyear: " + alarmYear + " month: " + alarmMonth + " day: " + alarmDay + " hour: " + alarmHour + " minute: " + alarmMinute + " ampm: " + alarmAmpm);
-
                 Calendar alarmCalendar = Calendar.getInstance();
                 alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp) + "000") - AlarmManager.INTERVAL_DAY);
+
+                Log.i(TAG, "manualkilled: " + dbManualKill);
 
                 if(!dbManualKill){
 
@@ -279,7 +277,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 MainActivity.db.updateManualKill(String.valueOf(MainActivity.sortedIDs.get(broadId)), false);
 
-            }else if(dbRepeatInterval.equals("month")){
+            }else if(dbRepeatInterval.equals("month") && !dbSnoozed){
 
                 //getting alarm data
                 Cursor alarmResult = MainActivity.db.getAlarmData(
@@ -438,8 +436,6 @@ public class AlertReceiver extends BroadcastReceiver {
                         context, broadId, MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-//                Log.i(TAG, "Stamp: " + Long.parseLong(String.valueOf(futureStamp) + "000") + " Current: " + Calendar.getInstance().getTimeInMillis());
-
                 MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong(String.valueOf(futureStamp) + "000"),
                         MainActivity.pendIntent);
 
@@ -449,7 +445,6 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 if(!dbManualKill){
 
-                    Log.i(TAG, "month: " + alarmCalendar.get(Calendar.MONTH) + " day: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
 //                    int newDay = Integer.parseInt(alarmDay);
 //                    int newMonth = Integer.parseInt(alarmMonth);
 //                    int newYear = Integer.parseInt(alarmYear);
@@ -488,8 +483,6 @@ public class AlertReceiver extends BroadcastReceiver {
                             String.valueOf(alarmCalendar.get(Calendar.DAY_OF_MONTH)),
                             String.valueOf(alarmCalendar.get(Calendar.MONTH)),
                             String.valueOf(alarmCalendar.get(Calendar.YEAR)));
-
-                    Log.i(TAG, "month: " + alarmCalendar.get(Calendar.MONTH) + " day: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
 
                 }
 

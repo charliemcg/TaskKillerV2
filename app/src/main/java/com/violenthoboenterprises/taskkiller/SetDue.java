@@ -696,6 +696,7 @@ public class SetDue extends MainActivity {
                             final Runnable runnable3 = new Runnable() {
                                 @Override
                                 public void run() {
+
                                     killAlarm.setVisible(false);
 
                                     //getting task data

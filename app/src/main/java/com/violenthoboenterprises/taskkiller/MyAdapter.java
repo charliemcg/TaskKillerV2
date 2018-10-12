@@ -156,7 +156,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //        checklistView.setLayoutParams(listParams);
 
 //        LinearLayout.LayoutParams thisParams = (LinearLayout.LayoutParams) taskView.getLayoutParams();
-//        Log.i(TAG, "Task height: " + thisParams.height);
         //Setting height of the list view
 //        thisParams.height = 350;
 //        taskView.setLayoutParams(thisParams);
@@ -462,15 +461,12 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //        //Animating a task with an alarm moving down through the list view
 //        if(MainActivity.alarmAnimation) {
-//            Log.i(TAG, "Position: " + position);
 //            if(position == (MainActivity.taskList.size() - 1)){
 //                MainActivity.theListView.setSelection(MainActivity.animatePosition);
 //                //TODO make sure to get correct resting position
 //                if(MainActivity.animatePosition == (MainActivity.taskList.size() - 1)){
-//                    Log.i(TAG, "Animation complete");
 //                    MainActivity.alarmAnimation = false;
 //                }else{
-//                    Log.i(TAG, "Reorder");
 //                    final Handler handler = new Handler();
 //
 //                    final Runnable runnable = new Runnable() {
@@ -998,7 +994,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                        newMonth++;
 //                    }
 
-//                    Log.i(TAG, "I'm in he re one");
                     Cursor origResult = MainActivity.db.getData(Integer.parseInt(
                             MainActivity.sortedIDs.get(position)));
                     String originalDay = "";
@@ -1578,7 +1573,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.taskPropertiesShowing = false;
 
-                Log.i(TAG, "Update killed one");
                 if(!dbOverdue) {
                     MainActivity.db.updateKilled(String.valueOf(
                             MainActivity.sortedIDs.get(position)), true);
@@ -1692,6 +1686,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 }
 
+                Log.i(TAG, "Here one");
                 MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                 MainActivity.add.setVisibility(View.VISIBLE);
@@ -1913,13 +1908,10 @@ class MyAdapter extends ArrayAdapter<String> {
 //                    cal.setTimeInMillis(Long.parseLong(dbTimestamp + "000") + Long.parseLong(String.valueOf(interval) + "000"));
 //                    int day = cal.get(Calendar.DAY_OF_MONTH);
 //                    int month = cal.get(Calendar.MONTH);
-////                    Log.i(TAG, "month: " + month + " newMonth: " + newMonth + " day: " + day + " newDay: " + newDay + " originalDay: " + originalDay);
 //                    if(day != Integer.parseInt(originalDay)){
 //                        int daysOut = 0;
 //                        if(newMonth == 2){
-//                            Log.i(TAG, "I'm in here");
 //                            daysOut = Integer.parseInt(originalDay) - day;
-//                            Log.i(TAG, "Days out: " + daysOut);
 //
 //                        }
 //                        if(month == 0 && (day == 28 || day == 29 || day == 30)){
@@ -2000,8 +1992,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
-//                Log.i(TAG, "Timestamp: " + futureStamp);
-
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -2013,8 +2003,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                         String.valueOf(newDay), String.valueOf(newMonth),
                         String.valueOf(newYear));
-
-//                Log.i(TAG, "month: " + newMonth + " day: " + newDay);
 
                 MainActivity.db.updateManualKill(String.valueOf(
                         MainActivity.sortedIDs.get(position)), true);
@@ -2249,7 +2237,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             interval = 2505600;
                                         }
                                         if ((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                .parseInt(finalDbTimestamp) + interval)) {
+                                                .parseInt(finalDbTimestamp) - (AlarmManager.INTERVAL_HOUR / 1000)/* + interval)*/)) {
                                             dontSnooze = true;
                                         }
                                     }
@@ -2266,7 +2254,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             if(!MainActivity.mute) {
                                                 MainActivity.sweep.start();
                                             }
-                                            MainActivity.toast.startAnimation
+                                            MainActivity.toastView.startAnimation
                                                     (AnimationUtils.loadAnimation(getContext(),
                                                             R.anim.enter_from_right_fast));
                                             MainActivity.toastView.setVisibility(View.VISIBLE);
@@ -2433,33 +2421,63 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         //Setting next alarm because monthly repeats
                                         // cannot be done automatically
-                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                                getContext(), Integer.parseInt(MainActivity
-                                                        .sortedIDs.get(position)),
-                                                MainActivity.alertIntent, PendingIntent
-                                                        .FLAG_UPDATE_CURRENT);
-
-                                        if(MainActivity.remindersAvailable) {
-                                            MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                    adjustedStamp, MainActivity.pendIntent);
-                                        }
+//                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                                                getContext(), Integer.parseInt(MainActivity
+//                                                        .sortedIDs.get(position)),
+//                                                MainActivity.alertIntent, PendingIntent
+//                                                        .FLAG_UPDATE_CURRENT);
+//
+//                                        if(MainActivity.remindersAvailable) {
+//                                            MainActivity.alarmManager.set(AlarmManager.RTC,
+//                                                    adjustedStamp, MainActivity.pendIntent);
+//                                        }
 
                                         //incrementing month
-                                        if (((newMonth == 2)
-                                                || (newMonth == 4) || (newMonth == 7)
-                                                || (newMonth == 9)) && (newDay == 31)) {
+//                                        if (((newMonth == 2)
+//                                                || (newMonth == 4) || (newMonth == 7)
+//                                                || (newMonth == 9)) && (newDay == 31)) {
+//                                            newDay = 30;
+//                                            newMonth++;
+//                                        } else if ((newMonth == 11) && (newDay == 31)) {
+//                                            newMonth = 0;
+//                                            newYear++;
+//                                        } else if (newMonth == 1
+//                                                && (newDay > 28) && (newYear % 4 != 0)) {
+//                                            newDay = 28;
+//                                            newMonth++;
+//                                        } else if (newMonth == 1
+//                                                && (newDay > 29) && (newYear % 4 == 0)) {
+//                                            newDay = 28;
+//                                            newMonth++;
+//                                        }
+
+                                        Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+                                                MainActivity.sortedIDs.get(position)));
+                                        String originalDay = "";
+                                        while (origResult.moveToNext()) {
+                                            //tempTimestamp = tempResult.getString(3);
+                                            originalDay = origResult.getString(20);
+                                        }
+                                        origResult.close();
+
+                                        newDay = Integer.parseInt(originalDay);
+                                        //incrementing month
+                                        if ((newMonth == 2 || newMonth == 4 || newMonth == 7
+                                                || newMonth == 9) && newDay == 31) {
                                             newDay = 30;
                                             newMonth++;
-                                        } else if ((newMonth == 11) && (newDay == 31)) {
+                                        } else if (newMonth == 11/* && (newDay == 31)*/) {
                                             newMonth = 0;
                                             newYear++;
-                                        } else if (newMonth == 1
-                                                && (newDay > 28) && (newYear % 4 != 0)) {
+                                        } else if (newMonth == 0
+                                                && newDay > 28 && newYear % 4 != 0) {
                                             newDay = 28;
                                             newMonth++;
-                                        } else if (newMonth == 1
-                                                && (newDay > 29) && (newYear % 4 == 0)) {
-                                            newDay = 28;
+                                        } else if (newMonth == 0
+                                                && newDay > 29 && newYear % 4 == 0) {
+                                            newDay = 29;
+                                            newMonth++;
+                                        }else{
                                             newMonth++;
                                         }
 
@@ -2506,17 +2524,19 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(futureStamp));
 
-                                        MainActivity.db.updateOverdue(String.valueOf(
-                                                MainActivity.sortedIDs.get(position)), false);
+                                    MainActivity.db.updateOverdue(String.valueOf(
+                                            MainActivity.sortedIDs.get(position)), false);
 
-                                        MainActivity.taskPropertiesShowing = false;
+                                    MainActivity.db.updateManualKill(MainActivity.sortedIDs.get(position), true);
 
-                                        //Returns the 'add' button
-                                        MainActivity.params.height = MainActivity.addHeight;
-                                        MainActivity.iconParams.height = MainActivity.addIconHeight;
+                                    MainActivity.taskPropertiesShowing = false;
 
-                                        taskView.setLayoutParams(MainActivity.params);
-                                        taskView.setLayoutParams(MainActivity.iconParams);
+                                    //Returns the 'add' button
+                                    MainActivity.params.height = MainActivity.addHeight;
+                                    MainActivity.iconParams.height = MainActivity.addIconHeight;
+
+                                    taskView.setLayoutParams(MainActivity.params);
+                                    taskView.setLayoutParams(MainActivity.iconParams);
 
                                     MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
@@ -2799,7 +2819,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                                     interval = 2491200;
                                                 }
                                                 if ((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                        .parseInt(finalDbTimestamp) + interval)) {
+                                                        .parseInt(finalDbTimestamp) - (AlarmManager.INTERVAL_HOUR / 1000)/* + interval*/)) {
                                                     dontSnooze = true;
                                                 }
                                             }
@@ -2969,34 +2989,64 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                                 //setting next alarm because monthly
                                                 // repeats cannot be done automatically
-                                                MainActivity.pendIntent = PendingIntent
-                                                        .getBroadcast(getContext(),
-                                                                Integer.parseInt(MainActivity
-                                                                .sortedIDs.get(position)),
-                                                        MainActivity.alertIntent, PendingIntent
-                                                                .FLAG_UPDATE_CURRENT);
-
-                                                if(MainActivity.remindersAvailable) {
-                                                    MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                            adjustedStamp, MainActivity.pendIntent);
-                                                }
+//                                                MainActivity.pendIntent = PendingIntent
+//                                                        .getBroadcast(getContext(),
+//                                                                Integer.parseInt(MainActivity
+//                                                                .sortedIDs.get(position)),
+//                                                        MainActivity.alertIntent, PendingIntent
+//                                                                .FLAG_UPDATE_CURRENT);
+//
+//                                                if(MainActivity.remindersAvailable) {
+//                                                    MainActivity.alarmManager.set(AlarmManager.RTC,
+//                                                            adjustedStamp, MainActivity.pendIntent);
+//                                                }
 
                                                 //incrementing month
-                                                if (((newMonth == 2) || (newMonth == 4)
-                                                        || (newMonth == 7) || (newMonth == 9))
-                                                        && (newDay == 31)) {
+//                                                if (((newMonth == 2) || (newMonth == 4)
+//                                                        || (newMonth == 7) || (newMonth == 9))
+//                                                        && (newDay == 31)) {
+//                                                    newDay = 30;
+//                                                    newMonth++;
+//                                                } else if ((newMonth == 11) && (newDay == 31)) {
+//                                                    newMonth = 0;
+//                                                    newYear++;
+//                                                } else if (newMonth == 1
+//                                                        && (newDay > 28) && (newYear % 4 != 0)) {
+//                                                    newDay = 28;
+//                                                    newMonth++;
+//                                                } else if (newMonth == 1
+//                                                        && (newDay > 29) && (newYear % 4 == 0)) {
+//                                                    newDay = 28;
+//                                                    newMonth++;
+//                                                }
+
+                                                Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+                                                        MainActivity.sortedIDs.get(position)));
+                                                String originalDay = "";
+                                                while (origResult.moveToNext()) {
+                                                    //tempTimestamp = tempResult.getString(3);
+                                                    originalDay = origResult.getString(20);
+                                                }
+                                                origResult.close();
+
+                                                newDay = Integer.parseInt(originalDay);
+                                                //incrementing month
+                                                if ((newMonth == 2 || newMonth == 4 || newMonth == 7
+                                                        || newMonth == 9) && newDay == 31) {
                                                     newDay = 30;
                                                     newMonth++;
-                                                } else if ((newMonth == 11) && (newDay == 31)) {
+                                                } else if (newMonth == 11/* && (newDay == 31)*/) {
                                                     newMonth = 0;
                                                     newYear++;
-                                                } else if (newMonth == 1
-                                                        && (newDay > 28) && (newYear % 4 != 0)) {
+                                                } else if (newMonth == 0
+                                                        && newDay > 28 && newYear % 4 != 0) {
                                                     newDay = 28;
                                                     newMonth++;
-                                                } else if (newMonth == 1
-                                                        && (newDay > 29) && (newYear % 4 == 0)) {
-                                                    newDay = 28;
+                                                } else if (newMonth == 0
+                                                        && newDay > 29 && newYear % 4 == 0) {
+                                                    newDay = 29;
+                                                    newMonth++;
+                                                }else{
                                                     newMonth++;
                                                 }
 
@@ -3054,6 +3104,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.db.updateOverdue(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
                                                     false);
+
+                                            MainActivity.db.updateManualKill(MainActivity.sortedIDs.get(position), true);
 
                                             MainActivity.taskPropertiesShowing = false;
 
@@ -3355,7 +3407,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             interval = 2419200;
                                         }
                                         if ((dateNow.getTimeInMillis() / 1000) >= (Integer
-                                                .parseInt(finalDbTimestamp) + interval)) {
+                                                .parseInt(finalDbTimestamp) - (AlarmManager.INTERVAL_HOUR / 1000)/* + interval*/)) {
                                             dontSnooze = true;
                                         }
 
@@ -3539,33 +3591,63 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         //setting next alarm because monthly
                                         // repeats cannot be done automatically
-                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
-                                                getContext(), Integer.parseInt(MainActivity
-                                                        .sortedIDs.get(position)),
-                                                MainActivity.alertIntent, PendingIntent
-                                                        .FLAG_UPDATE_CURRENT);
-
-                                        if(MainActivity.remindersAvailable) {
-                                            MainActivity.alarmManager.set(AlarmManager.RTC,
-                                                    adjustedStamp, MainActivity.pendIntent);
-                                        }
+//                                        MainActivity.pendIntent = PendingIntent.getBroadcast(
+//                                                getContext(), Integer.parseInt(MainActivity
+//                                                        .sortedIDs.get(position)),
+//                                                MainActivity.alertIntent, PendingIntent
+//                                                        .FLAG_UPDATE_CURRENT);
+//
+//                                        if(MainActivity.remindersAvailable) {
+//                                            MainActivity.alarmManager.set(AlarmManager.RTC,
+//                                                    adjustedStamp, MainActivity.pendIntent);
+//                                        }
 
                                         //incrementing month
-                                        if (((newMonth == 2) || (newMonth == 4)
-                                                || (newMonth == 7) || (newMonth == 9))
-                                                && (newDay == 31)) {
+//                                        if (((newMonth == 2) || (newMonth == 4)
+//                                                || (newMonth == 7) || (newMonth == 9))
+//                                                && (newDay == 31)) {
+//                                            newDay = 30;
+//                                            newMonth++;
+//                                        } else if ((newMonth == 11) && (newDay == 31)) {
+//                                            newMonth = 0;
+//                                            newYear++;
+//                                        } else if (newMonth == 1 && (newDay > 28)
+//                                                && (newYear % 4 != 0)) {
+//                                            newDay = 28;
+//                                            newMonth++;
+//                                        } else if ((newMonth == 1) && (newDay > 29)
+//                                                && (newYear % 4 == 0)) {
+//                                            newDay = 28;
+//                                            newMonth++;
+//                                        }
+
+                                        Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+                                                MainActivity.sortedIDs.get(position)));
+                                        String originalDay = "";
+                                        while (origResult.moveToNext()) {
+                                            //tempTimestamp = tempResult.getString(3);
+                                            originalDay = origResult.getString(20);
+                                        }
+                                        origResult.close();
+
+                                        newDay = Integer.parseInt(originalDay);
+                                        //incrementing month
+                                        if ((newMonth == 2 || newMonth == 4 || newMonth == 7
+                                                || newMonth == 9) && newDay == 31) {
                                             newDay = 30;
                                             newMonth++;
-                                        } else if ((newMonth == 11) && (newDay == 31)) {
+                                        } else if (newMonth == 11/* && (newDay == 31)*/) {
                                             newMonth = 0;
                                             newYear++;
-                                        } else if (newMonth == 1 && (newDay > 28)
-                                                && (newYear % 4 != 0)) {
+                                        } else if (newMonth == 0
+                                                && newDay > 28 && newYear % 4 != 0) {
                                             newDay = 28;
                                             newMonth++;
-                                        } else if ((newMonth == 1) && (newDay > 29)
-                                                && (newYear % 4 == 0)) {
-                                            newDay = 28;
+                                        } else if (newMonth == 0
+                                                && newDay > 29 && newYear % 4 == 0) {
+                                            newDay = 29;
+                                            newMonth++;
+                                        }else{
                                             newMonth++;
                                         }
 
@@ -3620,6 +3702,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.db.updateOverdue(String.valueOf(
                                             MainActivity.sortedIDs.get(position)), false);
+
+                                    MainActivity.db.updateManualKill(MainActivity.sortedIDs.get(position), true);
 
                                     MainActivity.taskPropertiesShowing = false;
 
@@ -3830,7 +3914,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.taskPropertiesShowing = false;
 
-                                    Log.i(TAG, "Update killed three");
                                     if(!finalDbOverdue) {
                                         MainActivity.db.updateKilled(String.valueOf(
                                                 MainActivity.sortedIDs.get(
@@ -3878,6 +3961,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                             MainActivity.alertIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
 
+                                    Log.i(TAG, "Here two");
                                     MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                                     MainActivity.add.setVisibility(View.VISIBLE);
@@ -4627,7 +4711,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.taskPropertiesShowing = false;
 
-                        Log.i(TAG, "Update killed four");
                         if(!finalDbOverdue) {
                             MainActivity.db.updateKilled(String.valueOf(
                                     MainActivity.sortedIDs.get(MainActivity.activeTask)), true);
@@ -4680,6 +4763,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         }
 
+                        Log.i(TAG, "Here three");
                         MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                         MainActivity.add.setVisibility(View.VISIBLE);
@@ -4891,7 +4975,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
 //                            Calendar newCalendar = Calendar.getInstance();
 //                            newCalendar.setTimeInMillis(Long.parseLong(String.valueOf(newStamp) + "000"));
-//                            Log.i(TAG, "month: " + newCalendar.get(Calendar.MONTH) + " day: " + newCalendar.get(Calendar.DAY_OF_MONTH));
 
                             MainActivity.db.updateManualKill(String.valueOf(
                                     MainActivity.sortedIDs.get(position)),true);
@@ -4935,8 +5018,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         }
 
-//                        Log.i(TAG, "Timestamp: " + futureStamp);
-
                         //updating timestamp
 //                        MainActivity.db.updateTimestamp(String.valueOf(
 //                                MainActivity.sortedIDs.get(position)),
@@ -4952,7 +5033,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.db.updateManualKill(String.valueOf(
                                 MainActivity.sortedIDs.get(position)), true);
 
-                        Log.i(TAG, "Update killed five");
                         if(!finalDbOverdue) {
                             MainActivity.db.updateKilledEarly(String.valueOf(
                                     MainActivity.sortedIDs.get(position)), true);
@@ -5560,7 +5640,6 @@ class MyAdapter extends ArrayAdapter<String> {
 ////                final Runnable r = new Runnable() {
 ////                    public void run() {
 ////                        notifyDataSetChanged();
-////                        Log.i(TAG, "I'm in here");
 ////                    }
 ////                };
 //
@@ -5632,6 +5711,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //
 //         }else {
 
+        Log.i(TAG, "Here four");
              MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
              Calendar calendar = Calendar.getInstance();
@@ -5887,6 +5967,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                  PendingIntent.FLAG_UPDATE_CURRENT);
                      }
 
+                 Log.i(TAG, "Here five");
                      MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
 
@@ -5943,7 +6024,6 @@ class MyAdapter extends ArrayAdapter<String> {
 //                final Runnable r = new Runnable() {
 //                    public void run() {
 //                        notifyDataSetChanged();
-//                        Log.i(TAG, "I'm in here");
 //                    }
 //                };
 

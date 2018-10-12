@@ -1251,7 +1251,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
         if(absListView.getId() == R.id.theListView) {
-//            Log.i(TAG, "I'm in here");
+
         }
     }
 
@@ -1321,6 +1321,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         db.deleteSnoozeData(String.valueOf(sortedIDs.get(position)));
         db.deleteAllSubtaskData(String.valueOf(sortedIDs.get(position)));
 
+        Log.i(TAG, "Here one");
         //Cancel notification alarms if one is set
         alarmManager.cancel(pendIntent.getService(this,
                 Integer.parseInt(sortedIDs.get(position)), alertIntent, 0));
@@ -1456,7 +1457,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             handler.postDelayed(runnable, 500);
         }
 
-        Log.i(TAG, "Update killed one");
         //marks task as not killed in database
         db.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
 
@@ -2139,8 +2139,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 ////                    }
 ////                    alarmResult.close();
 ////
-////                    Log.i(TAG, "Alarm Data\nyear: " + alarmYear + " month: " + alarmMonth + " day: " + alarmDay + " hour: " + alarmHour + " minute: " + alarmMinute + " ampm: " + alarmAmpm);
-////
 ////                    Calendar alarmCalendar = Calendar.getInstance();
 ////                    alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp) + "000") - AlarmManager.INTERVAL_DAY);
 ////
@@ -2309,13 +2307,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     MainActivity.alertIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
+            Log.i(TAG, "Here two");
             MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
             if(dbRepeat && !dbSnooze){
 
                 if(!dbOverdue){
 
-                    Log.i(TAG, "Update killed two");
                     db.updateKilledEarly(MainActivity.sortedIDs.get(thePosition),true);
 
                 }
@@ -2326,6 +2324,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
+                Log.i(TAG, "Here three");
                 MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
                 if(dbRepeatInterval.equals("day")){
@@ -3099,12 +3098,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         }
 
-//        Log.i(TAG, "I'm in here: " + taskListSize);
-//
 //        int k = 0;
 //        int j = 0;
 //        while(k < taskListSize){
-//            Log.i(TAG, "I'm in here. j: " + j + " k: " + k);
 //            Cursor sortedIdsResult = db.getData(j);
 //            while (sortedIdsResult.moveToNext()){
 //                tempSortedIDs.add(sortedIdsResult.getInt(16));
@@ -3114,8 +3110,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //            sortedIdsResult.close();
 //        }
 //
-//        Log.i(TAG, "tempSortedIds: " + tempSortedIDs);
-
         Collections.sort(tempSortedIDs);
 
         for(int i = 0; i < taskListSize; i ++){
