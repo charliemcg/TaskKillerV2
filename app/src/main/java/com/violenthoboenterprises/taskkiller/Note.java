@@ -113,7 +113,7 @@ public class Note extends MainActivity {
             @Override
             public void onClick(View v) {
 
-                submit(true);
+                submit();
 
             }
 
@@ -154,7 +154,7 @@ public class Note extends MainActivity {
 
     }
 
-    private void submit(boolean dark) {
+    private void submit() {
 
         //Keyboard is inactive without this line
         noteEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
@@ -242,7 +242,8 @@ public class Note extends MainActivity {
                                                     trashNote.setVisible(true);
 
                                                     //Hide keyboard
-                                                    keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                                                    keyboard.toggleSoftInput(InputMethodManager
+                                                            .HIDE_IMPLICIT_ONLY, 0);
 
                                                 }
                                             };
@@ -289,63 +290,61 @@ public class Note extends MainActivity {
 
         //Resetting alarm to off
         //TODO find out if return statements are necessary
-        //noinspection SimplifiableIfStatement
         if (id == R.id.killNoteItem) {
 
-        final Handler handler = new Handler();
+            final Handler handler = new Handler();
 
-        final Runnable runnable = new Runnable() {
-            public void run() {
+            final Runnable runnable = new Runnable() {
+                public void run() {
 
-                trashNote.setVisible(false);
-                trashNoteOpen.setVisible(true);
+                    trashNote.setVisible(false);
+                    trashNoteOpen.setVisible(true);
 
-                vibrate.vibrate(50);
+                    vibrate.vibrate(50);
 
-                if(!mute) {
-                    trash.start();
-                }
-
-                final Handler handler2 = new Handler();
-                final Runnable runnable2 = new Runnable(){
-                    public void run(){
-                        trashNote.setVisible(true);
-                        trashNoteOpen.setVisible(false);
-                        final Handler handler3 = new Handler();
-                        final Runnable runnable3 = new Runnable() {
-                            @Override
-                            public void run() {
-                                trashNote.setVisible(false);
-                                Cursor result = db.getData(Integer.parseInt(
-                                        MainActivity.sortedIdsForNote.get(activeTask)));
-                                while(result.moveToNext()){
-                                    checklistExists = (result.getInt(2) == 1);
-                                }
-                                result.close();
-
-                                //setting note in database to nothing
-                                db.updateData(MainActivity.sortedIdsForNote
-                                        .get(activeTask), "", checklistExists);
-
-                                noteTextView.setText("");
-
-                                //show add button
-                                noteEditText.setVisibility(View.VISIBLE);
-                                submitNoteBtnDark.setVisibility(View.VISIBLE);
-                            }
-                        };
-                        handler3.postDelayed(runnable3, 100);
+                    if(!mute) {
+                        trash.start();
                     }
-                };
-                handler2.postDelayed(runnable2, 100);
-            }
-        };
 
-        handler.postDelayed(runnable, 100);
+                    final Handler handler2 = new Handler();
+                    final Runnable runnable2 = new Runnable(){
+                        public void run(){
 
+                            trashNote.setVisible(true);
+                            trashNoteOpen.setVisible(false);
+                            final Handler handler3 = new Handler();
+                            final Runnable runnable3 = new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    trashNote.setVisible(false);
+                                    Cursor result = db.getData(Integer.parseInt(
+                                            MainActivity.sortedIdsForNote.get(activeTask)));
+                                    while(result.moveToNext()){
+                                        checklistExists = (result.getInt(2) == 1);
+                                    }
+                                    result.close();
+
+                                    //setting note in database to nothing
+                                    db.updateData(MainActivity.sortedIdsForNote
+                                            .get(activeTask), "", checklistExists);
+
+                                    noteTextView.setText("");
+
+                                    //show add button
+                                    noteEditText.setVisibility(View.VISIBLE);
+                                    submitNoteBtnDark.setVisibility(View.VISIBLE);
+                                }
+                            };
+                            handler3.postDelayed(runnable3, 100);
+                        }
+                    };
+                    handler2.postDelayed(runnable2, 100);
+                }
+            };
+            handler.postDelayed(runnable, 100);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

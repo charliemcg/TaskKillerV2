@@ -49,7 +49,8 @@ public class SetDue extends MainActivity {
     LinearLayout timeButton;
     static LinearLayout darkRepeat;
     LinearLayout lightRepeat;
-    static ImageView time, timeFadedDark, timeFadedLight, calendar, calendarFadedDark, calendarFadedLight;
+    static ImageView time, timeFadedDark, timeFadedLight, calendar,
+            calendarFadedDark, calendarFadedLight;
     ImageView dailyDark, weeklyDark, monthlyDark, cancelRepeatDark,
             dailyLight, weeklyLight, monthlyLight, cancelRepeatLight;
     View pickerRoot;
@@ -450,7 +451,6 @@ public class SetDue extends MainActivity {
                 setDue = true;
 
                 killAlarm.setVisible(true);
-//                dueToolbar.getMenu().getItem(0).setVisible(true);
 
             }
 
@@ -538,7 +538,9 @@ public class SetDue extends MainActivity {
                 setDue = false;
 
                 if(!timePicked && !datePicked) {
+
                     killAlarm.setVisible(false);
+
                 }
 
             }
@@ -567,7 +569,9 @@ public class SetDue extends MainActivity {
                 setDue = false;
 
                 if(!timePicked && !datePicked) {
+
                     killAlarm.setVisible(false);
+
                 }
 
             }
@@ -603,7 +607,6 @@ public class SetDue extends MainActivity {
 
         //Resetting alarm to off
         //TODO find out if return statements are necessary
-        //noinspection SimplifiableIfStatement
         if ((id == R.id.killAlarmItem) && (timePicked || datePicked || !repeat.equals("none"))) {
 
             final Handler handler = new Handler();
@@ -666,10 +669,11 @@ public class SetDue extends MainActivity {
 
                                     alarmManager.cancel(MainActivity.pendIntent);
 
-                                    db.updateAlarmData(dbTaskId,
-                                            "", "", "", "", "", "");
+                                    db.updateAlarmData(dbTaskId, "", "", "",
+                                            "", "", "");
 
-                                    db.updateSnoozeData(dbTaskId, "", "", "", "", "", "");
+                                    db.updateSnoozeData(dbTaskId, "", "", "",
+                                            "", "", "");
 
                                     setDue = false;
                                     datePicked = false;
@@ -699,15 +703,23 @@ public class SetDue extends MainActivity {
                                     }
 
                                     if(!lightDark) {
-                                        cancelRepeatDark.setBackgroundColor(Color.parseColor(highlight));
-                                        dailyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
-                                        weeklyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
-                                        monthlyDark.setBackgroundColor(Color.parseColor("#AAAAAA"));
+                                        cancelRepeatDark.setBackgroundColor
+                                                (Color.parseColor(highlight));
+                                        dailyDark.setBackgroundColor
+                                                (Color.parseColor("#AAAAAA"));
+                                        weeklyDark.setBackgroundColor
+                                                (Color.parseColor("#AAAAAA"));
+                                        monthlyDark.setBackgroundColor
+                                                (Color.parseColor("#AAAAAA"));
                                     }else{
-                                        cancelRepeatLight.setBackgroundColor(Color.parseColor(highlight));
-                                        dailyLight.setBackgroundColor(Color.parseColor("#000000"));
-                                        weeklyLight.setBackgroundColor(Color.parseColor("#000000"));
-                                        monthlyLight.setBackgroundColor(Color.parseColor("#000000"));
+                                        cancelRepeatLight.setBackgroundColor
+                                                (Color.parseColor(highlight));
+                                        dailyLight.setBackgroundColor
+                                                (Color.parseColor("#000000"));
+                                        weeklyLight.setBackgroundColor
+                                                (Color.parseColor("#000000"));
+                                        monthlyLight.setBackgroundColor
+                                                (Color.parseColor("#000000"));
                                     }
 
                                 }
@@ -727,7 +739,8 @@ public class SetDue extends MainActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class DatePickerDialogFrag extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+    public static class DatePickerDialogFrag extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener{
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -791,7 +804,8 @@ public class SetDue extends MainActivity {
                         AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, this, year, month, day);
             }
 
-            //Make so all previous dates are inactive. User shouldn't be able to set due date to in the past
+            //Make so all previous dates are inactive.
+            // User shouldn't be able to set due date to in the past
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
             return datePickerDialog;
@@ -1007,20 +1021,26 @@ public class SetDue extends MainActivity {
 
             //Initialising time picker based on light or dark
             if(!lightDark) {
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if(getResources().getConfiguration().orientation
+                        == Configuration.ORIENTATION_LANDSCAPE) {
                     timePickerDialog = new TimePickerDialog(this.getActivity(),
-                            AlertDialog.THEME_HOLO_DARK, this, defaultTimePickerHour, minute, false);
+                            AlertDialog.THEME_HOLO_DARK, this,
+                            defaultTimePickerHour, minute, false);
                 }else{
                     timePickerDialog = new TimePickerDialog(this.getActivity(),
-                            AlertDialog.THEME_DEVICE_DEFAULT_DARK, this, defaultTimePickerHour, minute, false);
+                            AlertDialog.THEME_DEVICE_DEFAULT_DARK, this,
+                            defaultTimePickerHour, minute, false);
                 }
             }else{
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if(getResources().getConfiguration().orientation
+                        == Configuration.ORIENTATION_LANDSCAPE) {
                     timePickerDialog = new TimePickerDialog(this.getActivity(),
-                            AlertDialog.THEME_HOLO_LIGHT, this, defaultTimePickerHour, minute, false);
+                            AlertDialog.THEME_HOLO_LIGHT, this,
+                            defaultTimePickerHour, minute, false);
                 }else {
                     timePickerDialog = new TimePickerDialog(getActivity(),
-                            AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, this, defaultTimePickerHour, minute, false);
+                            AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
+                            this, defaultTimePickerHour, minute, false);
                 }
             }
 

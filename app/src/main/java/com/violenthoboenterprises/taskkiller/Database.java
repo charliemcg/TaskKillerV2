@@ -393,14 +393,6 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-//    public boolean updateChecklistExist(String id, Boolean checklist){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues content = new ContentValues();
-//        content.put(COL3, checklist);
-//        db.update(TABLE, content, "ID = ?", new String[] {id});
-//        return true;
-//    }
-
     public boolean updateDue(String id, Boolean due){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
@@ -416,14 +408,6 @@ public class Database extends SQLiteOpenHelper {
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
-
-//    public boolean removeTimestamp(String id){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues content = new ContentValues();
-//        content.put(COL4, 0);
-//        db.update(TABLE, content, "ID = ?", new String[] {id});
-//        return true;
-//    }
 
     public boolean updateKilled(String id, Boolean killed){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -448,14 +432,6 @@ public class Database extends SQLiteOpenHelper {
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
-
-//    public boolean updateAlarmData(String id, Date time){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues content = new ContentValues();
-//        content.put(COL4, String.valueOf(time));
-//        db.update(TABLE, content, "ID = ?", new String[] {id});
-//        return true;
-//    }
 
     //TODO why do all these methods return a boolean? can they be void?
     public boolean updateTimestamp(String id, String timestamp){
@@ -556,14 +532,6 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-//    public boolean updateSnoozeTimestamp(String id, String stamp){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues content = new ContentValues();
-//        content.put(COL16, stamp);
-//        db.update(TABLE, content, "ID = ?", new String[] {id});
-//        return true;
-//    }
-
     public boolean updateAlarmData(String id, String hour, String minute, String ampm,
                                    String day, String month, String year){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -593,15 +561,6 @@ public class Database extends SQLiteOpenHelper {
         db.update(STABLE, content, "ID = ?", new String[] {id});
         return true;
     }
-
-//    public boolean updateAfterDelete(String id, String note){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues content= new ContentValues();
-//        content.put(COL1, id);
-//        content.put(COL2, note);
-//        db.update(TABLE, content, "NOTE = ?", new String[] {note});
-//        return true;
-//    }
 
     public boolean updateMute(Boolean mute){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -858,15 +817,6 @@ public class Database extends SQLiteOpenHelper {
         content.put(CCOL4, killed);
         db.update(CTABLE, content, "ID = ? AND SUBTASKID = ?",
                 new String[] {id, subtask});
-        return true;
-    }
-
-    public boolean addChecklist(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content= new ContentValues();
-        content.put(COL1, id);
-        content.put(COL3, true);
-        db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }
 

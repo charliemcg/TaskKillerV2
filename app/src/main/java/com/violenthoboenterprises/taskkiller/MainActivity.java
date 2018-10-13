@@ -536,12 +536,10 @@ public class MainActivity extends AppCompatActivity implements
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
 
-                int i = position;
-
                 //checking if task has been killed
                 Boolean killed = false;
                 Cursor result = db.getData(Integer
-                        .parseInt(sortedIDs.get(i)));
+                        .parseInt(sortedIDs.get(position)));
                 while (result.moveToNext()) {
                     killed = result.getInt(6) > 0;
                 }
@@ -552,12 +550,12 @@ public class MainActivity extends AppCompatActivity implements
 
                     longClicked = true;
 
-                    rename(i);
+                    rename(position);
 
                 //long click reinstates task that is crossed out
                 } else if (tasksAreClickable && killed && !taskPropertiesShowing) {
 
-                    reinstate(i);
+                    reinstate(position);
 
                 }
 
@@ -788,10 +786,10 @@ public class MainActivity extends AppCompatActivity implements
                                 Integer.parseInt(sortedIDs.get(taskList.size() - 1)),
                                 String.valueOf(timeNow.getTimeInMillis() / 1000));
                         db.insertAlarmData(Integer.parseInt(sortedIDs
-                                        .get(taskList.size()/*Size*/ - 1)), "", "",
+                                        .get(taskList.size() - 1)), "", "",
                                 "", "", "", "");
                         db.insertSnoozeData(Integer.parseInt(sortedIDs
-                                        .get(taskList.size()/*Size*/ - 1)), "", "",
+                                        .get(taskList.size() - 1)), "", "",
                                 "", "", "", "");
 
                         showDueDates = false;
@@ -1083,7 +1081,7 @@ public class MainActivity extends AppCompatActivity implements
         vibrate.vibrate(50);
 
         //TODO find out if return statements are necessary
-        //noinspection SimplifiableIfStatement
+        //Actions to occur if user selects 'mute'
         if (id == R.id.mute) {
 
             if(mute){
@@ -1097,6 +1095,7 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             return true;
+            //Actions to occur if user selects 'light mode'
         } else if (id == R.id.lightDark) {
 
             if (lightDark) {
@@ -1112,6 +1111,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             noTasksLeft();
             return true;
+            //Actions to occur if user selects 'color'
         } else if (id == R.id.highlight) {
 
             int colorPickerTheme;
@@ -1171,6 +1171,7 @@ public class MainActivity extends AppCompatActivity implements
                     .show();
 
             return true;
+            //Actions to occur if user selects the pro icon
         } else if (id == R.id.buy) {
 
             purchasesShowing = true;
@@ -1198,6 +1199,7 @@ public class MainActivity extends AppCompatActivity implements
 
             return true;
 
+            //Actions to occur if user selects 'cycle colors'
         } else if (id == R.id.autoColor) {
 
             if(colorCyclingAllowed){
@@ -1239,6 +1241,7 @@ public class MainActivity extends AppCompatActivity implements
             return true;
 
         }
+        //Actions to occur if user selects 'motivation'
         else if (id == R.id.motivation) {
 
             if(showMotivation){
@@ -1293,6 +1296,27 @@ public class MainActivity extends AppCompatActivity implements
                     addIcon.setLayoutParams(iconParams);
                 }
         }
+
+        if(absListView.getId() == R.id.theListView){
+
+            if((first + visible) == total && visible != total)
+            {
+                //Removes add button so as to not cover the last item
+                params.height = 0;
+                iconParams.height = 0;
+
+                add.setLayoutParams(params);
+                addIcon.setLayoutParams(iconParams);
+
+            }else{
+                //Returns the 'add' button
+                params.height = addHeight;
+                iconParams.height = addIconHeight;
+
+                add.setLayoutParams(params);
+                addIcon.setLayoutParams(iconParams);
+            }
+        }
     }
 
     //Shows table results for debugging purposes//
@@ -1335,7 +1359,7 @@ public class MainActivity extends AppCompatActivity implements
         Boolean checklist;
 
         //Getting existing data before going to Database class to change ids.
-        for(int i = (activeTask + 1); i < taskList.size()/*Size*/; i++){
+        for(int i = (activeTask + 1); i < taskList.size(); i++){
             result = db.getData(Integer.parseInt(sortedIDs.get(i)));
             id = "";
             note = "";
@@ -1513,8 +1537,8 @@ public class MainActivity extends AppCompatActivity implements
         ArrayList<String> tempTaskList = new ArrayList<>();
         ArrayList<String> tempKilledIdsList = new ArrayList<>();
         ArrayList<String> tempKilledTaskList = new ArrayList<>();
-        ArrayList<String> tempDueIdsList = new ArrayList<>();
-        ArrayList<String> tempDueTaskList = new ArrayList<>();
+//        ArrayList<String> tempDueIdsList = new ArrayList<>();
+//        ArrayList<String> tempDueTaskList = new ArrayList<>();
 
         //getting tasks which have no due date
         for(int i = 0; i < MainActivity.taskList.size(); i++){
@@ -1542,8 +1566,8 @@ public class MainActivity extends AppCompatActivity implements
                 tempKilledIdsList.add(String.valueOf(dbId));
                 tempKilledTaskList.add(dbTask);
             }else {
-                tempDueIdsList.add(String.valueOf(dbId));
-                tempDueTaskList.add(dbTask);
+//                tempDueIdsList.add(String.valueOf(dbId));
+//                tempDueTaskList.add(dbTask);
             }
 
         }
@@ -1668,21 +1692,21 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onGlobalLayout() {
 
-                        if (getResources().getConfiguration().orientation == 1) {
-
-                            portraitKeyboardMeasure = /*heightDiff*/activityRootView.getRootView()
-                                    .getHeight() / 2.4;
-                            landscapeKeyboardMeasure = activityRootView.getRootView()
-                                    .getWidth() / 13.7945205479452054794;
-
-                        } else if (getResources().getConfiguration().orientation == 2) {
-
-                            landscapeKeyboardMeasure = /*heightDiff*/activityRootView
-                                    .getHeight() / 13.7945205479452054794;
-                            portraitKeyboardMeasure = activityRootView.getRootView()
-                                    .getRootView().getWidth() / 2.4;
-
-                        }
+//                        if (getResources().getConfiguration().orientation == 1) {
+//
+//                            portraitKeyboardMeasure = /*heightDiff*/activityRootView.getRootView()
+//                                    .getHeight() / 2.4;
+//                            landscapeKeyboardMeasure = activityRootView.getRootView()
+//                                    .getWidth() / 13.7945205479452054794;
+//
+//                        } else if (getResources().getConfiguration().orientation == 2) {
+//
+//                            landscapeKeyboardMeasure = /*heightDiff*/activityRootView
+//                                    .getHeight() / 13.7945205479452054794;
+//                            portraitKeyboardMeasure = activityRootView.getRootView()
+//                                    .getRootView().getWidth() / 2.4;
+//
+//                        }
 
                         Rect screen = new Rect();
 
@@ -1841,6 +1865,7 @@ public class MainActivity extends AppCompatActivity implements
             theListView.setAdapter(theAdapter[0]);
     }
 
+    //actions to occur if user clicks the complete check box
     public void complete(View view) {
 
         if(tasksAreClickable && !MainActivity.blockSoundAndAnimate) {
@@ -1883,12 +1908,12 @@ public class MainActivity extends AppCompatActivity implements
             db.updateManualKill(String.valueOf(
                     MainActivity.sortedIDs.get(thePosition)), true);
 
-                db.updateOverdue(String.valueOf(thePosition), false);
-                //cancelling any snooze data
-                MainActivity.db.updateSnoozeData(String.valueOf(
-                        MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                        "", "", "", "", "", "");
-                db.updateSnooze(String.valueOf(thePosition), false);
+            db.updateOverdue(String.valueOf(thePosition), false);
+            //cancelling any snooze data
+            MainActivity.db.updateSnoozeData(String.valueOf(
+                    MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                    "", "", "", "", "", "");
+            db.updateSnooze(String.valueOf(thePosition), false);
 
             MainActivity.pendIntent = PendingIntent.getBroadcast(
                     this, Integer.parseInt(
@@ -2145,21 +2170,6 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-//    private void setHighlight(String s) {
-//
-//        vibrate.vibrate(50);
-//
-//        db.updateHighlight(s);
-//        highlight = s;
-//        toolbarDark.setTitleTextColor(Color.parseColor(s));
-//        toolbarLight.setTitleTextColor(Color.parseColor(s));
-//        addIcon.setTextColor(Color.parseColor(s));
-//        taskNameEditText.setBackgroundColor(Color.parseColor(s));
-//        setDividers(lightDark);
-//        toast.setBackgroundColor(Color.parseColor(highlight));
-//        colorPickerShowing();
-//    }
-
     private void setDividers(boolean lightDark) {
         if(!lightDark) {
             int[] colors = {0, Integer.parseInt(highlightDec), 0};
@@ -2167,7 +2177,8 @@ public class MainActivity extends AppCompatActivity implements
                     (GradientDrawable.Orientation.RIGHT_LEFT, colors));
             theListView.setDividerHeight(1);
         }else{
-            int[] colors = {Color.parseColor("#FFFFFF"), Integer.parseInt(highlightDec), Color.parseColor("#FFFFFF")};
+            int[] colors = {Color.parseColor("#FFFFFF"), Integer.parseInt(highlightDec),
+                    Color.parseColor("#FFFFFF")};
             theListView.setDivider(new GradientDrawable
                     (GradientDrawable.Orientation.RIGHT_LEFT, colors));
             theListView.setDividerHeight(3);
@@ -2193,7 +2204,9 @@ public class MainActivity extends AppCompatActivity implements
 
         final Runnable runnable = new Runnable() {
             public void run() {
+
                 purchases.setVisibility(View.VISIBLE);
+
             }
         };
 

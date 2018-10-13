@@ -13,23 +13,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class AlertReceiver extends BroadcastReceiver {
 
@@ -81,56 +67,58 @@ public class AlertReceiver extends BroadcastReceiver {
 
         if(MainActivity.lightDark) {
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_light);
-            remoteViews.setTextViewText(R.id.notif_title, /*msg*/dbTask);
+            remoteViews.setTextViewText(R.id.notif_title, dbTask);
         }else{
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification);
-            remoteViews.setTextViewText(R.id.notif_title, /*msg*/dbTask);
+            remoteViews.setTextViewText(R.id.notif_title, dbTask);
         }
 
-        final int NOTIFICATION_ID = 1;
-        final String NOTIFICATION_CHANNEL_ID = "my_notification_channel";
+        //Setting up notification channel for Oreo
+        final String notificChannelId = "notification_channel";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID, "My Notifications",
+                    notificChannelId, "notifications",
                     NotificationManager.IMPORTANCE_DEFAULT);
 
-            // Configure the notification channel.
-            notificationChannel.setDescription("Channel description");
+            notificationChannel.setDescription("Notifications about due being due");
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Integer.parseInt(MainActivity.highlightDec));
             notificationChannel.enableVibration(true);
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
-        //intent to execute when notification is clicked
-        builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+        //Building the notification
+        builder = new NotificationCompat.Builder(context, notificChannelId)
                 .setSmallIcon(R.drawable.small_notific_icon).setLargeIcon(BitmapFactory
                         .decodeResource(context.getResources(), R.drawable.ic_launcher_og))
-                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert).setWhen(0)
-                .setContentText(/*msg*/dbTask).setStyle(new NotificationCompat.BigTextStyle());
-
-        //Sets background of small icon
-        builder.setColorized(true).setColor(Color.parseColor(MainActivity.highlight));
-        builder.setCustomContentView(remoteViews);
-        builder.setLights(Integer.parseInt(MainActivity.highlightDec), 500, 500);
-        //use phone's default notification sound
-        builder.setDefaults(NotificationCompat.DEFAULT_SOUND);
-        //ensure app is opened when notification is clicked
-        builder.setContentIntent(notificIntent);
-        //cancels the notification when clicked
-        builder.setAutoCancel(true);
+                .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
+                .setWhen(0).setContentText(dbTask).setStyle(new NotificationCompat.BigTextStyle())
+                .setColorized(true).setColor(Color.parseColor(MainActivity.highlight))
+                .setCustomContentView(remoteViews).setLights(Integer.parseInt
+                        (MainActivity.highlightDec), 500, 500).setDefaults
+                        (NotificationCompat.DEFAULT_SOUND).setContentIntent(notificIntent)
+                .setAutoCancel(true);
 
         if(!dbRepeat){
+
             notificationManager.notify(1, builder.build());
+
+        //need to set up next notification for repeating task
         } else {
 
+            //don't inform user that task is due if they marked it as done
             if(!dbKilledEarly){
+
                 notificationManager.notify(1, builder.build());
+
             }else{
+
                 MainActivity.db.updateKilledEarly(String.valueOf(
                         MainActivity.sortedIDs.get(broadId)), false);
+
             }
 
+            //snoozed notifications cannot corrupt regular repeating notifications
             if(dbRepeatInterval.equals("day") && !dbSnoozed){
 
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
@@ -173,6 +161,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 alarmCalendar.setTimeInMillis(Long.parseLong
                         (String.valueOf(futureStamp) + "000") - AlarmManager.INTERVAL_DAY);
 
+                //alarm data is already updated if user marked task as done
                 if(!dbManualKill){
 
                     //updating due date in database
@@ -233,6 +222,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp)
                         + "000") - (AlarmManager.INTERVAL_DAY * 7));
 
+                //alarm data is already updated if user marked task as done
                 if(!dbManualKill){
 
                     //updating due date in database
@@ -252,16 +242,12 @@ public class AlertReceiver extends BroadcastReceiver {
 
             }else if(dbRepeatInterval.equals("month") && !dbSnoozed){
 
-                Calendar currentCal = Calendar.getInstance();
-                int currentYear = currentCal.get(Calendar.YEAR);
-                int currentMonth = currentCal.get(Calendar.MONTH);
-                int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
-
                 //Getting interval in seconds based on specific day and month
+                Calendar currentCal = Calendar.getInstance();
                 int interval = 0;
-                int theYear = currentYear;
-                int theMonth = currentMonth;
-                int theDay = currentDay;
+                int theYear = currentCal.get(Calendar.YEAR);
+                int theMonth = currentCal.get(Calendar.MONTH);
+                int theDay = currentCal.get(Calendar.DAY_OF_MONTH);
                 //Month January and day is 29 non leap year 2592000
                 if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
                     interval = 2592000;
@@ -337,13 +323,13 @@ public class AlertReceiver extends BroadcastReceiver {
                     }else if(month == 2 && (day == 28 || day == 29 || day == 30)){
                         daysOut = Integer.parseInt(originalDay) - day;
                         futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-                    }else if(month == 3 && (day == 28 || day == 29/* || day == 30*/)){
+                    }else if(month == 3 && (day == 28 || day == 29)){
                         daysOut = Integer.parseInt(originalDay) - day;
                         futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                     }else if(month == 4 && (day == 28 || day == 29 || day == 30)){
                         daysOut = Integer.parseInt(originalDay) - day;
                         futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-                    }else if(month == 5 && (day == 28 || day == 29/* || day == 30*/)){
+                    }else if(month == 5 && (day == 28 || day == 29)){
                         daysOut = Integer.parseInt(originalDay) - day;
                         futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                     }else if(month == 6 && (day == 28 || day == 29 || day == 30)){
@@ -352,13 +338,13 @@ public class AlertReceiver extends BroadcastReceiver {
                     }else if(month == 7 && (day == 28 || day == 29 || day == 30)){
                         daysOut = Integer.parseInt(originalDay) - day;
                         futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-                    }else if(month == 8 && (day == 28 || day == 29/* || day == 30*/)){
+                    }else if(month == 8 && (day == 28 || day == 29)){
                         daysOut = Integer.parseInt(originalDay) - day;
                         futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                     }else if(month == 9 && (day == 28 || day == 29 || day == 30)){
                         daysOut = Integer.parseInt(originalDay) - day;
                         futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-                    }else if(month == 10 && (day == 28 || day == 29/* || day == 30*/)){
+                    }else if(month == 10 && (day == 28 || day == 29)){
                         daysOut = Integer.parseInt(originalDay) - day;
                         futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
                     }else if(month == 11 && (day == 28 || day == 29 || day == 30)){
@@ -392,6 +378,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 Calendar alarmCalendar = Calendar.getInstance();
                 alarmCalendar.setTimeInMillis(Long.parseLong(oldStamp));
 
+                //alarm data is already updated if user marked task as done
                 if(!dbManualKill){
 
                     //updating due date in database
@@ -411,7 +398,5 @@ public class AlertReceiver extends BroadcastReceiver {
 
             }
         }
-
     }
-
 }

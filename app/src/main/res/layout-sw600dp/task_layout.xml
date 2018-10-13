@@ -14,7 +14,7 @@
         android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:descendantFocusability="blocksDescendants"><!--TODO is this going to block the ad?-->
+        android:descendantFocusability="blocksDescendants">
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
@@ -23,7 +23,6 @@
             ads:adSize="SMART_BANNER"
             ads:adUnitId="@string/banner_ad_unit_id"
             android:visibility="gone"/>
-            <!--dimensions are 468 x 60-->
 
         <ImageView
             android:id="@+id/banner"

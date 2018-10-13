@@ -46,7 +46,6 @@ public class Checklist extends MainActivity {
     static boolean fadeSubTasks;
     static boolean noteExists;
     static View checklistRootView;
-    private int heightDiff;
     static int renameMe;
     private static String TAG;
     private Toolbar subTasksToolbar;
@@ -355,15 +354,9 @@ public class Checklist extends MainActivity {
             @Override
             public void onGlobalLayout() {
 
-                heightDiff = checklistRootView.getRootView().getHeight();
-
                 Rect screen = new Rect();
 
                 checklistRootView.getWindowVisibleDisplayFrame(screen);
-
-                //Screen pixel values are used to determine how much of the screen is visible
-                heightDiff = checklistRootView.getRootView().getHeight() -
-                        (screen.bottom - screen.top);
 
                 if(screen.bottom != deviceheight){
 
