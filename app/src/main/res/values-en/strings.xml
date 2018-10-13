@@ -34,7 +34,7 @@
     <string name="removeAds">Remove Ads</string>
     <string name="permanentlyRemoveAds">Permanently remove all ads.</string>
     <string name="getReminders">Get Reminders</string>
-    <string name="setUnlimitedDueDates">Set unlimited due dates and get notifications on your phone.</string>
+    <string name="setUnlimitedDueDates">Set unlimited due dates and get notifications on your device.</string>
     <string name="cycleColors">Cycle Colours</string>
     <string name="featureColorSlowly">The feature colour will change several times a day.</string>
     <string name="unlockAll">Unlock All</string>
@@ -73,5 +73,6 @@
     <string name="cycleColorsAuto">Cycle Colours Automatically</string>
     <string name="soundFX">Sound FX</string>
     <string name="motivation">Motivation</string>
+    <string name="somethingWentWrong">Something went wrong</string>
 
 </resources>

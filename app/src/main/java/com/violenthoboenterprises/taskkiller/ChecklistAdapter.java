@@ -188,6 +188,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
                 (screen.bottom - screen.top);
 
+        //TODO check hardcoded pixel values
         if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
                 .getConfiguration().orientation == 1)) {
 

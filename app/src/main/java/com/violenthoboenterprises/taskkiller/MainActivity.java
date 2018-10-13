@@ -1273,34 +1273,33 @@ public class MainActivity extends AppCompatActivity implements
                          final int visible, final int total)
     {
 
-        //TODO refactor this code
-        switch(absListView.getId())
-        {
-            case R.id.theListView:
-
-                if((first + visible) == total && visible != total)
-                {
-                    //Removes add button so as to not cover the last item
-                    params.height = 0;
-                    iconParams.height = 0;
-
-                    add.setLayoutParams(params);
-                    addIcon.setLayoutParams(iconParams);
-
-                }else{
-                    //Returns the 'add' button
-                    params.height = addHeight;
-                    iconParams.height = addIconHeight;
-
-                    add.setLayoutParams(params);
-                    addIcon.setLayoutParams(iconParams);
-                }
-        }
+//        switch(absListView.getId())
+//        {
+//            case R.id.theListView:
+//
+//                if((first + visible) == total && visible != total)
+//                {
+//                    //Removes add button so as to not cover the last item
+//                    params.height = 0;
+//                    iconParams.height = 0;
+//
+//                    add.setLayoutParams(params);
+//                    addIcon.setLayoutParams(iconParams);
+//
+//                }else{
+//                    //Returns the 'add' button
+//                    params.height = addHeight;
+//                    iconParams.height = addIconHeight;
+//
+//                    add.setLayoutParams(params);
+//                    addIcon.setLayoutParams(iconParams);
+//                }
+//        }
 
         if(absListView.getId() == R.id.theListView){
 
-            if((first + visible) == total && visible != total)
-            {
+            if((first + visible) == total && visible != total){
+
                 //Removes add button so as to not cover the last item
                 params.height = 0;
                 iconParams.height = 0;
@@ -1308,13 +1307,15 @@ public class MainActivity extends AppCompatActivity implements
                 add.setLayoutParams(params);
                 addIcon.setLayoutParams(iconParams);
 
-            }else{
+            }else if(!taskPropertiesShowing){
+
                 //Returns the 'add' button
                 params.height = addHeight;
                 iconParams.height = addIconHeight;
 
                 add.setLayoutParams(params);
                 addIcon.setLayoutParams(iconParams);
+
             }
         }
     }
@@ -2546,30 +2547,32 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onBillingError(int errorCode, @Nullable Throwable error) {
 
-        toast.setText("Something went wrong");
-        final Handler handler = new Handler();
+//        toast.setText(R.string.somethingWentWrong);
+//        final Handler handler = new Handler();
+//
+//        final Runnable runnable = new Runnable() {
+//            public void run() {
+//            if(!mute) {
+//                sweep.start();
+//            }
+//                toastView.startAnimation(AnimationUtils.loadAnimation
+//                        (MainActivity.this, R.anim.enter_from_right_fast));
+//                toastView.setVisibility(View.VISIBLE);
+//                final Handler handler2 = new Handler();
+//                final Runnable runnable2 = new Runnable() {
+//                        public void run() {
+//                        toastView.startAnimation(AnimationUtils.loadAnimation
+//                                (MainActivity.this, android.R.anim.fade_out));
+//                        toastView.setVisibility(View.GONE);
+//                    }
+//                    };
+//                handler2.postDelayed(runnable2, 1500);
+//            }
+//        };
+//
+//        handler.postDelayed(runnable, 500);
 
-        final Runnable runnable = new Runnable() {
-            public void run() {
-            if(!mute) {
-                sweep.start();
-            }
-                toastView.startAnimation(AnimationUtils.loadAnimation
-                        (MainActivity.this, R.anim.enter_from_right_fast));
-                toastView.setVisibility(View.VISIBLE);
-                final Handler handler2 = new Handler();
-                final Runnable runnable2 = new Runnable() {
-                        public void run() {
-                        toastView.startAnimation(AnimationUtils.loadAnimation
-                                (MainActivity.this, android.R.anim.fade_out));
-                        toastView.setVisibility(View.GONE);
-                    }
-                    };
-                handler2.postDelayed(runnable2, 1500);
-            }
-        };
-
-        handler.postDelayed(runnable, 500);
+        Toast.makeText(MainActivity.this, R.string.somethingWentWrong, Toast.LENGTH_LONG).show();
 
     }
 
