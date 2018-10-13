@@ -1497,7 +1497,132 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+//    public void reorderList() {
+//
+//        Log.i(TAG, "Reordering MainActivity");
+//
+//        ArrayList<Integer> tempList = new ArrayList<>();
+//
+//        //Saving timestamps into a temporary array
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            //getting timestamp
+//            String dbTimestamp = "";
+//            Cursor dbResult = db.getSortedData(Integer.parseInt(
+//                    sortedIDs.get(i)));
+//            while (dbResult.moveToNext()) {
+//                dbTimestamp = dbResult.getString(3);
+//            }
+//            dbResult.close();
+//
+//            tempList.add(Integer.valueOf(dbTimestamp));
+//
+//        }
+//
+//        //Ordering list by time task was created
+//        ArrayList<String> whenTaskCreated = new ArrayList<>();
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//            String created = "";
+//            Cursor createdResult = db.getSortedData(Integer.parseInt
+//                    (sortedIDs.get(i)));
+//            while (createdResult.moveToNext()) {
+//                created = createdResult.getString(15);
+//            }
+//            createdResult.close();
+//            whenTaskCreated.add(created);
+//        }
+//
+//        Collections.sort(whenTaskCreated);
+//        Collections.reverse(whenTaskCreated);
+//
+//        ArrayList<String> tempIdsList = new ArrayList<>();
+//        ArrayList<String> tempTaskList = new ArrayList<>();
+//        ArrayList<String> tempKilledIdsList = new ArrayList<>();
+//        ArrayList<String> tempKilledTaskList = new ArrayList<>();
+////        ArrayList<String> tempDueIdsList = new ArrayList<>();
+////        ArrayList<String> tempDueTaskList = new ArrayList<>();
+//
+//        //getting tasks which have no due date
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            //getting task data
+//            int dbId = 0;
+//            String dbTimestamp = "";
+//            String dbTask = "";
+//            Boolean dbKilled = false;
+//            Cursor dbResult = db.getDataByTimestamp(
+//                    whenTaskCreated.get(i));
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTimestamp = dbResult.getString(3);
+//                dbTask = dbResult.getString(4);
+//                dbKilled = dbResult.getInt(6) > 0;
+//            }
+//            dbResult.close();
+//
+//            //Filtering out killed tasks
+//            if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
+//                tempIdsList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//            }else if((Integer.parseInt(dbTimestamp) == 0) && (dbKilled)){
+//                tempKilledIdsList.add(String.valueOf(dbId));
+//                tempKilledTaskList.add(dbTask);
+//            }else {
+////                tempDueIdsList.add(String.valueOf(dbId));
+////                tempDueTaskList.add(dbTask);
+//            }
+//
+//        }
+//
+//        Collections.sort(tempList);
+//
+//        //Adding due tasks to middle of task list
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            //getting task data
+//            int dbId = 0;
+//            String dbTask = "";
+//            Cursor dbResult = db.getDataByDueTime(
+//                    String.valueOf(tempList.get(i)));
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTask = dbResult.getString(4);
+//            }
+//            dbResult.close();
+//
+//            if((tempList.get(i) != 0)){
+//                tempIdsList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//            }
+//
+//        }
+//
+//        //Adding killed tasks to end of task list
+//        for(int i = 0; i < tempKilledIdsList.size(); i++){
+//            tempTaskList.add(tempKilledTaskList.get(i));
+//            tempIdsList.add(tempKilledIdsList.get(i));
+//        }
+//
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            MainActivity.db.updateSortedIndex(String.valueOf(i),
+//                    Integer.parseInt(tempIdsList.get(i)));
+//
+//        }
+//
+//        MainActivity.sortedIDs = tempIdsList;
+//        MainActivity.taskList = tempTaskList;
+//
+//        //Updating the view with the new order
+//        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+//                this, MainActivity.taskList)};
+//        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//
+//    }
+
     public void reorderList() {
+
+        Log.i(TAG, "Reordering MainActivity");
 
         ArrayList<Integer> tempList = new ArrayList<>();
 
@@ -1574,31 +1699,77 @@ public class MainActivity extends AppCompatActivity implements
 
         Collections.sort(tempList);
 
-        //Adding due tasks to middle of task list
+        //Adding due tasks which aren't killed to middle of task list
         for(int i = 0; i < MainActivity.taskList.size(); i++){
 
             //getting task data
             int dbId = 0;
             String dbTask = "";
-            Cursor dbResult = db.getDataByDueTime(
+            boolean dbKilled = false;
+            Cursor dbResult = MainActivity.db.getDataByDueTime(
                     String.valueOf(tempList.get(i)));
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
                 dbTask = dbResult.getString(4);
+                dbKilled = dbResult.getInt(6) > 0;
             }
             dbResult.close();
 
-            if((tempList.get(i) != 0)){
+            if((tempList.get(i) != 0) && !dbKilled){
                 tempIdsList.add(String.valueOf(dbId));
                 tempTaskList.add(dbTask);
             }
 
         }
 
+//        //Adding due tasks to middle of task list
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            //getting task data
+//            int dbId = 0;
+//            String dbTask = "";
+//            Cursor dbResult = db.getDataByDueTime(
+//                    String.valueOf(tempList.get(i)));
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTask = dbResult.getString(4);
+//            }
+//            dbResult.close();
+//
+//            if((tempList.get(i) != 0)){
+//                tempIdsList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//            }
+//
+//        }
+
         //Adding killed tasks to end of task list
         for(int i = 0; i < tempKilledIdsList.size(); i++){
             tempTaskList.add(tempKilledTaskList.get(i));
             tempIdsList.add(tempKilledIdsList.get(i));
+        }
+
+        //Adding killed tasks with due dates to middle of task list
+        for(int i = 0; i < MainActivity.taskList.size(); i++){
+
+            //getting task data
+            int dbId = 0;
+            String dbTask = "";
+            boolean dbKilled = false;
+            Cursor dbResult = MainActivity.db.getDataByDueTime(
+                    String.valueOf(tempList.get(i)));
+            while (dbResult.moveToNext()) {
+                dbId = dbResult.getInt(0);
+                dbTask = dbResult.getString(4);
+                dbKilled = dbResult.getInt(6) > 0;
+            }
+            dbResult.close();
+
+            if((tempList.get(i) != 0) && dbKilled){
+                tempIdsList.add(String.valueOf(dbId));
+                tempTaskList.add(dbTask);
+            }
+
         }
 
         for(int i = 0; i < MainActivity.taskList.size(); i++){

@@ -4337,6 +4337,8 @@ class MyAdapter extends ArrayAdapter<String> {
     //Reordering tasks by due date
     public void reorderList(){
 
+        Log.i(TAG, "Reordering MyAdapter");
+
         ArrayList<Integer> tempList = new ArrayList<>();
 
         //Saving timestamps into a temporary array
