@@ -1419,10 +1419,11 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.taskPropertiesShowing = false;
 
-                if(!dbOverdue) {
+                Log.i(TAG, "Attempting to kill one");
+//                if(!dbOverdue) {
                     MainActivity.db.updateKilled(String.valueOf(
                             MainActivity.sortedIDs.get(position)), true);
-                }
+//                }
 
                 MainActivity.db.updateIgnored(MainActivity.sortedIDs
                         .get(position), false);
@@ -3103,11 +3104,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.taskPropertiesShowing = false;
 
-                                    if(!finalDbOverdue) {
+                                    Log.i(TAG, "Attempting to kill two");
+//                                    if(!finalDbOverdue) {
                                         MainActivity.db.updateKilled(String.valueOf(
                                                 MainActivity.sortedIDs.get(
                                                         MainActivity.activeTask)), true);
-                                    }
+//                                    }
 
                                     if (MainActivity.showMotivation) {
                                         MainActivity.toast.setText(R.string.youKilledThisTask);
@@ -3601,11 +3603,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.taskPropertiesShowing = false;
 
-                        if(!finalDbOverdue) {
+                        Log.i(TAG, "Attempting to kill three");
+//                        if(!finalDbOverdue) {
                             MainActivity.db.updateKilled(String.valueOf(
                                     MainActivity.sortedIDs.get
                                             (MainActivity.activeTask)), true);
-                        }
+//                        }
 
                         MainActivity.db.updateIgnored(MainActivity.sortedIDs
                                 .get(position), false);
