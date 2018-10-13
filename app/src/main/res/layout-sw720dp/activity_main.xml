@@ -74,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="20sp"
+                    android:textSize="40sp"
                     android:text="@string/removeAds"/>
 
                 <TextView
@@ -83,6 +83,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="3"
                     android:gravity="center_vertical"
+                    android:textSize="30sp"
                     android:text="@string/permanentlyRemoveAds"/>
 
             </LinearLayout>
@@ -146,7 +147,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="20sp"
+                    android:textSize="40sp"
                     android:gravity="right"
                     android:text="@string/getReminders"/>
 
@@ -157,6 +158,7 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical|right"
+                    android:textSize="30sp"
                     android:text="@string/setUnlimitedDueDates"/>
 
             </LinearLayout>
@@ -186,7 +188,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1.5"
-                    android:textSize="20sp"
+                    android:textSize="40sp"
                     android:text="@string/cycleColors"/>
 
                 <TextView
@@ -196,6 +198,7 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical"
+                    android:textSize="30sp"
                     android:text="@string/featureColorSlowly"/>
 
             </LinearLayout>
@@ -259,7 +262,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="20sp"
+                    android:textSize="40sp"
                     android:gravity="right"
                     android:text="@string/unlockAll"/>
 
@@ -270,6 +273,7 @@
                     android:layout_weight="3"
                     android:layout_marginTop="5dp"
                     android:gravity="center_vertical|right"
+                    android:textSize="30sp"
                     android:text="@string/ultimateValuePack"/>
 
             </LinearLayout>
