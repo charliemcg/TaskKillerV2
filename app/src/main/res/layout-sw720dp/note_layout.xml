@@ -59,6 +59,7 @@
             android:layout_weight="1"
             android:padding="5dp"
             android:layout_gravity="center_vertical"
+            android:contentDescription="@string/accessSubmitButton"
             android:src="@drawable/submit_dark"/>
 
         <ImageView

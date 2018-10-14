@@ -27,7 +27,8 @@
         android:src="@drawable/tick"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="complete"/>
+        android:onClick="complete"
+        android:contentDescription="@string/accessEmptyCheckbox"/>
 
     <ImageView
         android:id="@+id/subtaskCompleted"
@@ -37,7 +38,8 @@
         android:src="@drawable/tick_complete"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/accessCheckboxTick"/>
 
     <ImageView
         android:id="@+id/subtaskCompleteFaded"
@@ -46,7 +48,8 @@
         android:layout_margin="8dp"
         android:src="@drawable/tick_faded"
         android:focusable="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="@string/accessEmptyCheckbox" />
 
     <ImageView
         android:id="@+id/subtaskCompletedFaded"
@@ -55,7 +58,8 @@
         android:layout_margin="8dp"
         android:src="@drawable/tick_complete_faded"
         android:focusable="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/accessCheckboxTick"/>
 
     <ImageView
         android:id="@+id/subtaskCompleteWhite"
@@ -65,7 +69,8 @@
         android:src="@drawable/tick_white"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="complete"/>
+        android:onClick="complete"
+        android:contentDescription="@string/accessEmptyCheckbox"/>
 
     <ImageView
         android:id="@+id/subtaskCompletedWhite"
@@ -75,7 +80,8 @@
         android:src="@drawable/tick_complete_white"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/accessCheckboxTick"/>
 
     <ImageView
         android:id="@+id/subtaskCompleteWhiteFaded"
@@ -84,7 +90,8 @@
         android:layout_margin="8dp"
         android:src="@drawable/tick_white_faded"
         android:focusable="true"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:contentDescription="@string/accessEmptyCheckbox"/>
 
     <ImageView
         android:id="@+id/subtaskCompletedWhiteFaded"
@@ -93,6 +100,7 @@
         android:layout_margin="8dp"
         android:src="@drawable/tick_complete_faded_white"
         android:focusable="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/accessCheckboxTick"/>
 
 </LinearLayout>

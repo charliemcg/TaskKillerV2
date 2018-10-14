@@ -2,9 +2,18 @@
 <set
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <translate
-        android:duration="600"
-        android:fromXDelta="100%"
-        android:toXDelta="0%" >
-    </translate>
+  <translate
+      android:duration="600"
+      android:fromXDelta="100%"
+      android:toXDelta="0%" >
+  </translate>
 </set>
+
+
+<!--<application>-->
+  <!--<component name="RecentProjectsManager">-->
+    <!--<option name="recentPaths">-->
+      <!--<list>-->
+        <!--<option value="$USER_HOME$/AndroidStudioProjects/TaskKiller" />-->
+        <!--<option value="E:/AndroidStudioProjects/RussianRoulette" />-->
+        <!--<opt-->

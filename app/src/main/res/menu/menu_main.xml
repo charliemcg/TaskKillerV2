@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/buy"
-        android:title="Buy"
+        android:title="@string/buy"
         android:orderInCategory="1"
         android:icon="@drawable/pro"
         app:showAsAction="always" />

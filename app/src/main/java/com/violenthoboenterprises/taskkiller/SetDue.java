@@ -543,6 +543,9 @@ public class SetDue extends MainActivity {
 
                 }
 
+                db.updateRepeatInterval(dbTaskId, "");
+                db.updateRepeat(dbTaskId, false);
+
             }
 
         });
@@ -573,6 +576,9 @@ public class SetDue extends MainActivity {
                     killAlarm.setVisible(false);
 
                 }
+
+                db.updateRepeatInterval(dbTaskId, "");
+                db.updateRepeat(dbTaskId, false);
 
             }
 
@@ -1344,6 +1350,7 @@ public class SetDue extends MainActivity {
                 }
 
             }else{
+                Log.i(TAG, "I'm in here");
                 db.updateRepeatInterval(dbTaskId, "");
                 db.updateRepeat(dbTaskId, false);
             }

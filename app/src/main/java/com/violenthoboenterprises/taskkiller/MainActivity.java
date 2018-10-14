@@ -62,6 +62,7 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.google.android.gms.ads.MobileAds;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -242,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements
     static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
-//    Button showDb;
+    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
 //    Button showUniversalDb;
@@ -348,6 +349,9 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         overridePendingTransition(R.anim.enter_from_right, R.anim.enter_from_right);
 
+        //Initialising the Google mobile ads SDK
+//        MobileAds.initialize(getApplicationContext(), "ca-app-pub-2378583121223638~2709009506");//TODO get new key
+
         toolbarDark = findViewById(R.id.toolbar_dark);
         toolbarLight = findViewById(R.id.toolbar_light);
         setSupportActionBar(toolbarDark);
@@ -429,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidth = displayMetrics.widthPixels;
         deviceheight = displayMetrics.heightPixels;
-//        showDb = findViewById(R.id.showDb);
+        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
@@ -591,41 +595,41 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         //Used for debugging purposes
-//        showDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllData();
-//
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("NOTE: " + res.getString(1) + "\n");
-//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-//                    buffer.append("TASK: " + res.getString(4) + "\n");
-//                    buffer.append("DUE: " + res.getString(5) + "\n");
-//                    buffer.append("KILLED: " + res.getString(6) + "\n");
-//                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
-//                    buffer.append("REPEAT: " + res.getString(8) + "\n");
-//                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
-//                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
-//                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-//                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
-//                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
-//                    buffer.append("IGNORED: " + res.getString(14) + "\n");
-//                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
-//                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
-//                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//            }
-//        });
+        showDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllData();
+
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("NOTE: " + res.getString(1) + "\n");
+                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+                    buffer.append("TASK: " + res.getString(4) + "\n");
+                    buffer.append("DUE: " + res.getString(5) + "\n");
+                    buffer.append("KILLED: " + res.getString(6) + "\n");
+                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
+                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
+                    buffer.append("IGNORED: " + res.getString(14) + "\n");
+                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
+                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
+                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+            }
+        });
 
         //Used for debugging purposes
 //        showAlarmDb.setOnClickListener(new View.OnClickListener() {
@@ -1462,9 +1466,11 @@ public class MainActivity extends AppCompatActivity implements
 
             final Runnable runnable = new Runnable() {
                 public void run() {
-                if(!mute) {
-                    sweep.start();
-                }
+
+                    if(!mute) {
+                        sweep.start();
+                    }
+
                     toastView.startAnimation(AnimationUtils.loadAnimation
                             (MainActivity.this, R.anim.enter_from_right_fast));
                     toastView.setVisibility(View.VISIBLE);
@@ -1483,8 +1489,32 @@ public class MainActivity extends AppCompatActivity implements
             handler.postDelayed(runnable, 500);
         }
 
+        //checking if task has a due date
+        Boolean due = false;
+        Cursor result = db.getData(Integer
+                .parseInt(sortedIDs.get(i)));
+        while (result.moveToNext()) {
+            due = result.getInt(5) > 0;
+        }
+        result.close();
+
         //marks task as not killed in database
-        db.updateKilled(toString().valueOf(MainActivity.sortedIDs.get(i)), false);
+        db.updateKilled(String.valueOf(sortedIDs.get(i)), false);
+        if(!remindersAvailable && duesSet >= 5){
+            db.updateAlarmData(String.valueOf(
+                    sortedIDs.get(i)),
+                    "", "", "", "", "", "");
+            db.updateTimestamp(String.valueOf(sortedIDs.get(i)), "0");
+            db.updateDue(String.valueOf(sortedIDs.get(i)), false);
+            db.updateRepeat(String.valueOf(sortedIDs.get(i)), false);
+            db.updateSnooze(String.valueOf(sortedIDs.get(i)), false);
+            db.updateInterval(String.valueOf(sortedIDs.get(i)),"0");
+            db.updateRepeatInterval(String.valueOf(sortedIDs.get(i)), "");
+            db.updateIgnored(String.valueOf(sortedIDs.get(i)), false);
+        }else if(!remindersAvailable && due){
+            duesSet++;
+            db.updateDuesSet(duesSet);
+        }
 
         reinstateAlarm = true;
 
@@ -1622,8 +1652,6 @@ public class MainActivity extends AppCompatActivity implements
 //    }
 
     public void reorderList() {
-
-        Log.i(TAG, "Reordering MainActivity");
 
         ArrayList<Integer> tempList = new ArrayList<>();
 
@@ -2485,57 +2513,71 @@ public class MainActivity extends AppCompatActivity implements
 
         //TODO find out what TransactionDetails prints out and enable in app purchase based on productId
 
-        //////////////////////////Remove Ads//////////////////////////////
-//        db.updateAdsRemoved(true);
-//        adsRemoved = true;
-//        purchasesShowing = false;
-//        colorPickerShowing();
-//        if(colorCyclingAllowed && remindersAvailable && adsRemoved){
-//            proBtn.setVisible(false);
-//        }
-//        removeAdsImg.setVisibility(View.GONE);
-//        removeAdsPurchasedImg.setVisibility(View.VISIBLE);
+        if(productId.equals("remove_ads")){
 
-        //////////////////////////Get Reminders//////////////////////////////
-//        db.updateRemindersAvailable(true);
-//        remindersAvailable = true;
-//        purchasesShowing = false;
-//        colorPickerShowing();
-//        if(colorCyclingAllowed && remindersAvailable && adsRemoved){
-//            proBtn.setVisible(false);
-//        }
-//        remindersImg.setVisibility(View.GONE);
-//        remindersPurchasedImg.setVisibility(View.VISIBLE);
+            Toast.makeText(MainActivity.this, "Ads removed", Toast.LENGTH_SHORT).show();//TODO remove this toast
 
-        //////////////////////////Cycle Colors//////////////////////////////
-//        db.updateCycleColors(true);
-//        colorCyclingAllowed = true;
-//        purchasesShowing = false;
-//        colorPickerShowing();
-//        if(colorCyclingAllowed && remindersAvailable && adsRemoved){
-//            proBtn.setVisible(false);
-//        }
-//        autoColorImg.setVisibility(View.GONE);
-//        autoColorPurchasedImg.setVisibility(View.VISIBLE);
+            db.updateAdsRemoved(true);
+            adsRemoved = true;
+            purchasesShowing = false;
+            colorPickerShowing();
+            if(colorCyclingAllowed && remindersAvailable && adsRemoved){
+                proBtn.setVisible(false);
+            }
+            removeAdsImg.setVisibility(View.GONE);
+            removeAdsPurchasedImg.setVisibility(View.VISIBLE);
 
-        //////////////////////////Unlock All//////////////////////////////
-//        db.updateAdsRemoved(true);
-//        db.updateRemindersAvailable(true);
-//        db.updateCycleColors(true);
-//        adsRemoved = true;
-//        remindersAvailable = true;
-//        colorCyclingAllowed = true;
-//        purchasesShowing = false;
-//        colorPickerShowing();
-//        proBtn.setVisible(false);
-//        unlockAllImg.setVisibility(View.GONE);
-//        unlockAllPurchasedImg.setVisibility(View.VISIBLE);
-//        autoColorImg.setVisibility(View.GONE);
-//        autoColorPurchasedImg.setVisibility(View.VISIBLE);
-//        remindersImg.setVisibility(View.GONE);
-//        remindersPurchasedImg.setVisibility(View.VISIBLE);
-//        removeAdsImg.setVisibility(View.GONE);
-//        removeAdsPurchasedImg.setVisibility(View.VISIBLE);
+        }else if(productId.equals("get_reminders")){
+
+            Toast.makeText(MainActivity.this, "Reminders now available", Toast.LENGTH_SHORT).show();//TODO remove this toast
+
+            db.updateRemindersAvailable(true);
+            remindersAvailable = true;
+            purchasesShowing = false;
+            colorPickerShowing();
+            if(colorCyclingAllowed && remindersAvailable && adsRemoved){
+                proBtn.setVisible(false);
+            }
+            remindersImg.setVisibility(View.GONE);
+            remindersPurchasedImg.setVisibility(View.VISIBLE);
+
+        }else if(productId.equals("cycle_colors")){
+
+            Toast.makeText(MainActivity.this, "Auto color cycling now available", Toast.LENGTH_SHORT).show();//TODO remove this toast
+
+            db.updateCycleColors(true);
+            colorCyclingAllowed = true;
+            purchasesShowing = false;
+            colorPickerShowing();
+            if(colorCyclingAllowed && remindersAvailable && adsRemoved){
+                proBtn.setVisible(false);
+            }
+            autoColorImg.setVisibility(View.GONE);
+            autoColorPurchasedImg.setVisibility(View.VISIBLE);
+
+        }else if(productId.equals("unlock_all")){
+
+            Toast.makeText(MainActivity.this, "All features purchased", Toast.LENGTH_SHORT).show();//TODO remove this toast
+
+            db.updateAdsRemoved(true);
+            db.updateRemindersAvailable(true);
+            db.updateCycleColors(true);
+            adsRemoved = true;
+            remindersAvailable = true;
+            colorCyclingAllowed = true;
+            purchasesShowing = false;
+            colorPickerShowing();
+            proBtn.setVisible(false);
+            unlockAllImg.setVisibility(View.GONE);
+            unlockAllPurchasedImg.setVisibility(View.VISIBLE);
+            autoColorImg.setVisibility(View.GONE);
+            autoColorPurchasedImg.setVisibility(View.VISIBLE);
+            remindersImg.setVisibility(View.GONE);
+            remindersPurchasedImg.setVisibility(View.VISIBLE);
+            removeAdsImg.setVisibility(View.GONE);
+            removeAdsPurchasedImg.setVisibility(View.VISIBLE);
+
+        }
 
     }
 
@@ -2608,7 +2650,7 @@ public class MainActivity extends AppCompatActivity implements
 
             //TODO replace this test stuff with real stuff
             //TODO see if productID should go in strings.xml
-            bp.purchase(this, "android.test.purchased");
+            bp.purchase(this, "remove_ads");
 
         }
 
@@ -2625,7 +2667,7 @@ public class MainActivity extends AppCompatActivity implements
 
             //TODO replace this test stuff with real stuff
             //            //TODO see if productID should go in strings.xml
-            bp.purchase(this, "android.test.purchased");
+            bp.purchase(this, "get_reminders");
 
         }
 
@@ -2642,7 +2684,7 @@ public class MainActivity extends AppCompatActivity implements
 
             //TODO replace this test stuff with real stuff
             //            //TODO see if productID should go in strings.xml
-            bp.purchase(this, "android.test.purchased");
+            bp.purchase(this, "cycle_colors");
 
         }
 
@@ -2650,7 +2692,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void unlockAll(View view) {
 
-        if(!colorCyclingAllowed || !remindersAvailable || !adsRemoved) {
+        if(!colorCyclingAllowed && !remindersAvailable && !adsRemoved) {
 
             vibrate.vibrate(50);
 
@@ -2660,7 +2702,7 @@ public class MainActivity extends AppCompatActivity implements
 
             //TODO replace this test stuff with real stuff
             //            //TODO see if productID should go in strings.xml
-            bp.purchase(this, "android.test.purchased");
+            bp.purchase(this, "unlock_all");
 
         }
 

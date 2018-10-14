@@ -2,7 +2,6 @@
     <string name="app_name">Task Killer</string>
     <string name="taskTitle">What are you going to do?</string>
     <string name="checklistItem">Add a sub-task here…</string>
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="smashThatTask">Smash that task!</string>
     <string name="beAWinner">Be a winner!</string>
     <string name="onlyWimpsGiveUp">Only wimps give up!</string>
@@ -75,6 +74,34 @@
     <string name="soundFX">Sound FX</string>
     <string name="motivation">Motivation</string>
     <string name="somethingWentWrong">Something went wrong</string>
+    <string name="generic_looking_ad_that_has_been_crossed_out">Generic looking ad that has been crossed out</string>
+    <string name="accessAdCrossedOutPurchased">Generic looking ad that has been crossed out in gray scale to indicate it has been purchased.</string>
+    <string name="accessGenericLookingAd">Generic looking ad that has been crossed out.</string>
+    <string name="accessBell">Gold notification bell</string>
+    <string name="accessBellPurchased">Notification bell in gray scale to indicate it has been purchased.</string>
+    <string name="accessArrowCircular">Arrow in circular shape in rainbow colors.</string>
+    <string name="accessArrowCircularPurchased">Arrow in circular shape in gray scale to indicate purchase.</string>
+    <string name="accessAllInAppImages">All images of in-app purchases displayed together.</string>
+    <string name="accessAllInAppImagesGray">All images off in-app purchases displayed together in gray scale to indicate that this package is unavailable</string>
+    <string name="accessNoTasks">Scope of gun looking at large tick covered with bullet wounds.</string>
+    <string name="accessEmptyCheckbox">Empty checkbox</string>
+    <string name="accessCheckboxTick">Checkbox with a tick in it.</string>
+    <string name="accessGrayedOutCalendar">Grayed out calendar to indicate that no date is set.</string>
+    <string name="accessCalendar">White and red calendar.</string>
+    <string name="accessGrayedOutClock">Grayed out alarm clock indicating that time has not been set.</string>
+    <string name="accessClock">Red and gray alarm clock.</string>
+    <string name="accessNoRepeat">Circular arrow that says no repeat.</string>
+    <string name="accessDailyRepeat">Circular arrow that says daily repeat.</string>
+    <string name="accessMonthlyRepeat">Circular arrow that says monthly repeat.</string>
+    <string name="accessSubmitButton">Arrow representing a submit button.</string>
+    <string name="accessWhiteTick">White tick on red background with gun scope over it.</string>
+    <string name="bannerPromptingUser">Banner prompting user to upgrade.</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="appNameFull">Task Killer: No Excuses Todo List</string>
+    <string name="accessTrashCan">Gray trash can representing a delete button.</string>
+    <string name="buy">Buy</string>
+    <string name="accessMushroomCloudTick">Mushroom cloud with tick and five stars.</string>
+    <string name="alarm">Alarm</string>
     <!--TODO get new id. this one is pinched from Russian Roulette 2378583121223638/5662475907-->
 
 </resources>

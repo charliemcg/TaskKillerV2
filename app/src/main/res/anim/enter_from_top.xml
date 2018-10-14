@@ -2,9 +2,18 @@
 <set
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <translate
-        android:duration="300"
-        android:fromYDelta="-100%"
-        android:toYDelta="0%" >
-    </translate>
+  <translate
+      android:duration="300"
+      android:fromYDelta="-100%"
+      android:toYDelta="0%" >
+  </translate>
 </set>
+
+<!--<application>-->
+  <!--<component name="ActionsCollector">-->
+    <!--<counts>-->
+      <!--<entry action="$Copy" count="17" />-->
+      <!--<entry action="$Delete" count="27" />-->
+      <!--<entry action="$Paste" count="90" />-->
+      <!--<entry action="$Redo" count="3" />-->
+      <!--<entry action=-->

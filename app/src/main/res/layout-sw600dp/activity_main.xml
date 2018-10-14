@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
+        app:title="@string/app_name"
         app:subtitle="@string/noExcuses"
         app:subtitleTextColor="@color/gray"
         android:elevation="4dp"
@@ -26,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         style="@style/HeaderBar"
+        app:title="@string/app_name"
         app:subtitle="@string/noExcuses"
         app:subtitleTextColor="@color/dark_gray"
         android:elevation="4dp"
@@ -94,7 +96,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/remove_ads"/>
+                android:src="@drawable/remove_ads"
+                android:contentDescription="@string/accessGenericLookingAd"/>
 
             <ImageView
                 android:id="@+id/removeAdsImagePurchased"
@@ -103,6 +106,7 @@
                 android:layout_weight="1"
                 android:layout_margin="10dp"
                 android:src="@drawable/remove_ads_purchased"
+                android:contentDescription="@string/accessAdCrossedOutPurchased"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -123,7 +127,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/bell"/>
+                android:src="@drawable/bell"
+                android:contentDescription="@string/accessBell"/>
 
             <ImageView
                 android:id="@+id/getRemindersImagePurchased"
@@ -132,6 +137,7 @@
                 android:layout_weight="1"
                 android:layout_margin="10dp"
                 android:src="@drawable/bell_purchased"
+                android:contentDescription="@string/accessBellPurchased"
                 android:visibility="gone"/>
 
             <LinearLayout
@@ -209,7 +215,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/auto_color"/>
+                android:src="@drawable/auto_color"
+                android:contentDescription="@string/accessArrowCircular"/>
 
             <ImageView
                 android:id="@+id/cycleColorsImagePurchased"
@@ -218,6 +225,7 @@
                 android:layout_weight="1"
                 android:layout_margin="10dp"
                 android:src="@drawable/auto_color_purchased"
+                android:contentDescription="@string/accessArrowCircularPurchased"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -238,7 +246,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:src="@drawable/unlock_all"/>
+                android:src="@drawable/unlock_all"
+                android:contentDescription="@string/accessAllInAppImages"/>
 
             <ImageView
                 android:id="@+id/unlockAllImagePurchased"
@@ -247,6 +256,7 @@
                 android:layout_weight="1"
                 android:layout_margin="10dp"
                 android:src="@drawable/unlock_all_purchased"
+                android:contentDescription="@string/accessAllInAppImagesGray"
                 android:visibility="gone"/>
 
             <LinearLayout
@@ -282,13 +292,13 @@
 
     </LinearLayout>
 
-    <!--<Button-->
-        <!--android:id="@+id/showDb"-->
-        <!--android:layout_marginTop="500dp"-->
-        <!--android:layout_marginLeft="200dp"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:text="DB"/>-->
+    <Button
+        android:id="@+id/showDb"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="200dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="DB"/>
     <!--<Button-->
         <!--android:id="@+id/showAlarmDb"-->
         <!--android:layout_marginTop="500dp"-->

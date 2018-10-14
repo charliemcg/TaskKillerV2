@@ -59,7 +59,8 @@
             android:layout_weight="1"
             android:padding="5dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/submit_dark"/>
+            android:src="@drawable/submit_dark"
+            android:contentDescription="@string/accessSubmitButton"/>
 
         <ImageView
             android:id="@+id/submitNoteOne"

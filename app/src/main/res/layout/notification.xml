@@ -9,7 +9,8 @@
         android:layout_width="64dp"
         android:layout_height="match_parent"
         android:src="@drawable/ic_launcher_og"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/accessWhiteTick"/>
 
     <LinearLayout
         android:id="@+id/notif_details"

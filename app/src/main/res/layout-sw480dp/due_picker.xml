@@ -34,6 +34,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:src="@drawable/calendar_faded"
+            android:contentDescription="@string/accessGrayedOutCalendar"
             android:padding="15dp"
             android:visibility="gone"/>
 
@@ -43,6 +44,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:src="@drawable/calendar_faded_light"
+            android:contentDescription="@string/accessGrayedOutCalendar"
             android:padding="15dp"
             android:visibility="gone"/>
 
@@ -52,6 +54,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:src="@drawable/calendar"
+            android:contentDescription="@string/accessCalendar"
             android:padding="15dp"
             android:visibility="gone"/>
 
@@ -88,6 +91,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:src="@drawable/time_faded"
+            android:contentDescription="@string/accessGrayedOutClock"
             android:padding="10dp"
             android:visibility="gone"/>
 
@@ -97,6 +101,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:src="@drawable/time_faded_light"
+            android:contentDescription="@string/accessGrayedOutClock"
             android:padding="10dp"
             android:visibility="gone"/>
 
@@ -106,6 +111,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:src="@drawable/time"
+            android:contentDescription="@string/accessClock"
             android:padding="10dp"
             android:visibility="gone"/>
 
@@ -148,6 +154,7 @@
                 android:id="@+id/cancelRepeatDark"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
+                android:contentDescription="@string/accessNoRepeat"
                 android:src="@drawable/repeat_none_dark"/>
 
         </RelativeLayout>
@@ -162,6 +169,7 @@
                 android:id="@+id/dailyDark"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
+                android:contentDescription="@string/accessDailyRepeat"
                 android:src="@drawable/repeat_day_dark"/>
 
         </RelativeLayout>
@@ -176,6 +184,7 @@
                 android:id="@+id/weeklyDark"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
+                android:contentDescription="Circular arrow that says weekly repeat."
                 android:src="@drawable/repeat_week_dark"/>
 
         </RelativeLayout>
@@ -190,6 +199,7 @@
                 android:id="@+id/monthlyDark"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
+                android:contentDescription="@string/accessMonthlyRepeat"
                 android:src="@drawable/repeat_month_dark"/>
 
         </RelativeLayout>
@@ -217,6 +227,7 @@
                 android:id="@+id/cancelRepeatLight"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
+                android:contentDescription="@string/accessNoRepeat"
                 android:src="@drawable/repeat_none_light"/>
 
         </RelativeLayout>
@@ -231,6 +242,7 @@
                 android:id="@+id/dailyLight"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
+                android:contentDescription="@string/accessDailyRepeat"
                 android:src="@drawable/repeat_day_light"/>
 
         </RelativeLayout>
@@ -245,6 +257,7 @@
                 android:id="@+id/weeklyLight"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
+                android:contentDescription="Circular arrow that says weekly repeat."
                 android:src="@drawable/repeat_week_light"/>
 
         </RelativeLayout>
@@ -259,6 +272,7 @@
                 android:id="@+id/monthlyLight"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
+                android:contentDescription="@string/accessMonthlyRepeat"
                 android:src="@drawable/repeat_month_light"/>
 
         </RelativeLayout>

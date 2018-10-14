@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:hardwareAccelerated="false"
         android:largeHeap="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
@@ -28,14 +29,6 @@
         <activity
             android:name=".Checklist"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-        <!--<activity android:name=".MoreInfoNotification"-->
-            <!--android:label="More on Notification"-->
-            <!--android:parentActivityName=".MainActivity">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".MainActivity"/>-->
-            <!--<receiver android:process=":remote" android:name="AlarmReceiver"/>-->
-        <!--</activity>-->
         <activity
             android:name=".Note"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>

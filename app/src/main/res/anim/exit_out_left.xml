@@ -2,9 +2,19 @@
 <set
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <translate
-        android:duration="600"
-        android:fromXDelta="0%"
-        android:toXDelta="-100%" >
-    </translate>
+  <translate
+      android:duration="600"
+      android:fromXDelta="0%"
+      android:toXDelta="-100%" >
+  </translate>
 </set>
+
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<project version="4">-->
+  <!--<component name="AndroidLayouts">-->
+    <!--<shared>-->
+      <!--<config>-->
+        <!--<device id="wear_round" />-->
+        <!--<device id="wear_round_chin_320_290" />-->
+        <!--<device id="wear_square" />-->
+        <!--<de-->

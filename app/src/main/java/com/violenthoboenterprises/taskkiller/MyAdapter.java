@@ -450,12 +450,12 @@ class MyAdapter extends ArrayAdapter<String> {
             if (position == 0 && MainActivity.taskList.size() > 4) {
                 adRow.setVisibility(View.VISIBLE);
                 boolean networkAvailable = false;
-                ConnectivityManager connectivityManager = (ConnectivityManager)
-                        getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-                    networkAvailable = true;
-                }
+//                ConnectivityManager connectivityManager = (ConnectivityManager)
+//                        getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+//                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+//                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+//                    networkAvailable = true;
+//                }
 
                 //Initialising banner ad
                 final AdView adView = taskView.findViewById(R.id.adView);
@@ -463,11 +463,11 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 if (networkAvailable) {
                     adView.setVisibility(View.VISIBLE);
-                    final AdRequest banRequest = new AdRequest.Builder()
+                    final AdRequest banRequest = new AdRequest.Builder()/*.build();*/
                             //TODO probably need a new ID
                             //TODO find out if id should go into strings.xml
-                            .addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")/*.addTestDevice
-                    (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
+                            /*.addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")*/.addTestDevice
+                    (AdRequest.DEVICE_ID_EMULATOR).build();//TODO remove .addTestDevice()
                     adView.loadAd(banRequest);
                 } else {
                     banner.setVisibility(View.VISIBLE);
@@ -475,7 +475,6 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
-        //TODO make sure hard coded values work on all devices
         //Task cannot be centered unless it's in view. Moving selected task into view
         // if not already in view in portrait.
         if ((MainActivity.activeTask > 6) && MainActivity.centerTask && (getContext()
@@ -1310,7 +1309,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.taskPropertiesShowing = false;
 
-                Log.i(TAG, "Attempting to kill one");
 //                if(!dbOverdue) {
                     MainActivity.db.updateKilled(String.valueOf(
                             MainActivity.sortedIDs.get(position)), true);
@@ -2995,7 +2993,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.taskPropertiesShowing = false;
 
-                                    Log.i(TAG, "Attempting to kill two");
 //                                    if(!finalDbOverdue) {
                                         MainActivity.db.updateKilled(String.valueOf(
                                                 MainActivity.sortedIDs.get(
@@ -3494,7 +3491,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         MainActivity.taskPropertiesShowing = false;
 
-                        Log.i(TAG, "Attempting to kill three");
 //                        if(!finalDbOverdue) {
                             MainActivity.db.updateKilled(String.valueOf(
                                     MainActivity.sortedIDs.get
@@ -3804,7 +3800,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                    if(MainActivity.duesSet < 3) {
+                    Log.i(TAG, "duesSet: " + MainActivity.duesSet);
+                    if(MainActivity.duesSet < 5 || finalDbDue) {
                         MainActivity.vibrate.vibrate(50);
 
                         //actions to occur if alarm not already set
@@ -4230,8 +4227,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
     //Reordering tasks by due date
     public void reorderList(){
-
-        Log.i(TAG, "Reordering MyAdapter");
 
         ArrayList<Integer> tempList = new ArrayList<>();
 

@@ -9,6 +9,7 @@
         android:layout_width="64dp"
         android:layout_height="match_parent"
         android:src="@drawable/ic_launcher_og"
+        android:contentDescription="@string/accessWhiteTick"
         android:layout_gravity="center_vertical"/>
 
     <LinearLayout
