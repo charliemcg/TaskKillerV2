@@ -2160,10 +2160,13 @@ public class MainActivity extends AppCompatActivity implements
 
                     }
 
-                    //updating timestamp
-                    MainActivity.db.updateTimestamp(String.valueOf(
-                            MainActivity.sortedIDs.get(thePosition)),
-                            String.valueOf(futureStamp));
+                    Log.i(TAG, "timestamp one");
+                    if(remindersAvailable) {
+                        //updating timestamp
+                        MainActivity.db.updateTimestamp(String.valueOf(
+                                MainActivity.sortedIDs.get(thePosition)),
+                                String.valueOf(futureStamp));
+                    }
 
                     //setting the name of the task for which the
                     // notification is being set
@@ -2202,6 +2205,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     }
 
+                    Log.i(TAG, "timestamp two");
                     //updating timestamp
                     MainActivity.db.updateTimestamp(String.valueOf(
                             MainActivity.sortedIDs.get(thePosition)),
@@ -2341,6 +2345,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     futureStamp = futureStamp / 1000;
 
+                    Log.i(TAG, "timestamp three");
                     //updating timestamp
                     MainActivity.db.updateTimestamp(String.valueOf(
                             MainActivity.sortedIDs.get(thePosition)),
