@@ -1663,42 +1663,72 @@ public class MainActivity extends AppCompatActivity implements
 
         ArrayList<Integer> allIDs = db.getIDs();
 
+        ArrayList<Integer> snoozedIDs = new ArrayList<>();
+
         ArrayList<Integer> tempList = new ArrayList<>();
 
-            //Saving timestamps into a temporary array
-            for (int i = 0; i < MainActivity.taskList.size(); i++) {
+        //Saving timestamps into a temporary array
+        for (int i = 0; i < MainActivity.taskList.size(); i++) {
 
-                //getting timestamp
-                String dbTimestamp = "";
+            //getting timestamp
+            String dbTimestamp = "";
+            boolean dbSnooze = false;
+            int dbInterval = 0;
+            String dbID = "";
 //            Cursor dbResult = db.getSortedData(Integer.parseInt(
 //                    sortedIDs.get(i)));
 //                Cursor dbResult = db.getSortedData(i);
-                Cursor dbResult = db.getData(allIDs.get(i));
-                while (dbResult.moveToNext()) {
-                    dbTimestamp = dbResult.getString(3);
-                }
-                dbResult.close();
+            Cursor dbResult = db.getData(allIDs.get(i));
+            while (dbResult.moveToNext()) {
+                dbID = dbResult.getString(0);
+                dbTimestamp = dbResult.getString(3);
+                dbSnooze = dbResult.getInt(10) > 0;
+                dbInterval = dbResult.getInt(12);
+            }
+            dbResult.close();
 
-                tempList.add(Integer.valueOf(dbTimestamp));
+            long snoozeStamp = (Integer.valueOf(dbTimestamp) + (3600 * dbInterval));
+            String tempTimestamp = "";
+            for(int j = 0; j < MainActivity.taskList.size(); j++) {
+                Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+                        MainActivity.sortedIDs.get(j)));
+                while (tempResult.moveToNext()) {
+                    tempTimestamp = tempResult.getString(3);
+                }
+                tempResult.close();
+                if(snoozeStamp == Long.parseLong(tempTimestamp)){
+                    snoozeStamp++;
+                    j = 0;
+                }
 
             }
 
+            if(dbSnooze) {
+                Log.i(TAG, "adding a snoozed task");
+                tempList.add((int) snoozeStamp);
+                snoozedIDs.add(Integer.parseInt(dbID));
+//                tempList.add(Integer.valueOf(dbTimestamp));
+            }else{
+                tempList.add(Integer.valueOf(dbTimestamp));
+            }
+
+        }
 
         ArrayList<String> whenTaskCreated = new ArrayList<>();
 
-            //Ordering list by time task was created
-            for (int i = 0; i < MainActivity.taskList.size(); i++) {
-                String created = "";
+        //Ordering list by time task was created
+        for (int i = 0; i < MainActivity.taskList.size(); i++) {
+            String created = "";
 //            Cursor createdResult = db.getSortedData(Integer.parseInt
 //                    (sortedIDs.get(i)));
 //                Cursor createdResult = db.getSortedData(i);
-                Cursor createdResult = db.getData(allIDs.get(i));
-                while (createdResult.moveToNext()) {
-                    created = createdResult.getString(15);
-                }
-                createdResult.close();
-                whenTaskCreated.add(created);
+            Cursor createdResult = db.getData(allIDs.get(i));
+            while (createdResult.moveToNext()) {
+                created = createdResult.getString(15);
             }
+            createdResult.close();
+            whenTaskCreated.add(created);
+        }
 
         Collections.sort(whenTaskCreated);
         Collections.reverse(whenTaskCreated);
@@ -1748,22 +1778,53 @@ public class MainActivity extends AppCompatActivity implements
         for(int i = 0; i < MainActivity.taskList.size(); i++){
 
             //getting task data
-            int dbId = 0;
-            String dbTask = "";
-            boolean dbKilled = false;
-            Cursor dbResult = MainActivity.db.getDataByDueTime(
-                    String.valueOf(tempList.get(i)));
+            int dbId;
+            String dbTask;
+            boolean dbKilled ;
+            Cursor dbResult;
+//            if(snoozedIDs.contains(i)){
+//                Log.i(TAG, "Snoozed task detected: " + i);
+//                dbResult = MainActivity.db.getData(i);
+//            }else {
+                dbResult = MainActivity.db.getDataByDueTime(
+                        String.valueOf(tempList.get(i)));
+//            }
+            Log.i(TAG, "dbResult: " + dbResult);
+            boolean dataExists = false;
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
                 dbTask = dbResult.getString(4);
                 dbKilled = dbResult.getInt(6) > 0;
+                Log.i(TAG, "dbId: " + dbId);
+                if((tempList.get(i) != 0) && !dbKilled){
+                    tempIdsList.add(String.valueOf(dbId));
+                    tempTaskList.add(dbTask);
+                }
+                dataExists = true;
+            }
+            if(!dataExists) {
+                Log.i(TAG, "detected lack of data");
+                dbResult = MainActivity.db.getData(snoozedIDs.get(0));
+                while(dbResult.moveToNext()){
+                    dbId = dbResult.getInt(0);
+                    dbTask = dbResult.getString(4);
+                    dbKilled = dbResult.getInt(6) > 0;
+                    Log.i(TAG, "dbId: " + dbId);
+                    if((tempList.get(i) != 0) && !dbKilled){
+                        tempIdsList.add(String.valueOf(dbId));
+                        tempTaskList.add(dbTask);
+                    }
+                }
+                snoozedIDs.remove(0);
             }
             dbResult.close();
 
-            if((tempList.get(i) != 0) && !dbKilled){
-                tempIdsList.add(String.valueOf(dbId));
-                tempTaskList.add(dbTask);
-            }
+//            Log.i(TAG, "dbTask: " + dbTask + " dbId: " + dbId);
+
+//            if((tempList.get(i) != 0) && !dbKilled){
+//                tempIdsList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//            }
 
         }
 
@@ -1794,7 +1855,7 @@ public class MainActivity extends AppCompatActivity implements
             tempIdsList.add(tempKilledIdsList.get(i));
         }
 
-        //Adding killed tasks with due dates to middle of task list
+        //Adding killed tasks with due dates to end of task list
         for(int i = 0; i < MainActivity.taskList.size(); i++){
 
             //getting task data
@@ -2127,7 +2188,7 @@ public class MainActivity extends AppCompatActivity implements
             db.updateOverdue(String.valueOf(thePosition), false);
             //cancelling any snooze data
             MainActivity.db.updateSnoozeData(String.valueOf(
-                    MainActivity.sortedIDs.get(MainActivity.activeTask)),
+                    MainActivity.sortedIDs.get(/*MainActivity.activeTask*/thePosition)),
                     "", "", "", "", "", "");
             db.updateSnooze(String.valueOf(thePosition), false);
 
@@ -2562,6 +2623,33 @@ public class MainActivity extends AppCompatActivity implements
         }else if(productId.equals("cycle_colors")){
 
             Toast.makeText(MainActivity.this, "Auto color cycling now available", Toast.LENGTH_SHORT).show();//TODO remove this toast
+
+            toast.setText(R.string.turnColorCyclingOnOff);
+            final Handler handler = new Handler();
+
+            final Runnable runnable = new Runnable() {
+                public void run() {
+
+                    if(!mute) {
+                        sweep.start();
+                    }
+
+                    toastView.startAnimation(AnimationUtils.loadAnimation
+                            (MainActivity.this, R.anim.enter_from_right_fast));
+                    toastView.setVisibility(View.VISIBLE);
+                    final Handler handler2 = new Handler();
+                    final Runnable runnable2 = new Runnable() {
+                        public void run() {
+                            toastView.startAnimation(AnimationUtils.loadAnimation
+                                    (MainActivity.this, android.R.anim.fade_out));
+                            toastView.setVisibility(View.GONE);
+                        }
+                    };
+                    handler2.postDelayed(runnable2, 3500);
+                }
+            };
+
+            handler.postDelayed(runnable, 500);
 
             db.updateCycleColors(true);
             colorCyclingAllowed = true;

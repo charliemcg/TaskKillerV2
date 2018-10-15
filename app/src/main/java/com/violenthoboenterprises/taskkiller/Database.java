@@ -300,6 +300,21 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL16
                 + " == " + stamp, null);
+//        Log.i(TAG, "result: " + result);
+//        String dbID = "";
+//        boolean dbSnooze = false;
+//        int dbSnoozeInterval = 0;
+//        String task = "";
+//        while (result.moveToNext()){
+//            dbID = result.getString(0);
+//            dbSnooze = result.getInt(10) > 0;
+//            dbSnoozeInterval = result.getInt(12);
+//            Log.i(TAG, "task: " + result.getString(4));
+//        }
+//        if(dbSnooze){
+//            result = this.getData(Integer.parseInt(dbID));
+//        }
+
         return result;
     }
 
