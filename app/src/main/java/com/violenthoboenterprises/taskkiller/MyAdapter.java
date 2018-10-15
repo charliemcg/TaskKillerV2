@@ -614,7 +614,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
-                Log.i(TAG, "timestamp one");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -682,7 +681,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
-                Log.i(TAG, "timestamp two");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -792,7 +790,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
-                Log.i(TAG, "timestamp three");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -1315,7 +1312,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.taskPropertiesShowing = false;
 
 //                if(!dbOverdue) {
-                Log.i(TAG, "killing one");
                     MainActivity.db.updateKilled(String.valueOf(
                             MainActivity.sortedIDs.get(position)), true);
 //                }
@@ -1493,7 +1489,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         newDay++;
                     }
 
-                    ///////////////////////////////////////
                     if(!MainActivity.remindersAvailable) {
                         //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                         // detect duplicates and then adjusting the timestamp on the millisecond level
@@ -1510,26 +1505,8 @@ class MyAdapter extends ArrayAdapter<String> {
                                 futureStamp++;
                                 i = 0;
                             }
-
                         }
-
-                        Log.i(TAG, "Future stamp: " + futureStamp);
-
-//                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(position)),
-//                            String.valueOf(futureStamp));
-//
-//                    String blahName = "";
-//                    Cursor blahResult = MainActivity.db.getData(Integer.parseInt(MainActivity.sortedIDs.get(position)));
-//                    while(blahResult.moveToNext()){
-//                        blahName = blahResult.getString(3);
-//                    }
-//                    blahResult.close();
-//                    Log.i(TAG, "stamp: " + blahName);
                     }
-                    //////////////////////////////////////
-
                 }else if(finalDbRepeatInterval.equals("week")){
 
                     interval = 604800;
@@ -1792,14 +1769,10 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
                 }
 
-                Log.i(TAG, "timestamp five");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
                         String.valueOf(futureStamp));
-
-                Log.i(TAG, "Updated timestamp: " + futureStamp);
-
 
                 //updating due time in database
                 MainActivity.db.updateAlarmData(String.valueOf(
@@ -1811,8 +1784,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.db.updateManualKill(String.valueOf(
                         MainActivity.sortedIDs.get(position)), true);
 
-
-                Log.i(TAG, "killing two");
                 if(!dbOverdue) {
                     MainActivity.db.updateKilledEarly(String.valueOf(
                             MainActivity.sortedIDs.get(position)), true);
@@ -2179,7 +2150,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     }
 
-                                    Log.i(TAG, "timestamp six");
                                     //updating timestamp
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
@@ -2607,7 +2577,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             }
 
-                                            Log.i(TAG, "timestamp seven");
                                             //updating timestamp
                                             MainActivity.db.updateTimestamp(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
@@ -3028,7 +2997,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             }
 
-                                            Log.i(TAG, "timestamp eight");
                                             //updating timestamp
                                             MainActivity.db.updateTimestamp(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
@@ -3186,7 +3154,6 @@ class MyAdapter extends ArrayAdapter<String> {
                                     MainActivity.taskPropertiesShowing = false;
 
 //                                    if(!finalDbOverdue) {
-                                    Log.i(TAG, "killing three");
                                         MainActivity.db.updateKilled(String.valueOf(
                                                 MainActivity.sortedIDs.get(
                                                         MainActivity.activeTask)), true);
@@ -3292,7 +3259,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         }
 
-                                        Log.i(TAG, "timestamp nine");
                                         //updating timestamp
                                         MainActivity.db.updateTimestamp(String.valueOf(
                                                 MainActivity.sortedIDs.get(position)),
@@ -3368,7 +3334,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         }
 
-                                        Log.i(TAG, "timestamp ten");
                                         //updating timestamp
                                         MainActivity.db.updateTimestamp(String.valueOf(
                                                 MainActivity.sortedIDs.get(position)),
@@ -3521,7 +3486,6 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                         futureStamp = futureStamp / 1000;
 
-                                        Log.i(TAG, "timestamp eleven");
                                         //updating timestamp
                                         MainActivity.db.updateTimestamp(String.valueOf(
                                                 MainActivity.sortedIDs.get(position)),
@@ -3688,7 +3652,6 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.taskPropertiesShowing = false;
 
 //                        if(!finalDbOverdue) {
-                        Log.i(TAG, "killing four");
                             MainActivity.db.updateKilled(String.valueOf(
                                     MainActivity.sortedIDs.get
                                             (MainActivity.activeTask)), true);
@@ -3823,6 +3786,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     }
 
                                 }
+                            }
 
                         }else if(finalDbRepeatInterval.equals("week")){
 
@@ -4375,7 +4339,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     }
 
-            }}});
+            }});
 
             //Actions to occur if user selects 'set due date'
             alarm.setOnClickListener(new View.OnClickListener() {
@@ -4622,7 +4586,6 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
             MainActivity.db.updateRepeatInterval
                     (MainActivity.sortedIDs.get(position), "");
-            Log.i(TAG, "timestamp twelve");
             MainActivity.db.updateTimestamp
                     (MainActivity.sortedIDs.get(position), "0");
             dbRepeat = false;
@@ -4660,7 +4623,6 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
             MainActivity.db.updateRepeatInterval
                     (MainActivity.sortedIDs.get(position), "");
-            Log.i(TAG, "timestamp thirteen");
             MainActivity.db.updateTimestamp
                     (MainActivity.sortedIDs.get(position), "0");
             dbRepeat = false;
@@ -4718,7 +4680,6 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
             }
 
-            Log.i(TAG, "timestamp fourteen");
             //updating timestamp
             MainActivity.db.updateTimestamp(String.valueOf(
                     MainActivity.sortedIDs.get(position)),

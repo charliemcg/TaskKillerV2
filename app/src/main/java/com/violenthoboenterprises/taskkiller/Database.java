@@ -297,7 +297,6 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public Cursor getDataByTimestamp(String stamp){
-
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL16
                 + " == " + stamp, null);

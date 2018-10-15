@@ -133,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements
 //    static int animateID;
     //used to block excessive sounds and animations if user kills tasks in close succession
     static boolean blockSoundAndAnimate;
+    //indicates that task was just reinstated
+    static boolean justReinstated;
 
     //task properties require exit animation
     static boolean exitTaskProperties;
@@ -459,6 +461,7 @@ public class MainActivity extends AppCompatActivity implements
         toolbarParams = (RelativeLayout.LayoutParams) toolbarDark.getLayoutParams();
         theListView.setOnScrollListener(this);
         blockSoundAndAnimate = false;
+        justReinstated = false;
 
         db.insertUniversalData(mute);
 
@@ -1522,9 +1525,14 @@ public class MainActivity extends AppCompatActivity implements
 //        animatePosition = i;
 //        animateID = Integer.parseInt(MainActivity.sortedIDs.get(i));
 
+//        reorderList();
+
+//        theListView.setAdapter(theAdapter[0]);
+
+//        justReinstated = true;
+
         reorderList();
 
-        theListView.setAdapter(theAdapter[0]);
 
     }
 
@@ -1653,36 +1661,44 @@ public class MainActivity extends AppCompatActivity implements
 
     public void reorderList() {
 
+        ArrayList<Integer> allIDs = db.getIDs();
+
         ArrayList<Integer> tempList = new ArrayList<>();
 
-        //Saving timestamps into a temporary array
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
+            //Saving timestamps into a temporary array
+            for (int i = 0; i < MainActivity.taskList.size(); i++) {
 
-            //getting timestamp
-            String dbTimestamp = "";
-            Cursor dbResult = db.getSortedData(Integer.parseInt(
-                    sortedIDs.get(i)));
-            while (dbResult.moveToNext()) {
-                dbTimestamp = dbResult.getString(3);
+                //getting timestamp
+                String dbTimestamp = "";
+//            Cursor dbResult = db.getSortedData(Integer.parseInt(
+//                    sortedIDs.get(i)));
+//                Cursor dbResult = db.getSortedData(i);
+                Cursor dbResult = db.getData(allIDs.get(i));
+                while (dbResult.moveToNext()) {
+                    dbTimestamp = dbResult.getString(3);
+                }
+                dbResult.close();
+
+                tempList.add(Integer.valueOf(dbTimestamp));
+
             }
-            dbResult.close();
 
-            tempList.add(Integer.valueOf(dbTimestamp));
 
-        }
-
-        //Ordering list by time task was created
         ArrayList<String> whenTaskCreated = new ArrayList<>();
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
-            String created = "";
-            Cursor createdResult = db.getSortedData(Integer.parseInt
-                    (sortedIDs.get(i)));
-            while (createdResult.moveToNext()) {
-                created = createdResult.getString(15);
+
+            //Ordering list by time task was created
+            for (int i = 0; i < MainActivity.taskList.size(); i++) {
+                String created = "";
+//            Cursor createdResult = db.getSortedData(Integer.parseInt
+//                    (sortedIDs.get(i)));
+//                Cursor createdResult = db.getSortedData(i);
+                Cursor createdResult = db.getData(allIDs.get(i));
+                while (createdResult.moveToNext()) {
+                    created = createdResult.getString(15);
+                }
+                createdResult.close();
+                whenTaskCreated.add(created);
             }
-            createdResult.close();
-            whenTaskCreated.add(created);
-        }
 
         Collections.sort(whenTaskCreated);
         Collections.reverse(whenTaskCreated);
@@ -2160,7 +2176,6 @@ public class MainActivity extends AppCompatActivity implements
 
                     }
 
-                    Log.i(TAG, "timestamp one");
                     if(remindersAvailable) {
                         //updating timestamp
                         MainActivity.db.updateTimestamp(String.valueOf(
@@ -2344,7 +2359,6 @@ public class MainActivity extends AppCompatActivity implements
 
                     futureStamp = futureStamp / 1000;
 
-                    Log.i(TAG, "timestamp three");
                     //updating timestamp
                     MainActivity.db.updateTimestamp(String.valueOf(
                             MainActivity.sortedIDs.get(thePosition)),
@@ -2819,7 +2833,9 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         for(int i = 0; i < taskListSize; i++){
-            Cursor sharedPreferencesResult = db.getSortedData(Integer.parseInt(sortedIDs.get(i)));
+//            Cursor sharedPreferencesResult = db.getSortedData(Integer.parseInt(sortedIDs.get(i)));
+//            Cursor sharedPreferencesResult = db.getSortedData(i);
+            Cursor sharedPreferencesResult = db.getData(IDList.get(i));
             while (sharedPreferencesResult.moveToNext()) {
                 taskList.add(sharedPreferencesResult.getString(4));
             }
