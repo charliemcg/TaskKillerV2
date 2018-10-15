@@ -2205,7 +2205,6 @@ public class MainActivity extends AppCompatActivity implements
 
                     }
 
-                    Log.i(TAG, "timestamp two");
                     //updating timestamp
                     MainActivity.db.updateTimestamp(String.valueOf(
                             MainActivity.sortedIDs.get(thePosition)),
