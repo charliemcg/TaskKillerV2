@@ -37,6 +37,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COL19 = "MANUALKILL";
     public static final String COL20 = "KILLEDEARLY";
     public static final String COL21 = "ORIGINALDAY";
+    public static final String COL22 = "SNOOZEDTIMESTAMP";
 
     //Alarm Table
     public static final String ATABLE = "alarms_table";
@@ -116,7 +117,7 @@ public class Database extends SQLiteOpenHelper {
                 " KILLED BOOLEAN, BROADCAST INTEGER, REPEAT BOOLEAN, OVERDUE BOOLEAN, " +
                 "SNOOZED BOOLEAN, SHOWONCE BOOLEAN, INTERVAL INTEGER, REPEATINTERVAL TEXT," +
                 " IGNORED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER, CHECKLISTSIZE INETGER, " +
-                "MANUALKILL BOOLEAN, KILLEDEARLY BOOLEAN, ORIGINALDAY TEXT)");
+                "MANUALKILL BOOLEAN, KILLEDEARLY BOOLEAN, ORIGINALDAY TEXT, SNOOZEDTIMESTAMP TEXT)");
         db.execSQL("create table " + ATABLE + " (ID INTEGER PRIMARY KEY, " +
                 "HOUR TEXT, MINUTE TEXT, AMPM TEXT, DAY TEXT, MONTH TEXT, YEAR TEXT)");
         db.execSQL("create table " + STABLE + " (ID INTEGER PRIMARY KEY, " +
@@ -169,6 +170,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(COL19, 0);
         content.put(COL20, 0);
         content.put(COL21, "");
+        content.put(COL22, 0);
         long result = db.insert(TABLE, null, content);
         if(result == -1){
             return false;
@@ -328,6 +330,13 @@ public class Database extends SQLiteOpenHelper {
     public Cursor getDataByDueTime(String stamp){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL4
+                + " == " + stamp, null);
+        return result;
+    }
+
+    public Cursor getDataBySnoozeTime(String stamp){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from " + TABLE + " where " + COL22
                 + " == " + stamp, null);
         return result;
     }
@@ -542,6 +551,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(COL21, day);
+        db.update(TABLE, content, "ID = ?", new String[] {id});
+        return true;
+    }
+
+    public boolean updateSnoozedTimestamp(String id, String snoozed){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(COL22, snoozed);
         db.update(TABLE, content, "ID = ?", new String[] {id});
         return true;
     }

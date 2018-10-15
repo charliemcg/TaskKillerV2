@@ -1675,6 +1675,7 @@ public class MainActivity extends AppCompatActivity implements
             boolean dbSnooze = false;
             int dbInterval = 0;
             String dbID = "";
+            String dbSnoozeStamp = "";
 //            Cursor dbResult = db.getSortedData(Integer.parseInt(
 //                    sortedIDs.get(i)));
 //                Cursor dbResult = db.getSortedData(i);
@@ -1684,28 +1685,29 @@ public class MainActivity extends AppCompatActivity implements
                 dbTimestamp = dbResult.getString(3);
                 dbSnooze = dbResult.getInt(10) > 0;
                 dbInterval = dbResult.getInt(12);
+                dbSnoozeStamp = dbResult.getString(21);
             }
             dbResult.close();
 
-            long snoozeStamp = (Integer.valueOf(dbTimestamp) + (3600 * dbInterval));
-            String tempTimestamp = "";
-            for(int j = 0; j < MainActivity.taskList.size(); j++) {
-                Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-                        MainActivity.sortedIDs.get(j)));
-                while (tempResult.moveToNext()) {
-                    tempTimestamp = tempResult.getString(3);
-                }
-                tempResult.close();
-                if(snoozeStamp == Long.parseLong(tempTimestamp)){
-                    snoozeStamp++;
-                    j = 0;
-                }
-
-            }
+//            long snoozeStamp = (Integer.valueOf(dbTimestamp) + (3600 * dbInterval));
+//            String tempTimestamp = "";
+//            for(int j = 0; j < MainActivity.taskList.size(); j++) {
+//                Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+//                        MainActivity.sortedIDs.get(j)));
+//                while (tempResult.moveToNext()) {
+//                    tempTimestamp = tempResult.getString(3);
+//                }
+//                tempResult.close();
+//                if(snoozeStamp == Long.parseLong(tempTimestamp)){
+//                    snoozeStamp++;
+//                    j = 0;
+//                }
+//
+//            }
 
             if(dbSnooze) {
-                Log.i(TAG, "adding a snoozed task");
-                tempList.add((int) snoozeStamp);
+                Log.i(TAG, "adding a snoozed task: " + dbSnoozeStamp);
+                tempList.add(Integer.parseInt(dbSnoozeStamp));
                 snoozedIDs.add(Integer.parseInt(dbID));
 //                tempList.add(Integer.valueOf(dbTimestamp));
             }else{
@@ -1786,7 +1788,7 @@ public class MainActivity extends AppCompatActivity implements
 //                Log.i(TAG, "Snoozed task detected: " + i);
 //                dbResult = MainActivity.db.getData(i);
 //            }else {
-                dbResult = MainActivity.db.getDataByDueTime(
+                dbResult = db.getDataByDueTime(
                         String.valueOf(tempList.get(i)));
 //            }
             Log.i(TAG, "dbResult: " + dbResult);
@@ -1804,7 +1806,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             if(!dataExists) {
                 Log.i(TAG, "detected lack of data");
-                dbResult = MainActivity.db.getData(snoozedIDs.get(0));
+                dbResult = db.getDataBySnoozeTime(String.valueOf(tempList.get(i)));
                 while(dbResult.moveToNext()){
                     dbId = dbResult.getInt(0);
                     dbTask = dbResult.getString(4);
@@ -1815,7 +1817,6 @@ public class MainActivity extends AppCompatActivity implements
                         tempTaskList.add(dbTask);
                     }
                 }
-                snoozedIDs.remove(0);
             }
             dbResult.close();
 
@@ -2191,6 +2192,7 @@ public class MainActivity extends AppCompatActivity implements
                     MainActivity.sortedIDs.get(/*MainActivity.activeTask*/thePosition)),
                     "", "", "", "", "", "");
             db.updateSnooze(String.valueOf(thePosition), false);
+            db.updateSnoozedTimestamp(MainActivity.sortedIDs.get(thePosition), "0");
 
             MainActivity.pendIntent = PendingIntent.getBroadcast(
                     this, Integer.parseInt(
