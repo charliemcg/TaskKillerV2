@@ -5154,9 +5154,11 @@ class MyAdapter extends ArrayAdapter<String> {
         Integer dbBroadcast = 0;
         Boolean dbRepeat = false;
         Boolean dbSnooze = false;
+        String dbTimestamp = "";
         Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
                 MainActivity.sortedIDs.get(position)));
         while (dbResult.moveToNext()) {
+            dbTimestamp = dbResult.getString(3);
             dbTask = dbResult.getString(4);
             dbBroadcast = dbResult.getInt(7);
             dbRepeat = dbResult.getInt(8) > 0;
@@ -5225,6 +5227,13 @@ class MyAdapter extends ArrayAdapter<String> {
             };
 
             handler.postDelayed(runnable, 500);
+
+            //negating any increase in due date limit
+            if(!MainActivity.remindersAvailable) {
+                MainActivity.duesSet--;
+                MainActivity.db.updateDuesSet(MainActivity.duesSet);
+            }
+
         } else if (currentDate.get(Calendar.YEAR) == year
                 && currentDate.get(Calendar.MONTH) == month
                 && currentDate.get(Calendar.DAY_OF_MONTH) == day
@@ -5263,6 +5272,12 @@ class MyAdapter extends ArrayAdapter<String> {
             };
 
             handler.postDelayed(runnable, 500);
+
+            //negating any increase in due date limit
+            if(!MainActivity.remindersAvailable) {
+                MainActivity.duesSet--;
+                MainActivity.db.updateDuesSet(MainActivity.duesSet);
+            }
 
         } else {
 
