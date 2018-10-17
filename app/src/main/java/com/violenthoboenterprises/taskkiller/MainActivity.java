@@ -1531,7 +1531,13 @@ public class MainActivity extends AppCompatActivity implements
 
 //        justReinstated = true;
 
-        reorderList();
+//        reorderList();
+        new Reorder();
+        //Updating the view with the new order
+        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                this, MainActivity.taskList)};
+        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
 
 
     }
@@ -1659,242 +1665,242 @@ public class MainActivity extends AppCompatActivity implements
 //
 //    }
 
-    public void reorderList() {
-
-        ArrayList<Integer> allIDs = db.getIDs();
-
-        ArrayList<Integer> snoozedIDs = new ArrayList<>();
-
-        ArrayList<Integer> tempList = new ArrayList<>();
-
-        //Saving timestamps into a temporary array
-        for (int i = 0; i < MainActivity.taskList.size(); i++) {
-
-            //getting timestamp
-            String dbTimestamp = "";
-            boolean dbSnooze = false;
-            int dbInterval = 0;
-            String dbID = "";
-            String dbSnoozeStamp = "";
-//            Cursor dbResult = db.getSortedData(Integer.parseInt(
-//                    sortedIDs.get(i)));
-//                Cursor dbResult = db.getSortedData(i);
-            Cursor dbResult = db.getData(allIDs.get(i));
-            while (dbResult.moveToNext()) {
-                dbID = dbResult.getString(0);
-                dbTimestamp = dbResult.getString(3);
-                dbSnooze = dbResult.getInt(10) > 0;
-                dbInterval = dbResult.getInt(12);
-                dbSnoozeStamp = dbResult.getString(21);
-            }
-            dbResult.close();
-
-//            long snoozeStamp = (Integer.valueOf(dbTimestamp) + (3600 * dbInterval));
-//            String tempTimestamp = "";
-//            for(int j = 0; j < MainActivity.taskList.size(); j++) {
-//                Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                        MainActivity.sortedIDs.get(j)));
-//                while (tempResult.moveToNext()) {
-//                    tempTimestamp = tempResult.getString(3);
-//                }
-//                tempResult.close();
-//                if(snoozeStamp == Long.parseLong(tempTimestamp)){
-//                    snoozeStamp++;
-//                    j = 0;
-//                }
+//    public void reorderList() {
 //
+//        ArrayList<Integer> allIDs = db.getIDs();
+//
+//        ArrayList<Integer> snoozedIDs = new ArrayList<>();
+//
+//        ArrayList<Integer> tempList = new ArrayList<>();
+//
+//        //Saving timestamps into a temporary array
+//        for (int i = 0; i < MainActivity.taskList.size(); i++) {
+//
+//            //getting timestamp
+//            String dbTimestamp = "";
+//            boolean dbSnooze = false;
+//            int dbInterval = 0;
+//            String dbID = "";
+//            String dbSnoozeStamp = "";
+////            Cursor dbResult = db.getSortedData(Integer.parseInt(
+////                    sortedIDs.get(i)));
+////                Cursor dbResult = db.getSortedData(i);
+//            Cursor dbResult = db.getData(allIDs.get(i));
+//            while (dbResult.moveToNext()) {
+//                dbID = dbResult.getString(0);
+//                dbTimestamp = dbResult.getString(3);
+//                dbSnooze = dbResult.getInt(10) > 0;
+//                dbInterval = dbResult.getInt(12);
+//                dbSnoozeStamp = dbResult.getString(21);
 //            }
-
-            if(dbSnooze) {
-                Log.i(TAG, "adding a snoozed task: " + dbSnoozeStamp);
-                tempList.add(Integer.parseInt(dbSnoozeStamp));
-                snoozedIDs.add(Integer.parseInt(dbID));
+//            dbResult.close();
+//
+////            long snoozeStamp = (Integer.valueOf(dbTimestamp) + (3600 * dbInterval));
+////            String tempTimestamp = "";
+////            for(int j = 0; j < MainActivity.taskList.size(); j++) {
+////                Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+////                        MainActivity.sortedIDs.get(j)));
+////                while (tempResult.moveToNext()) {
+////                    tempTimestamp = tempResult.getString(3);
+////                }
+////                tempResult.close();
+////                if(snoozeStamp == Long.parseLong(tempTimestamp)){
+////                    snoozeStamp++;
+////                    j = 0;
+////                }
+////
+////            }
+//
+//            if(dbSnooze) {
+//                Log.i(TAG, "adding a snoozed task: " + dbSnoozeStamp);
+//                tempList.add(Integer.parseInt(dbSnoozeStamp));
+//                snoozedIDs.add(Integer.parseInt(dbID));
+////                tempList.add(Integer.valueOf(dbTimestamp));
+//            }else{
 //                tempList.add(Integer.valueOf(dbTimestamp));
-            }else{
-                tempList.add(Integer.valueOf(dbTimestamp));
-            }
-
-        }
-
-        ArrayList<String> whenTaskCreated = new ArrayList<>();
-
-        //Ordering list by time task was created
-        for (int i = 0; i < MainActivity.taskList.size(); i++) {
-            String created = "";
-//            Cursor createdResult = db.getSortedData(Integer.parseInt
-//                    (sortedIDs.get(i)));
-//                Cursor createdResult = db.getSortedData(i);
-            Cursor createdResult = db.getData(allIDs.get(i));
-            while (createdResult.moveToNext()) {
-                created = createdResult.getString(15);
-            }
-            createdResult.close();
-            whenTaskCreated.add(created);
-        }
-
-        Collections.sort(whenTaskCreated);
-        Collections.reverse(whenTaskCreated);
-
-        ArrayList<String> tempIdsList = new ArrayList<>();
-        ArrayList<String> tempTaskList = new ArrayList<>();
-        ArrayList<String> tempKilledIdsList = new ArrayList<>();
-        ArrayList<String> tempKilledTaskList = new ArrayList<>();
-//        ArrayList<String> tempDueIdsList = new ArrayList<>();
-//        ArrayList<String> tempDueTaskList = new ArrayList<>();
-
-        //getting tasks which have no due date
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
-
-            //getting task data
-            int dbId = 0;
-            String dbTimestamp = "";
-            String dbTask = "";
-            Boolean dbKilled = false;
-            Cursor dbResult = db.getDataByTimestamp(
-                    whenTaskCreated.get(i));
-            while (dbResult.moveToNext()) {
-                dbId = dbResult.getInt(0);
-                dbTimestamp = dbResult.getString(3);
-                dbTask = dbResult.getString(4);
-                dbKilled = dbResult.getInt(6) > 0;
-            }
-            dbResult.close();
-
-            //Filtering out killed tasks
-            if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
-                tempIdsList.add(String.valueOf(dbId));
-                tempTaskList.add(dbTask);
-            }else if((Integer.parseInt(dbTimestamp) == 0) && (dbKilled)){
-                tempKilledIdsList.add(String.valueOf(dbId));
-                tempKilledTaskList.add(dbTask);
-            }else {
-//                tempDueIdsList.add(String.valueOf(dbId));
-//                tempDueTaskList.add(dbTask);
-            }
-
-        }
-
-        Collections.sort(tempList);
-
-        //Adding due tasks which aren't killed to middle of task list
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
-
-            //getting task data
-            int dbId;
-            String dbTask;
-            boolean dbKilled ;
-            Cursor dbResult;
-//            if(snoozedIDs.contains(i)){
-//                Log.i(TAG, "Snoozed task detected: " + i);
-//                dbResult = MainActivity.db.getData(i);
-//            }else {
-                dbResult = db.getDataByDueTime(
-                        String.valueOf(tempList.get(i)));
 //            }
-            Log.i(TAG, "dbResult: " + dbResult);
-            boolean dataExists = false;
-            while (dbResult.moveToNext()) {
-                dbId = dbResult.getInt(0);
-                dbTask = dbResult.getString(4);
-                dbKilled = dbResult.getInt(6) > 0;
-                Log.i(TAG, "dbId: " + dbId);
-                if((tempList.get(i) != 0) && !dbKilled){
-                    tempIdsList.add(String.valueOf(dbId));
-                    tempTaskList.add(dbTask);
-                }
-                dataExists = true;
-            }
-            if(!dataExists) {
-                Log.i(TAG, "detected lack of data");
-                dbResult = db.getDataBySnoozeTime(String.valueOf(tempList.get(i)));
-                while(dbResult.moveToNext()){
-                    dbId = dbResult.getInt(0);
-                    dbTask = dbResult.getString(4);
-                    dbKilled = dbResult.getInt(6) > 0;
-                    Log.i(TAG, "dbId: " + dbId);
-                    if((tempList.get(i) != 0) && !dbKilled){
-                        tempIdsList.add(String.valueOf(dbId));
-                        tempTaskList.add(dbTask);
-                    }
-                }
-            }
-            dbResult.close();
-
-//            Log.i(TAG, "dbTask: " + dbTask + " dbId: " + dbId);
-
-//            if((tempList.get(i) != 0) && !dbKilled){
+//
+//        }
+//
+//        ArrayList<String> whenTaskCreated = new ArrayList<>();
+//
+//        //Ordering list by time task was created
+//        for (int i = 0; i < MainActivity.taskList.size(); i++) {
+//            String created = "";
+////            Cursor createdResult = db.getSortedData(Integer.parseInt
+////                    (sortedIDs.get(i)));
+////                Cursor createdResult = db.getSortedData(i);
+//            Cursor createdResult = db.getData(allIDs.get(i));
+//            while (createdResult.moveToNext()) {
+//                created = createdResult.getString(15);
+//            }
+//            createdResult.close();
+//            whenTaskCreated.add(created);
+//        }
+//
+//        Collections.sort(whenTaskCreated);
+//        Collections.reverse(whenTaskCreated);
+//
+//        ArrayList<String> tempIdsList = new ArrayList<>();
+//        ArrayList<String> tempTaskList = new ArrayList<>();
+//        ArrayList<String> tempKilledIdsList = new ArrayList<>();
+//        ArrayList<String> tempKilledTaskList = new ArrayList<>();
+////        ArrayList<String> tempDueIdsList = new ArrayList<>();
+////        ArrayList<String> tempDueTaskList = new ArrayList<>();
+//
+//        //getting tasks which have no due date
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            //getting task data
+//            int dbId = 0;
+//            String dbTimestamp = "";
+//            String dbTask = "";
+//            Boolean dbKilled = false;
+//            Cursor dbResult = db.getDataByTimestamp(
+//                    whenTaskCreated.get(i));
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTimestamp = dbResult.getString(3);
+//                dbTask = dbResult.getString(4);
+//                dbKilled = dbResult.getInt(6) > 0;
+//            }
+//            dbResult.close();
+//
+//            //Filtering out killed tasks
+//            if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
 //                tempIdsList.add(String.valueOf(dbId));
 //                tempTaskList.add(dbTask);
+//            }else if((Integer.parseInt(dbTimestamp) == 0) && (dbKilled)){
+//                tempKilledIdsList.add(String.valueOf(dbId));
+//                tempKilledTaskList.add(dbTask);
+//            }else {
+////                tempDueIdsList.add(String.valueOf(dbId));
+////                tempDueTaskList.add(dbTask);
 //            }
-
-        }
-
-//        //Adding due tasks to middle of task list
+//
+//        }
+//
+//        Collections.sort(tempList);
+//
+//        //Adding due tasks which aren't killed to middle of task list
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            //getting task data
+//            int dbId;
+//            String dbTask;
+//            boolean dbKilled ;
+//            Cursor dbResult;
+////            if(snoozedIDs.contains(i)){
+////                Log.i(TAG, "Snoozed task detected: " + i);
+////                dbResult = MainActivity.db.getData(i);
+////            }else {
+//                dbResult = db.getDataByDueTime(
+//                        String.valueOf(tempList.get(i)));
+////            }
+//            Log.i(TAG, "dbResult: " + dbResult);
+//            boolean dataExists = false;
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTask = dbResult.getString(4);
+//                dbKilled = dbResult.getInt(6) > 0;
+//                Log.i(TAG, "dbId: " + dbId);
+//                if((tempList.get(i) != 0) && !dbKilled){
+//                    tempIdsList.add(String.valueOf(dbId));
+//                    tempTaskList.add(dbTask);
+//                }
+//                dataExists = true;
+//            }
+//            if(!dataExists) {
+//                Log.i(TAG, "detected lack of data");
+//                dbResult = db.getDataBySnoozeTime(String.valueOf(tempList.get(i)));
+//                while(dbResult.moveToNext()){
+//                    dbId = dbResult.getInt(0);
+//                    dbTask = dbResult.getString(4);
+//                    dbKilled = dbResult.getInt(6) > 0;
+//                    Log.i(TAG, "dbId: " + dbId);
+//                    if((tempList.get(i) != 0) && !dbKilled){
+//                        tempIdsList.add(String.valueOf(dbId));
+//                        tempTaskList.add(dbTask);
+//                    }
+//                }
+//            }
+//            dbResult.close();
+//
+////            Log.i(TAG, "dbTask: " + dbTask + " dbId: " + dbId);
+//
+////            if((tempList.get(i) != 0) && !dbKilled){
+////                tempIdsList.add(String.valueOf(dbId));
+////                tempTaskList.add(dbTask);
+////            }
+//
+//        }
+//
+////        //Adding due tasks to middle of task list
+////        for(int i = 0; i < MainActivity.taskList.size(); i++){
+////
+////            //getting task data
+////            int dbId = 0;
+////            String dbTask = "";
+////            Cursor dbResult = db.getDataByDueTime(
+////                    String.valueOf(tempList.get(i)));
+////            while (dbResult.moveToNext()) {
+////                dbId = dbResult.getInt(0);
+////                dbTask = dbResult.getString(4);
+////            }
+////            dbResult.close();
+////
+////            if((tempList.get(i) != 0)){
+////                tempIdsList.add(String.valueOf(dbId));
+////                tempTaskList.add(dbTask);
+////            }
+////
+////        }
+//
+//        //Adding killed tasks to end of task list
+//        for(int i = 0; i < tempKilledIdsList.size(); i++){
+//            tempTaskList.add(tempKilledTaskList.get(i));
+//            tempIdsList.add(tempKilledIdsList.get(i));
+//        }
+//
+//        //Adding killed tasks with due dates to end of task list
 //        for(int i = 0; i < MainActivity.taskList.size(); i++){
 //
 //            //getting task data
 //            int dbId = 0;
 //            String dbTask = "";
-//            Cursor dbResult = db.getDataByDueTime(
+//            boolean dbKilled = false;
+//            Cursor dbResult = MainActivity.db.getDataByDueTime(
 //                    String.valueOf(tempList.get(i)));
 //            while (dbResult.moveToNext()) {
 //                dbId = dbResult.getInt(0);
 //                dbTask = dbResult.getString(4);
+//                dbKilled = dbResult.getInt(6) > 0;
 //            }
 //            dbResult.close();
 //
-//            if((tempList.get(i) != 0)){
+//            if((tempList.get(i) != 0) && dbKilled){
 //                tempIdsList.add(String.valueOf(dbId));
 //                tempTaskList.add(dbTask);
 //            }
 //
 //        }
-
-        //Adding killed tasks to end of task list
-        for(int i = 0; i < tempKilledIdsList.size(); i++){
-            tempTaskList.add(tempKilledTaskList.get(i));
-            tempIdsList.add(tempKilledIdsList.get(i));
-        }
-
-        //Adding killed tasks with due dates to end of task list
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
-
-            //getting task data
-            int dbId = 0;
-            String dbTask = "";
-            boolean dbKilled = false;
-            Cursor dbResult = MainActivity.db.getDataByDueTime(
-                    String.valueOf(tempList.get(i)));
-            while (dbResult.moveToNext()) {
-                dbId = dbResult.getInt(0);
-                dbTask = dbResult.getString(4);
-                dbKilled = dbResult.getInt(6) > 0;
-            }
-            dbResult.close();
-
-            if((tempList.get(i) != 0) && dbKilled){
-                tempIdsList.add(String.valueOf(dbId));
-                tempTaskList.add(dbTask);
-            }
-
-        }
-
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
-
-            MainActivity.db.updateSortedIndex(String.valueOf(i),
-                    Integer.parseInt(tempIdsList.get(i)));
-
-        }
-
-        MainActivity.sortedIDs = tempIdsList;
-        MainActivity.taskList = tempTaskList;
-
-        //Updating the view with the new order
-        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
-                this, MainActivity.taskList)};
-        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-
-    }
+//
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            MainActivity.db.updateSortedIndex(String.valueOf(i),
+//                    Integer.parseInt(tempIdsList.get(i)));
+//
+//        }
+//
+//        MainActivity.sortedIDs = tempIdsList;
+//        MainActivity.taskList = tempTaskList;
+//
+//        //Updating the view with the new order
+//        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+//                this, MainActivity.taskList)};
+//        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//
+//    }
 
     //Create a new task
     private void createTask(final String taskName, ArrayList taskList, boolean taskBeingEdited) {
@@ -2146,6 +2152,19 @@ public class MainActivity extends AppCompatActivity implements
     //actions to occur if user clicks the complete check box
     public void complete(View view) {
 
+        //getting snooze
+        ArrayList<Integer> allIDs = db.getIDs();
+        for (int i = 0; i < MainActivity.taskList.size(); i++) {
+            boolean dbSnooze = false;
+            Cursor dbResult = MainActivity.db.getData(allIDs.get(i));
+            while (dbResult.moveToNext()) {
+                dbSnooze = dbResult.getInt(10) > 0;
+            }
+            dbResult.close();
+
+            Log.i(TAG, "Snooze: " + dbSnooze);
+        }
+
         if(tasksAreClickable && !MainActivity.blockSoundAndAnimate) {
 
             if (!mute) {
@@ -2163,6 +2182,8 @@ public class MainActivity extends AppCompatActivity implements
                     theListView.getAdapter().getItemId(thePosition));
 
             theListView.setAdapter(theAdapter[0]);
+
+            Log.i(TAG, "Position: " + thePosition + " sortedIDs: " + sortedIDs);
 
             //getting task data
             String dbTimestamp = "";
@@ -2183,16 +2204,16 @@ public class MainActivity extends AppCompatActivity implements
             }
             dbResult.close();
 
-            db.updateManualKill(String.valueOf(
-                    MainActivity.sortedIDs.get(thePosition)), true);
-
-            db.updateOverdue(String.valueOf(thePosition), false);
-            //cancelling any snooze data
-            MainActivity.db.updateSnoozeData(String.valueOf(
-                    MainActivity.sortedIDs.get(/*MainActivity.activeTask*/thePosition)),
-                    "", "", "", "", "", "");
-            db.updateSnooze(String.valueOf(thePosition), false);
-            db.updateSnoozedTimestamp(MainActivity.sortedIDs.get(thePosition), "0");
+//            db.updateManualKill(String.valueOf(
+//                    MainActivity.sortedIDs.get(thePosition)), true);
+//
+//            db.updateOverdue(String.valueOf(MainActivity.sortedIDs.get(thePosition)), false);
+//            //cancelling any snooze data
+//            MainActivity.db.updateSnoozeData(String.valueOf(
+//                    MainActivity.sortedIDs.get(/*MainActivity.activeTask*/thePosition)),
+//                    "", "", "", "", "", "");
+//            db.updateSnooze(String.valueOf(MainActivity.sortedIDs.get(thePosition)), false);
+//            db.updateSnoozedTimestamp(MainActivity.sortedIDs.get(thePosition), "0");
 
             MainActivity.pendIntent = PendingIntent.getBroadcast(
                     this, Integer.parseInt(
@@ -2201,6 +2222,19 @@ public class MainActivity extends AppCompatActivity implements
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             MainActivity.alarmManager.cancel(MainActivity.pendIntent);
+
+            //getting snooze
+            allIDs = db.getIDs();
+            for (int i = 0; i < MainActivity.taskList.size(); i++) {
+                boolean blahSnooze = false;
+                Cursor blahResult = MainActivity.db.getData(allIDs.get(i));
+                while (blahResult.moveToNext()) {
+                    blahSnooze = blahResult.getInt(10) > 0;
+                }
+                blahResult.close();
+
+                Log.i(TAG, "Snooze: " + blahSnooze);
+            }
 
             if(dbRepeat && !dbSnooze){
 
@@ -2932,7 +2966,12 @@ public class MainActivity extends AppCompatActivity implements
             sharedPreferencesResult.close();
         }
 
-        reorderList();
+//        reorderList();
+        new Reorder();
+        //Updating the view with the new order
+        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                this, MainActivity.taskList)};
+        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
         alertIntent = new Intent(this, AlertReceiver.class);
 

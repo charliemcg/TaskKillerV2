@@ -503,7 +503,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
         //Check if list needs to be reordered
         if(MainActivity.reorderList){
-            reorderList();
+//            reorderList();
+            new Reorder();
+            //Updating the view with the new order
+            MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                    getContext(), MainActivity.taskList)};
+            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
             MainActivity.reorderList = false;
         }
 
@@ -596,12 +601,81 @@ class MyAdapter extends ArrayAdapter<String> {
 
         //Determining if ignored repeating task has reached next repeat time
         Calendar nowness = new GregorianCalendar();
-        if(dbRepeatInterval.equals("day") && !dbTimestamp.equals("")){
+        if(dbRepeatInterval.equals("day") && (!dbTimestamp.equals("") || !dbTimestamp.equals("0"))){
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + 86400)) {
 
+//                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+//                // detect duplicates and then adjusting the timestamp on the millisecond level
+//                long futureStamp = Integer.parseInt(dbTimestamp) + 86400;
+//                String tempTimestamp = "";
+//                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+//                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+//                            MainActivity.sortedIDs.get(i)));
+//                    while (tempResult.moveToNext()) {
+//                        tempTimestamp = tempResult.getString(3);
+//                    }
+//                    tempResult.close();
+//                    if(futureStamp == Long.parseLong(tempTimestamp)){
+//                        futureStamp++;
+//                        i = 0;
+//                    }
+//
+//                }
+//
+//                //updating timestamp
+//                MainActivity.db.updateTimestamp(String.valueOf(
+//                        MainActivity.sortedIDs.get(position)),
+//                        String.valueOf(futureStamp));
+//
+//                if(!alarmDay.equals("")) {
+//                    int newDay = Integer.parseInt(alarmDay);
+//                    int newMonth = Integer.parseInt(alarmMonth);
+//                    int newYear = Integer.parseInt(alarmYear);
+//                    //Incrementing month
+//                    if (((newMonth == 0) || (newMonth == 2) || (newMonth == 4) || (newMonth == 6)
+//                            || (newMonth == 7) || (newMonth == 9)) && (newDay == 31)) {
+//                        newDay = 1;
+//                        newMonth++;
+//                    } else if (((newMonth == 1) || (newMonth == 3) || (newMonth == 5)
+//                            || (newMonth == 8) || (newMonth == 10)) && (newDay == 30)) {
+//                        newDay = 1;
+//                        newMonth++;
+//                    } else if ((newMonth == 11) && (newDay == 31)) {
+//                        newDay = 1;
+//                        newMonth = 0;
+//                        newYear++;
+//                    } else if ((newMonth == 1) && (newDay == 28) && (newYear % 4 != 0)) {
+//                        newDay = 1;
+//                        newMonth++;
+//                    } else if ((newMonth == 1) && (newDay == 29) && (newYear % 4 == 0)) {
+//                        newDay = 1;
+//                        newMonth++;
+//                    } else {
+//                        newDay++;
+//                    }
+//
+//                    //updating due date in database
+//                    MainActivity.db.updateAlarmData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            alarmHour, alarmMinute, alarmAmpm,
+//                            String.valueOf(newDay), String.valueOf(newMonth),
+//                            String.valueOf(newYear));
+//
+//                    //cancelling any snooze data
+//                    MainActivity.db.updateSnoozeData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            "", "", "", "", "", "");
+//
+//                }
+                Log.i(TAG, "now: " + (nowness.getTimeInMillis() / 1000));
+                Log.i(TAG, "timestamp: " + Long.parseLong(dbTimestamp));
+                long daysOut = (nowness.getTimeInMillis() / 1000) - Long.parseLong(dbTimestamp);
+                Log.i(TAG, "daysOut in seconds: " + daysOut);
+                daysOut = daysOut / 86400;
+                Log.i(TAG, "daysOut in days: " + daysOut);
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-                // detect duplicates and then adjusting the timestamp on the millisecond level
-                long futureStamp = Integer.parseInt(dbTimestamp) + 86400;
+                // detect duplicates and then adjusting the timestamp on the second level
+                long futureStamp = Integer.parseInt(dbTimestamp) + (86400 * daysOut);
                 String tempTimestamp = "";
                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
                     Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
@@ -622,39 +696,52 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.sortedIDs.get(position)),
                         String.valueOf(futureStamp));
 
+                Log.i(TAG, "now: " + (Calendar.getInstance().getTimeInMillis() / 1000) + " future: " + futureStamp);
+
                 if(!alarmDay.equals("")) {
-                    int newDay = Integer.parseInt(alarmDay);
-                    int newMonth = Integer.parseInt(alarmMonth);
-                    int newYear = Integer.parseInt(alarmYear);
-                    //Incrementing month
-                    if (((newMonth == 0) || (newMonth == 2) || (newMonth == 4) || (newMonth == 6)
-                            || (newMonth == 7) || (newMonth == 9)) && (newDay == 31)) {
-                        newDay = 1;
-                        newMonth++;
-                    } else if (((newMonth == 1) || (newMonth == 3) || (newMonth == 5)
-                            || (newMonth == 8) || (newMonth == 10)) && (newDay == 30)) {
-                        newDay = 1;
-                        newMonth++;
-                    } else if ((newMonth == 11) && (newDay == 31)) {
-                        newDay = 1;
-                        newMonth = 0;
-                        newYear++;
-                    } else if ((newMonth == 1) && (newDay == 28) && (newYear % 4 != 0)) {
-                        newDay = 1;
-                        newMonth++;
-                    } else if ((newMonth == 1) && (newDay == 29) && (newYear % 4 == 0)) {
-                        newDay = 1;
-                        newMonth++;
-                    } else {
-                        newDay++;
-                    }
+//                    int newDay = Integer.parseInt(alarmDay);
+//                    int newMonth = Integer.parseInt(alarmMonth);
+//                    int newYear = Integer.parseInt(alarmYear);
+//                    //Incrementing month
+//                    if (((newMonth == 0) || (newMonth == 2) || (newMonth == 4) || (newMonth == 6)
+//                            || (newMonth == 7) || (newMonth == 9)) && (newDay == 31)) {
+//                        newDay = 1;
+//                        newMonth++;
+//                    } else if (((newMonth == 1) || (newMonth == 3) || (newMonth == 5)
+//                            || (newMonth == 8) || (newMonth == 10)) && (newDay == 30)) {
+//                        newDay = 1;
+//                        newMonth++;
+//                    } else if ((newMonth == 11) && (newDay == 31)) {
+//                        newDay = 1;
+//                        newMonth = 0;
+//                        newYear++;
+//                    } else if ((newMonth == 1) && (newDay == 28) && (newYear % 4 != 0)) {
+//                        newDay = 1;
+//                        newMonth++;
+//                    } else if ((newMonth == 1) && (newDay == 29) && (newYear % 4 == 0)) {
+//                        newDay = 1;
+//                        newMonth++;
+//                    } else {
+//                        newDay++;
+//                    }
+                    Calendar adjustedCalendar = Calendar.getInstance();
+                    adjustedCalendar.setTimeInMillis(futureStamp * 1000);
+                    int newDay = adjustedCalendar.get(Calendar.DAY_OF_MONTH);
+                    int newMonth = adjustedCalendar.get(Calendar.MONTH);
+                    int newYear = adjustedCalendar.get(Calendar.YEAR);
+
+                    Log.i(TAG, "newDay: " + newDay + " newMonth: " + newMonth + " newYear: " + newYear);
 
                     //updating due date in database
-                    MainActivity.db.updateAlarmData(String.valueOf(
-                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                            alarmHour, alarmMinute, alarmAmpm,
-                            String.valueOf(newDay), String.valueOf(newMonth),
-                            String.valueOf(newYear));
+//                    MainActivity.db.updateAlarmData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            alarmHour, alarmMinute, alarmAmpm,
+//                            String.valueOf(newDay), String.valueOf(newMonth),
+//                            String.valueOf(newYear));
+
+                    MainActivity.db.updateAlarmData(String.valueOf(MainActivity.sortedIDs
+                            .get(position)), alarmHour, alarmMinute, alarmAmpm,
+                            String.valueOf(newDay), String.valueOf(newMonth), String.valueOf(newYear));
 
                     //cancelling any snooze data
                     MainActivity.db.updateSnoozeData(String.valueOf(
@@ -666,9 +753,74 @@ class MyAdapter extends ArrayAdapter<String> {
         }else if(dbRepeatInterval.equals("week") && !dbTimestamp.equals("")){
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + 604800)) {
 
+//                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+//                // detect duplicates and then adjusting the timestamp on the millisecond level
+//                long futureStamp = Integer.parseInt(dbTimestamp) + 604800;
+//                String tempTimestamp = "";
+//                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+//                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+//                            MainActivity.sortedIDs.get(i)));
+//                    while (tempResult.moveToNext()) {
+//                        tempTimestamp = tempResult.getString(3);
+//                    }
+//                    tempResult.close();
+//                    if(futureStamp == Long.parseLong(tempTimestamp)){
+//                        futureStamp++;
+//                        i = 0;
+//                    }
+//
+//                }
+//
+//                //updating timestamp
+//                MainActivity.db.updateTimestamp(String.valueOf(
+//                        MainActivity.sortedIDs.get(position)),
+//                        String.valueOf(futureStamp));
+//
+//                if(!alarmDay.equals("")) {
+//                    int theDay = Integer.parseInt(alarmDay) + 7;
+//                    int theMonth = Integer.parseInt(alarmMonth);
+//                    int theYear = Integer.parseInt(alarmYear);
+//                    //Incrementing week//TODO this week incrementing looks different to other versions in this class
+//                    if(((theMonth == 0) || (theMonth == 2)
+//                            || (theMonth == 4) || (theMonth == 6)
+//                            || (theMonth == 7) || (theMonth == 9)) && (theDay >= 25)){
+//                        theDay -= 31;
+//                        theMonth++;
+//                    }else if(((theMonth == 3) || (theMonth == 5)
+//                            || (theMonth == 8)|| (theMonth == 10)) && (theDay >= 24)){
+//                        theDay -= 30;
+//                        theMonth++;
+//                    }else if((theMonth == 11) && (theDay >= 25)){
+//                        theDay -= 31;
+//                        theMonth++;
+//                        theYear++;
+//                    }else if((theMonth == 1) && (theDay >= 22) && (theYear % 4 != 0)){
+//                        theDay -= 28;
+//                        theMonth++;
+//                    }else if((theMonth == 1) && (theDay >= 22) && (theYear % 4 == 0)){
+//                        theDay -= 29;
+//                        theMonth++;
+//                    }
+//
+//                    //updating due time in database
+//                    MainActivity.db.updateAlarmData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            alarmHour, alarmMinute, alarmAmpm,
+//                            String.valueOf(theDay), String.valueOf(theMonth),
+//                            String.valueOf(theYear));
+//
+//                    //cancelling any snooze data
+//                    MainActivity.db.updateSnoozeData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            "", "", "", "", "", "");
+//
+//                }
+
+                long daysOut = (nowness.getTimeInMillis() / 1000) - Long.parseLong(dbTimestamp);
+                daysOut = daysOut / 604800;
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-                // detect duplicates and then adjusting the timestamp on the millisecond level
-                long futureStamp = Integer.parseInt(dbTimestamp) + 604800;
+                // detect duplicates and then adjusting the timestamp on the second level
+                long futureStamp = Integer.parseInt(dbTimestamp) + (604800 * daysOut);
                 String tempTimestamp = "";
                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
                     Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
@@ -690,44 +842,22 @@ class MyAdapter extends ArrayAdapter<String> {
                         String.valueOf(futureStamp));
 
                 if(!alarmDay.equals("")) {
-                    int theDay = Integer.parseInt(alarmDay) + 7;
-                    int theMonth = Integer.parseInt(alarmMonth);
-                    int theYear = Integer.parseInt(alarmYear);
-                    //Incrementing week//TODO this week incrementing looks different to other versions in this class
-                    if(((theMonth == 0) || (theMonth == 2)
-                            || (theMonth == 4) || (theMonth == 6)
-                            || (theMonth == 7) || (theMonth == 9)) && (theDay >= 25)){
-                        theDay -= 31;
-                        theMonth++;
-                    }else if(((theMonth == 3) || (theMonth == 5)
-                            || (theMonth == 8)|| (theMonth == 10)) && (theDay >= 24)){
-                        theDay -= 30;
-                        theMonth++;
-                    }else if((theMonth == 11) && (theDay >= 25)){
-                        theDay -= 31;
-                        theMonth++;
-                        theYear++;
-                    }else if((theMonth == 1) && (theDay >= 22) && (theYear % 4 != 0)){
-                        theDay -= 28;
-                        theMonth++;
-                    }else if((theMonth == 1) && (theDay >= 22) && (theYear % 4 == 0)){
-                        theDay -= 29;
-                        theMonth++;
-                    }
+                    Calendar adjustedCalendar = Calendar.getInstance();
+                    adjustedCalendar.setTimeInMillis(futureStamp * 1000);
+                    int newDay = adjustedCalendar.get(Calendar.DAY_OF_MONTH);
+                    int newMonth = adjustedCalendar.get(Calendar.MONTH);
+                    int newYear = adjustedCalendar.get(Calendar.YEAR);
 
-                    //updating due time in database
-                    MainActivity.db.updateAlarmData(String.valueOf(
-                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                            alarmHour, alarmMinute, alarmAmpm,
-                            String.valueOf(theDay), String.valueOf(theMonth),
-                            String.valueOf(theYear));
+                    MainActivity.db.updateAlarmData(String.valueOf(MainActivity.sortedIDs
+                                    .get(position)), alarmHour, alarmMinute, alarmAmpm,
+                            String.valueOf(newDay), String.valueOf(newMonth), String.valueOf(newYear));
 
                     //cancelling any snooze data
                     MainActivity.db.updateSnoozeData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                             "", "", "", "", "", "");
-
                 }
+
             }
         }else if(dbRepeatInterval.equals("month") && !dbTimestamp.equals("")
                 && !alarmYear.equals("")){
@@ -775,18 +905,90 @@ class MyAdapter extends ArrayAdapter<String> {
 
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + interval)) {
 
+//                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
+//                // detect duplicates and then adjusting the timestamp on the millisecond level
+//                long futureStamp = Integer.parseInt(dbTimestamp) + interval;
+//                String tempTimestamp = "";
+//                for (int i = 0; i < MainActivity.taskList.size(); i++) {
+//                    Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+//                            MainActivity.sortedIDs.get(i)));
+//                    while (tempResult.moveToNext()) {
+//                        tempTimestamp = tempResult.getString(3);
+//                    }
+//                    tempResult.close();
+//                    if (futureStamp == Long.parseLong(tempTimestamp)) {
+//                        futureStamp++;
+//                        i = 0;
+//                    }
+//
+//                }
+//
+//                //updating timestamp
+//                MainActivity.db.updateTimestamp(String.valueOf(
+//                        MainActivity.sortedIDs.get(position)),
+//                        String.valueOf(futureStamp));
+//
+//                if (!alarmDay.equals("")) {
+//                    int newDay = Integer.parseInt(alarmDay);
+//                    int newMonth = Integer.parseInt(alarmMonth);
+//                    int newYear = Integer.parseInt(alarmYear);
+//
+//                    Cursor origResult = MainActivity.db.getData(Integer.parseInt(
+//                            MainActivity.sortedIDs.get(position)));
+//                    String originalDay = "";
+//                    while (origResult.moveToNext()) {
+//                        originalDay = origResult.getString(20);
+//                    }
+//                    origResult.close();
+//
+//                    newDay = Integer.parseInt(originalDay);
+//                    //incrementing month
+//                    if (newMonth == 2 || newMonth == 4 || newMonth == 7
+//                            || newMonth == 9 && newDay == 31) {
+//                        newDay = 30;
+//                        newMonth++;
+//                    } else if (newMonth == 11) {
+//                        newMonth = 0;
+//                        newYear++;
+//                    } else if (newMonth == 0
+//                            && newDay > 28 && newYear % 4 != 0) {
+//                        newDay = 28;
+//                        newMonth++;
+//                    } else if (newMonth == 0
+//                            && newDay > 29 && newYear % 4 == 0) {
+//                        newDay = 29;
+//                        newMonth++;
+//                    } else {
+//                        newMonth++;
+//                    }
+//
+//                    //updating due date in database
+//                    MainActivity.db.updateAlarmData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            alarmHour, alarmMinute, alarmAmpm,
+//                            String.valueOf(newDay), String.valueOf(newMonth),
+//                            String.valueOf(newYear));
+//
+//                    //cancelling any snooze data
+//                    MainActivity.db.updateSnoozeData(String.valueOf(
+//                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
+//                            "", "", "", "", "", "");
+//
+//                }
+                long daysOut = (nowness.getTimeInMillis() / 1000) - Long.parseLong(dbTimestamp);
+                daysOut = daysOut / interval;
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-                // detect duplicates and then adjusting the timestamp on the millisecond level
-                long futureStamp = Integer.parseInt(dbTimestamp) + interval;
+                // detect duplicates and then adjusting the timestamp on the second level
+                long futureStamp = Integer.parseInt(dbTimestamp) + (interval * daysOut);
                 String tempTimestamp = "";
-                for (int i = 0; i < MainActivity.taskList.size(); i++) {
+                for(int i = 0; i < MainActivity.taskList.size(); i++) {
                     Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
                             MainActivity.sortedIDs.get(i)));
                     while (tempResult.moveToNext()) {
                         tempTimestamp = tempResult.getString(3);
                     }
                     tempResult.close();
-                    if (futureStamp == Long.parseLong(tempTimestamp)) {
+                    if(futureStamp == Long.parseLong(tempTimestamp)){
                         futureStamp++;
                         i = 0;
                     }
@@ -798,52 +1000,21 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.sortedIDs.get(position)),
                         String.valueOf(futureStamp));
 
-                if (!alarmDay.equals("")) {
-                    int newDay = Integer.parseInt(alarmDay);
-                    int newMonth = Integer.parseInt(alarmMonth);
-                    int newYear = Integer.parseInt(alarmYear);
+                if(!alarmDay.equals("")) {
+                    Calendar adjustedCalendar = Calendar.getInstance();
+                    adjustedCalendar.setTimeInMillis(futureStamp * 1000);
+                    int newDay = adjustedCalendar.get(Calendar.DAY_OF_MONTH);
+                    int newMonth = adjustedCalendar.get(Calendar.MONTH);
+                    int newYear = adjustedCalendar.get(Calendar.YEAR);
 
-                    Cursor origResult = MainActivity.db.getData(Integer.parseInt(
-                            MainActivity.sortedIDs.get(position)));
-                    String originalDay = "";
-                    while (origResult.moveToNext()) {
-                        originalDay = origResult.getString(20);
-                    }
-                    origResult.close();
-
-                    newDay = Integer.parseInt(originalDay);
-                    //incrementing month
-                    if (newMonth == 2 || newMonth == 4 || newMonth == 7
-                            || newMonth == 9 && newDay == 31) {
-                        newDay = 30;
-                        newMonth++;
-                    } else if (newMonth == 11) {
-                        newMonth = 0;
-                        newYear++;
-                    } else if (newMonth == 0
-                            && newDay > 28 && newYear % 4 != 0) {
-                        newDay = 28;
-                        newMonth++;
-                    } else if (newMonth == 0
-                            && newDay > 29 && newYear % 4 == 0) {
-                        newDay = 29;
-                        newMonth++;
-                    } else {
-                        newMonth++;
-                    }
-
-                    //updating due date in database
-                    MainActivity.db.updateAlarmData(String.valueOf(
-                            MainActivity.sortedIDs.get(MainActivity.activeTask)),
-                            alarmHour, alarmMinute, alarmAmpm,
-                            String.valueOf(newDay), String.valueOf(newMonth),
-                            String.valueOf(newYear));
+                    MainActivity.db.updateAlarmData(String.valueOf(MainActivity.sortedIDs
+                                    .get(position)), alarmHour, alarmMinute, alarmAmpm,
+                            String.valueOf(newDay), String.valueOf(newMonth), String.valueOf(newYear));
 
                     //cancelling any snooze data
                     MainActivity.db.updateSnoozeData(String.valueOf(
                             MainActivity.sortedIDs.get(MainActivity.activeTask)),
                             "", "", "", "", "", "");
-
                 }
             }
         }
@@ -1326,6 +1497,16 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.db.updateIgnored(MainActivity.sortedIDs
                         .get(position), false);
 
+                MainActivity.db.updateManualKill(String.valueOf(
+                        MainActivity.sortedIDs.get(position)), true);
+
+                MainActivity.db.updateOverdue(String.valueOf(MainActivity.sortedIDs.get(position)), false);
+                //cancelling any snooze data
+                MainActivity.db.updateSnoozeData(String.valueOf(
+                        MainActivity.sortedIDs.get(/*MainActivity.activeTask*/position)),
+                        "", "", "", "", "", "");
+                MainActivity.db.updateSnooze(String.valueOf(MainActivity.sortedIDs.get(position)), false);
+
                 if(MainActivity.reinstateHint <= 2) {
                     if(MainActivity.reinstateHint == 2) {
                         MainActivity.toast.setText
@@ -1446,7 +1627,12 @@ class MyAdapter extends ArrayAdapter<String> {
                 taskView.setLayoutParams(MainActivity.params);
                 taskView.setLayoutParams(MainActivity.iconParams);
 
-                reorderList();
+//                reorderList();
+                new Reorder();
+                //Updating the view with the new order
+                MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                        getContext(), MainActivity.taskList)};
+                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
             //task is updated to be due at next repeat
             }else{
@@ -1776,6 +1962,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     }
                 }
 
+                Log.i(TAG, "I'm updating the timestamp four");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -2157,6 +2344,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     }
 
+                                    Log.i(TAG, "I'm updating the timestamp five");
                                     //updating timestamp
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
@@ -2295,7 +2483,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     MainActivity.repeating = false;
 
-                                    reorderList();
+//                                    reorderList();
+                                    new Reorder();
+                                    //Updating the view with the new order
+                                    MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                                            getContext(), MainActivity.taskList)};
+                                    MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                                     notifyDataSetChanged();
                                 }}
@@ -2592,6 +2785,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             }
 
+                                            Log.i(TAG, "I'm updating the timestamp six");
                                             //updating timestamp
                                             MainActivity.db.updateTimestamp(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
@@ -2739,7 +2933,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             MainActivity.repeating = false;
 
-                                            reorderList();
+//                                            reorderList();
+                                            new Reorder();
+                                            //Updating the view with the new order
+                                            MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                                                    getContext(), MainActivity.taskList)};
+                                            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                                             notifyDataSetChanged();
 
@@ -3018,6 +3217,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             }
 
+                                            Log.i(TAG, "I'm updating the timestamp seven");
                                             //updating timestamp
                                             MainActivity.db.updateTimestamp(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
@@ -3138,7 +3338,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             MainActivity.repeating = false;
 
-                                            reorderList();
+//                                            reorderList();
+                                            new Reorder();
+                                            //Updating the view with the new order
+                                            MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                                                    getContext(), MainActivity.taskList)};
+                                            MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                                             notifyDataSetChanged();
 
@@ -3286,6 +3491,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 }
 
+                                Log.i(TAG, "I'm updating the timestamp eight");
                                 //updating timestamp
                                 MainActivity.db.updateTimestamp(String.valueOf(
                                         MainActivity.sortedIDs.get(position)),
@@ -3361,6 +3567,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 }
 
+                                Log.i(TAG, "I'm updating the timestamp nine");
                                 //updating timestamp
                                 MainActivity.db.updateTimestamp(String.valueOf(
                                         MainActivity.sortedIDs.get(position)),
@@ -3513,6 +3720,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 futureStamp = futureStamp / 1000;
 
+                                Log.i(TAG, "I'm updating the timestamp ten");
                                 //updating timestamp
                                 MainActivity.db.updateTimestamp(String.valueOf(
                                         MainActivity.sortedIDs.get(position)),
@@ -3556,7 +3764,12 @@ class MyAdapter extends ArrayAdapter<String> {
                             }
                         }
 
-                        reorderList();
+//                        reorderList();
+                        new Reorder();
+                        //Updating the view with the new order
+                        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                                getContext(), MainActivity.taskList)};
+                        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                     }
                 });
@@ -3750,7 +3963,12 @@ class MyAdapter extends ArrayAdapter<String> {
                         v.setLayoutParams(MainActivity.params);
                         v.setLayoutParams(MainActivity.iconParams);
 
-                        reorderList();
+//                        reorderList();
+                        new Reorder();
+                        //Updating the view with the new order
+                        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                                getContext(), MainActivity.taskList)};
+                        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                     //task is updated to be due at next repeat
                     }else{
@@ -4082,6 +4300,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             }
                         }
 
+                        Log.i(TAG, "I'm updating the timestamp eleven");
                         //updating timestamp
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
@@ -4618,6 +4837,8 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
             MainActivity.db.updateRepeatInterval
                     (MainActivity.sortedIDs.get(position), "");
+
+            Log.i(TAG, "I'm updating the timestamp twelve");
             MainActivity.db.updateTimestamp
                     (MainActivity.sortedIDs.get(position), "0");
             dbRepeat = false;
@@ -4655,6 +4876,8 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
             MainActivity.db.updateRepeatInterval
                     (MainActivity.sortedIDs.get(position), "");
+
+            Log.i(TAG, "I'm updating the timestamp thirteen");
             MainActivity.db.updateTimestamp
                     (MainActivity.sortedIDs.get(position), "0");
             dbRepeat = false;
@@ -4712,6 +4935,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
             }
 
+            Log.i(TAG, "I'm updating the timestamp fourteen");
             //updating timestamp
             MainActivity.db.updateTimestamp(String.valueOf(
                     MainActivity.sortedIDs.get(position)),
@@ -4781,7 +5005,12 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.repeating = false;
 
-                reorderList();
+//                reorderList();
+                new Reorder();
+                //Updating the view with the new order
+                MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+                        getContext(), MainActivity.taskList)};
+                MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
                 //TODO make animation work
 //                MainActivity.alarmAnimation = true;
@@ -4803,178 +5032,209 @@ class MyAdapter extends ArrayAdapter<String> {
     }
 
     //Reordering tasks by due date
-    public void reorderList(){
-
-        ArrayList<Integer> allIDs = MainActivity.db.getIDs();//
-
-        ArrayList<Integer> snoozedIDs = new ArrayList<>();//
-
-        ArrayList<Integer> tempList = new ArrayList<>();
-
-        //Saving timestamps into a temporary array
-        for (int i = 0; i < MainActivity.taskList.size(); i++) {
-
-            //getting timestamp
-            String dbTimestamp = "";
-            boolean dbSnooze = false;
-            int dbInterval = 0;
-            String dbID = "";
-            Cursor dbResult = MainActivity.db.getData(allIDs.get(i));
-            while (dbResult.moveToNext()) {
-                dbID = dbResult.getString(0);
-                dbTimestamp = dbResult.getString(3);
-                dbSnooze = dbResult.getInt(10) > 0;
-                dbInterval = dbResult.getInt(12);
-            }
-            dbResult.close();
-
-            long snoozeStamp = (Integer.valueOf(dbTimestamp) + (3600 * dbInterval));
-            String tempTimestamp = "";
-            for(int j = 0; j < MainActivity.taskList.size(); j++) {
-                Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-                        MainActivity.sortedIDs.get(j)));
-                while (tempResult.moveToNext()) {
-                    tempTimestamp = tempResult.getString(3);
-                }
-                tempResult.close();
-                if(snoozeStamp == Long.parseLong(tempTimestamp)){
-                    snoozeStamp++;
-                    j = 0;
-                }
-
-            }
-
-            if(dbSnooze) {
-                tempList.add((int) snoozeStamp);
-                snoozedIDs.add(Integer.parseInt(dbID));
-            }else{
-                tempList.add(Integer.valueOf(dbTimestamp));
-            }
-
-        }
-        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\\
+//    public void reorderList(){
+//
+//        ArrayList<Integer> allIDs = MainActivity.db.getIDs();//
+//
+//        ArrayList<Integer> snoozedIDs = new ArrayList<>();//
+//
+//        ArrayList<Integer> tempList = new ArrayList<>();
+//
 //        //Saving timestamps into a temporary array
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//        for (int i = 0; i < MainActivity.taskList.size(); i++) {
 //
 //            //getting timestamp
 //            String dbTimestamp = "";
-//            Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
-//                    MainActivity.sortedIDs.get(i)));
+//            boolean dbSnooze = false;
+//            int dbInterval = 0;
+//            String dbID = "";
+//            Cursor dbResult = MainActivity.db.getData(allIDs.get(i));
 //            while (dbResult.moveToNext()) {
+//                dbID = dbResult.getString(0);
 //                dbTimestamp = dbResult.getString(3);
+//                dbSnooze = dbResult.getInt(10) > 0;
+//                dbInterval = dbResult.getInt(12);
 //            }
 //            dbResult.close();
 //
-//            tempList.add(Integer.valueOf(dbTimestamp));
+//            long snoozeStamp = (Integer.valueOf(dbTimestamp) + (3600 * dbInterval));
+//            String tempTimestamp = "";
+//            for(int j = 0; j < MainActivity.taskList.size(); j++) {
+//                Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
+//                        MainActivity.sortedIDs.get(j)));
+//                while (tempResult.moveToNext()) {
+//                    tempTimestamp = tempResult.getString(3);
+//                }
+//                tempResult.close();
+//                if(snoozeStamp == Long.parseLong(tempTimestamp)){
+//                    snoozeStamp++;
+//                    j = 0;
+//                }
+//
+//            }
+//
+//            if(dbSnooze) {
+//                tempList.add((int) snoozeStamp);
+//                snoozedIDs.add(Integer.parseInt(dbID));
+//            }else{
+//                tempList.add(Integer.valueOf(dbTimestamp));
+//            }
 //
 //        }
-
-        ArrayList<String> whenTaskCreated = new ArrayList<>();//
-
-        //Ordering list by time task was created
-        for (int i = 0; i < MainActivity.taskList.size(); i++) {
-            String created = "";
-//            Cursor createdResult = db.getSortedData(Integer.parseInt
-//                    (sortedIDs.get(i)));
-//                Cursor createdResult = db.getSortedData(i);
-            Cursor createdResult = MainActivity.db.getData(allIDs.get(i));
-            while (createdResult.moveToNext()) {
-                created = createdResult.getString(15);
-            }
-            createdResult.close();
-            whenTaskCreated.add(created);
-        }
-        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\
+//        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\\
+////        //Saving timestamps into a temporary array
+////        for(int i = 0; i < MainActivity.taskList.size(); i++){
+////
+////            //getting timestamp
+////            String dbTimestamp = "";
+////            Cursor dbResult = MainActivity.db.getData(Integer.parseInt(
+////                    MainActivity.sortedIDs.get(i)));
+////            while (dbResult.moveToNext()) {
+////                dbTimestamp = dbResult.getString(3);
+////            }
+////            dbResult.close();
+////
+////            tempList.add(Integer.valueOf(dbTimestamp));
+////
+////        }
+//
+//        ArrayList<String> whenTaskCreated = new ArrayList<>();//
+//
 //        //Ordering list by time task was created
-//        ArrayList<String> whenTaskCreated = new ArrayList<>();
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//        for (int i = 0; i < MainActivity.taskList.size(); i++) {
 //            String created = "";
-//            Cursor createdResult = MainActivity.db.getData(Integer.parseInt
-//                    (MainActivity.sortedIDs.get(i)));
+////            Cursor createdResult = db.getSortedData(Integer.parseInt
+////                    (sortedIDs.get(i)));
+////                Cursor createdResult = db.getSortedData(i);
+//            Cursor createdResult = MainActivity.db.getData(allIDs.get(i));
 //            while (createdResult.moveToNext()) {
 //                created = createdResult.getString(15);
 //            }
 //            createdResult.close();
 //            whenTaskCreated.add(created);
 //        }
-
-        Collections.sort(whenTaskCreated);
-        Collections.reverse(whenTaskCreated);
-
-        ArrayList<String> tempIdsList = new ArrayList<>();
-        ArrayList<String> tempTaskList = new ArrayList<>();
-        ArrayList<String> tempKilledIdsList = new ArrayList<>();
-        ArrayList<String> tempKilledTaskList = new ArrayList<>();
-
-        //getting tasks which have no due date
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
-
-            //getting task data
-            int dbId = 0;
-            String dbTimestamp = "";
-            String dbTask = "";
-            Boolean dbKilled = false;
-            Cursor dbResult = MainActivity.db.getDataByTimestamp(
-                    whenTaskCreated.get(i));
-            while (dbResult.moveToNext()) {
-                dbId = dbResult.getInt(0);
-                dbTimestamp = dbResult.getString(3);
-                dbTask = dbResult.getString(4);
-                dbKilled = dbResult.getInt(6) > 0;
-            }
-            dbResult.close();
-
-            //Getting tasks with no due time and not killed
-            if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
-                tempIdsList.add(String.valueOf(dbId));
-                tempTaskList.add(dbTask);
-            //Getting tasks with no due time and killed
-            }else if((Integer.parseInt(dbTimestamp) == 0) && (dbKilled)){
-                tempKilledIdsList.add(String.valueOf(dbId));
-                tempKilledTaskList.add(dbTask);
-            }
-
-        }
-
-        Collections.sort(tempList);
-
-        //Adding due tasks which aren't killed to middle of task list
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
-            //getting task data
-            int dbId;
-            String dbTask;
-            boolean dbKilled ;
-            Cursor dbResult;
-            dbResult = MainActivity.db.getDataByDueTime(
-                    String.valueOf(tempList.get(i)));
-            boolean dataExists = false;
-            while (dbResult.moveToNext()) {
-                dbId = dbResult.getInt(0);
-                dbTask = dbResult.getString(4);
-                dbKilled = dbResult.getInt(6) > 0;
-                if((tempList.get(i) != 0) && !dbKilled){
-                    tempIdsList.add(String.valueOf(dbId));
-                    tempTaskList.add(dbTask);
-                }
-                dataExists = true;
-            }
-            if(!dataExists) {
-                dbResult = MainActivity.db.getData(snoozedIDs.get(0));
-                while(dbResult.moveToNext()){
-                    dbId = dbResult.getInt(0);
-                    dbTask = dbResult.getString(4);
-                    dbKilled = dbResult.getInt(6) > 0;
-                    if((tempList.get(i) != 0) && !dbKilled){
-                        tempIdsList.add(String.valueOf(dbId));
-                        tempTaskList.add(dbTask);
-                    }
-                }
-                snoozedIDs.remove(0);
-            }
-            dbResult.close();
-        }
-        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\
-        //Adding due tasks which aren't killed to middle of task list
+//        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\
+////        //Ordering list by time task was created
+////        ArrayList<String> whenTaskCreated = new ArrayList<>();
+////        for(int i = 0; i < MainActivity.taskList.size(); i++){
+////            String created = "";
+////            Cursor createdResult = MainActivity.db.getData(Integer.parseInt
+////                    (MainActivity.sortedIDs.get(i)));
+////            while (createdResult.moveToNext()) {
+////                created = createdResult.getString(15);
+////            }
+////            createdResult.close();
+////            whenTaskCreated.add(created);
+////        }
+//
+//        Collections.sort(whenTaskCreated);
+//        Collections.reverse(whenTaskCreated);
+//
+//        ArrayList<String> tempIdsList = new ArrayList<>();
+//        ArrayList<String> tempTaskList = new ArrayList<>();
+//        ArrayList<String> tempKilledIdsList = new ArrayList<>();
+//        ArrayList<String> tempKilledTaskList = new ArrayList<>();
+//
+//        //getting tasks which have no due date
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            //getting task data
+//            int dbId = 0;
+//            String dbTimestamp = "";
+//            String dbTask = "";
+//            Boolean dbKilled = false;
+//            Cursor dbResult = MainActivity.db.getDataByTimestamp(
+//                    whenTaskCreated.get(i));
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTimestamp = dbResult.getString(3);
+//                dbTask = dbResult.getString(4);
+//                dbKilled = dbResult.getInt(6) > 0;
+//            }
+//            dbResult.close();
+//
+//            //Getting tasks with no due time and not killed
+//            if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
+//                tempIdsList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//            //Getting tasks with no due time and killed
+//            }else if((Integer.parseInt(dbTimestamp) == 0) && (dbKilled)){
+//                tempKilledIdsList.add(String.valueOf(dbId));
+//                tempKilledTaskList.add(dbTask);
+//            }
+//
+//        }
+//
+//        Collections.sort(tempList);
+//
+//        //Adding due tasks which aren't killed to middle of task list
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//            //getting task data
+//            int dbId;
+//            String dbTask;
+//            boolean dbKilled ;
+//            Cursor dbResult;
+//            dbResult = MainActivity.db.getDataByDueTime(
+//                    String.valueOf(tempList.get(i)));
+//            boolean dataExists = false;
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTask = dbResult.getString(4);
+//                dbKilled = dbResult.getInt(6) > 0;
+//                if((tempList.get(i) != 0) && !dbKilled){
+//                    tempIdsList.add(String.valueOf(dbId));
+//                    tempTaskList.add(dbTask);
+//                }
+//                dataExists = true;
+//            }
+//            if(!dataExists) {
+//                dbResult = MainActivity.db.getData(snoozedIDs.get(0));
+//                while(dbResult.moveToNext()){
+//                    dbId = dbResult.getInt(0);
+//                    dbTask = dbResult.getString(4);
+//                    dbKilled = dbResult.getInt(6) > 0;
+//                    if((tempList.get(i) != 0) && !dbKilled){
+//                        tempIdsList.add(String.valueOf(dbId));
+//                        tempTaskList.add(dbTask);
+//                    }
+//                }
+//                snoozedIDs.remove(0);
+//            }
+//            dbResult.close();
+//        }
+//        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\
+//        //Adding due tasks which aren't killed to middle of task list
+////        for(int i = 0; i < MainActivity.taskList.size(); i++){
+////
+////            //getting task data
+////            int dbId = 0;
+////            String dbTask = "";
+////            boolean dbKilled = false;
+////            Cursor dbResult = MainActivity.db.getDataByDueTime(
+////                    String.valueOf(tempList.get(i)));
+////            while (dbResult.moveToNext()) {
+////                dbId = dbResult.getInt(0);
+////                dbTask = dbResult.getString(4);
+////                dbKilled = dbResult.getInt(6) > 0;
+////            }
+////            dbResult.close();
+////
+////            if((tempList.get(i) != 0) && !dbKilled){
+////                tempIdsList.add(String.valueOf(dbId));
+////                tempTaskList.add(dbTask);
+////            }
+////
+////        }
+//
+//        //Adding killed tasks to end of task list
+//        for(int i = 0; i < tempKilledIdsList.size(); i++){
+//
+//            tempTaskList.add(tempKilledTaskList.get(i));
+//            tempIdsList.add(tempKilledIdsList.get(i));
+//
+//        }
+//
+//        //Adding killed tasks with due dates to end of task list
 //        for(int i = 0; i < MainActivity.taskList.size(); i++){
 //
 //            //getting task data
@@ -4990,59 +5250,28 @@ class MyAdapter extends ArrayAdapter<String> {
 //            }
 //            dbResult.close();
 //
-//            if((tempList.get(i) != 0) && !dbKilled){
+//            if((tempList.get(i) != 0) && dbKilled){
 //                tempIdsList.add(String.valueOf(dbId));
 //                tempTaskList.add(dbTask);
 //            }
 //
 //        }
-
-        //Adding killed tasks to end of task list
-        for(int i = 0; i < tempKilledIdsList.size(); i++){
-
-            tempTaskList.add(tempKilledTaskList.get(i));
-            tempIdsList.add(tempKilledIdsList.get(i));
-
-        }
-
-        //Adding killed tasks with due dates to end of task list
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
-
-            //getting task data
-            int dbId = 0;
-            String dbTask = "";
-            boolean dbKilled = false;
-            Cursor dbResult = MainActivity.db.getDataByDueTime(
-                    String.valueOf(tempList.get(i)));
-            while (dbResult.moveToNext()) {
-                dbId = dbResult.getInt(0);
-                dbTask = dbResult.getString(4);
-                dbKilled = dbResult.getInt(6) > 0;
-            }
-            dbResult.close();
-
-            if((tempList.get(i) != 0) && dbKilled){
-                tempIdsList.add(String.valueOf(dbId));
-                tempTaskList.add(dbTask);
-            }
-
-        }
-
-        for(int i = 0; i < MainActivity.taskList.size(); i++){
-
-            MainActivity.db.updateSortedIndex(String.valueOf(i), Integer.parseInt
-                    (tempIdsList.get(i)));
-
-        }
-
-        MainActivity.sortedIDs = tempIdsList;
-        MainActivity.taskList = tempTaskList;
-
-        //Updating the view with the new order
-        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
-                getContext(), MainActivity.taskList)};
-        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-
-    }
+//
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            MainActivity.db.updateSortedIndex(String.valueOf(i), Integer.parseInt
+//                    (tempIdsList.get(i)));
+//
+//        }
+//
+//        MainActivity.sortedIDs = tempIdsList;
+//        MainActivity.taskList = tempTaskList;
+//
+//        //Updating the view with the new order
+//        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
+//                getContext(), MainActivity.taskList)};
+//        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+//
+//    }
 
 }
