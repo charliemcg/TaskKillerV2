@@ -4951,7 +4951,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
                     }
 
-            }});
+                    new Reorder();
+
+                }});
 
             //Actions to occur if user selects 'set due date'
             alarm.setOnClickListener(new View.OnClickListener() {

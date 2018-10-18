@@ -19,6 +19,8 @@ public class Reorder {
 
     private void startReordering() {
 
+        Log.i(TAG, "Reordering");
+
         ArrayList<Integer> allIDs = MainActivity.db.getIDs();
 
         ArrayList<Integer> snoozedIDs = new ArrayList<>();
@@ -43,8 +45,6 @@ public class Reorder {
                 dbSnoozeStamp = dbResult.getString(21);
             }
             dbResult.close();
-
-            Log.i(TAG, "Snooze: " + dbSnooze);
 
             if(dbSnooze) {
                 tempList.add(Integer.parseInt(dbSnoozeStamp));
