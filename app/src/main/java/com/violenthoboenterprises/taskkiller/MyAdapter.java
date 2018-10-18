@@ -858,47 +858,70 @@ class MyAdapter extends ArrayAdapter<String> {
                 && !alarmYear.equals("")){
 
             //Getting interval in seconds based on specific day and month
-            int interval = 0;
+            int interval;
             int theYear = Integer.parseInt(alarmYear);
             int theMonth = Integer.parseInt(alarmMonth);
             int theDay = Integer.parseInt(alarmDay);
-            //Month January and day is 29 non leap year 2592000
-            if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
-                interval = 2592000;
-            //Month January and day is 30 non leap year 2505600
-            }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
-                interval = 2505600;
-            //Month January and day is 31 non leap year 2419200
-            }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
+            //Month February and due day 28 and previous day 31 non leap year
+            if((theMonth == 1) && (theDay == 28) && (alarmDay.equals("31")) && (theYear % 4 != 0)){
                 interval = 2419200;
-            //Month January and day is 30 leap year 2592000
-            }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
-                interval = 2592000;
-            //Month January and day is 31 leap year 2505600
-            }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
+            //Month February and due day 28 and previous day 30 non leap year
+            }else if((theMonth == 1) && (theDay == 28) && (alarmDay.equals("30")) && (theYear % 4 != 0)) {
                 interval = 2505600;
-            //Month March||May||August||October and day is 31 2592000
-            }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
-                    || (theMonth == 9)) && (theDay == 31)){
+            //Month February and due day 28 and previous day 29 non leap year
+            }else if((theMonth == 1) && (theDay == 28) && (alarmDay.equals("29")) && (theYear % 4 != 0)) {
                 interval = 2592000;
-            //Month January||March||May||July||August||October||December 2678400
-            }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
-                    || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
-                    || (theMonth == 11)){
+            //Month February and due day 29 and previous day 31 leap year
+            }else if((theMonth == 1) && (theDay == 29) && (alarmDay.equals("31")) && (theYear % 4 == 0)) {
+                interval = 2505600;
+            //Month February and due day 29 and previous day 30 leap year
+            }else if((theMonth == 1) && (theDay == 29) && (alarmDay.equals("30")) && (theYear % 4 == 0)) {
+                interval = 2592000;
+            //Month February||April||June||September||November
+            }else if(theMonth == 0 || theMonth == 1 || theMonth == 3 || theMonth == 5 || theMonth == 8 || theMonth == 10) {
                 interval = 2678400;
-            //Month April||June||September||November 2592000
-            }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
-                    || (theMonth == 10)){
+            //Any other month
+            }else{
                 interval = 2592000;
-            //Month February non leap year 2419200
-            }else if((theMonth == 1) && (theYear % 4 != 0)){
-                interval = 2419200;
-            //Month February leap year 2505600
-            }else if((theMonth == 1) && (theYear % 4 == 0)){
-                 interval = 2505600;
             }
 
             if((nowness.getTimeInMillis() / 1000) >= (Integer.parseInt(dbTimestamp) + interval)) {
+
+                //Month January and day is 29 non leap year 2592000
+                if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
+                    interval = 2592000;
+                    //Month January and day is 30 non leap year 2505600
+                }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
+                    interval = 2505600;
+                    //Month January and day is 31 non leap year 2419200
+                }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
+                    interval = 2419200;
+                    //Month January and day is 30 leap year 2592000
+                }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
+                    interval = 2592000;
+                    //Month January and day is 31 leap year 2505600
+                }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
+                    interval = 2505600;
+                    //Month March||May||August||October and day is 31 2592000
+                }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
+                        || (theMonth == 9)) && (theDay == 31)){
+                    interval = 2592000;
+                    //Month January||March||May||July||August||October||December 2678400
+                }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
+                        || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
+                        || (theMonth == 11)){
+                    interval = 2678400;
+                    //Month April||June||September||November 2592000
+                }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
+                        || (theMonth == 10)){
+                    interval = 2592000;
+                    //Month February non leap year 2419200
+                }else if((theMonth == 1) && (theYear % 4 != 0)){
+                    interval = 2419200;
+                    //Month February leap year 2505600
+                }else if((theMonth == 1) && (theYear % 4 == 0)){
+                    interval = 2505600;
+                }
 
 //                //App crashes if exact duplicate of timestamp is saved in database. Attempting to
 //                // detect duplicates and then adjusting the timestamp on the millisecond level
@@ -1003,9 +1026,9 @@ class MyAdapter extends ArrayAdapter<String> {
                     int newMonth = adjustedCalendar.get(Calendar.MONTH);
                     int newYear = adjustedCalendar.get(Calendar.YEAR);
 
-                    MainActivity.db.updateAlarmData(String.valueOf(MainActivity.sortedIDs
-                                    .get(position)), alarmHour, alarmMinute, alarmAmpm,
-                            String.valueOf(newDay), String.valueOf(newMonth), String.valueOf(newYear));
+//                    MainActivity.db.updateAlarmData(String.valueOf(MainActivity.sortedIDs
+//                                    .get(position)), alarmHour, alarmMinute, alarmAmpm,
+//                            String.valueOf(newDay), String.valueOf(newMonth), String.valueOf(newYear));
 
                     //cancelling any snooze data
                     MainActivity.db.updateSnoozeData(String.valueOf(
@@ -1963,6 +1986,11 @@ class MyAdapter extends ArrayAdapter<String> {
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
                         String.valueOf(futureStamp));
+
+
+                Calendar tempCal = Calendar.getInstance();
+                tempCal.setTimeInMillis(futureStamp * 1000);
+                Log.i(TAG, "Month: " + tempCal.get(Calendar.MONTH) + " Day: " + tempCal.get(Calendar.DAY_OF_MONTH));
 
                 //updating due time in database
                 MainActivity.db.updateAlarmData(String.valueOf(

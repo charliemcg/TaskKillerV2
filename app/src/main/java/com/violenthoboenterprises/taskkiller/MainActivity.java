@@ -2253,6 +2253,7 @@ public class MainActivity extends AppCompatActivity implements
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(thePosition)),
                                 String.valueOf(futureStamp));
+
 //                    }
 
                     //setting the name of the task for which the
