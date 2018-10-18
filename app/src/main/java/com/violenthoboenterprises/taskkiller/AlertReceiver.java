@@ -140,9 +140,9 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
 
                 //updating timestamp
-                MainActivity.db.updateTimestamp(String.valueOf(
-                        MainActivity.sortedIDs.get(broadId)),
-                        String.valueOf(futureStamp));
+//                MainActivity.db.updateTimestamp(String.valueOf(//TODO
+//                        MainActivity.sortedIDs.get(broadId)),
+//                        String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
                 // notification is being set
@@ -201,9 +201,9 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
 
                 //updating timestamp
-                MainActivity.db.updateTimestamp(String.valueOf(
-                        MainActivity.sortedIDs.get(broadId)),
-                        String.valueOf(futureStamp));
+//                MainActivity.db.updateTimestamp(String.valueOf(
+//                        MainActivity.sortedIDs.get(broadId)),
+//                        String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
                 // notification is being set
@@ -358,9 +358,9 @@ public class AlertReceiver extends BroadcastReceiver {
                 String oldStamp = dbTimestamp + "000";
 
                 //updating timestamp
-                MainActivity.db.updateTimestamp(String.valueOf(
-                        MainActivity.sortedIDs.get(broadId)),
-                        String.valueOf(futureStamp));
+//                MainActivity.db.updateTimestamp(String.valueOf(
+//                        MainActivity.sortedIDs.get(broadId)),
+//                        String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
                 // notification is being set

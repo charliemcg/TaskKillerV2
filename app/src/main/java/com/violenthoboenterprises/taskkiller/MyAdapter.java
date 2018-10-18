@@ -688,6 +688,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+                Log.i(TAG, "I'm in here one");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -829,6 +830,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+                Log.i(TAG, "I'm in here two");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -988,6 +990,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+                Log.i(TAG, "I'm in here three");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -1675,7 +1678,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         newDay++;
                     }
 
-                    if(!MainActivity.remindersAvailable) {
+//                    if(!MainActivity.remindersAvailable) {
                         //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                         // detect duplicates and then adjusting the timestamp on the millisecond level
                         futureStamp = Long.parseLong(dbTimestamp) + (AlarmManager.INTERVAL_DAY / 1000);
@@ -1692,7 +1695,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 i = 0;
                             }
                         }
-                    }
+//                    }
                 }else if(finalDbRepeatInterval.equals("week")){
 
                     interval = 604800;
@@ -1720,7 +1723,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         newMonth++;
                     }
 
-                    if(!MainActivity.remindersAvailable){
+//                    if(!MainActivity.remindersAvailable){
 
                         //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                         // detect duplicates and then adjusting the timestamp on the millisecond level
@@ -1741,7 +1744,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                         }
 
-                    }
+//                    }
 
                 }else if(finalDbRepeatInterval.equals("month")) {
 
@@ -1819,7 +1822,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         newMonth++;
                     }
 
-                    if(!MainActivity.remindersAvailable){
+//                    if(!MainActivity.remindersAvailable){
 
                         //Getting interval in seconds based on specific day and month
                         Calendar currentCal = Calendar.getInstance();
@@ -1932,10 +1935,10 @@ class MyAdapter extends ArrayAdapter<String> {
                             }
                         }
                         futureStamp = futureStamp / 1000;
-                    }
+//                    }
                 }
 
-                if(MainActivity.remindersAvailable) {
+//                if(MainActivity.remindersAvailable) {
                     //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                     // detect duplicates and then adjusting the timestamp on the millisecond level
                     futureStamp = Integer.parseInt(finalDbTimestamp) + interval;
@@ -1953,8 +1956,9 @@ class MyAdapter extends ArrayAdapter<String> {
                         }
 
                     }
-                }
+//                }
 
+                Log.i(TAG, "I'm in here four");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -2336,6 +2340,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                     }
 
+                                    Log.i(TAG, "I'm in here five");
                                     //updating timestamp
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
@@ -2776,6 +2781,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             }
 
+                                            Log.i(TAG, "I'm in here six");
                                             //updating timestamp
                                             MainActivity.db.updateTimestamp(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
@@ -3207,6 +3213,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             }
 
+                                            Log.i(TAG, "I'm in here seven");
                                             //updating timestamp
                                             MainActivity.db.updateTimestamp(String.valueOf(
                                                     MainActivity.sortedIDs.get(position)),
@@ -3342,6 +3349,9 @@ class MyAdapter extends ArrayAdapter<String> {
                                 handler.postDelayed(runnable, 600);
                             }
                         });
+
+                        new Reorder();
+
                     }
                 });
 
@@ -3377,7 +3387,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //                                  if(!finalDbOverdue) {
                                 MainActivity.db.updateKilled(String.valueOf(
                                         MainActivity.sortedIDs.get(
-                                                MainActivity.activeTask)), true);
+                                                position)), true);
 //                                }
                             MainActivity.db.updateSnoozedTimestamp(MainActivity.sortedIDs.get(position),
                                     "0");
@@ -3553,6 +3563,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 }
 
+                                Log.i(TAG, "I'm in here eight");
                                 //updating timestamp
                                 MainActivity.db.updateTimestamp(String.valueOf(
                                         MainActivity.sortedIDs.get(position)),
@@ -3666,6 +3677,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 }
 
+                                Log.i(TAG, "I'm in here nine");
                                 //updating timestamp
                                 MainActivity.db.updateTimestamp(String.valueOf(
                                         MainActivity.sortedIDs.get(position)),
@@ -4103,6 +4115,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     }
                                     futureStamp = futureStamp / 1000;
 //                                }
+                                Log.i(TAG, "I'm in here ten");
                                 //updating timestamp
                                 MainActivity.db.updateTimestamp(String.valueOf(
                                         MainActivity.sortedIDs.get(position)),
@@ -4380,7 +4393,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 newDay++;
                             }
 
-                            if(!MainActivity.remindersAvailable) {
+//                            if(!MainActivity.remindersAvailable) {
                                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                                 // detect duplicates and then adjusting the timestamp on the millisecond level
                                 futureStamp = Long.parseLong(finalDbTimestamp) + (AlarmManager.INTERVAL_DAY / 1000);
@@ -4398,7 +4411,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     }
 
                                 }
-                            }
+//                            }
 
                         }else if(finalDbRepeatInterval.equals("week")){
 
@@ -4427,7 +4440,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 newMonth++;
                             }
 
-                            if(!MainActivity.remindersAvailable){
+//                            if(!MainActivity.remindersAvailable){
 
                                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                                 // detect duplicates and then adjusting the timestamp on the millisecond level
@@ -4448,7 +4461,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 }
 
-                            }
+//                            }
 
                         }else if(finalDbRepeatInterval.equals("month")) {
 
@@ -4526,7 +4539,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                 newMonth++;
                             }
 
-                            if(!MainActivity.remindersAvailable){
+//                            if(!MainActivity.remindersAvailable){
 
                                 //Getting interval in seconds based on specific day and month
                                 Calendar currentCal = Calendar.getInstance();
@@ -4639,10 +4652,10 @@ class MyAdapter extends ArrayAdapter<String> {
                                     }
                                 }
                                 futureStamp = futureStamp / 1000;
-                            }
+//                            }
                         }
 
-                        if(MainActivity.remindersAvailable) {
+//                        if(MainActivity.remindersAvailable) {
                             //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                             // detect duplicates and then adjusting the timestamp on the millisecond level
                             futureStamp = Integer.parseInt(finalDbTimestamp) + interval;
@@ -4660,8 +4673,9 @@ class MyAdapter extends ArrayAdapter<String> {
                                 }
 
                             }
-                        }
+//                        }
 
+                        Log.i(TAG, "I'm in here eleven");
                         //updating timestamp
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
@@ -5203,6 +5217,7 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateRepeatInterval
                     (MainActivity.sortedIDs.get(position), "");
 
+            Log.i(TAG, "I'm in here twelve");
             MainActivity.db.updateTimestamp
                     (MainActivity.sortedIDs.get(position), "0");
             dbRepeat = false;
@@ -5248,6 +5263,7 @@ class MyAdapter extends ArrayAdapter<String> {
             MainActivity.db.updateRepeatInterval
                     (MainActivity.sortedIDs.get(position), "");
 
+            Log.i(TAG, "I'm in here thirteen");
             MainActivity.db.updateTimestamp
                     (MainActivity.sortedIDs.get(position), "0");
             dbRepeat = false;
@@ -5311,6 +5327,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
             }
 
+            Log.i(TAG, "I'm in here fourteen");
             //updating timestamp
             MainActivity.db.updateTimestamp(String.valueOf(
                     MainActivity.sortedIDs.get(position)),

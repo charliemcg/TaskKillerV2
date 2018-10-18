@@ -19,8 +19,6 @@ public class Reorder {
 
     private void startReordering() {
 
-        Log.i(TAG, "Reordering");
-
         ArrayList<Integer> allIDs = MainActivity.db.getIDs();
 
         ArrayList<Integer> snoozedIDs = new ArrayList<>();
