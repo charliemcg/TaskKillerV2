@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.util.Calendar;
@@ -32,6 +33,8 @@ public class AlertReceiver extends BroadcastReceiver {
 
     public void createNotification(Context context, String msg, String msgText,
                                    String msgAlert, int broadId){
+
+        Log.i(TAG, "I'm in here alertReceiver");
 
         //defining intent and action to perform
         PendingIntent notificIntent = PendingIntent.getActivity(context, 1,
@@ -99,7 +102,7 @@ public class AlertReceiver extends BroadcastReceiver {
                         (NotificationCompat.DEFAULT_SOUND).setContentIntent(notificIntent)
                 .setAutoCancel(true);
 
-        if(!dbRepeat){
+        if(!dbRepeat && MainActivity.remindersAvailable){
 
             notificationManager.notify(1, builder.build());
 
@@ -107,7 +110,7 @@ public class AlertReceiver extends BroadcastReceiver {
         } else {
 
             //don't inform user that task is due if they marked it as done
-            if(!dbKilledEarly){
+            if(!dbKilledEarly && MainActivity.remindersAvailable){
 
                 notificationManager.notify(1, builder.build());
 
@@ -140,9 +143,13 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
 
                 //updating timestamp
-//                MainActivity.db.updateTimestamp(String.valueOf(//TODO
-//                        MainActivity.sortedIDs.get(broadId)),
-//                        String.valueOf(futureStamp));
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(broadId)),
+                        String.valueOf(futureStamp));
+
+//                Calendar tempCal = Calendar.getInstance();
+//                tempCal.setTimeInMillis(futureStamp);
+//                Log.i(TAG, "month: " + tempCal.get(Calendar.MONTH) + " day: " + tempCal.get(Calendar.DAY_OF_MONTH));
 
                 //setting the name of the task for which the
                 // notification is being set
@@ -156,6 +163,10 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
                         (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
+
+                Calendar tempCal = Calendar.getInstance();
+                tempCal.setTimeInMillis(futureStamp * 1000);
+                Log.i(TAG, "month: " + tempCal.get(Calendar.MONTH) + " day: " + tempCal.get(Calendar.DAY_OF_MONTH));
 
                 Calendar alarmCalendar = Calendar.getInstance();
                 alarmCalendar.setTimeInMillis(Long.parseLong
@@ -201,9 +212,9 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
 
                 //updating timestamp
-//                MainActivity.db.updateTimestamp(String.valueOf(
-//                        MainActivity.sortedIDs.get(broadId)),
-//                        String.valueOf(futureStamp));
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(broadId)),
+                        String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
                 // notification is being set
@@ -358,9 +369,9 @@ public class AlertReceiver extends BroadcastReceiver {
                 String oldStamp = dbTimestamp + "000";
 
                 //updating timestamp
-//                MainActivity.db.updateTimestamp(String.valueOf(
-//                        MainActivity.sortedIDs.get(broadId)),
-//                        String.valueOf(futureStamp));
+                MainActivity.db.updateTimestamp(String.valueOf(
+                        MainActivity.sortedIDs.get(broadId)),
+                        String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
                 // notification is being set

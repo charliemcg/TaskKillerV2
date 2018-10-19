@@ -1350,7 +1350,6 @@ public class SetDue extends MainActivity {
                 }
 
             }else{
-                Log.i(TAG, "I'm in here");
                 db.updateRepeatInterval(dbTaskId, "");
                 db.updateRepeat(dbTaskId, false);
             }
