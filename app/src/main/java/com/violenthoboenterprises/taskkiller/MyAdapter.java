@@ -3486,12 +3486,22 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                             Log.i(TAG, "I'm in here seven");
                                             //updating timestamp
-                                            MainActivity.db.updateTimestamp(String.valueOf(
-                                                    MainActivity.sortedIDs.get(position)),
-                                                    String.valueOf(futureStamp));
+                                            if(!finalDbOverdue) {
+                                                MainActivity.db.updateTimestamp(String.valueOf(
+                                                        MainActivity.sortedIDs.get(position)),
+                                                        String.valueOf(futureStamp));
+                                            }else{
+                                                MainActivity.db.updateTimestamp(String.valueOf(
+                                                        MainActivity.sortedIDs.get(position)),
+                                                        String.valueOf(Long.parseLong(finalDbTimestamp)));
+                                            }
 
                                             Calendar snoozeCal = Calendar.getInstance();
-                                            snoozeCal.setTimeInMillis(futureStamp * 1000);
+                                            if(!finalDbOverdue) {
+                                                snoozeCal.setTimeInMillis(futureStamp * 1000);
+                                            }else{
+                                                snoozeCal.setTimeInMillis(Long.parseLong(finalDbTimestamp) * 1000);
+                                            }
                                             newYear = snoozeCal.get(Calendar.YEAR);
                                             newMonth = snoozeCal.get(Calendar.MONTH);
                                             newDay = snoozeCal.get(Calendar.DAY_OF_MONTH);
