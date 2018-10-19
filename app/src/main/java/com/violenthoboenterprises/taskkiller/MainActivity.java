@@ -156,8 +156,6 @@ public class MainActivity extends AppCompatActivity implements
     //Height of the 'add' button
     static int addHeight;
     static int addIconHeight;
-    //Measures to determine if keyboard is up
-    private int heightDiff;
     //Height of list view as viewable on screen
     static int listViewHeight;
     static int thePosition;
@@ -179,11 +177,6 @@ public class MainActivity extends AppCompatActivity implements
 
     //Interval between repeating alarms
     static long repeatInterval;
-
-    //Helps to determine if keyboard is up in portrait orientation
-    public double portraitKeyboardMeasure;
-    //Helps to determine if keyboard is up in landscape orientation
-    public double landscapeKeyboardMeasure;
 
     //List of task names
     public static ArrayList<String> taskList;
@@ -245,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements
     static TextView addIcon;
 
     //Used for debugging purposes. Should not be visible in final version.
-//    Button showDb;
+    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
 //    Button showUniversalDb;
@@ -351,9 +344,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         overridePendingTransition(R.anim.enter_from_right, R.anim.enter_from_right);
 
-        //Initialising the Google mobile ads SDK
-//        MobileAds.initialize(getApplicationContext(), "ca-app-pub-2378583121223638~2709009506");//TODO get new key
-
         toolbarDark = findViewById(R.id.toolbar_dark);
         toolbarLight = findViewById(R.id.toolbar_light);
         setSupportActionBar(toolbarDark);
@@ -435,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         deviceWidth = displayMetrics.widthPixels;
         deviceheight = displayMetrics.heightPixels;
-//        showDb = findViewById(R.id.showDb);
+        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
 //        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
@@ -598,41 +588,41 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         //Used for debugging purposes
-//        showDb.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Cursor res = db.getAllData();
-//
-//                if(res.getCount() == 0){
-//                    showMessage("Error", "Nothing found");
-//                }
-//                StringBuffer buffer = new StringBuffer();
-//                while(res.moveToNext()){
-//                    buffer.append("ID: " + res.getString(0) + "\n");
-//                    buffer.append("NOTE: " + res.getString(1) + "\n");
-//                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
-//                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
-//                    buffer.append("TASK: " + res.getString(4) + "\n");
-//                    buffer.append("DUE: " + res.getString(5) + "\n");
-//                    buffer.append("KILLED: " + res.getString(6) + "\n");
-//                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
-//                    buffer.append("REPEAT: " + res.getString(8) + "\n");
-//                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
-//                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
-//                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
-//                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
-//                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
-//                    buffer.append("IGNORED: " + res.getString(14) + "\n");
-//                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
-//                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
-//                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
-//                }
-//                res.close();
-//
-//                showMessage("Data", buffer.toString());
-//            }
-//        });
+        showDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Cursor res = db.getAllData();
+
+                if(res.getCount() == 0){
+                    showMessage("Error", "Nothing found");
+                }
+                StringBuffer buffer = new StringBuffer();
+                while(res.moveToNext()){
+                    buffer.append("ID: " + res.getString(0) + "\n");
+                    buffer.append("NOTE: " + res.getString(1) + "\n");
+                    buffer.append("CHECKLIST: " + res.getString(2) + "\n");
+                    buffer.append("TIMESTAMP: " + res.getString(3) + "\n");
+                    buffer.append("TASK: " + res.getString(4) + "\n");
+                    buffer.append("DUE: " + res.getString(5) + "\n");
+                    buffer.append("KILLED: " + res.getString(6) + "\n");
+                    buffer.append("BROADCAST: " + res.getString(7) + "\n");
+                    buffer.append("REPEAT: " + res.getString(8) + "\n");
+                    buffer.append("OVERDUE: " + res.getString(9) + "\n");
+                    buffer.append("SNOOZED: " + res.getString(10) + "\n");
+                    buffer.append("SHOWONCE: " + res.getString(11) + "\n");
+                    buffer.append("INTERVAL: " + res.getString(12) + "\n");
+                    buffer.append("REPEATINTERVAL: " + res.getString(13) + "\n");
+                    buffer.append("IGNORED: " + res.getString(14) + "\n");
+                    buffer.append("CREATETIMESTAMP: " + res.getString(15) + "\n");
+                    buffer.append("SORTEDINDEX: " + res.getString(16) + "\n");
+                    buffer.append("CHECKLISTSIZE: " + res.getString(17) + "\n\n");
+                }
+                res.close();
+
+                showMessage("Data", buffer.toString());
+            }
+        });
 
         //Used for debugging purposes
 //        showAlarmDb.setOnClickListener(new View.OnClickListener() {
@@ -1129,13 +1119,10 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             ColorPickerDialogBuilder
-                    .with(MainActivity.this, colorPickerTheme)
-                    .setTitle(getString(R.string.chooseColor))
+                    .with(MainActivity.this, colorPickerTheme).setTitle(getString(R.string.chooseColor))
                     .initialColor(Integer.parseInt(highlightDec))
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                    .density(10)
-                    .noSliders()
-                    .setOnColorSelectedListener(new OnColorSelectedListener() {
+                    .density(10).noSliders().setOnColorSelectedListener(new OnColorSelectedListener() {
                         @Override
                         public void onColorSelected(int selectedColor) {
                             String tempHighlight = "#" + Integer.toHexString(selectedColor);
@@ -1144,8 +1131,7 @@ public class MainActivity extends AppCompatActivity implements
                             addIcon.setTextColor(Color.parseColor(tempHighlight));
                             taskNameEditText.setBackgroundColor(Color.parseColor(tempHighlight));
                         }
-                    })
-                    .setPositiveButton(getString(R.string.oK), new ColorPickerClickListener() {
+                    }).setPositiveButton(getString(R.string.oK), new ColorPickerClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                             highlight = "#" + Integer.toHexString(selectedColor);
@@ -1164,8 +1150,7 @@ public class MainActivity extends AppCompatActivity implements
                             }
                             theListView.setAdapter(theAdapter[0]);
                         }
-                    })
-                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             toolbarDark.setTitleTextColor(Color.parseColor(highlight));
@@ -1173,9 +1158,7 @@ public class MainActivity extends AppCompatActivity implements
                             addIcon.setTextColor(Color.parseColor(highlight));
                             taskNameEditText.setBackgroundColor(Color.parseColor(highlight));
                         }
-                    })
-                    .build()
-                    .show();
+                    }).build().show();
 
             return true;
             //Actions to occur if user selects the pro icon
@@ -1279,29 +1262,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onScroll(AbsListView absListView, final int first,
                          final int visible, final int total)
     {
-
-//        switch(absListView.getId())
-//        {
-//            case R.id.theListView:
-//
-//                if((first + visible) == total && visible != total)
-//                {
-//                    //Removes add button so as to not cover the last item
-//                    params.height = 0;
-//                    iconParams.height = 0;
-//
-//                    add.setLayoutParams(params);
-//                    addIcon.setLayoutParams(iconParams);
-//
-//                }else{
-//                    //Returns the 'add' button
-//                    params.height = addHeight;
-//                    iconParams.height = addIconHeight;
-//
-//                    add.setLayoutParams(params);
-//                    addIcon.setLayoutParams(iconParams);
-//                }
-//        }
 
         if(absListView.getId() == R.id.theListView){
 
@@ -1524,17 +1484,6 @@ public class MainActivity extends AppCompatActivity implements
 
         reinstateAlarm = true;
 
-//        reinstateAnimation = true;
-//        animatePosition = i;
-//        animateID = Integer.parseInt(MainActivity.sortedIDs.get(i));
-
-//        reorderList();
-
-//        theListView.setAdapter(theAdapter[0]);
-
-//        justReinstated = true;
-
-//        reorderList();
         new Reorder();
         //Updating the view with the new order
         MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
@@ -1544,366 +1493,6 @@ public class MainActivity extends AppCompatActivity implements
 
 
     }
-
-//    public void reorderList() {
-//
-//        Log.i(TAG, "Reordering MainActivity");
-//
-//        ArrayList<Integer> tempList = new ArrayList<>();
-//
-//        //Saving timestamps into a temporary array
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//
-//            //getting timestamp
-//            String dbTimestamp = "";
-//            Cursor dbResult = db.getSortedData(Integer.parseInt(
-//                    sortedIDs.get(i)));
-//            while (dbResult.moveToNext()) {
-//                dbTimestamp = dbResult.getString(3);
-//            }
-//            dbResult.close();
-//
-//            tempList.add(Integer.valueOf(dbTimestamp));
-//
-//        }
-//
-//        //Ordering list by time task was created
-//        ArrayList<String> whenTaskCreated = new ArrayList<>();
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//            String created = "";
-//            Cursor createdResult = db.getSortedData(Integer.parseInt
-//                    (sortedIDs.get(i)));
-//            while (createdResult.moveToNext()) {
-//                created = createdResult.getString(15);
-//            }
-//            createdResult.close();
-//            whenTaskCreated.add(created);
-//        }
-//
-//        Collections.sort(whenTaskCreated);
-//        Collections.reverse(whenTaskCreated);
-//
-//        ArrayList<String> tempIdsList = new ArrayList<>();
-//        ArrayList<String> tempTaskList = new ArrayList<>();
-//        ArrayList<String> tempKilledIdsList = new ArrayList<>();
-//        ArrayList<String> tempKilledTaskList = new ArrayList<>();
-////        ArrayList<String> tempDueIdsList = new ArrayList<>();
-////        ArrayList<String> tempDueTaskList = new ArrayList<>();
-//
-//        //getting tasks which have no due date
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//
-//            //getting task data
-//            int dbId = 0;
-//            String dbTimestamp = "";
-//            String dbTask = "";
-//            Boolean dbKilled = false;
-//            Cursor dbResult = db.getDataByTimestamp(
-//                    whenTaskCreated.get(i));
-//            while (dbResult.moveToNext()) {
-//                dbId = dbResult.getInt(0);
-//                dbTimestamp = dbResult.getString(3);
-//                dbTask = dbResult.getString(4);
-//                dbKilled = dbResult.getInt(6) > 0;
-//            }
-//            dbResult.close();
-//
-//            //Filtering out killed tasks
-//            if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
-//                tempIdsList.add(String.valueOf(dbId));
-//                tempTaskList.add(dbTask);
-//            }else if((Integer.parseInt(dbTimestamp) == 0) && (dbKilled)){
-//                tempKilledIdsList.add(String.valueOf(dbId));
-//                tempKilledTaskList.add(dbTask);
-//            }else {
-////                tempDueIdsList.add(String.valueOf(dbId));
-////                tempDueTaskList.add(dbTask);
-//            }
-//
-//        }
-//
-//        Collections.sort(tempList);
-//
-//        //Adding due tasks to middle of task list
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//
-//            //getting task data
-//            int dbId = 0;
-//            String dbTask = "";
-//            Cursor dbResult = db.getDataByDueTime(
-//                    String.valueOf(tempList.get(i)));
-//            while (dbResult.moveToNext()) {
-//                dbId = dbResult.getInt(0);
-//                dbTask = dbResult.getString(4);
-//            }
-//            dbResult.close();
-//
-//            if((tempList.get(i) != 0)){
-//                tempIdsList.add(String.valueOf(dbId));
-//                tempTaskList.add(dbTask);
-//            }
-//
-//        }
-//
-//        //Adding killed tasks to end of task list
-//        for(int i = 0; i < tempKilledIdsList.size(); i++){
-//            tempTaskList.add(tempKilledTaskList.get(i));
-//            tempIdsList.add(tempKilledIdsList.get(i));
-//        }
-//
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//
-//            MainActivity.db.updateSortedIndex(String.valueOf(i),
-//                    Integer.parseInt(tempIdsList.get(i)));
-//
-//        }
-//
-//        MainActivity.sortedIDs = tempIdsList;
-//        MainActivity.taskList = tempTaskList;
-//
-//        //Updating the view with the new order
-//        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
-//                this, MainActivity.taskList)};
-//        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-//
-//    }
-
-//    public void reorderList() {
-//
-//        ArrayList<Integer> allIDs = db.getIDs();
-//
-//        ArrayList<Integer> snoozedIDs = new ArrayList<>();
-//
-//        ArrayList<Integer> tempList = new ArrayList<>();
-//
-//        //Saving timestamps into a temporary array
-//        for (int i = 0; i < MainActivity.taskList.size(); i++) {
-//
-//            //getting timestamp
-//            String dbTimestamp = "";
-//            boolean dbSnooze = false;
-//            int dbInterval = 0;
-//            String dbID = "";
-//            String dbSnoozeStamp = "";
-////            Cursor dbResult = db.getSortedData(Integer.parseInt(
-////                    sortedIDs.get(i)));
-////                Cursor dbResult = db.getSortedData(i);
-//            Cursor dbResult = db.getData(allIDs.get(i));
-//            while (dbResult.moveToNext()) {
-//                dbID = dbResult.getString(0);
-//                dbTimestamp = dbResult.getString(3);
-//                dbSnooze = dbResult.getInt(10) > 0;
-//                dbInterval = dbResult.getInt(12);
-//                dbSnoozeStamp = dbResult.getString(21);
-//            }
-//            dbResult.close();
-//
-////            long snoozeStamp = (Integer.valueOf(dbTimestamp) + (3600 * dbInterval));
-////            String tempTimestamp = "";
-////            for(int j = 0; j < MainActivity.taskList.size(); j++) {
-////                Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-////                        MainActivity.sortedIDs.get(j)));
-////                while (tempResult.moveToNext()) {
-////                    tempTimestamp = tempResult.getString(3);
-////                }
-////                tempResult.close();
-////                if(snoozeStamp == Long.parseLong(tempTimestamp)){
-////                    snoozeStamp++;
-////                    j = 0;
-////                }
-////
-////            }
-//
-//            if(dbSnooze) {
-//                Log.i(TAG, "adding a snoozed task: " + dbSnoozeStamp);
-//                tempList.add(Integer.parseInt(dbSnoozeStamp));
-//                snoozedIDs.add(Integer.parseInt(dbID));
-////                tempList.add(Integer.valueOf(dbTimestamp));
-//            }else{
-//                tempList.add(Integer.valueOf(dbTimestamp));
-//            }
-//
-//        }
-//
-//        ArrayList<String> whenTaskCreated = new ArrayList<>();
-//
-//        //Ordering list by time task was created
-//        for (int i = 0; i < MainActivity.taskList.size(); i++) {
-//            String created = "";
-////            Cursor createdResult = db.getSortedData(Integer.parseInt
-////                    (sortedIDs.get(i)));
-////                Cursor createdResult = db.getSortedData(i);
-//            Cursor createdResult = db.getData(allIDs.get(i));
-//            while (createdResult.moveToNext()) {
-//                created = createdResult.getString(15);
-//            }
-//            createdResult.close();
-//            whenTaskCreated.add(created);
-//        }
-//
-//        Collections.sort(whenTaskCreated);
-//        Collections.reverse(whenTaskCreated);
-//
-//        ArrayList<String> tempIdsList = new ArrayList<>();
-//        ArrayList<String> tempTaskList = new ArrayList<>();
-//        ArrayList<String> tempKilledIdsList = new ArrayList<>();
-//        ArrayList<String> tempKilledTaskList = new ArrayList<>();
-////        ArrayList<String> tempDueIdsList = new ArrayList<>();
-////        ArrayList<String> tempDueTaskList = new ArrayList<>();
-//
-//        //getting tasks which have no due date
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//
-//            //getting task data
-//            int dbId = 0;
-//            String dbTimestamp = "";
-//            String dbTask = "";
-//            Boolean dbKilled = false;
-//            Cursor dbResult = db.getDataByTimestamp(
-//                    whenTaskCreated.get(i));
-//            while (dbResult.moveToNext()) {
-//                dbId = dbResult.getInt(0);
-//                dbTimestamp = dbResult.getString(3);
-//                dbTask = dbResult.getString(4);
-//                dbKilled = dbResult.getInt(6) > 0;
-//            }
-//            dbResult.close();
-//
-//            //Filtering out killed tasks
-//            if((Integer.parseInt(dbTimestamp) == 0) && (!dbKilled)){
-//                tempIdsList.add(String.valueOf(dbId));
-//                tempTaskList.add(dbTask);
-//            }else if((Integer.parseInt(dbTimestamp) == 0) && (dbKilled)){
-//                tempKilledIdsList.add(String.valueOf(dbId));
-//                tempKilledTaskList.add(dbTask);
-//            }else {
-////                tempDueIdsList.add(String.valueOf(dbId));
-////                tempDueTaskList.add(dbTask);
-//            }
-//
-//        }
-//
-//        Collections.sort(tempList);
-//
-//        //Adding due tasks which aren't killed to middle of task list
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//
-//            //getting task data
-//            int dbId;
-//            String dbTask;
-//            boolean dbKilled ;
-//            Cursor dbResult;
-////            if(snoozedIDs.contains(i)){
-////                Log.i(TAG, "Snoozed task detected: " + i);
-////                dbResult = MainActivity.db.getData(i);
-////            }else {
-//                dbResult = db.getDataByDueTime(
-//                        String.valueOf(tempList.get(i)));
-////            }
-//            Log.i(TAG, "dbResult: " + dbResult);
-//            boolean dataExists = false;
-//            while (dbResult.moveToNext()) {
-//                dbId = dbResult.getInt(0);
-//                dbTask = dbResult.getString(4);
-//                dbKilled = dbResult.getInt(6) > 0;
-//                Log.i(TAG, "dbId: " + dbId);
-//                if((tempList.get(i) != 0) && !dbKilled){
-//                    tempIdsList.add(String.valueOf(dbId));
-//                    tempTaskList.add(dbTask);
-//                }
-//                dataExists = true;
-//            }
-//            if(!dataExists) {
-//                Log.i(TAG, "detected lack of data");
-//                dbResult = db.getDataBySnoozeTime(String.valueOf(tempList.get(i)));
-//                while(dbResult.moveToNext()){
-//                    dbId = dbResult.getInt(0);
-//                    dbTask = dbResult.getString(4);
-//                    dbKilled = dbResult.getInt(6) > 0;
-//                    Log.i(TAG, "dbId: " + dbId);
-//                    if((tempList.get(i) != 0) && !dbKilled){
-//                        tempIdsList.add(String.valueOf(dbId));
-//                        tempTaskList.add(dbTask);
-//                    }
-//                }
-//            }
-//            dbResult.close();
-//
-////            Log.i(TAG, "dbTask: " + dbTask + " dbId: " + dbId);
-//
-////            if((tempList.get(i) != 0) && !dbKilled){
-////                tempIdsList.add(String.valueOf(dbId));
-////                tempTaskList.add(dbTask);
-////            }
-//
-//        }
-//
-////        //Adding due tasks to middle of task list
-////        for(int i = 0; i < MainActivity.taskList.size(); i++){
-////
-////            //getting task data
-////            int dbId = 0;
-////            String dbTask = "";
-////            Cursor dbResult = db.getDataByDueTime(
-////                    String.valueOf(tempList.get(i)));
-////            while (dbResult.moveToNext()) {
-////                dbId = dbResult.getInt(0);
-////                dbTask = dbResult.getString(4);
-////            }
-////            dbResult.close();
-////
-////            if((tempList.get(i) != 0)){
-////                tempIdsList.add(String.valueOf(dbId));
-////                tempTaskList.add(dbTask);
-////            }
-////
-////        }
-//
-//        //Adding killed tasks to end of task list
-//        for(int i = 0; i < tempKilledIdsList.size(); i++){
-//            tempTaskList.add(tempKilledTaskList.get(i));
-//            tempIdsList.add(tempKilledIdsList.get(i));
-//        }
-//
-//        //Adding killed tasks with due dates to end of task list
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//
-//            //getting task data
-//            int dbId = 0;
-//            String dbTask = "";
-//            boolean dbKilled = false;
-//            Cursor dbResult = MainActivity.db.getDataByDueTime(
-//                    String.valueOf(tempList.get(i)));
-//            while (dbResult.moveToNext()) {
-//                dbId = dbResult.getInt(0);
-//                dbTask = dbResult.getString(4);
-//                dbKilled = dbResult.getInt(6) > 0;
-//            }
-//            dbResult.close();
-//
-//            if((tempList.get(i) != 0) && dbKilled){
-//                tempIdsList.add(String.valueOf(dbId));
-//                tempTaskList.add(dbTask);
-//            }
-//
-//        }
-//
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//
-//            MainActivity.db.updateSortedIndex(String.valueOf(i),
-//                    Integer.parseInt(tempIdsList.get(i)));
-//
-//        }
-//
-//        MainActivity.sortedIDs = tempIdsList;
-//        MainActivity.taskList = tempTaskList;
-//
-//        //Updating the view with the new order
-//        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
-//                this, MainActivity.taskList)};
-//        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-//
-//    }
 
     //Create a new task
     private void createTask(final String taskName, ArrayList taskList, boolean taskBeingEdited) {
@@ -1974,97 +1563,75 @@ public class MainActivity extends AppCompatActivity implements
     void checkKeyboardShowing() {
 
         //TODO check out the hard coded pixels will work on all devices
-        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener
-                (new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
 
-//                        if (getResources().getConfiguration().orientation == 1) {
-//
-//                            portraitKeyboardMeasure = /*heightDiff*/activityRootView.getRootView()
-//                                    .getHeight() / 2.4;
-//                            landscapeKeyboardMeasure = activityRootView.getRootView()
-//                                    .getWidth() / 13.7945205479452054794;
-//
-//                        } else if (getResources().getConfiguration().orientation == 2) {
-//
-//                            landscapeKeyboardMeasure = /*heightDiff*/activityRootView
-//                                    .getHeight() / 13.7945205479452054794;
-//                            portraitKeyboardMeasure = activityRootView.getRootView()
-//                                    .getRootView().getWidth() / 2.4;
-//
-//                        }
+                Rect screen = new Rect();
 
-                        Rect screen = new Rect();
+                activityRootView.getWindowVisibleDisplayFrame(screen);
 
-                        activityRootView.getWindowVisibleDisplayFrame(screen);
+                if(screen.bottom != deviceheight){
 
-                        //Screen pixel values are used to determine how much of
-                        // the screen is visible
-                        heightDiff = activityRootView.getRootView().getHeight() -
-                                (screen.bottom - screen.top);
+                    fadeTasks = true;
 
-                        if(screen.bottom != deviceheight){
+                    if (goToMyAdapter) {
 
-                            fadeTasks = true;
+                        theListView.setAdapter(theAdapter[0]);
 
-                            if (goToMyAdapter) {
-
-                                theListView.setAdapter(theAdapter[0]);
-
-                                goToMyAdapter = false;
-
-                            }
-
-                            taskNameEditText.setFocusable(true);
-
-                            taskNameEditText.requestFocus();
-
-                            //Keyboard is inactive without this line
-                            taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-
-                            //Textbox is visible and 'add' button is gone
-                            // whenever keyboard is showing
-                            taskNameEditText.setVisibility(View.VISIBLE);
-
-                            params.height = 0;
-                            iconParams.height = 0;
-
-                            add.setLayoutParams(params);
-                            addIcon.setLayoutParams(iconParams);
-
-                            tasksAreClickable = false;
-
-                            restoreNormalListView = true;
-
-                        }else if(restoreNormalListView){
-
-                            fadeTasks = false;
-
-                            //Textbox is gone and 'add' button is visible whenever
-                            // keyboard is not showing
-                            taskNameEditText.setVisibility(View.GONE);
-
-                            params.height = addHeight;
-                            iconParams.height = addIconHeight;
-
-                            add.setLayoutParams(params);
-                            addIcon.setLayoutParams(iconParams);
-
-                            tasksAreClickable = true;
-
-                            theListView.setAdapter(theAdapter[0]);
-
-                            restoreNormalListView = false;
-
-                            //Once editing is complete the adapter can update the list
-                            goToMyAdapter = true;
-
-                        }
+                        goToMyAdapter = false;
 
                     }
 
-                });
+                    taskNameEditText.setFocusable(true);
+
+                    taskNameEditText.requestFocus();
+
+                    //Keyboard is inactive without this line
+                    taskNameEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+
+                    //Textbox is visible and 'add' button is gone
+                    // whenever keyboard is showing
+                    taskNameEditText.setVisibility(View.VISIBLE);
+
+                    params.height = 0;
+                    iconParams.height = 0;
+
+                    add.setLayoutParams(params);
+                    addIcon.setLayoutParams(iconParams);
+
+                    tasksAreClickable = false;
+
+                    restoreNormalListView = true;
+
+                }else if(restoreNormalListView){
+
+                    fadeTasks = false;
+
+                    //Textbox is gone and 'add' button is visible whenever
+                    // keyboard is not showing
+                    taskNameEditText.setVisibility(View.GONE);
+
+                    params.height = addHeight;
+                    iconParams.height = addIconHeight;
+
+                    add.setLayoutParams(params);
+                    addIcon.setLayoutParams(iconParams);
+
+                    tasksAreClickable = true;
+
+                    theListView.setAdapter(theAdapter[0]);
+
+                    restoreNormalListView = false;
+
+                    //Once editing is complete the adapter can update the list
+                    goToMyAdapter = true;
+
+                }
+
+            }
+
+        });
 
     }
 
@@ -2192,271 +1759,9 @@ public class MainActivity extends AppCompatActivity implements
             }
             dbResult.close();
 
-//            db.updateManualKill(String.valueOf(
-//                    MainActivity.sortedIDs.get(thePosition)), true);
-//
-//            db.updateOverdue(String.valueOf(MainActivity.sortedIDs.get(thePosition)), false);
-//            //cancelling any snooze data
-//            MainActivity.db.updateSnoozeData(String.valueOf(
-//                    MainActivity.sortedIDs.get(/*MainActivity.activeTask*/thePosition)),
-//                    "", "", "", "", "", "");
-//            db.updateSnooze(String.valueOf(MainActivity.sortedIDs.get(thePosition)), false);
-//            db.updateSnoozedTimestamp(MainActivity.sortedIDs.get(thePosition), "0");
+            if(dbRepeat && !dbSnooze && !dbOverdue){
 
-//            MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                    this, Integer.parseInt(
-//                            MainActivity.sortedIDs.get(thePosition) + 1000),
-//                    MainActivity.alertIntent,
-//                    PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//            Log.i(TAG, "Cancelling");
-//            MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-
-            if(dbRepeat && !dbSnooze){
-
-                if(!dbOverdue){
-
-                    db.updateKilledEarly(MainActivity.sortedIDs.get(thePosition),true);
-
-                }
-
-//                MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                        this, Integer.parseInt(
-//                                MainActivity.sortedIDs.get(thePosition)),
-//                        MainActivity.alertIntent,
-//                        PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//                MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-
-                if(dbRepeatInterval.equals("day")){
-
-                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp) -
-//                            (AlarmManager.INTERVAL_DAY / 1000));
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-
-//                    Log.i(TAG, "timestamp: " + dbTimestamp);
-//                    Log.i(TAG, "futureStamp: " + futureStamp);
-//                    if(remindersAvailable) {
-                        //updating timestamp
-//                        MainActivity.db.updateTimestamp(String.valueOf(
-//                                MainActivity.sortedIDs.get(thePosition)),
-//                                String.valueOf(futureStamp));
-
-//                    }
-
-                    //setting the name of the task for which the
-                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-////                    if(MainActivity.remindersAvailable) {
-//                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
-//                                        (String.valueOf(futureStamp) + "000"),
-//                                MainActivity.pendIntent);
-//                    }
-
-                }else if(dbRepeatInterval.equals("week")){
-
-                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp)
-//                            - ((AlarmManager.INTERVAL_DAY * 7) / 1000));
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-
-                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(thePosition)),
-//                            String.valueOf(futureStamp));
-
-                    //setting the name of the task for which the
-                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-////                    if(MainActivity.remindersAvailable) {
-//                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
-//                                        (String.valueOf(futureStamp) + "000"),
-//                                MainActivity.pendIntent);
-//                    }
-
-                }else if(dbRepeatInterval.equals("month")){
-
-//                    Calendar currentCal = Calendar.getInstance();
-//                    int currentYear = currentCal.get(Calendar.YEAR);
-//                    int currentMonth = currentCal.get(Calendar.MONTH);
-//                    int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
-//
-//                    int interval = 0;
-//                    int theYear = currentYear;
-//                    int theMonth = currentMonth;
-//                    int theDay = currentDay;
-//                    //Month January and day is 29 non leap year 2592000
-//                    if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
-//                        interval = 2592000;
-//                        //Month January and day is 30 non leap year 2505600
-//                    }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
-//                        interval = 2505600;
-//                        //Month January and day is 31 non leap year 2419200
-//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
-//                        interval = 2419200;
-//                        //Month January and day is 30 leap year 2592000
-//                    }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
-//                        interval = 2592000;
-//                        //Month January and day is 31 leap year 2505600
-//                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
-//                        interval = 2505600;
-//                        //Month March||May||August||October and day is 31 2592000
-//                    }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
-//                            || (theMonth == 9)) && (theDay == 31)){
-//                        interval = 2592000;
-//                        //Month January||March||May||July||August||October||December 2678400
-//                    }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
-//                            || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
-//                            || (theMonth == 11)){
-//                        interval = 2678400;
-//                        //Month April||June||September||November 2592000
-//                    }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
-//                            || (theMonth == 10)){
-//                        interval = 2592000;
-//                        //Month February non leap year 2419200
-//                    }else if((theMonth == 1) && (theYear % 4 != 0)){
-//                        interval = 2419200;
-//                        //Month February leap year 2505600
-//                    }else if((theMonth == 1) && (theYear % 4 == 0)){
-//                        interval = 2505600;
-//                    }
-//
-//                    //App crashes if exact duplicate of timestamp is saved in database. Attempting to
-//                    // detect duplicates and then adjusting the timestamp on the millisecond level
-//                    long futureStamp = (Long.parseLong(dbTimestamp) - interval);
-//                    String tempTimestamp = "";
-//                    for(int i = 0; i < MainActivity.taskList.size(); i++) {
-//                        Cursor tempResult = MainActivity.db.getData(Integer.parseInt(
-//                                MainActivity.sortedIDs.get(i)));
-//                        while (tempResult.moveToNext()) {
-//                            tempTimestamp = tempResult.getString(3);
-//                        }
-//                        tempResult.close();
-//                        if(futureStamp == Long.parseLong(tempTimestamp)){
-//                            futureStamp++;
-//                            i = 0;
-//                        }
-//
-//                    }
-//
-//                    futureStamp = Long.parseLong(String.valueOf(futureStamp) + "000");
-//                    Cursor origResult = MainActivity.db.getData(Integer.parseInt(
-//                            MainActivity.sortedIDs.get(thePosition)));
-//                    String originalDay = "";
-//                    while (origResult.moveToNext()) {
-//                        originalDay = origResult.getString(20);
-//                    }
-//                    origResult.close();
-//
-//                    Calendar cal = Calendar.getInstance();
-//                    cal.setTimeInMillis(futureStamp);
-//                    int day = cal.get(Calendar.DAY_OF_MONTH);
-//                    int month = cal.get(Calendar.MONTH);
-//                    if(day != Integer.parseInt(originalDay)){
-//                        int daysOut;
-//                        if(month == 0 && (day == 28 || day == 29 || day == 30)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 2 && (day == 28 || day == 29 || day == 30)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 3 && (day == 28 || day == 29)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 4 && (day == 28 || day == 29 || day == 30)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 5 && (day == 28 || day == 29)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 6 && (day == 28 || day == 29 || day == 30)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 7 && (day == 28 || day == 29 || day == 30)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 8 && (day == 28 || day == 29)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 9 && (day == 28 || day == 29 || day == 30)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 10 && (day == 28 || day == 29)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }else if(month == 11 && (day == 28 || day == 29 || day == 30)){
-//                            daysOut = Integer.parseInt(originalDay) - day;
-//                            futureStamp = futureStamp + (AlarmManager.INTERVAL_DAY * daysOut);
-//                        }
-//                    }
-//
-//                    futureStamp = futureStamp / 1000;
-
-                    //updating timestamp
-//                    MainActivity.db.updateTimestamp(String.valueOf(
-//                            MainActivity.sortedIDs.get(thePosition)),
-//                            String.valueOf(futureStamp));
-
-                    //setting the name of the task for which the
-                    // notification is being set
-//                    MainActivity.alertIntent.putExtra("ToDo", dbTask);
-//                    MainActivity.alertIntent.putExtra("broadId", thePosition);
-//
-//                    //Setting alarm
-//                    MainActivity.pendIntent = PendingIntent.getBroadcast(
-//                            MainActivity.this, thePosition, MainActivity.alertIntent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT);
-//
-////                    if(MainActivity.remindersAvailable) {
-//                        MainActivity.alarmManager.set(AlarmManager.RTC,
-//                                Long.parseLong(String.valueOf(futureStamp) + "000"),
-//                                MainActivity.pendIntent);
-//                    }
-
-                }
+                db.updateKilledEarly(MainActivity.sortedIDs.get(thePosition),true);
 
             }
 
@@ -2712,31 +2017,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onBillingError(int errorCode, @Nullable Throwable error) {
 
-//        toast.setText(R.string.somethingWentWrong);
-//        final Handler handler = new Handler();
-//
-//        final Runnable runnable = new Runnable() {
-//            public void run() {
-//            if(!mute) {
-//                sweep.start();
-//            }
-//                toastView.startAnimation(AnimationUtils.loadAnimation
-//                        (MainActivity.this, R.anim.enter_from_right_fast));
-//                toastView.setVisibility(View.VISIBLE);
-//                final Handler handler2 = new Handler();
-//                final Runnable runnable2 = new Runnable() {
-//                        public void run() {
-//                        toastView.startAnimation(AnimationUtils.loadAnimation
-//                                (MainActivity.this, android.R.anim.fade_out));
-//                        toastView.setVisibility(View.GONE);
-//                    }
-//                    };
-//                handler2.postDelayed(runnable2, 1500);
-//            }
-//        };
-//
-//        handler.postDelayed(runnable, 500);
-
         Toast.makeText(MainActivity.this, R.string.somethingWentWrong, Toast.LENGTH_LONG).show();
 
     }
@@ -2789,7 +2069,7 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             //TODO replace this test stuff with real stuff
-            //            //TODO see if productID should go in strings.xml
+            //TODO see if productID should go in strings.xml
             bp.purchase(this, "get_reminders");
 
         }
@@ -2806,7 +2086,7 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             //TODO replace this test stuff with real stuff
-            //            //TODO see if productID should go in strings.xml
+            //TODO see if productID should go in strings.xml
             bp.purchase(this, "cycle_colors");
 
         }
@@ -2824,36 +2104,17 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             //TODO replace this test stuff with real stuff
-            //            //TODO see if productID should go in strings.xml
+            //TODO see if productID should go in strings.xml
             bp.purchase(this, "unlock_all");
 
         }
 
     }
 
-//TODO use the following where users make purchases
-    //bp.purchase(MainActivity.this, "android.test.purchased");
-    //TODO fill in information
-    //Without developer payload
-    //TODO see if IDs should go into strings.xml
-    //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE");
-    //With developer payload
-    //bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE", "DEVELOPER PAYLOAD HERE");
-
-    //TODO find out if this is required
-//            Bundle extraParams = new Bundle()
-//            extraParams.putString("accountId", "MY_ACCOUNT_ID");
-//            bp.purchase(YOUR_ACTIVITY, "YOUR PRODUCT ID FROM GOOGLE PLAY CONSOLE HERE", null /*or developer payload*/, extraParams);
-//            bp.subscribe(YOUR_ACTIVITY, "YOUR SUBSCRIPTION ID FROM GOOGLE PLAY CONSOLE HERE", null /*or developer payload*/, extraParams);
-
     @Override
     protected void onPause(){
 
         super.onPause();
-
-        //TODO find out what's going on here. Mute back button?
-//        AudioManager mgr = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-//        mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false);
 
         //TODO check if this line is needed
         sortedIdsForNote = sortedIDs;
@@ -2938,8 +2199,6 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         for(int i = 0; i < taskListSize; i++){
-//            Cursor sharedPreferencesResult = db.getSortedData(Integer.parseInt(sortedIDs.get(i)));
-//            Cursor sharedPreferencesResult = db.getSortedData(i);
             Cursor sharedPreferencesResult = db.getData(IDList.get(i));
             while (sharedPreferencesResult.moveToNext()) {
                 taskList.add(sharedPreferencesResult.getString(4));
@@ -2947,7 +2206,6 @@ public class MainActivity extends AppCompatActivity implements
             sharedPreferencesResult.close();
         }
 
-//        reorderList();
         new Reorder();
         //Updating the view with the new order
         MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(

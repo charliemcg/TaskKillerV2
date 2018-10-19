@@ -179,10 +179,6 @@ public class Reorder {
         MainActivity.sortedIDs = tempIdsList;
         MainActivity.taskList = tempTaskList;
 
-//        //Updating the view with the new order
-//        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(context, MainActivity.taskList)};
-//        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
-
     }
 
 }
