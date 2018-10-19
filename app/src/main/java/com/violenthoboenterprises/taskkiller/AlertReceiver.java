@@ -64,6 +64,25 @@ public class AlertReceiver extends BroadcastReceiver {
         }
         dbResult.close();
 
+        //getting alarm data
+        Cursor alarmResult = MainActivity.db.getAlarmData(
+                Integer.parseInt(MainActivity.sortedIDs.get(broadId)));
+        String alarmHour = "";
+        String alarmMinute = "";
+        String alarmAmpm = "";
+        String alarmDay = "";
+        String alarmMonth = "";
+        String alarmYear = "";
+        while(alarmResult.moveToNext()){
+            alarmHour = alarmResult.getString(1);
+            alarmMinute = alarmResult.getString(2);
+            alarmAmpm = alarmResult.getString(3);
+            alarmDay = alarmResult.getString(4);
+            alarmMonth = alarmResult.getString(5);
+            alarmYear = alarmResult.getString(6);
+        }
+        alarmResult.close();
+
         //allows for notifications
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -256,9 +275,12 @@ public class AlertReceiver extends BroadcastReceiver {
                 //Getting interval in seconds based on specific day and month
                 Calendar currentCal = Calendar.getInstance();
                 int interval = 0;
-                int theYear = currentCal.get(Calendar.YEAR);
-                int theMonth = currentCal.get(Calendar.MONTH);
-                int theDay = currentCal.get(Calendar.DAY_OF_MONTH);
+//                int theYear = currentCal.get(Calendar.YEAR);
+//                int theMonth = currentCal.get(Calendar.MONTH);
+//                int theDay = currentCal.get(Calendar.DAY_OF_MONTH);
+                int theYear = Integer.parseInt(alarmYear);
+                int theMonth = Integer.parseInt(alarmMonth);
+                int theDay = Integer.parseInt(alarmDay);
                 //Month January and day is 29 non leap year 2592000
                 if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
                     interval = 2592000;
@@ -372,6 +394,10 @@ public class AlertReceiver extends BroadcastReceiver {
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(broadId)),
                         String.valueOf(futureStamp));
+
+                Calendar tempCal = Calendar.getInstance();
+                tempCal.setTimeInMillis(futureStamp * 1000);
+                Log.i(TAG, "month: " + tempCal.get(Calendar.MONTH) + " day: " + tempCal.get(Calendar.DAY_OF_MONTH));
 
                 //setting the name of the task for which the
                 // notification is being set
