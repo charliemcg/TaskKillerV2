@@ -152,7 +152,7 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         }
 
         //setting sub task name
-        if (Checklist.subTaskBeingEdited && (Integer.parseInt(dbTaskId) ==
+        if (Checklist.subTaskBeingEdited && (/*Integer.parseInt(dbTaskId)*/Checklist.renameMe ==
                 Checklist.sortedSubtaskIds.get(position)) &&
                 !Checklist.goToChecklistAdapter) {
 
