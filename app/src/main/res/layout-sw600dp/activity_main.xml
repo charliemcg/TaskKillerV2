@@ -292,13 +292,13 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/showDb"
-        android:layout_marginTop="500dp"
-        android:layout_marginLeft="200dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="DB"/>
+    <!--<Button-->
+        <!--android:id="@+id/showDb"-->
+        <!--android:layout_marginTop="500dp"-->
+        <!--android:layout_marginLeft="200dp"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:text="DB"/>-->
     <!--<Button-->
         <!--android:id="@+id/showAlarmDb"-->
         <!--android:layout_marginTop="500dp"-->
@@ -306,12 +306,12 @@
         <!--android:layout_width="100dp"-->
         <!--android:layout_height="100dp"-->
         <!--android:text="Time"/>-->
-    <!--<Button-->
-        <!--android:id="@+id/showUniversalDb"-->
-        <!--android:layout_marginTop="500dp"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:text="Universal DB"/>-->
+    <Button
+        android:id="@+id/showUniversalDb"
+        android:layout_marginTop="500dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="Universal DB"/>
     <!--<Button-->
         <!--android:id="@+id/showSubtasksDb"-->
         <!--android:layout_marginTop="500dp"-->

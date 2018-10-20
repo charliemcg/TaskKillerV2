@@ -1658,6 +1658,8 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 MainActivity.taskPropertiesShowing = false;
 
+                new Reorder();
+
                 MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
             }
