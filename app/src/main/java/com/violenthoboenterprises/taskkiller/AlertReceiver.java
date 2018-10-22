@@ -141,8 +141,7 @@ public class AlertReceiver extends BroadcastReceiver {
             }
 
             //cancelling any snoozed alarm data
-            MainActivity.db.updateSnoozeData(String.valueOf(
-                    MainActivity.sortedIDs.get(broadId)),
+            MainActivity.db.updateSnoozeData(String.valueOf(broadId),
                     "",
                     "",
                     "",
@@ -150,13 +149,13 @@ public class AlertReceiver extends BroadcastReceiver {
                     "",
                     "");
 
-            MainActivity.db.updateSnoozedTimestamp(String.valueOf(MainActivity
-                    .sortedIDs.get(broadId)), "0");
+            MainActivity.db.updateSnoozedTimestamp(String.valueOf(broadId), "0");
 
-            MainActivity.db.updateSnooze(String.valueOf(MainActivity.sortedIDs
-                    .get(broadId)), false);
+            MainActivity.db.updateSnooze(String.valueOf(broadId), false);
 
             dbSnoozed = false;
+
+            MainActivity.db.updateIgnored(String.valueOf(broadId), false);
 
             //snoozed notifications cannot corrupt regular repeating notifications
             if(dbRepeatInterval.equals("day") && !dbSnoozed){
@@ -194,27 +193,36 @@ public class AlertReceiver extends BroadcastReceiver {
                         context, broadId, MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-
+                Calendar alarmCalendar = Calendar.getInstance();
+                Long diff = Long.valueOf(0);
 
                 if(!dbKilledEarly) {
-                    Log.i(TAG, "Not killed early");
+//                    Log.i(TAG, "Not killed early");
                     Calendar currentCal = Calendar.getInstance();
                     Calendar futureCal = Calendar.getInstance();
                     futureCal.setTimeInMillis(futureStamp * 1000);
-                    Long diff = futureCal.getTimeInMillis() - currentCal.getTimeInMillis();
+                    diff = futureCal.getTimeInMillis() - currentCal.getTimeInMillis();
                     diff = diff / 1000;
-                    Log.i(TAG, "diff: " + diff);
+//                    Log.i(TAG, "diff: " + diff);
                     if(diff < 86400) {
                         MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
                                 (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
+//                        alarmCalendar.setTimeInMillis(Long.parseLong
+//                                (String.valueOf(futureStamp) + "000"));
                     }else{
+                        int daysOut = (int) (diff / 86400);
                         MainActivity.alarmManager.set(AlarmManager.RTC, (Long.parseLong
-                                (String.valueOf(futureStamp) + "000") - 86400000), MainActivity.pendIntent);
+                                (String.valueOf(futureStamp) + "000") - (86400000 * daysOut)),
+                                MainActivity.pendIntent);
+//                        alarmCalendar.setTimeInMillis(Long.parseLong
+//                                (String.valueOf(futureStamp) + "000") - (86400000 * daysOut));
                     }
                 }else{
                     Log.i(TAG, "Killed early");
                     MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
                             (String.valueOf(dbTimestamp) + "000"), MainActivity.pendIntent);
+//                    alarmCalendar.setTimeInMillis(Long.parseLong
+//                            (String.valueOf(dbTimestamp) + "000"));
                 }
 
 //                Calendar tempCal = Calendar.getInstance();
@@ -233,13 +241,31 @@ public class AlertReceiver extends BroadcastReceiver {
 //                Log.i(TAG, "//////////////////////////////");
 ////                Log.i(TAG, "diff: " + difference);
 
-                Calendar alarmCalendar = Calendar.getInstance();
+//                Calendar alarmCalendar = Calendar.getInstance();
                 alarmCalendar.setTimeInMillis(Long.parseLong
                         (String.valueOf(futureStamp) + "000") - AlarmManager.INTERVAL_DAY);
-                Log.i(TAG, "futureDay: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
+//                Log.i(TAG, "futureDay: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
 
                 //alarm data is already updated if user marked task as done
-                if(!dbManualKill && (Integer.parseInt(alarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))){
+                if(!dbManualKill
+                        && (Integer.parseInt(alarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))){
+                    currentCal = Calendar.getInstance();
+                    Calendar futureCal = Calendar.getInstance();
+                    futureCal.setTimeInMillis((futureStamp * 1000) - AlarmManager.INTERVAL_DAY);
+                    diff = (Long.parseLong(String.valueOf(futureStamp) + "000")
+                            - AlarmManager.INTERVAL_DAY)
+                            - currentCal.getTimeInMillis();
+                    diff = diff / 1000;
+                    Log.i(TAG, "diff: " + diff);
+                    if(diff > 0) {
+                        Log.i(TAG, "I'm in here diff: " + diff);
+                        int daysOut = (int) (diff / 86400);
+                        Log.i(TAG, "daysOut: " + daysOut);
+                        futureStamp =  futureStamp - (86400 * (daysOut + 1));
+                        alarmCalendar.setTimeInMillis(Long.parseLong
+                                (String.valueOf(futureStamp) + "000")
+                                - AlarmManager.INTERVAL_DAY);
+                    }
 
                     Log.i(TAG, "updating due: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
 
