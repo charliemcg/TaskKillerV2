@@ -34,7 +34,7 @@ public class AlertReceiver extends BroadcastReceiver {
     public void createNotification(Context context, String msg, String msgText,
                                    String msgAlert, int broadId){
 
-        Log.i(TAG, "I'm in here alertReceiver");
+//        Log.i(TAG, "I'm in here alertReceiver");
 
         //defining intent and action to perform
         PendingIntent notificIntent = PendingIntent.getActivity(context, 1,
@@ -176,20 +176,54 @@ public class AlertReceiver extends BroadcastReceiver {
                         context, broadId, MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
-                        (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
 
-                Calendar tempCal = Calendar.getInstance();
-                tempCal.setTimeInMillis(futureStamp * 1000);
-                Log.i(TAG, "month: " + tempCal.get(Calendar.MONTH) + " day: "
-                        + tempCal.get(Calendar.DAY_OF_MONTH));
+
+                if(!dbKilledEarly) {
+                    Log.i(TAG, "Not killed early");
+                    Calendar currentCal = Calendar.getInstance();
+                    Calendar futureCal = Calendar.getInstance();
+                    futureCal.setTimeInMillis(futureStamp * 1000);
+                    Long diff = futureCal.getTimeInMillis() - currentCal.getTimeInMillis();
+                    diff = diff / 1000;
+                    Log.i(TAG, "diff: " + diff);
+                    if(diff < 86400) {
+                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                                (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
+                    }else{
+                        MainActivity.alarmManager.set(AlarmManager.RTC, (Long.parseLong
+                                (String.valueOf(futureStamp) + "000") - 86400000), MainActivity.pendIntent);
+                    }
+                }else{
+                    Log.i(TAG, "Killed early");
+                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                            (String.valueOf(dbTimestamp) + "000"), MainActivity.pendIntent);
+                }
+
+//                Calendar tempCal = Calendar.getInstance();
+//                tempCal.setTimeInMillis(futureStamp * 1000);
+////                Log.i(TAG, "month: " + tempCal.get(Calendar.MONTH) + " day: "
+////                        + tempCal.get(Calendar.DAY_OF_MONTH));
+                Calendar currentCal = Calendar.getInstance();
+////                Log.i(TAG, "month: " + currentCal.get(Calendar.MONTH) + " day: "
+////                        + currentCal.get(Calendar.DAY_OF_MONTH));
+//                long difference = (futureStamp * 1000) - currentCal.getTimeInMillis();
+//                difference = difference / 1000;
+//                Log.i(TAG, "currentDay: " + currentCal.getTimeInMillis());
+//                Log.i(TAG, "future: " + (futureStamp * 1000));
+//                Log.i(TAG, "alarmDay: " + alarmDay);
+//                Log.i(TAG, "currentDay: " + (currentCal.get(Calendar.DAY_OF_MONTH)));
+//                Log.i(TAG, "//////////////////////////////");
+////                Log.i(TAG, "diff: " + difference);
 
                 Calendar alarmCalendar = Calendar.getInstance();
                 alarmCalendar.setTimeInMillis(Long.parseLong
                         (String.valueOf(futureStamp) + "000") - AlarmManager.INTERVAL_DAY);
+                Log.i(TAG, "futureDay: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
 
                 //alarm data is already updated if user marked task as done
-                if(!dbManualKill){
+                if(!dbManualKill && (Integer.parseInt(alarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))){
+
+//                    Log.i(TAG, "updating due");
 
                     //updating due date in database
                     MainActivity.db.updateAlarmData(String.valueOf(/*
@@ -203,8 +237,13 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 }
 
-                MainActivity.db.updateManualKill(String.valueOf
-                        (/*MainActivity.sortedIDs.get(*/broadId/*)*/), false);
+//                if(!dbKilledEarly) {
+                    MainActivity.db.updateManualKill(String.valueOf
+                            (/*MainActivity.sortedIDs.get(*/broadId/*)*/), false);
+//                }else{
+//                    MainActivity.db.updateManualKill(String.valueOf
+//                            (/*MainActivity.sortedIDs.get(*/broadId/*)*/), true);
+//                }
 
             }else if(dbRepeatInterval.equals("week") && !dbSnoozed){
 

@@ -185,26 +185,30 @@ class ChecklistAdapter extends ArrayAdapter<String> {
         Checklist.checklistRootView.getWindowVisibleDisplayFrame(screen);
 
         //Screen pixel values are used to determine how much of the screen is visible
-        int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
-                (screen.bottom - screen.top);
-
-        //TODO check hardcoded pixel values
-        if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
-                .getConfiguration().orientation == 1)) {
-
-            Checklist.subTasksClickable = false;
-
-        //Similar to above but for landscape mode
-        }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
-                .getResources().getConfiguration().orientation == 2)){
-
-            Checklist.subTasksClickable = false;
-
-        }else{
-
-            Checklist.subTasksClickable = true;
-
-        }
+//        int heightDiff = Checklist.checklistRootView.getRootView().getHeight() -
+//                (screen.bottom - screen.top);
+//
+//        Log.i(TAG, "rootview height: " + Checklist.checklistRootView.getRootView().getHeight()
+//                + "\nscreen.bottom: " + screen.bottom + "\nscreen.top: " + screen.top
+//                + "\nheightDiff: " + heightDiff);
+//
+//        //TODO check hardcoded pixel values
+//        if ((heightDiff > 800) && (Checklist.checklistRootView.getResources()
+//                .getConfiguration().orientation == 1)) {
+//
+//            Checklist.subTasksClickable = false;
+//
+//        //Similar to above but for landscape mode
+//        }else if((heightDiff > 73) && (heightDiff < 800) && (Checklist.checklistRootView
+//                .getResources().getConfiguration().orientation == 2)){
+//
+//            Checklist.subTasksClickable = false;
+//
+//        }else{
+//
+//            Checklist.subTasksClickable = true;
+//
+//        }
 
         if (Checklist.subTasksClickable) {
 

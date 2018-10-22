@@ -1088,7 +1088,8 @@ public class SetDue extends MainActivity {
                 adjustedMinute = ":" + minute;
             }
 
-            timeTextView.setText(adjustedHour + /*":" +*/adjustedMinute + adjustedAmPm);
+            String formattedTime = adjustedHour + adjustedMinute + adjustedAmPm;
+            timeTextView.setText(formattedTime);
 
             MainActivity.vibrate.vibrate(50);
 

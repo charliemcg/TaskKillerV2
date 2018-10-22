@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements
     static boolean repeating;
     //Used to indicate that list needs to be reordered
     static boolean reorderList;
-    //Reinstate alarm after reinstating task //TODO if deciding to use this feature
+    //Reinstate alarm after reinstating task
     static boolean reinstateAlarm;
     //Used to determine that task is being set to complete
     static boolean completeTask;
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements
 //    Button showDb;
 //    Button showAlarmDb;
 //    Button showSnoozeDb;
-    Button showUniversalDb;
+//    Button showUniversalDb;
 //    Button showSubtasksDb;
 
     //Scrollable list
@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements
         deviceheight = displayMetrics.heightPixels;
 //        showDb = findViewById(R.id.showDb);
 //        showAlarmDb = findViewById(R.id.showAlarmDb);
-        showUniversalDb = findViewById(R.id.showUniversalDb);
+//        showUniversalDb = findViewById(R.id.showUniversalDb);
 //        showSubtasksDb = findViewById(R.id.showSubtasksDb);
         duesSet = 0;
         showMotivation = false;
@@ -677,43 +677,43 @@ public class MainActivity extends AppCompatActivity implements
 //        });
 
         //Used for debugging purposes
-        showUniversalDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Cursor res = db.getAllUniversalData();
-                if(res.getCount() == 0){
-                    showMessage("Error", "Nothing found");
-                }
-                StringBuffer buffer = new StringBuffer();
-                while(res.moveToNext()){
-                    buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("MUTE: " + res.getString(1) + "\n");
-                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
-                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
-                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
-                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
-                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
-                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
-                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
-                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
-                    buffer.append("SETALARM: " + res.getString(10) + "\n");
-                    buffer.append("YEAR: " + res.getString(11) + "\n");
-                    buffer.append("MONTH: " + res.getString(12) + "\n");
-                    buffer.append("DAY: " + res.getString(13) + "\n");
-                    buffer.append("HOUR: " + res.getString(14) + "\n");
-                    buffer.append("MINUTE: " + res.getString(15) + "\n");
-                    buffer.append("AMPM: " + res.getString(17) + "\n");
-                    buffer.append("DUESSET: " + res.getString(19) + "\n");
-                    buffer.append("HIGHLIGHTDEC: " + res.getString(29) + "\n\n");
-                }
-                res.close();
-
-                showMessage("Data", buffer.toString());
-
-            }
-
-        });
+//        showUniversalDb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Cursor res = db.getAllUniversalData();
+//                if(res.getCount() == 0){
+//                    showMessage("Error", "Nothing found");
+//                }
+//                StringBuffer buffer = new StringBuffer();
+//                while(res.moveToNext()){
+//                    buffer.append("ID: " + res.getString(0) + "\n");
+//                    buffer.append("MUTE: " + res.getString(1) + "\n");
+//                    buffer.append("HIGHLIGHT: " + res.getString(2) + "\n");
+//                    buffer.append("DARKLIGHT: " + res.getString(3) + "\n");
+//                    buffer.append("ACTIVETASKNAME: " + res.getString(4) + "\n");
+//                    buffer.append("ADSREMOVED: " + res.getString(5) + "\n");
+//                    buffer.append("REMINDERSAVAILABLE: " + res.getString(6) + "\n");
+//                    buffer.append("CYCLECOLORS: " + res.getString(7) + "\n");
+//                    buffer.append("TASKLISTSIZE: " + res.getString(8) + "\n");
+//                    buffer.append("CHECKLISTLISTSIZE: " + res.getString(9) + "\n");
+//                    buffer.append("SETALARM: " + res.getString(10) + "\n");
+//                    buffer.append("YEAR: " + res.getString(11) + "\n");
+//                    buffer.append("MONTH: " + res.getString(12) + "\n");
+//                    buffer.append("DAY: " + res.getString(13) + "\n");
+//                    buffer.append("HOUR: " + res.getString(14) + "\n");
+//                    buffer.append("MINUTE: " + res.getString(15) + "\n");
+//                    buffer.append("AMPM: " + res.getString(17) + "\n");
+//                    buffer.append("DUESSET: " + res.getString(19) + "\n");
+//                    buffer.append("HIGHLIGHTDEC: " + res.getString(29) + "\n\n");
+//                }
+//                res.close();
+//
+//                showMessage("Data", buffer.toString());
+//
+//            }
+//
+//        });
 
         //Used for debugging purposes
 //        showSubtasksDb.setOnClickListener(new View.OnClickListener() {
@@ -1562,7 +1562,6 @@ public class MainActivity extends AppCompatActivity implements
     //Actions to occur when keyboard is showing
     void checkKeyboardShowing() {
 
-        //TODO check out the hard coded pixels will work on all devices
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
