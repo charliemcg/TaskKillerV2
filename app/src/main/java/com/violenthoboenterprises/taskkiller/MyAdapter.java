@@ -1583,7 +1583,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 futureStamp = futureStamp / 1000;
 
-//                Log.i(TAG, "I'm in here four");
+                Log.i(TAG, "I'm in here four");
                 Calendar currentCal = Calendar.getInstance();
                 Calendar futureCal = Calendar.getInstance();
                 futureCal.setTimeInMillis(futureStamp * 1000);
@@ -1613,10 +1613,12 @@ class MyAdapter extends ArrayAdapter<String> {
                     snoozeCal.setTimeInMillis(Long.parseLong(finalDbTimestamp) * 1000);
                 }else{
                     Log.i(TAG, "in else");
+                    int daysOut = (int) (diff / 86400);
+                    Log.i(TAG, "days out: " + daysOut);
                     MainActivity.db.updateTimestamp(String.valueOf(
                             MainActivity.sortedIDs.get(position)),
-                            String.valueOf(Integer.parseInt(finalDbTimestamp) - 86400));
-                    snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp) - 86400) * 1000);
+                            String.valueOf(Integer.parseInt(finalDbTimestamp) - (86400 * daysOut)));
+                    snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp) - (86400 * daysOut)) * 1000);
                 }
 
 //                if(!dbOverdue) {
@@ -2986,37 +2988,110 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 Log.i(TAG, "I'm in here eight");
                                 //updating timestamp
-                                if(!finalDbOverdue) {
+//                                if(!finalDbOverdue) {
+//                                    MainActivity.db.updateTimestamp(String.valueOf(
+//                                            MainActivity.sortedIDs.get(position)),
+//                                            String.valueOf(futureStamp));
+//                                }else{
+//                                    MainActivity.db.updateTimestamp(String.valueOf(
+//                                            MainActivity.sortedIDs.get(position)),
+//                                            String.valueOf(finalDbTimestamp));
+//                                }
+
+                                Calendar currentCal = Calendar.getInstance();
+                                Calendar futureCal = Calendar.getInstance();
+                                futureCal.setTimeInMillis(futureStamp * 1000);
+                                Calendar timestampCal = Calendar.getInstance();
+                                timestampCal.setTimeInMillis(Long.parseLong(finalDbTimestamp) * 1000);
+                                Long diff = (Long.parseLong(finalDbTimestamp) * 1000) - currentCal.getTimeInMillis();
+                                Log.i(TAG, "diff: " + (diff / 1000));
+                                diff = diff / 1000;
+
+                                Calendar snoozeCal = Calendar.getInstance();
+                                //updating timestamp
+                                if(!finalDbOverdue && (Integer.parseInt(finalAlarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))) {
+                                    Log.i(TAG, "in if");
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(futureStamp));
-                                }else{
+                                    snoozeCal.setTimeInMillis(futureStamp * 1000);
+                                }else if(diff < 86400){
+                                    Log.i(TAG, "in else if");
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(finalDbTimestamp));
+                                    snoozeCal.setTimeInMillis(Long.parseLong(finalDbTimestamp) * 1000);
+                                }else{
+                                    Log.i(TAG, "in else");
+                                    int daysOut = (int) (diff / 86400);
+                                    Log.i(TAG, "days out: " + daysOut);
+                                    MainActivity.db.updateTimestamp(String.valueOf(
+                                            MainActivity.sortedIDs.get(position)),
+                                            String.valueOf(Integer.parseInt(finalDbTimestamp) - (86400 * daysOut)));
+                                    snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp) - (86400 * daysOut)) * 1000);
                                 }
 
                                 if(!finalAlarmDay.equals("")) {
 
-                                    Calendar adjustedCalendar = Calendar.getInstance();
-                                    if(!finalDbOverdue) {
-                                        adjustedCalendar.setTimeInMillis(futureStamp * 1000);
-                                    }else{
-                                        adjustedCalendar.setTimeInMillis(Long.parseLong
-                                                (finalDbTimestamp) * 1000);
-                                    }
-                                    int newDay = adjustedCalendar.get(Calendar.DAY_OF_MONTH);
-                                    int newMonth = adjustedCalendar.get(Calendar.MONTH);
-                                    int newYear = adjustedCalendar.get(Calendar.YEAR);
+                                    //////////////////////////////////////////////
 
-                                    MainActivity.db.updateAlarmData(String.valueOf(MainActivity
-                                                    .sortedIDs.get(position)), finalAlarmHour,
-                                            finalAlarmMinute, finalAlarmAmpm,
+                                    int newDay;
+                                    int newMonth;
+                                    int newYear;
+
+                                    newYear = snoozeCal.get(Calendar.YEAR);
+                                    newMonth = snoozeCal.get(Calendar.MONTH);
+                                    newDay = snoozeCal.get(Calendar.DAY_OF_MONTH);
+
+                                    //updating due time in database
+                                    MainActivity.db.updateAlarmData(String.valueOf(
+                                            MainActivity.sortedIDs.get(position)),
+                                            finalAlarmHour, finalAlarmMinute, finalAlarmAmpm,
                                             String.valueOf(newDay), String.valueOf(newMonth),
                                             String.valueOf(newYear));
 
-                                    MainActivity.db.updateManualKill(String.valueOf(MainActivity
-                                            .sortedIDs.get(position)), true);
+                                    //cancelling any snoozed alarm data
+                                    MainActivity.db.updateSnoozeData(String.valueOf(
+                                            MainActivity.sortedIDs.get(position)),
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "");
+
+                                    MainActivity.db.updateSnoozedTimestamp(String.valueOf(MainActivity
+                                            .sortedIDs.get(position)), "0");
+
+                                    MainActivity.db.updateSnooze(String.valueOf(MainActivity.sortedIDs
+                                            .get(position)), false);
+
+                                    MainActivity.db.updateManualKill(String.valueOf(
+                                            MainActivity.sortedIDs.get(position)), true);
+
+                                    MainActivity.db.updateShowOnce(
+                                            MainActivity.sortedIDs.get(position), true);
+                                    ///////////////////////////////////////////////
+
+//                                    Calendar adjustedCalendar = Calendar.getInstance();
+//                                    if(!finalDbOverdue) {
+//                                        adjustedCalendar.setTimeInMillis(futureStamp * 1000);
+//                                    }else{
+//                                        adjustedCalendar.setTimeInMillis(Long.parseLong
+//                                                (finalDbTimestamp) * 1000);
+//                                    }
+//                                    int newDay = adjustedCalendar.get(Calendar.DAY_OF_MONTH);
+//                                    int newMonth = adjustedCalendar.get(Calendar.MONTH);
+//                                    int newYear = adjustedCalendar.get(Calendar.YEAR);
+//
+//                                    MainActivity.db.updateAlarmData(String.valueOf(MainActivity
+//                                                    .sortedIDs.get(position)), finalAlarmHour,
+//                                            finalAlarmMinute, finalAlarmAmpm,
+//                                            String.valueOf(newDay), String.valueOf(newMonth),
+//                                            String.valueOf(newYear));
+//
+//                                    MainActivity.db.updateManualKill(String.valueOf(MainActivity
+//                                            .sortedIDs.get(position)), true);
 
                                 }
 
@@ -3663,10 +3738,11 @@ class MyAdapter extends ArrayAdapter<String> {
                             snoozeCal.setTimeInMillis(Long.parseLong(finalDbTimestamp) * 1000);
                         }else{
                             Log.i(TAG, "in else");
+                            int daysOut = (int) (diff / 86400);
                             MainActivity.db.updateTimestamp(String.valueOf(
                                     MainActivity.sortedIDs.get(position)),
-                                    String.valueOf(Integer.parseInt(finalDbTimestamp) - 86400));
-                            snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp) - 86400) * 1000);
+                                    String.valueOf(Integer.parseInt(finalDbTimestamp) - (86400 * daysOut)));
+                            snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp) - (86400 * daysOut)) * 1000);
                         }
 
                         Log.i(TAG, "I'm in here eleven");

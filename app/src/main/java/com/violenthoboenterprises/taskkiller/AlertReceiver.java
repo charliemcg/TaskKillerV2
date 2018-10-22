@@ -140,6 +140,24 @@ public class AlertReceiver extends BroadcastReceiver {
 
             }
 
+            //cancelling any snoozed alarm data
+            MainActivity.db.updateSnoozeData(String.valueOf(
+                    MainActivity.sortedIDs.get(broadId)),
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "");
+
+            MainActivity.db.updateSnoozedTimestamp(String.valueOf(MainActivity
+                    .sortedIDs.get(broadId)), "0");
+
+            MainActivity.db.updateSnooze(String.valueOf(MainActivity.sortedIDs
+                    .get(broadId)), false);
+
+            dbSnoozed = false;
+
             //snoozed notifications cannot corrupt regular repeating notifications
             if(dbRepeatInterval.equals("day") && !dbSnoozed){
 
@@ -223,7 +241,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 //alarm data is already updated if user marked task as done
                 if(!dbManualKill && (Integer.parseInt(alarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))){
 
-//                    Log.i(TAG, "updating due");
+                    Log.i(TAG, "updating due: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
 
                     //updating due date in database
                     MainActivity.db.updateAlarmData(String.valueOf(/*
