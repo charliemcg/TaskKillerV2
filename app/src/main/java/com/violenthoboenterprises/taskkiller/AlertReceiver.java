@@ -27,12 +27,12 @@ public class AlertReceiver extends BroadcastReceiver {
 
         //retrieving task name to set as notification name
         createNotification(context, String.valueOf(intent.getStringExtra("ToDo")),
-                "", "", intent.getIntExtra("broadId", 0));
+                "", "", intent.getIntExtra("broadId", 0), intent.getBooleanExtra("snoozeStatus", false));
 
     }
 
     public void createNotification(Context context, String msg, String msgText,
-                                   String msgAlert, int broadId){
+                                   String msgAlert, int broadId, boolean snoozeStatus){
 
 //        Log.i(TAG, "I'm in here alertReceiver");
 
@@ -157,8 +157,10 @@ public class AlertReceiver extends BroadcastReceiver {
 
             MainActivity.db.updateIgnored(String.valueOf(broadId), false);
 
+            Log.i(TAG, "snoozeStatus: " + snoozeStatus);
+
             //snoozed notifications cannot corrupt regular repeating notifications
-            if(dbRepeatInterval.equals("day") && !dbSnoozed){
+            if(dbRepeatInterval.equals("day") && !snoozeStatus){
 
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                 // detect duplicates and then adjusting the timestamp on the millisecond level
