@@ -47,6 +47,7 @@ public class AlertReceiver extends BroadcastReceiver {
         String dbTimestamp = "";
         String dbTask = "";
         Boolean dbRepeat = false;
+        boolean dbOverdue = false;
         Boolean dbSnoozed = false;
         String dbRepeatInterval = "";
         Boolean dbManualKill = false;
@@ -57,6 +58,7 @@ public class AlertReceiver extends BroadcastReceiver {
             dbTimestamp = dbResult.getString(3);
             dbTask = dbResult.getString(4);
             dbRepeat = dbResult.getInt(8) > 0;
+            dbOverdue = dbResult.getInt(9) > 0;
             dbSnoozed = dbResult.getInt(10) > 0;
             dbRepeatInterval = dbResult.getString(13);
             dbManualKill = dbResult.getInt(18) > 0;
@@ -157,8 +159,6 @@ public class AlertReceiver extends BroadcastReceiver {
 
             MainActivity.db.updateIgnored(String.valueOf(broadId), false);
 
-            Log.i(TAG, "snoozeStatus: " + snoozeStatus);
-
             //snoozed notifications cannot corrupt regular repeating notifications
             if(dbRepeatInterval.equals("day") && !snoozeStatus){
 
@@ -167,8 +167,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 long futureStamp = Long.parseLong(dbTimestamp) + (AlarmManager.INTERVAL_DAY / 1000);
                 String tempTimestamp = "";
                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
-                    Cursor tempResult = MainActivity.db.getData(/*Integer.parseInt(
-                            MainActivity.sortedIDs.get(*/i/*))*/);
+                    Cursor tempResult = MainActivity.db.getData(i);
                     while (tempResult.moveToNext()) {
                         tempTimestamp = tempResult.getString(3);
                     }
@@ -181,8 +180,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
 
                 //updating timestamp
-                MainActivity.db.updateTimestamp(String.valueOf(/*
-                        MainActivity.sortedIDs.get(*/broadId/*)*/),
+                MainActivity.db.updateTimestamp(String.valueOf(broadId),
                         String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
@@ -199,54 +197,29 @@ public class AlertReceiver extends BroadcastReceiver {
                 Long diff = Long.valueOf(0);
 
                 if(!dbKilledEarly) {
-//                    Log.i(TAG, "Not killed early");
                     Calendar currentCal = Calendar.getInstance();
                     Calendar futureCal = Calendar.getInstance();
                     futureCal.setTimeInMillis(futureStamp * 1000);
                     diff = futureCal.getTimeInMillis() - currentCal.getTimeInMillis();
                     diff = diff / 1000;
-//                    Log.i(TAG, "diff: " + diff);
                     if(diff < 86400) {
                         MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
                                 (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
-//                        alarmCalendar.setTimeInMillis(Long.parseLong
-//                                (String.valueOf(futureStamp) + "000"));
                     }else{
                         int daysOut = (int) (diff / 86400);
                         MainActivity.alarmManager.set(AlarmManager.RTC, (Long.parseLong
                                 (String.valueOf(futureStamp) + "000") - (86400000 * daysOut)),
                                 MainActivity.pendIntent);
-//                        alarmCalendar.setTimeInMillis(Long.parseLong
-//                                (String.valueOf(futureStamp) + "000") - (86400000 * daysOut));
                     }
                 }else{
-                    Log.i(TAG, "Killed early");
                     MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
                             (String.valueOf(dbTimestamp) + "000"), MainActivity.pendIntent);
-//                    alarmCalendar.setTimeInMillis(Long.parseLong
-//                            (String.valueOf(dbTimestamp) + "000"));
                 }
 
-//                Calendar tempCal = Calendar.getInstance();
-//                tempCal.setTimeInMillis(futureStamp * 1000);
-////                Log.i(TAG, "month: " + tempCal.get(Calendar.MONTH) + " day: "
-////                        + tempCal.get(Calendar.DAY_OF_MONTH));
                 Calendar currentCal = Calendar.getInstance();
-////                Log.i(TAG, "month: " + currentCal.get(Calendar.MONTH) + " day: "
-////                        + currentCal.get(Calendar.DAY_OF_MONTH));
-//                long difference = (futureStamp * 1000) - currentCal.getTimeInMillis();
-//                difference = difference / 1000;
-//                Log.i(TAG, "currentDay: " + currentCal.getTimeInMillis());
-//                Log.i(TAG, "future: " + (futureStamp * 1000));
-//                Log.i(TAG, "alarmDay: " + alarmDay);
-//                Log.i(TAG, "currentDay: " + (currentCal.get(Calendar.DAY_OF_MONTH)));
-//                Log.i(TAG, "//////////////////////////////");
-////                Log.i(TAG, "diff: " + difference);
 
-//                Calendar alarmCalendar = Calendar.getInstance();
                 alarmCalendar.setTimeInMillis(Long.parseLong
                         (String.valueOf(futureStamp) + "000") - AlarmManager.INTERVAL_DAY);
-//                Log.i(TAG, "futureDay: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
 
                 //alarm data is already updated if user marked task as done
                 if(!dbManualKill
@@ -258,22 +231,16 @@ public class AlertReceiver extends BroadcastReceiver {
                             - AlarmManager.INTERVAL_DAY)
                             - currentCal.getTimeInMillis();
                     diff = diff / 1000;
-                    Log.i(TAG, "diff: " + diff);
                     if(diff > 0) {
-                        Log.i(TAG, "I'm in here diff: " + diff);
                         int daysOut = (int) (diff / 86400);
-                        Log.i(TAG, "daysOut: " + daysOut);
                         futureStamp =  futureStamp - (86400 * (daysOut + 1));
                         alarmCalendar.setTimeInMillis(Long.parseLong
                                 (String.valueOf(futureStamp) + "000")
                                 - AlarmManager.INTERVAL_DAY);
                     }
 
-                    Log.i(TAG, "updating due: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
-
                     //updating due date in database
-                    MainActivity.db.updateAlarmData(String.valueOf(/*
-                            MainActivity.sortedIDs.get(*/broadId/*)*/),
+                    MainActivity.db.updateAlarmData(String.valueOf(broadId),
                             String.valueOf(alarmCalendar.get(Calendar.HOUR)),
                             String.valueOf(alarmCalendar.get(Calendar.MINUTE)),
                             String.valueOf(alarmCalendar.get(Calendar.AM_PM)),
@@ -283,15 +250,9 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 }
 
-//                if(!dbKilledEarly) {
-                    MainActivity.db.updateManualKill(String.valueOf
-                            (/*MainActivity.sortedIDs.get(*/broadId/*)*/), false);
-//                }else{
-//                    MainActivity.db.updateManualKill(String.valueOf
-//                            (/*MainActivity.sortedIDs.get(*/broadId/*)*/), true);
-//                }
+                MainActivity.db.updateManualKill(String.valueOf(broadId), false);
 
-            }else if(dbRepeatInterval.equals("week") && !dbSnoozed){
+            }else if(dbRepeatInterval.equals("week") && !snoozeStatus){
 
                 //App crashes if exact duplicate of timestamp is saved in database. Attempting to
                 // detect duplicates and then adjusting the timestamp on the millisecond level
@@ -299,8 +260,7 @@ public class AlertReceiver extends BroadcastReceiver {
                         ((AlarmManager.INTERVAL_DAY * 7) / 1000);
                 String tempTimestamp = "";
                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
-                    Cursor tempResult = MainActivity.db.getData(/*Integer.parseInt(
-                            MainActivity.sortedIDs.get(*/i/*))*/);
+                    Cursor tempResult = MainActivity.db.getData(i);
                     while (tempResult.moveToNext()) {
                         tempTimestamp = tempResult.getString(3);
                     }
@@ -313,9 +273,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
 
                 //updating timestamp
-                MainActivity.db.updateTimestamp(String.valueOf(/*
-                        MainActivity.sortedIDs.get(*/broadId/*)*/),
-                        String.valueOf(futureStamp));
+                MainActivity.db.updateTimestamp(String.valueOf(broadId), String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
                 // notification is being set
@@ -323,23 +281,62 @@ public class AlertReceiver extends BroadcastReceiver {
                 MainActivity.alertIntent.putExtra("broadId", broadId);
 
                 //Setting alarm
-                MainActivity.pendIntent = PendingIntent.getBroadcast(
+                 MainActivity.pendIntent = PendingIntent.getBroadcast(
                         context, broadId, MainActivity.alertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
-                                (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
+//                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+//                                (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
 
                 Calendar alarmCalendar = Calendar.getInstance();
+                Long diff = Long.valueOf(0);
+
+                if(!dbKilledEarly) {
+                    Calendar currentCal = Calendar.getInstance();
+                    Calendar futureCal = Calendar.getInstance();
+                    futureCal.setTimeInMillis(futureStamp * 1000);
+                    diff = futureCal.getTimeInMillis() - currentCal.getTimeInMillis();
+                    diff = diff / 1000;
+                    if(diff < (86400 * 7)) {
+                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                                (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
+                    }else{
+                        int daysOut = (int) (diff / (86400 * 7));
+                        MainActivity.alarmManager.set(AlarmManager.RTC, (Long.parseLong
+                                        (String.valueOf(futureStamp) + "000") - ((86400000 * 7) * daysOut)),
+                                MainActivity.pendIntent);
+                    }
+                }else{
+                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                            (String.valueOf(dbTimestamp) + "000"), MainActivity.pendIntent);
+                }
+
+                Calendar currentCal = Calendar.getInstance();
+
                 alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp)
                         + "000") - (AlarmManager.INTERVAL_DAY * 7));
 
                 //alarm data is already updated if user marked task as done
-                if(!dbManualKill){
+                if(!dbManualKill
+                        && (Integer.parseInt(alarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))){
+                    currentCal = Calendar.getInstance();
+                    Calendar futureCal = Calendar.getInstance();
+                    futureCal.setTimeInMillis((futureStamp * 1000) - (AlarmManager.INTERVAL_DAY * 7));
+                    diff = (Long.parseLong(String.valueOf(futureStamp) + "000")
+                            - (AlarmManager.INTERVAL_DAY * 7)) - currentCal.getTimeInMillis();
+                    diff = diff / 1000;
+                    if(diff > 0) {
+                        int daysOut = (int) (diff / (86400 * 7));
+                        futureStamp =  futureStamp - ((86400 * 7) * (daysOut + 1));
+                        alarmCalendar.setTimeInMillis(Long.parseLong
+                                (String.valueOf(futureStamp) + "000")
+                                - (AlarmManager.INTERVAL_DAY * 7));
+                    }
+
+                    Log.i(TAG, "newDay: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
 
                     //updating due date in database
-                    MainActivity.db.updateAlarmData(String.valueOf(/*
-                            MainActivity.sortedIDs.get(*/broadId/*)*/),
+                    MainActivity.db.updateAlarmData(String.valueOf(broadId),
                             String.valueOf(alarmCalendar.get(Calendar.HOUR)),
                             String.valueOf(alarmCalendar.get(Calendar.MINUTE)),
                             String.valueOf(alarmCalendar.get(Calendar.AM_PM)),
@@ -349,8 +346,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 }
 
-                MainActivity.db.updateManualKill(String.valueOf
-                        (/*MainActivity.sortedIDs.get(*/broadId/*)*/), false);
+                MainActivity.db.updateManualKill(String.valueOf(broadId), false);
 
             }else if(dbRepeatInterval.equals("month") && !dbSnoozed){
 
