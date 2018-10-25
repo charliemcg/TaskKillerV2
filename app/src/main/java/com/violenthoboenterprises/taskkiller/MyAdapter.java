@@ -1647,6 +1647,9 @@ class MyAdapter extends ArrayAdapter<String> {
                                 - (repeatInterval * daysWrong)) * 1000);
                     }
                 }else{
+                    Log.i(TAG, "dbOverdue: " + dbOverdue + "\ndiff: " + diff
+                            + "\nrepeatInterval: " + repeatInterval + "\nalarmMonth: " + alarmMonth
+                            + "\ncurrentMonth: " + currentCal.get(Calendar.MONTH));
                     if (!dbOverdue && (Integer.parseInt(alarmMonth)
                             != currentCal.get(Calendar.MONTH))) {
                         Log.i(TAG, "one");
@@ -1687,13 +1690,25 @@ class MyAdapter extends ArrayAdapter<String> {
                                 - (repeatInterval * daysWrong)) + repeatInterval) * 1000);
                     } else {
                         Log.i(TAG, "six");
-                        int daysWrong = (int) (diff / repeatInterval);
+                        Long value = Long.parseLong(finalDbTimestamp);
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
-                                String.valueOf(Integer.parseInt(finalDbTimestamp)
-                                        - (repeatInterval * daysWrong)));
-                        snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp)
-                                - (repeatInterval * daysWrong)) * 1000);
+                                String.valueOf(value));
+                        snoozeCal.setTimeInMillis(value * 1000);
+//                        Calendar blah = Calendar.getInstance();
+//                        blah.setTimeInMillis(Long.parseLong(dbTimestamp + "000"));
+//                        Log.i(TAG, "day: " + blah.get(Calendar.DAY_OF_MONTH));
+//                        long daysWrong = diff / repeatInterval;
+//                        long timestampForCalculation = Long.parseLong(dbTimestamp + "000");
+//                        long repeatIntervalForCalculation = repeatInterval * 1000;
+//                        MainActivity.db.updateTimestamp(String.valueOf(
+//                                MainActivity.sortedIDs.get(position)),
+//                                String.valueOf(Integer.parseInt(finalDbTimestamp)
+//                                        - (repeatInterval * daysWrong)));
+////                        snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp)
+////                                - (repeatInterval * daysWrong)) * 1000);
+//                        snoozeCal.setTimeInMillis(timestampForCalculation - (repeatIntervalForCalculation * daysWrong));
+//                        Log.i(TAG, ".day: " + snoozeCal.get(Calendar.DAY_OF_MONTH));
                     }
                 }
 
@@ -1713,7 +1728,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     snoozeCal.setTimeInMillis(snoozeMillisForCalculation - (intervalForCalculation * 1000));
 //                    snoozeCal.setTimeInMillis((snoozeCal.getTimeInMillis()
 //                            - ((repeatInterval * daysWrong) * 1000)));
-                    Log.i(TAG, "day: " + snoozeCal.get(Calendar.DAY_OF_MONTH));
+//                    Log.i(TAG, "day: " + snoozeCal.get(Calendar.DAY_OF_MONTH));
                 }else if((timestampCal.get(Calendar.DAY_OF_MONTH) != Integer.parseInt(alarmDay))
                         || (finalDbRepeatInterval.equals("month") && (timestampCal.get(Calendar.MONTH)
                         != Integer.parseInt(alarmMonth)))){
@@ -3608,43 +3623,84 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 Calendar snoozeCal = Calendar.getInstance();
                                 //updating timestamp
-                                if(!finalDbOverdue && (Integer.parseInt(finalAlarmMonth) != currentCal.get(Calendar.MONTH))
-                                    /*(Integer.parseInt(finalAlarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))*/) {
+//                                if(!finalDbOverdue && (Integer.parseInt(finalAlarmMonth) != currentCal.get(Calendar.MONTH))
+//                                    /*(Integer.parseInt(finalAlarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))*/) {
+//                                    MainActivity.db.updateTimestamp(String.valueOf(
+//                                            MainActivity.sortedIDs.get(position)),
+//                                            String.valueOf(futureStamp));
+//                                    snoozeCal.setTimeInMillis(futureStamp * 1000);
+//                                }else if(!finalDbOverdue && diff < repeatInterval && (Integer.parseInt(finalAlarmMonth) == currentCal.get(Calendar.MONTH))
+//                                    /*(Integer.parseInt(finalAlarmDay) == currentCal.get(Calendar.DAY_OF_MONTH))*/){
+//                                    Long value = Long.parseLong(finalDbTimestamp) + repeatInterval;
+//                                    MainActivity.db.updateTimestamp(String.valueOf(
+//                                            MainActivity.sortedIDs.get(position)),
+//                                            String.valueOf(value));
+//                                    snoozeCal.setTimeInMillis(value * 1000);
+//                                }else if(finalDbOverdue && diff < repeatInterval && (Integer.parseInt(finalAlarmMonth) == currentCal.get(Calendar.MONTH))
+//                                    /*(Integer.parseInt(finalAlarmDay) == currentCal.get(Calendar.DAY_OF_MONTH))*/){
+//                                    Long value = Long.parseLong(finalDbTimestamp);
+//                                    MainActivity.db.updateTimestamp(String.valueOf(
+//                                            MainActivity.sortedIDs.get(position)),
+//                                            String.valueOf(value));
+//                                    snoozeCal.setTimeInMillis(value * 1000);
+//                                }else if(diff < repeatInterval){
+//                                    MainActivity.db.updateTimestamp(String.valueOf(
+//                                            MainActivity.sortedIDs.get(position)),
+//                                            String.valueOf(finalDbTimestamp));
+//                                    snoozeCal.setTimeInMillis(Long.parseLong(finalDbTimestamp) * 1000);
+//                                }else if(!finalDbOverdue){
+//                                    int daysOut = (int) (diff / repeatInterval);
+//                                    MainActivity.db.updateTimestamp(String.valueOf(
+//                                            MainActivity.sortedIDs.get(position)),
+//                                            String.valueOf((Integer.parseInt(finalDbTimestamp) - (repeatInterval * daysOut)) + repeatInterval));
+//                                    snoozeCal.setTimeInMillis(((Long.parseLong(finalDbTimestamp) - (repeatInterval * daysOut)) + repeatInterval)* 1000);
+//                                }else{
+//                                    int daysOut = (int) (diff / repeatInterval);
+//                                    MainActivity.db.updateTimestamp(String.valueOf(
+//                                            MainActivity.sortedIDs.get(position)),
+//                                            String.valueOf(Integer.parseInt(finalDbTimestamp) - (repeatInterval * daysOut)));
+//                                    snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp) - (repeatInterval * daysOut)) * 1000);
+//                                }
+
+                                if (!finalDbOverdue && (Integer.parseInt(finalAlarmMonth)
+                                        != currentCal.get(Calendar.MONTH))) {
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(futureStamp));
                                     snoozeCal.setTimeInMillis(futureStamp * 1000);
-                                }else if(!finalDbOverdue && diff < repeatInterval && (Integer.parseInt(finalAlarmMonth) == currentCal.get(Calendar.MONTH))
-                                    /*(Integer.parseInt(finalAlarmDay) == currentCal.get(Calendar.DAY_OF_MONTH))*/){
+                                } else if (!finalDbOverdue && diff < repeatInterval && (Integer.parseInt(finalAlarmMonth)
+                                        == currentCal.get(Calendar.MONTH))) {
                                     Long value = Long.parseLong(finalDbTimestamp) + repeatInterval;
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(value));
                                     snoozeCal.setTimeInMillis(value * 1000);
-                                }else if(finalDbOverdue && diff < repeatInterval && (Integer.parseInt(finalAlarmMonth) == currentCal.get(Calendar.MONTH))
-                                    /*(Integer.parseInt(finalAlarmDay) == currentCal.get(Calendar.DAY_OF_MONTH))*/){
+                                } else if (finalDbOverdue && diff < repeatInterval && (Integer.parseInt(finalAlarmMonth)
+                                        == currentCal.get(Calendar.MONTH))) {
                                     Long value = Long.parseLong(finalDbTimestamp);
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(value));
                                     snoozeCal.setTimeInMillis(value * 1000);
-                                }else if(diff < repeatInterval){
+                                } else if (diff < repeatInterval) {
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
                                             String.valueOf(finalDbTimestamp));
                                     snoozeCal.setTimeInMillis(Long.parseLong(finalDbTimestamp) * 1000);
-                                }else if(!finalDbOverdue){
-                                    int daysOut = (int) (diff / repeatInterval);
+                                } else if (!finalDbOverdue) {
+                                    int daysWrong = (int) (diff / repeatInterval);
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
-                                            String.valueOf((Integer.parseInt(finalDbTimestamp) - (repeatInterval * daysOut)) + repeatInterval));
-                                    snoozeCal.setTimeInMillis(((Long.parseLong(finalDbTimestamp) - (repeatInterval * daysOut)) + repeatInterval)* 1000);
-                                }else{
-                                    int daysOut = (int) (diff / repeatInterval);
+                                            String.valueOf((Integer.parseInt(finalDbTimestamp)
+                                                    - (repeatInterval * daysWrong)) + repeatInterval));
+                                    snoozeCal.setTimeInMillis(((Long.parseLong(finalDbTimestamp)
+                                            - (repeatInterval * daysWrong)) + repeatInterval) * 1000);
+                                } else {
+                                    Long value = Long.parseLong(finalDbTimestamp);
                                     MainActivity.db.updateTimestamp(String.valueOf(
                                             MainActivity.sortedIDs.get(position)),
-                                            String.valueOf(Integer.parseInt(finalDbTimestamp) - (repeatInterval * daysOut)));
-                                    snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp) - (repeatInterval * daysOut)) * 1000);
+                                            String.valueOf(value));
+                                    snoozeCal.setTimeInMillis(value * 1000);
                                 }
 
                                 if(!finalAlarmDay.equals("")) {
@@ -4185,13 +4241,18 @@ class MyAdapter extends ArrayAdapter<String> {
                                 snoozeCal.setTimeInMillis(((Long.parseLong(finalDbTimestamp)
                                         - (repeatInterval * daysWrong)) + repeatInterval) * 1000);
                             } else {
-                                int daysWrong = (int) (diff / repeatInterval);
+//                                int daysWrong = (int) (diff / repeatInterval);
+//                                MainActivity.db.updateTimestamp(String.valueOf(
+//                                        MainActivity.sortedIDs.get(position)),
+//                                        String.valueOf(Integer.parseInt(finalDbTimestamp)
+//                                                - (repeatInterval * daysWrong)));
+//                                snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp)
+//                                        - (repeatInterval * daysWrong)) * 1000);
+                                Long value = Long.parseLong(finalDbTimestamp);
                                 MainActivity.db.updateTimestamp(String.valueOf(
                                         MainActivity.sortedIDs.get(position)),
-                                        String.valueOf(Integer.parseInt(finalDbTimestamp)
-                                                - (repeatInterval * daysWrong)));
-                                snoozeCal.setTimeInMillis((Long.parseLong(finalDbTimestamp)
-                                        - (repeatInterval * daysWrong)) * 1000);
+                                        String.valueOf(value));
+                                snoozeCal.setTimeInMillis(value * 1000);
                             }
                         }
 

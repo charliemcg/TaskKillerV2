@@ -529,6 +529,8 @@ public class AlertReceiver extends BroadcastReceiver {
                 alarmCalendar.setTimeInMillis(futureStampForCalculation
                         - (intervalForCalculation + dayDriftForCalculation));
 
+                Log.i(TAG, "day: " + alarmCalendar.get(Calendar.DAY_OF_MONTH));
+
 //                alarmCalendar.setTimeInMillis(Long.parseLong(String.valueOf(futureStamp)
 //                        + "000")/* - (interval + (AlarmManager.INTERVAL_DAY * daysOut))*/);
 
