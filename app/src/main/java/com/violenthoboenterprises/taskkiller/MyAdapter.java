@@ -1474,6 +1474,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     int theYear = Integer.parseInt(finalAlarmYear);
                     int theMonth = Integer.parseInt(finalAlarmMonth);
                     int theDay = Integer.parseInt(finalAlarmDay);
+                    Log.i(TAG, "day: " + theDay);
                     //Month January and day is 29 non leap year 2592000
                     if ((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)) {
                         interval = 2592000;
@@ -1648,12 +1649,14 @@ class MyAdapter extends ArrayAdapter<String> {
                 }else{
                     if (!dbOverdue && (Integer.parseInt(alarmMonth)
                             != currentCal.get(Calendar.MONTH))) {
+                        Log.i(TAG, "one");
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
                                 String.valueOf(futureStamp));
                         snoozeCal.setTimeInMillis(futureStamp * 1000);
                     } else if (!dbOverdue && diff < repeatInterval && (Integer.parseInt(alarmMonth)
                             == currentCal.get(Calendar.MONTH))) {
+                        Log.i(TAG, "two");
                         Long value = Long.parseLong(finalDbTimestamp) + repeatInterval;
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
@@ -1661,17 +1664,20 @@ class MyAdapter extends ArrayAdapter<String> {
                         snoozeCal.setTimeInMillis(value * 1000);
                     } else if (dbOverdue && diff < repeatInterval && (Integer.parseInt(alarmMonth)
                             == currentCal.get(Calendar.MONTH))) {
+                        Log.i(TAG, "three");
                         Long value = Long.parseLong(finalDbTimestamp);
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
                                 String.valueOf(value));
                         snoozeCal.setTimeInMillis(value * 1000);
                     } else if (diff < repeatInterval) {
+                        Log.i(TAG, "four");
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
                                 String.valueOf(finalDbTimestamp));
                         snoozeCal.setTimeInMillis(Long.parseLong(finalDbTimestamp) * 1000);
                     } else if (!dbOverdue) {
+                        Log.i(TAG, "five");
                         int daysWrong = (int) (diff / repeatInterval);
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
@@ -1680,6 +1686,7 @@ class MyAdapter extends ArrayAdapter<String> {
                         snoozeCal.setTimeInMillis(((Long.parseLong(finalDbTimestamp)
                                 - (repeatInterval * daysWrong)) + repeatInterval) * 1000);
                     } else {
+                        Log.i(TAG, "six");
                         int daysWrong = (int) (diff / repeatInterval);
                         MainActivity.db.updateTimestamp(String.valueOf(
                                 MainActivity.sortedIDs.get(position)),
@@ -1699,9 +1706,14 @@ class MyAdapter extends ArrayAdapter<String> {
                 if(dbSnooze) {
                     diff = snoozeCal.getTimeInMillis() - currentCal.getTimeInMillis();
                     diff = diff / 1000;
-                    int daysWrong = (int) (diff / repeatInterval);
-                    snoozeCal.setTimeInMillis((snoozeCal.getTimeInMillis()
-                            - ((repeatInterval * daysWrong) * 1000)));
+//                    int daysWrong = (int) (diff / repeatInterval);
+                    long daysWrong = diff / repeatInterval;
+                    long snoozeMillisForCalculation = snoozeCal.getTimeInMillis();
+                    long intervalForCalculation = repeatInterval * daysWrong;
+                    snoozeCal.setTimeInMillis(snoozeMillisForCalculation - (intervalForCalculation * 1000));
+//                    snoozeCal.setTimeInMillis((snoozeCal.getTimeInMillis()
+//                            - ((repeatInterval * daysWrong) * 1000)));
+                    Log.i(TAG, "day: " + snoozeCal.get(Calendar.DAY_OF_MONTH));
                 }else if((timestampCal.get(Calendar.DAY_OF_MONTH) != Integer.parseInt(alarmDay))
                         || (finalDbRepeatInterval.equals("month") && (timestampCal.get(Calendar.MONTH)
                         != Integer.parseInt(alarmMonth)))){
@@ -4206,9 +4218,10 @@ class MyAdapter extends ArrayAdapter<String> {
                         if(finalDbSnooze) {
                             diff = snoozeCal.getTimeInMillis() - currentCal.getTimeInMillis();
                             diff = diff / 1000;
-                            int daysWrong = (int) (diff / repeatInterval);
-                            snoozeCal.setTimeInMillis((snoozeCal.getTimeInMillis()
-                                    - ((repeatInterval * daysWrong) * 1000)));
+                            long daysWrong = diff / repeatInterval;
+                            long snoozeMillisForCalculation = snoozeCal.getTimeInMillis();
+                            long intervalForCalculation = repeatInterval * daysWrong;
+                            snoozeCal.setTimeInMillis(snoozeMillisForCalculation - (intervalForCalculation * 1000));
                         }else if((timestampCal.get(Calendar.DAY_OF_MONTH) != Integer.parseInt(finalAlarmDay))
                                 || (finalDbRepeatInterval.equals("month") && (timestampCal.get(Calendar.MONTH)
                                 != Integer.parseInt(finalAlarmMonth)))){
