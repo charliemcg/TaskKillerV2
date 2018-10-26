@@ -41,12 +41,14 @@ public class Reorder {
             int dbInterval = 0;
             String dbID = "";
             String dbTask = "";
+            boolean dbDue = false;
             String dbSnoozeStamp = "";
             Cursor dbResult = MainActivity.db.getData(allIDs.get(i));
             while (dbResult.moveToNext()) {
                 dbID = dbResult.getString(0);
                 dbTimestamp = dbResult.getString(3);
                 dbTask = dbResult.getString(4);
+                dbDue = dbResult.getInt(5) > 0;
                 dbSnooze = dbResult.getInt(10) > 0;
                 dbInterval = dbResult.getInt(12);
                 dbSnoozeStamp = dbResult.getString(21);
@@ -74,7 +76,7 @@ public class Reorder {
             if(dbSnooze) {
                 tempList.add(Integer.parseInt(dbSnoozeStamp));
                 snoozedIDs.add(Integer.parseInt(dbID));
-            }else{
+            }else if (dbDue){
                 Calendar alarmCal = Calendar.getInstance();
                 alarmCal.set(Calendar.YEAR, Integer.parseInt(alarmYear));
                 alarmCal.set(Calendar.MONTH, Integer.parseInt(alarmMonth));
@@ -90,7 +92,8 @@ public class Reorder {
                 }else {
                     tempList.add(Integer.valueOf(dbTimestamp));
                 }
-
+            }else{
+                tempList.add(Integer.valueOf(dbTimestamp));
             }
 
         }
@@ -203,6 +206,26 @@ public class Reorder {
         }
 
         //Adding killed tasks with due dates to end of task list
+//        for(int i = 0; i < MainActivity.taskList.size(); i++){
+//
+//            //getting task data
+//            int dbId = 0;
+//            String dbTask = "";
+//            boolean dbKilled = false;
+//            Cursor dbResult = MainActivity.db.getDataByDueTime(
+//                    String.valueOf(tempList.get(i)));
+//            while (dbResult.moveToNext()) {
+//                dbId = dbResult.getInt(0);
+//                dbTask = dbResult.getString(4);
+//                dbKilled = dbResult.getInt(6) > 0;
+//            }
+//            dbResult.close();
+//            if((tempList.get(i) != 0) && dbKilled){
+//                tempIdsList.add(String.valueOf(dbId));
+//                tempTaskList.add(dbTask);
+//            }
+//
+//        }
         for(int i = 0; i < MainActivity.taskList.size(); i++){
 
             //getting task data
@@ -211,21 +234,32 @@ public class Reorder {
             boolean dbKilled = false;
             Cursor dbResult = MainActivity.db.getDataByDueTime(
                     String.valueOf(tempList.get(i)));
+            boolean dataExists = false;
             while (dbResult.moveToNext()) {
                 dbId = dbResult.getInt(0);
                 dbTask = dbResult.getString(4);
                 dbKilled = dbResult.getInt(6) > 0;
+                if((tempList.get(i) != 0) && dbKilled){
+                    tempIdsList.add(String.valueOf(dbId));
+                    tempTaskList.add(dbTask);
+                }
+                dataExists = true;
+            }
+            if (!dataExists) {
+                dbResult = MainActivity.db.getDataByDueTime(String.valueOf(correctTimestampList
+                        .get(positionCounter.indexOf(tempList.get(i)))));
+                while (dbResult.moveToNext()) {
+                    dbId = dbResult.getInt(0);
+                    dbTask = dbResult.getString(4);
+                    dbKilled = dbResult.getInt(6) > 0;
+                    if ((tempList.get(i) != 0) && !dbKilled) {
+                        tempIdsList.add(String.valueOf(dbId));
+                        tempTaskList.add(dbTask);
+                    }
+                }
             }
             dbResult.close();
-
-            if((tempList.get(i) != 0) && dbKilled){
-                tempIdsList.add(String.valueOf(dbId));
-                tempTaskList.add(dbTask);
-            }
-
         }
-
-        Log.i(TAG, "tempTaskList: " + tempTaskList);
 
         for(int i = 0; i < MainActivity.taskList.size(); i++){
 
