@@ -205,33 +205,16 @@ public class Reorder {
             tempIdsList.add(tempKilledIdsList.get(i));
         }
 
+        Log.i(TAG, "tempTaskList: " + tempTaskList);
+
         //Adding killed tasks with due dates to end of task list
-//        for(int i = 0; i < MainActivity.taskList.size(); i++){
-//
-//            //getting task data
-//            int dbId = 0;
-//            String dbTask = "";
-//            boolean dbKilled = false;
-//            Cursor dbResult = MainActivity.db.getDataByDueTime(
-//                    String.valueOf(tempList.get(i)));
-//            while (dbResult.moveToNext()) {
-//                dbId = dbResult.getInt(0);
-//                dbTask = dbResult.getString(4);
-//                dbKilled = dbResult.getInt(6) > 0;
-//            }
-//            dbResult.close();
-//            if((tempList.get(i) != 0) && dbKilled){
-//                tempIdsList.add(String.valueOf(dbId));
-//                tempTaskList.add(dbTask);
-//            }
-//
-//        }
         for(int i = 0; i < MainActivity.taskList.size(); i++){
 
             //getting task data
             int dbId = 0;
             String dbTask = "";
             boolean dbKilled = false;
+            boolean dbRepeat = false;
             Cursor dbResult = MainActivity.db.getDataByDueTime(
                     String.valueOf(tempList.get(i)));
             boolean dataExists = false;
@@ -252,7 +235,8 @@ public class Reorder {
                     dbId = dbResult.getInt(0);
                     dbTask = dbResult.getString(4);
                     dbKilled = dbResult.getInt(6) > 0;
-                    if ((tempList.get(i) != 0) && !dbKilled) {
+                    dbRepeat = dbResult.getInt(8) > 0;
+                    if ((tempList.get(i) != 0) && !dbKilled && !dbRepeat) {
                         tempIdsList.add(String.valueOf(dbId));
                         tempTaskList.add(dbTask);
                     }
@@ -267,6 +251,8 @@ public class Reorder {
                     Integer.parseInt(tempIdsList.get(i)));
 
         }
+
+        Log.i(TAG, "tempTaskList: " + tempTaskList);
 
         MainActivity.sortedIDs = tempIdsList;
         MainActivity.taskList = tempTaskList;

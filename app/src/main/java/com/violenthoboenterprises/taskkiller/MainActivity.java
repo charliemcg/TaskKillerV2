@@ -567,6 +567,8 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
+                taskBeingEdited = false;
+
                 goToMyAdapter = true;
 
                 vibrate.vibrate(50);
@@ -1490,8 +1492,6 @@ public class MainActivity extends AppCompatActivity implements
                 this, MainActivity.taskList)};
         MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
 
-
-
     }
 
     //Create a new task
@@ -1664,58 +1664,63 @@ public class MainActivity extends AppCompatActivity implements
             handler.postDelayed(runnable, 200);
             purchasesShowing = false;
         }
-            theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                    //Tasks are not clickable if keyboard is up
-                    if(tasksAreClickable && !completeTask) {
+                //Tasks are not clickable if keyboard is up
+                if(tasksAreClickable && !completeTask) {
 
-                        vibrate.vibrate(50);
+                    vibrate.vibrate(50);
 
-                        //checking if task has been killed
-                        Boolean killed = false;
-                        Cursor result = db.getData(Integer
-                                .parseInt(sortedIDs.get(position)));
-                        while (result.moveToNext()) {
-                            killed = result.getInt(6) > 0;
-                        }
-                        result.close();
+                    //checking if task has been killed
+                    Boolean killed = false;
+                    Cursor result = db.getData(Integer
+                            .parseInt(sortedIDs.get(position)));
+                    while (result.moveToNext()) {
+                        killed = result.getInt(6) > 0;
+                    }
+                    result.close();
 
-                        //Selecting a task to view options
-                        if (!taskPropertiesShowing && !killed) {
+                    //Selecting a task to view options
+                    if (!taskPropertiesShowing && !killed) {
 
-                            viewProperties(position);
+                        viewProperties(position);
 
-                        //Removes completed task
-                        } else if (!taskPropertiesShowing && killed) {
+                    //Removes completed task
+                    } else if (!taskPropertiesShowing && killed) {
 
-                            removeTask(position);
+                        removeTask(position);
 
-                        //Removes task options from view
-                        } else {
+                    //Removes task options from view
+                    } else {
 
-                            removeTaskProperties();
-
-                        }
-
-                    }else {
-
-                        completeTask = false;
+                        removeTaskProperties();
 
                     }
 
+                }else {
+
+                    completeTask = false;
+
                 }
 
-            });
-            add.setClickable(true);
-            if(lightDark) {
-                onCreateOptionsMenu(toolbarLight.getMenu());
-            }else{
-                onCreateOptionsMenu(toolbarDark.getMenu());
             }
-            theListView.setAdapter(theAdapter[0]);
+
+        });
+
+        add.setClickable(true);
+
+        if(lightDark) {
+            onCreateOptionsMenu(toolbarLight.getMenu());
+        }else{
+            onCreateOptionsMenu(toolbarDark.getMenu());
+        }
+
+        theListView.setAdapter(theAdapter[0]);
+
     }
 
     //actions to occur if user clicks the complete check box
@@ -2211,13 +2216,13 @@ public class MainActivity extends AppCompatActivity implements
 
         new Reorder();
         //Updating the view with the new order
-        MainActivity.theAdapter = new ListAdapter[]{new MyAdapter(
-                this, MainActivity.taskList)};
-        MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+        theAdapter = new ListAdapter[]{new MyAdapter(
+                this, taskList)};
+        theListView.setAdapter(theAdapter[0]);
 
         alertIntent = new Intent(this, AlertReceiver.class);
 
-        theListView.setAdapter(theAdapter[0]);
+//        theListView.setAdapter(theAdapter[0]);
 
         //Checks to see if there are still tasks left
         noTasksLeft();
