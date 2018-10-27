@@ -4382,15 +4382,13 @@ class MyAdapter extends ArrayAdapter<String> {
                     PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        MainActivity.alarmManager.cancel(MainActivity.pendIntent);
-
         Calendar currentDate = new GregorianCalendar();
 
         int adjustedHour = hour;
         if (ampm == 1) {
             adjustedHour += 12;
         }else if(hour == 12){
-             adjustedHour = 0;
+            adjustedHour = 0;
         }
 
         if (currentDate.get(Calendar.YEAR) == year
@@ -4400,13 +4398,13 @@ class MyAdapter extends ArrayAdapter<String> {
             adjustedHour) {
 
             MainActivity.toast.setText(R.string.cannotSetTask);
-            MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
-            MainActivity.db.updateRepeatInterval
-                    (MainActivity.sortedIDs.get(position), "");
+//            MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
+//            MainActivity.db.updateRepeatInterval
+//                    (MainActivity.sortedIDs.get(position), "");
+//            MainActivity.db.updateTimestamp
+//                    (MainActivity.sortedIDs.get(position), "0");
+//            dbRepeat = false;
 
-            MainActivity.db.updateTimestamp
-                    (MainActivity.sortedIDs.get(position), "0");
-            dbRepeat = false;
             final Handler handler = new Handler();
 
             final Runnable runnable = new Runnable() {
@@ -4444,14 +4442,15 @@ class MyAdapter extends ArrayAdapter<String> {
                 || (currentDate.get(Calendar.HOUR_OF_DAY) == 0 && adjustedHour == 12)
                 || (currentDate.get(Calendar.HOUR_OF_DAY) == 12 && adjustedHour == 24))
                 && currentDate.get(Calendar.MINUTE) > minute) {
-            MainActivity.toast.setText(R.string.cannotSetTask);
-            MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
-            MainActivity.db.updateRepeatInterval
-                    (MainActivity.sortedIDs.get(position), "");
 
-            MainActivity.db.updateTimestamp
-                    (MainActivity.sortedIDs.get(position), "0");
-            dbRepeat = false;
+            MainActivity.toast.setText(R.string.cannotSetTask);
+//            MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), false);
+//            MainActivity.db.updateRepeatInterval
+//                    (MainActivity.sortedIDs.get(position), "");
+//            MainActivity.db.updateTimestamp
+//                    (MainActivity.sortedIDs.get(position), "0");
+//            dbRepeat = false;
+
             final Handler handler = new Handler();
 
             final Runnable runnable = new Runnable() {
@@ -4483,6 +4482,8 @@ class MyAdapter extends ArrayAdapter<String> {
             }
 
         } else {
+
+            MainActivity.alarmManager.cancel(MainActivity.pendIntent);
 
             int amPmHour = hour;
             if (ampm == 1 && amPmHour != 12) {
