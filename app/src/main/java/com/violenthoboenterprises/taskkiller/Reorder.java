@@ -205,8 +205,6 @@ public class Reorder {
             tempIdsList.add(tempKilledIdsList.get(i));
         }
 
-        Log.i(TAG, "tempTaskList: " + tempTaskList);
-
         //Adding killed tasks with due dates to end of task list
         for(int i = 0; i < MainActivity.taskList.size(); i++){
 
@@ -251,8 +249,6 @@ public class Reorder {
                     Integer.parseInt(tempIdsList.get(i)));
 
         }
-
-        Log.i(TAG, "tempTaskList: " + tempTaskList);
 
         MainActivity.sortedIDs = tempIdsList;
         MainActivity.taskList = tempTaskList;

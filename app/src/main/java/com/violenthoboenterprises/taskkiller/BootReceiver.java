@@ -30,36 +30,18 @@ public class BootReceiver extends BroadcastReceiver {
 
             for( int i = 0 ; i < taskListSize ; i++ ) {
 
-                int dbID = 0;
-                String dbNote = "";
                 String dbTimestamp = "";
                 String dbTask = "";
                 Boolean dbDue = false;
-                Boolean dbKilled = false;
                 int dbBroadcast = 0;
-                Boolean dbRepeat = false;
                 Boolean dbOverdue = false;
-                Boolean dbSnooze = false;
-                String dbRepeatInterval = "";
-                Boolean dbIgnored = false;
-                int dbChecklistSize = 0;
-                String dbSnoozedStamp = "";
                 Cursor dbResult = db.getData(IDList.get(i));
                 while (dbResult.moveToNext()) {
-                    dbID = dbResult.getInt(0);
-                    dbNote = dbResult.getString(1);
                     dbTimestamp = dbResult.getString(3);
                     dbTask = dbResult.getString(4);
                     dbDue = dbResult.getInt(5) > 0;
-                    dbKilled = dbResult.getInt(6) > 0;
                     dbBroadcast = dbResult.getInt(7);
-                    dbRepeat = dbResult.getInt(8) > 0;
                     dbOverdue = dbResult.getInt(9) > 0;
-                    dbSnooze = dbResult.getInt(10) > 0;
-                    dbRepeatInterval = dbResult.getString(13);
-                    dbIgnored = dbResult.getInt(14) > 0;
-                    dbChecklistSize = dbResult.getInt(17);
-                    dbSnoozedStamp = dbResult.getString(21);
                 }
                 dbResult.close();
 

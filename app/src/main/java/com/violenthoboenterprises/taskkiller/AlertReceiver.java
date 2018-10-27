@@ -13,7 +13,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.util.Calendar;

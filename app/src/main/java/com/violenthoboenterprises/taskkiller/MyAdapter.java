@@ -4594,6 +4594,7 @@ class MyAdapter extends ArrayAdapter<String> {
 //                MainActivity.animatePosition = position;
             }
         };
+
         handler.postDelayed(runnable, 1);//TODO app stuffs up if this handler is removed for some reason
 
         if (dbRepeat) {

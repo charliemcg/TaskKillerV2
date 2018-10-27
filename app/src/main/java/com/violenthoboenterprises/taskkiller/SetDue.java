@@ -66,6 +66,7 @@ public class SetDue extends MainActivity {
     static MenuItem killAlarm, trashAlarmOpen;
     static boolean datePicked, timePicked;
     static int screenSize;
+    String dbRepeatInterval;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -116,7 +117,6 @@ public class SetDue extends MainActivity {
         dbDueTime = "";
         dbTaskId = "";
         dbTask = "";
-        String dbRepeatInterval = "";
         boolean dbRepeat = false;
         Cursor dbTaskResult = MainActivity.db.getUniversalData();
         while (dbTaskResult.moveToNext()) {
@@ -1288,7 +1288,6 @@ public class SetDue extends MainActivity {
                         db.updateAmPm(ampm);
                         db.updateMinute(minute);
                     }else{
-
                         getTimeFromDB();
                     }
 
@@ -1350,7 +1349,7 @@ public class SetDue extends MainActivity {
 
                 }
 
-            }else{
+            }else if(dbRepeatInterval.equals("")){
                 db.updateRepeatInterval(dbTaskId, "");
                 db.updateRepeat(dbTaskId, false);
             }
