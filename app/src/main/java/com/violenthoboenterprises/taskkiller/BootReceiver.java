@@ -14,13 +14,10 @@ import java.util.Calendar;
 public class BootReceiver extends BroadcastReceiver {
 
     String TAG = "BootReceiver";
-    static boolean booted = false;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-
-            booted = true;
 
             Database db = new Database(context);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

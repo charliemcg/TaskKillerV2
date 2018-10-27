@@ -25,6 +25,9 @@ public class AlertReceiver extends BroadcastReceiver {
     String highlight;
     String highlightDec;
     boolean remindersAvailable;
+    int theTaskListSize;
+    Intent theAlertIntent;
+    AlarmManager theAlarmManager;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -56,11 +59,17 @@ public class AlertReceiver extends BroadcastReceiver {
                 remindersAvailable = uniResult.getInt(6) > 0;
             }
             uniResult.close();
+            theTaskListSize = theDB.getTotalRows();
+            theAlertIntent = new Intent(context, AlertReceiver.class);
+            theAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         }else {
             theDB = MainActivity.db;
             highlight = MainActivity.highlight;
             highlightDec = MainActivity.highlightDec;
             remindersAvailable = MainActivity.remindersAvailable;
+            theTaskListSize = MainActivity.taskList.size();
+            theAlertIntent = MainActivity.alertIntent;
+            theAlarmManager = MainActivity.alarmManager;
         }
 
         //getting task data
@@ -150,7 +159,7 @@ public class AlertReceiver extends BroadcastReceiver {
         } else {
 
             //don't inform user that task is due if they marked it as done
-            if(!dbKilledEarly && MainActivity.remindersAvailable){
+            if(!dbKilledEarly && remindersAvailable){
 
                 notificationManager.notify(1, builder.build());
 
@@ -184,7 +193,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 // detect duplicates and then adjusting the timestamp on the millisecond level
                 long futureStamp = Long.parseLong(dbTimestamp) + (AlarmManager.INTERVAL_DAY / 1000);
                 String tempTimestamp = "";
-                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                for(int i = 0; i < theTaskListSize; i++) {
                     Cursor tempResult = theDB.getData(i);
                     while (tempResult.moveToNext()) {
                         tempTimestamp = tempResult.getString(3);
@@ -203,12 +212,12 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 //setting the name of the task for which the
                 // notification is being set
-                MainActivity.alertIntent.putExtra("ToDo", dbTask);
-                MainActivity.alertIntent.putExtra("broadId", broadId);
+                theAlertIntent.putExtra("ToDo", dbTask);
+                theAlertIntent.putExtra("broadId", broadId);
 
                 //Setting alarm
                 MainActivity.pendIntent = PendingIntent.getBroadcast(
-                        context, broadId, MainActivity.alertIntent,
+                        context, broadId, theAlertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
                 Calendar alarmCalendar = Calendar.getInstance();
@@ -221,16 +230,16 @@ public class AlertReceiver extends BroadcastReceiver {
                     diff = futureCal.getTimeInMillis() - currentCal.getTimeInMillis();
                     diff = diff / 1000;
                     if(diff < 86400) {
-                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                        theAlarmManager.set(AlarmManager.RTC, Long.parseLong
                                 (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
                     }else{
                         int daysOut = (int) (diff / 86400);
-                        MainActivity.alarmManager.set(AlarmManager.RTC, (Long.parseLong
+                        theAlarmManager.set(AlarmManager.RTC, (Long.parseLong
                                 (String.valueOf(futureStamp) + "000") - (86400000 * daysOut)),
                                 MainActivity.pendIntent);
                     }
                 }else{
-                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                    theAlarmManager.set(AlarmManager.RTC, Long.parseLong
                             (String.valueOf(dbTimestamp) + "000"), MainActivity.pendIntent);
                 }
 
@@ -275,7 +284,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 long futureStamp = Long.parseLong(dbTimestamp) +
                         ((AlarmManager.INTERVAL_DAY * 7) / 1000);
                 String tempTimestamp = "";
-                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                for(int i = 0; i < theTaskListSize; i++) {
                     Cursor tempResult = theDB.getData(i);
                     while (tempResult.moveToNext()) {
                         tempTimestamp = tempResult.getString(3);
@@ -293,12 +302,12 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 //setting the name of the task for which the
                 // notification is being set
-                MainActivity.alertIntent.putExtra("ToDo", dbTask);
-                MainActivity.alertIntent.putExtra("broadId", broadId);
+                theAlertIntent.putExtra("ToDo", dbTask);
+                theAlertIntent.putExtra("broadId", broadId);
 
                 //Setting alarm
                  MainActivity.pendIntent = PendingIntent.getBroadcast(
-                        context, broadId, MainActivity.alertIntent,
+                        context, broadId, theAlertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
 //                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
@@ -314,16 +323,16 @@ public class AlertReceiver extends BroadcastReceiver {
                     diff = futureCal.getTimeInMillis() - currentCal.getTimeInMillis();
                     diff = diff / 1000;
                     if(diff < (86400 * 7)) {
-                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                        theAlarmManager.set(AlarmManager.RTC, Long.parseLong
                                 (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
                     }else{
                         int daysOut = (int) (diff / (86400 * 7));
-                        MainActivity.alarmManager.set(AlarmManager.RTC, (Long.parseLong
+                        theAlarmManager.set(AlarmManager.RTC, (Long.parseLong
                                         (String.valueOf(futureStamp) + "000") - ((86400000 * 7) * daysOut)),
                                 MainActivity.pendIntent);
                     }
                 }else{
-                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                    theAlarmManager.set(AlarmManager.RTC, Long.parseLong
                             (String.valueOf(dbTimestamp) + "000"), MainActivity.pendIntent);
                 }
 
@@ -410,7 +419,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 // detect duplicates and then adjusting the timestamp on the millisecond level
                 long futureStamp = (Long.parseLong(dbTimestamp) + interval);
                 String tempTimestamp = "";
-                for(int i = 0; i < MainActivity.taskList.size(); i++) {
+                for(int i = 0; i < theTaskListSize; i++) {
                     Cursor tempResult = theDB.getData(i);
                     while (tempResult.moveToNext()) {
                         tempTimestamp = tempResult.getString(3);
@@ -486,12 +495,12 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 //setting the name of the task for which the
                 // notification is being set
-                MainActivity.alertIntent.putExtra("ToDo", dbTask);
-                MainActivity.alertIntent.putExtra("broadId", broadId);
+                theAlertIntent.putExtra("ToDo", dbTask);
+                theAlertIntent.putExtra("broadId", broadId);
 
                 //Setting alarm
                 MainActivity.pendIntent = PendingIntent.getBroadcast(
-                        context, broadId, MainActivity.alertIntent,
+                        context, broadId, theAlertIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
 //                MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
@@ -510,16 +519,16 @@ public class AlertReceiver extends BroadcastReceiver {
                     if(diff < (interval + ((AlarmManager.INTERVAL_DAY * daysOut) / 1000))) {
                         futureCal.setTimeInMillis(Long.parseLong
                                 (String.valueOf(futureStamp) + "000"));
-                        MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                        theAlarmManager.set(AlarmManager.RTC, Long.parseLong
                                 (String.valueOf(futureStamp) + "000"), MainActivity.pendIntent);
                     }else{
                         int daysWrong = (int) (diff / (interval + ((AlarmManager.INTERVAL_DAY * daysOut) / 1000)));
-                        MainActivity.alarmManager.set(AlarmManager.RTC, (Long.parseLong
+                        theAlarmManager.set(AlarmManager.RTC, (Long.parseLong
                                         (String.valueOf(futureStamp) + "000") - (((interval + (AlarmManager.INTERVAL_DAY * daysOut)) * daysWrong))),
                                 MainActivity.pendIntent);
                     }
                 }else{
-                    MainActivity.alarmManager.set(AlarmManager.RTC, Long.parseLong
+                    theAlarmManager.set(AlarmManager.RTC, Long.parseLong
                             (String.valueOf(dbTimestamp) + "000"), MainActivity.pendIntent);
                 }
 
