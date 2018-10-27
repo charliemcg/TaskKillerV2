@@ -21,6 +21,10 @@ import java.util.Calendar;
 public class AlertReceiver extends BroadcastReceiver {
 
     String TAG = "AlertReceiver";
+    Database theDB;
+    String highlight;
+    String highlightDec;
+    boolean remindersAvailable;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -42,6 +46,23 @@ public class AlertReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder;
         RemoteViews remoteViews;
 
+        if(MainActivity.db == null){
+            theDB = new Database(context);
+            highlight = "#00FF00";
+            highlightDec = "-298516736";
+            //getting universal data
+            Cursor uniResult = theDB.getUniversalData();
+            while(uniResult.moveToNext()){
+                remindersAvailable = uniResult.getInt(6) > 0;
+            }
+            uniResult.close();
+        }else {
+            theDB = MainActivity.db;
+            highlight = MainActivity.highlight;
+            highlightDec = MainActivity.highlightDec;
+            remindersAvailable = MainActivity.remindersAvailable;
+        }
+
         //getting task data
         String dbTimestamp = "";
         String dbTask = "";
@@ -51,8 +72,8 @@ public class AlertReceiver extends BroadcastReceiver {
         String dbRepeatInterval = "";
         Boolean dbManualKill = false;
         Boolean dbKilledEarly = false;
-        Cursor dbResult = MainActivity.db.getData(/*Integer.parseInt(
-                MainActivity.sortedIDs.get(*/broadId/*))*/);
+        Cursor dbResult;
+        dbResult = theDB.getData(broadId);
         while (dbResult.moveToNext()) {
             dbTimestamp = dbResult.getString(3);
             dbTask = dbResult.getString(4);
@@ -66,8 +87,7 @@ public class AlertReceiver extends BroadcastReceiver {
         dbResult.close();
 
         //getting alarm data
-        Cursor alarmResult = MainActivity.db.getAlarmData(/*
-                Integer.parseInt(MainActivity.sortedIDs.get(*/broadId/*))*/);
+        Cursor alarmResult = theDB.getAlarmData(broadId);
         String alarmHour = "";
         String alarmMinute = "";
         String alarmAmpm = "";
@@ -116,13 +136,13 @@ public class AlertReceiver extends BroadcastReceiver {
                         .decodeResource(context.getResources(), R.drawable.ic_launcher_og))
                 .setContentTitle(context.getString(R.string.killThisTask)).setTicker(msgAlert)
                 .setWhen(0).setContentText(dbTask).setStyle(new NotificationCompat.BigTextStyle())
-                .setColorized(true).setColor(Color.parseColor(MainActivity.highlight))
+                .setColorized(true).setColor(Color.parseColor(highlight))
                 .setCustomContentView(remoteViews).setLights(Integer.parseInt
-                        (MainActivity.highlightDec), 500, 500).setDefaults
+                        (highlightDec), 500, 500).setDefaults
                         (NotificationCompat.DEFAULT_SOUND).setContentIntent(notificIntent)
                 .setAutoCancel(true);
 
-        if(!dbRepeat && MainActivity.remindersAvailable){
+        if(!dbRepeat && remindersAvailable){
 
             notificationManager.notify(1, builder.build());
 
@@ -136,13 +156,12 @@ public class AlertReceiver extends BroadcastReceiver {
 
             }else{
 
-                MainActivity.db.updateKilledEarly(String.valueOf(/*
-                        MainActivity.sortedIDs.get(*/broadId/*)*/), false);
+                theDB.updateKilledEarly(String.valueOf(broadId), false);
 
             }
 
             //cancelling any snoozed alarm data
-            MainActivity.db.updateSnoozeData(String.valueOf(broadId),
+            theDB.updateSnoozeData(String.valueOf(broadId),
                     "",
                     "",
                     "",
@@ -150,13 +169,13 @@ public class AlertReceiver extends BroadcastReceiver {
                     "",
                     "");
 
-            MainActivity.db.updateSnoozedTimestamp(String.valueOf(broadId), "0");
+            theDB.updateSnoozedTimestamp(String.valueOf(broadId), "0");
 
-            MainActivity.db.updateSnooze(String.valueOf(broadId), false);
+            theDB.updateSnooze(String.valueOf(broadId), false);
 
             dbSnoozed = false;
 
-            MainActivity.db.updateIgnored(String.valueOf(broadId), false);
+            theDB.updateIgnored(String.valueOf(broadId), false);
 
             //snoozed notifications cannot corrupt regular repeating notifications
             if(dbRepeatInterval.equals("day") && !snoozeStatus){
@@ -166,7 +185,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 long futureStamp = Long.parseLong(dbTimestamp) + (AlarmManager.INTERVAL_DAY / 1000);
                 String tempTimestamp = "";
                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
-                    Cursor tempResult = MainActivity.db.getData(i);
+                    Cursor tempResult = theDB.getData(i);
                     while (tempResult.moveToNext()) {
                         tempTimestamp = tempResult.getString(3);
                     }
@@ -179,7 +198,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
 
                 //updating timestamp
-                MainActivity.db.updateTimestamp(String.valueOf(broadId),
+                theDB.updateTimestamp(String.valueOf(broadId),
                         String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
@@ -237,7 +256,7 @@ public class AlertReceiver extends BroadcastReceiver {
                     }
 
                     //updating due date in database
-                    MainActivity.db.updateAlarmData(String.valueOf(broadId),
+                    theDB.updateAlarmData(String.valueOf(broadId),
                             String.valueOf(alarmCalendar.get(Calendar.HOUR)),
                             String.valueOf(alarmCalendar.get(Calendar.MINUTE)),
                             String.valueOf(alarmCalendar.get(Calendar.AM_PM)),
@@ -247,7 +266,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 }
 
-                MainActivity.db.updateManualKill(String.valueOf(broadId), false);
+                theDB.updateManualKill(String.valueOf(broadId), false);
 
             }else if(dbRepeatInterval.equals("week") && !snoozeStatus){
 
@@ -257,7 +276,7 @@ public class AlertReceiver extends BroadcastReceiver {
                         ((AlarmManager.INTERVAL_DAY * 7) / 1000);
                 String tempTimestamp = "";
                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
-                    Cursor tempResult = MainActivity.db.getData(i);
+                    Cursor tempResult = theDB.getData(i);
                     while (tempResult.moveToNext()) {
                         tempTimestamp = tempResult.getString(3);
                     }
@@ -270,7 +289,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
 
                 //updating timestamp
-                MainActivity.db.updateTimestamp(String.valueOf(broadId), String.valueOf(futureStamp));
+                theDB.updateTimestamp(String.valueOf(broadId), String.valueOf(futureStamp));
 
                 //setting the name of the task for which the
                 // notification is being set
@@ -331,7 +350,7 @@ public class AlertReceiver extends BroadcastReceiver {
                     }
 
                     //updating due date in database
-                    MainActivity.db.updateAlarmData(String.valueOf(broadId),
+                    theDB.updateAlarmData(String.valueOf(broadId),
                             String.valueOf(alarmCalendar.get(Calendar.HOUR)),
                             String.valueOf(alarmCalendar.get(Calendar.MINUTE)),
                             String.valueOf(alarmCalendar.get(Calendar.AM_PM)),
@@ -341,7 +360,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 }
 
-                MainActivity.db.updateManualKill(String.valueOf(broadId), false);
+                theDB.updateManualKill(String.valueOf(broadId), false);
 
             }else if(dbRepeatInterval.equals("month") && !snoozeStatus){
 
@@ -392,7 +411,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 long futureStamp = (Long.parseLong(dbTimestamp) + interval);
                 String tempTimestamp = "";
                 for(int i = 0; i < MainActivity.taskList.size(); i++) {
-                    Cursor tempResult = MainActivity.db.getData(i);
+                    Cursor tempResult = theDB.getData(i);
                     while (tempResult.moveToNext()) {
                         tempTimestamp = tempResult.getString(3);
                     }
@@ -405,7 +424,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 }
 
                 futureStamp = Long.parseLong(String.valueOf(futureStamp) + "000");
-                Cursor origResult = MainActivity.db.getData(broadId);
+                Cursor origResult = theDB.getData(broadId);
                 String originalDay = "";
                 while (origResult.moveToNext()) {
                     originalDay = origResult.getString(20);
@@ -459,7 +478,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 String oldStamp = dbTimestamp + "000";
 
                 //updating timestamp
-                MainActivity.db.updateTimestamp(String.valueOf(broadId),
+                theDB.updateTimestamp(String.valueOf(broadId),
                         String.valueOf(futureStamp));
 
 //                Calendar tempCal = Calendar.getInstance();
@@ -531,7 +550,7 @@ public class AlertReceiver extends BroadcastReceiver {
                     }
 
                     //updating due date in database
-                    MainActivity.db.updateAlarmData(String.valueOf(broadId),
+                    theDB.updateAlarmData(String.valueOf(broadId),
                             String.valueOf(alarmCalendar.get(Calendar.HOUR)),
                             String.valueOf(alarmCalendar.get(Calendar.MINUTE)),
                             String.valueOf(alarmCalendar.get(Calendar.AM_PM)),
@@ -541,7 +560,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 }
 
-                MainActivity.db.updateManualKill(String.valueOf(broadId), false);
+                theDB.updateManualKill(String.valueOf(broadId), false);
 
             }
         }
