@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             ads:adSize="SMART_BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id"
+            ads:adUnitId="ca-app-pub-2378583121223638/7561576546"
             android:visibility="gone"/>
 
         <ImageView

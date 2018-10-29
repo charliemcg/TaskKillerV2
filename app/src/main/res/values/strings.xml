@@ -103,6 +103,6 @@
     <string name="accessMushroomCloudTick">Mushroom cloud with tick and five stars.</string>
     <string name="alarm">Alarm</string>
     <string name="turnColorCyclingOnOff">Turn colour cycling on/off in the top right menu.</string>
-    <!--TODO get new id. this one is pinched from Russian Roulette 2378583121223638/5662475907-->
+    <string name="accessPlusSign">Plus sign for adding tasks.</string>
 
 </resources>

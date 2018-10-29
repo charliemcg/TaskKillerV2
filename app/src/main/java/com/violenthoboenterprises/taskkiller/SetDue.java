@@ -1182,14 +1182,16 @@ public class SetDue extends MainActivity {
         if(setDue) {
             //Determine if repeat needs to be set
             if(!repeat.equals("none")) {
-                db.updateRepeatInterval(dbTaskId, repeat);
-                db.updateRepeat(dbTaskId, true);
+//                db.updateRepeatInterval(dbTaskId, repeat);
+//                db.updateRepeat(dbTaskId, true);
+                db.updateRepeatIntervalTemp(repeat);
+                db.updateRepeatTemp(true);
 
                 if(repeat.equals("day")){
 
                     repeatInterval = AlarmManager.INTERVAL_DAY;
 
-                    db.updateRepeatInterval(dbTaskId,"day");
+//                    db.updateRepeatInterval(dbTaskId,"day");
 
                     repeating = true;
 
@@ -1246,7 +1248,7 @@ public class SetDue extends MainActivity {
 
                     repeatInterval = (AlarmManager.INTERVAL_DAY * 7);
 
-                    db.updateRepeatInterval(dbTaskId, "week");
+//                    db.updateRepeatInterval(dbTaskId, "week");
 
                     repeating = true;
 
@@ -1297,7 +1299,7 @@ public class SetDue extends MainActivity {
 
                 }else if(repeat.equals("month")){
 
-                    db.updateRepeatInterval(dbTaskId, "month");
+//                    db.updateRepeatInterval(dbTaskId, "month");
 
                     repeating = true;
 

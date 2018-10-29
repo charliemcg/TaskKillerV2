@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -264,6 +265,7 @@ class MyAdapter extends ArrayAdapter<String> {
         int uniAmPm = 0;
         String uniInterval = "0";
         String uniOriginalDayTemp = "";
+        boolean uniRepeatTemp = false;
         while(uniResult.moveToNext()){
             uniSetAlarm = uniResult.getInt(10) > 0;
             uniYear = uniResult.getInt(11);
@@ -274,6 +276,7 @@ class MyAdapter extends ArrayAdapter<String> {
             uniAmPm = uniResult.getInt(17);
             uniInterval = uniResult.getString(30);
             uniOriginalDayTemp = uniResult.getString(31);
+            uniRepeatTemp = uniResult.getInt(32) > 0;
         }
         uniResult.close();
 
@@ -453,28 +456,38 @@ class MyAdapter extends ArrayAdapter<String> {
             if (position == 0 && MainActivity.taskList.size() > 4) {
                 adRow.setVisibility(View.VISIBLE);
                 boolean networkAvailable = false;
-//                ConnectivityManager connectivityManager = (ConnectivityManager)
-//                        getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-//                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-//                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-//                    networkAvailable = true;
-//                }
+                ConnectivityManager connectivityManager = (ConnectivityManager)
+                        getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                    networkAvailable = true;
+                }
 
                 //Initialising banner ad
                 final AdView adView = taskView.findViewById(R.id.adView);
-                ImageView banner = taskView.findViewById(R.id.banner);
+                final ImageView banner = taskView.findViewById(R.id.banner);
 
                 if (networkAvailable) {
                     adView.setVisibility(View.VISIBLE);
                     final AdRequest banRequest = new AdRequest.Builder()/*.build();*/
                             //TODO probably need a new ID
                             //TODO find out if id should go into strings.xml
-                            /*.addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")*/.addTestDevice
-                    (AdRequest.DEVICE_ID_EMULATOR).build();//TODO remove .addTestDevice()
+                            /*.addTestDevice("7A57C74D0EDE338C302869CB538CD3AC")*//*.addTestDevice
+                    (AdRequest.DEVICE_ID_EMULATOR)*/.build();//TODO remove .addTestDevice()
                     adView.loadAd(banRequest);
                 } else {
                     banner.setVisibility(View.VISIBLE);
                 }
+
+                adView.setAdListener(new AdListener() {
+
+                    @Override
+                    public void onAdFailedToLoad(int errorCode) {
+                        banner.setVisibility(View.VISIBLE);
+                    }
+
+                });
+
             }
         }
 
@@ -596,6 +609,21 @@ class MyAdapter extends ArrayAdapter<String> {
 
         }
 
+        if(uniSetAlarm && (position == MainActivity.activeTask)){
+            setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute,
+                    uniAmPm, uniInterval, uniOriginalDayTemp, uniRepeatTemp);
+            MainActivity.db.updateSetAlarm(false);
+            MainActivity.db.updateYear(0);
+            MainActivity.db.updateMonth(0);
+            MainActivity.db.updateDay(0);
+            MainActivity.db.updateHour(0);
+            MainActivity.db.updateMinute(0);
+            MainActivity.db.updateAmPm(0);
+            MainActivity.db.updateRepeatIntervalTemp("0");
+            MainActivity.db.updateOriginalDayTemp("");
+            MainActivity.db.updateRepeatTemp(false);
+        }
+
         //Determining if ignored repeating task has reached next repeat time
         Calendar nowness = new GregorianCalendar();
         if(dbRepeatInterval.equals("day") && (!dbTimestamp.equals("") || !dbTimestamp.equals("0"))){
@@ -621,6 +649,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+                Log.i(TAG, "one");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -669,6 +698,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+                Log.i(TAG, "two");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -782,6 +812,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                 }
 
+                Log.i(TAG, "three");
                 //updating timestamp
                 MainActivity.db.updateTimestamp(String.valueOf(
                         MainActivity.sortedIDs.get(position)),
@@ -799,19 +830,19 @@ class MyAdapter extends ArrayAdapter<String> {
             }
         }
 
-        if(uniSetAlarm && (position == MainActivity.activeTask)){
-            setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute,
-                    uniAmPm, uniInterval, uniOriginalDayTemp);
-            MainActivity.db.updateSetAlarm(false);
-            MainActivity.db.updateYear(0);
-            MainActivity.db.updateMonth(0);
-            MainActivity.db.updateDay(0);
-            MainActivity.db.updateHour(0);
-            MainActivity.db.updateMinute(0);
-            MainActivity.db.updateAmPm(0);
-            MainActivity.db.updateRepeatIntervalTemp("0");
-            MainActivity.db.updateOriginalDayTemp("");
-        }
+//        if(uniSetAlarm && (position == MainActivity.activeTask)){
+//            setAlarm(position, uniYear, uniMonth, uniDay, uniHour, uniMinute,
+//                    uniAmPm, uniInterval, uniOriginalDayTemp);
+//            MainActivity.db.updateSetAlarm(false);
+//            MainActivity.db.updateYear(0);
+//            MainActivity.db.updateMonth(0);
+//            MainActivity.db.updateDay(0);
+//            MainActivity.db.updateHour(0);
+//            MainActivity.db.updateMinute(0);
+//            MainActivity.db.updateAmPm(0);
+//            MainActivity.db.updateRepeatIntervalTemp("0");
+//            MainActivity.db.updateOriginalDayTemp("");
+//        }
 
         if(MainActivity.fadeTasks){
             //Fade out inactive taskviews
@@ -1596,6 +1627,7 @@ class MyAdapter extends ArrayAdapter<String> {
                     repeatInterval = Integer.parseInt(bigInterval);
                 }
 
+                Log.i(TAG, "four");
                 Calendar snoozeCal = Calendar.getInstance();
                 //updating timestamp
                 if(!finalDbRepeatInterval.equals("month")) {
@@ -2001,6 +2033,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 repeatInterval = interval;
                                             }
 
+                                            Log.i(TAG, "five");
                                             //updating timestamp
                                             if(!finalDbOverdue) {
                                                 MainActivity.db.updateTimestamp(String.valueOf(
@@ -2382,6 +2415,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 repeatInterval = interval;
                                             }
 
+                                            Log.i(TAG, "six");
                                             //updating timestamp
                                             if(!finalDbOverdue) {
                                                 MainActivity.db.updateTimestamp(String.valueOf(
@@ -2759,6 +2793,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                                 repeatInterval = interval;
                                             }
 
+                                            Log.i(TAG, "seven");
                                             //updating timestamp
                                             if(!finalDbOverdue) {
                                                 MainActivity.db.updateTimestamp(String.valueOf(
@@ -3088,6 +3123,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     repeatInterval = 86400;
                                 }
 
+                                Log.i(TAG, "eight");
                                 Calendar snoozeCal = Calendar.getInstance();
                                 //updating timestamp
                                 if(!finalDbOverdue && (Integer.parseInt(finalAlarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))) {
@@ -3202,6 +3238,7 @@ class MyAdapter extends ArrayAdapter<String> {
                                     repeatInterval = 86400 * 7;
                                 }
 
+                                Log.i(TAG, "nine");
                                 Calendar snoozeCal = Calendar.getInstance();
                                 //updating timestamp
                                 if(!finalDbOverdue && (Integer.parseInt(finalAlarmDay) != currentCal.get(Calendar.DAY_OF_MONTH))) {
@@ -3479,6 +3516,7 @@ class MyAdapter extends ArrayAdapter<String> {
 
                                 Calendar snoozeCal = Calendar.getInstance();
 
+                                Log.i(TAG, "ten");
                                 if (!finalDbOverdue && (Integer.parseInt(finalAlarmMonth)
                                         != currentCal.get(Calendar.MONTH))) {
                                     MainActivity.db.updateTimestamp(String.valueOf(
@@ -3956,6 +3994,7 @@ class MyAdapter extends ArrayAdapter<String> {
                             repeatInterval = Integer.parseInt(bigInterval);
                         }
 
+                        Log.i(TAG, "eleven");
                         Calendar snoozeCal = Calendar.getInstance();
                         //updating timestamp
                         if(!finalDbRepeatInterval.equals("month")) {
@@ -4161,7 +4200,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
 
-                    if(MainActivity.duesSet < 5 || finalDbDue) {
+                    if(MainActivity.duesSet < 5 || finalDbDue || MainActivity.remindersAvailable) {
                         MainActivity.vibrate.vibrate(50);
 
                         //actions to occur if alarm not already set
@@ -4351,7 +4390,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
     //set notification alarm for selected task
     private void setAlarm(final int position, int year, int month, int day, int hour, int minute,
-            int ampm, String uniInterval, String originalDayTemp){
+            int ampm, String uniInterval, String originalDayTemp, boolean uniRepeat){
+
+        Log.i(TAG, "Setting alarm");
 
         String dbTask = "";
         Integer dbBroadcast = 0;
@@ -4513,6 +4554,7 @@ class MyAdapter extends ArrayAdapter<String> {
                 }
             }
 
+            Log.i(TAG, "twelve");
             //updating timestamp
             MainActivity.db.updateTimestamp(String.valueOf(
                     MainActivity.sortedIDs.get(position)),
@@ -4567,6 +4609,9 @@ class MyAdapter extends ArrayAdapter<String> {
 
             MainActivity.db.updateShowOnce(
                     MainActivity.sortedIDs.get(position), true);
+
+            MainActivity.db.updateRepeatInterval(MainActivity.sortedIDs.get(position), uniInterval);
+            MainActivity.db.updateRepeat(MainActivity.sortedIDs.get(position), uniRepeat);
 
         }
 

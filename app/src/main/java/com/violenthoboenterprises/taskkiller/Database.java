@@ -93,6 +93,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String UCOL30 = "HIGHLIGHTDEC";
     public static final String UCOL31 = "REPEATINTERVALTEMP";
     public static final String UCOL32 = "ORIGINALDAYTEMP";
+    public static final String UCOL33 = "REPEATTEMP";
 
     //Subtasks
     public static final String CTABLE = "subtasks_table";
@@ -131,7 +132,7 @@ public class Database extends SQLiteOpenHelper {
                 "REPEATHINT INTEGER, RENAMEHINT INTEGER, REINSTATEHINT INTEGER, " +
                 "TIMESTARTED INTEGER, REVIEWONE BOOLEAN, REVIEWTWO BOOLEAN, REVIEWTHREE BOOLEAN, " +
                 "REVIEWFOUR BOOLEAN, HIGHLIGHTDEC TEXT, REPEATINTERVALTEMP TEXT, " +
-                "ORIGINALDAYTEMP TEXT)");
+                "ORIGINALDAYTEMP TEXT, REPEATTEMP BOOLEAN)");
         db.execSQL("create table " + CTABLE + " (ID INTEGER, SUBTASKID INTEGER," +
                 " SUBTASK TEXT, KILLED BOOLEAN, TIMECREATED TEXT, SORTEDINDEX INTEGER)");
     }
@@ -226,9 +227,9 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL3, "#FF00FF00");
         content.put(UCOL4, false);
         content.put(UCOL5, "");
-        content.put(UCOL6, true);//TODO change back to false!!!
-        content.put(UCOL7, true);//TODO change back to false!!!
-        content.put(UCOL8, true);//TODO change back to false!!!
+        content.put(UCOL6, false);//TODO change back to false!!!
+        content.put(UCOL7, false);//TODO change back to false!!!
+        content.put(UCOL8, false);//TODO change back to false!!!
         content.put(UCOL9, 0);
         content.put(UCOL10, 0);
         content.put(UCOL11, false);
@@ -253,6 +254,7 @@ public class Database extends SQLiteOpenHelper {
         content.put(UCOL30, "-298516736");
         content.put(UCOL31, "0");
         content.put(UCOL32, "");
+        content.put(UCOL33, false);
         long result = db.insert(UTABLE, null, content);
         if(result == -1){
             return false;
@@ -829,6 +831,14 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(UCOL32, day);
+        db.update(UTABLE, content, "ID = ?", new String[] {"0"});
+        return true;
+    }
+
+    public boolean updateRepeatTemp(boolean repeat){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(UCOL33, repeat);
         db.update(UTABLE, content, "ID = ?", new String[] {"0"});
         return true;
     }
