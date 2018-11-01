@@ -55,6 +55,8 @@ public class Reorder {
             }
             dbResult.close();
 
+            Log.i(TAG, "stamp: " + dbTimestamp);
+
             //getting alarm data
             Cursor alarmResult = MainActivity.db.getAlarmData(allIDs.get(i));
             String alarmHour = "";
@@ -74,6 +76,7 @@ public class Reorder {
             alarmResult.close();
 
             if(dbSnooze) {
+                Log.i(TAG, "one");
                 tempList.add(Integer.parseInt(dbSnoozeStamp));
                 snoozedIDs.add(Integer.parseInt(dbID));
             }else if (dbDue){
@@ -85,14 +88,17 @@ public class Reorder {
                 alarmCal.set(Calendar.HOUR, Integer.parseInt(alarmHour));
                 alarmCal.set(Calendar.MINUTE, Integer.parseInt(alarmMinute));
                 if(Integer.parseInt(dbTimestamp) > (alarmCal.getTimeInMillis() / 1000)){
+                    Log.i(TAG, "two");
                     tempList.add(Integer.parseInt(String.valueOf(alarmCal.getTimeInMillis() / 1000)));
                     wrongIDList.add(dbID);
                     correctTimestampList.add(dbTimestamp);
                     positionCounter.add(Integer.parseInt(String.valueOf(alarmCal.getTimeInMillis() / 1000)));
                 }else {
+                    Log.i(TAG, "three");
                     tempList.add(Integer.valueOf(dbTimestamp));
                 }
             }else{
+                Log.i(TAG, "four");
                 tempList.add(Integer.valueOf(dbTimestamp));
             }
 
@@ -213,6 +219,7 @@ public class Reorder {
             String dbTask = "";
             boolean dbKilled = false;
             boolean dbRepeat = false;
+            Log.i(TAG, "tempList: " + tempList);
             Cursor dbResult = MainActivity.db.getDataByDueTime(
                     String.valueOf(tempList.get(i)));
             boolean dataExists = false;
@@ -226,7 +233,7 @@ public class Reorder {
                 }
                 dataExists = true;
             }
-            if (!dataExists) {
+            if (!dataExists && !tempIdsList.contains(String.valueOf(dbId))) {
                 dbResult = MainActivity.db.getDataByDueTime(String.valueOf(correctTimestampList
                         .get(positionCounter.indexOf(tempList.get(i)))));
                 while (dbResult.moveToNext()) {
@@ -234,7 +241,7 @@ public class Reorder {
                     dbTask = dbResult.getString(4);
                     dbKilled = dbResult.getInt(6) > 0;
                     dbRepeat = dbResult.getInt(8) > 0;
-                    if ((tempList.get(i) != 0) && !dbKilled && !dbRepeat) {
+                    if ((tempList.get(i) != 0) && !dbKilled && !dbRepeat && !tempIdsList.contains(String.valueOf(dbId))) {
                         tempIdsList.add(String.valueOf(dbId));
                         tempTaskList.add(dbTask);
                     }

@@ -118,6 +118,7 @@ public class SetDue extends MainActivity {
         dbTaskId = "";
         dbTask = "";
         boolean dbRepeat = false;
+        boolean dbOverdue = false;
         Cursor dbTaskResult = MainActivity.db.getUniversalData();
         while (dbTaskResult.moveToNext()) {
             dbTaskId = dbTaskResult.getString(4);
@@ -127,6 +128,7 @@ public class SetDue extends MainActivity {
             dbDueTime = dbTaskResult.getString(3);
             dbTask = dbTaskResult.getString(4);
             dbRepeat = dbTaskResult.getInt(8) > 0;
+            dbOverdue = dbTaskResult.getInt(9) > 0;
             dbRepeatInterval = dbTaskResult.getString(13);
         }
         dbTaskResult.close();
@@ -517,6 +519,7 @@ public class SetDue extends MainActivity {
         });
 
         //Actions to occur when user chooses to cancel the repeat
+        final boolean finalDbOverdue = dbOverdue;
         cancelRepeatDark.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -541,6 +544,14 @@ public class SetDue extends MainActivity {
 
                     killAlarm.setVisible(false);
 
+                }
+
+                if(finalDbOverdue && dbRepeatInterval.equals("day")){
+                    db.updateTimestamp(dbTaskId, String.valueOf(Integer.parseInt(dbDueTime) - 86400));
+                }else if(finalDbOverdue && dbRepeatInterval.equals("week")){
+                    db.updateTimestamp(dbTaskId, String.valueOf(Long.parseLong(dbDueTime) - (86400 * 7)));
+                }else if(finalDbOverdue && dbRepeatInterval.equals("month")){
+                    //TODO get month interval
                 }
 
                 db.updateRepeatInterval(dbTaskId, "");

@@ -3740,6 +3740,9 @@ class MyAdapter extends ArrayAdapter<String> {
                         MainActivity.db.updateSnoozedTimestamp(MainActivity.sortedIDs.get(position),
                                 "0");
 
+                        MainActivity.db.updateSnooze(String.valueOf(MainActivity.sortedIDs
+                                .get(position)), false);
+
                         if(MainActivity.showMotivation) {
                             MainActivity.toast.setText(R.string.youKilledThisTask);
                             final Handler handler = new Handler();
