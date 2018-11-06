@@ -1285,6 +1285,8 @@ class MyAdapter extends ArrayAdapter<String> {
         //actions to occur in regards to selected task
         if((MainActivity.completeTask) && (MainActivity.thePosition == position)){
 
+            Log.i(TAG, "I'm in here");
+
             MainActivity.vibrate.vibrate(100);
 
             //task is killed if not repeating
@@ -1796,9 +1798,65 @@ class MyAdapter extends ArrayAdapter<String> {
                         };
 
                         handler.postDelayed(runnable, 500);
+                    }else if(MainActivity.showMotivation) {
+                        MainActivity.toast.setText(R.string.youKilledThisTask);
+                        final Handler handler = new Handler();
+
+                        final Runnable runnable = new Runnable() {
+                            public void run() {
+                                if (!MainActivity.mute) {
+                                    MainActivity.sweep.start();
+                                }
+                                MainActivity.toastView.startAnimation
+                                        (AnimationUtils.loadAnimation
+                                                (getContext(), R.anim.enter_from_right_fast));
+                                MainActivity.toastView.setVisibility(View.VISIBLE);
+                                final Handler handler2 = new Handler();
+                                final Runnable runnable2 = new Runnable() {
+                                    public void run() {
+                                        MainActivity.toastView.startAnimation(AnimationUtils
+                                                .loadAnimation(getContext(),
+                                                        android.R.anim.fade_out));
+                                        MainActivity.toastView.setVisibility(View.GONE);
+                                    }
+                                };
+                                handler2.postDelayed(runnable2, 1500);
+                            }
+                        };
+
+                        handler.postDelayed(runnable, 500);
+
                     }
                     MainActivity.repeatHint++;
                     MainActivity.db.updateRepeatHint(MainActivity.repeatHint);
+                }else if(MainActivity.showMotivation) {
+                            MainActivity.toast.setText(R.string.youKilledThisTask);
+                            final Handler handler = new Handler();
+
+                            final Runnable runnable = new Runnable() {
+                                public void run() {
+                                    if (!MainActivity.mute) {
+                                        MainActivity.sweep.start();
+                                    }
+                                    MainActivity.toastView.startAnimation
+                                            (AnimationUtils.loadAnimation
+                                            (getContext(), R.anim.enter_from_right_fast));
+                                    MainActivity.toastView.setVisibility(View.VISIBLE);
+                                    final Handler handler2 = new Handler();
+                                    final Runnable runnable2 = new Runnable() {
+                                        public void run() {
+                                            MainActivity.toastView.startAnimation(AnimationUtils
+                                                    .loadAnimation(getContext(),
+                                                            android.R.anim.fade_out));
+                                            MainActivity.toastView.setVisibility(View.GONE);
+                                        }
+                                    };
+                                    handler2.postDelayed(runnable2, 1500);
+                                }
+                            };
+
+                            handler.postDelayed(runnable, 500);
+
                 }
 
                 propertyRow.setVisibility(View.GONE);
@@ -1808,6 +1866,8 @@ class MyAdapter extends ArrayAdapter<String> {
                 new Reorder();
 
                 MainActivity.theListView.setAdapter(MainActivity.theAdapter[0]);
+
+                Log.i(TAG, "I'm in here as I should be");
 
             }
 
