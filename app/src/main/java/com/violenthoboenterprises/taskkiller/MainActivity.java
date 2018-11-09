@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         overridePendingTransition(R.anim.enter_from_right, R.anim.enter_from_right);
 
-        MobileAds.initialize(this, "ca-app-pub-2378583121223638~7860959443");
+//        MobileAds.initialize(this, "ca-app-pub-2378583121223638~7860959443");
 
         toolbarDark = findViewById(R.id.toolbar_dark);
         toolbarLight = findViewById(R.id.toolbar_light);
@@ -399,7 +399,8 @@ public class MainActivity extends AppCompatActivity implements
         cycleColorsDescription = findViewById(R.id.cycleColorsDescription);
         unlockAllTitle = findViewById(R.id.unlockAllTitle);
         unlockAllDescription = findViewById(R.id.unlockAllDescription);
-        bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmkKmTeO/yvcYI+3INnQbDgR6CdrdNvDuDKNSZ093arop02HezphS/EyiHbkvl16ncYZkrXYEhjUnneAHI+PW3lCcBIvxyQBiyXoGz+N001K9Ot+GBK5JPt1Kd0YXhkdB6W+GcE3muh9juvnYQ14xaiv6GR4Nr7AoH0m9DUxcSLXY/nRD8PUUen+BEPWKsbYUELIyuUQU7ng1aKig6386PQVLK3ugkmN6pxhkxgjombfT58ZcMvme23n1IND6M3lE849thuwJc2WBnCIcFo/aieehqEE1w+kfmZMPvRgPprzZ+15Fh3smXqbfxMiduA2J7CiWsfkMxxcdRNjVVD2+VwIDAQAB", this);
+//        bp = new BillingProcessor(this, "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmkKmTeO/yvcYI+3INnQbDgR6CdrdNvDuDKNSZ093arop02HezphS/EyiHbkvl16ncYZkrXYEhjUnneAHI+PW3lCcBIvxyQBiyXoGz+N001K9Ot+GBK5JPt1Kd0YXhkdB6W+GcE3muh9juvnYQ14xaiv6GR4Nr7AoH0m9DUxcSLXY/nRD8PUUen+BEPWKsbYUELIyuUQU7ng1aKig6386PQVLK3ugkmN6pxhkxgjombfT58ZcMvme23n1IND6M3lE849thuwJc2WBnCIcFo/aieehqEE1w+kfmZMPvRgPprzZ+15Fh3smXqbfxMiduA2J7CiWsfkMxxcdRNjVVD2+VwIDAQAB", this);
+        bp = new BillingProcessor(this, null, this);
         purchases = findViewById(R.id.purchases);
         adsRemoved = false;
         remindersAvailable = false;
@@ -504,6 +505,17 @@ public class MainActivity extends AppCompatActivity implements
                     if (!taskPropertiesShowing && !killed) {
 
                         viewProperties(position);
+
+                        theListView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                theListView.setSelection(activeTask);
+//                                MainActivity.theListView.smoothScrollToPosition
+//                                        (MainActivity.activeTask, 0
+//                                                /*(MainActivity.listViewHeight / 2)
+//                                                        - (MainActivity.toolbarParams.height * 2)*/);
+                            }
+                        });
 
                     //Removes completed task
                     } else if (!taskPropertiesShowing && killed) {
@@ -2227,6 +2239,14 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         new Reorder();
+
+        theListView.post(new Runnable() {
+            @Override
+            public void run() {
+                theListView.setSelection(activeTask);
+            }
+        });
+
         //Updating the view with the new order
         theAdapter = new ListAdapter[]{new MyAdapter(
                 this, taskList)};

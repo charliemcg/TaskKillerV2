@@ -44,8 +44,8 @@ android {
         applicationId "com.violenthoboenterprises.taskkiller"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 11
-        versionName "1.10"
+        versionCode 13
+        versionName "1.12"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -551,7 +551,63 @@ public class SetDue extends MainActivity {
                 }else if(finalDbOverdue && dbRepeatInterval.equals("week")){
                     db.updateTimestamp(dbTaskId, String.valueOf(Long.parseLong(dbDueTime) - (86400 * 7)));
                 }else if(finalDbOverdue && dbRepeatInterval.equals("month")){
-                    //TODO get month interval
+
+                    int interval = 0;
+
+                    Cursor alarmResult = MainActivity.db.getAlarmData
+                            (Integer.parseInt(dbTaskId));
+                    String alarmDay = "";
+                    String alarmMonth = "";
+                    String alarmYear = "";
+                    while(alarmResult.moveToNext()){
+                        alarmDay = alarmResult.getString(4);
+                        alarmMonth = alarmResult.getString(5);
+                        alarmYear = alarmResult.getString(6);
+                    }
+
+                    alarmResult.close();
+
+                    int theYear = Integer.parseInt(alarmYear);
+                    int theMonth = Integer.parseInt(alarmMonth);
+                    int theDay = Integer.parseInt(alarmDay);
+
+                    //Month January and day is 29 non leap year 2592000
+                    if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
+                        interval = 2592000;
+                        //Month January and day is 30 non leap year 2505600
+                    }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
+                        interval = 2505600;
+                        //Month January and day is 31 non leap year 2419200
+                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
+                        interval = 2419200;
+                        //Month January and day is 30 leap year 2592000
+                    }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
+                        interval = 2592000;
+                        //Month January and day is 31 leap year 2505600
+                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
+                        interval = 2505600;
+                        //Month March||May||August||October and day is 31 2592000
+                    }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
+                            || (theMonth == 9)) && (theDay == 31)){
+                        interval = 2592000;
+                        //Month January||March||May||July||August||October||December 2678400
+                    }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
+                            || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
+                            || (theMonth == 11)){
+                        interval = 2678400;
+                        //Month April||June||September||November 2592000
+                    }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
+                            || (theMonth == 10)){
+                        interval = 2592000;
+                        //Month February non leap year 2419200
+                    }else if((theMonth == 1) && (theYear % 4 != 0)){
+                        interval = 2419200;
+                        //Month February leap year 2505600
+                    }else if((theMonth == 1) && (theYear % 4 == 0)){
+                        interval = 2505600;
+                    }
+
+                    db.updateTimestamp(dbTaskId, String.valueOf(Integer.parseInt(dbDueTime) - interval));
                 }
 
                 db.updateRepeatInterval(dbTaskId, "");
@@ -586,6 +642,70 @@ public class SetDue extends MainActivity {
 
                     killAlarm.setVisible(false);
 
+                }
+
+                if(finalDbOverdue && dbRepeatInterval.equals("day")){
+                    db.updateTimestamp(dbTaskId, String.valueOf(Integer.parseInt(dbDueTime) - 86400));
+                }else if(finalDbOverdue && dbRepeatInterval.equals("week")){
+                    db.updateTimestamp(dbTaskId, String.valueOf(Long.parseLong(dbDueTime) - (86400 * 7)));
+                }else if(finalDbOverdue && dbRepeatInterval.equals("month")){
+
+                    int interval = 0;
+
+                    Cursor alarmResult = MainActivity.db.getAlarmData
+                            (Integer.parseInt(dbTaskId));
+                    String alarmDay = "";
+                    String alarmMonth = "";
+                    String alarmYear = "";
+                    while(alarmResult.moveToNext()){
+                        alarmDay = alarmResult.getString(4);
+                        alarmMonth = alarmResult.getString(5);
+                        alarmYear = alarmResult.getString(6);
+                    }
+
+                    alarmResult.close();
+
+                    int theYear = Integer.parseInt(alarmYear);
+                    int theMonth = Integer.parseInt(alarmMonth);
+                    int theDay = Integer.parseInt(alarmDay);
+
+                    //Month January and day is 29 non leap year 2592000
+                    if((theMonth == 0) && (theDay == 29) && (theYear % 4 != 0)){
+                        interval = 2592000;
+                        //Month January and day is 30 non leap year 2505600
+                    }else if((theMonth == 0) && (theDay == 30) && (theYear % 4 != 0)){
+                        interval = 2505600;
+                        //Month January and day is 31 non leap year 2419200
+                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 != 0)){
+                        interval = 2419200;
+                        //Month January and day is 30 leap year 2592000
+                    }else if((theMonth == 0) && (theDay == 30)  && (theYear % 4 == 0)){
+                        interval = 2592000;
+                        //Month January and day is 31 leap year 2505600
+                    }else if((theMonth == 0) && (theDay == 31) && (theYear % 4 == 0)){
+                        interval = 2505600;
+                        //Month March||May||August||October and day is 31 2592000
+                    }else if(((theMonth == 2) || (theMonth == 4) || (theMonth == 7)
+                            || (theMonth == 9)) && (theDay == 31)){
+                        interval = 2592000;
+                        //Month January||March||May||July||August||October||December 2678400
+                    }else if((theMonth == 0) || (theMonth == 2) || (theMonth == 4)
+                            || (theMonth == 6) || (theMonth == 7) || (theMonth == 9)
+                            || (theMonth == 11)){
+                        interval = 2678400;
+                        //Month April||June||September||November 2592000
+                    }else if((theMonth == 3) || (theMonth == 5) || (theMonth == 8)
+                            || (theMonth == 10)){
+                        interval = 2592000;
+                        //Month February non leap year 2419200
+                    }else if((theMonth == 1) && (theYear % 4 != 0)){
+                        interval = 2419200;
+                        //Month February leap year 2505600
+                    }else if((theMonth == 1) && (theYear % 4 == 0)){
+                        interval = 2505600;
+                    }
+
+                    db.updateTimestamp(dbTaskId, String.valueOf(Integer.parseInt(dbDueTime) - interval));
                 }
 
                 db.updateRepeatInterval(dbTaskId, "");

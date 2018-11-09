@@ -459,9 +459,9 @@ class MyAdapter extends ArrayAdapter<String> {
                 ConnectivityManager connectivityManager = (ConnectivityManager)
                         getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-                    networkAvailable = true;
-                }
+//                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+//                    networkAvailable = true;
+//                }
 
                 //Initialising banner ad
                 final AdView adView = taskView.findViewById(R.id.adView);
@@ -1282,10 +1282,20 @@ class MyAdapter extends ArrayAdapter<String> {
             dueClearWhite.setBackgroundColor(Color.parseColor("#DDDDDD"));
         }
 
+        if(MainActivity.taskPropertiesShowing && position <= MainActivity.activeTask){
+
+            MainActivity.listViewHeight = MainActivity.theListView.getMeasuredHeight();
+//            MainActivity.theListView.smoothScrollToPosition(MainActivity.activeTask,
+//                    (MainActivity.listViewHeight / 2) -
+//                            (MainActivity.toolbarParams.height * 2));
+            MainActivity.theListView.setSelection(MainActivity.activeTask);
+
+            notifyDataSetChanged();
+
+        }
+
         //actions to occur in regards to selected task
         if((MainActivity.completeTask) && (MainActivity.thePosition == position)){
-
-            Log.i(TAG, "I'm in here");
 
             MainActivity.vibrate.vibrate(100);
 
@@ -3763,12 +3773,12 @@ class MyAdapter extends ArrayAdapter<String> {
             });
 
             //centering the selected item in the view
-            MainActivity.listViewHeight = MainActivity.theListView.getMeasuredHeight();
-            MainActivity.theListView.smoothScrollToPositionFromTop(position,
-                    (MainActivity.listViewHeight / 2) -
-                            (MainActivity.toolbarParams.height * 2));
-
-            notifyDataSetChanged();
+//            MainActivity.listViewHeight = MainActivity.theListView.getMeasuredHeight();
+//            MainActivity.theListView.smoothScrollToPositionFromTop(position,
+//                    (MainActivity.listViewHeight / 2) -
+//                            (MainActivity.toolbarParams.height * 2));
+//
+//            notifyDataSetChanged();
 
             //put data in text view
             theTextView.setText(task);
